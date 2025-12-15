@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://eyyrdjphljp8"]
+
+[ext_resource type="Script" uid="uid://cnsimvghm7vi" path="res://scripts/hex_base.gd" id="1_y3h7m"]
+[ext_resource type="PackedScene" uid="uid://bns2pm4pxu5gb" path="res://meshes/tiles/base/hex_grass.glb" id="1_yvw4p"]
+
+[node name="hex_base" type="Node3D" unique_id=333938054]
+script = ExtResource("1_y3h7m")
+
+[node name="mesh" parent="." unique_id=1912687700 instance=ExtResource("1_yvw4p")]

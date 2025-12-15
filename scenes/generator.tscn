@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://maout4rpahg4"]
+
+[ext_resource type="Script" uid="uid://cd51gsg387fr4" path="res://scripts/hex_grid.gd" id="1_5yxne"]
+[ext_resource type="PackedScene" uid="uid://eyyrdjphljp8" path="res://scenes/hex_base.tscn" id="2_w5vnv"]
+
+[node name="generator" type="Node3D" unique_id=1031745512]
+script = ExtResource("1_5yxne")
+packed_scene = ExtResource("2_w5vnv")
