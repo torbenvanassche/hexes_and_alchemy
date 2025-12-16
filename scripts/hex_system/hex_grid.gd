@@ -81,7 +81,5 @@ func generate_chunk(cx: int, cy: int) -> HexChunk:
 
 	for y in range(start_y, start_y + CHUNK_HEIGHT):
 		for x in range(start_x, start_x + CHUNK_WIDTH):
-			var picked_scene := DataManager.instance.pick_scene(x, y)
-			SceneManager.instance.cache_scenes([picked_scene], 
-				func(sIArray: Array[SceneInfo]) -> void: chunk.add_hex(create_hex(x, y, spacing_vec, sIArray[0].packed_scene.instantiate())))
-	return chunk
+			DataManager.instance.pick_scene(x, y).queue(func(sI: SceneInfo) -> void: chunk.add_hex(create_hex(x, y, spacing_vec, sI.packed_scene.instantiate())));
+	return chunk	

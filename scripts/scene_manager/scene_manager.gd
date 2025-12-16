@@ -37,37 +37,15 @@ func get_or_create_scene(scene_name: String, scene_config: SceneConfig = SceneCo
 			_active_scene.set_deferred("process_mode", Node.PROCESS_MODE_DISABLED)
 	
 	var scene_info: SceneInfo = DataManager.instance.get_scene_by_name(scene_name);
-	if is_instance_valid(scene_info.node):
-		_on_scene_load(scene_info, scene_config);
+	if scene_info.is_cached:
+		scene_info.cached.emit(scene_info);
+		return scene_info;
 	else:
-		if scene_cache.get_from_cache(scene_info) != null:
-			_on_scene_load(scene_info, scene_config);
-		else:
-			if !scene_info.cached.is_connected(_on_scene_load.bind(scene_config)):
-				scene_info.cached.connect(_on_scene_load.bind(scene_config))
-			scene_cache.queue(scene_info);
+		scene_cache.queue(scene_info);
 	return scene_info;
-	
-func cache_scenes(to_load: Array[SceneInfo], c: Callable = Callable()) -> void:
-	if _check_loaded(to_load):
-		c.call(to_load);
-		return
-	
-	for s_info in to_load:
-		var loader: SceneInfo = get_or_create_scene(s_info.id)
-		loader.cached.connect(func(_loaded: SceneInfo) -> void:
-			if _check_loaded(to_load):
-				c.call(to_load)
-		)
 		
 func _check_loaded(to_load: Array[SceneInfo]) -> bool:
 	return to_load.all(func(scene: SceneInfo) -> bool: return scene.is_cached)
-
-func _on_scene_load(scene_info: SceneInfo, scene_config: SceneConfig) -> void:
-	_active_scene = scene_info.get_instance();
-	_active_scene.visible = true;
-	if scene_config.add_to_stack:
-		scene_stack.append(scene_info)
 
 func set_scene_reference(id: String, target: Node) -> void:
 	DataManager.instance.get_scene_by_name(id).node = target;

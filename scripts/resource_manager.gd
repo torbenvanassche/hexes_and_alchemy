@@ -8,6 +8,11 @@ func _ready() -> void:
 	DataManager.instance = self;
 	for scene in scenes:
 		scene.ready();
+		
+	for region in regions:
+		for scene in scenes:
+			if not region.scene_multipliers.has(scene):
+				region.scene_multipliers[scene] = 0;
 
 func get_scene_by_name(scene_name: String) -> SceneInfo:
 	var filtered := scenes.filter(func(scene: SceneInfo) -> bool: return scene != null && scene.id == scene_name);
@@ -66,7 +71,7 @@ func get_region_for(x: int, y: int) -> RegionInfo:
 		if region.noise == null:
 			continue
 
-		var n := region.noise.get_noise_2d(x, y)
+		var n := (region.noise.get_noise_2d(x, y) + 1.0) * 0.5
 		var score := n * region.region_weight
 
 		if score > best_score:

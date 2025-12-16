@@ -35,12 +35,12 @@ func _check_progress() -> void:
 			if loading_queue.size() == 0:
 				timer.stop();
 
-func get_from_cache(scene_info: SceneInfo) -> Node:
+func get_from_cache(scene_info: SceneInfo) -> SceneInfo:
 	if cached_scenes.has(scene_info):
-		return cached_scenes[cached_scenes.find(scene_info)].node;
+		return cached_scenes[cached_scenes.find(scene_info)];
 	else:
 		queue(scene_info)
-		return null;
+		return scene_info;
 		
 func is_cached(scene_info: SceneInfo) -> Variant:
 	if loading_queue.has(scene_info) || cached_scenes.has(scene_info):

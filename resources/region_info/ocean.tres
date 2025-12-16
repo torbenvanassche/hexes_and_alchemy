@@ -4,12 +4,9 @@
 [ext_resource type="Resource" uid="uid://dq3k4j72tnetv" path="res://resources/scene_info/hex_water_plain.tres" id="2_dpad2"]
 [ext_resource type="Script" uid="uid://m31o3kdm652g" path="res://scripts/hex_system/region.gd" id="2_yrmbv"]
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_sh8ks"]
-
 [resource]
 script = ExtResource("2_yrmbv")
 name = "ocean"
-noise = SubResource("FastNoiseLite_sh8ks")
 scene_multipliers = Dictionary[ExtResource("1_sh8ks"), float]({
 ExtResource("2_dpad2"): 1.0
 })

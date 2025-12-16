@@ -30,15 +30,6 @@ func release() -> void:
 	SceneManager.instance.scene_cache.remove(self);
 	is_cached = false;
 	
-func get_instance() -> Node:
-	if not node:
-		if is_cached:
-			node = ResourceLoader.load_threaded_get(packed_scene.resource_path).instantiate();
-		else:
-			SceneManager.instance.get_or_create_scene(id)
-	return node;
-	
-##Will execute the callable, this will cache the scene if it is unloaded.
 func queue(c: Callable) -> void:
 	if is_cached:
 		c.call(self);
