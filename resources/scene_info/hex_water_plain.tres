@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="SceneInfo" format=3 uid="uid://dq3k4j72tnetv"]
+
+[ext_resource type="Script" uid="uid://6t4u66o5q6po" path="res://scripts/scene_manager/scene_info.gd" id="1_ctt4v"]
+[ext_resource type="PackedScene" uid="uid://ci1fy2fl7cvfe" path="res://scenes/hexes/hex_water_plain.tscn" id="1_gpb4g"]
+
+[resource]
+script = ExtResource("1_ctt4v")
+packed_scene = ExtResource("1_gpb4g")
+type = 1
+metadata/_custom_type_script = "uid://6t4u66o5q6po"

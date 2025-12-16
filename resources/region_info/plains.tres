@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="RegionInfo" format=3 uid="uid://cqs6mgr0ms55u"]
+
+[ext_resource type="Script" uid="uid://6t4u66o5q6po" path="res://scripts/scene_manager/scene_info.gd" id="1_ltde2"]
+[ext_resource type="Script" uid="uid://m31o3kdm652g" path="res://scripts/hex_system/region.gd" id="2_te6hx"]
+[ext_resource type="Resource" uid="uid://betpu2iylw1qy" path="res://resources/scene_info/hex_green.tres" id="2_y4g60"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ltde2"]
+
+[resource]
+script = ExtResource("2_te6hx")
+name = "plains"
+noise = SubResource("FastNoiseLite_ltde2")
+scene_multipliers = Dictionary[ExtResource("1_ltde2"), float]({
+ExtResource("2_y4g60"): 1.0
+})
+metadata/_custom_type_script = "uid://m31o3kdm652g"

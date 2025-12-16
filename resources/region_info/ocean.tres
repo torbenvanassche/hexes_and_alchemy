@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="RegionInfo" format=3 uid="uid://bbahgdc5whoa4"]
+
+[ext_resource type="Script" uid="uid://6t4u66o5q6po" path="res://scripts/scene_manager/scene_info.gd" id="1_sh8ks"]
+[ext_resource type="Resource" uid="uid://dq3k4j72tnetv" path="res://resources/scene_info/hex_water_plain.tres" id="2_dpad2"]
+[ext_resource type="Script" uid="uid://m31o3kdm652g" path="res://scripts/hex_system/region.gd" id="2_yrmbv"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_sh8ks"]
+
+[resource]
+script = ExtResource("2_yrmbv")
+name = "ocean"
+noise = SubResource("FastNoiseLite_sh8ks")
+scene_multipliers = Dictionary[ExtResource("1_sh8ks"), float]({
+ExtResource("2_dpad2"): 1.0
+})
+metadata/_custom_type_script = "uid://m31o3kdm652g"

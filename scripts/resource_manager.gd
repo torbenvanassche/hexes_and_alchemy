@@ -1,24 +1,13 @@
 class_name DataManager extends Node
 
 @export var scenes: Array[SceneInfo];
-
-var _total_weight: float = 0.0
-var _cumulative_weights: Array[float] = []
+@export var regions: Array[RegionInfo];
 
 static var instance: DataManager;
 func _ready() -> void:
 	DataManager.instance = self;
 	for scene in scenes:
 		scene.ready();
-	_build_weight_table()
-	
-func _build_weight_table() -> void:
-	_total_weight = 0.0
-	_cumulative_weights.clear()
-
-	for info in scenes:
-		_total_weight += max(info.spawn_weight, 0.0)
-		_cumulative_weights.append(_total_weight)
 
 func get_scene_by_name(scene_name: String) -> SceneInfo:
 	var filtered := scenes.filter(func(scene: SceneInfo) -> bool: return scene != null && scene.id == scene_name);
@@ -44,13 +33,44 @@ func is_active(scene_name: String) -> bool:
 	var scene_info := get_scene_by_name(scene_name);
 	return scene_info.node != null && scene_info.node.visible == true
 	
-func pick_random_scene() -> SceneInfo:
-	if scenes.is_empty():
+func pick_scene(x: int, y: int) -> SceneInfo:
+	var total_weight := 0.0
+	var cumulative: Array[float] = []
+	var region := get_region_for(x, y);
+
+	for info in scenes:
+		var w := info.spawn_weight
+
+		if region != null and region.scene_multipliers.has(info):
+			w *= region.scene_multipliers[info]
+
+		w = max(w, 0.0)
+		total_weight += w
+		cumulative.append(total_weight)
+
+	if total_weight <= 0.0:
 		return null
 
-	var r := randf() * _total_weight
-
-	for i in scenes.size():
-		if r <= _cumulative_weights[i]:
+	var r := randf() * total_weight
+	for i in cumulative.size():
+		if r <= cumulative[i]:
 			return scenes[i]
+
 	return scenes[-1]
+
+func get_region_for(x: int, y: int) -> RegionInfo:
+	var best_region: RegionInfo = null
+	var best_score := -INF
+
+	for region in regions:
+		if region.noise == null:
+			continue
+
+		var n := region.noise.get_noise_2d(x, y)
+		var score := n * region.region_weight
+
+		if score > best_score:
+			best_score = score
+			best_region = region
+
+	return best_region

@@ -8,7 +8,7 @@ enum Type {
 	EVENT
 }
 
-@export var id:String;
+var id:String;
 
 @export_group("Core")
 @export var packed_scene: PackedScene;
