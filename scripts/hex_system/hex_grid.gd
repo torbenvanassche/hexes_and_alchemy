@@ -1,8 +1,6 @@
 class_name HexGrid
 extends Node3D
 
-@export var packed_scene: PackedScene
-
 var pointy_top: bool = false;
 var spacing: float = 0.25
 
@@ -38,21 +36,14 @@ func has_chunk(cx: int, cy: int) -> bool:
 	
 func get_spacing() -> Vector2:
 	if pointy_top:
-		return Vector2(
-			3.0 * RADIUS_IN / 2.0 + spacing,
-			sqrt(3.0) * RADIUS_IN + spacing
-		)
+		return Vector2(3.0 * RADIUS_IN / 2.0 + spacing, sqrt(3.0) * RADIUS_IN + spacing)
 	else:
-		return Vector2(
-			sqrt(3.0) * RADIUS_IN + spacing,
-			3.0 * RADIUS_IN / 2.0 + spacing
-		)
+		return Vector2(sqrt(3.0) * RADIUS_IN + spacing, 3.0 * RADIUS_IN / 2.0 + spacing)
 		
 func get_chunk_coords(x: int, y: int) -> Vector2i:
 	return Vector2i(floori(float(x) / CHUNK_WIDTH), floori(float(y) / CHUNK_HEIGHT))
 		
-func create_hex(x: int, y: int, spacing_vec: Vector2) -> HexBase:
-	var hex := packed_scene.instantiate() as HexBase
+func create_hex(x: int, y: int, spacing_vec: Vector2, hex: HexBase) -> HexBase:
 	add_child(hex)
 
 	var pos := Vector3.ZERO
@@ -90,7 +81,7 @@ func generate_chunk(cx: int, cy: int) -> HexChunk:
 
 	for y in range(start_y, start_y + CHUNK_HEIGHT):
 		for x in range(start_x, start_x + CHUNK_WIDTH):
-			var hex := create_hex(x, y, spacing_vec)
-			chunk.add_hex(hex)
-
+			var picked_scene := DataManager.instance.pick_random_scene()
+			SceneManager.instance.cache_scenes([picked_scene], 
+				func(sIArray: Array[SceneInfo]) -> void: chunk.add_hex(create_hex(x, y, spacing_vec, sIArray[0].packed_scene.instantiate())))
 	return chunk
