@@ -23,7 +23,7 @@ signal cached(scene_info: SceneInfo);
 var is_cached: bool = false;
 var is_queued: bool = false;
 
-func ready() -> void:
+func initialize() -> void:
 	id = resource_path.get_file().trim_suffix(".tres");
 
 func release() -> void:

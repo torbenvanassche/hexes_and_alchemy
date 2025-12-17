@@ -1,7 +1,9 @@
 [gd_scene format=3 uid="uid://ci1fy2fl7cvfe"]
 
+[ext_resource type="Script" uid="uid://cnsimvghm7vi" path="res://scripts/hex_system/hex_base.gd" id="1_d0k30"]
 [ext_resource type="PackedScene" uid="uid://dbubivckakm1r" path="res://meshes/tiles/base/hex_water.glb" id="1_lvh52"]
 
 [node name="Node3D" type="Node3D" unique_id=1526827113]
+script = ExtResource("1_d0k30")
 
 [node name="Root Scene" parent="." unique_id=1354532191 instance=ExtResource("1_lvh52")]

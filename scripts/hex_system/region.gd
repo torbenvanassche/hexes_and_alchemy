@@ -1,7 +1,14 @@
 class_name RegionInfo
 extends Resource
 
-@export var name: String;
-@export var noise: FastNoiseLite;
-@export var region_weight: float = 1.0;
-@export var scene_multipliers: Dictionary[SceneInfo, float];
+var id: String
+@export var noise: FastNoiseLite
+
+@export var priority: int = 0
+@export var activation_threshold: float = 0.5
+@export var region_weight: float = 1.0
+
+@export var scene_multipliers: Dictionary[SceneInfo, float] = {}
+
+func initialize() -> void:
+	id = resource_path.get_file().trim_suffix(".tres");

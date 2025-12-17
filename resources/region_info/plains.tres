@@ -4,9 +4,14 @@
 [ext_resource type="Script" uid="uid://m31o3kdm652g" path="res://scripts/hex_system/region.gd" id="2_te6hx"]
 [ext_resource type="Resource" uid="uid://betpu2iylw1qy" path="res://resources/scene_info/hex_green.tres" id="2_y4g60"]
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_te6hx"]
+seed = 1
+frequency = 0.1
+
 [resource]
 script = ExtResource("2_te6hx")
-name = "plains"
+noise = SubResource("FastNoiseLite_te6hx")
+activation_threshold = 0.25
 scene_multipliers = Dictionary[ExtResource("1_ltde2"), float]({
 ExtResource("2_y4g60"): 1.0
 })

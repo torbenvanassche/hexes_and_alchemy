@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://bbh3tqcpujraq" path="res://scripts/scene_manager/scene_manager.gd" id="4_jh1ax"]
 [ext_resource type="Resource" uid="uid://betpu2iylw1qy" path="res://resources/scene_info/hex_green.tres" id="4_kycxp"]
 [ext_resource type="Script" uid="uid://m31o3kdm652g" path="res://scripts/hex_system/region.gd" id="5_3hfy5"]
+[ext_resource type="Resource" uid="uid://dq3k4j72tnetv" path="res://resources/scene_info/hex_water_plain.tres" id="5_7pvxh"]
 [ext_resource type="Resource" uid="uid://cqs6mgr0ms55u" path="res://resources/region_info/plains.tres" id="6_7pvxh"]
 [ext_resource type="Resource" uid="uid://bbahgdc5whoa4" path="res://resources/region_info/ocean.tres" id="7_y3xxt"]
 
@@ -27,7 +28,7 @@ glow_enabled = true
 
 [node name="resource_manager" type="Node" parent="." unique_id=1025417812]
 script = ExtResource("2_sqa0i")
-scenes = Array[ExtResource("3_jh1ax")]([ExtResource("4_kycxp"), ExtResource("4_j287u")])
+scenes = Array[ExtResource("3_jh1ax")]([ExtResource("4_kycxp"), ExtResource("4_j287u"), ExtResource("5_7pvxh")])
 regions = Array[ExtResource("5_3hfy5")]([ExtResource("6_7pvxh"), ExtResource("7_y3xxt")])
 
 [node name="scene_manager" type="Node" parent="." unique_id=514371925 node_paths=PackedStringArray("root")]
