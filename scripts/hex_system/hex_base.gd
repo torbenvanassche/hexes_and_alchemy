@@ -1,10 +1,14 @@
-@tool
 class_name HexBase
 extends Node3D
 
 const SIDES := 6
 const RADIUS_IN := 1.0
 const RADIUS_OUT := 2.0 / sqrt(3.0)
+
+var meshes: Array[MeshInstance3D] = [];
+
+func _ready() -> void:
+	meshes.assign(find_children("*", "MeshInstance3D", true, false))
 
 func get_hex_vertices() -> Array[Vector3]:
 	var vertices: Array[Vector3] = []
@@ -23,3 +27,8 @@ func get_edge_midpoints() -> Array[Vector3]:
 		midpoints.append((a + b) * 0.5)
 
 	return midpoints
+
+func apply_region(reg: RegionInfo) -> void:
+	for mesh in meshes:
+		if reg && reg.material:
+			mesh.material_override = reg.material;

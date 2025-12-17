@@ -1,0 +1,6 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bsjgt7wkv1u6r"]
+
+[ext_resource type="Texture2D" uid="uid://8hsyqylphfb7" path="res://textures/hexagons_medieval_Fall.png" id="1_fiptr"]
+
+[resource]
+albedo_texture = ExtResource("1_fiptr")

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="SceneInfo" format=3 uid="uid://betpu2iylw1qy"]
+
+[ext_resource type="PackedScene" uid="uid://eyyrdjphljp8" path="res://scenes/hexes/hex_simple_champfer.tscn" id="1_r2d0s"]
+[ext_resource type="Script" uid="uid://6t4u66o5q6po" path="res://scripts/scene_manager/scene_info.gd" id="2_wov65"]
+
+[resource]
+script = ExtResource("2_wov65")
+packed_scene = ExtResource("1_r2d0s")
+type = 1
+metadata/_custom_type_script = "uid://6t4u66o5q6po"

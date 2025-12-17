@@ -1,8 +1,10 @@
 [gd_resource type="Resource" script_class="RegionInfo" format=3 uid="uid://cqs6mgr0ms55u"]
 
 [ext_resource type="Script" uid="uid://6t4u66o5q6po" path="res://scripts/scene_manager/scene_info.gd" id="1_ltde2"]
+[ext_resource type="Material" uid="uid://c66vbca7lgh6m" path="res://materials/default.tres" id="1_v1b04"]
 [ext_resource type="Script" uid="uid://m31o3kdm652g" path="res://scripts/hex_system/region.gd" id="2_te6hx"]
-[ext_resource type="Resource" uid="uid://betpu2iylw1qy" path="res://resources/scene_info/hex_green.tres" id="2_y4g60"]
+[ext_resource type="Resource" uid="uid://betpu2iylw1qy" path="res://resources/scene_info/hex_simple.tres" id="3_aq4h2"]
+[ext_resource type="Resource" uid="uid://0rbvckas43of" path="res://resources/scene_info/hex_simple_with_dirt.tres" id="4_yf7g0"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_te6hx"]
 seed = 1
@@ -11,8 +13,10 @@ frequency = 0.1
 [resource]
 script = ExtResource("2_te6hx")
 noise = SubResource("FastNoiseLite_te6hx")
-activation_threshold = 0.25
+activation_threshold = 0.2
+material = ExtResource("1_v1b04")
 scene_multipliers = Dictionary[ExtResource("1_ltde2"), float]({
-ExtResource("2_y4g60"): 1.0
+ExtResource("3_aq4h2"): 1.0,
+ExtResource("4_yf7g0"): 0.1
 })
 metadata/_custom_type_script = "uid://m31o3kdm652g"

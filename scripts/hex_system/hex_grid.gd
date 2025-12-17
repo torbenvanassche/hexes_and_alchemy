@@ -45,6 +45,8 @@ func get_chunk_coords(x: int, y: int) -> Vector2i:
 		
 func create_hex(x: int, y: int, spacing_vec: Vector2, hex: HexBase) -> HexBase:
 	add_child(hex)
+	
+	hex.apply_region(DataManager.instance.get_region_for(x, y))
 
 	var pos := Vector3.ZERO
 
@@ -82,4 +84,4 @@ func generate_chunk(cx: int, cy: int) -> HexChunk:
 	for y in range(start_y, start_y + CHUNK_HEIGHT):
 		for x in range(start_x, start_x + CHUNK_WIDTH):
 			DataManager.instance.pick_scene(x, y).queue(func(sI: SceneInfo) -> void: chunk.add_hex(create_hex(x, y, spacing_vec, sI.packed_scene.instantiate())));
-	return chunk	
+	return chunk
