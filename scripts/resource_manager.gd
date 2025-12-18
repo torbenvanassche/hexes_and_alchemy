@@ -3,10 +3,6 @@ class_name DataManager extends Node
 @export var scenes: Array[SceneInfo];
 @export var regions: Array[RegionInfo];
 
-const REGION_SIZE := 16
-var region_map: Dictionary[Vector2i, RegionInfo] = {}
-var region_counts: Dictionary[RegionInfo, int] = {}
-
 static var instance: DataManager;
 func _ready() -> void:
 	DataManager.instance = self;

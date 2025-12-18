@@ -3,7 +3,7 @@
 [ext_resource type="Material" uid="uid://bsjgt7wkv1u6r" path="res://materials/sand.tres" id="1_cjbsg"]
 [ext_resource type="Script" uid="uid://6t4u66o5q6po" path="res://scripts/scene_manager/scene_info.gd" id="2_0svbn"]
 [ext_resource type="Resource" uid="uid://betpu2iylw1qy" path="res://resources/scene_info/hex_simple.tres" id="3_027p0"]
-[ext_resource type="Script" uid="uid://m31o3kdm652g" path="res://scripts/hex_system/region.gd" id="5_ts14k"]
+[ext_resource type="Script" uid="uid://m31o3kdm652g" path="res://scripts/hex_system/region_info.gd" id="5_ts14k"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_te6hx"]
 seed = 2

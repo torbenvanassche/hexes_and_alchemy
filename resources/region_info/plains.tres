@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://6t4u66o5q6po" path="res://scripts/scene_manager/scene_info.gd" id="1_ltde2"]
 [ext_resource type="Material" uid="uid://c66vbca7lgh6m" path="res://materials/default.tres" id="1_v1b04"]
-[ext_resource type="Script" uid="uid://m31o3kdm652g" path="res://scripts/hex_system/region.gd" id="2_te6hx"]
+[ext_resource type="Script" uid="uid://m31o3kdm652g" path="res://scripts/hex_system/region_info.gd" id="2_te6hx"]
 [ext_resource type="Resource" uid="uid://betpu2iylw1qy" path="res://resources/scene_info/hex_simple.tres" id="3_aq4h2"]
 [ext_resource type="Resource" uid="uid://0rbvckas43of" path="res://resources/scene_info/hex_simple_with_dirt.tres" id="4_yf7g0"]
 
