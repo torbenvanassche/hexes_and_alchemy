@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://brvlq57sriljj"]
+
+[ext_resource type="PackedScene" uid="uid://c45porvj1pmnn" path="res://meshes/units/blue/unit_blue_full.glb" id="1_3vyb7"]
+
+[node name="Node3D" type="Node3D" unique_id=1190852250]
+
+[node name="Root Scene" parent="." unique_id=334534422 instance=ExtResource("1_3vyb7")]

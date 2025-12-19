@@ -2,6 +2,7 @@ class_name DataManager extends Node
 
 @export var scenes: Array[SceneInfo];
 @export var regions: Array[RegionInfo];
+@export var player: SceneInfo;
 
 const CUBE_DIRS : Array[Vector3i] = [
 	Vector3i(1,-1,0), Vector3i(1,0,-1), Vector3i(0,1,-1),

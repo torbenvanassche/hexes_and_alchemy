@@ -28,6 +28,8 @@ glow_enabled = true
 
 [node name="root" type="Node3D" unique_id=1531349496]
 
+[node name="game_manager" type="Node" parent="." unique_id=299541562]
+
 [node name="resource_manager" type="Node" parent="." unique_id=1025417812]
 script = ExtResource("2_sqa0i")
 scenes = Array[ExtResource("3_jh1ax")]([ExtResource("4_kycxp"), ExtResource("5_7pvxh"), ExtResource("5_y3xxt"), ExtResource("6_xsp7o")])
@@ -35,7 +37,7 @@ regions = Array[ExtResource("5_3hfy5")]([ExtResource("6_7pvxh"), ExtResource("7_
 
 [node name="scene_manager" type="Node" parent="." unique_id=514371925 node_paths=PackedStringArray("root")]
 script = ExtResource("4_jh1ax")
-root = NodePath("../game_world")
+root = NodePath("")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=694636533]
 environment = SubResource("Environment_lrqlo")
@@ -44,10 +46,8 @@ environment = SubResource("Environment_lrqlo")
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
 shadow_enabled = true
 
-[node name="generator" parent="." unique_id=1031745512 instance=ExtResource("1_j5px3")]
-initial_chunks = Vector2i(5, 5)
+[node name="game_world" parent="." unique_id=1031745512 instance=ExtResource("1_j5px3")]
+chunk_radius = null
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=643252364]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 10.355938, 0)
-
-[node name="game_world" type="Node3D" parent="." unique_id=856219759]

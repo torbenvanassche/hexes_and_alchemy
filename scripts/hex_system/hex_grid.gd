@@ -4,7 +4,8 @@ extends Node3D
 var pointy_top: bool = false;
 var _spacing: float = 0.25
 
-@export var initial_chunks: Vector2i = Vector2i(2, 2)
+@export var chunk_radius: int = 3;
+var initial_generation: bool = true;
 
 const RADIUS_IN := 1.0
 
@@ -30,14 +31,20 @@ const CHUNK_DIR_VECTORS: Dictionary[ChunkDir, Vector2i] = {
 
 func _ready() -> void:
 	map_ready.connect(_on_map_ready)
-	for cy in range(initial_chunks.y):
-		for cx in range(initial_chunks.x):
+	for cy in range(-chunk_radius, chunk_radius + 1):
+		for cx in range(-chunk_radius, chunk_radius + 1):
+			if Vector2(cx, cy).length() > chunk_radius:
+				continue
 			generate_chunk(cx, cy)
 
 func _on_map_ready() -> void:
 	for reg in region_instances.keys():
 		for rI: RegionInstance in region_instances[reg]:
 			rI.generate_structures_for_region()
+			
+	if initial_generation:
+		initial_generation = false;
+		_spawn_player()
 	
 func has_chunk(cx: int, cy: int) -> bool:
 	return chunks.has(Vector2i(cx, cy))

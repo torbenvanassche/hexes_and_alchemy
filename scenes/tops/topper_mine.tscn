@@ -1,10 +1,8 @@
 [gd_scene format=3 uid="uid://cy1s6kym2ib68"]
 
 [ext_resource type="PackedScene" uid="uid://twco3r24bsnx" path="res://meshes/buildings/blue/building_mine_blue.glb" id="1_bbfir"]
-[ext_resource type="Script" uid="uid://cnsimvghm7vi" path="res://scripts/hex_system/hex_base.gd" id="1_f4m0s"]
 
 [node name="Node3D" type="Node3D" unique_id=2071832704]
-script = ExtResource("1_f4m0s")
 
 [node name="Root Scene" parent="." unique_id=1429542013 instance=ExtResource("1_bbfir")]
 transform = Transform3D(-0.8660254, 0, -0.49999997, 0, 1, 0, 0.49999997, 0, -0.8660254, 0, 0, 0)
