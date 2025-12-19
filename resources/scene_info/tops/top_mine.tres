@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="StructureInfo" format=3 uid="uid://ckpmn3cutb7an"]
+
+[ext_resource type="PackedScene" uid="uid://cy1s6kym2ib68" path="res://scenes/tops/topper_mine.tscn" id="1_wnxti"]
+[ext_resource type="Script" uid="uid://btydeamnhd6x" path="res://scripts/structures/structure_info.gd" id="2_2jjhd"]
+
+[sub_resource type="Curve" id="Curve_nqdss"]
+_limits = [0.0, 20.0, 0.0, 50.0]
+_data = [Vector2(15, 1), 0.0, 0.08571429, 0, 1, Vector2(50, 4), 0.08571429, 0.0, 1, 0]
+point_count = 2
+
+[resource]
+script = ExtResource("2_2jjhd")
+max_per_region_size = SubResource("Curve_nqdss")
+packed_scene = ExtResource("1_wnxti")
+type = 4
+spawn_weight = 0.5
+metadata/_custom_type_script = "uid://btydeamnhd6x"

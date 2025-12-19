@@ -5,7 +5,8 @@ enum Type {
 	SCENE,
 	TILE,
 	UI,
-	EVENT
+	EVENT,
+	STRUCTURE
 }
 
 var id:String;

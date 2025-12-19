@@ -2,7 +2,7 @@ class_name HexGrid
 extends Node3D
 
 var pointy_top: bool = false;
-var spacing: float = 0.25
+var _spacing: float = 0.25
 
 @export var initial_chunks: Vector2i = Vector2i(2, 2)
 
@@ -10,6 +10,9 @@ const RADIUS_IN := 1.0
 
 var chunks: Dictionary[Vector2i, HexChunk] = {}
 var region_instances: Dictionary[RegionInfo, Array] = {} 
+var tiles: Dictionary[Vector3i, HexBase] = {}
+
+signal map_ready();
 
 enum ChunkDir {
 	NORTH,
@@ -26,42 +29,59 @@ const CHUNK_DIR_VECTORS: Dictionary[ChunkDir, Vector2i] = {
 }
 
 func _ready() -> void:
+	map_ready.connect(_on_map_ready)
 	for cy in range(initial_chunks.y):
 		for cx in range(initial_chunks.x):
 			generate_chunk(cx, cy)
+
+func _on_map_ready() -> void:
+	for reg in region_instances.keys():
+		for rI: RegionInstance in region_instances[reg]:
+			rI.generate_structures_for_region()
 	
 func has_chunk(cx: int, cy: int) -> bool:
 	return chunks.has(Vector2i(cx, cy))
 	
 func get_spacing() -> Vector2:
 	if pointy_top:
-		return Vector2(3.0 * RADIUS_IN / 2.0 + spacing, sqrt(3.0) * RADIUS_IN + spacing)
+		return Vector2(3.0 * RADIUS_IN / 2.0 + _spacing, sqrt(3.0) * RADIUS_IN + _spacing)
 	else:
-		return Vector2(sqrt(3.0) * RADIUS_IN + spacing, 3.0 * RADIUS_IN / 2.0 + spacing)
+		return Vector2(sqrt(3.0) * RADIUS_IN + _spacing, 3.0 * RADIUS_IN / 2.0 + _spacing)
 	
 func _get_instances_for_region(region: RegionInfo) -> Array:
 	if not region_instances.has(region):
 		region_instances[region] = []
 	return region_instances[region];
 		
-func create_hex(grid_id: Vector2i, spacing_vec: Vector2, hex: HexBase) -> HexBase:
+func create_hex(grid_id: Vector2i, spacing: Vector2, hex: HexBase) -> HexBase:
 	add_child(hex)
-	hex.grid_id = grid_id
+	hex.region = DataManager.instance.get_region_for(grid_id.x, grid_id.y);
 
-	var region := DataManager.instance.get_region_for(grid_id.x, grid_id.y)
-	hex.apply_region(region)
+	hex.grid_id = grid_id;
+	hex.cube_id = offset_to_cube(grid_id)
+	tiles[hex.cube_id] = hex;
 
 	var pos := Vector3.ZERO
-
 	if pointy_top:
-		pos.x = grid_id.x * spacing_vec.x
-		pos.z = grid_id.y * spacing_vec.y + (grid_id.x & 1) * (spacing_vec.y / 2.0)
+		pos.x = grid_id.x * spacing.x
+		pos.z = grid_id.y * spacing.y + (grid_id.x & 1) * (spacing.y / 2)
 	else:
-		pos.x = grid_id.x * spacing_vec.x + (grid_id.y & 1) * (spacing_vec.x / 2.0)
-		pos.z = grid_id.y * spacing_vec.y
+		pos.x = grid_id.x * spacing.x + (grid_id.y & 1) * (spacing.x / 2)
+		pos.z = grid_id.y * spacing.y
 	hex.position = pos
-	
 	return hex
+	
+func offset_to_cube(grid: Vector2i) -> Vector3i:
+	if pointy_top:
+		var x := grid.x
+		var z := grid.y - (grid.x - (grid.x & 1)) / 2
+		var y := -x - z
+		return Vector3i(x, y, z)
+	else:
+		var x := grid.x - (grid.y - (grid.y & 1)) / 2
+		var z := grid.y
+		var y := -x - z
+		return Vector3i(x, y, z)
 
 func expand_from_chunk(cx: int, cy: int, dir: int) -> void:
 	var offset := CHUNK_DIR_VECTORS[dir]
@@ -73,27 +93,50 @@ func expand_from_chunk(cx: int, cy: int, dir: int) -> void:
 	generate_chunk(new_coords.x, new_coords.y)
 	
 func _post_process_chunk(chunk: HexChunk) -> void:
-	for generated_hex in chunk.hexes:
-		var hex_right = chunk.get_hex(generated_hex.grid_id + Vector2i(1, 0))
-		if hex_right && hex_right.region == generated_hex.region:
-			var found_hex: bool = false;
-			for r: RegionInstance in _get_instances_for_region(generated_hex.region):
-				if r.has_hex(hex_right.grid_id):
-					r.add_hex(generated_hex.grid_id, generated_hex)
-					found_hex = true;
-			
-			if not found_hex:
-				var reg = RegionInstance.new(generated_hex.region);
-				reg.add_hex(generated_hex.grid_id, generated_hex)
-				_get_instances_for_region(generated_hex.region).append(reg);
-		
-	var done: bool = true;
-	for c in chunks:
+	for hex: HexBase in chunk.hexes:
+		_assign_region_instance(hex)
+	
+	var all_chunks_generated: bool = true;
+	for c in chunks.keys():
 		if not chunks[c].is_generated:
-			done = false;
-	if done:
-		for i in region_instances:
-			print(i.id, region_instances[i].size())
+			all_chunks_generated = false;
+	if all_chunks_generated:
+		map_ready.emit();
+
+func _assign_region_instance(hex: HexBase) -> void:
+	if hex.region_instance != null:
+		return
+
+	var touching_instances: Array[RegionInstance] = []
+
+	for d in DataManager.instance.CUBE_DIRS:
+		var nid := hex.cube_id + d
+		if not tiles.has(nid):
+			continue
+
+		var neighbor := tiles[nid]
+		if neighbor.region != hex.region:
+			continue
+
+		if neighbor.region_instance != null and not touching_instances.has(neighbor.region_instance):
+			touching_instances.append(neighbor.region_instance)
+
+	match touching_instances.size():
+		0:
+			var reg := RegionInstance.new(hex.region)
+			reg.add_hex(hex)
+			_get_instances_for_region(hex.region).append(reg)
+		1:
+			touching_instances[0].add_hex(hex)
+		_:
+			var primary := touching_instances[0]
+			primary.add_hex(hex)
+			for i in range(1, touching_instances.size()):
+				var other := touching_instances[i]
+				for h: HexBase in other.hexes.values():
+					primary.add_hex(h)
+				_get_instances_for_region(hex.region).erase(other)
+
 		
 func generate_chunk(cx: int, cy: int) -> HexChunk:
 	var key := Vector2i(cx, cy)

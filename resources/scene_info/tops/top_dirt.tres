@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="StructureInfo" format=3 uid="uid://dbhyrexgkscja"]
+
+[ext_resource type="PackedScene" uid="uid://cvkpa07ijqa1m" path="res://scenes/tops/topper_dirt.tscn" id="1_okhmu"]
+[ext_resource type="Script" uid="uid://btydeamnhd6x" path="res://scripts/structures/structure_info.gd" id="2_kbdnr"]
+
+[sub_resource type="Curve" id="Curve_nqdss"]
+_limits = [0.0, 20.0, 0.0, 50.0]
+_data = [Vector2(9, 0), 0.0, 0.07317074, 0, 1, Vector2(50, 3), 0.07317074, 0.0, 1, 0]
+point_count = 2
+
+[resource]
+script = ExtResource("2_kbdnr")
+max_per_region_size = SubResource("Curve_nqdss")
+packed_scene = ExtResource("1_okhmu")
+type = 4
+spawn_weight = 0.1
+metadata/_custom_type_script = "uid://btydeamnhd6x"
