@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://3pb564xgsaqo"]
 
 [ext_resource type="PackedScene" uid="uid://maout4rpahg4" path="res://scenes/generator.tscn" id="1_j5px3"]
+[ext_resource type="Script" uid="uid://cdjrbv2tvjlvw" path="res://scripts/game_manager.gd" id="1_l5cgh"]
 [ext_resource type="Script" uid="uid://dpjtl8txjms6k" path="res://scripts/resource_manager.gd" id="2_sqa0i"]
 [ext_resource type="Script" uid="uid://6t4u66o5q6po" path="res://scripts/scene_manager/scene_info.gd" id="3_jh1ax"]
 [ext_resource type="Script" uid="uid://bbh3tqcpujraq" path="res://scripts/scene_manager/scene_manager.gd" id="4_jh1ax"]
@@ -29,6 +30,7 @@ glow_enabled = true
 [node name="root" type="Node3D" unique_id=1531349496]
 
 [node name="game_manager" type="Node" parent="." unique_id=299541562]
+script = ExtResource("1_l5cgh")
 
 [node name="resource_manager" type="Node" parent="." unique_id=1025417812]
 script = ExtResource("2_sqa0i")
