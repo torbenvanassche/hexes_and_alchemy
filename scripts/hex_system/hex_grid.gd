@@ -44,7 +44,7 @@ func _on_map_ready() -> void:
 			
 	if initial_generation:
 		initial_generation = false;
-		_spawn_player()
+		Manager.instance.spawn_player(chunks[Vector2i(0, 0)].pick_random())
 	
 func has_chunk(cx: int, cy: int) -> bool:
 	return chunks.has(Vector2i(cx, cy))
@@ -80,14 +80,14 @@ func create_hex(grid_id: Vector2i, spacing: Vector2, hex: HexBase) -> HexBase:
 	
 func offset_to_cube(grid: Vector2i) -> Vector3i:
 	if pointy_top:
-		var x := grid.x
-		var z := grid.y - (grid.x - (grid.x & 1)) / 2
-		var y := -x - z
+		var x: int = grid.x
+		var z: int = grid.y - ((grid.x - (grid.x & 1)) >> 1)
+		var y: int = -x - z
 		return Vector3i(x, y, z)
 	else:
-		var x := grid.x - (grid.y - (grid.y & 1)) / 2
-		var z := grid.y
-		var y := -x - z
+		var x: int = grid.x - ((grid.y - (grid.y & 1)) >> 1)
+		var z: int = grid.y
+		var y: int = -x - z
 		return Vector3i(x, y, z)
 
 func expand_from_chunk(cx: int, cy: int, dir: int) -> void:

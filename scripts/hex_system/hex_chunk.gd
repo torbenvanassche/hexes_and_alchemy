@@ -42,3 +42,6 @@ func get_hex(idx: Vector2i) -> HexBase:
 	if rV.size() == 1:
 		return rV[0];
 	return null;
+	
+func pick_random() -> HexBase:
+	return hexes.pick_random()

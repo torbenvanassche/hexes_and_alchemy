@@ -11,6 +11,9 @@ const CUBE_DIRS : Array[Vector3i] = [
 
 static var instance: DataManager;
 func _ready() -> void:
+	if not scenes.has(player):
+		scenes.append(player);
+	
 	DataManager.instance = self;
 	for scene in scenes:
 		scene.initialize();

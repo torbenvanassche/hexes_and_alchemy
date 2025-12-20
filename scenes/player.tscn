@@ -5,3 +5,4 @@
 [node name="Node3D" type="Node3D" unique_id=1190852250]
 
 [node name="Root Scene" parent="." unique_id=334534422 instance=ExtResource("1_3vyb7")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)

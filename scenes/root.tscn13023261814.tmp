@@ -56,7 +56,3 @@ shadow_enabled = true
 [node name="Camera3D" type="Camera3D" parent="." unique_id=503402897]
 transform = Transform3D(1, 0, 0, 0, 0.8551743, 0.51834047, 0, -0.51834047, 0.8551743, 0, 3.7496269, 3.5924623)
 script = ExtResource("15_dylgi")
-camera_distance = 8.0
-camera_height = 3.0
-pan_speed = 10.0
-max_pan_distance = 8.0
