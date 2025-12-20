@@ -1,8 +1,18 @@
 [gd_scene format=3 uid="uid://brvlq57sriljj"]
 
 [ext_resource type="PackedScene" uid="uid://c45porvj1pmnn" path="res://meshes/units/blue/unit_blue_full.glb" id="1_3vyb7"]
+[ext_resource type="Script" uid="uid://dbq18q3bbriy7" path="res://scripts/player.gd" id="1_g2els"]
 
-[node name="Node3D" type="Node3D" unique_id=1190852250]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_g2els"]
+radius = 0.3
+height = 1.0698242
+
+[node name="Node3D" type="CharacterBody3D" unique_id=357255706]
+script = ExtResource("1_g2els")
 
 [node name="Root Scene" parent="." unique_id=334534422 instance=ExtResource("1_3vyb7")]
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=850278735]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5019531, 0)
+shape = SubResource("CapsuleShape3D_g2els")

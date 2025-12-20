@@ -30,6 +30,7 @@ const CHUNK_DIR_VECTORS: Dictionary[ChunkDir, Vector2i] = {
 }
 
 func _ready() -> void:
+	Manager.instance.hex_grid = self;
 	map_ready.connect(_on_map_ready)
 	for cy in range(-chunk_radius, chunk_radius + 1):
 		for cx in range(-chunk_radius, chunk_radius + 1):
@@ -164,5 +165,21 @@ func generate_chunk(cx: int, cy: int) -> HexChunk:
 			var grid_id := Vector2i(gx, gy)
 			DataManager.instance.pick_scene(gx, gy).queue(
 				func(sI: SceneInfo) -> void:
-					chunk.add_hex(create_hex(grid_id, spacing_vec, sI.packed_scene.instantiate())))
+					chunk.add_hex(create_hex(grid_id, spacing_vec, sI.get_instance())))
 	return chunk
+	
+func get_hex_at_world_position(pos: Vector3) -> HexBase:
+	var spacing := get_spacing()
+
+	var gx: int
+	var gy: int
+
+	if pointy_top:
+		gx = roundi(pos.x / spacing.x)
+		gy = roundi((pos.z - (gx & 1) * spacing.y * 0.5) / spacing.y)
+	else:
+		gy = roundi(pos.z / spacing.y)
+		gx = roundi((pos.x - (gy & 1) * spacing.x * 0.5) / spacing.x)
+
+	var cube := offset_to_cube(Vector2i(gx, gy))
+	return tiles.get(cube, null)

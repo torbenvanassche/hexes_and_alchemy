@@ -46,19 +46,16 @@ func get_or_create_scene(scene_name: String, scene_config: SceneConfig = SceneCo
 		
 func _check_loaded(to_load: Array[SceneInfo]) -> bool:
 	return to_load.all(func(scene: SceneInfo) -> bool: return scene.is_cached)
-
-func set_scene_reference(id: String, target: Node) -> void:
-	DataManager.instance.get_scene_by_name(id).node = target;
 	
 func remove_scene(info: SceneInfo, permanent: bool = false) -> void:
-	if info.node != null:
-		scene_stack.erase(info);
+	if info.instances.size() != 0:
+		for i in info.instances:
+			if scene_stack.has(i):
+				scene_stack.erase(i);
 		if permanent:
 			info.release();
 		else:
 			info.remove();
-	else:
-		Debug.message("Could not remove scene %s because it was never loaded" % info.id);
 	
 func to_previous_scene() -> void:
 	if scene_stack.size() != 0:

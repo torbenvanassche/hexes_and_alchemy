@@ -11,6 +11,7 @@ point_count = 2
 [resource]
 script = ExtResource("2_2jjhd")
 max_per_region_size = SubResource("Curve_nqdss")
+is_walkable = false
 packed_scene = ExtResource("1_wnxti")
 type = 4
 spawn_weight = 0.5

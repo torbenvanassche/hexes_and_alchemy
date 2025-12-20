@@ -4,6 +4,7 @@ class_name StructureInfo extends SceneInfo
 
 func initialize() -> void:
 	self.type = Type.STRUCTURE;
+	is_walkable = false;
 	super();
 	
 func get_max_count(tile_count: int) -> int:

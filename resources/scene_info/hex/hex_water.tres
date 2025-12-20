@@ -5,6 +5,7 @@
 
 [resource]
 script = ExtResource("1_ctt4v")
+is_walkable = false
 packed_scene = ExtResource("1_gpb4g")
 type = 1
 metadata/_custom_type_script = "uid://6t4u66o5q6po"
