@@ -7,3 +7,4 @@
 script = ExtResource("1_d0k30")
 
 [node name="Root Scene" parent="." unique_id=1354532191 instance=ExtResource("1_lvh52")]
+transform = Transform3D(0.98, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
