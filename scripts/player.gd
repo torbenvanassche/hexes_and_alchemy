@@ -3,6 +3,7 @@ extends CharacterBody3D
 
 @export var move_speed := 6.0
 @export var acceleration := 10.0
+@export var dash_modifier := 1.5;
 
 func _physics_process(delta: float) -> void:
 	if Manager.instance.input_moves_player():
@@ -31,6 +32,8 @@ func _handle_movement(delta: float) -> void:
 	var move_dir := (right * input.x + forward * input.y)
 
 	var target_velocity := move_dir * move_speed
+	if Input.is_action_pressed("move_sprint"):
+		target_velocity *= dash_modifier;
 
 	if move_dir.length() > 0.01:
 		var probe_pos := global_position + move_dir.normalized() * Manager.instance.hex_grid.RADIUS_IN * 0.5
