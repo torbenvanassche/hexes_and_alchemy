@@ -58,7 +58,7 @@ func pick_scene(x: int, y: int) -> SceneInfo:
 		if not region.scene_multipliers.has(info):
 			continue
 
-		var w := info.spawn_weight * region.scene_multipliers[info]
+		var w := region.scene_multipliers[info]
 		if w <= 0.0:
 			continue
 

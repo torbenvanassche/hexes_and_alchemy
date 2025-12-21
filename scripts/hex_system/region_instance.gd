@@ -20,6 +20,9 @@ func merge_from(other: RegionInstance) -> void:
 	for coord in other.hexes:
 		add_hex(other.hexes[coord])
 		
+func remove_hex(coord: Vector3i) -> void:
+	hexes.erase(coord);
+		
 func _count_structures(inst: RegionInstance, pInfo: StructureInfo) -> int:
 	var count := 0
 	for s in inst.structures.values():
@@ -36,7 +39,7 @@ func _pick_structure() -> StructureInfo:
 		var max_allowed := s.get_max_count(hexes.size())
 		var current := _count_structures(self, s)
 
-		if max_allowed > 0 and current >= max_allowed:
+		if max_allowed > 0 and current > max_allowed:
 			continue
 
 		var weight := info.structures[s] * s.spawn_weight
@@ -57,6 +60,14 @@ func _pick_structure() -> StructureInfo:
 
 	return null
 
+func _can_place_structure_at(candidate_id: Vector3i, candidate: StructureInfo) -> bool:
+	for existing_id in structures.keys():
+		var existing: StructureInfo = structures[existing_id]
+
+		var required_distance: int = (candidate.required_space_radius + existing.required_space_radius + max(candidate.minimum_distance_from_other_structures, existing.minimum_distance_from_other_structures))
+		if Manager.instance.hex_grid.cube_distance(existing_id, candidate_id) < required_distance:
+			return false
+	return true
 	
 func generate_structures_for_region() -> void:
 	if info.structures.is_empty():
@@ -70,6 +81,11 @@ func generate_structures_for_region() -> void:
 		if structure == null:
 			break
 
-		var hex_id := available_hexes.pop_back() as Vector3i;
-		structures[hex_id] = structure
-		hexes[hex_id].set_structure(structure);
+		var hex_id := available_hexes.pop_back() as Vector3i;		
+		var hex := Manager.instance.hex_grid.get_hex_at_world_position(hex_id);
+		if Manager.instance.hex_grid.chunks[Vector2i(0,0)].hexes.has(hex):
+			continue
+		
+		if hex && hex.can_generate && _can_place_structure_at(hex_id, structure):
+			structures[hex_id] = structure
+			Manager.instance.hex_grid.get_hex_at_world_position(hex_id).set_structure(structure);

@@ -38,6 +38,7 @@ func _ready() -> void:
 				continue
 			generate_chunk(cx, cy)
 
+
 func _on_map_ready() -> void:
 	for reg in region_instances.keys():
 		for rI: RegionInstance in region_instances[reg]:
@@ -61,12 +62,17 @@ func _get_instances_for_region(region: RegionInfo) -> Array:
 		region_instances[region] = []
 	return region_instances[region];
 		
-func create_hex(grid_id: Vector2i, spacing: Vector2, hex: HexBase) -> HexBase:
+func create_hex(grid_id: Vector2i, hex: HexBase) -> HexBase:
 	add_child(hex)
 	hex.region = DataManager.instance.get_region_for(grid_id.x, grid_id.y);
+	var spacing =  get_spacing();
 
 	hex.grid_id = grid_id;
 	hex.cube_id = offset_to_cube(grid_id)
+	
+	if tiles.has(hex.cube_id):
+		push_error("Duplicate cube_id: %s" % hex.cube_id)
+	
 	tiles[hex.cube_id] = hex;
 
 	var pos := Vector3.ZERO
@@ -154,7 +160,6 @@ func generate_chunk(cx: int, cy: int) -> HexChunk:
 	var chunk := HexChunk.new(cx, cy)
 	chunks[key] = chunk
 
-	var spacing_vec := get_spacing()
 	var start_x := cx * chunk.CHUNK_WIDTH
 	var start_y := cy * chunk.CHUNK_HEIGHT
 	
@@ -165,7 +170,7 @@ func generate_chunk(cx: int, cy: int) -> HexChunk:
 			var grid_id := Vector2i(gx, gy)
 			DataManager.instance.pick_scene(gx, gy).queue(
 				func(sI: SceneInfo) -> void:
-					chunk.add_hex(create_hex(grid_id, spacing_vec, sI.get_instance())))
+					chunk.add_hex(create_hex(grid_id, sI.get_instance())))
 	return chunk
 	
 func get_hex_at_world_position(pos: Vector3) -> HexBase:
@@ -183,3 +188,61 @@ func get_hex_at_world_position(pos: Vector3) -> HexBase:
 
 	var cube := offset_to_cube(Vector2i(gx, gy))
 	return tiles.get(cube, null)
+	
+func get_tiles_in_radius(center: Vector3i, radius: int) -> Array[HexBase]:
+	var result: Array[HexBase] = []
+	for dx in range(-radius, radius + 1):
+		for dy in range(
+			max(-radius, -dx - radius),
+			min(radius, -dx + radius) + 1
+		):
+			var dz := -dx - dy
+			var cube := center + Vector3i(dx, dy, dz)
+
+			if tiles.has(cube):
+				result.append(tiles[cube])
+	return result
+
+	
+func grid_to_chunk_coords(grid_id: Vector2i) -> Vector2i:
+	return Vector2i(
+		floori(float(grid_id.x) / HexChunk.CHUNK_WIDTH),
+		floori(float(grid_id.y) / HexChunk.CHUNK_HEIGHT)
+	)
+	
+func cube_distance(a: Vector3i, b: Vector3i) -> int:
+	return max(
+		abs(a.x - b.x),
+		abs(a.y - b.y),
+		abs(a.z - b.z)
+	)
+
+func replace(hex: HexBase, replacement: HexBase, region: RegionInfo) -> void:
+	if hex == null or replacement == null:
+		return
+		
+	if replacement.get_parent() == self:
+		return;
+
+	replacement.grid_id = hex.grid_id
+	replacement.cube_id = hex.cube_id
+	replacement.region = region
+	replacement.region_instance = null
+
+	replacement.global_transform = hex.global_transform
+
+	if tiles.get(hex.cube_id) == hex:
+		tiles.erase(hex.cube_id)
+
+	if hex.region_instance != null:
+		hex.region_instance.remove_hex(hex.cube_id)
+
+	tiles[replacement.cube_id] = replacement
+	
+	var chunk_coords := grid_to_chunk_coords(hex.grid_id)
+	chunks[chunk_coords].hexes.erase(hex);
+	
+	add_child(replacement)
+	chunks[chunk_coords].add_hex(replacement);
+	
+	hex.queue_free()

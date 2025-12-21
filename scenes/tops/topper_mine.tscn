@@ -5,4 +5,4 @@
 [node name="Node3D" type="Node3D" unique_id=2071832704]
 
 [node name="Root Scene" parent="." unique_id=1429542013 instance=ExtResource("1_bbfir")]
-transform = Transform3D(-0.8660254, 0, -0.49999997, 0, 1, 0, 0.49999997, 0, -0.8660254, 0, 0, 0)
+transform = Transform3D(-2.424871, 0, -1.4000001, 0, 2.8, 0, 1.4000001, 0, -2.424871, 0, 0, 0)

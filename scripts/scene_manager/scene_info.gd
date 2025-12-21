@@ -18,9 +18,6 @@ var id:String;
 @export var packed_scene: PackedScene;
 @export var type: Type;
 
-@export_group("Spawner data")
-@export var spawn_weight: float = 1;
-
 signal cached(scene_info: SceneInfo);
 
 var is_cached: bool = false;

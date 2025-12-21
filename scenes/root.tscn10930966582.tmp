@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://3pb564xgsaqo"]
+
+[ext_resource type="PackedScene" uid="uid://maout4rpahg4" path="res://scenes/generator.tscn" id="1_j5px3"]
+[ext_resource type="Script" uid="uid://cdjrbv2tvjlvw" path="res://scripts/game_manager.gd" id="1_l5cgh"]
+[ext_resource type="Script" uid="uid://dpjtl8txjms6k" path="res://scripts/resource_manager.gd" id="2_sqa0i"]
+[ext_resource type="Script" uid="uid://6t4u66o5q6po" path="res://scripts/scene_manager/scene_info.gd" id="3_jh1ax"]
+[ext_resource type="Script" uid="uid://bbh3tqcpujraq" path="res://scripts/scene_manager/scene_manager.gd" id="4_jh1ax"]
+[ext_resource type="Resource" uid="uid://betpu2iylw1qy" path="res://resources/scene_info/hex/hex_simple.tres" id="4_kycxp"]
+[ext_resource type="Script" uid="uid://m31o3kdm652g" path="res://scripts/hex_system/region_info.gd" id="5_3hfy5"]
+[ext_resource type="Resource" uid="uid://dq3k4j72tnetv" path="res://resources/scene_info/hex/hex_water.tres" id="5_7pvxh"]
+[ext_resource type="Resource" uid="uid://dbhyrexgkscja" path="res://resources/scene_info/tops/top_dirt.tres" id="5_y3xxt"]
+[ext_resource type="Resource" uid="uid://cqs6mgr0ms55u" path="res://resources/region_info/plains.tres" id="6_7pvxh"]
+[ext_resource type="Resource" uid="uid://ckpmn3cutb7an" path="res://resources/scene_info/tops/top_mine.tres" id="6_xsp7o"]
+[ext_resource type="Resource" uid="uid://bbahgdc5whoa4" path="res://resources/region_info/ocean.tres" id="7_y3xxt"]
+[ext_resource type="Resource" uid="uid://bflckgydmmunp" path="res://resources/region_info/desert.tres" id="9_y3xxt"]
+[ext_resource type="Resource" uid="uid://ckehcbpixu26o" path="res://resources/player.tres" id="12_vgks2"]
+[ext_resource type="Script" uid="uid://dcapggl16i04f" path="res://scripts/camera.gd" id="15_dylgi"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_j5px3"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_twpsu"]
+sky_material = SubResource("ProceduralSkyMaterial_j5px3")
+
+[sub_resource type="Environment" id="Environment_lrqlo"]
+background_mode = 2
+sky = SubResource("Sky_twpsu")
+tonemap_mode = 2
+glow_enabled = true
+
+[node name="root" type="Node3D" unique_id=1531349496]
+
+[node name="game_manager" type="Node" parent="." unique_id=299541562]
+script = ExtResource("1_l5cgh")
+
+[node name="resource_manager" type="Node" parent="." unique_id=1025417812]
+script = ExtResource("2_sqa0i")
+scenes = Array[ExtResource("3_jh1ax")]([ExtResource("4_kycxp"), ExtResource("5_7pvxh"), ExtResource("5_y3xxt"), ExtResource("6_xsp7o")])
+regions = Array[ExtResource("5_3hfy5")]([ExtResource("6_7pvxh"), ExtResource("7_y3xxt"), ExtResource("9_y3xxt")])
+player = ExtResource("12_vgks2")
+
+[node name="scene_manager" type="Node" parent="." unique_id=514371925 node_paths=PackedStringArray("root")]
+script = ExtResource("4_jh1ax")
+root = NodePath("../game_world")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=694636533]
+environment = SubResource("Environment_lrqlo")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1827579750]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
+
+[node name="game_world" parent="." unique_id=1031745512 instance=ExtResource("1_j5px3")]
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=503402897]
+transform = Transform3D(1, 0, 0, 0, 0.8551743, 0.51834047, 0, -0.51834047, 0.8551743, 0, 3.7496269, 3.5924623)
+script = ExtResource("15_dylgi")
+camera_distance = 8.0
+camera_height = 3.0
+pan_speed = 10.0
+max_pan_distance = 8.0

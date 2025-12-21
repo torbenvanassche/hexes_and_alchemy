@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bu4jtqxbds1u5"]
+
+[ext_resource type="PackedScene" uid="uid://6h1kj7hbn5qq" path="res://meshes/buildings/blue/building_blacksmith_blue.glb" id="1_43jb5"]
+
+[node name="Node3D" type="Node3D" unique_id=728034513]
+
+[node name="Root Scene" parent="." unique_id=867165107 instance=ExtResource("1_43jb5")]
+transform = Transform3D(2.8, 0, 0, 0, 2.8, 0, 0, 0, 2.8, 0, 0, 0)

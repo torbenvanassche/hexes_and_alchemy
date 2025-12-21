@@ -1,7 +1,0 @@
-[gd_scene format=3 uid="uid://dxpf634vmktem"]
-
-[ext_resource type="PackedScene" uid="uid://cjeap2dsndlsj" path="res://meshes/buildings/blue/building_home_A_blue.glb" id="1_son8o"]
-
-[node name="Node3D" type="Node3D" unique_id=757799974]
-
-[node name="Root Scene" parent="." unique_id=744505557 instance=ExtResource("1_son8o")]

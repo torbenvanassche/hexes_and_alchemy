@@ -11,8 +11,8 @@ point_count = 2
 [resource]
 script = ExtResource("2_kbdnr")
 max_per_region_size = SubResource("Curve_nqdss")
+minimum_distance_from_other_structures = 2
 is_walkable = false
 packed_scene = ExtResource("1_okhmu")
 type = 4
-spawn_weight = 0.1
 metadata/_custom_type_script = "uid://btydeamnhd6x"
