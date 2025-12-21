@@ -1,11 +1,10 @@
-[gd_resource type="Resource" script_class="SceneInfo" format=3 uid="uid://dq3k4j72tnetv"]
+[gd_resource type="Resource" script_class="HexInfo" format=3 uid="uid://bto28untf5lrf"]
 
-[ext_resource type="Script" uid="uid://6t4u66o5q6po" path="res://scripts/scene_manager/scene_info.gd" id="1_ctt4v"]
-[ext_resource type="PackedScene" uid="uid://ci1fy2fl7cvfe" path="res://scenes/hexes/hex_water.tscn" id="1_gpb4g"]
+[ext_resource type="Script" uid="uid://dt4im1k7j4jn" path="res://scripts/hex_system/hex_info.gd" id="1_nekhc"]
+[ext_resource type="PackedScene" uid="uid://ci1fy2fl7cvfe" path="res://scenes/hexes/hex_water.tscn" id="1_yy18x"]
 
 [resource]
-script = ExtResource("1_ctt4v")
+script = ExtResource("1_nekhc")
 is_walkable = false
-packed_scene = ExtResource("1_gpb4g")
-type = 1
-metadata/_custom_type_script = "uid://6t4u66o5q6po"
+packed_scene = ExtResource("1_yy18x")
+metadata/_custom_type_script = "uid://dt4im1k7j4jn"

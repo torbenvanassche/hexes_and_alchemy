@@ -1,8 +1,11 @@
 class_name DataManager extends Node
 
-@export var scenes: Array[SceneInfo];
+@export var hexes: Array[HexInfo];
 @export var regions: Array[RegionInfo];
+@export var structures: Array[StructureInfo];
 @export var player: SceneInfo;
+
+var scene_data: Array[SceneInfo];
 
 const CUBE_DIRS : Array[Vector3i] = [
 	Vector3i(1,-1,0), Vector3i(1,0,-1), Vector3i(0,1,-1),
@@ -11,18 +14,17 @@ const CUBE_DIRS : Array[Vector3i] = [
 
 static var instance: DataManager;
 func _ready() -> void:
-	if not scenes.has(player):
-		scenes.append(player);
-	
 	DataManager.instance = self;
-	for scene in scenes:
-		scene.initialize();
-		
-	for region in regions:
-		region.initialize()
+	for object in [hexes, regions, structures]:
+		for item in object:
+			item.initialize();
+			
+	scene_data.append_array(hexes)
+	scene_data.append_array(structures);
+	scene_data.append(player)
 
 func get_scene_by_name(scene_name: String) -> SceneInfo:
-	var filtered := scenes.filter(func(scene: SceneInfo) -> bool: return scene != null && scene.id == scene_name);
+	var filtered := scene_data.filter(func(scene: SceneInfo) -> bool: return scene != null && scene.id == scene_name);
 	if filtered.size() == 1:
 		return filtered[0];
 	elif filtered.size() == 0:
@@ -32,7 +34,7 @@ func get_scene_by_name(scene_name: String) -> SceneInfo:
 	return null;
 
 func node_to_info(node: Node) -> SceneInfo:
-	var filtered: Array[SceneInfo] = scenes.filter(func(x: SceneInfo) -> bool: return x.node == node);
+	var filtered: Array[SceneInfo] = scene_data.filter(func(x: SceneInfo) -> bool: return x.node == node);
 	if filtered.size() == 1:
 		return filtered[0];
 	elif filtered.size() > 1:
@@ -45,16 +47,16 @@ func is_active(scene_name: String) -> bool:
 	var scene_info := get_scene_by_name(scene_name);
 	return scene_info.node != null && scene_info.node.visible == true
 	
-func pick_scene(x: int, y: int) -> SceneInfo:
+func pick_scene(x: int, y: int) -> HexInfo:
 	var region := get_region_for(x, y)
 	if region == null:
 		return null
 
 	var total_weight := 0.0
 	var cumulative: Array[float] = []
-	var valid_scenes: Array[SceneInfo] = []
+	var valid_scenes: Array[HexInfo] = []
 
-	for info in scenes:
+	for info in hexes:
 		if not region.scene_multipliers.has(info):
 			continue
 

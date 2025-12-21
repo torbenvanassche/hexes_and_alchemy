@@ -70,9 +70,6 @@ func create_hex(grid_id: Vector2i, hex: HexBase) -> HexBase:
 	hex.grid_id = grid_id;
 	hex.cube_id = offset_to_cube(grid_id)
 	
-	if tiles.has(hex.cube_id):
-		push_error("Duplicate cube_id: %s" % hex.cube_id)
-	
 	tiles[hex.cube_id] = hex;
 
 	var pos := Vector3.ZERO
@@ -210,12 +207,8 @@ func grid_to_chunk_coords(grid_id: Vector2i) -> Vector2i:
 		floori(float(grid_id.y) / HexChunk.CHUNK_HEIGHT)
 	)
 	
-func cube_distance(a: Vector3i, b: Vector3i) -> int:
-	return max(
-		abs(a.x - b.x),
-		abs(a.y - b.y),
-		abs(a.z - b.z)
-	)
+func cube_distance(a: Vector3i, b: Vector3i) -> float:
+	return a.distance_to(b)
 
 func replace(hex: HexBase, replacement: HexBase, region: RegionInfo) -> void:
 	if hex == null or replacement == null:

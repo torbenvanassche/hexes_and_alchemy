@@ -11,7 +11,7 @@ var id: String
 @export var material: StandardMaterial3D;
 
 @export var structures: Dictionary[StructureInfo, float] = {};
-@export var scene_multipliers: Dictionary[SceneInfo, float] = {}
+@export var scene_multipliers: Dictionary[HexInfo, float] = {}
 
 func initialize() -> void:
 	id = resource_path.get_file().trim_suffix(".tres");

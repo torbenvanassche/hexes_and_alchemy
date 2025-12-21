@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bjfa18fuhmhll"]
+
+[ext_resource type="PackedScene" uid="uid://bttuym3sphjmk" path="res://meshes/buildings/blue/building_shipyard_blue.glb" id="1_yhdsw"]
+
+[node name="Node3D" type="Node3D" unique_id=506515738]
+
+[node name="Root Scene" parent="." unique_id=1208768673 instance=ExtResource("1_yhdsw")]
+transform = Transform3D(2.8, 0, 0, 0, 2.8, 0, 0, 0, 2.8, 0, 0, 0)

@@ -1,12 +1,14 @@
 [gd_resource type="Resource" script_class="RegionInfo" format=3 uid="uid://cqs6mgr0ms55u"]
 
-[ext_resource type="Script" uid="uid://6t4u66o5q6po" path="res://scripts/scene_manager/scene_info.gd" id="1_ltde2"]
 [ext_resource type="Material" uid="uid://c66vbca7lgh6m" path="res://materials/default.tres" id="1_v1b04"]
 [ext_resource type="Script" uid="uid://m31o3kdm652g" path="res://scripts/hex_system/region_info.gd" id="2_te6hx"]
+[ext_resource type="Script" uid="uid://dt4im1k7j4jn" path="res://scripts/hex_system/hex_info.gd" id="2_yf7g0"]
 [ext_resource type="Resource" uid="uid://betpu2iylw1qy" path="res://resources/scene_info/hex/hex_simple.tres" id="3_aq4h2"]
-[ext_resource type="Resource" uid="uid://ckpmn3cutb7an" path="res://resources/scene_info/tops/top_mine.tres" id="4_yf7g0"]
+[ext_resource type="Resource" uid="uid://ckpmn3cutb7an" path="res://resources/scene_info/tops/mine.tres" id="4_yf7g0"]
 [ext_resource type="Script" uid="uid://btydeamnhd6x" path="res://scripts/structures/structure_info.gd" id="5_v1b04"]
-[ext_resource type="Resource" uid="uid://dbhyrexgkscja" path="res://resources/scene_info/tops/top_dirt.tres" id="6_yf7g0"]
+[ext_resource type="Resource" uid="uid://dbhyrexgkscja" path="res://resources/scene_info/tops/dirt.tres" id="6_yf7g0"]
+[ext_resource type="Resource" uid="uid://clias4ed18wk0" path="res://resources/scene_info/tops/lumbermill.tres" id="8_fa7qv"]
+[ext_resource type="Resource" uid="uid://1es63jn2bgn" path="res://resources/scene_info/tops/blacksmith.tres" id="9_gb63y"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_te6hx"]
 seed = 1
@@ -19,9 +21,11 @@ activation_threshold = 0.2
 material = ExtResource("1_v1b04")
 structures = Dictionary[ExtResource("5_v1b04"), float]({
 ExtResource("6_yf7g0"): 2.0,
-ExtResource("4_yf7g0"): 1.0
+ExtResource("4_yf7g0"): 1.0,
+ExtResource("8_fa7qv"): 1.0,
+ExtResource("9_gb63y"): 1.0
 })
-scene_multipliers = Dictionary[ExtResource("1_ltde2"), float]({
+scene_multipliers = Dictionary[ExtResource("2_yf7g0"), float]({
 ExtResource("3_aq4h2"): 1.0
 })
 metadata/_custom_type_script = "uid://m31o3kdm652g"

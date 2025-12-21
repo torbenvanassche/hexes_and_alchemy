@@ -1,10 +1,9 @@
-[gd_resource type="Resource" script_class="SceneInfo" format=3 uid="uid://betpu2iylw1qy"]
+[gd_resource type="Resource" script_class="HexInfo" format=3 uid="uid://betpu2iylw1qy"]
 
-[ext_resource type="PackedScene" uid="uid://eyyrdjphljp8" path="res://scenes/hexes/hex_simple_champfer.tscn" id="1_r2d0s"]
-[ext_resource type="Script" uid="uid://6t4u66o5q6po" path="res://scripts/scene_manager/scene_info.gd" id="2_wov65"]
+[ext_resource type="Script" uid="uid://dt4im1k7j4jn" path="res://scripts/hex_system/hex_info.gd" id="1_dbcde"]
+[ext_resource type="PackedScene" uid="uid://eyyrdjphljp8" path="res://scenes/hexes/hex_simple_champfer.tscn" id="1_k3brp"]
 
 [resource]
-script = ExtResource("2_wov65")
-packed_scene = ExtResource("1_r2d0s")
-type = 1
-metadata/_custom_type_script = "uid://6t4u66o5q6po"
+script = ExtResource("1_dbcde")
+packed_scene = ExtResource("1_k3brp")
+metadata/_custom_type_script = "uid://dt4im1k7j4jn"

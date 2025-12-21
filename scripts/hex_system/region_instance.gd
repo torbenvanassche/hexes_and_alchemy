@@ -61,12 +61,13 @@ func _pick_structure() -> StructureInfo:
 	return null
 
 func _can_place_structure_at(candidate_id: Vector3i, candidate: StructureInfo) -> bool:
-	for existing_id in structures.keys():
-		var existing: StructureInfo = structures[existing_id]
-
-		var required_distance: int = (candidate.required_space_radius + existing.required_space_radius + max(candidate.minimum_distance_from_other_structures, existing.minimum_distance_from_other_structures))
-		if Manager.instance.hex_grid.cube_distance(existing_id, candidate_id) < required_distance:
-			return false
+	for region_info: RegionInfo in Manager.instance.hex_grid.region_instances.keys():
+		for region_instance: RegionInstance in Manager.instance.hex_grid.region_instances[region_info]:
+			for structure_position in region_instance.structures.keys():
+				var structureInfo: StructureInfo = region_instance.structures[structure_position];
+				var required_distance: int = (candidate.required_space_radius + structureInfo.required_space_radius + max(candidate.minimum_distance_from_other_structures, structureInfo.minimum_distance_from_other_structures))
+				if Manager.instance.hex_grid.cube_distance(structure_position, candidate_id) < required_distance:
+					return false
 	return true
 	
 func generate_structures_for_region() -> void:

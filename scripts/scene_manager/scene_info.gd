@@ -11,9 +11,6 @@ enum Type {
 
 var id:String;
 
-@export var is_walkable: bool = true;
-@export var has_collision: bool = false;
-
 @export_group("Core")
 @export var packed_scene: PackedScene;
 @export var type: Type;

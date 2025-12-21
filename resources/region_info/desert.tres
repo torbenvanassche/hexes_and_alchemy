@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="RegionInfo" format=3 uid="uid://bflckgydmmunp"]
 
 [ext_resource type="Material" uid="uid://bsjgt7wkv1u6r" path="res://materials/sand.tres" id="1_cjbsg"]
-[ext_resource type="Script" uid="uid://6t4u66o5q6po" path="res://scripts/scene_manager/scene_info.gd" id="2_0svbn"]
+[ext_resource type="Script" uid="uid://dt4im1k7j4jn" path="res://scripts/hex_system/hex_info.gd" id="2_ea2wi"]
 [ext_resource type="Resource" uid="uid://betpu2iylw1qy" path="res://resources/scene_info/hex/hex_simple.tres" id="3_027p0"]
 [ext_resource type="Script" uid="uid://btydeamnhd6x" path="res://scripts/structures/structure_info.gd" id="5_ea2wi"]
 [ext_resource type="Script" uid="uid://m31o3kdm652g" path="res://scripts/hex_system/region_info.gd" id="5_ts14k"]
@@ -17,7 +17,7 @@ activation_threshold = 0.7
 structure_fail_weight = 5.0
 region_weight = 0.5
 material = ExtResource("1_cjbsg")
-scene_multipliers = Dictionary[ExtResource("2_0svbn"), float]({
+scene_multipliers = Dictionary[ExtResource("2_ea2wi"), float]({
 ExtResource("3_027p0"): 1.0
 })
 metadata/_custom_type_script = "uid://m31o3kdm652g"
