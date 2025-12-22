@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://kikgjf07aidw"]
+
+[ext_resource type="Script" uid="uid://d2gmikfacoxba" path="res://input_prompts/scripts/rebind_mapper.gd" id="1_6kcs6"]
+[ext_resource type="Texture2D" uid="uid://iphhxccexo3h" path="res://input_prompts/textures/kb_mouse_inputs.png" id="2_dnmgc"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6bnle"]
+region = Rect2(0, 0, 16, 16)
+
+[node name="action_setter" type="Button" unique_id=1915618881 node_paths=PackedStringArray("action_name", "action_image", "rebinding_text")]
+custom_minimum_size = Vector2(0, 50)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_6kcs6")
+action_name = NodePath("MarginContainer/HBoxContainer/action_label")
+action_image = NodePath("MarginContainer/HBoxContainer/action_prompt")
+rebinding_text = NodePath("MarginContainer/HBoxContainer/rebind_prompt")
+action_texture = ExtResource("2_dnmgc")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1747018470]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=1037969830]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+
+[node name="action_label" type="Label" parent="MarginContainer/HBoxContainer" unique_id=1533747994]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+text = "action name"
+vertical_alignment = 1
+
+[node name="action_prompt" type="TextureRect" parent="MarginContainer/HBoxContainer" unique_id=587563297]
+layout_mode = 2
+texture = SubResource("AtlasTexture_6bnle")
+expand_mode = 2
+stretch_mode = 4
+
+[node name="rebind_prompt" type="Label" parent="MarginContainer/HBoxContainer" unique_id=1013293262]
+visible = false
+layout_mode = 2
+text = "Press key to bind..."

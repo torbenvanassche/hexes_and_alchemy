@@ -4,7 +4,6 @@
 [ext_resource type="Script" uid="uid://cdjrbv2tvjlvw" path="res://scripts/game_manager.gd" id="1_l5cgh"]
 [ext_resource type="Script" uid="uid://dpjtl8txjms6k" path="res://scripts/resource_manager.gd" id="2_sqa0i"]
 [ext_resource type="Script" uid="uid://dt4im1k7j4jn" path="res://scripts/hex_system/hex_info.gd" id="3_l5cgh"]
-[ext_resource type="Script" uid="uid://bbh3tqcpujraq" path="res://scripts/scene_manager/scene_manager.gd" id="4_jh1ax"]
 [ext_resource type="Resource" uid="uid://betpu2iylw1qy" path="res://resources/scene_info/hex/hex_simple.tres" id="4_vgks2"]
 [ext_resource type="Script" uid="uid://m31o3kdm652g" path="res://scripts/hex_system/region_info.gd" id="5_3hfy5"]
 [ext_resource type="Resource" uid="uid://bto28untf5lrf" path="res://resources/scene_info/hex/hex_water.tres" id="5_dylgi"]
@@ -14,10 +13,11 @@
 [ext_resource type="Script" uid="uid://btydeamnhd6x" path="res://scripts/structures/structure_info.gd" id="10_gt4lb"]
 [ext_resource type="Resource" uid="uid://dbhyrexgkscja" path="res://resources/scene_info/tops/dirt.tres" id="11_ya6yc"]
 [ext_resource type="Resource" uid="uid://ckpmn3cutb7an" path="res://resources/scene_info/tops/mine.tres" id="12_mflgo"]
-[ext_resource type="Resource" uid="uid://ckehcbpixu26o" path="res://resources/player.tres" id="12_vgks2"]
+[ext_resource type="Resource" uid="uid://ckehcbpixu26o" path="res://resources/scene_info/player.tres" id="12_vgks2"]
 [ext_resource type="Resource" uid="uid://1es63jn2bgn" path="res://resources/scene_info/tops/blacksmith.tres" id="13_34frw"]
 [ext_resource type="Resource" uid="uid://clias4ed18wk0" path="res://resources/scene_info/tops/lumbermill.tres" id="14_8ui5n"]
 [ext_resource type="Script" uid="uid://dcapggl16i04f" path="res://scripts/camera.gd" id="15_dylgi"]
+[ext_resource type="Resource" uid="uid://bnoa83evr4tvv" path="res://resources/scene_info/ui/pause_menu.tres" id="16_gt4lb"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_j5px3"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -32,7 +32,7 @@ sky = SubResource("Sky_twpsu")
 tonemap_mode = 2
 glow_enabled = true
 
-[node name="root" type="Node3D" unique_id=1531349496]
+[node name="game" type="Node3D" unique_id=1531349496]
 
 [node name="game_manager" type="Node" parent="." unique_id=299541562]
 script = ExtResource("1_l5cgh")
@@ -43,10 +43,7 @@ hexes = Array[ExtResource("3_l5cgh")]([ExtResource("4_vgks2"), ExtResource("5_dy
 regions = Array[ExtResource("5_3hfy5")]([ExtResource("6_7pvxh"), ExtResource("7_y3xxt"), ExtResource("9_y3xxt")])
 structures = Array[ExtResource("10_gt4lb")]([ExtResource("11_ya6yc"), ExtResource("12_mflgo"), ExtResource("13_34frw"), ExtResource("14_8ui5n")])
 player = ExtResource("12_vgks2")
-
-[node name="scene_manager" type="Node" parent="." unique_id=514371925 node_paths=PackedStringArray("root")]
-script = ExtResource("4_jh1ax")
-root = NodePath("../game_world")
+pause_menu = ExtResource("16_gt4lb")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=694636533]
 environment = SubResource("Environment_lrqlo")
@@ -64,3 +61,9 @@ camera_distance = 8.0
 camera_height = 3.0
 pan_speed = 10.0
 max_pan_distance = 8.0
+
+[node name="game_ui" type="Control" parent="." unique_id=1151064387]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0

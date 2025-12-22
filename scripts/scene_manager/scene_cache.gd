@@ -8,10 +8,11 @@ func _init() -> void:
 	timer = Timer.new();
 	timer.timeout.connect(_check_progress)
 	timer.wait_time = 0.1;
-	
-	SceneManager.instance.add_child(timer)
 
 func queue(scene_info: SceneInfo) -> Signal:
+	if not timer.get_parent():
+		SceneManager.add_child(timer);
+	
 	if timer.is_stopped():
 		timer.start();
 	

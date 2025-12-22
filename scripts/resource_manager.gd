@@ -3,7 +3,9 @@ class_name DataManager extends Node
 @export var hexes: Array[HexInfo];
 @export var regions: Array[RegionInfo];
 @export var structures: Array[StructureInfo];
+
 @export var player: SceneInfo;
+@export var pause_menu: SceneInfo;
 
 var scene_data: Array[SceneInfo];
 

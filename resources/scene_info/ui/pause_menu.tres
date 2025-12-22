@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="SceneInfo" format=3 uid="uid://bnoa83evr4tvv"]
+
+[ext_resource type="PackedScene" uid="uid://bd0i5jrt7650t" path="res://scenes/ui/pause_scene.tscn" id="1_28e2k"]
+[ext_resource type="Script" uid="uid://6t4u66o5q6po" path="res://scripts/scene_manager/scene_info.gd" id="1_yy1p2"]
+
+[resource]
+script = ExtResource("1_yy1p2")
+packed_scene = ExtResource("1_28e2k")
+metadata/_custom_type_script = "uid://6t4u66o5q6po"

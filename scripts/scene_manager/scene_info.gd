@@ -48,4 +48,4 @@ func queue(c: Callable) -> void:
 		cached.connect(c, CONNECT_ONE_SHOT);
 			
 	if not is_queued && not is_cached:
-		SceneManager.instance.get_or_create_scene(id);
+		SceneManager.get_or_create_scene(id);

@@ -1,14 +1,10 @@
-class_name SceneManager
 extends Node
-
-@export_group("Data Setup") 
-static var instance: SceneManager;
 
 var scene_stack: Array[SceneInfo] = [];
 var scene_cache: SceneCache;
 
-@export var root: Node;
-@export var _ui_container: Node;
+@onready var root: Node3D = $"../game/game_world";
+@onready var _ui_container: Control = $"../game/game_ui";
 
 signal scene_entered(scene: Node)
 signal scene_exited(scene: Node)
@@ -24,7 +20,6 @@ var _active_scene: Node:
 		scene_entered.emit(_active_scene);
 
 func _init() -> void:
-	SceneManager.instance = self;
 	scene_cache = SceneCache.new()
 			
 func get_or_create_scene(scene_name: String, scene_config: SceneConfig = SceneConfig.new()) -> SceneInfo:

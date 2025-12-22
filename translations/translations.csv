@@ -1,0 +1,15 @@
+keys,en,nl
+LANGUAGE,english,nederlands
+KEYBIND_CAMERA_RESET,camera reset,
+KEYBIND_CAMERA_PAN_LEFT,camera pan left,
+KEYBIND_CAMERA_PAN_RIGHT,camera pan right,
+KEYBIND_CAMERA_PAN_FORWARD,camera pan forward,
+KEYBIND_CAMERA_PAN_DOWN,camera pan down,
+KEYBIND_CAMERA_ROTATE_LEFT,camera rotate left,
+KEYBIND_CAMERA_ROTATE_RIGHT,camera rotate right,
+KEYBIND_TOGGLE_INPUT,toggle input,
+KEYBIND_MOVE_FORWARD,move forward,
+KEYBIND_MOVE_DOWN,move backward,
+KEYBIND_MOVE_LEFT,move left,
+KEYBIND_MOVE_RIGHT,move right,
+KEYBIND_SPRINT,sprint

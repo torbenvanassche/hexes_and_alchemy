@@ -57,9 +57,6 @@ func _physics_process(delta: float) -> void:
 		
 	_handle_rotation_input()
 
-	if Input.is_action_just_pressed("camera_reset"):
-		snapping = true
-
 	if snapping:
 		_snap_to_center(delta)
 	elif not Manager.instance.input_moves_player():

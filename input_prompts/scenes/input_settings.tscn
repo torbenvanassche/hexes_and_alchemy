@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://d2jcsx4wopdry"]
+
+[ext_resource type="Script" uid="uid://bfq38cdpu8meg" path="res://input_prompts/scripts/input_settings.gd" id="1_iossd"]
+
+[node name="input_settings" type="Control" unique_id=866818354 node_paths=PackedStringArray("keybind_container")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_iossd")
+keybind_container = NodePath("PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/action_list")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1032265376]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=1154912445]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=1185679455]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1427817054]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="action_list" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/ScrollContainer" unique_id=45673288]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=401852316]
+layout_mode = 2
+
+[node name="reset" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1115987529]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "RESET CONTROL BINDINGS"
+
+[node name="confirm" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=201621034]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "APPLY CHANGES"
