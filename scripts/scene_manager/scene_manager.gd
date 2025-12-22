@@ -4,7 +4,7 @@ var scene_stack: Array[SceneInfo] = [];
 var scene_cache: SceneCache;
 
 @onready var root: Node3D = $"../game/game_world";
-@onready var _ui_container: Control = $"../game/game_ui";
+@onready var _ui_container: CanvasLayer = $"../game/game_ui";
 
 signal scene_entered(scene: Node)
 signal scene_exited(scene: Node)
@@ -21,6 +21,7 @@ var _active_scene: Node:
 
 func _init() -> void:
 	scene_cache = SceneCache.new()
+	process_mode = Node.PROCESS_MODE_ALWAYS;
 			
 func get_or_create_scene(scene_name: String, scene_config: SceneConfig = SceneConfig.new()) -> SceneInfo:
 	var previous_scene_info: SceneInfo = null;
@@ -51,6 +52,9 @@ func remove_scene(info: SceneInfo, permanent: bool = false) -> void:
 			info.release();
 		else:
 			info.remove();
+			
+func remove_scene_by_name(scene_name: String, permanent: bool = false) -> void:
+	remove_scene(DataManager.instance.get_scene_by_name(scene_name), permanent)
 	
 func to_previous_scene() -> void:
 	if scene_stack.size() != 0:
@@ -58,13 +62,14 @@ func to_previous_scene() -> void:
 		if scene_stack.size() != 0:
 			get_or_create_scene(scene_stack[scene_stack.size() - 1].id, SceneConfig.new(false));
 	
-func add(n: SceneInfo) -> bool:
-	if n.type == SceneInfo.Type.UI && not n.get_instance().get_parent() == _ui_container:
-		_ui_container.add_child(n.get_instance());
-		return true;
-	elif n.type != SceneInfo.Type.SCENE && not n.get_instance().get_parent() == root:
-		root.add_child(n.get_instance());
-		return true;
+func add(n: SceneInfo) -> Node:
+	var instance := n.get_instance();
+	if n.type == SceneInfo.Type.UI && not instance.get_parent() == _ui_container:
+		_ui_container.add_child(instance);
+		return instance;
+	elif not instance.get_parent() == root:
+		root.add_child(instance);
+		return instance;
 	else:
 		Debug.err(n.id + " cannot be directly added to a scene.")
-	return false;
+	return null;

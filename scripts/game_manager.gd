@@ -30,8 +30,7 @@ func spawn_player(spawn_hex: HexBase) -> void:
 	DataManager.instance.player.queue(_on_player_loaded.bind(spawn_hex))
 	
 func _on_player_loaded(player_scene: SceneInfo, spawn_hex: HexBase) -> void:
-	player_instance = player_scene.get_instance()
-	SceneManager.add_child(player_instance)
+	player_instance = SceneManager.add(player_scene)
 	player_instance.position = spawn_hex.position;
 	camera.target = player_instance;
 	

@@ -9,7 +9,7 @@ enum Type {
 	STRUCTURE
 }
 
-var id:String;
+@export var id: String;
 
 @export_group("Core")
 @export var packed_scene: PackedScene;

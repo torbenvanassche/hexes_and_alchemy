@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bem2f43dlfne5" path="res://scripts/scene_controllers/pause_screen.gd" id="1_53068"]
 
-[node name="Panel" type="Panel" unique_id=1103910319]
+[node name="Panel" type="Panel" unique_id=1103910319 node_paths=PackedStringArray("resume_button", "settings_button", "quit_button")]
 process_mode = 2
 anchors_preset = 15
 anchor_right = 1.0
@@ -10,6 +10,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_53068")
+resume_button = NodePath("CenterContainer/VBoxContainer/resume")
+settings_button = NodePath("CenterContainer/VBoxContainer/settings")
+quit_button = NodePath("CenterContainer/VBoxContainer/quit")
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=668023114]
 layout_mode = 1

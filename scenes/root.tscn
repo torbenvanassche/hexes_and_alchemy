@@ -62,8 +62,4 @@ camera_height = 3.0
 pan_speed = 10.0
 max_pan_distance = 8.0
 
-[node name="game_ui" type="Control" parent="." unique_id=1151064387]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="game_ui" type="CanvasLayer" parent="." unique_id=2127553330]

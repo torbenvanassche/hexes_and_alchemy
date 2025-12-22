@@ -23,6 +23,7 @@ func _ready() -> void:
 			
 	scene_data.append_array(hexes)
 	scene_data.append_array(structures);
+	scene_data.append(pause_menu)
 	scene_data.append(player)
 
 func get_scene_by_name(scene_name: String) -> SceneInfo:
