@@ -5,6 +5,8 @@ extends CharacterBody3D
 @export var acceleration := 10.0
 @export var dash_modifier := 1.5;
 
+@onready var inventory: Inventory = $Inventory;
+
 func _physics_process(delta: float) -> void:
 	if Manager.instance.input_moves_player():
 		_handle_movement(delta)

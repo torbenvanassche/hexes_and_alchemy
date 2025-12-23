@@ -17,21 +17,21 @@ const CUBE_DIRS : Array[Vector3i] = [
 static var instance: DataManager;
 func _ready() -> void:
 	DataManager.instance = self;
-	for object in [hexes, regions, structures]:
-		for item in object:
-			item.initialize();
-			
+	
 	scene_data.append_array(hexes)
 	scene_data.append_array(structures);
 	scene_data.append(pause_menu)
 	scene_data.append(player)
+	
+	for object in scene_data:
+		object.initialize();
 
 func get_scene_by_name(scene_name: String) -> SceneInfo:
 	var filtered := scene_data.filter(func(scene: SceneInfo) -> bool: return scene != null && scene.id == scene_name);
 	if filtered.size() == 1:
 		return filtered[0];
 	elif filtered.size() == 0:
-		Debug.err(scene_name + " was not found, unable to instantiate!")
+		Debug.err(scene_name + " was not found!")
 		return null;
 	Debug.err(scene_name + " has multiple references, this is not allowed!")
 	return null;

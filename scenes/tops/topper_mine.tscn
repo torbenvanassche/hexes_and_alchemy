@@ -1,8 +1,27 @@
 [gd_scene format=3 uid="uid://cy1s6kym2ib68"]
 
-[ext_resource type="PackedScene" uid="uid://twco3r24bsnx" path="res://meshes/buildings/blue/building_mine_blue.glb" id="1_bbfir"]
+[ext_resource type="PackedScene" uid="uid://twco3r24bsnx" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_mine_blue.glb" id="1_bbfir"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bbfir"]
+size = Vector3(4.4847717, 3.2875977, 4.2372665)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_f4m0s"]
+size = Vector3(2.7013798, 1.7530518, 1.04356)
 
 [node name="Node3D" type="Node3D" unique_id=2071832704]
+transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, 0, 0, 0)
 
 [node name="Root Scene" parent="." unique_id=1429542013 instance=ExtResource("1_bbfir")]
-transform = Transform3D(-2.424871, 0, -1.4000001, 0, 2.8, 0, 1.4000001, 0, -2.424871, 0, 0, 0)
+transform = Transform3D(2.8, 0, 0, 0, 2.8, 0, 0, 0, 2.8, 0, 0, 0)
+
+[node name="Area3D" type="StaticBody3D" parent="." unique_id=1957721428]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=1907988473]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00819394, 1.611084, -0.6532325)
+shape = SubResource("BoxShape3D_bbfir")
+
+[node name="trigger" type="Area3D" parent="." unique_id=1246923180]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="trigger" unique_id=1814591473]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.034273565, 0.8438115, 1.8041683)
+shape = SubResource("BoxShape3D_f4m0s")

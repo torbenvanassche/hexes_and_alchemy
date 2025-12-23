@@ -45,21 +45,25 @@ structures = Array[ExtResource("10_gt4lb")]([ExtResource("11_ya6yc"), ExtResourc
 player = ExtResource("12_vgks2")
 pause_menu = ExtResource("16_gt4lb")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=694636533]
+[node name="shared_components" type="Node" parent="." unique_id=2003265152]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="shared_components" unique_id=694636533]
 environment = SubResource("Environment_lrqlo")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1827579750]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="shared_components" unique_id=1827579750]
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
 shadow_enabled = true
 
-[node name="game_world" parent="." unique_id=1031745512 instance=ExtResource("1_j5px3")]
-
-[node name="Camera3D" type="Camera3D" parent="." unique_id=503402897]
-transform = Transform3D(1, 0, 0, 0, 0.8551743, 0.51834047, 0, -0.51834047, 0.8551743, 0, 3.7496269, 3.5924623)
+[node name="Camera3D" type="Camera3D" parent="shared_components" unique_id=503402897]
+transform = Transform3D(1, 0, 0, 0, 0.85517436, 0.5183405, 0, -0.5183405, 0.85517436, 0, 3.7496269, 3.5924623)
 script = ExtResource("15_dylgi")
 camera_distance = 8.0
 camera_height = 3.0
 pan_speed = 10.0
 max_pan_distance = 8.0
+
+[node name="scene_controller" type="Node3D" parent="." unique_id=723261223]
+
+[node name="game_world" parent="scene_controller" unique_id=1031745512 instance=ExtResource("1_j5px3")]
 
 [node name="game_ui" type="CanvasLayer" parent="." unique_id=2127553330]

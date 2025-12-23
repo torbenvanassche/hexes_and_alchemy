@@ -5,7 +5,6 @@
 [ext_resource type="Script" uid="uid://m31o3kdm652g" path="res://scripts/hex_system/region_info.gd" id="2_yrmbv"]
 [ext_resource type="Resource" uid="uid://bto28untf5lrf" path="res://resources/scene_info/hex/hex_water.tres" id="3_aaf4r"]
 [ext_resource type="Script" uid="uid://btydeamnhd6x" path="res://scripts/structures/structure_info.gd" id="5_mhu40"]
-[ext_resource type="Resource" uid="uid://guey01mmh155" path="res://resources/scene_info/tops/shipyard.tres" id="6_mhu40"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_yrmbv"]
 
@@ -14,9 +13,6 @@ script = ExtResource("2_yrmbv")
 noise = SubResource("FastNoiseLite_yrmbv")
 activation_threshold = 0.6
 material = ExtResource("1_dpad2")
-structures = Dictionary[ExtResource("5_mhu40"), float]({
-ExtResource("6_mhu40"): 1.0
-})
 scene_multipliers = Dictionary[ExtResource("2_aaf4r"), float]({
 ExtResource("3_aaf4r"): 1.0
 })

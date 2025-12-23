@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bjfa18fuhmhll"]
 
-[ext_resource type="PackedScene" uid="uid://bttuym3sphjmk" path="res://meshes/buildings/blue/building_shipyard_blue.glb" id="1_yhdsw"]
+[ext_resource type="PackedScene" uid="uid://bttuym3sphjmk" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_shipyard_blue.glb" id="1_yhdsw"]
 
 [node name="Node3D" type="Node3D" unique_id=506515738]
 

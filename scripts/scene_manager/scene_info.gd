@@ -39,9 +39,13 @@ func release() -> void:
 	
 func remove() -> void:
 	for i in instances:
-		i.get_parent().remove_child(i)
+		if i.get_parent():
+			i.get_parent().remove_child(i)
 	
 func queue(c: Callable) -> void:
+	if id == "":
+		initialize();
+	
 	if is_cached:
 		c.call(self);
 	elif not cached.is_connected(c):

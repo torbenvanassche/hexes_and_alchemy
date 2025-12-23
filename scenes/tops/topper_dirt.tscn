@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cvkpa07ijqa1m"]
 
-[ext_resource type="PackedScene" uid="uid://b5nvbe2agstv" path="res://meshes/buildings/neutral/building_dirt.glb" id="2_h10pt"]
+[ext_resource type="PackedScene" uid="uid://b5nvbe2agstv" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/building_dirt.glb" id="2_h10pt"]
 
 [node name="Node3D" type="Node3D" unique_id=75474733]
 

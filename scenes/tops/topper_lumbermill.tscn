@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://8os3rjtx8nfb"]
 
-[ext_resource type="PackedScene" uid="uid://52621cbs2hrd" path="res://meshes/buildings/blue/building_lumbermill_blue.glb" id="1_l6lh2"]
+[ext_resource type="PackedScene" uid="uid://52621cbs2hrd" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_lumbermill_blue.glb" id="1_l6lh2"]
 
 [node name="Node3D" type="Node3D" unique_id=658915438]
 
