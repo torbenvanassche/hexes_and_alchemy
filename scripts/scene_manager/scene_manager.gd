@@ -72,7 +72,7 @@ func add(n: SceneInfo, allow_multiple: bool = false, is_visible: bool = true) ->
 	if "visible" in instance:
 		instance.visible = is_visible;
 		
-	if n.type == SceneInfo.Type.UI && not instance.get_parent() == _ui_container:
+	if n.type == SceneInfo.Type.UI:
 		_ui_container.add_child(instance);
 		scene_stack.append(n)
 		return instance;
