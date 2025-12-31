@@ -10,32 +10,35 @@ enum Type {
 }
 
 @export var id: String;
-
-@export_group("Core")
 @export var packed_scene: PackedScene;
 @export var type: Type;
 
+var is_unique: bool = false;
 signal cached(scene_info: SceneInfo);
 
 var is_cached: bool = false;
 var is_queued: bool = false;
-var instances: Array[Node];
+var instances: Array[Node] = [];
 
 func initialize() -> void:
 	id = resource_path.get_file().trim_suffix(".tres");
+	is_unique = type == Type.UI;
 	
 func get_instance() -> Node:
-	var ps := packed_scene.instantiate();
-	instances.append(ps);
-	if ps is HexBase:
-		ps.scene_info = self;
-	return ps;
+	instances = instances.filter(func(i): return is_instance_valid(i))
+	if is_unique and instances.size() > 0:
+		return instances[0]
+	var instance := packed_scene.instantiate()
+	instances.append(instance)
+	return instance
 
 func release() -> void:
 	for i in instances:
-		i.queue_free()
-	SceneManager.instance.scene_cache.remove(self);
-	is_cached = false;
+		if is_instance_valid(i):
+			i.queue_free()
+	instances.clear()
+	SceneManager.instance.scene_cache.remove(self)
+	is_cached = false
 	
 func remove() -> void:
 	for i in instances:

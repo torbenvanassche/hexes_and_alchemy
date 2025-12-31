@@ -8,4 +8,5 @@ script = ExtResource("1_yy1p2")
 id = "pause_menu"
 packed_scene = ExtResource("1_28e2k")
 type = 2
+one_instance = true
 metadata/_custom_type_script = "uid://6t4u66o5q6po"

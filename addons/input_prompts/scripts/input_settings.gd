@@ -20,7 +20,7 @@ func _load_default() -> void:
 	for action: String in InputManager.mappable_actions:
 		var events: Array[InputEvent] = InputMap.action_get_events(action);
 		if events.size() > 0:
-			Config.change_keybinding(action, events[0]);
+			Config.input.change_keybinding(action, events[0]);
 	
 func _on_save() -> void:
 	Config.save();
@@ -35,13 +35,14 @@ func _reset_bindings() -> void:
 		var events: Array[InputEvent] = InputMap.action_get_events(action);
 		if events.size() > 0:
 			var key: String = events[0].as_text().to_lower();
+			key = key.trim_suffix(" - physical")
 			btn.set_key(key, events[0]);
 		
 		keybind_container.add_child(btn);
 		btn.pressed.connect(_on_rebind_key.bind(btn, action))
 		
 func _load_bindings() -> void:
-	var keybindings: Dictionary = Config.load_keybindings();
+	var keybindings: Dictionary = Config.input.load_keybindings();
 	for action: String in keybindings.keys():
 		InputManager.set_action(action, keybindings[action])
 

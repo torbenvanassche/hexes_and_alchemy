@@ -1,8 +1,12 @@
 [gd_scene format=3 uid="uid://c0cx8yohbgqh5"]
 
 [ext_resource type="Script" uid="uid://bhn5mfd3d5ujk" path="res://addons/control_helpers/toggle_group.gd" id="1_pfmrl"]
+[ext_resource type="Resource" uid="uid://cs0kfyy871ovd" path="res://resources/scene_info/ui/game_settings.tres" id="2_6hi4t"]
+[ext_resource type="Resource" uid="uid://uov1jt8s2qia" path="res://resources/scene_info/ui/input_settings.tres" id="2_j3boo"]
+[ext_resource type="Texture2D" uid="uid://bfjflheeann5w" path="res://addons/input_prompts/left.png" id="3_xi83m"]
 
-[node name="Control" type="VBoxContainer" unique_id=1653328238 node_paths=PackedStringArray("button_group_parent")]
+[node name="Control" type="VBoxContainer" unique_id=1653328238 node_paths=PackedStringArray("button_group_parent", "tab_instance_parent", "group_buttons", "back_button")]
+process_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -10,14 +14,29 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_pfmrl")
 button_group_parent = NodePath("tab_buttons")
+tab_instance_parent = NodePath("tab_instances")
+group_buttons = {
+NodePath("tab_buttons/GAME"): ExtResource("2_6hi4t"),
+NodePath("tab_buttons/INPUT"): ExtResource("2_j3boo")
+}
+back_button = NodePath("tab_buttons/BACK")
 
 [node name="tab_buttons" type="HBoxContainer" parent="." unique_id=1257880228]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 
+[node name="BACK" type="Button" parent="tab_buttons" unique_id=455643234]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+icon = ExtResource("3_xi83m")
+expand_icon = true
+
 [node name="GAME" type="Button" parent="tab_buttons" unique_id=406211892]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
 text = "GAME	"
 
 [node name="INPUT" type="Button" parent="tab_buttons" unique_id=4257191]

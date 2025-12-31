@@ -64,7 +64,7 @@ func set_action(action: StringName, event: InputEvent) -> void:
 func replace_action(action: StringName, event: InputEvent) -> void:
 	set_action(action, event)
 	remapping_button.set_key(event.as_text().trim_suffix(" (Physical)").to_lower(), event)
-	Config.change_keybinding(action_to_remap, event)
+	Config.input.change_keybinding(action_to_remap, event)
 	
 	is_remapping = false;
 	action_to_remap = "";

@@ -43,9 +43,19 @@ func get_or_create_scene(scene_name: String, scene_config: SceneConfig = SceneCo
 func _check_loaded(to_load: Array[SceneInfo]) -> bool:
 	return to_load.all(func(scene: SceneInfo) -> bool: return scene.is_cached)
 	
-func remove_scene(info: SceneInfo, permanent: bool = false) -> void:
+func _remove_from_stack(info: SceneInfo) -> void:
 	if scene_stack.has(info):
 		scene_stack.erase(info);
+		
+func _pop_stack() -> SceneInfo:
+	if scene_stack.size() != 0:
+		var popped : SceneInfo = scene_stack[-1];
+		_remove_from_stack(popped);
+		return popped;
+	return null;
+	
+func remove_scene(info: SceneInfo, permanent: bool = false) -> void:
+	_remove_from_stack(info)
 	if permanent:
 		info.release();
 	else:
@@ -54,16 +64,30 @@ func remove_scene(info: SceneInfo, permanent: bool = false) -> void:
 func remove_scene_by_name(scene_name: String, permanent: bool = false) -> void:
 	remove_scene(DataManager.instance.get_scene_by_name(scene_name), permanent)
 	
-func to_previous_scene() -> void:
+func to_previous_scene() -> SceneInfo:
 	if scene_stack.size() != 0:
-		scene_stack.pop_back();
+		var s: SceneInfo = _pop_stack();
 		if scene_stack.size() != 0:
-			get_or_create_scene(scene_stack[scene_stack.size() - 1].id, SceneConfig.new(false));
-			
+			return get_or_create_scene(scene_stack[scene_stack.size() - 1].id, SceneConfig.new(false));
+	return null;
+	
+func get_current_scene() -> SceneInfo:
+	if scene_stack.size() != 0:
+		return scene_stack[-1];
+	return null;
+
+func set_visible_by_name(scene_name: String, state: bool = true) -> void:
+	set_visible(DataManager.instance.get_scene_by_name(scene_name), state)
+	
+func set_visible(scene_info: SceneInfo, state: bool = true) -> void:
+	for instance in scene_info.instances:
+		if "visible" in instance:
+			instance.visible = state;
+
 func transition(scene_info: SceneInfo, immediate: bool = true) -> void:
 	pass
 	
-func add(n: SceneInfo, allow_multiple: bool = false, is_visible: bool = true) -> Node:
+func add(n: SceneInfo, allow_multiple: bool = false, is_visible: bool = true, add_to_stack: bool = true) -> Node:
 	var instance_count := scene_stack.count(n);
 	if instance_count >= 1 && not allow_multiple:
 		return
@@ -72,13 +96,17 @@ func add(n: SceneInfo, allow_multiple: bool = false, is_visible: bool = true) ->
 	if "visible" in instance:
 		instance.visible = is_visible;
 		
+	if add_to_stack:
+		scene_stack.append(n)
+		
+	if instance.is_inside_tree():
+		return;
+		
 	if n.type == SceneInfo.Type.UI:
 		_ui_container.add_child(instance);
-		scene_stack.append(n)
 		return instance;
 	elif not instance.get_parent() == root:
 		root.add_child(instance);
-		scene_stack.append(n)
 		return instance;
 	else:
 		Debug.err(n.id + " cannot be directly added to a scene.")

@@ -27,6 +27,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="resume" type="Button" parent="CenterContainer/VBoxContainer" unique_id=522419469]
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 text = "Resume"
 

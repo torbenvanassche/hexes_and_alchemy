@@ -24,18 +24,25 @@ func _physics_process(_delta: float) -> void:
 		move_player = !move_player;
 		
 	if Input.is_action_just_pressed("cancel"):
-		pause_game(true);
+		var current_scene := SceneManager.get_current_scene();
+		if current_scene && current_scene.id == "pause_menu":
+			pause_game(false);
+		else:
+			pause_game(true);
 
 func spawn_player(spawn_hex: HexBase) -> void:
-	DataManager.instance.player.queue(_on_player_loaded.bind(spawn_hex))
+	DataManager.instance.get_scene_by_name("player").queue(_on_player_loaded.bind(spawn_hex))
 	
 func _on_player_loaded(player_scene: SceneInfo, spawn_hex: HexBase) -> void:
-	player_instance = SceneManager.add(player_scene)
+	player_instance = SceneManager.add(player_scene, false, true, false);
 	player_instance.position = spawn_hex.position;
 	camera.target = player_instance;
 	
 func pause_game(force: bool = !is_paused) -> void:
 	is_paused = force;
 	get_tree().paused = is_paused;
+	var scene := DataManager.instance.get_scene_by_name("pause_menu");
 	if is_paused:
-		DataManager.instance.pause_menu.queue(func(s: SceneInfo) -> void: SceneManager.add(s))
+		scene.queue(func(s: SceneInfo) -> void: SceneManager.add(s))
+	else:
+		SceneManager.remove_scene(scene)

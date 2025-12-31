@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://bfq38cdpu8meg" path="res://addons/input_prompts/scripts/input_settings.gd" id="1_iossd"]
 
 [node name="input_settings" type="Control" unique_id=866818354 node_paths=PackedStringArray("keybind_container")]
+process_mode = 3
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

@@ -4,9 +4,7 @@ class_name DataManager extends Node
 @export var regions: Array[RegionInfo];
 @export var structures: Array[StructureInfo];
 
-@export var player: SceneInfo;
-@export var pause_menu: SceneInfo;
-
+@export var scenes: Array[SceneInfo]
 var scene_data: Array[SceneInfo];
 
 const CUBE_DIRS : Array[Vector3i] = [
@@ -20,8 +18,7 @@ func _ready() -> void:
 	
 	scene_data.append_array(hexes)
 	scene_data.append_array(structures);
-	scene_data.append(pause_menu)
-	scene_data.append(player)
+	scene_data.append_array(scenes)
 	
 	for object in scene_data:
 		object.initialize();

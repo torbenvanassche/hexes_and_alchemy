@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://ughm5jhd4ey6"]
+
+[node name="Control" type="Control" unique_id=976897692]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="." unique_id=199110682]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="Panel" unique_id=479341388]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Panel/CenterContainer" unique_id=1116448425]
+layout_mode = 2
+text = "NO SETTINGS HERE YET"

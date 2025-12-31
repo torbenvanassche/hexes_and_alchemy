@@ -10,7 +10,6 @@ func _init() -> void:
 	timer.wait_time = 0.1;
 
 func queue(scene_info: SceneInfo) -> Signal:
-	print(scene_info.id)
 	if not timer.is_inside_tree():
 		SceneManager.add_child(timer);
 	
