@@ -34,7 +34,7 @@ func get_scene_by_name(scene_name: String) -> SceneInfo:
 	return null;
 
 func node_to_info(node: Node) -> SceneInfo:
-	var filtered: Array[SceneInfo] = scene_data.filter(func(x: SceneInfo) -> bool: return x.node == node);
+	var filtered: Array[SceneInfo] = scene_data.filter(func(x: SceneInfo) -> bool: return x.has_instance(node));
 	if filtered.size() == 1:
 		return filtered[0];
 	elif filtered.size() > 1:

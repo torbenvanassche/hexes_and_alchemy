@@ -32,6 +32,9 @@ func get_instance() -> Node:
 	var instance := packed_scene.instantiate()
 	instances.append(instance)
 	return instance
+	
+func has_instance(node: Node) -> bool:
+	return instances.has(node);
 
 func release() -> void:
 	for i in instances:
