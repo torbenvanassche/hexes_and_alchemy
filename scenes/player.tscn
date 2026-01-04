@@ -8,7 +8,10 @@
 radius = 0.3
 height = 1.0698242
 
-[node name="Node3D" type="CharacterBody3D" unique_id=357255706]
+[sub_resource type="BoxShape3D" id="BoxShape3D_qhqgy"]
+size = Vector3(1.5, 1.5, 1.5)
+
+[node name="player" type="CharacterBody3D" unique_id=357255706]
 script = ExtResource("1_g2els")
 
 [node name="Root Scene" parent="." unique_id=334534422 instance=ExtResource("1_3vyb7")]
@@ -23,3 +26,9 @@ script = ExtResource("3_qhqgy")
 unlocked_slots = 5
 max_slots = 5
 metadata/_custom_type_script = "uid://b6rgx41co3bur"
+
+[node name="interactor" type="Area3D" parent="." unique_id=614406519]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="interactor" unique_id=255196853]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75172853, 0)
+shape = SubResource("BoxShape3D_qhqgy")

@@ -5,7 +5,7 @@ class_name StructureInfo extends SceneInfo
 @export var minimum_distance_from_other_structures: int = 4;
 @export var spawn_weight: float = 1;
 
-@export var scene_on_enter: SceneInfo;
+@export var interaction_script: Script;
 
 func initialize() -> void:
 	self.type = Type.STRUCTURE;

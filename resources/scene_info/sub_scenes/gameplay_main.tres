@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="SceneInfo" format=3 uid="uid://cutvod5684gln"]
+
+[ext_resource type="Script" uid="uid://6t4u66o5q6po" path="res://scripts/scene_manager/scene_info.gd" id="1_ybv51"]
+[ext_resource type="PackedScene" uid="uid://maout4rpahg4" path="res://scenes/generator.tscn" id="1_yveqn"]
+
+[resource]
+script = ExtResource("1_ybv51")
+id = "gameplay_main"
+packed_scene = ExtResource("1_yveqn")
+is_unique = true
+metadata/_custom_type_script = "uid://6t4u66o5q6po"

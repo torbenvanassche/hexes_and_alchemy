@@ -29,10 +29,14 @@ var pan_offset := Vector3.ZERO
 var spring_arm: SpringArm3D
 var camera: Camera3D
 
+var snap_camera_on_player_moving: bool = true;
+
+func snap_camera_on_player_moved(b: bool) -> void:
+	snapping = b && snap_camera_on_player_moving;
 
 func _ready() -> void:
 	_build_camera_hierarchy()
-	Manager.instance.camera = self;
+	Manager.instance.spring_arm_camera = self;
 	target_yaw = rotation.y + deg_to_rad(default_yaw_offset_deg)
 
 func _build_camera_hierarchy() -> void:

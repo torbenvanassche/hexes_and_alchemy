@@ -5,9 +5,19 @@ extends CharacterBody3D
 @export var acceleration := 10.0
 @export var dash_modifier := 1.5;
 
+@onready var interactor: Area3D = $interactor;
 @onready var inventory: Inventory = $Inventory;
 
+var current_triggers: Array[StructureInstance] = [];
+
+func _ready() -> void:
+	interactor.area_entered.connect(add_trigger)
+	interactor.area_exited.connect(remove_trigger)
+
 func _physics_process(delta: float) -> void:
+	if Input.is_action_just_pressed("primary_action") && current_triggers.size() != 0:
+		current_triggers[0].on_interact();
+	
 	if Manager.instance.input_moves_player():
 		_handle_movement(delta)
 		move_and_slide()
@@ -21,7 +31,7 @@ func _handle_movement(delta: float) -> void:
 	if input.length() > 1.0:
 		input = input.normalized()
 
-	var cam_basis := Manager.instance.camera.global_transform.basis
+	var cam_basis := Manager.instance.spring_arm_camera.global_transform.basis
 
 	var forward := -cam_basis.z
 	forward.y = 0
@@ -51,3 +61,9 @@ func _handle_movement(delta: float) -> void:
 	if move_dir.length() > 0.1:
 		var target_rot := atan2(move_dir.x, move_dir.z)
 		rotation.y = lerp_angle(rotation.y, target_rot, delta * 10.0)
+
+func add_trigger(other: Area3D) -> void:
+	current_triggers.append(other.get_meta("target"))
+	
+func remove_trigger(other: Area3D) -> void:
+	current_triggers.erase(other.get_meta("target"))

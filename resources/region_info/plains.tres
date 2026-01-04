@@ -4,11 +4,11 @@
 [ext_resource type="Script" uid="uid://m31o3kdm652g" path="res://scripts/hex_system/region_info.gd" id="2_te6hx"]
 [ext_resource type="Script" uid="uid://dt4im1k7j4jn" path="res://scripts/hex_system/hex_info.gd" id="2_yf7g0"]
 [ext_resource type="Resource" uid="uid://betpu2iylw1qy" path="res://resources/scene_info/hex/hex_simple.tres" id="3_aq4h2"]
-[ext_resource type="Resource" uid="uid://ckpmn3cutb7an" path="res://resources/scene_info/tops/mine.tres" id="4_yf7g0"]
+[ext_resource type="Resource" uid="uid://ckpmn3cutb7an" path="res://resources/scene_info/structures/spawnable_mine.tres" id="4_yf7g0"]
 [ext_resource type="Script" uid="uid://btydeamnhd6x" path="res://scripts/structures/structure_info.gd" id="5_v1b04"]
-[ext_resource type="Resource" uid="uid://dbhyrexgkscja" path="res://resources/scene_info/tops/dirt.tres" id="6_yf7g0"]
-[ext_resource type="Resource" uid="uid://clias4ed18wk0" path="res://resources/scene_info/tops/lumbermill.tres" id="8_fa7qv"]
-[ext_resource type="Resource" uid="uid://1es63jn2bgn" path="res://resources/scene_info/tops/blacksmith.tres" id="9_gb63y"]
+[ext_resource type="Resource" uid="uid://dbhyrexgkscja" path="res://resources/scene_info/structures/dirt.tres" id="6_yf7g0"]
+[ext_resource type="Resource" uid="uid://clias4ed18wk0" path="res://resources/scene_info/structures/lumbermill.tres" id="8_fa7qv"]
+[ext_resource type="Resource" uid="uid://1es63jn2bgn" path="res://resources/scene_info/structures/blacksmith.tres" id="9_gb63y"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_te6hx"]
 seed = 1

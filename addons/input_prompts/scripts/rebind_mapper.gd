@@ -7,7 +7,7 @@ class_name InputDisplayer extends Button
 @export var action_texture: Texture2D;
 
 func set_key(string: String, event: InputEvent) -> void:
-	_prepare_texture()
+	action_image.texture = InputManager.get_input_texture()
 	var entry: Array;
 	if event is InputEventKey:
 		entry = InputManager.keys.keyboard.get(string)
@@ -26,8 +26,3 @@ func set_label(string: String) -> void:
 func set_rebinding() -> void:
 	rebinding_text.visible = true;
 	action_image.visible = false;
-
-func _prepare_texture() -> void:
-	var a := AtlasTexture.new();
-	a.atlas = action_texture;
-	action_image.texture = a.duplicate(true);

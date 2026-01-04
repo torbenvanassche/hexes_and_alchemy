@@ -2,7 +2,25 @@
 
 [ext_resource type="PackedScene" uid="uid://6h1kj7hbn5qq" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_blacksmith_blue.glb" id="1_43jb5"]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_43jb5"]
+size = Vector3(3.7111816, 2.8012085, 1.3815613)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_cpkdt"]
+size = Vector3(3.5284424, 2.8012085, 2.2856293)
+
 [node name="Node3D" type="Node3D" unique_id=728034513]
 
 [node name="Root Scene" parent="." unique_id=867165107 instance=ExtResource("1_43jb5")]
 transform = Transform3D(2.8, 0, 0, 0, 2.8, 0, 0, 0, 2.8, 0, 0, 0)
+
+[node name="interaction" type="Area3D" parent="." unique_id=1325427929]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="interaction" unique_id=323897064]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.003540039, 1.3209534, 1.2575836)
+shape = SubResource("BoxShape3D_43jb5")
+
+[node name="collision" type="StaticBody3D" parent="." unique_id=1843671345]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="collision" unique_id=623158031]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0095825195, 1.3209534, -0.43702173)
+shape = SubResource("BoxShape3D_cpkdt")

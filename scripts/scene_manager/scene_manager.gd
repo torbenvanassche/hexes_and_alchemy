@@ -43,6 +43,12 @@ func get_or_create_scene(scene_name: String, scene_config: SceneConfig = SceneCo
 func _check_loaded(to_load: Array[SceneInfo]) -> bool:
 	return to_load.all(func(scene: SceneInfo) -> bool: return scene.is_cached)
 	
+func set_active_scene(info: SceneInfo) -> void:
+	if info.is_unique:
+		_active_scene = info.get_instance();
+	else:
+		Debug.message("Cannot set active scene to non-unique instanced SceneInfo.")
+	
 func _remove_from_stack(info: SceneInfo) -> void:
 	if scene_stack.has(info):
 		scene_stack.erase(info);
@@ -66,7 +72,7 @@ func remove_scene_by_name(scene_name: String, permanent: bool = false) -> void:
 	
 func to_previous_scene() -> SceneInfo:
 	if scene_stack.size() != 0:
-		var s: SceneInfo = _pop_stack();
+		_pop_stack();
 		if scene_stack.size() != 0:
 			return get_or_create_scene(scene_stack[scene_stack.size() - 1].id, SceneConfig.new(false));
 	return null;

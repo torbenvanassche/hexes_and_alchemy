@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://3pb564xgsaqo"]
 
+[ext_resource type="PackedScene" uid="uid://maout4rpahg4" path="res://scenes/generator.tscn" id="1_j5px3"]
 [ext_resource type="Script" uid="uid://cdjrbv2tvjlvw" path="res://scripts/game_manager.gd" id="1_l5cgh"]
 [ext_resource type="Script" uid="uid://dpjtl8txjms6k" path="res://scripts/resource_manager.gd" id="2_sqa0i"]
 [ext_resource type="Script" uid="uid://dt4im1k7j4jn" path="res://scripts/hex_system/hex_info.gd" id="3_l5cgh"]
@@ -22,7 +23,6 @@
 [ext_resource type="Resource" uid="uid://001nokdh5ewb" path="res://resources/scene_info/ui/settings_menu.tres" id="18_mflgo"]
 [ext_resource type="Resource" uid="uid://cs0kfyy871ovd" path="res://resources/scene_info/ui/game_settings.tres" id="20_8ui5n"]
 [ext_resource type="Resource" uid="uid://dhooled2cyusq" path="res://resources/scene_info/sub_scenes/gameplay_mines.tres" id="21_ccljq"]
-[ext_resource type="Resource" uid="uid://cutvod5684gln" path="res://resources/scene_info/sub_scenes/gameplay_main.tres" id="22_jehah"]
 [ext_resource type="Script" uid="uid://p57cg8ml65u0" path="res://scripts/helpers/world_space_ui.gd" id="23_f3p2p"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_j5px3"]
@@ -42,14 +42,13 @@ glow_enabled = true
 
 [node name="game_manager" type="Node" parent="." unique_id=299541562]
 script = ExtResource("1_l5cgh")
-initial_scene = ExtResource("22_jehah")
 
 [node name="resource_manager" type="Node" parent="." unique_id=1025417812]
 script = ExtResource("2_sqa0i")
 hexes = Array[ExtResource("3_l5cgh")]([ExtResource("4_vgks2"), ExtResource("5_dylgi")])
 regions = Array[ExtResource("5_3hfy5")]([ExtResource("6_7pvxh"), ExtResource("7_y3xxt"), ExtResource("9_y3xxt")])
 structures = Array[ExtResource("10_gt4lb")]([ExtResource("11_ya6yc"), ExtResource("12_mflgo"), ExtResource("13_34frw"), ExtResource("14_8ui5n")])
-scenes = Array[ExtResource("15_ya6yc")]([ExtResource("12_vgks2"), ExtResource("16_gt4lb"), ExtResource("18_34frw"), ExtResource("18_mflgo"), ExtResource("20_8ui5n"), ExtResource("21_ccljq"), ExtResource("22_jehah")])
+scenes = Array[ExtResource("15_ya6yc")]([ExtResource("12_vgks2"), ExtResource("16_gt4lb"), ExtResource("18_34frw"), ExtResource("18_mflgo"), ExtResource("20_8ui5n"), ExtResource("21_ccljq")])
 
 [node name="shared_components" type="Node" parent="." unique_id=2003265152]
 
@@ -69,6 +68,8 @@ pan_speed = 10.0
 max_pan_distance = 8.0
 
 [node name="scene_controller" type="Node3D" parent="." unique_id=723261223]
+
+[node name="game_world" parent="scene_controller" unique_id=1031745512 instance=ExtResource("1_j5px3")]
 
 [node name="game_ui" type="CanvasLayer" parent="." unique_id=2127553330]
 

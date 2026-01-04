@@ -32,16 +32,32 @@ signal input_mode_changed();
 var action_to_remap: StringName;
 var is_remapping: bool = false;
 var remapping_button: InputDisplayer = null;
+
 var dictionary_path: String = "res://addons/input_prompts/input_prompts.json"
+@onready var keyboard_image: Texture2D = preload("res://addons/input_prompts/textures/kb_mouse_inputs.png");
 
 var keys: Dictionary:
 	get:
 		if !keys:
 			keys = FileUtils.load_json(dictionary_path)
 		return keys;
+		
+func get_icon_size() -> Vector2i:
+	return Vector2i(keys.rect_size[0], keys.rect_size[1]);
+	
+func get_rect(coord: Vector2i) -> Rect2:
+	return Rect2(coord.x * get_icon_size().x, coord.y * get_icon_size().y, get_icon_size().x, get_icon_size().y)
+		
+func get_input_texture() -> AtlasTexture:
+	var a := AtlasTexture.new();
+	if current_input_device == InputDevice.KEYBOARD_MOUSE:
+		a.atlas = keyboard_image;
+	else:
+		a.atlas = keyboard_image;
+	return a.duplicate(true);
 
 func get_key(key: String) -> Array:
-	if Manager.instance.current_input_device == Manager.instance.InputDevice.KEYBOARD_MOUSE:
+	if current_input_device == InputDevice.KEYBOARD_MOUSE:
 		if keys.keyboard.has(key):
 			return keys.keyboard[key]
 		elif keys.mouse.has(key):

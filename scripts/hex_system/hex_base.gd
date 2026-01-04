@@ -33,7 +33,7 @@ func apply_region(reg: RegionInfo) -> void:
 			mesh.material_override = reg.material;
 			
 func is_walkable(_player: PlayerController = Manager.instance.player_instance) -> bool:
-	return scene_info.is_walkable;
+	return scene_info && scene_info.is_walkable;
 
 func set_structure(s: StructureInfo) -> void:
 	var required_tiles = Manager.instance.hex_grid.get_tiles_in_radius(cube_id, s.required_space_radius);

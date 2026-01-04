@@ -13,7 +13,7 @@ enum Type {
 @export var packed_scene: PackedScene;
 @export var type: Type;
 
-var is_unique: bool = false;
+@export var is_unique: bool = false;
 signal cached(scene_info: SceneInfo);
 
 var is_cached: bool = false;
@@ -22,7 +22,8 @@ var instances: Array[Node] = [];
 
 func initialize() -> void:
 	id = resource_path.get_file().trim_suffix(".tres");
-	is_unique = type == Type.UI;
+	if not is_unique:
+		is_unique = type == Type.UI;
 	
 func get_instance() -> Node:
 	instances = instances.filter(func(i): return is_instance_valid(i))
