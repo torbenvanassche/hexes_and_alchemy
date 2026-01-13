@@ -5,4 +5,4 @@ func interact() -> void:
 	mine_scene.queue(_on_mineshaft_loaded)
 	
 func _on_mineshaft_loaded(sI: SceneInfo):
-	pass
+	SceneManager.transition(sI)

@@ -134,7 +134,7 @@ func _assign_region_instance(hex: HexBase) -> void:
 
 	match touching_instances.size():
 		0:
-			var reg := RegionInstance.new(hex.region)
+			var reg := RegionInstance.new(hex.region, self)
 			reg.add_hex(hex)
 			_get_instances_for_region(hex.region).append(reg)
 		1:

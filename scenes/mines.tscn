@@ -4,4 +4,4 @@
 
 [node name="mines" type="Node3D" unique_id=150166398]
 script = ExtResource("1_aqnyu")
-chunk_radius = 1
+chunk_radius = 0

@@ -4,8 +4,10 @@ extends RefCounted
 var info: RegionInfo
 var hexes: Dictionary[Vector3i, HexBase] = {}
 var structures: Dictionary[Vector3i, StructureInfo] = {}
+var hex_grid: HexGrid;
 
-func _init(p_info: RegionInfo) -> void:
+func _init(p_info: RegionInfo, grid: HexGrid) -> void:
+	hex_grid = grid;
 	info = p_info
 
 func add_hex(hex: HexBase) -> void:
@@ -61,12 +63,12 @@ func _pick_structure() -> StructureInfo:
 	return null
 
 func _can_place_structure_at(candidate_id: Vector3i, candidate: StructureInfo) -> bool:
-	for region_info: RegionInfo in Manager.instance.hex_grid.region_instances.keys():
-		for region_instance: RegionInstance in Manager.instance.hex_grid.region_instances[region_info]:
+	for region_info: RegionInfo in hex_grid.region_instances.keys():
+		for region_instance: RegionInstance in hex_grid.region_instances[region_info]:
 			for structure_position in region_instance.structures.keys():
 				var structureInfo: StructureInfo = region_instance.structures[structure_position];
 				var required_distance: int = (candidate.required_space_radius + structureInfo.required_space_radius + max(candidate.minimum_distance_from_other_structures, structureInfo.minimum_distance_from_other_structures))
-				if Manager.instance.hex_grid.cube_distance(structure_position, candidate_id) < required_distance:
+				if hex_grid.cube_distance(structure_position, candidate_id) < required_distance:
 					return false
 	return true
 	
@@ -82,11 +84,11 @@ func generate_structures_for_region() -> void:
 		if structure == null:
 			break
 
-		var hex_id := available_hexes.pop_back() as Vector3i;		
-		var hex := Manager.instance.hex_grid.get_hex_at_world_position(hex_id);
-		if Manager.instance.hex_grid.chunks[Vector2i(0,0)].hexes.has(hex):
+		var hex_id := available_hexes.pop_back() as Vector3i;
+		var hex := hex_grid.get_hex_at_world_position(hex_id);
+		if hex_grid.chunks[Vector2i(0,0)].hexes.has(hex):
 			continue
 		
 		if hex && hex.can_generate && _can_place_structure_at(hex_id, structure):
 			structures[hex_id] = structure
-			Manager.instance.hex_grid.get_hex_at_world_position(hex_id).set_structure(structure);
+			hex_grid.get_hex_at_world_position(hex_id).set_structure(structure);

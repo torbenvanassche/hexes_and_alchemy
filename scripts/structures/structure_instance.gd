@@ -33,7 +33,7 @@ func _on_area_enter(other: Area3D) -> void:
 		Manager.instance.interaction_prompt.show_rect(instance);
 		
 func on_interact() -> void:
-	if script_handler.has_method("interact"):
+	if script_handler && script_handler.has_method("interact"):
 		script_handler.interact();
 	else:
 		Debug.message("No interact method found on interaction handler.")

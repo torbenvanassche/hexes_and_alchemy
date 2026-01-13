@@ -47,9 +47,10 @@ func spawn_player(spawn_hex: HexBase) -> void:
 	DataManager.instance.get_scene_by_name("player").queue(_on_player_loaded.bind(spawn_hex))
 	
 func _on_player_loaded(player_scene: SceneInfo, spawn_hex: HexBase) -> void:
-	player_instance = SceneManager.add(player_scene, false, true, false);
+	if not player_instance:
+		player_instance = SceneManager.add(player_scene, false, true, false);
+		spring_arm_camera.target = player_instance;
 	player_instance.position = spawn_hex.position;
-	spring_arm_camera.target = player_instance;
 	
 func pause_game(force: bool = !is_paused) -> void:
 	is_paused = force;

@@ -7,4 +7,5 @@
 script = ExtResource("1_rjq7u")
 id = "player"
 packed_scene = ExtResource("1_dk6ju")
+is_unique = true
 metadata/_custom_type_script = "uid://6t4u66o5q6po"

@@ -90,8 +90,12 @@ func set_visible(scene_info: SceneInfo, state: bool = true) -> void:
 		if "visible" in instance:
 			instance.visible = state;
 
-func transition(scene_info: SceneInfo, immediate: bool = true) -> void:
-	pass
+func transition(scene_info: SceneInfo) -> void:
+	if "visible" in _active_scene:
+		_active_scene.process_mode = Node.PROCESS_MODE_DISABLED;
+		_active_scene.visible = false;
+	add(scene_info);
+	set_active_scene(scene_info);
 	
 func add(n: SceneInfo, allow_multiple: bool = false, is_visible: bool = true, add_to_stack: bool = true) -> Node:
 	var instance_count := scene_stack.count(n);
