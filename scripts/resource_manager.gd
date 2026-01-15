@@ -47,8 +47,8 @@ func is_active(scene_name: String) -> bool:
 	var scene_info := get_scene_by_name(scene_name);
 	return scene_info.node != null && scene_info.node.visible == true
 	
-func pick_scene(x: int, y: int) -> HexInfo:
-	var region := get_region_for(x, y)
+func pick_scene(x: int, y: int, region_options: Array[RegionInfo] = regions) -> HexInfo:
+	var region := get_region_for(x, y, region_options)
 	if region == null:
 		return null
 
@@ -78,11 +78,11 @@ func pick_scene(x: int, y: int) -> HexInfo:
 
 	return valid_scenes[-1]
 	
-func get_region_for(x: int, y: int) -> RegionInfo:
+func get_region_for(x: int, y: int, region_options: Array[RegionInfo] = regions) -> RegionInfo:
 	var best_region: RegionInfo = null
 	var best_score := -INF
 
-	for region in regions:
+	for region in region_options:
 		if region.noise == null:
 			continue
 
@@ -97,6 +97,6 @@ func get_region_for(x: int, y: int) -> RegionInfo:
 			best_region = region
 			
 	if best_region == null:
-		best_region = regions.pick_random();
+		best_region = region_options.pick_random();
 
 	return best_region
