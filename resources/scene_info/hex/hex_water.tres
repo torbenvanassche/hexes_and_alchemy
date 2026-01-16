@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="HexInfo" format=3 uid="uid://bto28untf5lrf"]
 
-[ext_resource type="Script" uid="uid://dt4im1k7j4jn" path="res://scripts/hex_system/hex_info.gd" id="1_nekhc"]
+[ext_resource type="Script" uid="uid://dt4im1k7j4jn" path="res://scripts/hex_system/base/hex_info.gd" id="1_nekhc"]
 [ext_resource type="PackedScene" uid="uid://ci1fy2fl7cvfe" path="res://scenes/hexes/hex_water.tscn" id="1_yy18x"]
 
 [resource]

@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://cbcbaivigakxy"]
+
+[ext_resource type="PackedScene" uid="uid://bpi6u36qmvxes" path="res://meshes/kay_fantasy_hexagon/decoration/props/ladder.glb" id="1_328ig"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3sell"]
+size = Vector3(1.5767212, 1.6783295, 1.070488)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kgtil"]
+size = Vector3(0.5867615, 1.6437683, 0.24139023)
+
+[node name="Node3D" type="Node3D" unique_id=1151817518]
+
+[node name="Root Scene" parent="." unique_id=1674175704 instance=ExtResource("1_328ig")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+
+[node name="interaction" type="Area3D" parent="." unique_id=777824050]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="interaction" unique_id=374934557]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.04598999, 0.75951385, 0.041245222)
+shape = SubResource("BoxShape3D_3sell")
+
+[node name="collision" type="StaticBody3D" parent="." unique_id=259781885]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="collision" unique_id=1090936934]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00010681152, 0.7422333, 0.006793499)
+shape = SubResource("BoxShape3D_kgtil")

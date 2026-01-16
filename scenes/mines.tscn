@@ -1,7 +1,11 @@
 [gd_scene format=3 uid="uid://dqdnavip5a4d0"]
 
-[ext_resource type="Script" uid="uid://cd51gsg387fr4" path="res://scripts/hex_system/hex_grid.gd" id="1_aqnyu"]
+[ext_resource type="Script" uid="uid://dq87du7mc0w23" path="res://scripts/hex_system/hexgrid_mines.gd" id="1_aqnyu"]
+[ext_resource type="Script" uid="uid://m31o3kdm652g" path="res://scripts/hex_system/base/region_info.gd" id="2_nxsip"]
+[ext_resource type="Resource" uid="uid://dwrkqdwamk3tl" path="res://resources/region_info/mineshaft.tres" id="3_fxsa3"]
 
 [node name="mines" type="Node3D" unique_id=150166398]
 script = ExtResource("1_aqnyu")
 chunk_radius = 0
+custom_regions = Array[ExtResource("2_nxsip")]([ExtResource("3_fxsa3")])
+use_global_regions = false

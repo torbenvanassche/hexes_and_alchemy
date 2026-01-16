@@ -4,8 +4,18 @@ extends Node3D
 var pointy_top: bool = false;
 var _spacing: float = 0.25
 
+##The radius for initial chunk generation, more can be generated on demand
 @export var chunk_radius: int = 3;
+@export var grid_id: String;
+@export var set_grid_as_active: bool = false;
 var initial_generation: bool = true;
+
+##Optionally define custom regions that can generate if you don't want to use the global setting
+@export var custom_regions: Array[RegionInfo];
+
+##Whether or not to merge the general list of regions as part of the generation process
+@export var use_global_regions: bool = true;
+var region_options: Array[RegionInfo];
 
 const RADIUS_IN := 1.0
 
@@ -30,14 +40,22 @@ const CHUNK_DIR_VECTORS: Dictionary[ChunkDir, Vector2i] = {
 }
 
 func _ready() -> void:
-	Manager.instance.hex_grid = self;
+	if use_global_regions:
+		region_options = DataManager.instance.regions;
+	for region in custom_regions:
+		if not region_options.has(region):
+			region_options.append(region);
+	
+	Manager.instance.grid_storage[grid_id] = self;
+	if set_grid_as_active:
+		Manager.instance.hex_grid = self;
+	
 	map_ready.connect(_on_map_ready)
 	for cy in range(-chunk_radius, chunk_radius + 1):
 		for cx in range(-chunk_radius, chunk_radius + 1):
 			if Vector2(cx, cy).length() > chunk_radius:
 				continue
 			generate_chunk(cx, cy)
-
 
 func _on_map_ready() -> void:
 	for reg in region_instances.keys():
@@ -51,12 +69,6 @@ func _on_map_ready() -> void:
 func has_chunk(cx: int, cy: int) -> bool:
 	return chunks.has(Vector2i(cx, cy))
 	
-func get_spacing() -> Vector2:
-	if pointy_top:
-		return Vector2(3.0 * RADIUS_IN / 2.0 + _spacing, sqrt(3.0) * RADIUS_IN + _spacing)
-	else:
-		return Vector2(sqrt(3.0) * RADIUS_IN + _spacing, 3.0 * RADIUS_IN / 2.0 + _spacing)
-	
 func _get_instances_for_region(region: RegionInfo) -> Array:
 	if not region_instances.has(region):
 		region_instances[region] = []
@@ -64,11 +76,12 @@ func _get_instances_for_region(region: RegionInfo) -> Array:
 		
 func create_hex(grid_id: Vector2i, hex: HexBase) -> HexBase:
 	add_child(hex)
-	hex.region = DataManager.instance.get_region_for(grid_id.x, grid_id.y);
-	var spacing =  get_spacing();
+		
+	hex.region = DataManager.instance.get_region_for(grid_id.x, grid_id.y, region_options);
+	var spacing =  GridUtils.get_spacing(RADIUS_IN, _spacing, pointy_top);
 
 	hex.grid_id = grid_id;
-	hex.cube_id = offset_to_cube(grid_id)
+	hex.cube_id = GridUtils.offset_to_cube(grid_id, pointy_top)
 	
 	tiles[hex.cube_id] = hex;
 
@@ -81,18 +94,6 @@ func create_hex(grid_id: Vector2i, hex: HexBase) -> HexBase:
 		pos.z = grid_id.y * spacing.y
 	hex.position = pos
 	return hex
-	
-func offset_to_cube(grid: Vector2i) -> Vector3i:
-	if pointy_top:
-		var x: int = grid.x
-		var z: int = grid.y - ((grid.x - (grid.x & 1)) >> 1)
-		var y: int = -x - z
-		return Vector3i(x, y, z)
-	else:
-		var x: int = grid.x - ((grid.y - (grid.y & 1)) >> 1)
-		var z: int = grid.y
-		var y: int = -x - z
-		return Vector3i(x, y, z)
 
 func expand_from_chunk(cx: int, cy: int, dir: int) -> void:
 	var offset := CHUNK_DIR_VECTORS[dir]
@@ -148,7 +149,6 @@ func _assign_region_instance(hex: HexBase) -> void:
 					primary.add_hex(h)
 				_get_instances_for_region(hex.region).erase(other)
 
-		
 func generate_chunk(cx: int, cy: int) -> HexChunk:
 	var key := Vector2i(cx, cy)
 	if chunks.has(key):
@@ -165,7 +165,7 @@ func generate_chunk(cx: int, cy: int) -> HexChunk:
 	for gy in range(start_y, start_y + chunk.CHUNK_HEIGHT):
 		for gx in range(start_x, start_x + chunk.CHUNK_WIDTH):
 			var grid_id := Vector2i(gx, gy)
-			DataManager.instance.pick_scene(gx, gy).queue(
+			DataManager.instance.pick_scene(gx, gy, custom_regions).queue(
 				func(sI: SceneInfo) -> void:
 					var instance = sI.get_instance();
 					instance.scene_info = sI;
@@ -173,7 +173,7 @@ func generate_chunk(cx: int, cy: int) -> HexChunk:
 	return chunk
 	
 func get_hex_at_world_position(pos: Vector3) -> HexBase:
-	var spacing := get_spacing()
+	var spacing := GridUtils.get_spacing(RADIUS_IN, _spacing, pointy_top);
 
 	var gx: int
 	var gy: int
@@ -185,7 +185,7 @@ func get_hex_at_world_position(pos: Vector3) -> HexBase:
 		gy = roundi(pos.z / spacing.y)
 		gx = roundi((pos.x - (gy & 1) * spacing.x * 0.5) / spacing.x)
 
-	var cube := offset_to_cube(Vector2i(gx, gy))
+	var cube := GridUtils.offset_to_cube(Vector2i(gx, gy), pointy_top)
 	return tiles.get(cube, null)
 	
 func get_tiles_in_radius(center: Vector3i, radius: int) -> Array[HexBase]:
@@ -201,16 +201,12 @@ func get_tiles_in_radius(center: Vector3i, radius: int) -> Array[HexBase]:
 			if tiles.has(cube):
 				result.append(tiles[cube])
 	return result
-
 	
 func grid_to_chunk_coords(grid_id: Vector2i) -> Vector2i:
 	return Vector2i(
 		floori(float(grid_id.x) / HexChunk.CHUNK_WIDTH),
 		floori(float(grid_id.y) / HexChunk.CHUNK_HEIGHT)
 	)
-	
-func cube_distance(a: Vector3i, b: Vector3i) -> float:
-	return a.distance_to(b)
 
 func replace(hex: HexBase, replacement: HexBase, region: RegionInfo) -> void:
 	if hex == null or replacement == null:

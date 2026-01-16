@@ -68,7 +68,7 @@ func _can_place_structure_at(candidate_id: Vector3i, candidate: StructureInfo) -
 			for structure_position in region_instance.structures.keys():
 				var structureInfo: StructureInfo = region_instance.structures[structure_position];
 				var required_distance: int = (candidate.required_space_radius + structureInfo.required_space_radius + max(candidate.minimum_distance_from_other_structures, structureInfo.minimum_distance_from_other_structures))
-				if hex_grid.cube_distance(structure_position, candidate_id) < required_distance:
+				if GridUtils.cube_distance(structure_position, candidate_id) < required_distance:
 					return false
 	return true
 	

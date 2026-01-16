@@ -1,10 +1,10 @@
 [gd_resource type="Resource" script_class="RegionInfo" format=3 uid="uid://bflckgydmmunp"]
 
 [ext_resource type="Material" uid="uid://bsjgt7wkv1u6r" path="res://materials/sand.tres" id="1_cjbsg"]
-[ext_resource type="Script" uid="uid://dt4im1k7j4jn" path="res://scripts/hex_system/hex_info.gd" id="2_ea2wi"]
+[ext_resource type="Script" uid="uid://dt4im1k7j4jn" path="res://scripts/hex_system/base/hex_info.gd" id="2_ea2wi"]
 [ext_resource type="Resource" uid="uid://betpu2iylw1qy" path="res://resources/scene_info/hex/hex_simple.tres" id="3_027p0"]
 [ext_resource type="Script" uid="uid://btydeamnhd6x" path="res://scripts/structures/structure_info.gd" id="5_ea2wi"]
-[ext_resource type="Script" uid="uid://m31o3kdm652g" path="res://scripts/hex_system/region_info.gd" id="5_ts14k"]
+[ext_resource type="Script" uid="uid://m31o3kdm652g" path="res://scripts/hex_system/base/region_info.gd" id="5_ts14k"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_te6hx"]
 seed = 2

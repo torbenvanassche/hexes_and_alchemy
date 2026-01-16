@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="StructureInfo" format=3 uid="uid://btnk3qkcvaya0"]
+
+[ext_resource type="Script" uid="uid://btydeamnhd6x" path="res://scripts/structures/structure_info.gd" id="1_3smpn"]
+
+[sub_resource type="Curve" id="Curve_3smpn"]
+_limits = [0.99, 1.0, 0.0, 1.0]
+_data = [Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 1
+
+[resource]
+script = ExtResource("1_3smpn")
+max_per_region_size = SubResource("Curve_3smpn")
+metadata/_custom_type_script = "uid://btydeamnhd6x"

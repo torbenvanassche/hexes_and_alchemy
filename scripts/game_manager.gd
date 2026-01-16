@@ -4,6 +4,8 @@ static var instance: Manager;
 
 var spring_arm_camera: SpringArmFollowCamera;
 var player_instance: PlayerController;
+
+var grid_storage: Dictionary[String, HexGrid];
 var hex_grid: HexGrid;
 
 var move_player: bool = true;
