@@ -6,7 +6,7 @@ var _spacing: float = 0.25
 
 ##The radius for initial chunk generation, more can be generated on demand
 @export var chunk_radius: int = 3;
-@export var grid_id: String;
+@export var grid_name: String;
 @export var set_grid_as_active: bool = false;
 var initial_generation: bool = true;
 
@@ -46,9 +46,9 @@ func _ready() -> void:
 		if not region_options.has(region):
 			region_options.append(region);
 	
-	Manager.instance.grid_storage[grid_id] = self;
-	if set_grid_as_active:
-		Manager.instance.hex_grid = self;
+	SceneManager.add_hex_grid(grid_name, self);
+	if not SceneManager.hex_grid:
+		SceneManager.hex_grid = self;
 	
 	map_ready.connect(_on_map_ready)
 	for cy in range(-chunk_radius, chunk_radius + 1):
@@ -165,7 +165,7 @@ func generate_chunk(cx: int, cy: int) -> HexChunk:
 	for gy in range(start_y, start_y + chunk.CHUNK_HEIGHT):
 		for gx in range(start_x, start_x + chunk.CHUNK_WIDTH):
 			var grid_id := Vector2i(gx, gy)
-			DataManager.instance.pick_scene(gx, gy, custom_regions).queue(
+			DataManager.instance.pick_scene(gx, gy, region_options).queue(
 				func(sI: SceneInfo) -> void:
 					var instance = sI.get_instance();
 					instance.scene_info = sI;

@@ -48,8 +48,8 @@ func _handle_movement(delta: float) -> void:
 		target_velocity *= dash_modifier;
 
 	if move_dir.length() > 0.01:
-		var probe_pos := global_position + move_dir.normalized() * Manager.instance.hex_grid.RADIUS_IN * 0.5
-		var hex := Manager.instance.hex_grid.get_hex_at_world_position(probe_pos)
+		var probe_pos := global_position + move_dir.normalized() * SceneManager.hex_grid.RADIUS_IN * 0.5
+		var hex := SceneManager.hex_grid.get_hex_at_world_position(probe_pos)
 
 		if hex == null or not hex.is_walkable(self):
 			velocity = Vector3.ZERO

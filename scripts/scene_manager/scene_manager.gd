@@ -3,6 +3,9 @@ extends Node
 var scene_stack: Array[SceneInfo] = [];
 var scene_cache: SceneCache;
 
+var grid_storage: Dictionary[String, HexGrid];
+var hex_grid: HexGrid;
+
 @onready var root: Node3D = $"../game/scene_controller";
 @onready var _ui_container: CanvasLayer = $"../game/game_ui";
 
@@ -22,6 +25,15 @@ var _active_scene: Node:
 func _init() -> void:
 	scene_cache = SceneCache.new()
 	process_mode = Node.PROCESS_MODE_ALWAYS;
+	
+func add_hex_grid(hex_name: String, grid: HexGrid) -> void:
+	grid_storage[hex_name] = grid;
+	
+func set_active_grid(hex_name: String) -> void:
+	hex_grid = grid_storage[hex_name];
+	
+func remove_hex_grid(hex_name: String) -> void:
+	grid_storage.erase(hex_name)
 			
 func get_or_create_scene(scene_name: String, scene_config: SceneConfig = SceneConfig.new()) -> SceneInfo:
 	var previous_scene_info: SceneInfo = null;
@@ -96,6 +108,9 @@ func transition(scene_info: SceneInfo) -> void:
 		_active_scene.visible = false;
 	add(scene_info);
 	set_active_scene(scene_info);
+	
+	if scene_info.is_unique && scene_info.get_instance() is HexGrid:
+		set_active_grid((scene_info.get_instance() as HexGrid).grid_name)
 	
 func add(n: SceneInfo, allow_multiple: bool = false, is_visible: bool = true, add_to_stack: bool = true) -> Node:
 	var instance_count := scene_stack.count(n);
