@@ -18,6 +18,7 @@
 [ext_resource type="Script" uid="uid://dcapggl16i04f" path="res://scripts/camera.gd" id="15_dylgi"]
 [ext_resource type="Script" uid="uid://6t4u66o5q6po" path="res://scripts/scene_manager/scene_info.gd" id="15_ya6yc"]
 [ext_resource type="Resource" uid="uid://bnoa83evr4tvv" path="res://resources/scene_info/ui/pause_menu.tres" id="16_gt4lb"]
+[ext_resource type="Resource" uid="uid://btnk3qkcvaya0" path="res://resources/structure_info/ladder.tres" id="16_jehah"]
 [ext_resource type="Resource" uid="uid://uov1jt8s2qia" path="res://resources/scene_info/ui/input_settings.tres" id="18_34frw"]
 [ext_resource type="Resource" uid="uid://001nokdh5ewb" path="res://resources/scene_info/ui/settings_menu.tres" id="18_mflgo"]
 [ext_resource type="Resource" uid="uid://cs0kfyy871ovd" path="res://resources/scene_info/ui/game_settings.tres" id="20_8ui5n"]
@@ -48,7 +49,7 @@ initial_scene = ExtResource("22_jehah")
 script = ExtResource("2_sqa0i")
 hexes = Array[ExtResource("3_l5cgh")]([ExtResource("4_vgks2"), ExtResource("5_dylgi")])
 regions = Array[ExtResource("5_3hfy5")]([ExtResource("6_7pvxh"), ExtResource("7_y3xxt"), ExtResource("9_y3xxt")])
-structures = Array[ExtResource("10_gt4lb")]([ExtResource("11_ya6yc"), ExtResource("12_mflgo"), ExtResource("13_34frw"), ExtResource("14_8ui5n")])
+structures = Array[ExtResource("10_gt4lb")]([ExtResource("11_ya6yc"), ExtResource("12_mflgo"), ExtResource("13_34frw"), ExtResource("14_8ui5n"), ExtResource("16_jehah")])
 scenes = Array[ExtResource("15_ya6yc")]([ExtResource("12_vgks2"), ExtResource("16_gt4lb"), ExtResource("18_34frw"), ExtResource("18_mflgo"), ExtResource("20_8ui5n"), ExtResource("21_ccljq"), ExtResource("22_jehah")])
 
 [node name="shared_components" type="Node" parent="." unique_id=2003265152]

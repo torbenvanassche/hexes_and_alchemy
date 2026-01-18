@@ -68,5 +68,5 @@ func add_trigger(other: Area3D) -> void:
 func remove_trigger(other: Area3D) -> void:
 	current_triggers.erase(other.get_meta("target"))
 
-func get_cube_coordinate() -> HexBase:
-	return Manager.instance.hex_grid.get_hex_at_world_position(position)
+func get_hex() -> HexBase:
+	return SceneManager.hex_grid.get_hex_at_world_position(position)

@@ -41,6 +41,7 @@ func set_structure(s: StructureInfo) -> void:
 	required_tiles = required_tiles.filter(func(f: HexBase) -> bool: return not f.is_walkable());
 	s.queue(_on_structure_loaded.bind(required_tiles));
 	
+##When the structure finishes loading, add the instance to the scene and validate adjacent tiles
 func _on_structure_loaded(s: StructureInfo, required_tiles: Array[HexBase]) -> void:
 	structure = StructureInstance.new(s, s.get_instance());
 	add_child(structure.instance);
