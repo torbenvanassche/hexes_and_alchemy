@@ -9,6 +9,7 @@ extends CharacterBody3D
 @onready var inventory: Inventory = $Inventory;
 
 var current_triggers: Array[StructureInstance] = [];
+var return_position: Vector3;
 
 func _ready() -> void:
 	interactor.area_entered.connect(add_trigger)
@@ -69,4 +70,13 @@ func remove_trigger(other: Area3D) -> void:
 	current_triggers.erase(other.get_meta("target"))
 
 func get_hex() -> HexBase:
-	return SceneManager.hex_grid.get_hex_at_world_position(position)
+	if not SceneManager.hex_grid.is_visible_in_tree():
+		Debug.message("Returning hex from invisible HexGrid, is this intended?")
+	return SceneManager.hex_grid.get_hex_at_world_position(global_position)
+
+func set_return_position() -> void:
+	return_position = global_position;
+	
+func return_to_cached_position() -> void:
+	global_position = return_position;
+	Manager.instance.spring_arm_camera.snap_to_target();

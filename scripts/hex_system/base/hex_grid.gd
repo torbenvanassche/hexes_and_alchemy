@@ -7,7 +7,6 @@ var _spacing: float = 0.25
 ##The radius for initial chunk generation, more can be generated on demand
 @export var chunk_radius: int = 3;
 @export var grid_name: String;
-@export var set_grid_as_active: bool = false;
 var initial_generation: bool = true;
 
 ##Optionally define custom regions that can generate if you don't want to use the global setting
@@ -48,7 +47,7 @@ func _ready() -> void:
 	
 	SceneManager.add_hex_grid(grid_name, self);
 	if not SceneManager.hex_grid:
-		SceneManager.hex_grid = self;
+		SceneManager.set_active_grid(grid_name)
 	
 	map_ready.connect(_on_map_ready)
 	for cy in range(-chunk_radius, chunk_radius + 1):

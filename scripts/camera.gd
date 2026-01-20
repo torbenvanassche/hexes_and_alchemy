@@ -124,3 +124,6 @@ func get_ray_hit_from_screen_point() -> Dictionary:
 	var result := space_state.intersect_ray(query)
 
 	return result if result else {}
+
+func snap_to_target() -> void:
+	_snap_to_center(0);

@@ -8,6 +8,5 @@ func _ready() -> void:
 func _on_map_ready() -> void:
 	super();
 	
-	#TODO: Figure out why the hex is in the main grid rather than the one that was just generated
-	#Seems related to the right hexgrid not being set when this is called
+	SceneManager.set_active_grid(grid_name)
 	Manager.instance.player_instance.get_hex().set_structure(exit);

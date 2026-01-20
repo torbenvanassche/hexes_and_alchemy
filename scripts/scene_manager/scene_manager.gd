@@ -58,6 +58,7 @@ func _check_loaded(to_load: Array[SceneInfo]) -> bool:
 func set_active_scene(info: SceneInfo) -> void:
 	if info.is_unique:
 		_active_scene = info.get_instance();
+		_active_scene.process_mode = Node.PROCESS_MODE_PAUSABLE;
 	else:
 		Debug.message("Cannot set active scene to non-unique instanced SceneInfo.")
 	
