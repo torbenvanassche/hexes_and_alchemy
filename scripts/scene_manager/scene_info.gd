@@ -18,36 +18,43 @@ signal cached(scene_info: SceneInfo);
 
 var is_cached: bool = false;
 var is_queued: bool = false;
-var instances: Array[Node] = [];
+var instances: Array[SceneInstance] = [];
+
+@export var close_on_player_leaving: bool = false;
 
 func initialize() -> void:
 	id = resource_path.get_file().trim_suffix(".tres");
 	if not is_unique:
 		is_unique = type == Type.UI;
 	
-func get_instance() -> Node:
-	instances = instances.filter(func(i): return is_instance_valid(i))
+func get_instance() -> SceneInstance:
+	instances = instances.filter(func(i: SceneInstance): return is_instance_valid(i.node))
 	if is_unique and instances.size() > 0:
 		return instances[0]
-	var instance := packed_scene.instantiate()
+	var instance := SceneInstance.new(packed_scene.instantiate(), self);
 	instances.append(instance)
 	return instance
 	
 func has_instance(node: Node) -> bool:
-	return instances.has(node);
+	for instance in instances:
+		if instance.node == node:
+			return true;
+	return false;
 
 func release() -> void:
 	for i in instances:
+		if is_instance_valid(i.node):
+			i.node.queue_free();
 		if is_instance_valid(i):
-			i.queue_free()
+			i.queue_free();
 	instances.clear()
 	SceneManager.instance.scene_cache.remove(self)
 	is_cached = false
 	
 func remove() -> void:
 	for i in instances:
-		if i.get_parent():
-			i.get_parent().remove_child(i)
+		if i.node.get_parent():
+			i.node.get_parent().remove_child(i.node)
 	
 func queue(c: Callable) -> void:
 	if id == "":
