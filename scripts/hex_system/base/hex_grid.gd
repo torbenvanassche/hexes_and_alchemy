@@ -166,7 +166,8 @@ func generate_chunk(cx: int, cy: int) -> HexChunk:
 			var grid_id := Vector2i(gx, gy)
 			DataManager.instance.pick_scene(gx, gy, region_options).queue(
 				func(sI: SceneInfo) -> void:
-					var instance := sI.get_instance().node;
+					var instance = sI.get_instance();
+					instance.scene_info = sI;
 					chunk.add_hex(create_hex(grid_id, instance)))
 	return chunk
 	

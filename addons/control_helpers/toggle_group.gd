@@ -36,5 +36,5 @@ func _on_tab_changed(button: BaseButton) -> void:
 func _on_tab_change_scene_loaded(scene_info: SceneInfo) -> void:
 	var opened_scene := scene_info.get_instance()
 	if not opened_scene.is_inside_tree():
-		tab_instance_parent.add_child(opened_scene.node)
+		tab_instance_parent.add_child(opened_scene)
 	opened_scene.visible = true;
