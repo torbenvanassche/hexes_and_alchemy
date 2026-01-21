@@ -104,9 +104,10 @@ func set_visible(scene_info: SceneInfo, state: bool = true) -> void:
 			instance.visible = state;
 
 func transition(scene_info: SceneInfo) -> void:
-	if "visible" in _active_scene:
-		_active_scene.process_mode = Node.PROCESS_MODE_DISABLED;
-		_active_scene.visible = false;
+	if "visible" in _active_scene.node:
+		_active_scene.node.process_mode = Node.PROCESS_MODE_DISABLED;
+		_active_scene.node.visible = false;
+		_active_scene.on_player_leave.emit();
 	add(scene_info);
 	set_active_scene(scene_info);
 	

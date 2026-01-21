@@ -3,6 +3,8 @@ class_name SceneInstance extends RefCounted
 var node: Node;
 var scene_info: SceneInfo;
 
+signal on_player_leave();
+
 func _init(_n: Node, s_info: SceneInfo) -> void:
 	node = _n;
 	scene_info = s_info;

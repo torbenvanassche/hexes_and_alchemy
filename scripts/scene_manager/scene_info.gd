@@ -20,7 +20,7 @@ var is_cached: bool = false;
 var is_queued: bool = false;
 var instances: Array[SceneInstance] = [];
 
-@export var close_on_player_leaving: bool = false;
+@export var destroy_on_player_leave: bool = false;
 
 func initialize() -> void:
 	id = resource_path.get_file().trim_suffix(".tres");
@@ -32,8 +32,14 @@ func get_instance() -> SceneInstance:
 	if is_unique and instances.size() > 0:
 		return instances[0]
 	var instance := SceneInstance.new(packed_scene.instantiate(), self);
+	if destroy_on_player_leave:
+		instance.on_player_leave.connect(destroy_instance.bind(instance))
 	instances.append(instance)
 	return instance
+	
+func destroy_instance(instance: SceneInstance) -> void:
+	instance.node.queue_free();
+	instances.erase(instance);
 	
 func has_instance(node: Node) -> bool:
 	for instance in instances:
