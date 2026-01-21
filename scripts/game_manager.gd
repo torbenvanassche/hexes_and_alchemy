@@ -47,7 +47,7 @@ func spawn_player(spawn_hex: HexBase) -> void:
 	
 func _on_player_loaded(player_scene: SceneInfo, spawn_hex: HexBase) -> void:
 	if not player_instance:
-		player_instance = SceneManager.add(player_scene, false, true, false);
+		player_instance = SceneManager.add(player_scene, false, true, false).node;
 		spring_arm_camera.target = player_instance;
 	player_instance.position = spawn_hex.position;
 	

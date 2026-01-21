@@ -12,8 +12,8 @@ var region: RegionInfo;
 var structure_root_tile: Vector3i;
 
 var structure: StructureInstance;
-var scene_info: SceneInfo;
 var static_body: StaticBody3D;
+var scene_instance: SceneInstance;
 
 var ground_mesh: MeshInstance3D;
 
@@ -33,7 +33,7 @@ func apply_region(reg: RegionInfo) -> void:
 			mesh.material_override = reg.material;
 			
 func is_walkable(_player: PlayerController = Manager.instance.player_instance) -> bool:
-	return scene_info && scene_info.is_walkable;
+	return scene_instance && scene_instance.scene_info && scene_instance.scene_info.is_walkable;
 
 func set_structure(s: StructureInfo) -> void:
 	var required_tiles = SceneManager.hex_grid.get_tiles_in_radius(cube_id, s.required_space_radius);
@@ -43,11 +43,11 @@ func set_structure(s: StructureInfo) -> void:
 	
 ##When the structure finishes loading, add the instance to the scene and validate adjacent tiles
 func _on_structure_loaded(s: StructureInfo, required_tiles: Array[HexBase]) -> void:
-	structure = StructureInstance.new(s, s.get_instance());
+	structure = StructureInstance.new(s, s.get_instance().node);
 	add_child(structure.instance);
 	structure.instance.rotate_y(deg_to_rad(60 * randi_range(0, 5)))
 	_ready();
 	
 	for t in required_tiles:
-		SceneManager.hex_grid.replace(t, scene_info.get_instance(), region);
+		SceneManager.hex_grid.replace(t, scene_instance.scene_info.get_instance().node, region);
 	apply_region(region)
