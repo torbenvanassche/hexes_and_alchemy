@@ -44,5 +44,6 @@ func _on_area_enter(other: Area3D) -> void:
 func on_interact() -> void:
 	if script_handler && script_handler.has_method("interact"):
 		script_handler.interact();
+		print("interaction detected.")
 	else:
 		Debug.message("No interact method found on interaction handler.")

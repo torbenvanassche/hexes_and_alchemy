@@ -49,23 +49,16 @@ func has_instance(node: Node) -> bool:
 
 func release() -> void:
 	for i in instances:
-		if is_instance_valid(i.node):
-			i.node.queue_free();
 		if is_instance_valid(i):
-			i.queue_free();
+			i.destroy()
 	instances.clear()
 	SceneManager.instance.scene_cache.remove(self)
 	is_cached = false
 	
-func remove() -> void:
-	for i in instances:
-		if i.node.get_parent():
-			i.node.get_parent().remove_child(i.node)
-	
 func queue(c: Callable) -> void:
 	if id == "":
 		initialize();
-	
+		
 	if is_cached:
 		c.call(self);
 	elif not cached.is_connected(c):
