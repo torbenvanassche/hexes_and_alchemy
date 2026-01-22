@@ -4,5 +4,4 @@
 
 [node name="generator" type="Node3D" unique_id=1031745512]
 script = ExtResource("1_5yxne")
-grid_id = "main_world"
-set_grid_as_active = true
+grid_name = "main_world"

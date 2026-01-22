@@ -50,6 +50,7 @@ func _on_player_loaded(player_scene: SceneInfo, spawn_hex: HexBase) -> void:
 		player_instance = SceneManager.add(player_scene, false, true, false).node;
 		spring_arm_camera.target = player_instance;
 	player_instance.position = spawn_hex.position;
+	Manager.instance.spring_arm_camera.snap_to_target()
 	
 func pause_game(force: bool = !is_paused) -> void:
 	is_paused = force;

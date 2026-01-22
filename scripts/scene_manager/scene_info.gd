@@ -38,8 +38,8 @@ func get_instance() -> SceneInstance:
 	return instance
 	
 func destroy_instance(instance: SceneInstance) -> void:
-	instance.node.queue_free();
 	instances.erase(instance);
+	instance.destroy();
 	
 func has_instance(node: Node) -> bool:
 	for instance in instances:

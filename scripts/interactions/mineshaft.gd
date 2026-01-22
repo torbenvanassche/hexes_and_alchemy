@@ -7,4 +7,3 @@ func interact() -> void:
 	
 func _on_mineshaft_loaded(sI: SceneInfo):
 	SceneManager.transition(sI)
-	Manager.instance.spring_arm_camera.snap_to_target();

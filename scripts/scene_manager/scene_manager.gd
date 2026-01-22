@@ -31,6 +31,7 @@ func add_hex_grid(hex_name: String, grid: HexGrid) -> void:
 	
 func set_active_grid(hex_name: String) -> void:
 	hex_grid = grid_storage[hex_name];
+	print(hex_grid)
 	
 func remove_hex_grid(hex_name: String) -> void:
 	grid_storage.erase(hex_name)

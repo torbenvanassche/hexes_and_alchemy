@@ -8,4 +8,5 @@ script = ExtResource("1_85fpa")
 id = "gameplay_mines"
 packed_scene = ExtResource("1_ron40")
 is_unique = true
+destroy_on_player_leave = true
 metadata/_custom_type_script = "uid://6t4u66o5q6po"
