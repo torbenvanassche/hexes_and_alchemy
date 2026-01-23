@@ -3,25 +3,28 @@ class_name SceneInstance extends RefCounted
 var node: Node;
 var scene_info: SceneInfo;
 
-signal on_player_leave();
-signal on_player_enter();
+signal on_leave();
+signal on_enter();
 
 func _init(_n: Node, s_info: SceneInfo) -> void:
 	node = _n;
 	scene_info = s_info;
 	if "scene_instance" in node:
 		node.scene_instance = self;
+	if node.has_method("on_load"):
+		on_enter.connect(node.on_load, CONNECT_ONE_SHOT)
+	if node.has_method("on_enter"):
+		on_enter.connect(node.on_enter)
+	if s_info.destroy_on_player_leave:
+		s_info.destroy_instance(self);
 
 func destroy() -> void:
-	if node is HexGrid:
-		SceneManager.remove_hex_grid((node as HexGrid).grid_name)
-	
-	for sig in on_player_leave.get_connections():
-		if on_player_leave.is_connected(sig.callable):
-			on_player_leave.disconnect(sig.callable);
-	for sig in on_player_enter.get_connections():
-		if on_player_enter.is_connected(sig.callable):
-			on_player_enter.disconnect(sig.callable);
+	for sig in on_leave.get_connections():
+		if on_leave.is_connected(sig.callable):
+			on_leave.disconnect(sig.callable);
+	for sig in on_enter.get_connections():
+		if on_enter.is_connected(sig.callable):
+			on_enter.disconnect(sig.callable);
 	node.free();
 		
 	if get_reference_count() > 0:

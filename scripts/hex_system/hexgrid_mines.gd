@@ -8,5 +8,5 @@ func _ready() -> void:
 func _on_map_ready() -> void:
 	super();
 	
-	SceneManager.set_active_grid(grid_name)
-	Manager.instance.player_instance.get_hex().set_structure(exit);
+func on_load() -> void:
+	Manager.instance.player_instance.get_hex().set_structure(exit);	

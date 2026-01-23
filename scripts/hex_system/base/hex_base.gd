@@ -36,7 +36,7 @@ func is_walkable(_player: PlayerController = Manager.instance.player_instance) -
 	return scene_instance && scene_instance.scene_info && scene_instance.scene_info.is_walkable;
 
 func set_structure(s: StructureInfo) -> void:
-	var required_tiles = SceneManager.hex_grid.get_tiles_in_radius(cube_id, s.required_space_radius);
+	var required_tiles = SceneManager.get_active_scene().node.get_tiles_in_radius(cube_id, s.required_space_radius);
 	required_tiles.all(func(f: HexBase) -> void: f.can_generate = false);
 	required_tiles = required_tiles.filter(func(f: HexBase) -> bool: return not f.is_walkable());
 	s.queue(_on_structure_loaded.bind(required_tiles));
@@ -49,5 +49,5 @@ func _on_structure_loaded(s: StructureInfo, required_tiles: Array[HexBase]) -> v
 	_ready();
 	
 	for t in required_tiles:
-		SceneManager.hex_grid.replace(t, scene_instance.scene_info.get_instance().node, region);
+		SceneManager.get_active_scene().node.replace(t, scene_instance.scene_info.get_instance().node, region);
 	apply_region(region)

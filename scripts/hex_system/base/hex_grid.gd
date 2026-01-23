@@ -16,7 +16,7 @@ var initial_generation: bool = true;
 @export var use_global_regions: bool = true;
 var region_options: Array[RegionInfo];
 
-const RADIUS_IN := 1.0
+static var RADIUS_IN: float = 1.0
 
 var chunks: Dictionary[Vector2i, HexChunk] = {}
 var region_instances: Dictionary[RegionInfo, Array] = {} 
@@ -44,10 +44,6 @@ func _ready() -> void:
 	for region in custom_regions:
 		if not region_options.has(region):
 			region_options.append(region);
-	
-	SceneManager.add_hex_grid(grid_name, self);
-	if not SceneManager.hex_grid:
-		SceneManager.set_active_grid(grid_name)
 	
 	map_ready.connect(_on_map_ready)
 	for cy in range(-chunk_radius, chunk_radius + 1):
@@ -171,6 +167,9 @@ func generate_chunk(cx: int, cy: int) -> HexChunk:
 	return chunk
 	
 func get_hex_at_world_position(pos: Vector3) -> HexBase:
+	if not is_visible_in_tree():
+		Debug.message("Getting hex position from invisible HexGrid.");
+	
 	var spacing := GridUtils.get_spacing(RADIUS_IN, _spacing, pointy_top);
 
 	var gx: int

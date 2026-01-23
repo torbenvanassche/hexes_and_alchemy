@@ -32,8 +32,6 @@ func get_instance() -> SceneInstance:
 	if is_unique and instances.size() > 0:
 		return instances[0]
 	var instance := SceneInstance.new(packed_scene.instantiate(), self);
-	if destroy_on_player_leave:
-		instance.on_player_leave.connect(destroy_instance.bind(instance))
 	instances.append(instance)
 	return instance
 	

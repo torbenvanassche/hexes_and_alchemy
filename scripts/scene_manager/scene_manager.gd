@@ -3,9 +3,6 @@ extends Node
 var scene_stack: Array[SceneInfo] = [];
 var scene_cache: SceneCache;
 
-var grid_storage: Dictionary[String, HexGrid];
-var hex_grid: HexGrid;
-
 @onready var root: Node3D = $"../game/scene_controller";
 @onready var _ui_container: CanvasLayer = $"../game/game_ui";
 
@@ -16,25 +13,19 @@ var _active_scene: SceneInstance:
 	set(new_scene):
 		if _active_scene && _active_scene.node != null:
 			scene_exited.emit(_active_scene.node);
-			if _active_scene.node.has_method("on_disable"):
-				_active_scene.node.on_disable();
+			_active_scene.on_leave.emit();
 		_active_scene = new_scene;
-		_active_scene.node.visible = true;
+		if _active_scene.node && "visible" in _active_scene.node:
+			_active_scene.node.visible = true;
 		scene_entered.emit(_active_scene.node);
+		_active_scene.on_enter.emit();
 
 func _init() -> void:
 	scene_cache = SceneCache.new()
 	process_mode = Node.PROCESS_MODE_ALWAYS;
 	
-func add_hex_grid(hex_name: String, grid: HexGrid) -> void:
-	grid_storage[hex_name] = grid;
-	
-func set_active_grid(hex_name: String) -> void:
-	hex_grid = grid_storage[hex_name];
-	print(hex_grid)
-	
-func remove_hex_grid(hex_name: String) -> void:
-	grid_storage.erase(hex_name)
+func get_active_scene() -> SceneInstance:
+	return _active_scene;
 			
 func get_or_create_scene(scene_name: String, scene_config: SceneConfig = SceneConfig.new()) -> SceneInfo:
 	var previous_scene_info: SceneInfo = null;
@@ -59,7 +50,6 @@ func _check_loaded(to_load: Array[SceneInfo]) -> bool:
 func set_active_scene(info: SceneInfo) -> void:
 	if info.is_unique:
 		_active_scene = info.get_instance();
-		_active_scene.node.process_mode = Node.PROCESS_MODE_PAUSABLE;
 	else:
 		Debug.message("Cannot set active scene to non-unique instanced SceneInfo.")
 	
@@ -108,12 +98,8 @@ func transition(scene_info: SceneInfo) -> void:
 	if "visible" in _active_scene.node:
 		_active_scene.node.process_mode = Node.PROCESS_MODE_DISABLED;
 		_active_scene.node.visible = false;
-		_active_scene.on_player_leave.emit();
 	add(scene_info);
 	set_active_scene(scene_info);
-	
-	if scene_info.is_unique && scene_info.get_instance().node is HexGrid:
-		set_active_grid((scene_info.get_instance().node as HexGrid).grid_name)
 	
 func add(n: SceneInfo, allow_multiple: bool = false, is_visible: bool = true, add_to_stack: bool = true) -> SceneInstance:
 	var instance_count := scene_stack.count(n);

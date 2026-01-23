@@ -49,8 +49,14 @@ func _handle_movement(delta: float) -> void:
 		target_velocity *= dash_modifier;
 
 	if move_dir.length() > 0.01:
-		var probe_pos := global_position + move_dir.normalized() * SceneManager.hex_grid.RADIUS_IN * 0.5
-		var hex := SceneManager.hex_grid.get_hex_at_world_position(probe_pos)
+		var probe_pos := global_position + move_dir.normalized() * HexGrid.RADIUS_IN * 0.5
+		var grid := SceneManager.get_active_scene().node;
+		var hex: HexBase = null;
+		if grid is HexGrid:
+			hex = grid.get_hex_at_world_position(probe_pos)
+		else:
+			Debug.message("Active scene is not a hexgrid, cannot walk")
+			return;
 
 		if hex == null or not hex.is_walkable(self):
 			velocity = Vector3.ZERO
@@ -70,9 +76,7 @@ func remove_trigger(other: Area3D) -> void:
 	current_triggers.erase(other.get_meta("target"))
 
 func get_hex() -> HexBase:
-	if not SceneManager.hex_grid.is_visible_in_tree():
-		Debug.message("Returning hex from invisible HexGrid, is this intended?")
-	return SceneManager.hex_grid.get_hex_at_world_position(global_position)
+	return (SceneManager.get_active_scene().node as HexGrid).get_hex_at_world_position(global_position)
 
 func set_return_position() -> void:
 	return_position = global_position;
