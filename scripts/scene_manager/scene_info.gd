@@ -21,22 +21,30 @@ var is_queued: bool = false;
 var instances: Array[SceneInstance] = [];
 
 @export var destroy_on_player_leave: bool = false;
+@export var process_mode_enabled: Node.ProcessMode = Node.ProcessMode.PROCESS_MODE_PAUSABLE;
+@export var process_mode_disabled: Node.ProcessMode = Node.ProcessMode.PROCESS_MODE_DISABLED;
 
 func initialize() -> void:
 	id = resource_path.get_file().trim_suffix(".tres");
 	if not is_unique:
 		is_unique = type == Type.UI;
+		
+func set_process_mode(instance: SceneInstance, b: bool) -> void:
+	instance.set_process_mode(b)
 	
 func get_instance() -> SceneInstance:
 	instances = instances.filter(func(i: SceneInstance): return is_instance_valid(i.node))
 	if is_unique and instances.size() > 0:
 		return instances[0]
 	var instance := SceneInstance.new(packed_scene.instantiate(), self);
+	instance.set_process_mode(true)
 	instances.append(instance)
 	return instance
 	
 func destroy_instance(instance: SceneInstance) -> void:
 	instances.erase(instance);
+	if SceneManager.scene_stack.has(self):
+		SceneManager._remove_from_stack(self)
 	instance.destroy();
 	
 func has_instance(node: Node) -> bool:

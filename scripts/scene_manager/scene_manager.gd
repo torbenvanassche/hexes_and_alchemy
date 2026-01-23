@@ -27,14 +27,13 @@ func _init() -> void:
 func get_active_scene() -> SceneInstance:
 	return _active_scene;
 			
-func get_or_create_scene(scene_name: String, scene_config: SceneConfig = SceneConfig.new()) -> SceneInfo:
+func get_or_create_scene(scene_name: String) -> SceneInfo:
 	var previous_scene_info: SceneInfo = null;
 	if _active_scene != null:
 		previous_scene_info = DataManager.instance.node_to_info(_active_scene.node);
 		if previous_scene_info.id == scene_name:
 			return null; 
-		if scene_config.disable_processing:
-			_active_scene.set_deferred("process_mode", Node.PROCESS_MODE_DISABLED)
+		_active_scene.set_process_mode(false)
 	
 	var scene_info: SceneInfo = DataManager.instance.get_scene_by_name(scene_name);
 	if scene_info.is_cached:
@@ -78,7 +77,7 @@ func to_previous_scene() -> SceneInfo:
 	if scene_stack.size() != 0:
 		_pop_stack();
 		if scene_stack.size() != 0:
-			return get_or_create_scene(scene_stack[scene_stack.size() - 1].id, SceneConfig.new(false));
+			return get_or_create_scene(scene_stack[scene_stack.size() - 1].id);
 	return null;
 	
 func get_current_scene() -> SceneInfo:
@@ -96,7 +95,7 @@ func set_visible(scene_info: SceneInfo, state: bool = true) -> void:
 
 func transition(scene_info: SceneInfo) -> void:
 	if "visible" in _active_scene.node:
-		_active_scene.node.process_mode = Node.PROCESS_MODE_DISABLED;
+		_active_scene.set_process_mode(false)
 		_active_scene.node.visible = false;
 	add(scene_info);
 	set_active_scene(scene_info);

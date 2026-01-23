@@ -9,4 +9,4 @@ func _on_map_ready() -> void:
 	super();
 	
 func on_load() -> void:
-	Manager.instance.player_instance.get_hex().set_structure(exit);	
+	Manager.instance.player_instance.get_hex().set_structure(exit);
