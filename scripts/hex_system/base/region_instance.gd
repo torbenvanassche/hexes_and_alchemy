@@ -36,8 +36,12 @@ func render_debug_region() -> void:
 		hex.ground_mesh.material_override = mat;
 		
 func _required_distance(a: StructureInfo, b: StructureInfo) -> int:
-	return (a.required_space_radius + b.required_space_radius + max(a.minimum_distance_from_other_structures, b.minimum_distance_from_other_structures))
-
+	return (
+		max(a.required_space_radius, b.required_space_radius)
+		+ max(a.minimum_distance_from_other_structures, b.minimum_distance_from_other_structures)
+		+ 1
+	)
+		
 func _pick_structure() -> StructureInfo:
 	var total_weight := 0.0
 	var candidates: Array[StructureInfo] = []
@@ -80,22 +84,28 @@ func _compute_structure_caps() -> void:
 		structure_counts[s] = 0
 
 func _can_place_structure_at(pos: Vector3i, candidate: StructureInfo) -> bool:
-	for region_instance: RegionInstance in hex_grid.region_instances[info]:
-		for other_pos: Vector3i in region_instance.structures.keys():
-			var other: StructureInfo = region_instance.structures[other_pos]
-			if GridUtils.cube_distance(pos, other_pos) < _required_distance(candidate, other):
-				return false
+	var chunk_coords := hex_grid.grid_to_chunk_coords(hex_grid.tiles[pos].grid_id)
+	if chunk_coords == Vector2i(0, 0):
+		return false
+	
+	for region_list in hex_grid.region_instances.values():
+		for region_instance: RegionInstance in region_list:
+			for other_pos: Vector3i in region_instance.structures.keys():
+				var other := region_instance.structures[other_pos]
 
+				var dist := GridUtils.cube_distance(pos, other_pos)
+				var min_dist := _required_distance(candidate, other)
+				if dist <= min_dist:
+					return false
 	return true
 
-	
 func generate_structures_for_region() -> void:
 	if info.structures.is_empty():
 		return
 
 	_compute_structure_caps()
 
-	var available_hexes: Array[Vector3i] = hexes.keys()
+	var available_hexes: Array[Vector3i] = hexes.keys()	
 	available_hexes.shuffle()
 
 	var max_total := 0
@@ -133,5 +143,4 @@ func generate_structures_for_region() -> void:
 			break
 
 		if not placed:
-			# No valid spot found for this structure anymore
 			structure_counts[structure] = structure_caps[structure]
