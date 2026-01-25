@@ -31,6 +31,13 @@ func _count_structures(inst: RegionInstance, pInfo: StructureInfo) -> int:
 		if s == pInfo:
 			count += 1
 	return count
+	
+func render_debug_region() -> void:
+	var clr := Color(randf_range(0, 1), randf_range(0, 1), randf_range(0, 1));
+	for hex: HexBase in hexes.values():
+		var mat := StandardMaterial3D.new();
+		mat.albedo_color = clr;
+		hex.ground_mesh.material_override = mat;
 
 func _pick_structure() -> StructureInfo:
 	var total_weight := info.structure_fail_weight

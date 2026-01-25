@@ -5,12 +5,13 @@
 
 [sub_resource type="Curve" id="Curve_nqdss"]
 _limits = [0.0, 20.0, 0.0, 50.0]
-_data = [Vector2(9, 0), 0.0, 0.07317074, 0, 1, Vector2(50, 3), 0.07317074, 0.0, 1, 0]
+_data = [Vector2(15, 0), 0.0, 0.22857143, 0, 1, Vector2(50, 8), 0.22857143, 0.0, 1, 0]
 point_count = 2
 
 [resource]
 script = ExtResource("2_wbcrx")
 max_per_region_size = SubResource("Curve_nqdss")
+minimum_distance_from_other_structures = 2
 packed_scene = ExtResource("1_3mjya")
 type = 4
 metadata/_custom_type_script = "uid://btydeamnhd6x"
