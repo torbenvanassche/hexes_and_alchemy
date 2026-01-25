@@ -1,12 +1,14 @@
 [gd_resource type="Resource" script_class="RegionInfo" format=3 uid="uid://dwrkqdwamk3tl"]
 
 [ext_resource type="Script" uid="uid://dt4im1k7j4jn" path="res://scripts/hex_system/base/hex_info.gd" id="1_r03tl"]
+[ext_resource type="Material" uid="uid://ujt5yjofwqxp" path="res://materials/underground_tile.tres" id="1_xk32j"]
 [ext_resource type="Resource" uid="uid://betpu2iylw1qy" path="res://resources/scene_info/hex/hex_simple.tres" id="2_xk32j"]
 [ext_resource type="Script" uid="uid://m31o3kdm652g" path="res://scripts/hex_system/base/region_info.gd" id="2_y82xm"]
 [ext_resource type="Script" uid="uid://btydeamnhd6x" path="res://scripts/structures/structure_info.gd" id="3_xk32j"]
 
 [resource]
 script = ExtResource("2_y82xm")
+material = ExtResource("1_xk32j")
 scene_multipliers = Dictionary[ExtResource("1_r03tl"), float]({
 ExtResource("2_xk32j"): 1.0
 })
