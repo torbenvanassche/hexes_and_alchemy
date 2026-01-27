@@ -69,7 +69,6 @@ func _pick_structure() -> StructureInfo:
 
 	return null
 
-
 func _compute_structure_caps() -> void:
 	structure_caps.clear()
 	var region_size := hexes.size()
@@ -85,8 +84,11 @@ func _compute_structure_caps() -> void:
 
 func _can_place_structure_at(pos: Vector3i, candidate: StructureInfo) -> bool:
 	var chunk_coords := hex_grid.grid_to_chunk_coords(hex_grid.tiles[pos].grid_id)
-	if chunk_coords == Vector2i(0, 0):
+	if chunk_coords == Vector2i(0, 0) && hex_grid.skip_spawn_chunk:
 		return false
+		
+	if Manager.instance.player_instance && pos == Manager.instance.player_instance.get_hex().cube_id:
+		return false;
 	
 	for region_list in hex_grid.region_instances.values():
 		for region_instance: RegionInstance in region_list:

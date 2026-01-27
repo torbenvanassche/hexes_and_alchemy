@@ -76,7 +76,8 @@ func remove_trigger(other: Area3D) -> void:
 	current_triggers.erase(other.get_meta("target"))
 
 func get_hex() -> HexBase:
-	return (SceneManager.get_active_scene().node as HexGrid).get_hex_at_world_position(global_position)
+	var grid := (SceneManager.get_active_scene().node as HexGrid);
+	return grid.get_hex_at_world_position(global_position)
 
 func set_return_position() -> void:
 	return_position = global_position;

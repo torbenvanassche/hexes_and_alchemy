@@ -27,11 +27,20 @@ func _get_meshes() -> Array[MeshInstance3D]:
 	return meshes
 
 func apply_region(reg: RegionInfo) -> void:
-	region = reg;
+	region = reg
+
+	if not reg or not reg.material:
+		return
+
+	var structure_meshes := []
+	if structure and structure.instance:
+		structure_meshes = structure.instance.find_children("*", "MeshInstance3D", true, false)
 	for mesh in meshes:
-		if reg && reg.material:
-			mesh.material_override = reg.material;
-			
+		if structure_meshes.has(mesh) and structure.structure_info.structure_material:
+			mesh.material_override = structure.structure_info.structure_material
+		else:
+			mesh.material_override = reg.material
+
 func is_walkable(_player: PlayerController = Manager.instance.player_instance) -> bool:
 	return scene_instance && scene_instance.scene_info && scene_instance.scene_info.is_walkable;
 

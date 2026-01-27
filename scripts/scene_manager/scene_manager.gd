@@ -98,7 +98,6 @@ func transition(scene_info: SceneInfo) -> void:
 		_active_scene.set_process_mode(false)
 		_active_scene.node.visible = false;
 	add(scene_info);
-	set_active_scene(scene_info);
 	
 func add(n: SceneInfo, allow_multiple: bool = false, is_visible: bool = true, add_to_stack: bool = true) -> SceneInstance:
 	var instance_count := scene_stack.count(n);

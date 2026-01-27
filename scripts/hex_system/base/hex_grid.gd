@@ -16,6 +16,8 @@ var initial_generation: bool = true;
 @export var use_global_regions: bool = true;
 var region_options: Array[RegionInfo];
 
+var skip_spawn_chunk: bool = true;
+
 static var RADIUS_IN: float = 1.0
 
 var chunks: Dictionary[Vector2i, HexChunk] = {}
@@ -45,7 +47,7 @@ func _ready() -> void:
 		if not region_options.has(region):
 			region_options.append(region);
 	
-	map_ready.connect(_on_map_ready)
+	map_ready.connect(_on_map_ready, CONNECT_ONE_SHOT)
 	for cy in range(-chunk_radius, chunk_radius + 1):
 		for cx in range(-chunk_radius, chunk_radius + 1):
 			if Vector2(cx, cy).length() > chunk_radius:
@@ -53,13 +55,15 @@ func _ready() -> void:
 			generate_chunk(cx, cy)
 
 func _on_map_ready() -> void:
-	for reg in region_instances.keys():
-		for rI: RegionInstance in region_instances[reg]:
-			rI.generate_structures_for_region()
-			
 	if initial_generation:
 		initial_generation = false;
 		Manager.instance.spawn_player(chunks[Vector2i(0, 0)].pick_random())
+		
+	SceneManager.set_active_scene(DataManager.instance.node_to_info(self))
+	
+	for reg in region_instances.keys():
+		for rI: RegionInstance in region_instances[reg]:
+			rI.generate_structures_for_region()
 	
 func has_chunk(cx: int, cy: int) -> bool:
 	return chunks.has(Vector2i(cx, cy))
@@ -168,7 +172,7 @@ func generate_chunk(cx: int, cy: int) -> HexChunk:
 	
 func get_hex_at_world_position(pos: Vector3) -> HexBase:
 	if not is_visible_in_tree():
-		Debug.message("Getting hex position from invisible HexGrid.");
+		Debug.message("Getting hex position from invisible HexGrid %s." % [self.grid_name]);
 	
 	var spacing := GridUtils.get_spacing(RADIUS_IN, _spacing, pointy_top);
 

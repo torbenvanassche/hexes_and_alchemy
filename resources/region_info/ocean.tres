@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="RegionInfo" format=3 uid="uid://bbahgdc5whoa4"]
 
-[ext_resource type="Material" uid="uid://c66vbca7lgh6m" path="res://materials/default.tres" id="1_dpad2"]
+[ext_resource type="Material" uid="uid://c66vbca7lgh6m" path="res://materials/kay_fantasy_default.tres" id="1_dpad2"]
 [ext_resource type="Script" uid="uid://dt4im1k7j4jn" path="res://scripts/hex_system/base/hex_info.gd" id="2_aaf4r"]
 [ext_resource type="Script" uid="uid://m31o3kdm652g" path="res://scripts/hex_system/base/region_info.gd" id="2_yrmbv"]
 [ext_resource type="Resource" uid="uid://bto28untf5lrf" path="res://resources/scene_info/hex/hex_water.tres" id="3_aaf4r"]

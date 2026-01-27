@@ -24,8 +24,6 @@ func _ready() -> void:
 	
 func _initialized(_scene_info: SceneInfo) -> void:
 	SceneManager.add(_scene_info);
-	SceneManager.set_active_scene(_scene_info);
-	pass
 	
 func input_moves_player() -> bool:
 	return move_player || InputManager.is_device(InputManager.InputDevice.CONTROLLER);
