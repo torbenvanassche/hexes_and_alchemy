@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cy1s6kym2ib68"]
 
 [ext_resource type="PackedScene" uid="uid://twco3r24bsnx" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_mine_blue.glb" id="1_bbfir"]
+[ext_resource type="Script" uid="uid://dvidxmav7hphs" path="res://scripts/interactions/mineshaft.gd" id="1_f4m0s"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bbfir"]
 size = Vector3(4.4847717, 3.2875977, 4.2372665)
@@ -10,6 +11,7 @@ size = Vector3(2.7013798, 1.7530518, 1.04356)
 
 [node name="Node3D" type="Node3D" unique_id=2071832704]
 transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, 0, 0, 0)
+script = ExtResource("1_f4m0s")
 
 [node name="Root Scene" parent="." unique_id=1429542013 instance=ExtResource("1_bbfir")]
 transform = Transform3D(2.8, 0, 0, 0, 2.8, 0, 0, 0, 2.8, 0, 0, 0)

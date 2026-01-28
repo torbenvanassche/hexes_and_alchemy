@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://lqsfyv464flu"]
+
+[ext_resource type="Script" uid="uid://ccx3jw8bp6p5n" path="res://scripts/interactions/ore_deposit.gd" id="1_7of6m"]
+[ext_resource type="PackedScene" uid="uid://c5liv1s3nef21" path="res://meshes/kay_fantasy_hexagon/decoration/nature/mountain_A.glb" id="1_y8amj"]
+[ext_resource type="Material" uid="uid://gheuptx4d3rm" path="res://materials/iron.tres" id="2_ygy3y"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3sell"]
+size = Vector3(1.5767212, 1.6783295, 1.6134753)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kgtil"]
+size = Vector3(0.7496567, 0.5864792, 0.7751913)
+
+[node name="Node3D" type="Node3D" unique_id=1151817518]
+script = ExtResource("1_7of6m")
+material = ExtResource("2_ygy3y")
+
+[node name="Root Scene" parent="." unique_id=617551268 instance=ExtResource("1_y8amj")]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
+
+[node name="interaction" type="Area3D" parent="." unique_id=777824050]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="interaction" unique_id=374934557]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.04598999, 0.75951385, -0.030773163)
+shape = SubResource("BoxShape3D_3sell")
+
+[node name="collision" type="StaticBody3D" parent="." unique_id=259781885]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="collision" unique_id=1090936934]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0039634705, 0.28834915, -0.002872467)
+shape = SubResource("BoxShape3D_kgtil")

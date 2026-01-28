@@ -12,11 +12,6 @@ class_name StructureInfo extends SceneInfo
 ##How common this item is in the spawning algorithm
 @export var spawn_weight: float = 1;
 
-##The script that defines interaction with the player. This must contain an `execute` function
-@export var interaction_script: Script;
-
-@export var interaction_data: Dictionary[String, Variant];
-
 ##Optional custom material for the node, if not set it will default to use the material of the region it belongs to.
 @export var structure_material: StandardMaterial3D;
 

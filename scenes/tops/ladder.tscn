@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cbcbaivigakxy"]
 
 [ext_resource type="PackedScene" uid="uid://bpi6u36qmvxes" path="res://meshes/kay_fantasy_hexagon/decoration/props/ladder.glb" id="1_328ig"]
+[ext_resource type="Script" uid="uid://b253lrr4on1xx" path="res://scripts/interactions/return_to_main.gd" id="1_de2aa"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_3sell"]
 size = Vector3(1.5767212, 1.6783295, 1.070488)
@@ -9,6 +10,7 @@ size = Vector3(1.5767212, 1.6783295, 1.070488)
 size = Vector3(0.5867615, 1.6437683, 0.24139023)
 
 [node name="Node3D" type="Node3D" unique_id=1151817518]
+script = ExtResource("1_de2aa")
 
 [node name="Root Scene" parent="." unique_id=1674175704 instance=ExtResource("1_328ig")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)

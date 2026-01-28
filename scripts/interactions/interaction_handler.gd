@@ -1,5 +1,6 @@
-@abstract class_name Interaction extends Node
+@abstract class_name Interaction extends Node3D
 
-var parameters: Dictionary[String, Variant];
+var structure_instance: StructureInstance;
 
 @abstract func interact();
+@abstract func setup();

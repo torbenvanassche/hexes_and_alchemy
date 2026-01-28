@@ -9,9 +9,8 @@ func message(s: String) -> void:
 func warn(s: String) -> void:
 	if show_log:
 		push_warning(s);
-		print("WARNING: %s" % [s]);
+		print_rich("[color=yellow]WARNING: %s[/color]" % s)
 		
 func err(s: String) -> void:
 	if show_log:
 		printerr(s);
-		print("ERROR: %s" % [s]);

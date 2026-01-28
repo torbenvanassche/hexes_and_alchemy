@@ -1,7 +1,9 @@
 [gd_scene format=3 uid="uid://cvkpa07ijqa1m"]
 
+[ext_resource type="Script" uid="uid://c2ak30cofsw0q" path="res://scripts/interactions/dirt_patch.gd" id="1_whuaq"]
 [ext_resource type="PackedScene" uid="uid://b5nvbe2agstv" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/building_dirt.glb" id="2_h10pt"]
 
 [node name="Node3D" type="Node3D" unique_id=75474733]
+script = ExtResource("1_whuaq")
 
 [node name="Root Scene2" parent="." unique_id=624363515 instance=ExtResource("2_h10pt")]

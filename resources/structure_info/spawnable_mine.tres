@@ -1,6 +1,5 @@
 [gd_resource type="Resource" script_class="StructureInfo" format=3 uid="uid://ckpmn3cutb7an"]
 
-[ext_resource type="Script" uid="uid://dvidxmav7hphs" path="res://scripts/interactions/mineshaft.gd" id="1_naaes"]
 [ext_resource type="PackedScene" uid="uid://cy1s6kym2ib68" path="res://scenes/tops/topper_mine.tscn" id="2_ox4ln"]
 [ext_resource type="Script" uid="uid://btydeamnhd6x" path="res://scripts/structures/structure_info.gd" id="3_gi0i3"]
 
@@ -13,7 +12,6 @@ point_count = 2
 script = ExtResource("3_gi0i3")
 max_per_region_size = SubResource("Curve_nqdss")
 required_space_radius = 1
-interaction_script = ExtResource("1_naaes")
 id = "spawnable_mines"
 packed_scene = ExtResource("2_ox4ln")
 type = 4

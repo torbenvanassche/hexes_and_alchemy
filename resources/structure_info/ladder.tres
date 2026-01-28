@@ -1,7 +1,6 @@
 [gd_resource type="Resource" script_class="StructureInfo" format=3 uid="uid://btnk3qkcvaya0"]
 
 [ext_resource type="Script" uid="uid://btydeamnhd6x" path="res://scripts/structures/structure_info.gd" id="1_3smpn"]
-[ext_resource type="Script" uid="uid://b253lrr4on1xx" path="res://scripts/interactions/return_to_main.gd" id="1_6c4l8"]
 [ext_resource type="PackedScene" uid="uid://cbcbaivigakxy" path="res://scenes/tops/ladder.tscn" id="1_pa0ai"]
 [ext_resource type="Material" uid="uid://c66vbca7lgh6m" path="res://materials/kay_fantasy_default.tres" id="4_hik3d"]
 
@@ -14,7 +13,6 @@ point_count = 1
 script = ExtResource("1_3smpn")
 max_per_region_size = SubResource("Curve_3smpn")
 minimum_distance_from_other_structures = 0
-interaction_script = ExtResource("1_6c4l8")
 structure_material = ExtResource("4_hik3d")
 packed_scene = ExtResource("1_pa0ai")
 metadata/_custom_type_script = "uid://btydeamnhd6x"

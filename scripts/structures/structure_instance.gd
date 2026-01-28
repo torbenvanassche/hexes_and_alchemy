@@ -1,29 +1,26 @@
 class_name StructureInstance extends RefCounted
 
 var structure_info: StructureInfo;
-var instance: Node3D;
+var instance: Interaction;
 
 var enterable_triggers: Array[Area3D];
 var colliders: Array[StaticBody3D];
-var collision_shapes: Array[CollisionShape3D]
+var collision_shapes: Array[CollisionShape3D];
+var meshes: Array[MeshInstance3D]
 
-var script_handler: Node;
-
-func _init(s: StructureInfo, node: Node) -> void:	
+func _init(s: StructureInfo, node: Node) -> void:
+	if not node is Interaction:
+		Debug.err("%s is not of type interaction, please assign a handler!" % [s.id])
+		return;
+	
 	structure_info = s;
 	instance = node;
-	
-	if structure_info.interaction_script:
-		script_handler = Node.new();
-		script_handler.set_script(structure_info.interaction_script);
-		if not script_handler is Interaction:
-			Debug.err("%s does not have a valid interaction script." % [structure_info.id])
-		(script_handler as Interaction).parameters = structure_info.interaction_data;
-		instance.add_child(script_handler)
+	instance.structure_instance = self;
 	
 	enterable_triggers.assign(instance.find_children("*", "Area3D", true, false))
 	colliders.assign(instance.find_children("*", "StaticBody3D", true, false))
 	collision_shapes.assign(instance.find_children("*", "CollisionShape3D", true, false))
+	meshes.assign(instance.find_children("*", "MeshInstance3D", true, false))
 	
 	instance.visibility_changed.connect(_on_visibility_changed)
 	
@@ -31,6 +28,7 @@ func _init(s: StructureInfo, node: Node) -> void:
 		trigger.set_meta("target", self)
 		trigger.area_entered.connect(_on_area_enter)
 		trigger.area_exited.connect(_on_area_exit);
+	instance.setup();
 		
 func _on_visibility_changed() -> void:
 	for shape in collision_shapes:
@@ -45,7 +43,7 @@ func _on_area_enter(other: Area3D) -> void:
 		Manager.instance.interaction_prompt.show_rect(instance);
 		
 func on_interact() -> void:
-	if script_handler && script_handler.has_method("interact"):
-		script_handler.interact();
+	if instance.has_method("interact"):
+		instance.interact();
 	else:
 		Debug.message("No interact method found on interaction handler.")
