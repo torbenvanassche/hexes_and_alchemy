@@ -1,4 +1,4 @@
-extends Node
+extends Interaction
 
 func interact() -> void:
 	DataManager.instance.get_scene_by_name("gameplay_main").queue(_on_transition)

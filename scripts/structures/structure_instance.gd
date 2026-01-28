@@ -16,6 +16,9 @@ func _init(s: StructureInfo, node: Node) -> void:
 	if structure_info.interaction_script:
 		script_handler = Node.new();
 		script_handler.set_script(structure_info.interaction_script);
+		if not script_handler is Interaction:
+			Debug.err("%s does not have a valid interaction script." % [structure_info.id])
+		(script_handler as Interaction).parameters = structure_info.interaction_data;
 		instance.add_child(script_handler)
 	
 	enterable_triggers.assign(instance.find_children("*", "Area3D", true, false))
