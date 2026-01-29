@@ -14,6 +14,7 @@ class_name StructureInfo extends SceneInfo
 
 ##Optional custom material for the node, if not set it will default to use the material of the region it belongs to.
 @export var structure_material: StandardMaterial3D;
+@export var use_parent_material: bool = true;
 
 func initialize() -> void:
 	self.type = Type.STRUCTURE;

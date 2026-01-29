@@ -36,10 +36,10 @@ func apply_region(reg: RegionInfo) -> void:
 	if structure and structure.instance:
 		structure_meshes = structure.instance.find_children("*", "MeshInstance3D", true, false)
 	for mesh in meshes:
-		if structure_meshes.has(mesh) and structure.structure_info.structure_material:
-			mesh.material_override = structure.structure_info.structure_material
-		else:
-			mesh.material_override = reg.material
+		var material := reg.material
+		if structure_meshes.has(mesh) and not structure.structure_info.use_parent_material:
+			material = structure.structure_info.structure_material
+		mesh.set_surface_override_material(0, material)
 
 func is_walkable(_player: PlayerController = Manager.instance.player_instance) -> bool:
 	return scene_instance && scene_instance.scene_info && scene_instance.scene_info.is_walkable;
