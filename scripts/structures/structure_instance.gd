@@ -43,6 +43,7 @@ func _on_area_enter(other: Area3D) -> void:
 		Manager.instance.interaction_prompt.show_rect(instance);
 		
 func destroy() -> void:
+	instance.queue_free()
 	queue_free()
 	super();
 		

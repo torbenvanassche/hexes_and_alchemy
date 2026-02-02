@@ -16,7 +16,7 @@ var initial_generation: bool = true;
 @export var use_global_regions: bool = true;
 var region_options: Array[RegionInfo];
 
-var skip_spawn_chunk: bool = true;
+var initialized: bool = false;
 
 static var RADIUS_IN: float = 1.0
 
@@ -24,7 +24,7 @@ var chunks: Dictionary[Vector2i, HexChunk] = {}
 var region_instances: Dictionary[RegionInfo, Array] = {} 
 var tiles: Dictionary[Vector3i, HexBase] = {}
 
-signal map_ready();
+signal generated();
 
 enum ChunkDir {
 	NORTH,
@@ -40,6 +40,9 @@ const CHUNK_DIR_VECTORS: Dictionary[ChunkDir, Vector2i] = {
 	ChunkDir.WEST:  Vector2i(-1, 0),
 }
 
+func _init() -> void:
+	generated.connect(_on_map_ready, CONNECT_ONE_SHOT)
+
 func _ready() -> void:
 	if use_global_regions:
 		region_options = DataManager.instance.regions;
@@ -47,7 +50,6 @@ func _ready() -> void:
 		if not region_options.has(region):
 			region_options.append(region);
 	
-	map_ready.connect(_on_map_ready, CONNECT_ONE_SHOT)
 	for cy in range(-chunk_radius, chunk_radius + 1):
 		for cx in range(-chunk_radius, chunk_radius + 1):
 			if Vector2(cx, cy).length() > chunk_radius:
@@ -55,8 +57,7 @@ func _ready() -> void:
 			generate_chunk(cx, cy)
 
 func _on_map_ready() -> void:
-	if initial_generation:
-		initial_generation = false;
+	if not initialized:
 		Manager.instance.spawn_player(chunks[Vector2i(0, 0)].pick_random())
 		
 	SceneManager.set_active_scene(DataManager.instance.node_to_info(self))
@@ -64,6 +65,10 @@ func _on_map_ready() -> void:
 	for reg in region_instances.keys():
 		for rI: RegionInstance in region_instances[reg]:
 			rI.generate_structures_for_region()
+	initialized = true;
+				
+func on_enter() -> void:
+	SceneManager.set_active_scene(DataManager.instance.node_to_info(self))
 	
 func has_chunk(cx: int, cy: int) -> bool:
 	return chunks.has(Vector2i(cx, cy))
@@ -112,7 +117,7 @@ func _post_process_chunk(chunk: HexChunk) -> void:
 		if not chunks[c].is_generated:
 			all_chunks_generated = false;
 	if all_chunks_generated:
-		map_ready.emit();
+		generated.emit();
 
 func _assign_region_instance(hex: HexBase) -> void:
 	if hex.region_instance != null:
