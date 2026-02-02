@@ -1,37 +1,34 @@
-class_name SceneInstance extends RefCounted
+class_name SceneInstance
+extends Node
 
-var node: Node;
-var scene_info: SceneInfo;
+var scene_info: SceneInfo
+var node: Node
 
-signal on_leave();
-signal on_enter();
+signal on_leave
+signal on_enter
 
 func _init(_n: Node, s_info: SceneInfo) -> void:
-	node = _n;
+	node = _n; 
 	scene_info = s_info;
+	
 	if "scene_instance" in node:
-		node.scene_instance = self;
+		node.scene_instance = self
+
 	if node.has_method("on_load"):
 		on_enter.connect(node.on_load, CONNECT_ONE_SHOT)
+
 	if node.has_method("on_enter"):
-		on_enter.connect(node.on_enter);
-	if s_info.destroy_on_player_leave:
-		on_leave.connect(s_info.destroy_instance.bind(self))
-		
-func set_process_mode(b: bool) -> void:
-	if b: 
-		node.process_mode = scene_info.process_mode_enabled;
-	else:
-		node.process_mode = scene_info.process_mode_disabled;
+		on_enter.connect(node.on_enter)
+
+	if scene_info.destroy_on_player_leave:
+		on_leave.connect(destroy)
+
+	on_enter.emit()
 
 func destroy() -> void:
-	for sig in on_leave.get_connections():
-		if on_leave.is_connected(sig.callable):
-			on_leave.disconnect(sig.callable);
-	for sig in on_enter.get_connections():
-		if on_enter.is_connected(sig.callable):
-			on_enter.disconnect(sig.callable);
-	node.free();
-		
-	if get_reference_count() > 0:
-		Debug.message("Reference count for object %s is %s" % [self, get_reference_count()])
+	if is_instance_valid(node):
+		node.queue_free()
+	queue_free()
+
+func set_processing(enabled: bool) -> void:
+	node.process_mode = (scene_info.process_mode_enabled if enabled else scene_info.process_mode_disabled)

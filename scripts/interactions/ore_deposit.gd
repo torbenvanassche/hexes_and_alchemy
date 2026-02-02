@@ -7,4 +7,5 @@ func setup() -> void:
 		mesh.material_override = material;
 
 func interact() -> void:
+	structure_instance.destroy()
 	pass

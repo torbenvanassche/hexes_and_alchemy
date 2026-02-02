@@ -1,4 +1,4 @@
-class_name StructureInstance extends RefCounted
+class_name StructureInstance extends SceneInstance
 
 var structure_info: StructureInfo;
 var instance: Interaction;
@@ -8,13 +8,13 @@ var colliders: Array[StaticBody3D];
 var collision_shapes: Array[CollisionShape3D];
 var meshes: Array[MeshInstance3D]
 
-func _init(s: StructureInfo, node: Node) -> void:
-	if not node is Interaction:
+func _init(_n: Node, s: SceneInfo) -> void:
+	if not _n is Interaction:
 		Debug.err("%s is not of type interaction, please assign a handler!" % [s.id])
 		return;
 	
 	structure_info = s;
-	instance = node;
+	instance = _n;
 	instance.structure_instance = self;
 	
 	enterable_triggers.assign(instance.find_children("*", "Area3D", true, false))
@@ -41,6 +41,10 @@ func _on_area_exit(other: Area3D) -> void:
 func _on_area_enter(other: Area3D) -> void:
 	if other.get_parent() is PlayerController:
 		Manager.instance.interaction_prompt.show_rect(instance);
+		
+func destroy() -> void:
+	queue_free()
+	super();
 		
 func on_interact() -> void:
 	if instance.has_method("interact"):

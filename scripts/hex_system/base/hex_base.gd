@@ -52,7 +52,7 @@ func set_structure(s: StructureInfo) -> void:
 	
 ##When the structure finishes loading, add the instance to the scene and validate adjacent tiles
 func _on_structure_loaded(s: StructureInfo, required_tiles: Array[HexBase]) -> void:
-	structure = StructureInstance.new(s, s.get_instance().node);
+	structure = StructureInstance.new(s.get_instance().node, s);
 	if structure.instance:
 		add_child(structure.instance);
 		structure.instance.rotate_y(deg_to_rad(60 * randi_range(0, 5)))

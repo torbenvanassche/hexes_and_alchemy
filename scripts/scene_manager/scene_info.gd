@@ -30,14 +30,14 @@ func initialize() -> void:
 		is_unique = type == Type.UI;
 		
 func set_process_mode(instance: SceneInstance, b: bool) -> void:
-	instance.set_process_mode(b)
+	instance.set_processing(b)
 	
 func get_instance() -> SceneInstance:
 	instances = instances.filter(func(i: SceneInstance): return is_instance_valid(i.node))
 	if is_unique and instances.size() > 0:
 		return instances[0]
 	var instance := SceneInstance.new(packed_scene.instantiate(), self);
-	instance.set_process_mode(true)
+	instance.set_processing(true)
 	instances.append(instance)
 	return instance
 	
