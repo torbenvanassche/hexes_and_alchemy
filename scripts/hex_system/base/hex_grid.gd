@@ -16,7 +16,9 @@ var _spacing: float = 0.25
 var region_options: Array[RegionInfo];
 
 var initialized: bool = false;
-var skip_spawn_chunk: bool = true;
+
+##Chunks that should not generate structures
+@export var skipped_chunks: Array[Vector2i];
 
 static var RADIUS_IN: float = 1.0
 
@@ -52,14 +54,11 @@ func _ready() -> void:
 	
 	for cy in range(-chunk_radius, chunk_radius + 1):
 		for cx in range(-chunk_radius, chunk_radius + 1):
-			if Vector2(cx, cy).length() > chunk_radius:
-				continue
 			generate_chunk(cx, cy)
 
 func _on_map_ready() -> void:
 	if not initialized:
 		Manager.instance.spawn_player(chunks[Vector2i(0, 0)].pick_random())
-		
 	SceneManager.set_active_scene(DataManager.instance.node_to_info(self))
 	
 	for reg in region_instances.keys():
@@ -156,6 +155,8 @@ func generate_chunk(cx: int, cy: int) -> HexChunk:
 	var chunk := HexChunk.new(cx, cy)
 	chunks[key] = chunk
 	add_child(chunk)
+	
+	chunk.generate_structures = not skipped_chunks.has(key);
 
 	var start_x := cx * chunk.CHUNK_WIDTH
 	var start_y := cy * chunk.CHUNK_HEIGHT

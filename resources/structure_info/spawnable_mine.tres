@@ -11,7 +11,6 @@ point_count = 2
 [resource]
 script = ExtResource("3_gi0i3")
 max_per_region_size = SubResource("Curve_nqdss")
-required_space_radius = 1
 id = "spawnable_mines"
 packed_scene = ExtResource("2_ox4ln")
 type = 4

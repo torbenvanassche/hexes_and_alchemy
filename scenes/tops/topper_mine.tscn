@@ -4,26 +4,25 @@
 [ext_resource type="Script" uid="uid://dvidxmav7hphs" path="res://scripts/interactions/mineshaft.gd" id="1_f4m0s"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bbfir"]
-size = Vector3(4.4847717, 3.2875977, 4.2372665)
+size = Vector3(1.1559805, 1.174, 1.513)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_f4m0s"]
-size = Vector3(2.7013798, 1.7530518, 1.04356)
+size = Vector3(0.94522744, 0.7539673, 0.41274548)
 
 [node name="Node3D" type="Node3D" unique_id=2071832704]
 transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, 0, 0, 0)
 script = ExtResource("1_f4m0s")
 
 [node name="Root Scene" parent="." unique_id=1429542013 instance=ExtResource("1_bbfir")]
-transform = Transform3D(2.8, 0, 0, 0, 2.8, 0, 0, 0, 2.8, 0, 0, 0)
 
 [node name="Area3D" type="StaticBody3D" parent="." unique_id=1957721428]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=1907988473]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00819394, 1.611084, -0.6532325)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.035767704, 0.58037907, -0.14940524)
 shape = SubResource("BoxShape3D_bbfir")
 
 [node name="trigger" type="Area3D" parent="." unique_id=1246923180]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="trigger" unique_id=1814591473]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.034273565, 0.8438115, 1.8041683)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.002259612, 0.34426928, 0.63651735)
 shape = SubResource("BoxShape3D_f4m0s")

@@ -5,20 +5,20 @@
 [ext_resource type="Script" uid="uid://b6rgx41co3bur" path="res://addons/inventory/scripts/inventory/inventory.gd" id="3_qhqgy"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_g2els"]
-radius = 0.3
-height = 1.0698242
+radius = 0.095214844
+height = 0.36999512
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_qhqgy"]
-size = Vector3(1.5, 1.5, 1.5)
+size = Vector3(0.7191162, 0.5185547, 0.6298218)
 
 [node name="player" type="CharacterBody3D" unique_id=357255706]
 script = ExtResource("1_g2els")
+move_speed = 3.0
 
 [node name="Root Scene" parent="." unique_id=334534422 instance=ExtResource("1_3vyb7")]
-transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=850278735]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5019531, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15617341, 0)
 shape = SubResource("CapsuleShape3D_g2els")
 
 [node name="Inventory" type="Node" parent="." unique_id=34841540]
@@ -30,5 +30,5 @@ metadata/_custom_type_script = "uid://b6rgx41co3bur"
 [node name="interactor" type="Area3D" parent="." unique_id=614406519]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="interactor" unique_id=255196853]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75172853, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.008117676, 0.26100588, -0.002960205)
 shape = SubResource("BoxShape3D_qhqgy")

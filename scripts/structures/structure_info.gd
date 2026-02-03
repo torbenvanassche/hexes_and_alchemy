@@ -7,7 +7,7 @@ class_name StructureInfo extends SceneInfo
 @export var required_space_radius: int = 0;
 
 ##Minimum distance from structure to nearest adjacent structure
-@export var minimum_distance_from_other_structures: int = 4;
+@export var minimum_distance_from_other_structures: int = 2;
 
 ##How common this item is in the spawning algorithm
 @export var spawn_weight: float = 1;

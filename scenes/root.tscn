@@ -10,10 +10,9 @@
 [ext_resource type="Resource" uid="uid://bbahgdc5whoa4" path="res://resources/region_info/ocean.tres" id="7_y3xxt"]
 [ext_resource type="Resource" uid="uid://bflckgydmmunp" path="res://resources/region_info/desert.tres" id="9_y3xxt"]
 [ext_resource type="Script" uid="uid://btydeamnhd6x" path="res://scripts/structures/structure_info.gd" id="10_gt4lb"]
-[ext_resource type="Resource" uid="uid://dbhyrexgkscja" path="res://resources/structure_info/dirt.tres" id="11_ya6yc"]
+[ext_resource type="Resource" uid="uid://dbhyrexgkscja" path="res://resources/structure_info/farmland.tres" id="11_ya6yc"]
 [ext_resource type="Resource" uid="uid://ckpmn3cutb7an" path="res://resources/structure_info/spawnable_mine.tres" id="12_mflgo"]
 [ext_resource type="Resource" uid="uid://ckehcbpixu26o" path="res://resources/scene_info/player.tres" id="12_vgks2"]
-[ext_resource type="Resource" uid="uid://1es63jn2bgn" path="res://resources/structure_info/blacksmith.tres" id="13_34frw"]
 [ext_resource type="Resource" uid="uid://clias4ed18wk0" path="res://resources/structure_info/lumbermill.tres" id="14_8ui5n"]
 [ext_resource type="Script" uid="uid://dcapggl16i04f" path="res://scripts/camera.gd" id="15_dylgi"]
 [ext_resource type="Script" uid="uid://6t4u66o5q6po" path="res://scripts/scene_manager/scene_info.gd" id="15_ya6yc"]
@@ -23,6 +22,7 @@
 [ext_resource type="Resource" uid="uid://uov1jt8s2qia" path="res://resources/scene_info/ui/input_settings.tres" id="18_34frw"]
 [ext_resource type="Resource" uid="uid://001nokdh5ewb" path="res://resources/scene_info/ui/settings_menu.tres" id="18_mflgo"]
 [ext_resource type="Resource" uid="uid://foly5odh7d4j" path="res://resources/structure_info/ore_deposit_iron.tres" id="18_re66h"]
+[ext_resource type="Resource" uid="uid://c1ypx4o3q73t0" path="res://resources/structure_info/settlement.tres" id="19_isfgf"]
 [ext_resource type="Resource" uid="uid://cs0kfyy871ovd" path="res://resources/scene_info/ui/game_settings.tres" id="20_8ui5n"]
 [ext_resource type="Resource" uid="uid://dhooled2cyusq" path="res://resources/scene_info/sub_scenes/gameplay_mines.tres" id="21_ccljq"]
 [ext_resource type="Resource" uid="uid://cutvod5684gln" path="res://resources/scene_info/sub_scenes/gameplay_main.tres" id="22_jehah"]
@@ -51,7 +51,7 @@ initial_scene = ExtResource("22_jehah")
 script = ExtResource("2_sqa0i")
 hexes = Array[ExtResource("3_l5cgh")]([ExtResource("4_vgks2"), ExtResource("5_dylgi")])
 regions = Array[ExtResource("5_3hfy5")]([ExtResource("6_7pvxh"), ExtResource("7_y3xxt"), ExtResource("9_y3xxt")])
-structures = Array[ExtResource("10_gt4lb")]([ExtResource("11_ya6yc"), ExtResource("12_mflgo"), ExtResource("13_34frw"), ExtResource("14_8ui5n"), ExtResource("16_jehah"), ExtResource("17_re66h"), ExtResource("18_re66h")])
+structures = Array[ExtResource("10_gt4lb")]([ExtResource("11_ya6yc"), ExtResource("12_mflgo"), ExtResource("14_8ui5n"), ExtResource("16_jehah"), ExtResource("17_re66h"), ExtResource("18_re66h"), ExtResource("19_isfgf")])
 scenes = Array[ExtResource("15_ya6yc")]([ExtResource("12_vgks2"), ExtResource("16_gt4lb"), ExtResource("18_34frw"), ExtResource("18_mflgo"), ExtResource("20_8ui5n"), ExtResource("21_ccljq"), ExtResource("22_jehah")])
 
 [node name="shared_components" type="Node" parent="." unique_id=2003265152]
@@ -66,8 +66,9 @@ shadow_enabled = true
 [node name="Camera3D" type="Camera3D" parent="shared_components" unique_id=503402897]
 transform = Transform3D(1, 0, 0, 0, 0.85517436, 0.5183405, 0, -0.5183405, 0.85517436, 0, 3.7496269, 3.5924623)
 script = ExtResource("15_dylgi")
-camera_distance = 8.0
-camera_height = 3.0
+camera_distance = 3.0
+camera_height = 1.0
+camera_pitch_deg = -5.0
 pan_speed = 10.0
 max_pan_distance = 8.0
 

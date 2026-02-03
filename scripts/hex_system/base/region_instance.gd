@@ -86,7 +86,7 @@ func _can_place_structure_at(pos: Vector3i, candidate: StructureInfo) -> bool:
 	var hex := hexes[pos]
 	
 	var chunk_coords := hex_grid.grid_to_chunk_coords(hex.grid_id)
-	if chunk_coords == Vector2i.ZERO and hex_grid.skip_spawn_chunk:
+	if chunk_coords == Vector2i.ZERO and not hex_grid.chunks[chunk_coords].generate_structures:
 		return false
 		
 	if Manager.instance.player_instance && pos == Manager.instance.player_instance.get_hex().cube_id:

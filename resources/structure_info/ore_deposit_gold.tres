@@ -11,7 +11,6 @@ point_count = 2
 [resource]
 script = ExtResource("2_n541b")
 max_per_region_size = SubResource("Curve_p57q2")
-minimum_distance_from_other_structures = 2
 packed_scene = ExtResource("1_2ik4p")
 type = 4
 metadata/_custom_type_script = "uid://btydeamnhd6x"

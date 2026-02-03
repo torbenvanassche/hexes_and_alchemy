@@ -4,25 +4,24 @@
 [ext_resource type="Script" uid="uid://b253lrr4on1xx" path="res://scripts/interactions/return_to_main.gd" id="1_de2aa"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_3sell"]
-size = Vector3(1.5767212, 1.6783295, 1.070488)
+size = Vector3(0.44093704, 0.7843895, 0.5320873)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_kgtil"]
-size = Vector3(0.5867615, 1.6437683, 0.24139023)
+size = Vector3(0.24516869, 0.82353973, 0.06742656)
 
 [node name="Node3D" type="Node3D" unique_id=1151817518]
 script = ExtResource("1_de2aa")
 
 [node name="Root Scene" parent="." unique_id=1674175704 instance=ExtResource("1_328ig")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 
 [node name="interaction" type="Area3D" parent="." unique_id=777824050]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="interaction" unique_id=374934557]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.04598999, 0.75951385, 0.041245222)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.010759354, 0.37818336, 0.0029013157)
 shape = SubResource("BoxShape3D_3sell")
 
 [node name="collision" type="StaticBody3D" parent="." unique_id=259781885]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="collision" unique_id=1090936934]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00010681152, 0.7422333, 0.006793499)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.001999855, 0.38612747, 0.008121431)
 shape = SubResource("BoxShape3D_kgtil")

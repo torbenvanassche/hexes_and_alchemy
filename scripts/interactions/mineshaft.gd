@@ -5,8 +5,5 @@ func interact() -> void:
 	Manager.instance.player_instance.set_return_position()
 	mine_scene.queue(_on_mineshaft_loaded)
 	
-func setup() -> void:
-	pass
-	
 func _on_mineshaft_loaded(sI: SceneInfo):
 	SceneManager.transition(sI)

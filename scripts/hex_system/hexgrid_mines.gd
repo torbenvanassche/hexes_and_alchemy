@@ -4,7 +4,6 @@ class_name HexMines extends HexGrid
 
 func _ready() -> void:
 	generated.connect(on_enter, CONNECT_ONE_SHOT)
-	skip_spawn_chunk = false;
 	super()
 	
 func _on_map_ready() -> void:

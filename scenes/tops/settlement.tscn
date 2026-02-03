@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://b0hwbv6450ror"]
+
+[ext_resource type="PackedScene" uid="uid://d4ck04oubluj3" path="res://scenes/tops/topper_blacksmith.tscn" id="1_xmt5k"]
+
+[node name="starting_settlement" type="Node3D" unique_id=1143800928]
+
+[node name="blacksmith" parent="." unique_id=728034513 instance=ExtResource("1_xmt5k")]
