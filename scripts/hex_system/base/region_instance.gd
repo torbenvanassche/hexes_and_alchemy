@@ -107,7 +107,7 @@ func generate_structures_for_region() -> void:
 
 	_compute_structure_caps()
 
-	var available_hexes: Array[Vector3i] = hexes.keys()	
+	var available_hexes: Array[Vector3i] = hexes.keys()
 	available_hexes.shuffle()
 
 	var max_total := 0

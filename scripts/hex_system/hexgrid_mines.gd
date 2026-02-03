@@ -12,4 +12,3 @@ func _on_map_ready() -> void:
 	
 func on_enter() -> void:
 	Manager.instance.player_instance.get_hex().set_structure(exit);
-	super();

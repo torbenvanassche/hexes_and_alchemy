@@ -33,11 +33,12 @@ var _active_scene: SceneInstance:
 		if not _active_scene.node is HexGrid:
 			_active_scene.on_enter.emit()
 			return
-		var grid := _active_scene.node as HexGrid
-		if grid.initialized:
-			_active_scene.on_enter.emit();
 		else:
-			grid.generated.connect(_active_scene.on_enter.emit)
+			var grid := _active_scene.node as HexGrid
+			if grid.initialized:
+				_active_scene.on_enter.emit();
+			else:
+				grid.generated.connect(_active_scene.on_enter.emit)
 
 func _init() -> void:
 	scene_cache = SceneCache.new()
@@ -112,23 +113,27 @@ func set_visible(scene_info: SceneInfo, state: bool = true) -> void:
 		if "visible" in instance:
 			instance.visible = state;
 
-func transition(scene_info: SceneInfo) -> void:
+func transition(scene_info: SceneInfo, activate_after_transition: bool = false) -> void:
 	if "visible" in _active_scene.node:
 		_active_scene.set_processing(false)
 		_active_scene.node.visible = false;
 	add(scene_info);
 	
-func add(n: SceneInfo, allow_multiple: bool = false, is_visible: bool = true, add_to_stack: bool = true) -> SceneInstance:
+	if activate_after_transition:
+		set_active_scene(scene_info);
+	
+func add(n: SceneInfo, is_visible: bool = true, add_to_stack: bool = true) -> SceneInstance:
 	var instance_count := scene_stack.count(n);
-	if instance_count >= 1 && not allow_multiple:
+	if instance_count > 1 && n.is_unique:
 		return null;
 	
 	var instance := n.get_instance();
-	if "visible" in instance:
-		instance.visible = is_visible;
+	if "visible" in instance.node:
+		instance.node.visible = is_visible;
 		
 	if add_to_stack:
-		scene_stack.append(n)
+		if scene_stack.size() == 0 || scene_stack[-1] != n:
+			scene_stack.append(n)
 		
 	if instance.node.is_inside_tree():
 		return null;

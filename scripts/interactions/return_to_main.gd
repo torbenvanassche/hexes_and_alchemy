@@ -7,5 +7,5 @@ func interact() -> void:
 func setup() -> void:
 	pass
 	
-func _on_transition(s: SceneInfo) -> void:
-	SceneManager.transition(s)
+func _on_transition(_s: SceneInfo) -> void:
+	SceneManager.transition(SceneManager.to_previous_scene(), true)

@@ -14,5 +14,6 @@ script = ExtResource("1_3smpn")
 max_per_region_size = SubResource("Curve_3smpn")
 minimum_distance_from_other_structures = 0
 structure_material = ExtResource("4_hik3d")
+use_parent_material = false
 packed_scene = ExtResource("1_pa0ai")
 metadata/_custom_type_script = "uid://btydeamnhd6x"

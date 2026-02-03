@@ -33,7 +33,7 @@ func set_process_mode(instance: SceneInstance, b: bool) -> void:
 	instance.set_processing(b)
 	
 func get_instance() -> SceneInstance:
-	instances = instances.filter(func(i: SceneInstance): return is_instance_valid(i.node))
+	instances.assign(instances.filter(func(i: SceneInstance): return is_instance_valid(i.node)))
 	if is_unique and instances.size() > 0:
 		return instances[0]
 	var instance := SceneInstance.new(packed_scene.instantiate(), self);
