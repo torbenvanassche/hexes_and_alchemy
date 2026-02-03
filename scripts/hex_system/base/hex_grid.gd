@@ -7,7 +7,6 @@ var _spacing: float = 0.25
 ##The radius for initial chunk generation, more can be generated on demand
 @export var chunk_radius: int = 3;
 @export var grid_name: String;
-var initial_generation: bool = true;
 
 ##Optionally define custom regions that can generate if you don't want to use the global setting
 @export var custom_regions: Array[RegionInfo];
@@ -17,6 +16,7 @@ var initial_generation: bool = true;
 var region_options: Array[RegionInfo];
 
 var initialized: bool = false;
+var skip_spawn_chunk: bool = true;
 
 static var RADIUS_IN: float = 1.0
 
@@ -66,9 +66,6 @@ func _on_map_ready() -> void:
 		for rI: RegionInstance in region_instances[reg]:
 			rI.generate_structures_for_region()
 	initialized = true;
-				
-func on_enter() -> void:
-	SceneManager.set_active_scene(DataManager.instance.node_to_info(self))
 	
 func has_chunk(cx: int, cy: int) -> bool:
 	return chunks.has(Vector2i(cx, cy))
@@ -79,8 +76,6 @@ func _get_instances_for_region(region: RegionInfo) -> Array:
 	return region_instances[region];
 		
 func create_hex(grid_id: Vector2i, hex: HexBase) -> HexBase:
-	add_child(hex)
-		
 	hex.region = DataManager.instance.get_region_for(grid_id.x, grid_id.y, region_options);
 	var spacing =  GridUtils.get_spacing(RADIUS_IN, _spacing, pointy_top);
 
@@ -160,6 +155,7 @@ func generate_chunk(cx: int, cy: int) -> HexChunk:
 
 	var chunk := HexChunk.new(cx, cy)
 	chunks[key] = chunk
+	add_child(chunk)
 
 	var start_x := cx * chunk.CHUNK_WIDTH
 	var start_y := cy * chunk.CHUNK_HEIGHT
@@ -239,8 +235,6 @@ func replace(hex: HexBase, replacement: HexBase, region: RegionInfo) -> void:
 	
 	var chunk_coords := grid_to_chunk_coords(hex.grid_id)
 	chunks[chunk_coords].hexes.erase(hex);
-	
-	add_child(replacement)
 	chunks[chunk_coords].add_hex(replacement);
 	
 	hex.queue_free()
