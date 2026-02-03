@@ -82,9 +82,11 @@ func _compute_structure_caps() -> void:
 	for s in structure_caps.keys():
 		structure_counts[s] = 0
 
-func _can_place_structure_at(pos: Vector3i, candidate: StructureInfo) -> bool:
-	var chunk_coords := hex_grid.grid_to_chunk_coords(hex_grid.tiles[pos].grid_id)
-	if chunk_coords == Vector2i(0, 0) && hex_grid.skip_spawn_chunk:
+func _can_place_structure_at(pos: Vector3i, candidate: StructureInfo) -> bool:	
+	var hex := hexes[pos]
+	
+	var chunk_coords := hex_grid.grid_to_chunk_coords(hex.grid_id)
+	if chunk_coords == Vector2i.ZERO and hex_grid.skip_spawn_chunk:
 		return false
 		
 	if Manager.instance.player_instance && pos == Manager.instance.player_instance.get_hex().cube_id:
@@ -126,7 +128,7 @@ func generate_structures_for_region() -> void:
 
 		for attempt in 5:
 			var hex_id: Vector3i = available_hexes.pick_random()
-			var hex := hex_grid.get_hex_at_world_position(hex_id)
+			var hex := hexes[hex_id]
 
 			if not hex or not hex.can_generate:
 				continue
