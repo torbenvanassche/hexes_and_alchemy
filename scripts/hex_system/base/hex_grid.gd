@@ -57,8 +57,6 @@ func _ready() -> void:
 			generate_chunk(cx, cy)
 
 func _on_map_ready() -> void:
-	if not initialized:
-		Manager.instance.spawn_player(chunks[Vector2i(0, 0)].pick_random())
 	SceneManager.set_active_scene(DataManager.instance.node_to_info(self))
 	
 	for reg in region_instances.keys():

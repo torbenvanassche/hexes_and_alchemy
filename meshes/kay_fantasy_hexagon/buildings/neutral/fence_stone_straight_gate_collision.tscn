@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://ceeffxsbgrta"]
+
+[ext_resource type="PackedScene" uid="uid://cqqvwgt7wi66o" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/fence_stone_straight_gate.glb" id="1_dtyi4"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_18drs"]
+size = Vector3(0.0021044922, 0.0038134765, 0.0027441406)
+
+[node name="Root Scene" unique_id=588626811 instance=ExtResource("1_dtyi4")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="RootNode/fence_stone_straight_gate" parent_id_path=PackedInt32Array(734100268) index="1" unique_id=1035457252]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RootNode/fence_stone_straight_gate/StaticBody3D" index="0" unique_id=1502578281]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.010015783, 0.0038141303, 0.00088378845)
+shape = SubResource("BoxShape3D_18drs")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="RootNode/fence_stone_straight_gate/StaticBody3D" index="1" unique_id=964942795]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.010015783, -0.0038067102, 0.00088378746)
+shape = SubResource("BoxShape3D_18drs")

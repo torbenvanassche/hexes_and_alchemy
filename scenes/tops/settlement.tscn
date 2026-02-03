@@ -1,7 +1,84 @@
 [gd_scene format=3 uid="uid://b0hwbv6450ror"]
 
+[ext_resource type="PackedScene" uid="uid://gb2g45tjja61" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/building_stage_A.glb" id="1_f6x38"]
+[ext_resource type="Script" uid="uid://beb2p3obw00h8" path="res://scripts/hex_system/settlement.gd" id="1_l415u"]
 [ext_resource type="PackedScene" uid="uid://d4ck04oubluj3" path="res://scenes/tops/topper_blacksmith.tscn" id="1_xmt5k"]
+[ext_resource type="PackedScene" uid="uid://cjeap2dsndlsj" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_home_A_blue.glb" id="3_c5c2h"]
+[ext_resource type="Script" uid="uid://bk48n1ib0bco4" path="res://grid_helper.gd" id="3_scayi"]
+[ext_resource type="PackedScene" uid="uid://cjei5gsoj7jp7" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/fence_stone_straight.glb" id="4_616a5"]
+[ext_resource type="PackedScene" uid="uid://eyyrdjphljp8" path="res://scenes/hexes/hex_simple_champfer.tscn" id="4_f6x38"]
+[ext_resource type="PackedScene" uid="uid://ceeffxsbgrta" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/fence_stone_straight_gate_collision.tscn" id="7_616a5"]
 
-[node name="starting_settlement" type="Node3D" unique_id=1143800928]
+[node name="starting_settlement" type="Node3D" unique_id=1143800928 node_paths=PackedStringArray("spawn_position")]
+script = ExtResource("1_l415u")
+spawn_position = NodePath("player_spawn")
 
-[node name="blacksmith" parent="." unique_id=728034513 instance=ExtResource("1_xmt5k")]
+[node name="ground" type="Node3D" parent="." unique_id=140917949]
+script = ExtResource("3_scayi")
+prefab = ExtResource("4_f6x38")
+grid_size = Vector2i(5, 5)
+grid_offset = Vector2i(-2, -2)
+
+[node name="structures" type="Node3D" parent="." unique_id=516994821]
+
+[node name="construction_a" parent="structures" unique_id=216741624 instance=ExtResource("1_f6x38")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.973076, 0, 1.75)
+
+[node name="Root Scene9" parent="structures/construction_a" unique_id=1156997070 instance=ExtResource("4_616a5")]
+transform = Transform3D(-0.49999988, 0, 0.8660255, 0, 1, 0, -0.8660255, 0, -0.49999988, 0, 0, 0)
+
+[node name="Root Scene10" parent="structures/construction_a" unique_id=2059508822 instance=ExtResource("4_616a5")]
+transform = Transform3D(0.5000002, 0, 0.8660253, 0, 1, 0, -0.8660253, 0, 0.5000002, 0, 0, 0)
+
+[node name="Root Scene11" parent="structures/construction_a" unique_id=763347888 instance=ExtResource("4_616a5")]
+transform = Transform3D(-1, 0, 1.1920929e-07, 0, 1, 0, -1.1920929e-07, 0, -1, 0, 0, 0)
+
+[node name="Root Scene12" parent="structures/construction_a" unique_id=117545638 instance=ExtResource("4_616a5")]
+transform = Transform3D(-0.50000006, 0, -0.8660254, 0, 1, 0, 0.8660254, 0, -0.50000006, 0, 0, 0)
+
+[node name="blacksmith" parent="structures" unique_id=728034513 instance=ExtResource("1_xmt5k")]
+
+[node name="Root Scene4" parent="structures/blacksmith" unique_id=598503815 instance=ExtResource("4_616a5")]
+
+[node name="Root Scene5" parent="structures/blacksmith" unique_id=499109290 instance=ExtResource("4_616a5")]
+transform = Transform3D(0.49999997, 0, -0.86602545, 0, 1, 0, 0.86602545, 0, 0.49999997, 0, 0, 0)
+
+[node name="Root Scene6" parent="structures/blacksmith" unique_id=1211326074 instance=ExtResource("4_616a5")]
+transform = Transform3D(-0.5000001, 0, -0.8660254, 0, 1, 0, 0.8660254, 0, -0.5000001, 0, 0, 0)
+
+[node name="home" parent="structures" unique_id=540453184 instance=ExtResource("3_c5c2h")]
+transform = Transform3D(-0.59999985, 0, 1.0392307, 0, 1.2, 0, -1.0392307, 0, -0.59999985, -0.9910254, 0, 1.75)
+
+[node name="Root Scene2" parent="structures/home" unique_id=405962202 instance=ExtResource("4_616a5")]
+transform = Transform3D(-0.41666648, 0, -0.72168785, 0, 0.83333325, 0, 0.72168785, 0, -0.41666648, 0, 0, 0)
+
+[node name="Root Scene3" parent="structures/home" unique_id=1750871850 instance=ExtResource("4_616a5")]
+transform = Transform3D(-0.83333325, 0, -1.1920929e-07, 0, 0.83333325, 0, 1.1920929e-07, 0, -0.83333325, 0, 0, 0)
+
+[node name="Root Scene11" parent="structures/home" unique_id=1311021894 instance=ExtResource("4_616a5")]
+transform = Transform3D(0.83333325, 0, 2.9802322e-08, 0, 0.83333325, 0, -2.9802322e-08, 0, 0.83333325, 0, 0, 0)
+
+[node name="Root Scene12" parent="structures/home" unique_id=1731305228 instance=ExtResource("4_616a5")]
+transform = Transform3D(0.4166667, 0, -0.7216878, 0, 0.83333325, 0, 0.7216878, 0, 0.4166667, 0, 0, 0)
+
+[node name="walls" type="Node3D" parent="." unique_id=854268926]
+
+[node name="Root Scene7" parent="walls" unique_id=1469083703 instance=ExtResource("4_616a5")]
+transform = Transform3D(0.49999997, 0, -0.86602545, 0, 1, 0, 0.86602545, 0, 0.49999997, 2, 0, 0)
+
+[node name="Root Scene8" parent="walls" unique_id=991823694 instance=ExtResource("4_616a5")]
+transform = Transform3D(-0.5000001, 0, -0.8660254, 0, 1, 0, 0.8660254, 0, -0.5000001, 2, 0, 0)
+
+[node name="Root Scene9" parent="walls" unique_id=2135617906 instance=ExtResource("4_616a5")]
+transform = Transform3D(-0.49999988, 0, 0.8660255, 0, 1, 0, -0.8660255, 0, -0.49999988, 1, 0, 1.7499027)
+
+[node name="entrances" type="Node3D" parent="." unique_id=884947801]
+
+[node name="Root Scene" parent="entrances" unique_id=950763859 instance=ExtResource("7_616a5")]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 1.9786718, 2.3841858e-07, 0.008921385)
+
+[node name="Root Scene2" parent="entrances" unique_id=588626811 instance=ExtResource("7_616a5")]
+transform = Transform3D(0.49999997, 0, 0.86602545, 0, 1, 0, -0.86602545, 0, 0.49999997, 1, 0, 1.7499027)
+
+[node name="player_spawn" type="Node3D" parent="." unique_id=1450424186]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.43173504, 0, 1.4711934)

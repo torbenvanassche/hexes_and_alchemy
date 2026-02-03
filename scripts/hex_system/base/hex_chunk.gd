@@ -45,9 +45,20 @@ func _propagate_visibility() -> void:
 		hex.visible = visible;
 		
 func get_center() -> HexBase:
-	var x := (CHUNK_WIDTH / 2.0) * (chunk_x + 1);
-	var y := (CHUNK_HEIGHT / 2.0) * (chunk_y + 1);
-	return hexes[floori(x * y)]
+	if hexes.is_empty():
+		return null
+		
+	var center_pos := bounds.position + bounds.size * 0.5
+	var closest: HexBase = null
+	var best_dist := INF
+	
+	for hex in hexes:
+		var d := hex.global_position.distance_squared_to(center_pos)
+		if d < best_dist:
+			best_dist = d
+			closest = hex
+	return closest
+
 
 func get_hex(idx: Vector2i) -> HexBase:
 	var rV = hexes.filter(func(h: HexBase) -> bool: return h.grid_id == idx);

@@ -11,6 +11,7 @@ var is_paused: bool = false;
 @onready var interaction_prompt: WSD = $"../game_ui/interaction_prompt";
 
 @export var initial_scene: SceneInfo;
+var active_settlement: Settlement;
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS;
@@ -40,7 +41,7 @@ func _physics_process(_delta: float) -> void:
 		else:
 			pause_game(true);
 
-func spawn_player(spawn_hex: HexBase) -> void:
+func spawn_player(spawn_hex: HexBase = null) -> void:
 	DataManager.instance.get_scene_by_name("player").queue(_on_player_loaded.bind(spawn_hex))
 	
 func _on_player_loaded(player_scene: SceneInfo, spawn_hex: HexBase) -> void:
@@ -58,3 +59,6 @@ func pause_game(force: bool = !is_paused) -> void:
 		scene.queue(func(s: SceneInfo) -> void: SceneManager.add(s))
 	else:
 		SceneManager.remove_scene(scene)
+		
+func set_active_settlement(settle: Settlement) -> void:
+	active_settlement = settle;
