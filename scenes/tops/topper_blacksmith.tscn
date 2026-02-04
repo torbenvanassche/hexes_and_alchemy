@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://d4ck04oubluj3"]
 
 [ext_resource type="PackedScene" uid="uid://6h1kj7hbn5qq" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_blacksmith_blue.glb" id="1_43jb5"]
+[ext_resource type="Script" uid="uid://bpm6gm1mj4n65" path="res://scripts/interactions/blacksmith.gd" id="2_cpkdt"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_43jb5"]
 size = Vector3(0.42652893, 0.58376694, 0.31565857)
@@ -13,6 +14,7 @@ size = Vector3(1.3130188, 0.97569275, 0.938961)
 [node name="Root Scene" parent="." unique_id=867165107 instance=ExtResource("1_43jb5")]
 
 [node name="interaction" type="Area3D" parent="." unique_id=1325427929]
+script = ExtResource("2_cpkdt")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="interaction" unique_id=323897064]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0048803836, 0.31943703, 0.5359774)

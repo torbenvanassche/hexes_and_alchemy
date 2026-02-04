@@ -13,7 +13,7 @@ var tween: Tween
 
 func _ready() -> void:
 	start_angle = _get_axis_rotation()
-	setup(null)
+	super()
 
 func interact() -> void:
 	var target_angle := max_angle if not at_max else start_angle

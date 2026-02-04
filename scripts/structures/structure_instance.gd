@@ -10,8 +10,6 @@ func _init(_n: Node, s: SceneInfo) -> void:
 	instance = _n;
 	
 	meshes.assign(instance.find_children("*", "MeshInstance3D", true, false))
-	if instance is Interaction:
-		instance.setup(self);
 		
 func destroy() -> void:
 	instance.queue_free()

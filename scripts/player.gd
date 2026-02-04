@@ -57,8 +57,7 @@ func _handle_movement(delta: float) -> void:
 		else:
 			Debug.message("Active scene is not a hexgrid, cannot walk")
 			return;
-
-		print(hex.name)
+			
 		if hex == null or not hex.is_walkable(self):
 			velocity = Vector3.ZERO
 			return;
@@ -71,10 +70,22 @@ func _handle_movement(delta: float) -> void:
 		rotation.y = lerp_angle(rotation.y, target_rot, delta * 10.0)
 
 func add_trigger(other: Area3D) -> void:
-	current_triggers.append(other.get_meta("target"))
+	if other.has_meta("target"):
+		current_triggers.append(other.get_meta("target"))
+	else:
+		if (other as Node3D) is Interaction:
+			current_triggers.append(other)
+		else:
+			Debug.err("No interaction defined on %s" % [other])
 	
 func remove_trigger(other: Area3D) -> void:
-	current_triggers.erase(other.get_meta("target"))
+	if other.has_meta("target"):
+		current_triggers.erase(other.get_meta("target"))
+	else:
+		if (other as Node3D) is Interaction:
+			current_triggers.erase(other)
+		else:
+			Debug.err("No interaction defined on %s" % [other])
 
 func get_hex() -> HexBase:
 	var grid := (SceneManager.get_active_scene().node as HexGrid);

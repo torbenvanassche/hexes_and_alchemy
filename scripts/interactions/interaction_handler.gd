@@ -8,15 +8,11 @@ var collision_shapes: Array[CollisionShape3D];
 
 @abstract func interact();
 
-func setup(structure: StructureInstance) -> void:
-	structure_instance = structure;
-	
+func _ready() -> void:
 	enterable_triggers.assign(find_children("*", "Area3D", true, false))
 	colliders.assign(find_children("*", "StaticBody3D", true, false))
 	collision_shapes.assign(find_children("*", "CollisionShape3D", true, false))
 	
-	if structure_instance == DataManager.instance.structures[6]:
-		pass
 	for trigger: Area3D in enterable_triggers:
 		trigger.set_meta("target", self)
 		trigger.area_entered.connect(_on_area_enter)
