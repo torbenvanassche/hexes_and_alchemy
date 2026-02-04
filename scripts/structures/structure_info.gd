@@ -12,6 +12,8 @@ class_name StructureInfo extends SceneInfo
 ##How common this item is in the spawning algorithm
 @export var spawn_weight: float = 1;
 
+@export var randomize_rotation: bool = true;
+
 ##Optional custom material for the node, if not set it will default to use the material of the region it belongs to.
 @export var structure_material: StandardMaterial3D;
 @export var use_parent_material: bool = true;

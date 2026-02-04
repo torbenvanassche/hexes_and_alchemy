@@ -55,7 +55,8 @@ func _on_structure_loaded(s: StructureInfo, required_tiles: Array[HexBase]) -> v
 	structure = StructureInstance.new(s.get_instance().node, s);
 	if structure.instance:
 		add_child(structure.instance);
-		structure.instance.rotate_y(deg_to_rad(60 * randi_range(0, 5)))
+		if s.randomize_rotation:
+			structure.instance.rotate_y(deg_to_rad(60 * randi_range(0, 5)))
 		_ready();
 	
 	for t in required_tiles:

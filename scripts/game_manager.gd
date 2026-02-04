@@ -42,13 +42,19 @@ func _physics_process(_delta: float) -> void:
 			pause_game(true);
 
 func spawn_player(spawn_hex: HexBase = null) -> void:
-	DataManager.instance.get_scene_by_name("player").queue(_on_player_loaded.bind(spawn_hex))
+	DataManager.instance.get_scene_by_name("player").queue(_on_player_loaded.bind(spawn_hex.global_position))
 	
-func _on_player_loaded(player_scene: SceneInfo, spawn_hex: HexBase) -> void:
+func spawn_in_settlement() -> void:
+	if active_settlement:
+		DataManager.instance.get_scene_by_name("player").queue(_on_player_loaded.bind(active_settlement.spawn_position.global_position))
+	else:
+		Debug.err("Can't create player in settlement, no settlement is active.")
+
+func _on_player_loaded(player_scene: SceneInfo, spawn_position: Vector3) -> void:
 	if not player_instance:
 		player_instance = SceneManager.add(player_scene, true, false).node;
 		spring_arm_camera.target = player_instance;
-	player_instance.position = spawn_hex.position;
+	player_instance.global_position = spawn_position;
 	Manager.instance.spring_arm_camera.snap_to_target()
 	
 func pause_game(force: bool = !is_paused) -> void:
