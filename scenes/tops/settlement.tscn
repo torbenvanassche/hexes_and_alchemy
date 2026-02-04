@@ -4,21 +4,13 @@
 [ext_resource type="Script" uid="uid://beb2p3obw00h8" path="res://scripts/hex_system/settlement.gd" id="1_l415u"]
 [ext_resource type="PackedScene" uid="uid://d4ck04oubluj3" path="res://scenes/tops/topper_blacksmith.tscn" id="1_xmt5k"]
 [ext_resource type="PackedScene" uid="uid://cjeap2dsndlsj" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_home_A_blue.glb" id="3_c5c2h"]
-[ext_resource type="Script" uid="uid://bk48n1ib0bco4" path="res://grid_helper.gd" id="3_scayi"]
 [ext_resource type="PackedScene" uid="uid://cjei5gsoj7jp7" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/fence_stone_straight.glb" id="4_616a5"]
-[ext_resource type="PackedScene" uid="uid://eyyrdjphljp8" path="res://scenes/hexes/hex_simple_champfer.tscn" id="4_f6x38"]
 [ext_resource type="PackedScene" uid="uid://ceeffxsbgrta" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/fence_stone_straight_gate_collision.tscn" id="7_616a5"]
 
 [node name="starting_settlement" type="Node3D" unique_id=1143800928 node_paths=PackedStringArray("spawn_position")]
 script = ExtResource("1_l415u")
 spawn_position = NodePath("player_spawn")
 is_active_settlement = true
-
-[node name="ground" type="Node3D" parent="." unique_id=140917949]
-script = ExtResource("3_scayi")
-prefab = ExtResource("4_f6x38")
-grid_size = Vector2i(5, 5)
-grid_offset = Vector2i(-2, -2)
 
 [node name="structures" type="Node3D" parent="." unique_id=516994821]
 

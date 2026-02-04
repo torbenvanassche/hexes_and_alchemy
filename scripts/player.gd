@@ -8,7 +8,7 @@ extends CharacterBody3D
 @onready var interactor: Area3D = $interactor;
 @onready var inventory: Inventory = $Inventory;
 
-var current_triggers: Array[StructureInstance] = [];
+var current_triggers: Array[Interaction] = [];
 var return_position: Vector3;
 
 func _ready() -> void:
@@ -58,6 +58,7 @@ func _handle_movement(delta: float) -> void:
 			Debug.message("Active scene is not a hexgrid, cannot walk")
 			return;
 
+		print(hex.name)
 		if hex == null or not hex.is_walkable(self):
 			velocity = Vector3.ZERO
 			return;

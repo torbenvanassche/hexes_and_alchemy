@@ -189,7 +189,27 @@ func get_hex_at_world_position(pos: Vector3) -> HexBase:
 		gx = roundi((pos.x - (gy & 1) * spacing.x * 0.5) / spacing.x)
 
 	var cube := GridUtils.offset_to_cube(Vector2i(gx, gy), pointy_top)
-	return tiles.get(cube, null)
+	return tiles.get(_cube_round(cube), null)
+	
+func _cube_round(c: Vector3) -> Vector3i:
+	var rx := roundi(c.x)
+	var ry := roundi(c.y)
+	var rz := roundi(c.z)
+
+	var dx := absf(rx - c.x)
+	var dy := absf(ry - c.y)
+	var dz := absf(rz - c.z)
+
+	if dx > dy and dx > dz:
+		rx = -ry - rz
+	elif dy > dz:
+		ry = -rx - rz
+	else:
+		rz = -rx - ry
+
+	return Vector3i(rx, ry, rz)
+
+
 	
 func get_tiles_in_radius(center: Vector3i, radius: int) -> Array[HexBase]:
 	var result: Array[HexBase] = []
