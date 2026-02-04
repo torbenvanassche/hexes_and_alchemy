@@ -7,7 +7,6 @@
 [ext_resource type="Script" uid="uid://m31o3kdm652g" path="res://scripts/hex_system/base/region_info.gd" id="5_3hfy5"]
 [ext_resource type="Resource" uid="uid://bto28untf5lrf" path="res://resources/scene_info/hex/hex_water.tres" id="5_dylgi"]
 [ext_resource type="Resource" uid="uid://cqs6mgr0ms55u" path="res://resources/region_info/plains.tres" id="6_7pvxh"]
-[ext_resource type="Resource" uid="uid://bbahgdc5whoa4" path="res://resources/region_info/ocean.tres" id="7_y3xxt"]
 [ext_resource type="Resource" uid="uid://bflckgydmmunp" path="res://resources/region_info/desert.tres" id="9_y3xxt"]
 [ext_resource type="Script" uid="uid://btydeamnhd6x" path="res://scripts/structures/structure_info.gd" id="10_gt4lb"]
 [ext_resource type="Resource" uid="uid://dbhyrexgkscja" path="res://resources/structure_info/farmland.tres" id="11_ya6yc"]
@@ -50,7 +49,7 @@ initial_scene = ExtResource("22_jehah")
 [node name="resource_manager" type="Node" parent="." unique_id=1025417812]
 script = ExtResource("2_sqa0i")
 hexes = Array[ExtResource("3_l5cgh")]([ExtResource("4_vgks2"), ExtResource("5_dylgi")])
-regions = Array[ExtResource("5_3hfy5")]([ExtResource("6_7pvxh"), ExtResource("7_y3xxt"), ExtResource("9_y3xxt")])
+regions = Array[ExtResource("5_3hfy5")]([ExtResource("6_7pvxh"), ExtResource("9_y3xxt")])
 structures = Array[ExtResource("10_gt4lb")]([ExtResource("11_ya6yc"), ExtResource("12_mflgo"), ExtResource("14_8ui5n"), ExtResource("16_jehah"), ExtResource("17_re66h"), ExtResource("18_re66h"), ExtResource("19_isfgf")])
 scenes = Array[ExtResource("15_ya6yc")]([ExtResource("12_vgks2"), ExtResource("16_gt4lb"), ExtResource("18_34frw"), ExtResource("18_mflgo"), ExtResource("20_8ui5n"), ExtResource("21_ccljq"), ExtResource("22_jehah")])
 

@@ -11,7 +11,8 @@
 [resource]
 script = ExtResource("2_yrmbv")
 noise = SubResource("FastNoiseLite_yrmbv")
-activation_threshold = 0.6
+noise_max = 0.0
+priority = 1000
 material = ExtResource("1_dpad2")
 scene_multipliers = Dictionary[ExtResource("2_aaf4r"), float]({
 ExtResource("3_aaf4r"): 1.0

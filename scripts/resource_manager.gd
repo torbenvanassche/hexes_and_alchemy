@@ -7,6 +7,8 @@ class_name DataManager extends Node
 @export var scenes: Array[SceneInfo]
 var scene_data: Array[SceneInfo];
 
+@onready var ocean_descriptor: RegionInfo = preload("res://resources/region_info/ocean.tres");
+
 const CUBE_DIRS : Array[Vector3i] = [
 	Vector3i(1,-1,0), Vector3i(1,0,-1), Vector3i(0,1,-1),
 	Vector3i(-1,1,0), Vector3i(-1,0,1), Vector3i(0,-1,1)
@@ -82,23 +84,16 @@ func pick_scene(x: int, y: int, region_options: Array[RegionInfo] = regions) -> 
 	
 func get_region_for(x: int, y: int, region_options: Array[RegionInfo] = regions) -> RegionInfo:
 	var best_region: RegionInfo = null
-	var best_score := -INF
+	var best_priority := -INF
 
-	for region in region_options:
-		if region.noise == null:
+	for region: RegionInfo in region_options:
+		if not region.matches(x, y):
 			continue
 
-		var n := (region.noise.get_noise_2d(x, y) + 1.0) * 0.5
-		if n < region.activation_threshold:
-			continue
-
-		var score := n + region.priority * 10.0
-
-		if score > best_score:
-			best_score = score
+		if region.priority > best_priority:
+			best_priority = region.priority
 			best_region = region
 			
-	if best_region == null:
-		best_region = region_options.pick_random();
-
+	if not best_region:
+		return DataManager.instance.ocean_descriptor;
 	return best_region

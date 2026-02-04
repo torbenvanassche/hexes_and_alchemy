@@ -10,6 +10,7 @@ var _spacing: float = 0.25
 
 ##Optionally define custom regions that can generate if you don't want to use the global setting
 @export var custom_regions: Array[RegionInfo];
+@export var generate_ocean: bool = true;
 
 ##Whether or not to merge the general list of regions as part of the generation process
 @export var use_global_regions: bool = true;

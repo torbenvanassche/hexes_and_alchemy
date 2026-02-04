@@ -11,4 +11,5 @@ exit = ExtResource("2_fxsa3")
 chunk_radius = 0
 grid_name = "mine_instance"
 custom_regions = Array[ExtResource("2_nxsip")]([ExtResource("3_fxsa3")])
+generate_ocean = false
 use_global_regions = false

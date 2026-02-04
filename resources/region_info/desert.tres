@@ -13,7 +13,8 @@ frequency = 0.1
 [resource]
 script = ExtResource("5_ts14k")
 noise = SubResource("FastNoiseLite_te6hx")
-activation_threshold = 0.7
+noise_min = 0.0
+noise_max = 0.1
 structure_fail_weight = 5.0
 region_weight = 0.5
 material = ExtResource("1_cjbsg")

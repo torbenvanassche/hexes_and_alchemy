@@ -15,7 +15,9 @@ frequency = 0.1
 [resource]
 script = ExtResource("2_te6hx")
 noise = SubResource("FastNoiseLite_te6hx")
-activation_threshold = 0.2
+noise_min = 0.1
+noise_max = 0.5
+priority = 100
 material = ExtResource("1_fa7qv")
 structures = Dictionary[ExtResource("5_v1b04"), float]({
 ExtResource("6_yf7g0"): 2.0,
