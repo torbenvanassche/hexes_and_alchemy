@@ -6,7 +6,8 @@ var enterable_triggers: Array[Area3D];
 var colliders: Array[StaticBody3D];
 var collision_shapes: Array[CollisionShape3D];
 
-@abstract func interact();
+@abstract func interact() -> void;
+@abstract func can_interact() -> bool;
 
 func _ready() -> void:
 	enterable_triggers.assign(find_children("*", "Area3D", true, false))
@@ -21,7 +22,8 @@ func _ready() -> void:
 	visibility_changed.connect(_on_visibility_changed)
 	
 func on_interact() -> void:
-	interact();
+	if can_interact():
+		interact();
 
 func _on_visibility_changed() -> void:
 	for shape in collision_shapes:

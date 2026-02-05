@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://c0cx8yohbgqh5"]
 
-[ext_resource type="Script" uid="uid://bhn5mfd3d5ujk" path="res://addons/control_helpers/toggle_group.gd" id="1_pfmrl"]
+[ext_resource type="Script" uid="uid://bhn5mfd3d5ujk" path="res://tools/control_helpers/toggle_group.gd" id="1_pfmrl"]
 [ext_resource type="Resource" uid="uid://cs0kfyy871ovd" path="res://resources/scene_info/ui/game_settings.tres" id="2_6hi4t"]
 [ext_resource type="Resource" uid="uid://uov1jt8s2qia" path="res://resources/scene_info/ui/input_settings.tres" id="2_j3boo"]
-[ext_resource type="Texture2D" uid="uid://bfjflheeann5w" path="res://addons/input_prompts/left.png" id="3_xi83m"]
+[ext_resource type="Texture2D" uid="uid://bfjflheeann5w" path="res://tools/input_prompts/left.png" id="3_xi83m"]
 
 [node name="Control" type="VBoxContainer" unique_id=1653328238 node_paths=PackedStringArray("button_group_parent", "tab_instance_parent", "group_buttons", "back_button")]
 process_mode = 3

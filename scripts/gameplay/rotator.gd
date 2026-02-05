@@ -11,6 +11,9 @@ var start_angle: float
 var at_max: bool = false
 var tween: Tween
 
+func can_interact() -> bool:
+	return true;
+
 func _ready() -> void:
 	start_angle = _get_axis_rotation()
 	super()

@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://d4ck04oubluj3" path="res://scenes/tops/topper_blacksmith.tscn" id="1_xmt5k"]
 [ext_resource type="PackedScene" uid="uid://cjeap2dsndlsj" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_home_A_blue.glb" id="3_c5c2h"]
 [ext_resource type="PackedScene" uid="uid://cjei5gsoj7jp7" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/fence_stone_straight.glb" id="4_616a5"]
+[ext_resource type="PackedScene" uid="uid://bidvvqjxevoc3" path="res://scenes/tops/topper_market.tscn" id="6_616a5"]
 [ext_resource type="PackedScene" uid="uid://ceeffxsbgrta" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/fence_stone_straight_gate_collision.tscn" id="7_616a5"]
 
 [node name="starting_settlement" type="Node3D" unique_id=1143800928 node_paths=PackedStringArray("spawn_position")]
@@ -53,6 +54,9 @@ transform = Transform3D(0.83333325, 0, 2.9802322e-08, 0, 0.83333325, 0, -2.98023
 
 [node name="Root Scene12" parent="structures/home" unique_id=1731305228 instance=ExtResource("4_616a5")]
 transform = Transform3D(0.4166667, 0, -0.7216878, 0, 0.83333325, 0, 0.7216878, 0, 0.4166667, 0, 0, 0)
+
+[node name="market" parent="structures" unique_id=2075765343 instance=ExtResource("6_616a5")]
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 1.9820508, 0, 3.5)
 
 [node name="walls" type="Node3D" parent="." unique_id=854268926]
 

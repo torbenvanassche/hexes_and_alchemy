@@ -47,6 +47,9 @@ func _handle_movement(delta: float) -> void:
 	var target_velocity := move_dir * move_speed
 	if Input.is_action_pressed("move_sprint"):
 		target_velocity *= dash_modifier;
+		
+	if Input.is_action_pressed("inventory"):
+		DataManager.instance.get_scene_by_name("inventory_ui").queue(_open_inventory)
 
 	if move_dir.length() > 0.01:
 		var probe_pos := global_position + move_dir.normalized() * HexGrid.RADIUS_IN * 0.5
@@ -68,6 +71,13 @@ func _handle_movement(delta: float) -> void:
 	if move_dir.length() > 0.1:
 		var target_rot := atan2(move_dir.x, move_dir.z)
 		rotation.y = lerp_angle(rotation.y, target_rot, delta * 10.0)
+		
+func _open_inventory(window_info: SceneInfo) -> void:
+	var window_instance = SceneManager.add(window_info, false);
+	var inventory_ui: InventoryUI = (window_instance.node as DraggableControl).content_panel.get_child(0) as InventoryUI;
+	inventory_ui.inventory = inventory;
+	await get_tree().process_frame;
+	(window_instance.node as DraggableControl).visible = true;
 
 func add_trigger(other: Area3D) -> void:
 	if other.has_meta("target"):

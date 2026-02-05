@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="SceneInfo" format=3 uid="uid://uov1jt8s2qia"]
 
 [ext_resource type="Script" uid="uid://6t4u66o5q6po" path="res://scripts/scene_manager/scene_info.gd" id="1_2uhpa"]
-[ext_resource type="PackedScene" uid="uid://d2jcsx4wopdry" path="res://addons/input_prompts/scenes/input_settings.tscn" id="1_5co2y"]
+[ext_resource type="PackedScene" uid="uid://d2jcsx4wopdry" path="res://tools/input_prompts/scenes/input_settings.tscn" id="1_5co2y"]
 
 [resource]
 script = ExtResource("1_2uhpa")

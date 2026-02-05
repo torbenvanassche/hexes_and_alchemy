@@ -54,6 +54,8 @@ func set_structure(s: StructureInfo) -> void:
 func _on_structure_loaded(s: StructureInfo, required_tiles: Array[HexBase]) -> void:
 	structure = StructureInstance.new(s.get_instance().node, s);
 	if structure.instance:
+		if structure.instance is Interaction:
+			(structure.instance as Interaction).structure_instance = structure;
 		add_child(structure.instance);
 		if s.randomize_rotation:
 			structure.instance.rotate_y(deg_to_rad(60 * randi_range(0, 5)))

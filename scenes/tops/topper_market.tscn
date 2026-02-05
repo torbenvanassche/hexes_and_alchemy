@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://bidvvqjxevoc3"]
+
+[ext_resource type="PackedScene" uid="uid://cj47y4xllclub" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_market_blue.glb" id="1_uyef6"]
+[ext_resource type="Script" uid="uid://dsjvnwho537yo" path="res://scripts/interactions/market.gd" id="2_dxohp"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xlvr5"]
+size = Vector3(1.5101967, 0.85438347, 0.33025742)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_olqsr"]
+size = Vector3(1.8043289, 1.0020065, 1.2592618)
+
+[node name="market" type="Node3D" unique_id=2075765343]
+
+[node name="Root Scene" parent="." unique_id=1447252904 instance=ExtResource("1_uyef6")]
+script = ExtResource("2_dxohp")
+
+[node name="interaction" type="Area3D" parent="Root Scene" unique_id=191448897]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Root Scene/interaction" unique_id=1318954736]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.006129682, 0.4547453, 0.6482087)
+shape = SubResource("BoxShape3D_xlvr5")
+
+[node name="collision" type="StaticBody3D" parent="Root Scene" unique_id=1419775579]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Root Scene/collision" unique_id=789530055]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0062446594, 0.49768448, -0.09358561)
+shape = SubResource("BoxShape3D_olqsr")

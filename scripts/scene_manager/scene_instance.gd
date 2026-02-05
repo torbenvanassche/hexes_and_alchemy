@@ -27,6 +27,10 @@ func destroy() -> void:
 	if is_instance_valid(node):
 		node.queue_free()
 	queue_free()
+	
+func hide() -> void:
+	if is_instance_valid(node) && "visible" in node:
+		node.visible = false;
 
 func set_processing(enabled: bool) -> void:
 	node.process_mode = (scene_info.process_mode_enabled if enabled else scene_info.process_mode_disabled)

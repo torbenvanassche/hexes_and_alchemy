@@ -26,6 +26,8 @@
 [ext_resource type="Resource" uid="uid://dhooled2cyusq" path="res://resources/scene_info/sub_scenes/gameplay_mines.tres" id="21_ccljq"]
 [ext_resource type="Resource" uid="uid://cutvod5684gln" path="res://resources/scene_info/sub_scenes/gameplay_main.tres" id="22_jehah"]
 [ext_resource type="Script" uid="uid://p57cg8ml65u0" path="res://scripts/helpers/world_space_ui.gd" id="23_f3p2p"]
+[ext_resource type="Resource" uid="uid://ba77csvb4v1jq" path="res://resources/scene_info/ui/market_ui.tres" id="25_re66h"]
+[ext_resource type="Resource" uid="uid://jp3ftcrni36q" path="res://resources/scene_info/ui/inventory_ui.tres" id="26_isfgf"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_j5px3"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -51,7 +53,7 @@ script = ExtResource("2_sqa0i")
 hexes = Array[ExtResource("3_l5cgh")]([ExtResource("4_vgks2"), ExtResource("5_dylgi")])
 regions = Array[ExtResource("5_3hfy5")]([ExtResource("6_7pvxh"), ExtResource("9_y3xxt")])
 structures = Array[ExtResource("10_gt4lb")]([ExtResource("11_ya6yc"), ExtResource("12_mflgo"), ExtResource("14_8ui5n"), ExtResource("16_jehah"), ExtResource("17_re66h"), ExtResource("18_re66h"), ExtResource("19_isfgf")])
-scenes = Array[ExtResource("15_ya6yc")]([ExtResource("12_vgks2"), ExtResource("16_gt4lb"), ExtResource("18_34frw"), ExtResource("18_mflgo"), ExtResource("20_8ui5n"), ExtResource("21_ccljq"), ExtResource("22_jehah")])
+scenes = Array[ExtResource("15_ya6yc")]([ExtResource("12_vgks2"), ExtResource("16_gt4lb"), ExtResource("18_34frw"), ExtResource("18_mflgo"), ExtResource("20_8ui5n"), ExtResource("21_ccljq"), ExtResource("22_jehah"), ExtResource("25_re66h"), ExtResource("26_isfgf")])
 
 [node name="shared_components" type="Node" parent="." unique_id=2003265152]
 

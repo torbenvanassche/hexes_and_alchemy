@@ -14,6 +14,7 @@ enum Type {
 @export var type: Type;
 
 @export var is_unique: bool = false;
+@export var transient: bool = false;
 signal cached(scene_info: SceneInfo);
 
 var is_cached: bool = false;
@@ -60,6 +61,11 @@ func release() -> void:
 	instances.clear()
 	SceneManager.instance.scene_cache.remove(self)
 	is_cached = false
+	
+func remove() -> void:
+	for i in instances:
+		if is_instance_valid(i):
+			i.hide();
 	
 func queue(c: Callable) -> void:
 	if id == "":

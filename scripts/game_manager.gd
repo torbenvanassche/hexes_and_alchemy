@@ -52,7 +52,7 @@ func spawn_in_settlement() -> void:
 
 func _on_player_loaded(player_scene: SceneInfo, spawn_position: Vector3) -> void:
 	if not player_instance:
-		player_instance = SceneManager.add(player_scene, true, false).node;
+		player_instance = SceneManager.add(player_scene, true).node;
 		spring_arm_camera.target = player_instance;
 	player_instance.global_position = spawn_position;
 	Manager.instance.spring_arm_camera.snap_to_target()

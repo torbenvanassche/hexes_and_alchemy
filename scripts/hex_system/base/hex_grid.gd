@@ -172,24 +172,17 @@ func generate_chunk(cx: int, cy: int) -> HexChunk:
 					chunk.add_hex(create_hex(grid_id, node)))
 	return chunk
 	
-func get_hex_at_world_position(pos: Vector3) -> HexBase:
-	if not is_visible_in_tree():
-		Debug.message("Getting hex position from invisible HexGrid %s." % [self.grid_name]);
-	
-	var spacing := GridUtils.get_spacing(RADIUS_IN, _spacing, pointy_top);
+func get_hex_at_world_position(world_pos: Vector3) -> HexBase:
+	var closest: HexBase = null
+	var best_dist := INF
 
-	var gx: int
-	var gy: int
+	for hex: HexBase in tiles.values():
+		var d: float = hex.global_position.distance_squared_to(world_pos)
+		if d < best_dist:
+			best_dist = d
+			closest = hex
+	return closest
 
-	if pointy_top:
-		gx = roundi(pos.x / spacing.x)
-		gy = roundi((pos.z - (gx & 1) * spacing.y * 0.5) / spacing.y)
-	else:
-		gy = roundi(pos.z / spacing.y)
-		gx = roundi((pos.x - (gy & 1) * spacing.x * 0.5) / spacing.x)
-
-	var cube := GridUtils.offset_to_cube(Vector2i(gx, gy), pointy_top)
-	return tiles.get(_cube_round(cube), null)
 	
 func _cube_round(c: Vector3) -> Vector3i:
 	var rx := roundi(c.x)
@@ -208,8 +201,6 @@ func _cube_round(c: Vector3) -> Vector3i:
 		rz = -rx - ry
 
 	return Vector3i(rx, ry, rz)
-
-
 	
 func get_tiles_in_radius(center: Vector3i, radius: int) -> Array[HexBase]:
 	var result: Array[HexBase] = []

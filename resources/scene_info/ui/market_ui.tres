@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="SceneInfo" format=3 uid="uid://ba77csvb4v1jq"]
+
+[ext_resource type="Script" uid="uid://6t4u66o5q6po" path="res://scripts/scene_manager/scene_info.gd" id="1_d0cru"]
+[ext_resource type="PackedScene" uid="uid://dx0iu2mck02w4" path="res://scenes/ui/market_ui.tscn" id="1_pm5dh"]
+
+[resource]
+script = ExtResource("1_d0cru")
+id = "market_ui"
+packed_scene = ExtResource("1_pm5dh")
+type = 2
+is_unique = true
+transient = true
+metadata/_custom_type_script = "uid://6t4u66o5q6po"

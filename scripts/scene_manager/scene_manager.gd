@@ -21,10 +21,6 @@ var _active_scene: SceneInstance:
 			
 		#set the newly provided scene to active
 		_active_scene = new_scene;
-		
-		#if there is a "visible" property, set the node visible
-		if _active_scene.node && "visible" in _active_scene.node:
-			_active_scene.node.visible = true;
 			
 		#trigger scene entered logic, again internal and scenemanager
 		scene_entered.emit(_active_scene.node);
@@ -73,6 +69,12 @@ func set_active_scene(info: SceneInfo) -> void:
 		Debug.message("Cannot set active scene to non-unique instanced SceneInfo.")
 	
 func _remove_from_stack(info: SceneInfo) -> void:
+	if scene_stack[-1] == info:
+		var popped_scene: SceneInfo = scene_stack.pop_back();
+		if popped_scene.get_instance() == _active_scene:
+			set_active_scene(scene_stack[-1])
+			return
+	
 	if scene_stack.has(info):
 		scene_stack.erase(info);
 		
@@ -112,6 +114,24 @@ func set_visible(scene_info: SceneInfo, state: bool = true) -> void:
 	for instance in scene_info.instances:
 		if "visible" in instance:
 			instance.visible = state;
+			
+func is_in_tree(scene_instance: SceneInstance) -> bool:
+	var node := scene_instance.node
+	if not node.is_inside_tree():
+		return false
+
+	if scene_instance.scene_info.type == SceneInfo.Type.UI:
+		return _ui_container.is_ancestor_of(node)
+	return root.is_ancestor_of(node)
+
+func is_visible(scene_instance: SceneInstance) -> bool:
+	var node := scene_instance.node
+	if not node.is_inside_tree():
+		return false
+		
+	if "visible" in node:
+		return node.is_visible_in_tree();
+	return false;
 
 func transition(scene_info: SceneInfo, activate_after_transition: bool = false) -> void:
 	if "visible" in _active_scene.node:
@@ -122,28 +142,31 @@ func transition(scene_info: SceneInfo, activate_after_transition: bool = false) 
 	if activate_after_transition:
 		set_active_scene(scene_info);
 	
-func add(n: SceneInfo, is_visible: bool = true, add_to_stack: bool = true) -> SceneInstance:
+func add(n: SceneInfo, vis: bool = true) -> SceneInstance:
 	var instance_count := scene_stack.count(n);
 	if instance_count > 1 && n.is_unique:
 		return null;
 	
 	var instance := n.get_instance();
 	if "visible" in instance.node:
-		instance.node.visible = is_visible;
+		instance.node.visible = vis;
 		
-	if add_to_stack:
-		if scene_stack.size() == 0 || scene_stack[-1] != n:
-			scene_stack.append(n)
+	if n.is_unique && not n.transient && (scene_stack.size() == 0 || scene_stack[-1] != n):
+		scene_stack.append(n)
 		
 	if instance.node.is_inside_tree():
-		return null;
+		return instance;
 		
 	if n.type == SceneInfo.Type.UI:
 		_ui_container.add_child(instance.node);
-		return instance;
 	elif not instance.node.get_parent() == root:
 		root.add_child(instance.node);
-		return instance;
 	else:
 		Debug.err(n.id + " cannot be directly added to a scene.")
-	return null;
+	return instance;
+	
+func is_on_stack(scene: SceneInfo) -> bool:
+	return scene_stack.has(scene);
+	
+func is_on_stack_by_name(scene_name: String) -> bool:
+	return is_on_stack(DataManager.instance.get_scene_by_name(scene_name))

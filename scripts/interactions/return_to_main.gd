@@ -6,3 +6,6 @@ func interact() -> void:
 	
 func _on_transition(_s: SceneInfo) -> void:
 	SceneManager.transition(SceneManager.to_previous_scene(), true)
+
+func can_interact() -> bool:
+	return true;
