@@ -1,7 +1,7 @@
 extends Node
 
 @export var keybind_container: Node;
-@onready var keybind_template: PackedScene = preload("res://addons/input_prompts/scenes/action_setter.tscn")
+@onready var keybind_template: PackedScene = preload("res://tools/input_prompts/scenes/action_setter.tscn")
 @onready var reset_button: Button = $PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/reset;
 @onready var confirm_button: Button = $PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/confirm;
 

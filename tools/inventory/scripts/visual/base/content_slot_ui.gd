@@ -1,13 +1,11 @@
 class_name ContentSlotUI extends TextureButton
 
 @onready var textureRect: TextureRect = $margin_container/TextureRect/MarginContainer/item_sprite;
-@onready var backgroundElement: TextureRect = $margin_container/TextureRect;
 @onready var placeholderImage: TextureRect = $margin_container/TextureRect/rescaler/item_bg_icon;
 @onready var mainMarginContainer: MarginContainer = $margin_container;
 @onready var counter: Label = $count;
 
 @export_group("Properties")
-@export var background_gradient: Texture2D;
 @export var placeholder_image: Texture2D;
 @export var flip_placeholder: bool = false; 
 @export var show_amount: bool = true;
@@ -20,7 +18,6 @@ class_name ContentSlotUI extends TextureButton
 var contentSlot: ContentSlot;
 
 func _ready() -> void:
-	backgroundElement.texture = background_gradient;
 	placeholderImage.texture = placeholder_image;
 	placeholderImage.flip_h = flip_placeholder;
 	

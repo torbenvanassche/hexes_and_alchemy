@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://kikgjf07aidw"]
 
-[ext_resource type="Script" uid="uid://d2gmikfacoxba" path="res://addons/input_prompts/scripts/rebind_mapper.gd" id="1_6kcs6"]
-[ext_resource type="Texture2D" uid="uid://iphhxccexo3h" path="res://addons/input_prompts/textures/kb_mouse_inputs.png" id="2_dnmgc"]
+[ext_resource type="Script" uid="uid://d2gmikfacoxba" path="res://tools/input_prompts/scripts/rebind_mapper.gd" id="1_6kcs6"]
+[ext_resource type="Texture2D" uid="uid://iphhxccexo3h" path="res://tools/input_prompts/textures/kb_mouse_inputs.png" id="2_dnmgc"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6bnle"]
 region = Rect2(0, 0, 16, 16)

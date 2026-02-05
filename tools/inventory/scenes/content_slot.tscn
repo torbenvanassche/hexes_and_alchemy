@@ -1,10 +1,9 @@
 [gd_scene format=3 uid="uid://c5ocjw6joaemy"]
 
-[ext_resource type="StyleBox" uid="uid://dyequs13mhyp3" path="res://addons/inventory/styles/content_slot_stylebox.tres" id="1_f67vh"]
-[ext_resource type="StyleBox" uid="uid://b3yojughln6fb" path="res://addons/inventory/styles/content_slot_stylebox_disabled.tres" id="1_pdw3o"]
-[ext_resource type="Script" uid="uid://c8weu3p2f5ayn" path="res://addons/inventory/scripts/visual/base/content_slot_ui.gd" id="2_rfq8a"]
-[ext_resource type="Texture2D" path="res://sprites/borders/SPR_DarkFantasy_Frame_Box_Medium_05_Variant_01.png" id="3_nc0ld"]
-[ext_resource type="Texture2D" path="res://themes/gradients/blue_to_gray.tres" id="5_nc0ld"]
+[ext_resource type="StyleBox" uid="uid://dyequs13mhyp3" path="res://tools/inventory/styles/content_slot_stylebox.tres" id="1_f67vh"]
+[ext_resource type="StyleBox" uid="uid://b3yojughln6fb" path="res://tools/inventory/styles/content_slot_stylebox_disabled.tres" id="1_pdw3o"]
+[ext_resource type="Script" uid="uid://c8weu3p2f5ayn" path="res://tools/inventory/scripts/visual/base/content_slot_ui.gd" id="2_rfq8a"]
+[ext_resource type="Texture2D" uid="uid://dwb63f4p3rhtb" path="res://sprites/ui/panel-007.png" id="4_pdw3o"]
 
 [sub_resource type="Theme" id="Theme_ceefl"]
 Button/styles/disabled = ExtResource("1_pdw3o")
@@ -16,7 +15,7 @@ Button/styles/pressed = ExtResource("1_f67vh")
 [sub_resource type="LabelSettings" id="LabelSettings_aoki5"]
 font_size = 25
 
-[node name="item" type="TextureButton"]
+[node name="item" type="TextureButton" unique_id=930043497]
 custom_minimum_size = Vector2(100, 100)
 anchors_preset = 4
 anchor_top = 0.5
@@ -30,14 +29,12 @@ focus_mode = 0
 theme = SubResource("Theme_ceefl")
 theme_type_variation = &"FlatButton"
 toggle_mode = true
-texture_normal = ExtResource("3_nc0ld")
 ignore_texture_size = true
 stretch_mode = 4
 script = ExtResource("2_rfq8a")
-background_gradient = ExtResource("5_nc0ld")
 show_amount = false
 
-[node name="margin_container" type="MarginContainer" parent="."]
+[node name="margin_container" type="MarginContainer" parent="." unique_id=605675596]
 show_behind_parent = true
 layout_mode = 1
 anchors_preset = 15
@@ -50,12 +47,12 @@ theme_override_constants/margin_top = 2
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 2
 
-[node name="TextureRect" type="TextureRect" parent="margin_container"]
+[node name="TextureRect" type="TextureRect" parent="margin_container" unique_id=1043705938]
 layout_mode = 2
-texture = ExtResource("5_nc0ld")
+texture = ExtResource("4_pdw3o")
 expand_mode = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="margin_container/TextureRect"]
+[node name="MarginContainer" type="MarginContainer" parent="margin_container/TextureRect" unique_id=1990104491]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -67,12 +64,12 @@ theme_override_constants/margin_top = 15
 theme_override_constants/margin_right = 15
 theme_override_constants/margin_bottom = 15
 
-[node name="item_sprite" type="TextureRect" parent="margin_container/TextureRect/MarginContainer"]
+[node name="item_sprite" type="TextureRect" parent="margin_container/TextureRect/MarginContainer" unique_id=54231665]
 z_index = 1
 layout_mode = 2
 expand_mode = 1
 
-[node name="rescaler" type="MarginContainer" parent="margin_container/TextureRect"]
+[node name="rescaler" type="MarginContainer" parent="margin_container/TextureRect" unique_id=2118934438]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -90,11 +87,11 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="item_bg_icon" type="TextureRect" parent="margin_container/TextureRect/rescaler"]
+[node name="item_bg_icon" type="TextureRect" parent="margin_container/TextureRect/rescaler" unique_id=1887107339]
 layout_mode = 2
 expand_mode = 1
 
-[node name="count" type="Label" parent="."]
+[node name="count" type="Label" parent="." unique_id=1170717140]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0

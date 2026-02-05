@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bfjflheeann5w"
-path="res://.godot/imported/left.png-8fbc8dc8f1461c3ad613b8a82f74b219.ctex"
+uid="uid://fg17pv5hrxau"
+path="res://.godot/imported/cross.png-b0817f4c8ff6c9ccce662f63285917c7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/input_prompts/left.png"
-dest_files=["res://.godot/imported/left.png-8fbc8dc8f1461c3ad613b8a82f74b219.ctex"]
+source_file="res://sprites/ui/cross.png"
+dest_files=["res://.godot/imported/cross.png-b0817f4c8ff6c9ccce662f63285917c7.ctex"]
 
 [params]
 

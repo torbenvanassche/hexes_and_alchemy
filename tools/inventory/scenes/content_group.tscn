@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://g8cyqkretffu"]
+
+[ext_resource type="Script" uid="uid://5flpgwnxnsjt" path="res://tools/inventory/scripts/visual/base/inventory_ui.gd" id="1_jc34r"]
+[ext_resource type="PackedScene" uid="uid://c5ocjw6joaemy" path="res://tools/inventory/scenes/content_slot.tscn" id="2_wbhkh"]
+
+[node name="InventoryHud" type="Control" unique_id=918436490]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("1_jc34r")
+packed_slot = ExtResource("2_wbhkh")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=682192813]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GridContainer" type="GridContainer" parent="CenterContainer" unique_id=900671132]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+columns = 3

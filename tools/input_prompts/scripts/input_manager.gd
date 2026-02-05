@@ -33,8 +33,8 @@ var action_to_remap: StringName;
 var is_remapping: bool = false;
 var remapping_button: InputDisplayer = null;
 
-var dictionary_path: String = "res://addons/input_prompts/input_prompts.json"
-@onready var keyboard_image: Texture2D = preload("res://addons/input_prompts/textures/kb_mouse_inputs.png");
+var dictionary_path: String = "res://tools/input_prompts/input_prompts.json"
+@onready var keyboard_image: Texture2D = preload("res://tools/input_prompts/textures/kb_mouse_inputs.png");
 
 var keys: Dictionary:
 	get:
