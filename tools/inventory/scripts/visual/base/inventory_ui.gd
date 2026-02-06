@@ -1,5 +1,5 @@
 class_name InventoryUI
-extends Control
+extends GridContainer
 
 var elements: Array[Node] = []
 
@@ -11,15 +11,16 @@ var elements: Array[Node] = []
 		_rebuild_inventory()
 
 @export var packed_slot: PackedScene
-@export var max_slot_size: int = 50
+@export var slot_size: int = 100
 
-@onready var grid: GridContainer = $CenterContainer/GridContainer
+@onready var grid: GridContainer = self
 
 var selected_slot: ContentSlotUI
 
 func _rebuild_inventory() -> void:
 	for element in grid.get_children():
 		element.queue_free()
+
 	elements.clear()
 
 	if not inventory:
@@ -34,9 +35,10 @@ func add(content: ContentSlot) -> ContentSlotUI:
 
 	container.button_up.connect(_set_selected.bind(container))
 	container.set_content(content)
-	container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	container.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	container.custom_minimum_size = Vector2(max_slot_size, max_slot_size)
+
+	container.size_flags_horizontal = Control.SIZE_FILL
+	container.size_flags_vertical = Control.SIZE_FILL
+	container.custom_minimum_size = Vector2(slot_size, slot_size)
 
 	grid.add_child(container)
 	return container

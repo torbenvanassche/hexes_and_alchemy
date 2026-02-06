@@ -3,8 +3,12 @@
 [ext_resource type="PackedScene" uid="uid://dny1dqcanlco0" path="res://tools/custom_window/base_window.tscn" id="1_7nagc"]
 [ext_resource type="PackedScene" uid="uid://g8cyqkretffu" path="res://tools/inventory/scenes/content_group.tscn" id="2_4ycse"]
 
-[node name="Window" unique_id=1301866213 instance=ExtResource("1_7nagc")]
+[node name="Window" unique_id=1301866213 node_paths=PackedStringArray("content") instance=ExtResource("1_7nagc")]
+offset_right = -1152.0
+offset_bottom = -648.0
 id = "Inventory"
+content = NodePath("NinePatchRect/VBoxContainer/contentPanel/InventoryHud")
 
-[node name="InventoryHud" parent="NinePatchRect/VBoxContainer/content" parent_id_path=PackedInt32Array(649008893) index="0" unique_id=195655274 instance=ExtResource("2_4ycse")]
-layout_mode = 1
+[node name="InventoryHud" parent="NinePatchRect/VBoxContainer/contentPanel" parent_id_path=PackedInt32Array(1040542232) index="0" unique_id=195655274 instance=ExtResource("2_4ycse")]
+layout_mode = 2
+columns = 5

@@ -14,6 +14,7 @@ var return_position: Vector3;
 func _ready() -> void:
 	interactor.area_entered.connect(add_trigger)
 	interactor.area_exited.connect(remove_trigger)
+	inventory.add(DataManager.instance.get_item_by_name("ore_iron"));
 
 func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("primary_action") && current_triggers.size() != 0:
@@ -73,11 +74,10 @@ func _handle_movement(delta: float) -> void:
 		rotation.y = lerp_angle(rotation.y, target_rot, delta * 10.0)
 		
 func _open_inventory(window_info: SceneInfo) -> void:
-	var window_instance = SceneManager.add(window_info, false);
-	var inventory_ui: InventoryUI = (window_instance.node as DraggableControl).content_panel.get_child(0) as InventoryUI;
+	var window_instance := SceneManager.add(window_info, false);
+	var inventory_ui: InventoryUI = (window_instance.node as DraggableControl).content as InventoryUI;
 	inventory_ui.inventory = inventory;
-	await get_tree().process_frame;
-	(window_instance.node as DraggableControl).visible = true;
+	window_instance.on_enter.emit();
 
 func add_trigger(other: Area3D) -> void:
 	if other.has_meta("target"):

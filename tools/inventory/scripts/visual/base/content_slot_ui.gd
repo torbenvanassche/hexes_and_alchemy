@@ -1,13 +1,10 @@
 class_name ContentSlotUI extends TextureButton
 
-@onready var textureRect: TextureRect = $margin_container/TextureRect/MarginContainer/item_sprite;
-@onready var placeholderImage: TextureRect = $margin_container/TextureRect/rescaler/item_bg_icon;
+@onready var textureRect: TextureRect = $margin_container/background/MarginContainer/item_sprite;
 @onready var mainMarginContainer: MarginContainer = $margin_container;
 @onready var counter: Label = $count;
 
 @export_group("Properties")
-@export var placeholder_image: Texture2D;
-@export var flip_placeholder: bool = false; 
 @export var show_amount: bool = true;
 @export var main_margin_size: Vector4i = Vector4(2, 2, 2, 2);
 
@@ -17,10 +14,7 @@ class_name ContentSlotUI extends TextureButton
 
 var contentSlot: ContentSlot;
 
-func _ready() -> void:
-	placeholderImage.texture = placeholder_image;
-	placeholderImage.flip_h = flip_placeholder;
-	
+func _ready() -> void:	
 	mainMarginContainer.add_theme_constant_override("margin_left", main_margin_size.x)
 	mainMarginContainer.add_theme_constant_override("margin_top", main_margin_size.y)
 	mainMarginContainer.add_theme_constant_override("margin_right", main_margin_size.z)
@@ -44,9 +38,7 @@ func redraw() -> void:
 			textureRect.modulate = default_color;
 		counter.visible = show_amount;
 		counter.text = str(contentSlot.count);
-		placeholderImage.visible = false;
 	else:
-		placeholderImage.visible = true;
 		textureRect.texture = null;
 		counter.text = "";
 

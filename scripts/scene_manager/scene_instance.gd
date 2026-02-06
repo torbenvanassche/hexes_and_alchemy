@@ -18,7 +18,7 @@ func _init(_n: Node, s_info: SceneInfo) -> void:
 		on_enter.connect(node.on_load, CONNECT_ONE_SHOT)
 
 	if node.has_method("on_enter"):
-		on_enter.connect.call_deferred(node.on_enter)
+		on_enter.connect(node.on_enter)
 
 	if scene_info.destroy_on_player_leave:
 		on_leave.connect(destroy)

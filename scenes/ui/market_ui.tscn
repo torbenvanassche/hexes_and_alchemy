@@ -1,16 +1,21 @@
 [gd_scene format=3 uid="uid://dx0iu2mck02w4"]
 
 [ext_resource type="PackedScene" uid="uid://dny1dqcanlco0" path="res://tools/custom_window/base_window.tscn" id="1_w2das"]
-[ext_resource type="Texture2D" uid="uid://fg17pv5hrxau" path="res://sprites/ui/cross.png" id="2_3uv46"]
+[ext_resource type="Script" uid="uid://kyqrlu0hq63c" path="res://scripts/ui/market_ui.gd" id="2_3uv46"]
+[ext_resource type="PackedScene" uid="uid://b8rer4f8w6ive" path="res://scenes/ui/components/market_slot.tscn" id="3_i7iya"]
 
-[node name="Window" unique_id=1224465671 instance=ExtResource("1_w2das")]
+[node name="Window" unique_id=1224465671 node_paths=PackedStringArray("content") instance=ExtResource("1_w2das")]
 id = "Market"
+content = NodePath("NinePatchRect/VBoxContainer/contentPanel/GridContainer")
 
 [node name="MarginContainer2" parent="NinePatchRect/VBoxContainer/topbar" parent_id_path=PackedInt32Array(347636229) index="0" unique_id=634422055]
-theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 25
 
 [node name="Button" parent="NinePatchRect/VBoxContainer/topbar/MarginContainer2/HBoxContainer" parent_id_path=PackedInt32Array(1643440073) index="1" unique_id=1866505049]
 custom_minimum_size = Vector2(35, 25)
-text = ""
-icon = ExtResource("2_3uv46")
+
+[node name="GridContainer" type="GridContainer" parent="NinePatchRect/VBoxContainer/contentPanel" parent_id_path=PackedInt32Array(1040542232) index="0" unique_id=711131856]
+layout_mode = 2
+columns = 5
+script = ExtResource("2_3uv46")
+packed_slot = ExtResource("3_i7iya")

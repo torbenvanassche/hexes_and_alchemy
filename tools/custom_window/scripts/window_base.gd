@@ -7,7 +7,7 @@ extends Control
 @onready var top_bar: ColorRect = $NinePatchRect/VBoxContainer/topbar;
 @onready var close_button: Button = $NinePatchRect/VBoxContainer/topbar/MarginContainer2/HBoxContainer/Button;
 @onready var title: Label = $NinePatchRect/VBoxContainer/topbar/MarginContainer2/HBoxContainer/MarginContainer/Title;
-@onready var content_panel: Control = $NinePatchRect/VBoxContainer/content;
+@onready var content_panel: Control = $NinePatchRect/VBoxContainer/contentPanel;
 @onready var npr: NinePatchRect = $NinePatchRect;
 
 @export_enum("fullscreen", "display", "no_header", "none") var display_mode: String = "display"
@@ -16,10 +16,11 @@ var initial_position: Vector2;
 
 @export var store_position: bool = false;
 @export var override_position: Vector2;
-@export var override_size: Vector2 = Vector2(0, 0);
 @export var topbar_height: int = 50;
 @export var topbar_transparent: bool = false;
 @export var show_title: bool = true;
+
+@export var content: Control;
 
 signal close_requested();
 signal change_title(name: String);
@@ -34,16 +35,23 @@ func _ready() -> void:
 	change_title.connect(_change_title)
 	_change_title(id);
 	
-	if override_size != Vector2.ZERO:
-		self.set_deferred("size", override_size)
-		top_bar.custom_minimum_size = Vector2(override_size.x, topbar_height)
-		content_panel.custom_minimum_size = Vector2(override_size.x, override_size.y - top_bar.size.y)
+	top_bar.custom_minimum_size.y = topbar_height
 	
-func on_load() -> void:
+func _fit_to_content() -> void:
+	var content_size := content_panel.get_combined_minimum_size()
+
+	var height := content_size.y
+	if top_bar.visible:
+		height += top_bar.size.y
+
+	size = Vector2(content_size.x, height)
+
+	
+func on_enter() -> void:
 	match display_mode:
 		"fullscreen":
 			top_bar.visible = false;
-			size =get_viewport_rect().size;
+			size = get_viewport_rect().size;
 		"display":
 			top_bar.visible = true;
 			pass
@@ -62,14 +70,15 @@ func on_load() -> void:
 			initial_position = get_viewport_rect().size / 2
 		"override":
 			initial_position = override_position;
-			
 	if topbar_transparent:
 		top_bar.self_modulate = Color.TRANSPARENT;
-		
 	title.visible = show_title;
+	
+	_fit_to_content();
 
-	await get_tree().process_frame;
 	position = initial_position - size / 2;
+	await get_tree().process_frame;
+	visible = true;
 	
 	if store_position:
 		position = stored_position;

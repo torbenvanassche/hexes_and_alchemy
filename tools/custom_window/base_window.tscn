@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://djfe2kdofn562" path="res://tools/custom_window/scripts/window_base.gd" id="1_6jx1r"]
 [ext_resource type="Texture2D" uid="uid://boj06v8owoifo" path="res://sprites/ui/panel-031.png" id="2_bc7eo"]
+[ext_resource type="Texture2D" uid="uid://fg17pv5hrxau" path="res://sprites/ui/cross.png" id="3_6bca1"]
 
 [node name="Window" type="Control" unique_id=1301866213]
 layout_mode = 3
@@ -11,7 +12,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_6jx1r")
-override_size = Vector2(400, 200)
 
 [node name="NinePatchRect" type="NinePatchRect" parent="." unique_id=434834391]
 self_modulate = Color(0.79296875, 0.79296875, 0.79296875, 1)
@@ -51,7 +51,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_right = 20
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 30
 
 [node name="HBoxContainer" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/topbar/MarginContainer2" unique_id=1643440073]
 layout_mode = 2
@@ -60,7 +61,6 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/margin_left = 40
-theme_override_constants/margin_top = 5
 
 [node name="Title" type="Label" parent="NinePatchRect/VBoxContainer/topbar/MarginContainer2/HBoxContainer/MarginContainer" unique_id=1155745598]
 layout_mode = 2
@@ -70,13 +70,17 @@ text = "WINDOW TITLE"
 horizontal_alignment = 1
 
 [node name="Button" type="Button" parent="NinePatchRect/VBoxContainer/topbar/MarginContainer2/HBoxContainer" unique_id=1866505049]
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(40, 30)
 layout_mode = 2
-text = "X"
+icon = ExtResource("3_6bca1")
 flat = true
 icon_alignment = 1
 expand_icon = true
 
-[node name="content" type="Control" parent="NinePatchRect/VBoxContainer" unique_id=649008893]
+[node name="contentPanel" type="MarginContainer" parent="NinePatchRect/VBoxContainer" unique_id=1040542232]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 35

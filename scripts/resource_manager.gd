@@ -3,8 +3,9 @@ class_name DataManager extends Node
 @export var hexes: Array[HexInfo];
 @export var regions: Array[RegionInfo];
 @export var structures: Array[StructureInfo];
+@export var scenes: Array[SceneInfo];
+@export var items: Array[ItemInfo];
 
-@export var scenes: Array[SceneInfo]
 var scene_data: Array[SceneInfo];
 
 @onready var ocean_descriptor: RegionInfo = preload("res://resources/region_info/ocean.tres");
@@ -33,6 +34,16 @@ func get_scene_by_name(scene_name: String) -> SceneInfo:
 		Debug.err(scene_name + " was not found!")
 		return null;
 	Debug.err(scene_name + " has multiple references, this is not allowed!")
+	return null;
+	
+func get_item_by_name(item_name: String) -> ItemInfo:
+	var filtered := items.filter(func(item: ItemInfo) -> bool: return item.unique_id == item_name);
+	if filtered.size() == 1:
+		return filtered[0];
+	elif filtered.size() == 0:
+		Debug.err(item_name + " was not found!")
+		return null;
+	Debug.err(item_name + " has multiple references, this is not allowed!")
 	return null;
 
 func node_to_info(node: Node) -> SceneInfo:

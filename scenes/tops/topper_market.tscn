@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bidvvqjxevoc3"]
 
 [ext_resource type="PackedScene" uid="uid://cj47y4xllclub" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_market_blue.glb" id="1_uyef6"]
+[ext_resource type="Script" uid="uid://b6rgx41co3bur" path="res://tools/inventory/scripts/inventory/inventory.gd" id="1_xlvr5"]
 [ext_resource type="Script" uid="uid://dsjvnwho537yo" path="res://scripts/interactions/market.gd" id="2_dxohp"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_xlvr5"]
@@ -10,6 +11,12 @@ size = Vector3(1.5101967, 0.85438347, 0.33025742)
 size = Vector3(1.8043289, 1.0020065, 1.2592618)
 
 [node name="market" type="Node3D" unique_id=2075765343]
+
+[node name="Inventory" type="Node" parent="." unique_id=309232762]
+script = ExtResource("1_xlvr5")
+unlocked_slots = 4
+max_slots = 4
+metadata/_custom_type_script = "uid://b6rgx41co3bur"
 
 [node name="Root Scene" parent="." unique_id=1447252904 instance=ExtResource("1_uyef6")]
 script = ExtResource("2_dxohp")
