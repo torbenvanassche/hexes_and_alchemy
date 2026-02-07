@@ -37,16 +37,6 @@ func _ready() -> void:
 	
 	top_bar.custom_minimum_size.y = topbar_height
 	
-func _fit_to_content() -> void:
-	var content_size := content_panel.get_combined_minimum_size()
-
-	var height := content_size.y
-	if top_bar.visible:
-		height += top_bar.size.y
-
-	size = Vector2(content_size.x, height)
-
-	
 func on_enter() -> void:
 	match display_mode:
 		"fullscreen":
@@ -74,7 +64,7 @@ func on_enter() -> void:
 		top_bar.self_modulate = Color.TRANSPARENT;
 	title.visible = show_title;
 	
-	_fit_to_content();
+	size = npr.get_combined_minimum_size()
 
 	position = initial_position - size / 2;
 	await get_tree().process_frame;

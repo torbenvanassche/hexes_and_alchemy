@@ -22,3 +22,7 @@ layout_mode = 2
 
 [node name="SpinBox" type="SpinBox" parent="." unique_id=546989690]
 layout_mode = 2
+
+[node name="Button" type="Button" parent="." unique_id=1686994906]
+layout_mode = 2
+text = "Set price"

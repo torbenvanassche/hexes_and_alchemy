@@ -49,7 +49,7 @@ func _handle_movement(delta: float) -> void:
 	if Input.is_action_pressed("move_sprint"):
 		target_velocity *= dash_modifier;
 		
-	if Input.is_action_pressed("inventory"):
+	if Input.is_action_just_pressed("inventory"):
 		DataManager.instance.get_scene_by_name("inventory_ui").queue(_open_inventory)
 
 	if move_dir.length() > 0.01:
