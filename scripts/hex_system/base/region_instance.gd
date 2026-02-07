@@ -89,8 +89,14 @@ func _can_place_structure_at(pos: Vector3i, candidate: StructureInfo) -> bool:
 	if chunk_coords == Vector2i.ZERO and not hex_grid.chunks[chunk_coords].generate_structures:
 		return false
 		
-	if Manager.instance.player_instance && pos == Manager.instance.player_instance.get_hex().cube_id:
-		return false;
+	if Manager.instance.player_instance:
+		var player_hex := Manager.instance.player_instance.get_hex();
+		if not player_hex:
+			Debug.err("Player hex was not found.")
+			return false;
+		
+		if hex.cube_id == player_hex.cube_id:
+			return false;
 	
 	for region_list in hex_grid.region_instances.values():
 		for region_instance: RegionInstance in region_list:

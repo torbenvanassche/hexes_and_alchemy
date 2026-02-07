@@ -7,6 +7,7 @@
 offset_right = -1152.0
 offset_bottom = -648.0
 id = "Inventory"
+store_position = true
 content = NodePath("NinePatchRect/VBoxContainer/contentPanel/InventoryHud")
 
 [node name="InventoryHud" parent="NinePatchRect/VBoxContainer/contentPanel" parent_id_path=PackedInt32Array(1040542232) index="0" unique_id=195655274 instance=ExtResource("2_4ycse")]

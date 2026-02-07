@@ -7,6 +7,7 @@ func _ready() -> void:
 	super()
 	
 func _on_map_ready() -> void:
+	Manager.instance.player_instance.global_position = tiles.values().pick_random().global_position;
 	super();
 	
 func on_enter() -> void:

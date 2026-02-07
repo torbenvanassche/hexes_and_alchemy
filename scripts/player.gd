@@ -14,15 +14,22 @@ var return_position: Vector3;
 func _ready() -> void:
 	interactor.area_entered.connect(add_trigger)
 	interactor.area_exited.connect(remove_trigger)
-	inventory.add(DataManager.instance.get_item_by_name("ore_iron"));
+	inventory.add(DataManager.instance.get_item_by_name("ore_iron"), 5);
 
-func _physics_process(delta: float) -> void:
-	if Input.is_action_just_pressed("primary_action") && current_triggers.size() != 0:
-		current_triggers[0].on_interact();
-	
+func _physics_process(delta: float) -> void:	
 	if Manager.instance.input_moves_player():
 		_handle_movement(delta)
 		move_and_slide()
+		
+func _unhandled_input(_event: InputEvent) -> void:
+	if get_viewport().gui_get_focus_owner() != null:
+		return;
+		
+	if Input.is_action_just_pressed("primary_action") && current_triggers.size() != 0:
+		current_triggers[0].on_interact();
+	
+	if Input.is_action_just_pressed("inventory"):
+		DataManager.instance.get_scene_by_name("inventory_ui").queue(_open_inventory)
 
 func _handle_movement(delta: float) -> void:
 	var input := Vector2(
@@ -48,9 +55,6 @@ func _handle_movement(delta: float) -> void:
 	var target_velocity := move_dir * move_speed
 	if Input.is_action_pressed("move_sprint"):
 		target_velocity *= dash_modifier;
-		
-	if Input.is_action_just_pressed("inventory"):
-		DataManager.instance.get_scene_by_name("inventory_ui").queue(_open_inventory)
 
 	if move_dir.length() > 0.01:
 		var probe_pos := global_position + move_dir.normalized() * HexGrid.RADIUS_IN * 0.5

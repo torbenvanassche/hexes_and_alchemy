@@ -14,7 +14,9 @@ class_name ContentSlotUI extends TextureButton
 
 var contentSlot: ContentSlot;
 
-func _ready() -> void:	
+signal initialized();
+
+func _ready() -> void:
 	mainMarginContainer.add_theme_constant_override("margin_left", main_margin_size.x)
 	mainMarginContainer.add_theme_constant_override("margin_top", main_margin_size.y)
 	mainMarginContainer.add_theme_constant_override("margin_right", main_margin_size.z)
@@ -51,10 +53,10 @@ func set_content(_content: ContentSlot) -> void:
 		contentSlot.changed.disconnect(redraw);
 	contentSlot = _content;
 	contentSlot.changed.connect(redraw)
-	is_queued_for_deletion()
 	
 	if _content:
 		if is_node_ready():
+			initialized.emit();
 			redraw();
 		else:
 			ready.connect(redraw, CONNECT_ONE_SHOT);

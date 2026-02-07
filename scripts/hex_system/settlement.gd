@@ -15,4 +15,4 @@ func _ready() -> void:
 	
 func _toggle_collision() -> void:
 	for collision in collision_shapes:
-		collision.disabled = self.is_visible_in_tree();
+		collision.disabled = not self.is_visible_in_tree();

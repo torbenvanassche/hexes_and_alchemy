@@ -10,6 +10,3 @@ func can_interact() -> bool:
 	
 func _on_mineshaft_loaded(sI: SceneInfo):
 	SceneManager.transition(sI)
-	
-	var hex := Manager.instance.player_instance.get_hex();
-	Manager.instance.player_instance.global_position = hex.global_position;

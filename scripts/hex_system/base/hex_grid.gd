@@ -172,9 +172,9 @@ func generate_chunk(cx: int, cy: int) -> HexChunk:
 					chunk.add_hex(create_hex(grid_id, node)))
 	return chunk
 	
-func get_hex_at_world_position(world_pos: Vector3) -> HexBase:
+func get_hex_at_world_position(world_pos: Vector3, max_distance: float = 1.2) -> HexBase:
 	var closest: HexBase = null
-	var best_dist := INF
+	var best_dist := max_distance * max_distance
 
 	for hex: HexBase in tiles.values():
 		var d: float = hex.global_position.distance_squared_to(world_pos)
@@ -183,24 +183,6 @@ func get_hex_at_world_position(world_pos: Vector3) -> HexBase:
 			closest = hex
 	return closest
 
-	
-func _cube_round(c: Vector3) -> Vector3i:
-	var rx := roundi(c.x)
-	var ry := roundi(c.y)
-	var rz := roundi(c.z)
-
-	var dx := absf(rx - c.x)
-	var dy := absf(ry - c.y)
-	var dz := absf(rz - c.z)
-
-	if dx > dy and dx > dz:
-		rx = -ry - rz
-	elif dy > dz:
-		ry = -rx - rz
-	else:
-		rz = -rx - ry
-
-	return Vector3i(rx, ry, rz)
 	
 func get_tiles_in_radius(center: Vector3i, radius: int) -> Array[HexBase]:
 	var result: Array[HexBase] = []

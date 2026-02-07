@@ -19,8 +19,7 @@ var selected_slot: ContentSlotUI
 
 func _rebuild_inventory() -> void:
 	for element in grid.get_children():
-		element.queue_free()
-
+		element.free()
 	elements.clear()
 
 	if not inventory:
