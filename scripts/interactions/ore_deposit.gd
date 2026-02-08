@@ -1,6 +1,7 @@
 extends Interaction
 
 @export var material: StandardMaterial3D;
+@export var item_info: ItemInfo;
 
 func _ready() -> void:
 	super();
@@ -9,6 +10,7 @@ func _ready() -> void:
 
 func interact() -> void:
 	structure_instance.destroy()
+	Manager.instance.player_instance.inventory.add(item_info, 1)
 	pass
 	
 func can_interact() -> bool:

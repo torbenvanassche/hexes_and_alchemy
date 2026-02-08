@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://dpyxy65c7yisb"]
+
+[ext_resource type="PackedScene" uid="uid://bagl7tnsobw8w" path="res://meshes/kay_fantasy_hexagon/decoration/nature/trees_A_large.glb" id="1_k4nv7"]
+[ext_resource type="Script" uid="uid://cq000e45vtevx" path="res://scripts/interactions/forest.gd" id="1_ro7nm"]
+[ext_resource type="PackedScene" uid="uid://brdca467mutqb" path="res://meshes/kay_fantasy_hexagon/decoration/nature/trees_A_cut.glb" id="2_c5dpi"]
+[ext_resource type="Resource" uid="uid://b46nyvtvipor5" path="res://resources/item_info/wood_raw.tres" id="2_t00ul"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_c5dpi"]
+size = Vector3(2.6546097, 1.6783295, 2.7467527)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ro7nm"]
+size = Vector3(1.8792906, 0.5864792, 1.9651601)
+
+[node name="Node3D" type="Node3D" unique_id=1405714178]
+script = ExtResource("1_ro7nm")
+item_info = ExtResource("2_t00ul")
+
+[node name="trees" parent="." unique_id=1335934582 instance=ExtResource("1_k4nv7")]
+
+[node name="stumps" parent="." unique_id=398628447 instance=ExtResource("2_c5dpi")]
+
+[node name="interaction" type="Area3D" parent="." unique_id=104705730]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="interaction" unique_id=1053435043]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.022884369, 0.75951385, -0.048998356)
+shape = SubResource("BoxShape3D_c5dpi")
+
+[node name="collision" type="StaticBody3D" parent="." unique_id=1930612532]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="collision" unique_id=749560557]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.008503437, 0.28834915, -0.008573651)
+shape = SubResource("BoxShape3D_ro7nm")

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ItemInfo" format=3 uid="uid://oowfm1lpkvm"]
+
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="1_8ykgy"]
+[ext_resource type="Texture2D" uid="uid://d1h2gdswrgier" path="res://sprites/items/wood_processed.png" id="2_nr6xd"]
+
+[resource]
+script = ExtResource("1_8ykgy")
+unique_id = "wood_log"
+texture = ExtResource("2_nr6xd")
+metadata/_custom_type_script = "uid://c8ngjbq8w5gjr"
