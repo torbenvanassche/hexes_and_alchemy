@@ -2,26 +2,42 @@
 
 [ext_resource type="PackedScene" uid="uid://6h1kj7hbn5qq" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_blacksmith_blue.glb" id="1_43jb5"]
 [ext_resource type="Script" uid="uid://bpm6gm1mj4n65" path="res://scripts/interactions/blacksmith.gd" id="2_cpkdt"]
+[ext_resource type="PackedScene" uid="uid://gb2g45tjja61" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/building_stage_A.glb" id="2_eemul"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_43jb5"]
-size = Vector3(0.42652893, 0.58376694, 0.31565857)
+size = Vector3(1.602665, 0.30893278, 1.25601)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_cpkdt"]
-size = Vector3(1.3130188, 0.97569275, 0.938961)
+size = Vector3(1.0518265, 0.28567123, 0.880126)
 
 [node name="Node3D" type="Node3D" unique_id=728034513]
 script = ExtResource("2_cpkdt")
 
-[node name="Root Scene" parent="." unique_id=867165107 instance=ExtResource("1_43jb5")]
+[node name="foundation" parent="." unique_id=190993462 instance=ExtResource("2_eemul")]
 
-[node name="interaction" type="Area3D" parent="." unique_id=1325427929]
+[node name="interaction" type="Area3D" parent="foundation" unique_id=1817424316]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="interaction" unique_id=323897064]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="foundation/interaction" unique_id=916650957]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.016907275, 0.14401507, 0.122535765)
+shape = SubResource("BoxShape3D_43jb5")
+
+[node name="collision" type="StaticBody3D" parent="foundation" unique_id=1726522688]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="foundation/collision" unique_id=2054982171]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.043712616, 0.14244652, 0.09556866)
+shape = SubResource("BoxShape3D_cpkdt")
+
+[node name="fully_built" parent="." unique_id=867165107 instance=ExtResource("1_43jb5")]
+visible = false
+
+[node name="interaction" type="Area3D" parent="fully_built" unique_id=1325427929]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="fully_built/interaction" unique_id=323897064]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0048803836, 0.31943703, 0.5359774)
 shape = SubResource("BoxShape3D_43jb5")
 
-[node name="collision" type="StaticBody3D" parent="." unique_id=1843671345]
+[node name="collision" type="StaticBody3D" parent="fully_built" unique_id=1843671345]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="collision" unique_id=623158031]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="fully_built/collision" unique_id=623158031]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.007247925, 0.51084137, -0.087170124)
 shape = SubResource("BoxShape3D_cpkdt")
