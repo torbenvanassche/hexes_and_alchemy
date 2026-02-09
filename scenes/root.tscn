@@ -19,6 +19,7 @@
 [ext_resource type="Resource" uid="uid://btnk3qkcvaya0" path="res://resources/structure_info/ladder.tres" id="16_jehah"]
 [ext_resource type="Resource" uid="uid://c4yve7atd0tis" path="res://resources/structure_info/ore_deposit_gold.tres" id="17_re66h"]
 [ext_resource type="Resource" uid="uid://uov1jt8s2qia" path="res://resources/scene_info/ui/input_settings.tres" id="18_34frw"]
+[ext_resource type="Resource" uid="uid://c0cycppeql80w" path="res://resources/structure_info/forest.tres" id="18_58tnd"]
 [ext_resource type="Resource" uid="uid://001nokdh5ewb" path="res://resources/scene_info/ui/settings_menu.tres" id="18_mflgo"]
 [ext_resource type="Resource" uid="uid://foly5odh7d4j" path="res://resources/structure_info/ore_deposit_iron.tres" id="18_re66h"]
 [ext_resource type="Resource" uid="uid://c1ypx4o3q73t0" path="res://resources/structure_info/settlement.tres" id="19_isfgf"]
@@ -54,7 +55,7 @@ initial_scene = ExtResource("22_jehah")
 script = ExtResource("2_sqa0i")
 hexes = Array[ExtResource("3_l5cgh")]([ExtResource("4_vgks2"), ExtResource("5_dylgi")])
 regions = Array[ExtResource("5_3hfy5")]([ExtResource("6_7pvxh"), ExtResource("9_y3xxt")])
-structures = Array[ExtResource("10_gt4lb")]([ExtResource("11_ya6yc"), ExtResource("12_mflgo"), ExtResource("14_8ui5n"), ExtResource("16_jehah"), ExtResource("17_re66h"), ExtResource("18_re66h"), ExtResource("19_isfgf")])
+structures = Array[ExtResource("10_gt4lb")]([ExtResource("11_ya6yc"), ExtResource("12_mflgo"), ExtResource("14_8ui5n"), ExtResource("16_jehah"), ExtResource("17_re66h"), ExtResource("18_re66h"), ExtResource("19_isfgf"), ExtResource("18_58tnd")])
 scenes = Array[ExtResource("15_ya6yc")]([ExtResource("12_vgks2"), ExtResource("16_gt4lb"), ExtResource("18_34frw"), ExtResource("18_mflgo"), ExtResource("20_8ui5n"), ExtResource("21_ccljq"), ExtResource("22_jehah"), ExtResource("25_re66h"), ExtResource("26_isfgf")])
 items = Array[ExtResource("27_phl1g")]([ExtResource("28_58tnd")])
 
