@@ -7,6 +7,8 @@ class_name MarketSlotUI extends Control
 var line_edit: LineEdit;
 
 var item_price: int = 0;
+var sale_chance: float = 0;
+
 var text_cache: String;
 
 func get_slot() -> ContentSlotUI:
@@ -30,7 +32,14 @@ func _set_button_state() -> void:
 	btn_set_price.disabled = content_slot_ui.contentSlot.has_content(null)
 
 func _on_set_price(s: String = line_edit.text) -> void:
-	item_price = int(s)
+	var base_price: int = content_slot_ui.contentSlot.get_content().base_price;
+	item_price = maxi(1, int(s))
+	
+	sale_chance = Manager.instance.base_sale_chance * (base_price / float(item_price));
+	sale_chance = clampf(sale_chance, Manager.instance.min_sale_chance, Manager.instance.max_sale_chance);
+	
+func _on_sale_completed() -> void:
+	pass
 	
 func _validate_spinbox(s: String) -> void:
 	if s.is_empty() or s.is_valid_int():

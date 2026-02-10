@@ -1,7 +1,7 @@
 class_name Market extends Interaction
 
 var window_instance: SceneInstance;
-@onready var inventory: Inventory = $"../Inventory";
+@onready var inventory: Inventory = $Inventory
 
 func interact() -> void:
 	DataManager.instance.get_scene_by_name("market_ui").queue(_open_window)

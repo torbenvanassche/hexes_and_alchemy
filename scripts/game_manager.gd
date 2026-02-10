@@ -13,6 +13,12 @@ var is_paused: bool = false;
 @export var initial_scene: SceneInfo;
 var active_settlement: Settlement;
 
+@export_category("Market")
+@export var sale_check_interval: float = 5.0
+@export var base_sale_chance: float = 0.35
+@export var min_sale_chance: float = 0.05
+@export var max_sale_chance: float = 0.95
+
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS;
 	instance = self;

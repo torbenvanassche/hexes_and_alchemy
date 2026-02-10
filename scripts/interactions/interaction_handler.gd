@@ -34,5 +34,5 @@ func _on_area_exit(other: Area3D) -> void:
 		Manager.instance.interaction_prompt.show_rect(null)
 		
 func _on_area_enter(other: Area3D) -> void:
-	if other.get_parent() is PlayerController:
+	if other.get_parent() is PlayerController && can_interact():
 		Manager.instance.interaction_prompt.show_rect(self);

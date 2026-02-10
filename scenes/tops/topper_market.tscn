@@ -11,6 +11,7 @@ size = Vector3(1.5101967, 0.85438347, 0.33025742)
 size = Vector3(1.8043289, 1.0020065, 1.2592618)
 
 [node name="market" type="Node3D" unique_id=2075765343]
+script = ExtResource("2_dxohp")
 
 [node name="Inventory" type="Node" parent="." unique_id=309232762]
 script = ExtResource("1_xlvr5")
@@ -19,7 +20,6 @@ max_slots = 4
 metadata/_custom_type_script = "uid://b6rgx41co3bur"
 
 [node name="Root Scene" parent="." unique_id=1447252904 instance=ExtResource("1_uyef6")]
-script = ExtResource("2_dxohp")
 
 [node name="interaction" type="Area3D" parent="Root Scene" unique_id=191448897]
 
