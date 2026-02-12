@@ -18,6 +18,8 @@ var active_settlement: Settlement;
 @export var base_sale_chance: float = 0.35
 @export var min_sale_chance: float = 0.05
 @export var max_sale_chance: float = 0.95
+@onready var market_timer: Timer = Timer.new();
+signal market_tick();
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS;
@@ -28,6 +30,10 @@ func _ready() -> void:
 		return
 		
 	initial_scene.queue(_initialized);
+	
+	market_timer.wait_time = sale_check_interval
+	market_timer.timeout.connect(market_tick.emit)
+	market_timer.start();
 	
 func _initialized(_scene_info: SceneInfo) -> void:
 	SceneManager.add(_scene_info);

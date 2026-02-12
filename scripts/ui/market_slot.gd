@@ -23,6 +23,7 @@ func _ready() -> void:
 	
 	content_slot_ui.initialized.connect(_slot_ready)
 	btn_set_price.pressed.connect(_on_set_price)
+	Manager.instance.market_tick.connect(_try_sell)
 	
 func _slot_ready() -> void:
 	content_slot_ui.contentSlot.changed.connect(_set_button_state)
@@ -37,6 +38,11 @@ func _on_set_price(s: String = line_edit.text) -> void:
 	
 	sale_chance = Manager.instance.base_sale_chance * (base_price / float(item_price));
 	sale_chance = clampf(sale_chance, Manager.instance.min_sale_chance, Manager.instance.max_sale_chance);
+	
+func _try_sell() -> void:
+	var sold = randf() > sale_chance;
+	if sold:
+		pass
 	
 func _on_sale_completed() -> void:
 	pass
