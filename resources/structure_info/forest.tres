@@ -7,6 +7,12 @@
 _limits = [0.0, 5.0, 0.0, 50.0]
 _data = [Vector2(15, 1), 0.0, 0.04, 0, 1, Vector2(40, 2), 0.04, 0.0, 1, 0]
 point_count = 2
+point_0/position = Vector2(15, 1)
+point_0/right_tangent = 0.04
+point_0/right_mode = 1
+point_1/position = Vector2(40, 2)
+point_1/left_tangent = 0.04
+point_1/left_mode = 1
 
 [resource]
 script = ExtResource("2_nvtva")

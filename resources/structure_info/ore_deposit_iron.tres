@@ -7,6 +7,12 @@
 _limits = [0.0, 10.0, 0.0, 50.0]
 _data = [Vector2(0, 2), 0.0, 0.06, 0, 1, Vector2(50, 5), 0.06, -0.025, 1, 1]
 point_count = 2
+point_0/position = Vector2(0, 2)
+point_0/right_tangent = 0.06
+point_0/right_mode = 1
+point_1/position = Vector2(50, 5)
+point_1/left_tangent = 0.06
+point_1/left_mode = 1
 
 [resource]
 script = ExtResource("2_vflgg")

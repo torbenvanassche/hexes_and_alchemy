@@ -33,16 +33,24 @@ func _set_button_state() -> void:
 	btn_set_price.disabled = content_slot_ui.contentSlot.has_content(null)
 
 func _on_set_price(s: String = line_edit.text) -> void:
-	var base_price: int = content_slot_ui.contentSlot.get_content().base_price;
+	var base_price: int = content_slot_ui.contentSlot.get_content().base_value;
 	item_price = maxi(1, int(s))
 	
 	sale_chance = Manager.instance.base_sale_chance * (base_price / float(item_price));
 	sale_chance = clampf(sale_chance, Manager.instance.min_sale_chance, Manager.instance.max_sale_chance);
 	
 func _try_sell() -> void:
-	var sold = randf() > sale_chance;
-	if sold:
-		pass
+	if item_price != 0 && not content_slot_ui.contentSlot.has_content(null):
+		var sold = randf() > sale_chance;
+		if sold:
+			var currency := DataManager.instance.get_item_by_name("currency");
+			Manager.instance.player_instance.inventory.add(currency, item_price * content_slot_ui.contentSlot.count)
+			Debug.message("%s was sold for %s %s." % [content_slot_ui.contentSlot.get_content().unique_id, item_price * content_slot_ui.contentSlot.count, currency.unique_id])
+			_disable_slot();
+			
+func _disable_slot() -> void:
+	item_price = 0;
+	content_slot_ui.contentSlot.remove(content_slot_ui.contentSlot.count)
 	
 func _on_sale_completed() -> void:
 	pass

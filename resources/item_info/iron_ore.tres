@@ -6,7 +6,6 @@
 [resource]
 script = ExtResource("1_7sgqa")
 unique_id = "ore_iron"
-translation_key_name = "ORE_IRON_NAME"
-translation_key_description = "ORE_IRON_DESCRIPTION"
 texture = ExtResource("2_mytyu")
+base_value = 2
 metadata/_custom_type_script = "uid://c8ngjbq8w5gjr"

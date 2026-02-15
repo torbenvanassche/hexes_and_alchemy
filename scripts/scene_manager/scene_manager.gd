@@ -99,7 +99,7 @@ func to_previous_scene() -> SceneInfo:
 	if scene_stack.size() != 0:
 		_pop_stack();
 		if scene_stack.size() != 0:
-			return get_or_create_scene(scene_stack[scene_stack.size() - 1].id);
+			return scene_stack[-1]
 	return null;
 	
 func get_current_scene() -> SceneInfo:

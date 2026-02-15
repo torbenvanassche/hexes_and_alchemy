@@ -8,6 +8,7 @@
 _limits = [0.99, 1.0, 0.0, 1.0]
 _data = [Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 1
+point_0/position = Vector2(1, 1)
 
 [resource]
 script = ExtResource("1_3smpn")
