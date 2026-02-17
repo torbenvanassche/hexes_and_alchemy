@@ -29,7 +29,7 @@ func _rebuild_inventory() -> void:
 		var slot := add(content)
 		elements.append(slot)
 
-func add(content: ContentSlot) -> ContentSlotUI:
+func add(content: ContentSlotResource) -> ContentSlotUI:
 	var container: ContentSlotUI = packed_slot.instantiate()
 
 	container.button_up.connect(_set_selected.bind(container))

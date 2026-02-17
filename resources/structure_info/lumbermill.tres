@@ -5,13 +5,13 @@
 
 [sub_resource type="Curve" id="Curve_3gjmt"]
 _limits = [0.0, 20.0, 0.0, 50.0]
-_data = [Vector2(9, 0), 0.0, 0.07317074, 0, 1, Vector2(50, 3), 0.07317074, 0.0, 1, 0]
+_data = [Vector2(3, 20), inf_neg, -1.0, 1, 1, Vector2(20, 3), -1.0, inf_neg, 1, 1]
 point_count = 2
-point_0/position = Vector2(9, 0)
-point_0/right_tangent = 0.07317074
+point_0/position = Vector2(3, 20)
+point_0/right_tangent = -1.0
 point_0/right_mode = 1
-point_1/position = Vector2(50, 3)
-point_1/left_tangent = 0.07317074
+point_1/position = Vector2(20, 3)
+point_1/left_tangent = -1.0
 point_1/left_mode = 1
 
 [resource]

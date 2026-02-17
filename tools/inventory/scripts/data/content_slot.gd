@@ -1,11 +1,11 @@
-class_name ContentSlot extends Node
+class_name ContentSlotResource extends Resource
 
 var _content: ItemInfo;
 var count: int = 0;
 var _maxcount: int = 0;
 var is_unlocked: bool = false;
 
-signal changed();
+signal value_changed();
 
 func _init(_count: int = 0, content: ItemInfo = null, maxcount: int = 1, _unlocked: bool = true) -> void:
 	is_unlocked = _unlocked;
@@ -15,7 +15,7 @@ func _init(_count: int = 0, content: ItemInfo = null, maxcount: int = 1, _unlock
 	
 func set_content(content: ItemInfo) -> void:
 	_content = content;
-	changed.emit();
+	value_changed.emit();
 	
 func get_content() -> ItemInfo:
 	return _content;
@@ -36,7 +36,7 @@ func add(amount: int = 1, content: ItemInfo = null) -> int:
 	var remaining_space: int = _maxcount - count;
 	var amount_to_add: int = min(amount, remaining_space);
 	count += amount_to_add;
-	changed.emit();
+	value_changed.emit();
 	return amount - amount_to_add;
 	
 func remove(amount: int = 1) -> int:
@@ -44,7 +44,7 @@ func remove(amount: int = 1) -> int:
 	count -= amount_to_remove;
 	if count == 0:
 		reset()
-	changed.emit();
+	value_changed.emit();
 	return amount - amount_to_remove
 	
 func match_or_empty(element: ItemInfo) -> bool:

@@ -12,7 +12,7 @@ class_name ContentSlotUI extends TextureButton
 @export var default_color: Color = Color.WHITE;
 @export var dragging_color: Color = Color(Color.WHITE, 0.3)
 
-var contentSlot: ContentSlot;
+var contentSlot: ContentSlotResource;
 
 signal initialized();
 
@@ -48,11 +48,11 @@ func blur() -> void:
 	textureRect.modulate = dragging_color;
 	counter.visible = false;
 	
-func set_content(_content: ContentSlot) -> void:
-	if contentSlot && contentSlot.changed.is_connected(redraw):
-		contentSlot.changed.disconnect(redraw);
+func set_content(_content: ContentSlotResource) -> void:
+	if contentSlot && contentSlot.value_changed.is_connected(redraw):
+		contentSlot.value_changed.disconnect(redraw);
 	contentSlot = _content;
-	contentSlot.changed.connect(redraw)
+	contentSlot.value_changed.connect(redraw)
 	
 	if _content:
 		if is_node_ready():
@@ -79,8 +79,8 @@ func _can_drop_data(_at_position: Vector2, _data: Variant) -> bool:
 	return contentSlot && contentSlot.is_unlocked;
 
 func _drop_data(_at_position: Vector2, data: Variant) -> void:
-	var src_slot: ContentSlot = (data as DragData).slot.contentSlot
-	var dest_slot: ContentSlot = contentSlot
+	var src_slot: ContentSlotResource = (data as DragData).slot.contentSlot
+	var dest_slot: ContentSlotResource = contentSlot
 	
 	if dest_slot.has_content(null) or dest_slot.has_content(src_slot.get_content()):
 		src_slot.remove(src_slot.count - dest_slot.add(src_slot.count, src_slot.get_content()))

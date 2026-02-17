@@ -1,6 +1,6 @@
 class_name MarketUI extends InventoryUI
 
-func add(content: ContentSlot) -> ContentSlotUI:
+func add(content: ContentSlotResource) -> ContentSlotUI:
 	var market_slot: MarketSlotUI = packed_slot.instantiate();
 	grid.add_child(market_slot)
 	
