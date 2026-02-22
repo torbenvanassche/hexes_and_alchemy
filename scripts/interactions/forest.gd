@@ -19,13 +19,13 @@ func interact() -> void:
 	_set_tree_state(false)
 	_start_regrow()
 
-
 func can_interact() -> bool:
 	return trees.visible and not _is_regrowing
 
 func _set_tree_state(tree_enabled: bool) -> void:
 	trees.visible = tree_enabled
 	stumps.visible = not tree_enabled
+	toggle_collision(not tree_enabled)
 
 func _set_children_process(node: Node, enabled: bool) -> void:
 	for child in node.get_children():
