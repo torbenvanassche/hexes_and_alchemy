@@ -4,6 +4,8 @@
 [ext_resource type="Script" uid="uid://bpm6gm1mj4n65" path="res://scripts/interactions/blacksmith.gd" id="2_cpkdt"]
 [ext_resource type="PackedScene" uid="uid://gb2g45tjja61" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/building_stage_A.glb" id="2_eemul"]
 [ext_resource type="Script" uid="uid://cvpndsdtuqm4i" path="res://tools/fetch_quest/fetch_quest.gd" id="2_ranit"]
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="3_d4kth"]
+[ext_resource type="Resource" uid="uid://o03k1cg30nlw" path="res://resources/item_info/iron_ore.tres" id="4_inxjh"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_43jb5"]
 size = Vector3(1.602665, 0.30893278, 1.25601)
@@ -15,6 +17,9 @@ size = Vector3(1.0518265, 0.28567123, 0.880126)
 
 [node name="foundation" parent="." unique_id=190993462 instance=ExtResource("2_eemul")]
 script = ExtResource("2_ranit")
+items = Dictionary[ExtResource("3_d4kth"), int]({
+ExtResource("4_inxjh"): 1
+})
 
 [node name="interaction" type="Area3D" parent="foundation" unique_id=1817424316]
 

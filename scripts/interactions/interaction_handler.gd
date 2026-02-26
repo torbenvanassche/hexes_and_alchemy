@@ -20,7 +20,7 @@ func _ready() -> void:
 		trigger.area_exited.connect(_on_area_exit);
 		
 	visibility_changed.connect(_on_visibility_changed)
-
+	
 func toggle_collision(b: bool) -> void:
 	for col in collision_shapes:
 		if col.get_parent() is StaticBody3D:

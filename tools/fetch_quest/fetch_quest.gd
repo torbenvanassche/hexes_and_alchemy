@@ -4,6 +4,7 @@ extends Interaction
 var requests: Array[ItemRequest];
 
 func _ready() -> void:
+	super();
 	for key in items.keys():
 		var rq := ItemRequest.new(0, key, items[key]);
 		rq.completed.connect(_on_request_complete)

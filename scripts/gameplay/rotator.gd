@@ -15,8 +15,8 @@ func can_interact() -> bool:
 	return true;
 
 func _ready() -> void:
-	start_angle = _get_axis_rotation()
 	super()
+	start_angle = _get_axis_rotation()
 
 func interact() -> void:
 	var target_angle := max_angle if not at_max else start_angle
