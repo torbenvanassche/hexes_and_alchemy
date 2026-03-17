@@ -79,6 +79,7 @@ expand_icon = true
 
 [node name="contentPanel" type="MarginContainer" parent="NinePatchRect/VBoxContainer" unique_id=1040542232]
 layout_mode = 2
+size_flags_horizontal = 4
 size_flags_vertical = 3
 theme_override_constants/margin_left = 15
 theme_override_constants/margin_top = 8

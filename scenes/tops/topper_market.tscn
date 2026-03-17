@@ -15,8 +15,6 @@ script = ExtResource("2_dxohp")
 
 [node name="Inventory" type="Node" parent="." unique_id=309232762]
 script = ExtResource("1_xlvr5")
-unlocked_slots = 4
-max_slots = 4
 metadata/_custom_type_script = "uid://b6rgx41co3bur"
 
 [node name="Root Scene" parent="." unique_id=1447252904 instance=ExtResource("1_uyef6")]

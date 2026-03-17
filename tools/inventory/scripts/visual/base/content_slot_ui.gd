@@ -1,12 +1,13 @@
 class_name ContentSlotUI extends TextureButton
 
 @onready var textureRect: TextureRect = $margin_container/background/MarginContainer/item_sprite;
+@onready var textureMargin: MarginContainer = $margin_container/background/MarginContainer;
 @onready var mainMarginContainer: MarginContainer = $margin_container;
 @onready var counter: Label = $count;
 
 @export_group("Properties")
 @export var show_amount: bool = true;
-@export var main_margin_size: Vector4i = Vector4(2, 2, 2, 2);
+@export var main_margin_size: int = 2;
 
 @export_group("Drag Settings")
 @export var default_color: Color = Color.WHITE;
@@ -17,20 +18,16 @@ var contentSlot: ContentSlotResource;
 signal initialized();
 
 func _ready() -> void:
-	mainMarginContainer.add_theme_constant_override("margin_left", main_margin_size.x)
-	mainMarginContainer.add_theme_constant_override("margin_top", main_margin_size.y)
-	mainMarginContainer.add_theme_constant_override("margin_right", main_margin_size.z)
-	mainMarginContainer.add_theme_constant_override("margin_bottom", main_margin_size.w)
+	Helpers.apply_margin_uniform(mainMarginContainer, main_margin_size)
 	
 	counter.visible = show_amount;
 	counter.text = "";
 	
-	if contentSlot:
-		redraw();
-	
 func redraw() -> void:
 	if contentSlot == null:
 		return;
+		
+	await get_tree().process_frame
 	
 	disabled = !contentSlot.is_unlocked;
 	var resource := contentSlot.get_content()
@@ -38,6 +35,7 @@ func redraw() -> void:
 		if "texture" in resource:
 			textureRect.texture = resource.texture;
 			textureRect.modulate = default_color;
+			Helpers.apply_margin_uniform(textureMargin, absi(int((textureMargin.size.x - resource.img_size) / 2)))
 		counter.visible = show_amount;
 		counter.text = str(contentSlot.count);
 	else:
