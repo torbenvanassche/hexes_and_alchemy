@@ -23,7 +23,7 @@ func _ready() -> void:
 	
 	content_slot_ui.initialized.connect(_slot_ready)
 	btn_set_price.pressed.connect(_on_set_price)
-	Manager.instance.market_tick.connect(_try_sell)
+	Manager.instance.market.tick.connect(_try_sell)
 	
 func _slot_ready() -> void:
 	content_slot_ui.contentSlot.value_changed.connect(_set_button_state)

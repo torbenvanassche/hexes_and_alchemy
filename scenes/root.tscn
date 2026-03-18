@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://cdjrbv2tvjlvw" path="res://scripts/game_manager.gd" id="1_l5cgh"]
 [ext_resource type="Script" uid="uid://dpjtl8txjms6k" path="res://scripts/resource_manager.gd" id="2_sqa0i"]
 [ext_resource type="Script" uid="uid://dt4im1k7j4jn" path="res://scripts/hex_system/base/hex_info.gd" id="3_l5cgh"]
+[ext_resource type="Script" uid="uid://cf50g0p4jcitj" path="res://scripts/market_manager.gd" id="3_x7ldt"]
+[ext_resource type="Script" uid="uid://g8s30q5nqcd8" path="res://tools/time_of_day/daytime_cycle.gd" id="4_moyyc"]
 [ext_resource type="Resource" uid="uid://betpu2iylw1qy" path="res://resources/scene_info/hex/hex_simple.tres" id="4_vgks2"]
 [ext_resource type="Script" uid="uid://m31o3kdm652g" path="res://scripts/hex_system/base/region_info.gd" id="5_3hfy5"]
 [ext_resource type="Resource" uid="uid://bto28untf5lrf" path="res://resources/scene_info/hex/hex_water.tres" id="5_dylgi"]
@@ -54,6 +56,14 @@ glow_enabled = true
 [node name="game_manager" type="Node" parent="." unique_id=299541562]
 script = ExtResource("1_l5cgh")
 initial_scene = ExtResource("22_jehah")
+
+[node name="market_manager" type="Node" parent="game_manager" unique_id=243758957]
+script = ExtResource("3_x7ldt")
+metadata/_custom_type_script = "uid://cf50g0p4jcitj"
+
+[node name="time_of_day" type="Node" parent="game_manager" unique_id=1430942160]
+script = ExtResource("4_moyyc")
+metadata/_custom_type_script = "uid://g8s30q5nqcd8"
 
 [node name="resource_manager" type="Node" parent="." unique_id=1025417812]
 script = ExtResource("2_sqa0i")
