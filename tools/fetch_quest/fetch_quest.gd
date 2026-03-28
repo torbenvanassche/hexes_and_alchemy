@@ -3,6 +3,8 @@ extends Interaction
 @export var items: Dictionary[ItemInfo, int];
 var requests: Array[ItemRequest];
 
+signal request_completed();
+
 func _ready() -> void:
 	super();
 	for key in items.keys():
@@ -12,7 +14,7 @@ func _ready() -> void:
 		
 func _on_request_complete() -> void:
 	if requests.all(func(rq: ItemRequest) -> bool: return rq.is_full()):
-		pass;
+		request_completed.emit();
 
 func interact() -> void:
 	pass

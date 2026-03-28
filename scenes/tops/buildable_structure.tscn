@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://8hv1i8bxhtup"]
+
+[ext_resource type="Script" uid="uid://djs4oucsn1ckj" path="res://scripts/structures/structure_buildable.gd" id="1_memtb"]
+[ext_resource type="PackedScene" uid="uid://gb2g45tjja61" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/building_stage_A.glb" id="2_mxv53"]
+[ext_resource type="Script" uid="uid://cvpndsdtuqm4i" path="res://tools/fetch_quest/fetch_quest.gd" id="3_nw07d"]
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="4_nd8jn"]
+[ext_resource type="Resource" uid="uid://o03k1cg30nlw" path="res://resources/item_info/iron_ore.tres" id="5_3m745"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lnt80"]
+size = Vector3(1.602665, 0.30893278, 1.25601)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_tb1nb"]
+size = Vector3(1.0518265, 0.28567123, 0.880126)
+
+[node name="buildable_structure" type="Node3D" unique_id=147799684 node_paths=PackedStringArray("build_steps")]
+script = ExtResource("1_memtb")
+build_steps = [NodePath("foundation")]
+
+[node name="foundation" parent="." unique_id=216741624 instance=ExtResource("2_mxv53")]
+script = ExtResource("3_nw07d")
+items = Dictionary[ExtResource("4_nd8jn"), int]({
+ExtResource("5_3m745"): 1
+})
+
+[node name="interaction" type="Area3D" parent="foundation" unique_id=734105500]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="foundation/interaction" unique_id=2027521683]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.016907275, 0.14401507, 0.122535765)
+shape = SubResource("BoxShape3D_lnt80")
+
+[node name="collision" type="StaticBody3D" parent="foundation" unique_id=1309432564]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="foundation/collision" unique_id=402596690]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.043712616, 0.14244652, 0.09556866)
+shape = SubResource("BoxShape3D_tb1nb")

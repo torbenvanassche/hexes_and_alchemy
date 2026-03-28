@@ -1,12 +1,13 @@
 [gd_scene format=3 uid="uid://b0hwbv6450ror"]
 
-[ext_resource type="PackedScene" uid="uid://gb2g45tjja61" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/building_stage_A.glb" id="1_f6x38"]
 [ext_resource type="Script" uid="uid://beb2p3obw00h8" path="res://scripts/hex_system/settlement.gd" id="1_l415u"]
 [ext_resource type="PackedScene" uid="uid://d4ck04oubluj3" path="res://scenes/tops/topper_blacksmith.tscn" id="1_xmt5k"]
 [ext_resource type="PackedScene" uid="uid://cjeap2dsndlsj" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_home_A_blue.glb" id="3_c5c2h"]
 [ext_resource type="PackedScene" uid="uid://cjei5gsoj7jp7" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/fence_stone_straight.glb" id="4_616a5"]
 [ext_resource type="PackedScene" uid="uid://bidvvqjxevoc3" path="res://scenes/tops/topper_market.tscn" id="6_616a5"]
+[ext_resource type="PackedScene" uid="uid://8hv1i8bxhtup" path="res://scenes/tops/buildable_structure.tscn" id="6_l415u"]
 [ext_resource type="PackedScene" uid="uid://ceeffxsbgrta" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/fence_stone_straight_gate_collision.tscn" id="7_616a5"]
+[ext_resource type="PackedScene" uid="uid://clf621pbnvsbw" path="res://scenes/tops/topper_tavern.tscn" id="7_l415u"]
 
 [node name="starting_settlement" type="Node3D" unique_id=1143800928 node_paths=PackedStringArray("spawn_position")]
 script = ExtResource("1_l415u")
@@ -14,21 +15,6 @@ spawn_position = NodePath("player_spawn")
 is_active_settlement = true
 
 [node name="structures" type="Node3D" parent="." unique_id=516994821]
-
-[node name="construction_a" parent="structures" unique_id=216741624 instance=ExtResource("1_f6x38")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.973076, 0, 1.75)
-
-[node name="Root Scene9" parent="structures/construction_a" unique_id=1156997070 instance=ExtResource("4_616a5")]
-transform = Transform3D(-0.49999988, 0, 0.8660255, 0, 1, 0, -0.8660255, 0, -0.49999988, 0, 0, 0)
-
-[node name="Root Scene10" parent="structures/construction_a" unique_id=2059508822 instance=ExtResource("4_616a5")]
-transform = Transform3D(0.5000002, 0, 0.8660253, 0, 1, 0, -0.8660253, 0, 0.5000002, 0, 0, 0)
-
-[node name="Root Scene11" parent="structures/construction_a" unique_id=763347888 instance=ExtResource("4_616a5")]
-transform = Transform3D(-1, 0, 1.1920929e-07, 0, 1, 0, -1.1920929e-07, 0, -1, 0, 0, 0)
-
-[node name="Root Scene12" parent="structures/construction_a" unique_id=117545638 instance=ExtResource("4_616a5")]
-transform = Transform3D(-0.50000006, 0, -0.8660254, 0, 1, 0, 0.8660254, 0, -0.50000006, 0, 0, 0)
 
 [node name="blacksmith" parent="structures" unique_id=728034513 instance=ExtResource("1_xmt5k")]
 
@@ -58,6 +44,12 @@ transform = Transform3D(0.4166667, 0, -0.7216878, 0, 0.83333325, 0, 0.7216878, 0
 [node name="market" parent="structures" unique_id=2075765343 instance=ExtResource("6_616a5")]
 transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 1.9820508, 0, 3.5)
 
+[node name="buildable_structure" parent="structures" unique_id=147799684 node_paths=PackedStringArray("build_steps") instance=ExtResource("6_l415u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.973076, 0, 1.75)
+build_steps = [NodePath("foundation"), NodePath("tavern")]
+
+[node name="tavern" parent="structures/buildable_structure" unique_id=1607926184 instance=ExtResource("7_l415u")]
+
 [node name="walls" type="Node3D" parent="." unique_id=854268926]
 
 [node name="Root Scene7" parent="walls" unique_id=1469083703 instance=ExtResource("4_616a5")]
@@ -68,6 +60,18 @@ transform = Transform3D(-0.5000001, 0, -0.8660254, 0, 1, 0, 0.8660254, 0, -0.500
 
 [node name="Root Scene9" parent="walls" unique_id=2135617906 instance=ExtResource("4_616a5")]
 transform = Transform3D(-0.49999988, 0, 0.8660255, 0, 1, 0, -0.8660255, 0, -0.49999988, 1, 0, 1.7499027)
+
+[node name="Root Scene10" parent="walls" unique_id=1156997070 instance=ExtResource("4_616a5")]
+transform = Transform3D(-0.49999988, 0, 0.8660255, 0, 1, 0, -0.8660255, 0, -0.49999988, 2.973076, 0, 1.75)
+
+[node name="Root Scene11" parent="walls" unique_id=2059508822 instance=ExtResource("4_616a5")]
+transform = Transform3D(0.5000002, 0, 0.8660253, 0, 1, 0, -0.8660253, 0, 0.5000002, 2.973076, 0, 1.75)
+
+[node name="Root Scene12" parent="walls" unique_id=763347888 instance=ExtResource("4_616a5")]
+transform = Transform3D(-1, 0, 1.1920929e-07, 0, 1, 0, -1.1920929e-07, 0, -1, 2.973076, 0, 1.75)
+
+[node name="Root Scene13" parent="walls" unique_id=117545638 instance=ExtResource("4_616a5")]
+transform = Transform3D(-0.50000006, 0, -0.8660254, 0, 1, 0, 0.8660254, 0, -0.50000006, 2.973076, 0, 1.75)
 
 [node name="entrances" type="Node3D" parent="." unique_id=884947801]
 

@@ -3,7 +3,7 @@ class_name ContentSlotUI extends TextureButton
 @onready var textureRect: TextureRect = $margin_container/background/MarginContainer/item_sprite;
 @onready var textureMargin: MarginContainer = $margin_container/background/MarginContainer;
 @onready var mainMarginContainer: MarginContainer = $margin_container;
-@onready var counter: Label = $count;
+@onready var counter: Label = $margin_container/MarginContainer/count;
 
 @export_group("Properties")
 @export var show_amount: bool = true;
@@ -35,9 +35,8 @@ func redraw() -> void:
 		if "texture" in resource:
 			textureRect.texture = resource.texture;
 			textureRect.modulate = default_color;
-			Helpers.apply_margin_uniform(textureMargin, absi(int((textureMargin.size.x - resource.img_size) / 2)))
 		counter.visible = show_amount;
-		counter.text = str(contentSlot.count);
+		counter.text = "x" + str(contentSlot.count);
 	else:
 		textureRect.texture = null;
 		counter.text = "";

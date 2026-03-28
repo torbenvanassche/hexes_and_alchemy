@@ -2,13 +2,24 @@
 
 [ext_resource type="PackedScene" uid="uid://dny1dqcanlco0" path="res://tools/custom_window/base_window.tscn" id="1_7nagc"]
 [ext_resource type="PackedScene" uid="uid://g8cyqkretffu" path="res://tools/inventory/scenes/content_group.tscn" id="2_4ycse"]
+[ext_resource type="Texture2D" uid="uid://cbhlnklu2q6wp" path="res://sprites/ui/panel-015.png" id="2_drsq2"]
 
 [node name="Window" unique_id=1301866213 node_paths=PackedStringArray("content") instance=ExtResource("1_7nagc")]
-offset_right = -1152.0
-offset_bottom = -648.0
+size_flags_vertical = 3
 id = "Inventory"
 store_position = true
 content = NodePath("NinePatchRect/VBoxContainer/contentPanel/InventoryHud")
+
+[node name="NinePatchRect" parent="." index="0" unique_id=434834391]
+texture = ExtResource("2_drsq2")
+region_rect = Rect2(0, 0, 48, 48)
+patch_margin_left = 43
+patch_margin_top = 43
+patch_margin_right = 43
+patch_margin_bottom = 43
+
+[node name="topbar" parent="NinePatchRect/VBoxContainer" parent_id_path=PackedInt32Array(554725130) index="0" unique_id=347636229]
+color = Color(0, 0, 0, 0.8117647)
 
 [node name="InventoryHud" parent="NinePatchRect/VBoxContainer/contentPanel" parent_id_path=PackedInt32Array(1040542232) index="0" unique_id=195655274 instance=ExtResource("2_4ycse")]
 layout_mode = 2

@@ -13,3 +13,7 @@ func _ready() -> void:
 	market_timer.timeout.connect(tick.emit);
 	market_timer.autostart = true;
 	add_child(market_timer)
+	
+func calculate_sell_chance(base_price: float, item_price: float) -> float:
+	var sale_chance := base_sale_chance * (base_price / float(item_price));
+	return clampf(sale_chance, min_sale_chance, max_sale_chance);

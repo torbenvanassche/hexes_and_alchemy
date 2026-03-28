@@ -11,12 +11,14 @@ extends CharacterBody3D
 var current_triggers: Array[Interaction] = [];
 var return_position: Vector3;
 
+var currency: int;
+
 func _ready() -> void:
 	interactor.area_entered.connect(add_trigger)
 	interactor.area_exited.connect(remove_trigger)
 	inventory.add(DataManager.instance.get_item_by_name("ore_iron"), 5);
 
-func _physics_process(delta: float) -> void:	
+func _physics_process(delta: float) -> void:
 	if Manager.instance.input_moves_player():
 		_handle_movement(delta)
 		move_and_slide()

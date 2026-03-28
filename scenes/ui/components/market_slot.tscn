@@ -2,27 +2,78 @@
 
 [ext_resource type="PackedScene" uid="uid://c5ocjw6joaemy" path="res://tools/inventory/scenes/content_slot.tscn" id="1_0d1ms"]
 [ext_resource type="Script" uid="uid://brtr35b12dwpi" path="res://scripts/ui/market_slot.gd" id="1_2m32k"]
+[ext_resource type="Texture2D" uid="uid://cbhlnklu2q6wp" path="res://sprites/ui/panel-015.png" id="3_eyab0"]
+[ext_resource type="Theme" uid="uid://whaj7dl14je1" path="res://themes/base_theme.theme" id="4_edggb"]
 
-[node name="Control" type="VBoxContainer" unique_id=791476159]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -76.0
-offset_top = -67.5
-offset_right = 24.0
-offset_bottom = 67.5
-grow_horizontal = 2
-grow_vertical = 2
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_eyab0"]
+load_path = "res://.godot/imported/currency_mono.png-9fece7cd79693805f00e7770ad532f2e.ctex"
+
+[node name="Control" type="MarginContainer" unique_id=2049737903]
+self_modulate = Color(1, 1, 1, 0)
+offset_right = 100.0
+offset_bottom = 100.0
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
 script = ExtResource("1_2m32k")
 
 [node name="item" parent="." unique_id=930043497 instance=ExtResource("1_0d1ms")]
 layout_mode = 2
 
-[node name="SpinBox" type="SpinBox" parent="." unique_id=546989690]
-layout_mode = 2
+[node name="MarginContainer" type="MarginContainer" parent="item" unique_id=38376321]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+grow_horizontal = 0
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
 
-[node name="Button" type="Button" parent="." unique_id=1686994906]
+[node name="ListItem" type="Button" parent="item/MarginContainer" unique_id=563905966]
+custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
-text = "Set price"
+toggle_mode = true
+icon = SubResource("CompressedTexture2D_eyab0")
+flat = true
+expand_icon = true
+
+[node name="NinePatchRect" type="NinePatchRect" parent="item" unique_id=1283252793]
+self_modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -35.0
+offset_top = -20.5
+offset_right = 5.0
+offset_bottom = 5.0
+grow_horizontal = 0
+grow_vertical = 0
+texture = ExtResource("3_eyab0")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="price" type="LineEdit" parent="item/NinePatchRect" unique_id=23474697]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -19.125
+offset_top = -15.5
+offset_right = 19.125
+offset_bottom = 15.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("4_edggb")
+theme_override_constants/minimum_character_width = 2
+alignment = 1
+max_length = 3
+flat = true
+virtual_keyboard_type = 2

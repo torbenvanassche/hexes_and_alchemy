@@ -1,6 +1,6 @@
 class_name ContentGroup extends Node
 
-var data: Array[ContentSlotResource] = [];
+@export var data: Array[ContentSlotResource] = [];
 
 @export var stack_size: int = 1;
 

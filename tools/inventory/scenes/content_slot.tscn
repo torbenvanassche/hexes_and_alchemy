@@ -3,7 +3,7 @@
 [ext_resource type="StyleBox" uid="uid://dyequs13mhyp3" path="res://tools/inventory/styles/content_slot_stylebox.tres" id="1_f67vh"]
 [ext_resource type="StyleBox" uid="uid://b3yojughln6fb" path="res://tools/inventory/styles/content_slot_stylebox_disabled.tres" id="1_pdw3o"]
 [ext_resource type="Script" uid="uid://c8weu3p2f5ayn" path="res://tools/inventory/scripts/visual/base/content_slot_ui.gd" id="2_rfq8a"]
-[ext_resource type="Texture2D" uid="uid://dwb63f4p3rhtb" path="res://sprites/ui/panel-007.png" id="4_pdw3o"]
+[ext_resource type="Texture2D" uid="uid://bsqv6eysfvkrb" path="res://sprites/ui/panel-border-015.png" id="4_pdw3o"]
 
 [sub_resource type="Theme" id="Theme_ceefl"]
 Button/styles/disabled = ExtResource("1_pdw3o")
@@ -14,7 +14,6 @@ Button/styles/pressed = ExtResource("1_f67vh")
 
 [sub_resource type="LabelSettings" id="LabelSettings_aoki5"]
 font_size = 25
-font_color = Color(0, 0, 0, 1)
 
 [node name="content_slot" type="TextureButton" unique_id=930043497]
 custom_minimum_size = Vector2(100, 100)
@@ -43,7 +42,12 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="ColorRect" type="ColorRect" parent="margin_container" unique_id=128610021]
+layout_mode = 2
+color = Color(0, 0, 0, 0.4862745)
+
 [node name="background" type="TextureRect" parent="margin_container" unique_id=1043705938]
+self_modulate = Color(0.5078125, 0.5078125, 0.5078125, 1)
 layout_mode = 2
 texture = ExtResource("4_pdw3o")
 expand_mode = 1
@@ -55,30 +59,24 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
+theme_override_constants/margin_left = 7
+theme_override_constants/margin_top = 7
+theme_override_constants/margin_right = 7
+theme_override_constants/margin_bottom = 7
 
 [node name="item_sprite" type="TextureRect" parent="margin_container/background/MarginContainer" unique_id=54231665]
 z_index = 1
 layout_mode = 2
 expand_mode = 1
 
-[node name="count" type="Label" parent="." unique_id=1170717140]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -7.0
-offset_top = -20.0
-offset_right = 7.0
-offset_bottom = 15.0
-grow_horizontal = 2
-grow_vertical = 0
+[node name="MarginContainer" type="MarginContainer" parent="margin_container" unique_id=1314253522]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/margin_left = 7
+
+[node name="count" type="Label" parent="margin_container/MarginContainer" unique_id=1170717140]
+layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
-text = "0"
+text = "x10"
 label_settings = SubResource("LabelSettings_aoki5")
