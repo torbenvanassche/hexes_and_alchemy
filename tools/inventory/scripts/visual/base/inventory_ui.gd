@@ -3,7 +3,7 @@ extends GridContainer
 
 var elements: Array[Node] = []
 
-@export var inventory: Inventory:
+@export var inventory: ContentGroup:
 	set(value):
 		inventory = value
 		if not is_inside_tree():

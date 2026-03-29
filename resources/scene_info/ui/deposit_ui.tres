@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="SceneInfo" format=3 uid="uid://gvxkyaay206c"]
+
+[ext_resource type="PackedScene" uid="uid://dgxfl4ilfepra" path="res://scenes/ui/deposit_ui.tscn" id="1_0oukx"]
+[ext_resource type="Script" uid="uid://6t4u66o5q6po" path="res://scripts/scene_manager/scene_info.gd" id="2_73ret"]
+
+[resource]
+script = ExtResource("2_73ret")
+id = "deposit_ui"
+packed_scene = ExtResource("1_0oukx")
+type = 2
+is_unique = true
+transient = true
+metadata/_custom_type_script = "uid://6t4u66o5q6po"

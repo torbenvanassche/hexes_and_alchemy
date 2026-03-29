@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://dgxfl4ilfepra"]
+
+[ext_resource type="PackedScene" uid="uid://dny1dqcanlco0" path="res://tools/custom_window/base_window.tscn" id="1_xoce2"]
+[ext_resource type="PackedScene" uid="uid://g8cyqkretffu" path="res://tools/inventory/scenes/content_group.tscn" id="3_c8a6s"]
+[ext_resource type="PackedScene" uid="uid://cnlkcv8enh20k" path="res://scenes/ui/components/deposit_slot.tscn" id="3_xoce2"]
+
+[node name="Window" unique_id=1301866213 node_paths=PackedStringArray("content") instance=ExtResource("1_xoce2")]
+size_flags_vertical = 3
+id = "Deposit items"
+store_position = true
+content = NodePath("NinePatchRect/VBoxContainer/contentPanel/InventoryHud")
+
+[node name="NinePatchRect" parent="." index="0" unique_id=434834391]
+region_rect = Rect2(0, 0, 48, 48)
+
+[node name="topbar" parent="NinePatchRect/VBoxContainer" parent_id_path=PackedInt32Array(554725130) index="0" unique_id=347636229]
+color = Color(0, 0, 0, 0.8117647)
+
+[node name="InventoryHud" parent="NinePatchRect/VBoxContainer/contentPanel" parent_id_path=PackedInt32Array(1040542232) index="0" unique_id=195655274 instance=ExtResource("3_c8a6s")]
+layout_mode = 2
+columns = 5
+packed_slot = ExtResource("3_xoce2")

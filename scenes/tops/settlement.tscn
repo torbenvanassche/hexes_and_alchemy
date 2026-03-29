@@ -49,6 +49,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.973076, 0, 1.75)
 build_steps = [NodePath("foundation"), NodePath("tavern")]
 
 [node name="tavern" parent="structures/buildable_structure" unique_id=1607926184 instance=ExtResource("7_l415u")]
+visible = false
 
 [node name="walls" type="Node3D" parent="." unique_id=854268926]
 
