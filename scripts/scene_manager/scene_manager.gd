@@ -155,10 +155,13 @@ func add(n: SceneInfo, vis: bool = true) -> SceneInstance:
 		scene_stack.append(n)
 		
 	if instance.node.is_inside_tree():
+		if instance.node is Control:
+			(instance.node as Control).move_to_front();
 		return instance;
 		
 	if n.type == SceneInfo.Type.UI:
 		_ui_container.add_child(instance.node);
+		(instance.node as Control).move_to_front();
 	elif not instance.node.get_parent() == root:
 		root.add_child(instance.node);
 	else:

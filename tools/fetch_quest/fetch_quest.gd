@@ -12,12 +12,8 @@ func _ready() -> void:
 	
 	requests = ContentGroup.new();
 	for key: ItemInfo in items.keys():
-		requests.data.append(ContentSlotResource.new(0, key, items[key], true, false))
-	requests.changed.connect(_on_deposit_changed)
-		
-func _on_deposit_changed() -> void:
-	if requests.all(func(rq: ContentSlotResource) -> bool: return rq.is_full()):
-		completed.emit();
+		var slot := ContentSlotResource.new(0, key, items[key], true, false);
+		requests.add_slot(slot)
 
 func interact() -> void:
 	DataManager.instance.get_scene_by_name("deposit_ui").queue(_open_window)
@@ -27,8 +23,10 @@ func can_interact() -> bool:
 	
 func _open_window(window_info: SceneInfo) -> void:
 	window_instance = SceneManager.add(window_info, false);
-	var inventory_ui: InventoryUI = (window_instance.node as DraggableControl).content as InventoryUI;
-	inventory_ui.inventory = requests;
+	var dep_ui: DepositUI = (window_instance.node as DraggableControl).content as DepositUI;
+	dep_ui.inventory = requests;
+	if not dep_ui.complete_order.pressed.is_connected(completed.emit):
+		dep_ui.complete_order.pressed.connect(completed.emit);
 	window_instance.on_enter.emit();
 
 func _on_area_exit(other: Area3D) -> void:

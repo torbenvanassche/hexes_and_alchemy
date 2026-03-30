@@ -5,19 +5,31 @@ class_name ContentGroup extends Node
 @export var stack_size: int = 1;
 
 signal changed();
+signal full();
 		
 func get_available_slots(content: Resource, exclude_full: bool = false) -> Array[ContentSlotResource]:
 	return data.filter(func(slot: ContentSlotResource) -> bool: 
-		return slot.is_unlocked && slot.match_or_empty(content) && (!exclude_full || !slot.is_full()))
+		return slot.is_unlocked && slot.match_or_empty(content) && (!exclude_full || !slot.is_full()));
+		
+func is_full() -> bool:
+	return data.all(func(slot: ContentSlotResource) -> bool: return slot.is_full());
 	
 func create_or_unlock_slot() -> ContentSlotResource:
 	for slot in data:
 		if !slot.is_unlocked:
 			slot.unlock();
 			return slot;
-	var new_slot: ContentSlotResource = ContentSlotResource.new(0, null, stack_size, true);
-	data.append(new_slot);
-	return new_slot;
+	return add_slot(ContentSlotResource.new(0, null, stack_size, true));
+	
+func add_slot(slot: ContentSlotResource) -> ContentSlotResource:
+	slot.full.connect(_on_slot_full)
+	slot.changed.connect(changed.emit)
+	data.append(slot);
+	return slot;
+	
+func _on_slot_full() -> void:
+	if is_full():
+		full.emit();
 	
 func add(content: Resource, amount: int = 1, can_exceed_capacity: bool = false) -> int:
 	if content == null:
@@ -35,6 +47,8 @@ func add(content: Resource, amount: int = 1, can_exceed_capacity: bool = false) 
 		remaining_amount = slots[0].add(remaining_amount, content);
 		call_amount -= 1;
 	changed.emit();
+	if is_full():
+		full.emit();
 	return remaining_amount;
 
 func remove(content: Resource, amount: int = 1) -> int:

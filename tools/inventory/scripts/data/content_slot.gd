@@ -6,19 +6,18 @@ var maxcount: int = 0;
 var is_unlocked: bool = false;
 var clear_on_empty: bool = true;
 
-signal value_changed();
 signal full();
 
 func _init(_count: int = 0, content: ItemInfo = null, _maxcount: int = 1, _unlocked: bool = true, _clear_on_empty: bool = true) -> void:
 	is_unlocked = _unlocked;
 	clear_on_empty = _clear_on_empty;
-	maxcount = maxcount;
+	maxcount = _maxcount;
 	set_content(content);
 	count = _count;
 	
 func set_content(content: ItemInfo) -> void:
 	_content = content;
-	value_changed.emit();
+	changed.emit();
 	
 func get_content() -> ItemInfo:
 	return _content;
@@ -39,7 +38,7 @@ func add(amount: int = 1, content: ItemInfo = null) -> int:
 	var remaining_space: int = maxcount - count;
 	var amount_to_add: int = min(amount, remaining_space);
 	count += amount_to_add;
-	value_changed.emit();
+	changed.emit();
 	if is_full():
 		full.emit();
 	return amount - amount_to_add;
@@ -49,7 +48,7 @@ func remove(amount: int = 1) -> int:
 	count -= amount_to_remove;
 	if count == 0:
 		reset()
-	value_changed.emit();
+	changed.emit();
 	return amount - amount_to_remove
 	
 func match_or_empty(element: ItemInfo) -> bool:

@@ -84,4 +84,4 @@ size_flags_vertical = 3
 theme_override_constants/margin_left = 15
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 35
+theme_override_constants/margin_bottom = 15

@@ -14,6 +14,7 @@ class_name ContentSlotUI extends TextureButton
 @export var dragging_color: Color = Color(Color.WHITE, 0.3)
 
 var contentSlot: ContentSlotResource;
+static var drag_data: DragData;
 
 signal initialized();
 
@@ -26,8 +27,6 @@ func _ready() -> void:
 func redraw() -> void:
 	if contentSlot == null:
 		return;
-		
-	await get_tree().process_frame
 	
 	disabled = !contentSlot.is_unlocked;
 	var resource := contentSlot.get_content()
@@ -46,10 +45,10 @@ func blur() -> void:
 	counter.visible = false;
 	
 func set_content(_content: ContentSlotResource) -> void:
-	if contentSlot && contentSlot.value_changed.is_connected(redraw):
-		contentSlot.value_changed.disconnect(redraw);
+	if contentSlot && contentSlot.changed.is_connected(redraw):
+		contentSlot.changed.disconnect(redraw);
 	contentSlot = _content;
-	contentSlot.value_changed.connect(redraw)
+	contentSlot.changed.connect(redraw)
 	
 	if _content:
 		if is_node_ready():
@@ -59,7 +58,7 @@ func set_content(_content: ContentSlotResource) -> void:
 			ready.connect(redraw, CONNECT_ONE_SHOT);
 
 func _get_drag_data(_at_position: Vector2) -> DragData:
-	if !contentSlot.has_content(null):
+	if !contentSlot.has_content(null) && contentSlot.count != 0:
 		blur();
 		
 		var preview := TextureRect.new();
@@ -69,7 +68,9 @@ func _get_drag_data(_at_position: Vector2) -> DragData:
 		preview.size = Vector2(50, 50);
 		set_drag_preview(preview)
 		
-		return DragData.new(self);
+		drag_data = DragData.new(self);
+		return drag_data;
+	drag_data = null;
 	return null;
 	
 func _can_drop_data(_at_position: Vector2, _data: Variant) -> bool:
@@ -96,8 +97,6 @@ func _gui_input(_event: InputEvent) -> void:
 	if _event is InputEventMouseButton and _event.is_pressed() and _event.button_index == MOUSE_BUTTON_RIGHT && !contentSlot.has_content(null):
 		var mouse_position := get_global_mouse_position();
 		var context := ContextMenu.new([
-			ContextMenuItem.new("Test", print.bind("test")),
-			ContextMenuItem.new("Test2", print.bind("test2"))
 		])
 		add_child(context);
 		context.open(Vector2(mouse_position.x, mouse_position.y))

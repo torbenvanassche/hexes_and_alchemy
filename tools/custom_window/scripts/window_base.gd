@@ -7,6 +7,7 @@ extends Control
 @onready var top_bar: ColorRect = $NinePatchRect/VBoxContainer/topbar;
 @onready var close_button: Button = $NinePatchRect/VBoxContainer/topbar/MarginContainer2/HBoxContainer/Button;
 @onready var title: Label = $NinePatchRect/VBoxContainer/topbar/MarginContainer2/HBoxContainer/MarginContainer/Title;
+@onready var v_box_container: VBoxContainer = $NinePatchRect/VBoxContainer
 @onready var content_panel: Control = $NinePatchRect/VBoxContainer/contentPanel;
 @onready var npr: NinePatchRect = $NinePatchRect;
 
@@ -38,11 +39,8 @@ func _ready() -> void:
 	top_bar.custom_minimum_size.y = topbar_height
 	
 func _fit_to_content() -> void:
-	var content_size := content_panel.get_combined_minimum_size()
-
+	var content_size := v_box_container.get_combined_minimum_size()
 	var height := content_size.y
-	if top_bar.visible:
-		height += top_bar.size.y
 
 	set_deferred("size", Vector2(content_size.x, height))
 	
@@ -81,6 +79,10 @@ func on_enter() -> void:
 	
 	if store_position:
 		position = stored_position;
+		
+	for c: Control in content_panel.get_children():
+		if c.has_method("on_enter"):
+			c.on_enter();
 
 func _change_title(s: String) -> void:
 	title.text = s;
