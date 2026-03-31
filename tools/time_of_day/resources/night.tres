@@ -5,6 +5,7 @@
 [resource]
 script = ExtResource("1_qi2rw")
 phase = 4
+display_name = "night"
 end_time = 1.0
 color = Color(0.2, 0.29803923, 0.6, 1)
 light_energy = 0.2

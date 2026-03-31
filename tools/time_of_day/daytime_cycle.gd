@@ -11,8 +11,8 @@ enum Phase {
 @export var sun: DirectionalLight3D
 @export var environment: WorldEnvironment
 
-@export var sun_min_angle: float = -180
-@export var sun_max_angle: float = 260.0
+var sun_min_angle: float = -180
+var sun_max_angle: float = 180
 
 @export var phases: Array[TimeOfDayPhase]
 var current_phase: TimeOfDayPhase = null
@@ -47,6 +47,7 @@ func get_current_time_percentage() -> float:
 func _update_phase() -> void:
 	var new_phase := get_current_phase()
 	if new_phase != current_phase:
+		print(new_phase.display_name)
 		current_phase = new_phase
 		phase_changed.emit(current_phase)
 
@@ -108,7 +109,7 @@ func _update_lighting() -> void:
 		var env := environment.environment
 
 		var night_ambient := Color(0.05, 0.07, 0.12)
-		var day_ambient := base_color * 0.3
+		var day_ambient := base_color * 0.2
 
 		var ambient := night_ambient.lerp(day_ambient, height_factor)
 

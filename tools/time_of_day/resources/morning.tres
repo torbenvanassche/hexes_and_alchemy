@@ -5,7 +5,8 @@
 [resource]
 script = ExtResource("1_3dmie")
 phase = 1
-end_time = 0.4
+display_name = "morning"
+end_time = 0.3
 color = Color(1, 0.9529412, 0.8784314, 1)
-light_energy = 2.3
+light_energy = 1.3
 metadata/_custom_type_script = "uid://c5wapecp6hocm"

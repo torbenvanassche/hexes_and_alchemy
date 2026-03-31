@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_jtmxd")
-end_time = 0.2
+display_name = "dawn"
+end_time = 0.1
 color = Color(1, 0.7019608, 0.4, 1)
-light_energy = 1.5
 metadata/_custom_type_script = "uid://c5wapecp6hocm"

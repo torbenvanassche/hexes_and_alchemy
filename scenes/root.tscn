@@ -71,8 +71,6 @@ metadata/_custom_type_script = "uid://cf50g0p4jcitj"
 script = ExtResource("4_moyyc")
 sun = NodePath("../../shared_components/DirectionalLight3D")
 environment = NodePath("../../shared_components/WorldEnvironment")
-sun_min_angle = -90.0
-sun_max_angle = 270.0
 phases = Array[ExtResource("5_ltgni")]([ExtResource("6_8e7ao"), ExtResource("6_yg167"), ExtResource("7_8e7ao"), ExtResource("9_xkeu2"), ExtResource("8_xkeu2")])
 metadata/_custom_type_script = "uid://g8s30q5nqcd8"
 

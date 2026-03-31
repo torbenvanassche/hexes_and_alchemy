@@ -5,6 +5,7 @@
 [resource]
 script = ExtResource("1_mtmo0")
 phase = 3
+display_name = "dusk"
 end_time = 0.85
 color = Color(1, 0.54901963, 0.25882354, 1)
 light_energy = 1.5
