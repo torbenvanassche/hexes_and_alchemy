@@ -8,7 +8,13 @@
 [ext_resource type="Resource" uid="uid://betpu2iylw1qy" path="res://resources/scene_info/hex/hex_simple.tres" id="4_vgks2"]
 [ext_resource type="Script" uid="uid://m31o3kdm652g" path="res://scripts/hex_system/base/region_info.gd" id="5_3hfy5"]
 [ext_resource type="Resource" uid="uid://bto28untf5lrf" path="res://resources/scene_info/hex/hex_water.tres" id="5_dylgi"]
+[ext_resource type="Script" uid="uid://c5wapecp6hocm" path="res://tools/time_of_day/TimeOfDayPhase.gd" id="5_ltgni"]
 [ext_resource type="Resource" uid="uid://cqs6mgr0ms55u" path="res://resources/region_info/plains.tres" id="6_7pvxh"]
+[ext_resource type="Resource" uid="uid://cwuoci2a2rly8" path="res://tools/time_of_day/resources/dawn.tres" id="6_8e7ao"]
+[ext_resource type="Resource" uid="uid://b72w6vtxnws2x" path="res://tools/time_of_day/resources/morning.tres" id="6_yg167"]
+[ext_resource type="Resource" uid="uid://cv5lb40d33m22" path="res://tools/time_of_day/resources/afternoon.tres" id="7_8e7ao"]
+[ext_resource type="Resource" uid="uid://d2oshonh138ag" path="res://tools/time_of_day/resources/night.tres" id="8_xkeu2"]
+[ext_resource type="Resource" uid="uid://dkibdkuc04rrk" path="res://tools/time_of_day/resources/dusk.tres" id="9_xkeu2"]
 [ext_resource type="Resource" uid="uid://bflckgydmmunp" path="res://resources/region_info/desert.tres" id="9_y3xxt"]
 [ext_resource type="Script" uid="uid://btydeamnhd6x" path="res://scripts/structures/structure_info.gd" id="10_gt4lb"]
 [ext_resource type="Resource" uid="uid://dbhyrexgkscja" path="res://resources/structure_info/farmland.tres" id="11_ya6yc"]
@@ -50,7 +56,6 @@ sky_material = SubResource("ProceduralSkyMaterial_j5px3")
 background_mode = 2
 sky = SubResource("Sky_twpsu")
 tonemap_mode = 2
-glow_enabled = true
 
 [node name="game" type="Node3D" unique_id=1531349496]
 
@@ -62,8 +67,13 @@ initial_scene = ExtResource("22_jehah")
 script = ExtResource("3_x7ldt")
 metadata/_custom_type_script = "uid://cf50g0p4jcitj"
 
-[node name="time_of_day" type="Node" parent="game_manager" unique_id=1430942160]
+[node name="time_of_day" type="Node" parent="game_manager" unique_id=1430942160 node_paths=PackedStringArray("sun", "environment")]
 script = ExtResource("4_moyyc")
+sun = NodePath("../../shared_components/DirectionalLight3D")
+environment = NodePath("../../shared_components/WorldEnvironment")
+sun_min_angle = -90.0
+sun_max_angle = 270.0
+phases = Array[ExtResource("5_ltgni")]([ExtResource("6_8e7ao"), ExtResource("6_yg167"), ExtResource("7_8e7ao"), ExtResource("9_xkeu2"), ExtResource("8_xkeu2")])
 metadata/_custom_type_script = "uid://g8s30q5nqcd8"
 
 [node name="resource_manager" type="Node" parent="." unique_id=1025417812]

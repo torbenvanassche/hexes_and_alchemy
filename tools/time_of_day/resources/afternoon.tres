@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="TimeOfDayPhase" format=3 uid="uid://cv5lb40d33m22"]
+
+[ext_resource type="Script" uid="uid://c5wapecp6hocm" path="res://tools/time_of_day/TimeOfDayPhase.gd" id="1_t5273"]
+
+[resource]
+script = ExtResource("1_t5273")
+phase = 2
+end_time = 0.6
+color = Color(1, 1, 1, 1)
+light_energy = 2.8
+metadata/_custom_type_script = "uid://c5wapecp6hocm"
