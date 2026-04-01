@@ -11,43 +11,36 @@ enum Phase {
 @export var sun: DirectionalLight3D
 @export var environment: WorldEnvironment
 
-var sun_min_angle: float = -180
-var sun_max_angle: float = 180
-
 @export var phases: Array[TimeOfDayPhase]
 var current_phase: TimeOfDayPhase = null
 signal phase_changed(new_phase: TimeOfDayPhase)
 
-@export var duration: int = 10
-var days: int = 0;
-@onready var day_timer: Timer = Timer.new()
+@export var duration: float = 120.0  # seconds per full day
+var days: int = 0
+var _time: float = 0.0  # 0.0 → 1.0, continuous, no Timer needed
 
 signal day_ended()
 
 func _ready() -> void:
-	day_timer.wait_time = duration
-	day_timer.timeout.connect(_on_day_ended)
-	day_timer.autostart = true
-	add_child(day_timer)
-
 	current_phase = get_current_phase()
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	_time += delta / duration
+	if _time >= 1.0:
+		_time -= 1.0
+		days += 1
+		day_ended.emit()
+
 	_update_phase()
 	_update_sun_rotation()
 	_update_lighting()
-	
-func _on_day_ended() -> void:
-	day_ended.emit()
-	days += 1;
 
 func get_current_time_percentage() -> float:
-	return 1.0 - (day_timer.time_left / duration)
+	return _time
 
 func _update_phase() -> void:
 	var new_phase := get_current_phase()
 	if new_phase != current_phase:
-		print(new_phase.display_name)
 		current_phase = new_phase
 		phase_changed.emit(current_phase)
 
@@ -66,7 +59,6 @@ func get_next_phase(current: TimeOfDayPhase) -> TimeOfDayPhase:
 
 func get_phase_blend() -> float:
 	var t := get_current_time_percentage()
-
 	var prev_end := 0.0
 	for phase in phases:
 		if t < phase.end_time:
@@ -75,43 +67,33 @@ func get_phase_blend() -> float:
 				return 0.0
 			return (t - prev_end) / interval
 		prev_end = phase.end_time
-	return 0.0
+	return 1.0
 
 func _update_sun_rotation() -> void:
 	if not sun:
 		return
-
 	var t := get_current_time_percentage()
-	var angle := lerpf(sun_min_angle, sun_max_angle, t)
-
-	sun.rotation_degrees.x = angle
+	sun.rotation_degrees.x = lerpf(-90.0, 270.0, t)
 
 func _update_lighting() -> void:
 	if current_phase == null or not sun:
 		return
-
 	var next_phase := get_next_phase(current_phase)
 	var blend := get_phase_blend()
-	var angle := sun.rotation_degrees.x
 
 	var base_color := current_phase.color.lerp(next_phase.color, blend)
 	var base_energy := lerpf(current_phase.light_energy, next_phase.light_energy, blend)
-	
-	var horizon_min := -10.0
-	var horizon_max := 90.0
 
-	var height_factor := clampf((angle - horizon_min) / (horizon_max - horizon_min), 0.0, 1.0)
+	var angle := sun.rotation_degrees.x
+	var t_arc := (angle + 90.0) / 360.0
+	var height_factor := clampf(sin(t_arc * PI), 0.0, 1.0)
 
-	sun.light_energy = base_energy
 	sun.light_color = base_color
+	sun.light_energy = base_energy if height_factor > 0.0 else 0.0
 
 	if environment and environment.environment:
 		var env := environment.environment
-
-		var night_ambient := Color(0.05, 0.07, 0.12)
-		var day_ambient := base_color * 0.2
-
-		var ambient := night_ambient.lerp(day_ambient, height_factor)
-
-		env.ambient_light_color = ambient
-		env.ambient_light_energy = lerpf(0.2, 1.0, height_factor)
+		var night_ambient := Color(0.02, 0.03, 0.08)
+		var day_ambient := base_color * 0.3
+		env.ambient_light_color = night_ambient.lerp(day_ambient, height_factor)
+		env.ambient_light_energy = lerpf(0.15, 1.2, height_factor)
