@@ -15,9 +15,9 @@ enum Phase {
 var current_phase: TimeOfDayPhase = null
 signal phase_changed(new_phase: TimeOfDayPhase)
 
-@export var duration: float = 120.0  # seconds per full day
+@export var duration: float = 120.0
 var days: int = 0
-var _time: float = 0.0  # 0.0 → 1.0, continuous, no Timer needed
+var _time: float = 0.0
 
 signal day_ended()
 

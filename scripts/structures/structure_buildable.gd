@@ -6,12 +6,12 @@ var current_step: Interaction;
 func _ready() -> void:
 	current_step = build_steps[0];
 	for step in build_steps:
-		if step is FetchQuest:
+		if step is BuildRequest:
 			step.completed.connect(_on_step_completed.bind(step))
 		if build_steps.find(step) != 0:
 			step.visible = false;
 			
-func _on_step_completed(step: FetchQuest) -> void:
+func _on_step_completed(step: BuildRequest) -> void:
 	var index := build_steps.find(step);
 	if index < build_steps.size() - 1:
 		current_step.visible = false;

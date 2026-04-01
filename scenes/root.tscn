@@ -8,7 +8,7 @@
 [ext_resource type="Resource" uid="uid://betpu2iylw1qy" path="res://resources/scene_info/hex/hex_simple.tres" id="4_vgks2"]
 [ext_resource type="Script" uid="uid://m31o3kdm652g" path="res://scripts/hex_system/base/region_info.gd" id="5_3hfy5"]
 [ext_resource type="Resource" uid="uid://bto28untf5lrf" path="res://resources/scene_info/hex/hex_water.tres" id="5_dylgi"]
-[ext_resource type="Script" uid="uid://c5wapecp6hocm" path="res://tools/time_of_day/TimeOfDayPhase.gd" id="5_ltgni"]
+[ext_resource type="Script" uid="uid://c5wapecp6hocm" path="res://tools/time_of_day/time_of_day_phase.gd" id="5_ltgni"]
 [ext_resource type="Resource" uid="uid://cqs6mgr0ms55u" path="res://resources/region_info/plains.tres" id="6_7pvxh"]
 [ext_resource type="Resource" uid="uid://cwuoci2a2rly8" path="res://tools/time_of_day/resources/dawn.tres" id="6_8e7ao"]
 [ext_resource type="Resource" uid="uid://b72w6vtxnws2x" path="res://tools/time_of_day/resources/morning.tres" id="6_yg167"]
@@ -72,7 +72,6 @@ script = ExtResource("4_moyyc")
 sun = NodePath("../../shared_components/DirectionalLight3D")
 environment = NodePath("../../shared_components/WorldEnvironment")
 phases = Array[ExtResource("5_ltgni")]([ExtResource("6_8e7ao"), ExtResource("6_yg167"), ExtResource("7_8e7ao"), ExtResource("9_xkeu2"), ExtResource("8_xkeu2")])
-duration = 5.0
 metadata/_custom_type_script = "uid://g8s30q5nqcd8"
 
 [node name="resource_manager" type="Node" parent="." unique_id=1025417812]

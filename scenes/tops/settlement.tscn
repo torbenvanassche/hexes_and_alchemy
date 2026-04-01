@@ -8,6 +8,15 @@
 [ext_resource type="PackedScene" uid="uid://8hv1i8bxhtup" path="res://scenes/tops/buildable_structure.tscn" id="6_l415u"]
 [ext_resource type="PackedScene" uid="uid://ceeffxsbgrta" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/fence_stone_straight_gate_collision.tscn" id="7_616a5"]
 [ext_resource type="PackedScene" uid="uid://clf621pbnvsbw" path="res://scenes/tops/topper_tavern.tscn" id="7_l415u"]
+[ext_resource type="PackedScene" uid="uid://gb2g45tjja61" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/building_stage_A.glb" id="7_mkm41"]
+[ext_resource type="Script" uid="uid://cvpndsdtuqm4i" path="res://tools/quest_system/scripts/fetch_quest.gd" id="8_mt1kp"]
+[ext_resource type="Resource" uid="uid://byeghtr0gkyhp" path="res://tools/quest_system/resources/build_tavern.tres" id="9_47cix"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_04njl"]
+size = Vector3(1.602665, 0.30893278, 1.25601)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_msdat"]
+size = Vector3(1.0518265, 0.28567123, 0.880126)
 
 [node name="starting_settlement" type="Node3D" unique_id=1143800928 node_paths=PackedStringArray("spawn_position")]
 script = ExtResource("1_l415u")
@@ -47,6 +56,22 @@ transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 1.9820508, 
 [node name="buildable_structure" parent="structures" unique_id=147799684 node_paths=PackedStringArray("build_steps") instance=ExtResource("6_l415u")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.973076, 0, 1.75)
 build_steps = [NodePath("foundation"), NodePath("tavern")]
+
+[node name="foundation" parent="structures/buildable_structure" unique_id=216741624 instance=ExtResource("7_mkm41")]
+script = ExtResource("8_mt1kp")
+quest = ExtResource("9_47cix")
+
+[node name="interaction" type="Area3D" parent="structures/buildable_structure/foundation" unique_id=1087166324]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="structures/buildable_structure/foundation/interaction" unique_id=1366150295]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.016907275, 0.14401507, 0.122535765)
+shape = SubResource("BoxShape3D_04njl")
+
+[node name="collision" type="StaticBody3D" parent="structures/buildable_structure/foundation" unique_id=258863365]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="structures/buildable_structure/foundation/collision" unique_id=1289901415]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.043712616, 0.14244652, 0.09556866)
+shape = SubResource("BoxShape3D_msdat")
 
 [node name="tavern" parent="structures/buildable_structure" unique_id=1607926184 instance=ExtResource("7_l415u")]
 transform = Transform3D(-0.4999999, 0, -0.86602545, 0, 1, 0, 0.86602545, 0, -0.4999999, 0, 0, 0)
