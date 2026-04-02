@@ -25,9 +25,9 @@ func _ready() -> void:
 	current_phase = get_current_phase()
 
 func _process(delta: float) -> void:
-	_time += delta / duration
-	if _time >= 1.0:
-		_time -= 1.0
+	_time += delta
+	if _time >= duration:
+		_time -= duration
 		days += 1
 		day_ended.emit()
 
@@ -36,7 +36,7 @@ func _process(delta: float) -> void:
 	_update_lighting()
 
 func get_current_time_percentage() -> float:
-	return _time
+	return _time / duration
 
 func _update_phase() -> void:
 	var new_phase := get_current_phase()

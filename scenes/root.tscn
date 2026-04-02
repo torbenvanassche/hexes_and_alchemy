@@ -72,6 +72,7 @@ script = ExtResource("4_moyyc")
 sun = NodePath("../../shared_components/DirectionalLight3D")
 environment = NodePath("../../shared_components/WorldEnvironment")
 phases = Array[ExtResource("5_ltgni")]([ExtResource("6_8e7ao"), ExtResource("6_yg167"), ExtResource("7_8e7ao"), ExtResource("9_xkeu2"), ExtResource("8_xkeu2")])
+duration = 1.0
 metadata/_custom_type_script = "uid://g8s30q5nqcd8"
 
 [node name="resource_manager" type="Node" parent="." unique_id=1025417812]

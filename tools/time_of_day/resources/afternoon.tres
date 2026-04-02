@@ -7,6 +7,6 @@ script = ExtResource("1_t5273")
 phase = 2
 display_name = "afternoon"
 end_time = 0.62
-color = Color(1, 1, 1, 1)
+color = Color(1, 0.9795561, 0.453125, 1)
 light_energy = 1.5
 metadata/_custom_type_script = "uid://c5wapecp6hocm"
