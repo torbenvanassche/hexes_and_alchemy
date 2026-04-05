@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://gb2g45tjja61" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/building_stage_A.glb" id="7_mkm41"]
 [ext_resource type="Script" uid="uid://cvpndsdtuqm4i" path="res://tools/quest_system/scripts/fetch_quest.gd" id="8_mt1kp"]
 [ext_resource type="Resource" uid="uid://byeghtr0gkyhp" path="res://tools/quest_system/resources/build_tavern.tres" id="9_47cix"]
+[ext_resource type="PackedScene" uid="uid://c6gesglis1r62" path="res://scenes/tops/topper_questboard.tscn" id="11_mt1kp"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_04njl"]
 size = Vector3(1.602665, 0.30893278, 1.25601)
@@ -76,6 +77,9 @@ shape = SubResource("BoxShape3D_msdat")
 [node name="tavern" parent="structures/buildable_structure" unique_id=1607926184 instance=ExtResource("7_l415u")]
 transform = Transform3D(-0.4999999, 0, -0.86602545, 0, 1, 0, 0.86602545, 0, -0.4999999, 0, 0, 0)
 visible = false
+
+[node name="questboard" parent="structures" unique_id=1065241070 instance=ExtResource("11_mt1kp")]
+transform = Transform3D(0.8660254, 0, -0.5, 0, 1, 0, 0.5, 0, 0.8660254, 2.397221, 0, -0.66254705)
 
 [node name="walls" type="Node3D" parent="." unique_id=854268926]
 

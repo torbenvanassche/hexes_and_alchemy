@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://c6gesglis1r62"]
+
+[ext_resource type="Script" uid="uid://8k4lf3pd7r8" path="res://tools/quest_system/scripts/quest_board.gd" id="1_6cg5f"]
+[ext_resource type="PackedScene" uid="uid://croarym08s4su" path="res://meshes/kay_custom/quest_board.glb" id="1_uckkr"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6cg5f"]
+size = Vector3(1.1060038, 0.687778, 0.5198202)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lgrsq"]
+size = Vector3(0.709322, 0.60830307, 0.15392679)
+
+[node name="questboard" type="Node3D" unique_id=1065241070]
+script = ExtResource("1_6cg5f")
+
+[node name="quest_board" parent="." unique_id=1282978270 instance=ExtResource("1_uckkr")]
+
+[node name="interaction" type="Area3D" parent="." unique_id=884693552]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="interaction" unique_id=883594061]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.020191133, 0.31215024, -0.005495131)
+shape = SubResource("BoxShape3D_6cg5f")
+
+[node name="collision" type="StaticBody3D" parent="." unique_id=1787419569]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="collision" unique_id=1396252389]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.012019157, 0.30083275, -0.01808706)
+shape = SubResource("BoxShape3D_lgrsq")
