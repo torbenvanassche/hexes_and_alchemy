@@ -44,6 +44,8 @@
 [ext_resource type="Resource" uid="uid://dwrv8ceflmsjy" path="res://resources/item_info/gold_ore.tres" id="31_x7ldt"]
 [ext_resource type="Resource" uid="uid://oowfm1lpkvm" path="res://resources/item_info/wood_log.tres" id="32_moyyc"]
 [ext_resource type="Resource" uid="uid://b46nyvtvipor5" path="res://resources/item_info/wood_raw.tres" id="33_f0nuf"]
+[ext_resource type="Resource" uid="uid://bh6dgogp8tk5k" path="res://resources/scene_info/ui/quest_list_ui.tres" id="37_33j8a"]
+[ext_resource type="Resource" uid="uid://ce3u2bjgmkfe7" path="res://resources/scene_info/ui/quest_creation_ui.tres" id="38_eirlg"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_j5px3"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -80,7 +82,7 @@ script = ExtResource("2_sqa0i")
 hexes = Array[ExtResource("3_l5cgh")]([ExtResource("4_vgks2"), ExtResource("5_dylgi")])
 regions = Array[ExtResource("5_3hfy5")]([ExtResource("6_7pvxh"), ExtResource("9_y3xxt")])
 structures = Array[ExtResource("10_gt4lb")]([ExtResource("11_ya6yc"), ExtResource("12_mflgo"), ExtResource("14_8ui5n"), ExtResource("16_jehah"), ExtResource("17_re66h"), ExtResource("18_re66h"), ExtResource("19_isfgf"), ExtResource("18_58tnd")])
-scenes = Array[ExtResource("15_ya6yc")]([ExtResource("12_vgks2"), ExtResource("16_gt4lb"), ExtResource("18_34frw"), ExtResource("18_mflgo"), ExtResource("20_8ui5n"), ExtResource("21_ccljq"), ExtResource("22_jehah"), ExtResource("26_isfgf"), ExtResource("29_moyyc"), ExtResource("30_f0nuf")])
+scenes = Array[ExtResource("15_ya6yc")]([ExtResource("12_vgks2"), ExtResource("16_gt4lb"), ExtResource("18_34frw"), ExtResource("18_mflgo"), ExtResource("20_8ui5n"), ExtResource("21_ccljq"), ExtResource("22_jehah"), ExtResource("26_isfgf"), ExtResource("29_moyyc"), ExtResource("30_f0nuf"), ExtResource("37_33j8a"), ExtResource("38_eirlg")])
 items = Array[ExtResource("27_phl1g")]([ExtResource("28_58tnd"), ExtResource("30_agklt"), ExtResource("31_x7ldt"), ExtResource("32_moyyc"), ExtResource("33_f0nuf")])
 
 [node name="shared_components" type="Node" parent="." unique_id=2003265152]

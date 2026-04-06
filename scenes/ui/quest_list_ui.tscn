@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://brxjfdnhnyhhv"]
+
+[ext_resource type="PackedScene" uid="uid://dny1dqcanlco0" path="res://tools/custom_window/base_window.tscn" id="1_guitq"]
+[ext_resource type="Script" uid="uid://di4yd6oc2lo3y" path="res://tools/inventory/scripts/visual/base/quest_list_ui.gd" id="2_0d8vg"]
+
+[node name="Window" unique_id=1301866213 node_paths=PackedStringArray("content") instance=ExtResource("1_guitq")]
+id = "Quest board"
+content = NodePath("NinePatchRect/VBoxContainer/contentPanel/QuestListContainer")
+
+[node name="QuestListContainer" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel" parent_id_path=PackedInt32Array(1040542232) index="0" unique_id=82514535]
+layout_mode = 2
+script = ExtResource("2_0d8vg")

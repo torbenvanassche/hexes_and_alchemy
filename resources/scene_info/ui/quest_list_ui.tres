@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="SceneInfo" format=3 uid="uid://bh6dgogp8tk5k"]
+
+[ext_resource type="PackedScene" uid="uid://brxjfdnhnyhhv" path="res://scenes/ui/quest_list_ui.tscn" id="1_x7q3e"]
+[ext_resource type="Script" uid="uid://6t4u66o5q6po" path="res://scripts/scene_manager/scene_info.gd" id="2_ttyle"]
+
+[resource]
+script = ExtResource("2_ttyle")
+id = "quest_list_ui"
+packed_scene = ExtResource("1_x7q3e")
+type = 2
+is_unique = true
+transient = true
+metadata/_custom_type_script = "uid://6t4u66o5q6po"
