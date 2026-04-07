@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://bhqw7ckq2j06r"]
+
+[ext_resource type="Script" uid="uid://bspwdi5yrsyab" path="res://tools/inventory/scripts/visual/parts/quest_list_item_ui.gd" id="1_qmdcg"]
+[ext_resource type="PackedScene" uid="uid://c5ocjw6joaemy" path="res://tools/inventory/scenes/content_slot.tscn" id="2_vqdcy"]
+
+[node name="Control" type="HBoxContainer" unique_id=84988057]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -548.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+script = ExtResource("1_qmdcg")
+supply_slot = ExtResource("2_vqdcy")
+
+[node name="QuestNumber" type="Label" parent="." unique_id=725982639]
+layout_mode = 2
+
+[node name="QuestType" type="OptionButton" parent="." unique_id=531875893]
+layout_mode = 2
+
+[node name="QuestLocation" type="OptionButton" parent="." unique_id=64460896]
+layout_mode = 2
+
+[node name="QuestSupplies" type="HBoxContainer" parent="." unique_id=984581217]
+layout_mode = 2

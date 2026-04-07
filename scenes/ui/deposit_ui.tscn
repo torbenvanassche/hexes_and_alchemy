@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://dny1dqcanlco0" path="res://tools/custom_window/base_window.tscn" id="1_xoce2"]
 [ext_resource type="PackedScene" uid="uid://g8cyqkretffu" path="res://tools/inventory/scenes/content_group.tscn" id="3_c8a6s"]
-[ext_resource type="Script" uid="uid://m4gt3l1i1hk2" path="res://tools/inventory/scripts/visual/base/deposit_ui.gd" id="3_i1cn2"]
+[ext_resource type="Script" uid="uid://m4gt3l1i1hk2" path="res://tools/inventory/scripts/visual/screens/deposit_ui.gd" id="3_i1cn2"]
 [ext_resource type="PackedScene" uid="uid://cnlkcv8enh20k" path="res://scenes/ui/components/deposit_slot.tscn" id="3_xoce2"]
 
 [node name="Window" unique_id=1301866213 node_paths=PackedStringArray("content") instance=ExtResource("1_xoce2")]

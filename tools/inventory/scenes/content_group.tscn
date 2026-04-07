@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://g8cyqkretffu"]
 
-[ext_resource type="Script" uid="uid://5flpgwnxnsjt" path="res://tools/inventory/scripts/visual/base/inventory_ui.gd" id="1_jc34r"]
+[ext_resource type="Script" uid="uid://5flpgwnxnsjt" path="res://tools/inventory/scripts/visual/screens/inventory_ui.gd" id="1_jc34r"]
 [ext_resource type="PackedScene" uid="uid://c5ocjw6joaemy" path="res://tools/inventory/scenes/content_slot.tscn" id="2_wbhkh"]
 
 [node name="InventoryHud" type="GridContainer" unique_id=145464139]

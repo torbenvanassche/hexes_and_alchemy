@@ -4,6 +4,8 @@ class_name FetchQuest extends Quest
 var progress_tracker: ContentGroup;
 
 func initialize() -> void:
+	quest_type = Type.FETCH;
+	
 	progress_tracker = ContentGroup.new();
 	for key: ItemInfo in requested_items.keys():
 		var slot := ContentSlotResource.new(0, key, requested_items[key], true, false);

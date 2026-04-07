@@ -1,12 +1,18 @@
 [gd_scene format=3 uid="uid://brxjfdnhnyhhv"]
 
 [ext_resource type="PackedScene" uid="uid://dny1dqcanlco0" path="res://tools/custom_window/base_window.tscn" id="1_guitq"]
-[ext_resource type="Script" uid="uid://di4yd6oc2lo3y" path="res://tools/inventory/scripts/visual/base/quest_list_ui.gd" id="2_0d8vg"]
+[ext_resource type="Script" uid="uid://di4yd6oc2lo3y" path="res://tools/inventory/scripts/visual/screens/quest_list_ui.gd" id="2_0d8vg"]
+[ext_resource type="PackedScene" uid="uid://bhqw7ckq2j06r" path="res://scenes/ui/components/quest_list_item.tscn" id="3_axeff"]
 
 [node name="Window" unique_id=1301866213 node_paths=PackedStringArray("content") instance=ExtResource("1_guitq")]
+custom_minimum_size = Vector2(500, 0)
 id = "Quest board"
-content = NodePath("NinePatchRect/VBoxContainer/contentPanel/QuestListContainer")
+content = NodePath("NinePatchRect/VBoxContainer/contentPanel/ScrollContainer/QuestListContainer")
 
-[node name="QuestListContainer" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel" parent_id_path=PackedInt32Array(1040542232) index="0" unique_id=82514535]
+[node name="ScrollContainer" type="ScrollContainer" parent="NinePatchRect/VBoxContainer/contentPanel" parent_id_path=PackedInt32Array(1040542232) index="0" unique_id=1702041871]
+layout_mode = 2
+
+[node name="QuestListContainer" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/ScrollContainer" index="0" unique_id=82514535]
 layout_mode = 2
 script = ExtResource("2_0d8vg")
+quest_item_ui = ExtResource("3_axeff")

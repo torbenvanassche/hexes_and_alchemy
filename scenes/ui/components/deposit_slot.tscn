@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cnlkcv8enh20k"]
 
 [ext_resource type="PackedScene" uid="uid://c5ocjw6joaemy" path="res://tools/inventory/scenes/content_slot.tscn" id="2_6q5fs"]
-[ext_resource type="Script" uid="uid://bi51oy2c7lk2y" path="res://tools/inventory/scripts/visual/base/deposit_slot_ui.gd" id="2_voui4"]
+[ext_resource type="Script" uid="uid://bi51oy2c7lk2y" path="res://tools/inventory/scripts/visual/parts/deposit_slot_ui.gd" id="2_voui4"]
 
 [node name="content_slot" unique_id=930043497 instance=ExtResource("2_6q5fs")]
 script = ExtResource("2_voui4")

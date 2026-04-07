@@ -80,7 +80,7 @@ func on_enter() -> void:
 	if store_position:
 		position = stored_position;
 		
-	for c: Control in content_panel.get_children():
+	for c: Control in Helpers.flatten_children(content_panel, true):
 		if c.has_method("on_enter"):
 			c.on_enter();
 
