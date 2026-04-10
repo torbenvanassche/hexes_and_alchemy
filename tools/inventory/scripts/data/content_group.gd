@@ -6,7 +6,10 @@ class_name ContentGroup extends Node
 
 signal changed();
 signal full();
-		
+
+func _init(_stack_size: int = stack_size) -> void:
+	self.stack_size = _stack_size;
+
 func get_available_slots(content: Resource, exclude_full: bool = false) -> Array[ContentSlotResource]:
 	return data.filter(func(slot: ContentSlotResource) -> bool: 
 		return slot.is_unlocked && slot.match_or_empty(content) && (!exclude_full || !slot.is_full()));
@@ -36,6 +39,9 @@ func add(content: Resource, amount: int = 1, can_exceed_capacity: bool = false) 
 		Debug.message("Trying to add a null object to the inventory!");
 	
 	var remaining_amount: int = amount;
+	if data.size() == 0 && can_exceed_capacity:
+		create_or_unlock_slot()
+	
 	var call_amount: int = data.size();
 	while remaining_amount > 0 && call_amount > 0:
 		var slots: Array[ContentSlotResource] = get_available_slots(content, true);

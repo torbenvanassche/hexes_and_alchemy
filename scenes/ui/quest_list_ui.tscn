@@ -5,14 +5,28 @@
 [ext_resource type="PackedScene" uid="uid://bhqw7ckq2j06r" path="res://scenes/ui/components/quest_list_item.tscn" id="3_axeff"]
 
 [node name="Window" unique_id=1301866213 node_paths=PackedStringArray("content") instance=ExtResource("1_guitq")]
-custom_minimum_size = Vector2(500, 0)
+custom_minimum_size = Vector2(500, 350)
 id = "Quest board"
-content = NodePath("NinePatchRect/VBoxContainer/contentPanel/ScrollContainer/QuestListContainer")
+content = NodePath("NinePatchRect/VBoxContainer/contentPanel/ScrollContainer/QuestContainer")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="NinePatchRect/VBoxContainer/contentPanel" parent_id_path=PackedInt32Array(1040542232) index="0" unique_id=1702041871]
+[node name="contentPanel" parent="NinePatchRect/VBoxContainer" parent_id_path=PackedInt32Array(554725130) index="1" unique_id=1040542232]
+size_flags_horizontal = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="NinePatchRect/VBoxContainer/contentPanel" index="0" unique_id=1702041871]
 layout_mode = 2
 
-[node name="QuestListContainer" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/ScrollContainer" index="0" unique_id=82514535]
+[node name="QuestContainer" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/ScrollContainer" index="0" unique_id=82514535]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="CreateQuestButton" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/ScrollContainer/QuestContainer" index="0" unique_id=1078826420]
+layout_mode = 2
+text = "Create Quest"
+
+[node name="QuestListContainer" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/ScrollContainer/QuestContainer" index="1" unique_id=1016722743]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource("2_0d8vg")
 quest_item_ui = ExtResource("3_axeff")

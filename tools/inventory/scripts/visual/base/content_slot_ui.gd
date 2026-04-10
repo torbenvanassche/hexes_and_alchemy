@@ -12,6 +12,7 @@ class_name ContentSlotUI extends TextureButton
 @export_group("Drag Settings")
 @export var default_color: Color = Color.WHITE;
 @export var dragging_color: Color = Color(Color.WHITE, 0.3)
+@export var can_drag: bool = true;
 
 var contentSlot: ContentSlotResource;
 static var drag_data: DragData;
@@ -27,6 +28,8 @@ func _ready() -> void:
 func redraw() -> void:
 	if contentSlot == null:
 		return;
+		
+	mouse_filter = Control.MOUSE_FILTER_STOP if can_drag else Control.MOUSE_FILTER_IGNORE;
 	
 	disabled = !contentSlot.is_unlocked;
 	var resource := contentSlot.get_content()
@@ -58,6 +61,7 @@ func set_content(_content: ContentSlotResource) -> void:
 			ready.connect(redraw, CONNECT_ONE_SHOT);
 
 func _get_drag_data(_at_position: Vector2) -> DragData:
+	print(mouse_filter)
 	if !contentSlot.has_content(null) && contentSlot.count != 0:
 		blur();
 		

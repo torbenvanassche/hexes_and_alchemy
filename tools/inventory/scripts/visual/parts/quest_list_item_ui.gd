@@ -1,4 +1,4 @@
-class_name QuestListItemUI extends Node
+class_name QuestListItemUI extends Control
 
 @onready var quest_type: OptionButton = $QuestType
 @onready var quest_number: Label = $QuestNumber
@@ -9,22 +9,18 @@ class_name QuestListItemUI extends Node
 
 var questData: Quest;
 
-func _init() -> void:
-	tree_entered.connect(create)
-
 func set_data(quest: Quest) -> void:
 	questData = quest;
-		
-func create() -> QuestListItemUI:
-	if not questData:
-		Debug.err("No quest data provided for UI instance.")
 	
-	quest_number.text = str(self.get_parent().get_child_count());
+	quest_number.text = "%s." % [str(self.get_parent().get_child_count())];
 	for state in Quest.Type.keys():
 		quest_type.add_item(state, Quest.Type[state])
 
 	for supply_item in questData.supplies.data:
 		var slot: ContentSlotUI = supply_slot.instantiate();
+		slot.custom_minimum_size = Vector2i(30, 30);
+		slot.show_amount = false;
+		slot.can_drag = false;
+		
 		slot.set_content(supply_item);
 		quest_supplies.add_child(slot);
-	return self;

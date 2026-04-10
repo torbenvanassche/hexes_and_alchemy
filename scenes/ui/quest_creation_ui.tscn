@@ -1,6 +1,49 @@
 [gd_scene format=3 uid="uid://c3u8vjld6dmlp"]
 
 [ext_resource type="PackedScene" uid="uid://dny1dqcanlco0" path="res://tools/custom_window/base_window.tscn" id="1_b8c84"]
+[ext_resource type="Script" uid="uid://cp06udl0ffykh" path="res://tools/inventory/scripts/visual/screens/quest_creation_ui.gd" id="2_1mihr"]
 
-[node name="Window" unique_id=1301866213 instance=ExtResource("1_b8c84")]
-id = "Quest Board"
+[node name="Window" unique_id=1301866213 node_paths=PackedStringArray("content") instance=ExtResource("1_b8c84")]
+offset_right = -852.0
+offset_bottom = -498.0
+id = "New Quest"
+content = NodePath("NinePatchRect/VBoxContainer/contentPanel/VBoxContainer")
+
+[node name="contentPanel" parent="NinePatchRect/VBoxContainer" parent_id_path=PackedInt32Array(554725130) index="1" unique_id=1040542232]
+size_flags_horizontal = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel" index="0" unique_id=206947003]
+layout_mode = 2
+script = ExtResource("2_1mihr")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/VBoxContainer" index="0" unique_id=376979057]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/VBoxContainer/HBoxContainer" index="0" unique_id=844205132]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+text = "Type"
+
+[node name="QuestType" type="OptionButton" parent="NinePatchRect/VBoxContainer/contentPanel/VBoxContainer/HBoxContainer" index="1" unique_id=675844846]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/VBoxContainer" index="1" unique_id=1452652058]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/VBoxContainer/HBoxContainer2" index="0" unique_id=474702119]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+text = "Location"
+
+[node name="QuestLocation" type="OptionButton" parent="NinePatchRect/VBoxContainer/contentPanel/VBoxContainer/HBoxContainer2" index="1" unique_id=90833800]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="QuestSupplies" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/VBoxContainer" index="2" unique_id=1979064244]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="FinishQuestCreation" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/VBoxContainer" index="3" unique_id=860293657]
+layout_mode = 2
+text = "Create Quest"

@@ -7,21 +7,24 @@
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_bottom = -548.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 3
 script = ExtResource("1_qmdcg")
 supply_slot = ExtResource("2_vqdcy")
 
 [node name="QuestNumber" type="Label" parent="." unique_id=725982639]
 layout_mode = 2
+text = "Placeholder"
+horizontal_alignment = 1
 
 [node name="QuestType" type="OptionButton" parent="." unique_id=531875893]
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="QuestLocation" type="OptionButton" parent="." unique_id=64460896]
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="QuestSupplies" type="HBoxContainer" parent="." unique_id=984581217]
 layout_mode = 2
+size_flags_horizontal = 3
