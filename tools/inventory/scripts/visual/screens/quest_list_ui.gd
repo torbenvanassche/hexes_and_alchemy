@@ -24,3 +24,4 @@ func _on_create_quest_window_loaded(window_info: SceneInfo) -> void:
 	window_instance = SceneManager.add(window_info);
 	var quest_creation: QuestCreationUI = (window_instance.node as DraggableControl).content as QuestCreationUI;
 	quest_creation.quest_created.connect(add_quest)
+	window_instance.on_enter.emit();

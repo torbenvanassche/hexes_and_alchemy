@@ -4,8 +4,9 @@
 [ext_resource type="Script" uid="uid://cp06udl0ffykh" path="res://tools/inventory/scripts/visual/screens/quest_creation_ui.gd" id="2_1mihr"]
 
 [node name="Window" unique_id=1301866213 node_paths=PackedStringArray("content") instance=ExtResource("1_b8c84")]
+custom_minimum_size = Vector2(300, 150)
 offset_right = -852.0
-offset_bottom = -498.0
+offset_bottom = -648.0
 id = "New Quest"
 content = NodePath("NinePatchRect/VBoxContainer/contentPanel/VBoxContainer")
 

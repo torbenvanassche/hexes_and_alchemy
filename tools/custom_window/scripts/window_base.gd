@@ -73,8 +73,8 @@ func on_enter() -> void:
 	
 	_fit_to_content();
 
-	position = initial_position - size / 2;
 	await get_tree().process_frame;
+	position = initial_position - size / 2;
 	visible = true;
 	
 	if store_position:

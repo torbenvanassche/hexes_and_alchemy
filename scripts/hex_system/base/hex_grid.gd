@@ -68,6 +68,14 @@ func _on_map_ready() -> void:
 func has_chunk(cx: int, cy: int) -> bool:
 	return chunks.has(Vector2i(cx, cy))
 	
+func get_structured_hexes() -> Array[HexBase]:
+	var instances : Array[HexBase]
+	for region_instance in region_instances.keys():
+		var region := _get_instances_for_region(region_instance)
+		for instance: RegionInstance in region:
+			instances.append_array(instance.get_structured_hexes())
+	return instances;
+	
 func _get_instances_for_region(region: RegionInfo) -> Array:
 	if not region_instances.has(region):
 		region_instances[region] = []
