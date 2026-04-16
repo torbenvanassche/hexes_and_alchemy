@@ -10,7 +10,6 @@ func can_interact() -> bool:
 	
 func _open_window(window_info: SceneInfo) -> void:
 	window_instance = SceneManager.add(window_info, false);
-	var quest_list_ui: QuestListUI = (window_instance.node as DraggableControl).content as QuestListUI;
 	window_instance.on_enter.emit();
 
 func _on_area_exit(other: Area3D) -> void:
