@@ -2,8 +2,10 @@
 
 [ext_resource type="Script" uid="uid://bspwdi5yrsyab" path="res://tools/inventory/scripts/visual/parts/quest_list_item_ui.gd" id="1_qmdcg"]
 [ext_resource type="PackedScene" uid="uid://c5ocjw6joaemy" path="res://tools/inventory/scenes/content_slot.tscn" id="2_vqdcy"]
+[ext_resource type="Texture2D" uid="uid://fg17pv5hrxau" path="res://sprites/ui/cross.png" id="3_lpkqt"]
 
 [node name="Control" type="HBoxContainer" unique_id=84988057]
+custom_maximum_size = Vector2(-1, 25)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -17,14 +19,21 @@ layout_mode = 2
 text = "Placeholder"
 horizontal_alignment = 1
 
-[node name="QuestType" type="OptionButton" parent="." unique_id=531875893]
+[node name="QuestType" type="Label" parent="." unique_id=236912205]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="QuestLocation" type="OptionButton" parent="." unique_id=64460896]
+[node name="QuestLocation" type="Label" parent="." unique_id=246549521]
 layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="QuestSupplies" type="HBoxContainer" parent="." unique_id=984581217]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="RemoveQuest" type="Button" parent="." unique_id=68758061]
+custom_minimum_size = Vector2(25, 0)
+layout_mode = 2
+icon = ExtResource("3_lpkqt")
+flat = true
+expand_icon = true

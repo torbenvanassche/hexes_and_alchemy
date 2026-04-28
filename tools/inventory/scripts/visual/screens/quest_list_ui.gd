@@ -10,6 +10,8 @@ func add_quest(quest: Quest) -> void:
 	self.add_child(instance);
 	instance.set_data(quest);
 	
+	instance.remove_quest.pressed.connect(remove_child.bind(instance))
+	
 func _ready() -> void:
 	create_quest_button.pressed.connect(_open_create_quest_menu)
 	
