@@ -7,7 +7,7 @@ var chunk_y: int
 const CHUNK_WIDTH := 4
 const CHUNK_HEIGHT := 4
 
-var hexes: Array[HexBase] = []
+var hexes: Array[SceneInstance] = []
 var bounds: AABB
 
 var _bounds_initialized := false
@@ -24,9 +24,10 @@ func _init(cx: int, cy: int) -> void:
 	name = "Chunk(%s, %s)" % [chunk_x, chunk_y]
 	visibility_changed.connect(_propagate_visibility)
 
-func add_hex(hex: HexBase) -> void:
+func add_hex(instance: SceneInstance) -> void:
+	var hex := instance.node as HexBase;
 	hex.name = "hex(%s, %s, %s)" % [hex.cube_id.x, hex.cube_id.y, hex.cube_id.z]
-	hexes.append(hex)
+	hexes.append(instance)
 	add_child(hex)
 
 	var pos := hex.global_position
@@ -42,7 +43,7 @@ func add_hex(hex: HexBase) -> void:
 
 func _propagate_visibility() -> void:
 	for hex in hexes:
-		hex.visible = visible;
+		hex.node.visible = visible;
 		
 func get_center() -> HexBase:
 	if hexes.is_empty():
@@ -53,10 +54,10 @@ func get_center() -> HexBase:
 	var best_dist := INF
 	
 	for hex in hexes:
-		var d := hex.global_position.distance_squared_to(center_pos)
+		var d := hex.node.global_position.distance_squared_to(center_pos) as float;
 		if d < best_dist:
 			best_dist = d
-			closest = hex
+			closest = hex.node
 	return closest
 
 

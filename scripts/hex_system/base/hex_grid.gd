@@ -25,7 +25,7 @@ static var RADIUS_IN: float = 1.0
 
 var chunks: Dictionary[Vector2i, HexChunk] = {}
 var region_instances: Dictionary[RegionInfo, Array] = {} 
-var tiles: Dictionary[Vector3i, HexBase] = {}
+var tiles: Dictionary[Vector3i, SceneInstance] = {}
 
 signal generated();
 
@@ -81,14 +81,17 @@ func _get_instances_for_region(region: RegionInfo) -> Array:
 		region_instances[region] = []
 	return region_instances[region];
 		
-func create_hex(grid_id: Vector2i, hex: HexBase) -> HexBase:
+func create_hex(grid_id: Vector2i, info: SceneInfo) -> SceneInstance:
+	var scene_instance := info.get_instance();
+	var hex := scene_instance.node;
+	
 	hex.region = DataManager.instance.get_region_for(grid_id.x, grid_id.y, region_options);
 	var spacing =  GridUtils.get_spacing(RADIUS_IN, _spacing, pointy_top);
 
 	hex.grid_id = grid_id;
 	hex.cube_id = GridUtils.offset_to_cube(grid_id, pointy_top)
 	
-	tiles[hex.cube_id] = hex;
+	tiles[hex.cube_id] = scene_instance;
 
 	var pos := Vector3.ZERO
 	if pointy_top:
@@ -98,7 +101,7 @@ func create_hex(grid_id: Vector2i, hex: HexBase) -> HexBase:
 		pos.x = grid_id.x * spacing.x + (grid_id.y & 1) * (spacing.x / 2)
 		pos.z = grid_id.y * spacing.y
 	hex.position = pos
-	return hex
+	return scene_instance
 
 func expand_from_chunk(cx: int, cy: int, dir: int) -> void:
 	var offset := CHUNK_DIR_VECTORS[dir]
@@ -110,8 +113,8 @@ func expand_from_chunk(cx: int, cy: int, dir: int) -> void:
 	generate_chunk(new_coords.x, new_coords.y)
 	
 func _post_process_chunk(chunk: HexChunk) -> void:
-	for hex: HexBase in chunk.hexes:
-		_assign_region_instance(hex)
+	for hex: SceneInstance in chunk.hexes:
+		_assign_region_instance(hex.node)
 	
 	var all_chunks_generated: bool = true;
 	for c in chunks.keys():
@@ -131,7 +134,7 @@ func _assign_region_instance(hex: HexBase) -> void:
 		if not tiles.has(nid):
 			continue
 
-		var neighbor := tiles[nid]
+		var neighbor := tiles[nid].node;
 		if neighbor.region != hex.region:
 			continue
 
@@ -175,25 +178,22 @@ func generate_chunk(cx: int, cy: int) -> HexChunk:
 			var grid_id := Vector2i(gx, gy)
 			DataManager.instance.pick_scene(gx, gy, region_options).queue(
 				func(sI: SceneInfo) -> void:
-					var instance := sI.get_instance();
-					var node := instance.node;
-					chunk.add_hex(create_hex(grid_id, node)))
+					chunk.add_hex(create_hex(grid_id, sI)))
 	return chunk
 	
 func get_hex_at_world_position(world_pos: Vector3, max_distance: float = 1.2) -> HexBase:
 	var closest: HexBase = null
 	var best_dist := max_distance * max_distance
 
-	for hex: HexBase in tiles.values():
-		var d: float = hex.global_position.distance_squared_to(world_pos)
+	for scene_instance: SceneInstance in tiles.values():
+		var d: float = scene_instance.node.global_position.distance_squared_to(world_pos)
 		if d < best_dist:
 			best_dist = d
-			closest = hex
+			closest = scene_instance.node
 	return closest
 
-	
-func get_tiles_in_radius(center: Vector3i, radius: int) -> Array[HexBase]:
-	var result: Array[HexBase] = []
+func get_tiles_in_radius(center: Vector3i, radius: int) -> Array[SceneInstance]:
+	var result: Array[SceneInstance] = []
 	for dx in range(-radius, radius + 1):
 		for dy in range(
 			max(-radius, -dx - radius),
@@ -212,7 +212,10 @@ func grid_to_chunk_coords(grid_id: Vector2i) -> Vector2i:
 		floori(float(grid_id.y) / HexChunk.CHUNK_HEIGHT)
 	)
 
-func replace(hex: HexBase, replacement: HexBase, region: RegionInfo) -> void:
+func replace(hex_instance: SceneInstance, replacement_instance: SceneInstance, region: RegionInfo) -> void:
+	var hex := hex_instance.node as HexBase;
+	var replacement := replacement_instance.node as HexBase;
+	
 	if hex == null or replacement == null:
 		return
 		
@@ -232,10 +235,10 @@ func replace(hex: HexBase, replacement: HexBase, region: RegionInfo) -> void:
 	if hex.region_instance != null:
 		hex.region_instance.remove_hex(hex.cube_id)
 
-	tiles[replacement.cube_id] = replacement
+	tiles[replacement.cube_id] = replacement_instance
 	
 	var chunk_coords := grid_to_chunk_coords(hex.grid_id)
-	chunks[chunk_coords].hexes.erase(hex);
-	chunks[chunk_coords].add_hex(replacement);
+	chunks[chunk_coords].hexes.erase(hex_instance);
+	chunks[chunk_coords].add_hex(replacement_instance);
 	
 	hex.queue_free()

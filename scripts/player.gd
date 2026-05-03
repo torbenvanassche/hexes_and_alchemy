@@ -65,6 +65,8 @@ func _handle_movement(delta: float) -> void:
 		var hex: HexBase = null;
 		if grid is HexGrid:
 			hex = grid.get_hex_at_world_position(probe_pos)
+			for g in grid.get_tiles_in_radius(get_hex().cube_id, 2):
+				(g.node as HexBase).set_explored(true);
 		else:
 			Debug.message("Active scene is not a hexgrid, cannot walk")
 			return;

@@ -20,3 +20,12 @@ static func get_spacing(inner_radius: float, spacing: float, pointy_top: bool) -
 
 static func cube_distance(a: Vector3i, b: Vector3i) -> int:
 	return (abs(a.x - b.x) + abs(a.y - b.y) + abs(a.z - b.z)) / 2
+
+static func get_world_polygon(csgPolygon: CSGPolygon3D) -> PackedVector2Array:
+	var poly := csgPolygon.polygon
+	var result := PackedVector2Array()
+
+	for p in poly:
+		var world := csgPolygon.global_transform * Vector3(p.x, p.y, 0)
+		result.append(Vector2(world.x, world.z))
+	return result
