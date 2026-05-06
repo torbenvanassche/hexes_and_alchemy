@@ -155,9 +155,9 @@ func generate_structures_for_region() -> void:
 		if not placed:
 			structure_counts[structure] = structure_caps[structure]
 
-func get_structured_hexes(include_unexplored: bool) -> Array[HexBase]:
+func get_structured_hexes() -> Array[HexBase]:
 	var instances: Array[HexBase];
 	for hex: HexBase in hexes.values():
-		if hex.structure && (hex.is_explored || include_unexplored):
+		if hex.structure:
 			instances.append(hex)
 	return instances;

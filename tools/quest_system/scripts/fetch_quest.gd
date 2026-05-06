@@ -1,7 +1,6 @@
 class_name BuildRequest extends Interaction
 
 @export var quest: FetchQuest;
-var window_instance: SceneInstance;
 
 signal completed();
 

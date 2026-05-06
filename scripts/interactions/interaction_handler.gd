@@ -5,9 +5,12 @@ var structure_instance: StructureInstance;
 var enterable_triggers: Array[Area3D];
 var colliders: Array[StaticBody3D];
 var collision_shapes: Array[CollisionShape3D];
+var window_instance: SceneInstance;
 
 @abstract func interact() -> void;
 @abstract func can_interact() -> bool;
+
+@export var is_quest: bool = true;
 
 func _ready() -> void:
 	enterable_triggers.assign(find_children("*", "Area3D", true, false))
@@ -28,6 +31,8 @@ func toggle_collision(b: bool) -> void:
 	
 func on_interact() -> void:
 	if can_interact():
+		if is_quest:
+			DataManager.instance.get_scene_by_name("quest_creation_ui").queue(_on_create_quest_window_loaded);
 		interact();
 
 func _on_visibility_changed() -> void:
@@ -41,3 +46,10 @@ func _on_area_exit(other: Area3D) -> void:
 func _on_area_enter(other: Area3D) -> void:
 	if other.get_parent() is PlayerController && can_interact():
 		Manager.instance.interaction_prompt.show_rect(self);
+	
+func _on_create_quest_window_loaded(window_info: SceneInfo) -> void:
+	window_instance = SceneManager.add(window_info);
+	var quest_creation: QuestCreationUI = (window_instance.node as DraggableControl).content as QuestCreationUI;
+	if not quest_creation.quest_created.is_connected(Config.gamestate.add_quest):
+		quest_creation.quest_created.connect(Config.gamestate.add_quest)
+	window_instance.on_enter.emit();

@@ -8,12 +8,14 @@ var config := ConfigFile.new()
 # Sub-settings
 var input: InputSettings
 var gameplay: GameplaySettings;
+var gamestate: GameState;
 
 func _ready() -> void:
 	_load_or_create()
 
 	input = InputSettings.new(config)
 	gameplay = GameplaySettings.new();
+	gamestate = GameState.new();
 
 func _load_or_create() -> void:
 	if FileAccess.file_exists(FILE_PATH):

@@ -12,6 +12,7 @@ size = Vector3(1.8043289, 1.0020065, 1.2592618)
 
 [node name="market" type="Node3D" unique_id=2075765343]
 script = ExtResource("2_dxohp")
+is_quest = false
 
 [node name="Inventory" type="Node" parent="." unique_id=309232762]
 script = ExtResource("1_xlvr5")

@@ -11,6 +11,7 @@ size = Vector3(0.709322, 0.60830307, 0.15392679)
 
 [node name="questboard" type="Node3D" unique_id=1065241070]
 script = ExtResource("1_6cg5f")
+is_quest = false
 
 [node name="quest_board" parent="." unique_id=1282978270 instance=ExtResource("1_uckkr")]
 

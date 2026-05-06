@@ -15,6 +15,7 @@ size = Vector3(0.0021044922, 0.0038134765, 0.0027441406)
 script = ExtResource("2_18drs")
 max_angle = -80.0
 duration = 0.5
+is_quest = false
 
 [node name="Area3D" type="Area3D" parent="RootNode/fence_stone_straight_gate/fence_stone_straight_door" index="1" unique_id=921640344]
 

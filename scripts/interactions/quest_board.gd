@@ -1,7 +1,5 @@
 class_name QuestBoard extends Interaction
 
-var window_instance: SceneInstance;
-
 func interact() -> void:
 	DataManager.instance.get_scene_by_name("quest_list_ui").queue(_open_window)
 	

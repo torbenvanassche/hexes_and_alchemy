@@ -1,6 +1,5 @@
 class_name Market extends Interaction
 
-var window_instance: SceneInstance;
 @onready var inventory: Inventory = $Inventory
 
 func interact() -> void:
