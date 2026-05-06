@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://clf621pbnvsbw"]
 
 [ext_resource type="PackedScene" uid="uid://rggfeth3x6te" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_tavern_blue.glb" id="1_244u3"]
-[ext_resource type="Script" uid="uid://7q4dr2w3g7sa" path="res://scripts/interactions/tavern.gd" id="1_isasx"]
+[ext_resource type="Script" uid="uid://7q4dr2w3g7sa" path="res://scripts/interactions/interactable_locations/tavern.gd" id="1_isasx"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_isasx"]
 size = Vector3(0.7681427, 0.65410614, 0.5323236)

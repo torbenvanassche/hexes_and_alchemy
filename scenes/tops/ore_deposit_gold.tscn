@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c6av02q62q1u0"]
 
 [ext_resource type="PackedScene" uid="uid://c5liv1s3nef21" path="res://meshes/kay_fantasy_hexagon/decoration/nature/mountain_A.glb" id="1_0buf2"]
-[ext_resource type="Script" uid="uid://ccx3jw8bp6p5n" path="res://scripts/interactions/ore_deposit.gd" id="1_wxhr0"]
+[ext_resource type="Script" uid="uid://ccx3jw8bp6p5n" path="res://scripts/interactions/interactable_locations/ore_deposit.gd" id="1_wxhr0"]
 [ext_resource type="Material" uid="uid://uccrwp0lxu41" path="res://materials/gold.tres" id="2_es36s"]
 [ext_resource type="Resource" uid="uid://dwrv8ceflmsjy" path="res://resources/item_info/gold_ore.tres" id="3_qxo0u"]
 

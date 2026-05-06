@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cy1s6kym2ib68"]
 
 [ext_resource type="PackedScene" uid="uid://twco3r24bsnx" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_mine_blue.glb" id="1_bbfir"]
-[ext_resource type="Script" uid="uid://dvidxmav7hphs" path="res://scripts/interactions/mineshaft.gd" id="1_f4m0s"]
+[ext_resource type="Script" uid="uid://dvidxmav7hphs" path="res://scripts/interactions/interactable_locations/mineshaft.gd" id="1_f4m0s"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bbfir"]
 size = Vector3(1.1559805, 1.174, 1.513)

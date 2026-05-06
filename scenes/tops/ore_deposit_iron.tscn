@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://lqsfyv464flu"]
 
-[ext_resource type="Script" uid="uid://ccx3jw8bp6p5n" path="res://scripts/interactions/ore_deposit.gd" id="1_7of6m"]
+[ext_resource type="Script" uid="uid://ccx3jw8bp6p5n" path="res://scripts/interactions/interactable_locations/ore_deposit.gd" id="1_7of6m"]
 [ext_resource type="PackedScene" uid="uid://c5liv1s3nef21" path="res://meshes/kay_fantasy_hexagon/decoration/nature/mountain_A.glb" id="1_y8amj"]
 [ext_resource type="Material" uid="uid://gheuptx4d3rm" path="res://materials/iron.tres" id="2_ygy3y"]
 [ext_resource type="Resource" uid="uid://o03k1cg30nlw" path="res://resources/item_info/iron_ore.tres" id="3_smab7"]

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://d4ck04oubluj3"]
 
-[ext_resource type="Script" uid="uid://bpm6gm1mj4n65" path="res://scripts/interactions/blacksmith.gd" id="2_cpkdt"]
+[ext_resource type="Script" uid="uid://bpm6gm1mj4n65" path="res://scripts/interactions/interactable_locations/blacksmith.gd" id="2_cpkdt"]
 [ext_resource type="PackedScene" uid="uid://6h1kj7hbn5qq" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_blacksmith_blue.glb" id="2_eemul"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_43jb5"]

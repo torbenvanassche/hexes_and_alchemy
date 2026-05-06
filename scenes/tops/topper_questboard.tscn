@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c6gesglis1r62"]
 
-[ext_resource type="Script" uid="uid://8k4lf3pd7r8" path="res://tools/quest_system/scripts/quest_board.gd" id="1_6cg5f"]
+[ext_resource type="Script" uid="uid://8k4lf3pd7r8" path="res://scripts/interactions/quest_board.gd" id="1_6cg5f"]
 [ext_resource type="PackedScene" uid="uid://croarym08s4su" path="res://meshes/kay_custom/quest_board.glb" id="1_uckkr"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_6cg5f"]

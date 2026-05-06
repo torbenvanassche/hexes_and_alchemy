@@ -8,11 +8,9 @@ extends Interaction
 
 var _is_regrowing: bool = false
 
-
 func _ready() -> void:
 	super()
 	_set_tree_state(true)
-
 
 func interact() -> void:
 	Manager.instance.player_instance.inventory.add(item_info, 1)
