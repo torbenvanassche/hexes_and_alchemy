@@ -71,7 +71,7 @@ func _on_structure_loaded(s: StructureInfo, required_tiles: Array[SceneInstance]
 	structure = StructureInstance.new(s.get_instance().node, s);
 	if structure.instance:
 		if structure.instance is Interaction:
-			(structure.instance as Interaction).structure_instance = structure;
+			(structure.instance as Interaction).hex = self;
 		add_child(structure.instance);
 		if s.randomize_rotation:
 			structure.instance.rotate_y(deg_to_rad(60 * randi_range(0, 5)))

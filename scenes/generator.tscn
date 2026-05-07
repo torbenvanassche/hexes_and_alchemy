@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://dq87du7mc0w23" path="res://scripts/hex_system/hexgrid_main.gd" id="1_5yxne"]
 [ext_resource type="Resource" uid="uid://c1ypx4o3q73t0" path="res://resources/structure_info/settlement.tres" id="2_w5vnv"]
 
-[node name="generator" type="Node3D" unique_id=1031745512]
+[node name="generator" type="Node3D" unique_id=1069964981]
 script = ExtResource("1_5yxne")
 player_settlement = ExtResource("2_w5vnv")
 chunk_radius = 4

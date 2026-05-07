@@ -5,11 +5,11 @@ extends Interaction
 
 func _ready() -> void:
 	super();
-	for mesh: MeshInstance3D in structure_instance.meshes:
+	for mesh: MeshInstance3D in hex.structure.meshes:
 		mesh.material_override = material;
 
 func interact() -> void:
-	structure_instance.destroy()
+	hex.structure.destroy()
 	Manager.instance.player_instance.inventory.add(item_info, 1)
 	pass
 	

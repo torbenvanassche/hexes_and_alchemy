@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://rggfeth3x6te" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_tavern_blue.glb" id="1_244u3"]
 [ext_resource type="Script" uid="uid://7q4dr2w3g7sa" path="res://scripts/interactions/interactable_locations/tavern.gd" id="1_isasx"]
+[ext_resource type="Resource" uid="uid://c4slhs80lvehm" path="res://resources/scene_info/adventurer.tres" id="2_56i7v"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_isasx"]
 size = Vector3(0.7681427, 0.65410614, 0.5323236)
@@ -9,8 +10,10 @@ size = Vector3(0.7681427, 0.65410614, 0.5323236)
 [sub_resource type="BoxShape3D" id="BoxShape3D_56i7v"]
 size = Vector3(1.173315, 1.3972301, 1.0873525)
 
-[node name="tavern" type="Node3D" unique_id=1607926184]
+[node name="tavern" type="Node3D" unique_id=1607926184 node_paths=PackedStringArray("adventurer_spawn")]
 script = ExtResource("1_isasx")
+adventurer = ExtResource("2_56i7v")
+adventurer_spawn = NodePath("spawn_location")
 is_quest = false
 
 [node name="Root Scene" parent="." unique_id=1174146906 instance=ExtResource("1_244u3")]
@@ -26,3 +29,9 @@ shape = SubResource("BoxShape3D_isasx")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="collision" unique_id=1330385639]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.010420799, 0.69372463, -0.15895307)
 shape = SubResource("BoxShape3D_56i7v")
+
+[node name="spawn_location" type="Node3D" parent="." unique_id=1475512664]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.13711184, -1.1920929e-07, 0.7027963)
+
+[node name="spawn_interval" type="Timer" parent="." unique_id=1446512628]
+wait_time = 10.0

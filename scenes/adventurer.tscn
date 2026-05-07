@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://xay4s33jokxl"]
+
+[ext_resource type="Script" uid="uid://be74ln24enbj4" path="res://scripts/adventurer.gd" id="1_023up"]
+[ext_resource type="PackedScene" uid="uid://d4ymsokn1evq" path="res://meshes/kay_fantasy_hexagon/units/neutral/unit.glb" id="1_i0sav"]
+[ext_resource type="Material" uid="uid://csfmxfxexogrq" path="res://materials/adventurer.tres" id="2_h70i8"]
+
+[node name="npc" type="Node3D" unique_id=1058019275]
+script = ExtResource("1_023up")
+material = ExtResource("2_h70i8")
+
+[node name="mesh" parent="." unique_id=34736461 instance=ExtResource("1_i0sav")]

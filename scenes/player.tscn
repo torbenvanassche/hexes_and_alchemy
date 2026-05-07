@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://brvlq57sriljj"]
 
-[ext_resource type="PackedScene" uid="uid://c45porvj1pmnn" path="res://meshes/kay_fantasy_hexagon/units/blue/unit_blue_full.glb" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://dbq18q3bbriy7" path="res://scripts/player.gd" id="1_g2els"]
+[ext_resource type="PackedScene" uid="uid://d4ymsokn1evq" path="res://meshes/kay_fantasy_hexagon/units/neutral/unit.glb" id="2_qhqgy"]
 [ext_resource type="Script" uid="uid://b6rgx41co3bur" path="res://tools/inventory/scripts/inventory/inventory.gd" id="3_qhqgy"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_g2els"]
@@ -15,7 +15,7 @@ size = Vector3(0.7191162, 0.5185547, 0.6298218)
 script = ExtResource("1_g2els")
 move_speed = 3.0
 
-[node name="Root Scene" parent="." unique_id=334534422 instance=ExtResource("1_3vyb7")]
+[node name="player_model" parent="." unique_id=998890130 instance=ExtResource("2_qhqgy")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=850278735]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15617341, 0)
