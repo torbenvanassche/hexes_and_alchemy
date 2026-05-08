@@ -15,6 +15,6 @@ func can_interact() -> bool:
 	return false;
 	
 func _adventurer_ready(s: SceneInfo) -> void:
-	var instance := s.get_instance();
+	var instance := SceneManager.add(s);
 	instance.node.global_position = adventurer_spawn.global_position;
-	SceneManager.get_active_scene().add_child(instance);
+	instance.node.move_to_quest.call_deferred()

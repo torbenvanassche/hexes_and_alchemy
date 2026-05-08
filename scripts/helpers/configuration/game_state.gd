@@ -11,3 +11,8 @@ func add_quest(q: Quest) -> void:
 func remove_quest(q: Quest) -> void:
 	active_quests.erase(q)
 	quest_list_changed.emit();
+	
+func assign_quest(npc: NPC) -> Quest:
+	var q: Quest = active_quests.pick_random();
+	q.add_to_party(npc);
+	return q;

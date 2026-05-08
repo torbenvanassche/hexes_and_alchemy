@@ -16,8 +16,6 @@ var currency: int;
 func _ready() -> void:
 	interactor.area_entered.connect(add_trigger)
 	interactor.area_exited.connect(remove_trigger)
-	inventory.add(DataManager.instance.get_item_by_name("ore_iron"), 5);
-	inventory.add(DataManager.instance.get_item_by_name("wood_raw"), 5);
 
 func _physics_process(delta: float) -> void:
 	if Manager.instance.input_moves_player():
@@ -71,7 +69,7 @@ func _handle_movement(delta: float) -> void:
 			Debug.message("Active scene is not a hexgrid, cannot walk")
 			return;
 			
-		if hex == null or not hex.is_walkable(self):
+		if hex == null or not hex.is_traversable():
 			velocity = Vector3.ZERO
 			return;
 

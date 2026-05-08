@@ -39,7 +39,7 @@ func get_instance() -> SceneInstance:
 		return instances[0]
 	var instance := SceneInstance.new(packed_scene.instantiate(), self);
 	instance.set_processing(true)
-	instances.append(instance)
+	instances.append(instance)	
 	return instance
 	
 func destroy_instance(instance: SceneInstance) -> void:

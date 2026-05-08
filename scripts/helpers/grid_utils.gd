@@ -29,3 +29,17 @@ static func get_world_polygon(csgPolygon: CSGPolygon3D) -> PackedVector2Array:
 		var world := csgPolygon.global_transform * Vector3(p.x, p.y, 0)
 		result.append(Vector2(world.x, world.z))
 	return result
+
+static func world_to_offset(world_pos: Vector3, inner_radius: float, spacing_extra: float, pointy_top: bool) -> Vector2i:
+	var spacing := get_spacing(inner_radius, spacing_extra, pointy_top)
+
+	if pointy_top:
+		var gx := int(round(world_pos.x / spacing.x))
+		var gz_offset := (gx & 1) * (spacing.y / 2.0)
+		var gy := int(round((world_pos.z - gz_offset) / spacing.y))
+		return Vector2i(gx, gy)
+	else:
+		var gy := int(round(world_pos.z / spacing.y))
+		var gx_offset := (gy & 1) * (spacing.x / 2.0)
+		var gx := int(round((world_pos.x - gx_offset) / spacing.x))
+		return Vector2i(gx, gy)

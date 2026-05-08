@@ -61,11 +61,11 @@ func get_center() -> HexBase:
 	return closest
 
 
-func get_hex(idx: Vector2i) -> HexBase:
-	var rV = hexes.filter(func(h: HexBase) -> bool: return h.grid_id == idx);
+func get_hex(idx: Vector2i) -> SceneInstance:
+	var rV = hexes.filter(func(h: SceneInstance) -> bool: return h.node.grid_id == idx);
 	if rV.size() == 1:
 		return rV[0];
 	return null;
 	
-func pick_random() -> HexBase:
+func pick_random() -> SceneInstance:
 	return hexes.pick_random()

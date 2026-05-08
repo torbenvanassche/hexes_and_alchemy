@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bspwdi5yrsyab" path="res://tools/inventory/scripts/visual/parts/quest_list_item_ui.gd" id="1_qmdcg"]
 [ext_resource type="PackedScene" uid="uid://c5ocjw6joaemy" path="res://tools/inventory/scenes/content_slot.tscn" id="2_vqdcy"]
+[ext_resource type="Texture2D" uid="uid://brtjkkast8d0f" path="res://icon.svg" id="3_3kdy2"]
 [ext_resource type="Texture2D" uid="uid://fg17pv5hrxau" path="res://sprites/ui/cross.png" id="3_lpkqt"]
 
 [node name="Control" type="HBoxContainer" unique_id=84988057]
@@ -12,6 +13,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 10
 script = ExtResource("1_qmdcg")
 supply_slot = ExtResource("2_vqdcy")
 
@@ -28,6 +30,14 @@ size_flags_horizontal = 3
 [node name="QuestLocation" type="Label" parent="." unique_id=246549521]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="Party" type="HBoxContainer" parent="." unique_id=1583251630]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect" type="TextureRect" parent="Party" unique_id=518091395]
+layout_mode = 2
+texture = ExtResource("3_3kdy2")
 
 [node name="ProgressBar" type="ProgressBar" parent="." unique_id=1310734486]
 custom_minimum_size = Vector2(0, 25)
@@ -51,4 +61,5 @@ custom_minimum_size = Vector2(25, 0)
 layout_mode = 2
 icon = ExtResource("3_lpkqt")
 flat = true
+icon_alignment = 1
 expand_icon = true

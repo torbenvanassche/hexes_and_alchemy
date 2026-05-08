@@ -22,6 +22,9 @@ var is_explored: bool = false:
 	set(value):
 		is_explored = value;
 		set_explored(is_explored)
+		
+var blocked: bool = false;
+var movement_cost: float = 1.0;
 
 func _ready() -> void:
 	ground_hex_mesh = find_child("hex_*", true) as MeshInstance3D;
@@ -57,13 +60,15 @@ func get_meshes() -> Array[MeshInstance3D]:
 			meshes.erase(m);
 	return meshes;
 
-func is_walkable(_player: PlayerController = Manager.instance.player_instance) -> bool:
-	return scene_instance && scene_instance.scene_info && scene_instance.scene_info.is_walkable;
+func is_traversable(method: HexInfo.TraversalTag = HexInfo.TraversalTag.WALK) -> bool:
+	if blocked:
+		return false
+	return (scene_instance.scene_info as HexInfo).traversal_tags.has(method);
 
 func set_structure(s: StructureInfo) -> void:
 	var required_tiles: Array[SceneInstance] = SceneManager.get_active_scene().node.get_tiles_in_radius(cube_id, s.required_space_radius);
 	required_tiles.all(func(f: SceneInstance) -> void: f.node.can_generate = false);
-	required_tiles = required_tiles.filter(func(f: SceneInstance) -> bool: return not f.node.is_walkable());
+	required_tiles = required_tiles.filter(func(f: SceneInstance) -> bool: return not f.node.is_traversable());
 	s.queue(_on_structure_loaded.bind(required_tiles));
 	
 ##When the structure finishes loading, add the instance to the scene and validate adjacent tiles

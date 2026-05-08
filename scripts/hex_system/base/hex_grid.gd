@@ -26,6 +26,7 @@ static var RADIUS_IN: float = 1.0
 var chunks: Dictionary[Vector2i, HexChunk] = {}
 var region_instances: Dictionary[RegionInfo, Array] = {} 
 var tiles: Dictionary[Vector3i, SceneInstance] = {}
+@onready var pathfinder: HexAStar = HexAStar.new(self)
 
 signal generated();
 
@@ -241,4 +242,12 @@ func replace(hex_instance: SceneInstance, replacement_instance: SceneInstance, r
 	chunks[chunk_coords].hexes.erase(hex_instance);
 	chunks[chunk_coords].add_hex(replacement_instance);
 	
+	pathfinder.update_hex(replacement);
+	
 	hex.queue_free()
+
+func world_to_grid_id(world_pos: Vector3) -> Vector2i:
+	return GridUtils.world_to_offset(world_pos, RADIUS_IN, _spacing, pointy_top)
+
+func world_to_cube_id(world_pos: Vector3) -> Vector3i:
+	return GridUtils.offset_to_cube(world_to_grid_id(world_pos), pointy_top)

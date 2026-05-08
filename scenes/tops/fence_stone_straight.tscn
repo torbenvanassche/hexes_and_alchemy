@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://dgx2trjwvt0vn"]
+
+[ext_resource type="Script" uid="uid://b4lmhfcwgc234" path="res://scripts/hex_system/wall.gd" id="1_6y0wo"]
+[ext_resource type="PackedScene" uid="uid://cjei5gsoj7jp7" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/fence_stone_straight.glb" id="2_4l0ab"]
+
+[node name="Node3D" type="Node3D" unique_id=1934283632]
+script = ExtResource("1_6y0wo")
+
+[node name="Root Scene" parent="." unique_id=1634023335 instance=ExtResource("2_4l0ab")]

@@ -6,6 +6,7 @@ class_name QuestListItemUI extends Control
 @onready var remove_quest: Button = $RemoveQuest
 @onready var progress_bar: ProgressBar = $ProgressBar
 @onready var label: Label = $ProgressBar/Label
+@onready var party: HBoxContainer = $Party
 
 @export var supply_slot: PackedScene;
 
@@ -18,6 +19,12 @@ func set_data(quest: Quest) -> void:
 	quest_type.text = quest.Type.find_key(quest.quest_type);
 	quest_location.text = quest.location.structure.structure_info.id;
 	_update_progress()
+	
+	for n in quest.party:
+		var img := TextureRect.new();
+		img.texture = n.npc_info.img;
+		img.expand_mode = TextureRect.EXPAND_FIT_WIDTH;
+		party.add_child(img);
 	
 	quest.update_status.connect(_update_progress)
 	

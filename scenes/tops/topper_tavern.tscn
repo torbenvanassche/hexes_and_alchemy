@@ -34,4 +34,4 @@ shape = SubResource("BoxShape3D_56i7v")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.13711184, -1.1920929e-07, 0.7027963)
 
 [node name="spawn_interval" type="Timer" parent="." unique_id=1446512628]
-wait_time = 10.0
+one_shot = true

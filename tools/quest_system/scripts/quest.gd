@@ -12,6 +12,8 @@ var location: HexBase;
 var status: String = "Waiting";
 var progress: float;
 
+var party: Array[NPC];
+
 signal update_status();
 
 func _init(_location: HexBase = null, _type: Type = Type.FETCH, _supplies: ContentGroup = ContentGroup.new()) -> void:
@@ -21,3 +23,7 @@ func _init(_location: HexBase = null, _type: Type = Type.FETCH, _supplies: Conte
 	
 func add_supply(resource: ContentSlotResource) -> void:
 	supplies.add(resource)
+	
+func add_to_party(npc: NPC) -> void:
+	if not party.has(npc):
+		party.append(npc);

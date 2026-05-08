@@ -6,5 +6,6 @@
 [resource]
 script = ExtResource("1_nekhc")
 is_walkable = false
+traversal_tags = Array[int]([1, 2])
 packed_scene = ExtResource("1_yy18x")
 metadata/_custom_type_script = "uid://dt4im1k7j4jn"

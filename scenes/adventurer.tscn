@@ -1,11 +1,24 @@
 [gd_scene format=3 uid="uid://xay4s33jokxl"]
 
-[ext_resource type="Script" uid="uid://be74ln24enbj4" path="res://scripts/adventurer.gd" id="1_023up"]
+[ext_resource type="Script" uid="uid://be74ln24enbj4" path="res://scripts/npc.gd" id="1_023up"]
 [ext_resource type="PackedScene" uid="uid://d4ymsokn1evq" path="res://meshes/kay_fantasy_hexagon/units/neutral/unit.glb" id="1_i0sav"]
 [ext_resource type="Material" uid="uid://csfmxfxexogrq" path="res://materials/adventurer.tres" id="2_h70i8"]
 
-[node name="npc" type="Node3D" unique_id=1058019275]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_h70i8"]
+radius = 0.095214844
+height = 0.36999512
+
+[node name="npc" type="CharacterBody3D" unique_id=989589569]
+collision_layer = 0
+collision_mask = 0
 script = ExtResource("1_023up")
 material = ExtResource("2_h70i8")
+move_speed = 1.0
 
 [node name="mesh" parent="." unique_id=34736461 instance=ExtResource("1_i0sav")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=70279412]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15617341, 0)
+shape = SubResource("CapsuleShape3D_h70i8")
+
+[editable path="mesh"]
