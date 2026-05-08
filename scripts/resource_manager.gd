@@ -5,6 +5,7 @@ class_name DataManager extends Node
 @export var structures: Array[StructureInfo];
 @export var scenes: Array[SceneInfo];
 @export var items: Array[ItemInfo];
+@export var npcs: Array[NpcInfo];
 
 var scene_data: Array[SceneInfo];
 
