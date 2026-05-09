@@ -13,11 +13,3 @@ func _on_level_generated() -> void:
 
 func _ready() -> void:
 	(SceneManager.get_active_scene().node as HexGrid).generated.connect(_on_level_generated, CONNECT_ONE_SHOT)
-
-func rotation_to_cube_offset(rot_radians: float) -> Vector3i:
-	var deg := rad_to_deg(rot_radians)
-	deg = fposmod(-deg, 360.0)
-
-	var dir := int(floor((deg + 30.0) / 60.0)) % 6
-
-	return DataManager.instance.CUBE_DIRS[dir]

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://xay4s33jokxl"]
 
-[ext_resource type="Script" uid="uid://be74ln24enbj4" path="res://scripts/npc.gd" id="1_023up"]
+[ext_resource type="Script" uid="uid://be74ln24enbj4" path="res://tools/quest_system/scripts/npc.gd" id="1_023up"]
 [ext_resource type="PackedScene" uid="uid://d4ymsokn1evq" path="res://meshes/kay_fantasy_hexagon/units/neutral/unit.glb" id="1_i0sav"]
 [ext_resource type="Material" uid="uid://csfmxfxexogrq" path="res://materials/adventurer.tres" id="2_h70i8"]
 

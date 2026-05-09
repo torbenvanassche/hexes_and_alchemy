@@ -26,7 +26,7 @@ func on_enter() -> void:
 	var structure_hexes: Array[HexBase] = (SceneManager.get_active_scene().node as HexGrid).get_structured_hexes();
 	for hex in structure_hexes:
 		var distance := GridUtils.cube_distance(hex.cube_id, Manager.instance.player_instance.get_hex().cube_id);
-		if  distance <= Config.gameplay.max_quest_distance && hex.structure.structure_info.is_quest_target && hex.is_explored:
+		if  distance <= Config.gamestate.max_quest_distance && hex.structure.structure_info.is_quest_target && hex.is_explored:
 			quest_location.add_item("%s (%s tiles)" % [hex.structure.structure_info.id, distance], quest_location_hashes.size())
 			quest_location_hashes.append(hex)
 	finish_quest_creation.pressed.connect(_create_quest)

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="NpcInfo" format=3 uid="uid://c8hkdge0pvgtn"]
+
+[ext_resource type="PackedScene" uid="uid://xay4s33jokxl" path="res://scenes/adventurer.tscn" id="1_655wl"]
+[ext_resource type="Script" uid="uid://du4hbbtmblkj0" path="res://tools/quest_system/scripts/npc_info.gd" id="1_ba3wx"]
+[ext_resource type="Texture2D" uid="uid://chvmvna3iw2ov" path="res://sprites/ui/character.png" id="1_iiktj"]
+
+[resource]
+script = ExtResource("1_ba3wx")
+img = ExtResource("1_iiktj")
+id = "basic_adventurer"
+packed_scene = ExtResource("1_655wl")
+metadata/_custom_type_script = "uid://du4hbbtmblkj0"

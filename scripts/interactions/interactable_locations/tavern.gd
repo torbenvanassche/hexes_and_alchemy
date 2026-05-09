@@ -17,4 +17,4 @@ func can_interact() -> bool:
 func _adventurer_ready(s: SceneInfo) -> void:
 	var instance := SceneManager.add(s);
 	instance.node.global_position = adventurer_spawn.global_position;
-	instance.node.move_to_quest.call_deferred()
+	instance.node.assign_quest()
