@@ -1,12 +1,13 @@
-extends Interaction
+extends QuestObjective
 
 @onready var trees: Node3D = $trees
 @onready var stumps: Node3D = $stumps
 
-@export var regrow_time: float = 100
-@export var item_info: ItemInfo
+@export var regrow_time: float = 100.0
+@export var quest_time: float = 5.0
 
 var _is_regrowing: bool = false
+var _quest_running: bool = false
 
 func _ready() -> void:
 	super()
@@ -31,3 +32,19 @@ func _start_regrow() -> void:
 
 	_set_tree_state(true)
 	_is_regrowing = false
+
+func execute_quest(q: Quest) -> void:
+	if _quest_running:
+		return
+	_quest_running = true
+
+	await get_tree().create_timer(quest_time).timeout
+
+	_start_regrow();
+	q.update(Quest.QuestState.RETURNING)
+	_quest_running = false
+	
+func complete_quest(q: Quest) -> void:
+	var l := (hex.structure.structure_info as LootableStructureInfo);
+	Manager.instance.player_instance.inventory.add(l.item, randi_range(l.min_item_amount, l.max_item_amount))
+	q.update(Quest.QuestState.COMPLETE)

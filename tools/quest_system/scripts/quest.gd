@@ -62,3 +62,6 @@ func _check_party_arrived() -> void:
 	if party.all(func(n: NPC) -> bool: return n.on_location):
 		location.structure.instance.execute_quest(self);
 		update(QuestState.IN_PROGRESS)
+	
+func parse_reward() -> void:
+	location.structure.instance.complete_quest(self);

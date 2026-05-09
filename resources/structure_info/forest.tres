@@ -1,7 +1,8 @@
-[gd_resource type="Resource" script_class="StructureInfo" format=3 uid="uid://c0cycppeql80w"]
+[gd_resource type="Resource" script_class="LootableStructureInfo" format=3 uid="uid://dijohak4mpf7n"]
 
+[ext_resource type="Resource" uid="uid://b46nyvtvipor5" path="res://resources/item_info/wood_raw.tres" id="1_nvtva"]
+[ext_resource type="Script" uid="uid://brvtfutnwh30i" path="res://scripts/structures/lootable_info.gd" id="1_oogor"]
 [ext_resource type="PackedScene" uid="uid://dpyxy65c7yisb" path="res://scenes/tops/topper_forest.tscn" id="1_u11x1"]
-[ext_resource type="Script" uid="uid://btydeamnhd6x" path="res://scripts/structures/structure_info.gd" id="2_nvtva"]
 
 [sub_resource type="Curve" id="Curve_nqdss"]
 _limits = [0.0, 5.0, 0.0, 50.0]
@@ -9,10 +10,11 @@ _data = [Vector2(2, 5), inf_neg, -1.0, 1, 1, Vector2(5, 2), -1.0, inf_neg, 1, 1]
 point_count = 2
 
 [resource]
-script = ExtResource("2_nvtva")
+script = ExtResource("1_oogor")
+item = ExtResource("1_nvtva")
 max_per_region_size = SubResource("Curve_nqdss")
 minimum_distance_from_other_structures = 3
-id = "spawnable_mines"
+id = "forest"
 packed_scene = ExtResource("1_u11x1")
 type = 4
-metadata/_custom_type_script = "uid://btydeamnhd6x"
+metadata/_custom_type_script = "uid://brvtfutnwh30i"

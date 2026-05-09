@@ -1,4 +1,6 @@
-extends Interaction
+extends QuestObjective
+
+@onready var wheat: Node3D = $wheat
 
 func interact() -> void:
 	pass

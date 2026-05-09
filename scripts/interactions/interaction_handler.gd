@@ -10,8 +10,6 @@ var window_instance: SceneInstance;
 @abstract func interact() -> void;
 @abstract func can_interact() -> bool;
 
-@export var is_quest: bool = true;
-
 func _ready() -> void:
 	enterable_triggers.assign(find_children("*", "Area3D", true, false))
 	colliders.assign(find_children("*", "StaticBody3D", true, false))
@@ -31,8 +29,6 @@ func toggle_collision(b: bool) -> void:
 	
 func on_interact() -> void:
 	if can_interact():
-		if is_quest:
-			DataManager.instance.get_scene_by_name("quest_creation_ui").queue(_on_create_quest_window_loaded);
 		interact();
 
 func _on_visibility_changed() -> void:

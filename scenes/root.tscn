@@ -27,7 +27,7 @@
 [ext_resource type="Resource" uid="uid://btnk3qkcvaya0" path="res://resources/structure_info/ladder.tres" id="16_jehah"]
 [ext_resource type="Resource" uid="uid://c4yve7atd0tis" path="res://resources/structure_info/ore_deposit_gold.tres" id="17_re66h"]
 [ext_resource type="Resource" uid="uid://uov1jt8s2qia" path="res://resources/scene_info/ui/input_settings.tres" id="18_34frw"]
-[ext_resource type="Resource" uid="uid://c0cycppeql80w" path="res://resources/structure_info/forest.tres" id="18_58tnd"]
+[ext_resource type="Resource" uid="uid://dijohak4mpf7n" path="res://resources/structure_info/forest.tres" id="18_58tnd"]
 [ext_resource type="Resource" uid="uid://001nokdh5ewb" path="res://resources/scene_info/ui/settings_menu.tres" id="18_mflgo"]
 [ext_resource type="Resource" uid="uid://foly5odh7d4j" path="res://resources/structure_info/ore_deposit_iron.tres" id="18_re66h"]
 [ext_resource type="Resource" uid="uid://c1ypx4o3q73t0" path="res://resources/structure_info/settlement.tres" id="19_isfgf"]
