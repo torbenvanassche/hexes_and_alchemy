@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bspwdi5yrsyab" path="res://tools/inventory/scripts/visual/parts/quest_list_item_ui.gd" id="1_qmdcg"]
 [ext_resource type="PackedScene" uid="uid://c5ocjw6joaemy" path="res://tools/inventory/scenes/content_slot.tscn" id="2_vqdcy"]
 [ext_resource type="Texture2D" uid="uid://m3yff7hfup7m" path="res://sprites/ui/notepad_write.png" id="3_3kdy2"]
-[ext_resource type="Texture2D" uid="uid://fg17pv5hrxau" path="res://sprites/ui/cross.png" id="3_lpkqt"]
+[ext_resource type="Texture2D" uid="uid://c21ya3fh5a86q" path="res://sprites/ui/pouch_add.png" id="4_3kdy2"]
 
 [node name="Control" type="HBoxContainer" unique_id=84988057]
 custom_minimum_size = Vector2(0, 25)
@@ -59,10 +59,10 @@ flat = true
 icon_alignment = 1
 expand_icon = true
 
-[node name="RemoveQuest" type="Button" parent="." unique_id=68758061]
+[node name="CompleteQuest" type="Button" parent="." unique_id=1614009287]
 custom_minimum_size = Vector2(25, 0)
 layout_mode = 2
-icon = ExtResource("3_lpkqt")
+icon = ExtResource("4_3kdy2")
 flat = true
 icon_alignment = 1
 expand_icon = true

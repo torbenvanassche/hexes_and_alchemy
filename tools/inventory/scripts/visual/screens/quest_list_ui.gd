@@ -14,9 +14,6 @@ func on_enter() -> void:
 		self.add_child(instance);
 		instance.set_data(q);
 	
-		instance.remove_quest.pressed.connect(remove_child.bind(instance))
-		instance.remove_quest.pressed.connect(func() -> void: Config.gamestate.remove_quest(q))
-	
 func _ready() -> void:
 	create_quest_button.pressed.connect(_open_create_quest_menu)
 	Config.gamestate.quest_list_changed.connect(on_enter)

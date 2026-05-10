@@ -11,6 +11,4 @@ func _open_window(window_info: SceneInfo) -> void:
 	window_instance.on_enter.emit();
 
 func _on_area_exit(other: Area3D) -> void:
-	#if window_instance:
-		#window_instance.hide();
 	super(other);
