@@ -41,7 +41,7 @@ func execute_quest(q: Quest) -> void:
 	await get_tree().create_timer(quest_time).timeout
 
 	_start_regrow();
-	q.update(Quest.QuestState.RETURNING)
+	q.return_from_quest()
 	_quest_running = false
 	
 func complete_quest(q: Quest) -> void:

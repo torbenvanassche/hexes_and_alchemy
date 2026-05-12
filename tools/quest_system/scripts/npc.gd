@@ -9,9 +9,10 @@ var current_target_index := 0
 
 var current_quest: Quest;
 var npc_info: NpcInfo;
-var on_location: bool = false;
 
-signal arrived_at_quest();
+var at_quest: bool = false;
+
+signal arrived();
 
 func _ready() -> void:
 	$mesh/RootNode/unit.material_override = material
@@ -20,7 +21,7 @@ func _ready() -> void:
 	
 func assign_quest() -> void:
 	current_quest = Config.gamestate.assign_quest(self);
-	on_location = false;
+	at_quest = false;
 
 func move_to_quest() -> void:
 	visible = true;
@@ -29,6 +30,10 @@ func move_to_quest() -> void:
 	current_path = active_scene.pathfinder.get_hex_path(start_hex.cube_id, current_quest.location.cube_id)
 	current_path.remove_at(0);
 	current_target_index = 0
+	
+func return_home() -> void:
+	current_path.reverse();
+	current_target_index = 0;
 
 func _physics_process(_delta: float) -> void:
 	if current_path.is_empty():
@@ -36,9 +41,8 @@ func _physics_process(_delta: float) -> void:
 
 	if current_target_index >= current_path.size():
 		velocity = Vector3.ZERO
-		on_location = true;
-		arrived_at_quest.emit();
-		current_path.clear();
+		at_quest = true;
+		arrived.emit();
 		move_and_slide()
 		return
 

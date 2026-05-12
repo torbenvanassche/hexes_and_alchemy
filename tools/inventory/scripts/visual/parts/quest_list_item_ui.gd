@@ -19,8 +19,12 @@ func set_data(quest: Quest) -> void:
 	quest_number.text = "%s." % [str(self.get_parent().get_child_count())];
 	quest_type.text = quest.Type.find_key(quest.quest_type);
 	quest_location.text = quest.location.structure.structure_info.id;
-	if approve_quest.pressed.is_connected(questData.start):
-		approve_quest.pressed.disconnect(questData.start);
+	
+	approve_quest.visible = true;
+	if approve_quest.pressed.is_connected(_start_quest):
+		approve_quest.pressed.disconnect(_start_quest);
+	approve_quest.pressed.connect(_start_quest)
+	
 	if complete_quest.pressed.is_connected(questData.parse_reward):
 		complete_quest.pressed.disconnect(questData.parse_reward);
 	complete_quest.pressed.connect(questData.parse_reward);
@@ -33,6 +37,10 @@ func set_data(quest: Quest) -> void:
 		party.add_child(img);
 	
 	quest.update_status.connect(_update_progress)
+	
+func _start_quest() -> void:
+	approve_quest.visible = false
+	questData.start();
 	
 func _update_progress() -> void:
 	progress_bar.value = questData.progress;

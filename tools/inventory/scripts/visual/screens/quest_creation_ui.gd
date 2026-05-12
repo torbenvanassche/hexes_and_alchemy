@@ -16,11 +16,13 @@ func _reset_ui() -> void:
 		finish_quest_creation.pressed.disconnect(_create_quest)
 		
 func force_data(interaction: Interaction) -> void:
+	#TODO: Fix instance of quest referring to wrong object
 	quest_location.select(quest_location_hashes.find(interaction.hex))
 	quest_location.disabled = true;
 
 func on_enter() -> void:
 	_reset_ui()
+	quest_location.disabled = false;
 	for state in Quest.Type.keys():
 		quest_type.add_item(state, Quest.Type[state])
 	var structure_hexes: Array[HexBase] = (SceneManager.get_active_scene().node as HexGrid).get_structured_hexes();

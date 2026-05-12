@@ -42,11 +42,3 @@ func _on_area_exit(other: Area3D) -> void:
 func _on_area_enter(other: Area3D) -> void:
 	if other.get_parent() is PlayerController && can_interact():
 		Manager.instance.interaction_prompt.show_rect(self);
-	
-func _on_create_quest_window_loaded(window_info: SceneInfo) -> void:
-	window_instance = SceneManager.add(window_info);
-	var quest_creation: QuestCreationUI = (window_instance.node as DraggableControl).content as QuestCreationUI;
-	if not quest_creation.quest_created.is_connected(Config.gamestate.add_quest):
-		quest_creation.quest_created.connect(Config.gamestate.add_quest)
-		quest_creation.force_data(self)
-	window_instance.on_enter.emit();
