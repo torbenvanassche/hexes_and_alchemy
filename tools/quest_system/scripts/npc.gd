@@ -11,6 +11,7 @@ var current_quest: Quest;
 var npc_info: NpcInfo;
 
 var at_quest: bool = false;
+var at_home: bool = true;
 
 signal arrived();
 
@@ -41,8 +42,13 @@ func _physics_process(_delta: float) -> void:
 
 	if current_target_index >= current_path.size():
 		velocity = Vector3.ZERO
-		at_quest = true;
-		arrived.emit();
+		if current_quest.is_state(Quest.QuestState.EN_ROUTE):
+			at_quest = true;
+			arrived.emit();
+		elif current_quest.is_state(Quest.QuestState.RETURNING):
+			current_path.clear()
+			at_home = true;
+			arrived.emit();
 		move_and_slide()
 		return
 

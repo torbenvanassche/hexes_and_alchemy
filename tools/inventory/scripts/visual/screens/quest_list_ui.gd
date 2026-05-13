@@ -6,13 +6,15 @@ class_name QuestListUI extends VBoxContainer
 var window_instance: SceneInstance;
 
 func on_enter() -> void:
-	for c in get_children():
-		c.queue_free();
+	for c: QuestListItemUI in get_children():
+		if not Config.gamestate.active_quests.has(c.questData):
+			c.queue_free()
 		
 	for q: Quest in Config.gamestate.active_quests:
-		var instance: QuestListItemUI = quest_item_ui.instantiate();
-		self.add_child(instance);
-		instance.set_data(q);
+		if get_children().all(func(child: QuestListItemUI) -> bool: return child.questData != q):
+			var instance: QuestListItemUI = quest_item_ui.instantiate();
+			self.add_child(instance);
+			instance.set_data(q);
 	
 func _ready() -> void:
 	create_quest_button.pressed.connect(_open_create_quest_menu)

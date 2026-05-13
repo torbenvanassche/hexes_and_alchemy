@@ -5,7 +5,6 @@ class_name QuestCreationUI extends VBoxContainer
 @onready var finish_quest_creation: Button = $FinishQuestCreation
 
 signal quest_created(quest: Quest)
-
 var quest_location_hashes: Array[HexBase]
 
 func _reset_ui() -> void:

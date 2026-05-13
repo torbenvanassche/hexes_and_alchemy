@@ -38,7 +38,6 @@ build_steps = [NodePath("foundation"), NodePath("tavern")]
 [node name="foundation" parent="structures/buildable_structure" unique_id=216741624 instance=ExtResource("7_mkm41")]
 script = ExtResource("8_mt1kp")
 quest = ExtResource("9_47cix")
-is_quest = false
 
 [node name="interaction" type="Area3D" parent="structures/buildable_structure/foundation" unique_id=1087166324]
 

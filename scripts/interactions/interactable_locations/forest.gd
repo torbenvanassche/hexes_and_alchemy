@@ -44,7 +44,6 @@ func execute_quest(q: Quest) -> void:
 	q.return_from_quest()
 	_quest_running = false
 	
-func complete_quest(q: Quest) -> void:
+func complete_quest(_q: Quest) -> void:
 	var l := (hex.structure.structure_info as LootableStructureInfo);
 	Manager.instance.player_instance.inventory.add(l.item, randi_range(l.min_item_amount, l.max_item_amount))
-	q.update(Quest.QuestState.COMPLETE)

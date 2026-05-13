@@ -14,21 +14,18 @@ class_name QuestListItemUI extends Control
 var questData: Quest;
 
 func set_data(quest: Quest) -> void:
+	if questData:
+		Debug.err("Quest already has data, create a new one instead!")
+		return
 	questData = quest;
 	
 	quest_number.text = "%s." % [str(self.get_parent().get_child_count())];
 	quest_type.text = quest.Type.find_key(quest.quest_type);
 	quest_location.text = quest.location.structure.structure_info.id;
-	
-	approve_quest.visible = true;
-	if approve_quest.pressed.is_connected(_start_quest):
-		approve_quest.pressed.disconnect(_start_quest);
+
 	approve_quest.pressed.connect(_start_quest)
-	
-	if complete_quest.pressed.is_connected(questData.parse_reward):
-		complete_quest.pressed.disconnect(questData.parse_reward);
 	complete_quest.pressed.connect(questData.parse_reward);
-	_update_progress()
+	_update_progress(questData.state_machine.get_current_state())
 	
 	for n in quest.party:
 		var img := TextureRect.new();
@@ -36,14 +33,17 @@ func set_data(quest: Quest) -> void:
 		img.expand_mode = TextureRect.EXPAND_FIT_WIDTH;
 		party.add_child(img);
 	
-	quest.update_status.connect(_update_progress)
+	quest.state_machine.state_entered.connect(_update_progress)
+	quest.completed.connect(_on_quest_complete)
+	
+func _on_quest_complete() -> void:
+	questData = null;
+	queue_free();
 	
 func _start_quest() -> void:
 	approve_quest.visible = false
 	questData.start();
 	
-func _update_progress() -> void:
-	progress_bar.value = questData.progress;
-	label.text = questData.get_state_as_string();
-	approve_quest.visible = questData.status != Quest.QuestState.COMPLETE;
-	complete_quest.visible = questData.status == Quest.QuestState.COMPLETE;
+func _update_progress(state: String) -> void:
+	label.text = state;             
+	complete_quest.visible = questData.is_state(Quest.QuestState.COMPLETE);
