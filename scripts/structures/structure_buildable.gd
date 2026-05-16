@@ -1,4 +1,4 @@
-extends Node
+class_name Buildable extends Node
 
 @export var build_steps: Array[Interaction];
 var current_step: Interaction;
@@ -10,6 +10,8 @@ func _ready() -> void:
 			step.completed.connect(_on_step_completed.bind(step))
 		if build_steps.find(step) != 0:
 			step.visible = false;
+		if "buildable_structure" in step:
+			step.buildable_structure = self;
 			
 func _on_step_completed(step: BuildRequest) -> void:
 	var index := build_steps.find(step);

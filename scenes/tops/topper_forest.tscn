@@ -3,7 +3,6 @@
 [ext_resource type="PackedScene" uid="uid://bagl7tnsobw8w" path="res://meshes/kay_fantasy_hexagon/decoration/nature/trees_A_large.glb" id="1_k4nv7"]
 [ext_resource type="Script" uid="uid://cq000e45vtevx" path="res://scripts/interactions/interactable_locations/forest.gd" id="1_ro7nm"]
 [ext_resource type="PackedScene" uid="uid://brdca467mutqb" path="res://meshes/kay_fantasy_hexagon/decoration/nature/trees_A_cut.glb" id="2_c5dpi"]
-[ext_resource type="Resource" uid="uid://b46nyvtvipor5" path="res://resources/item_info/wood_raw.tres" id="2_t00ul"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_c5dpi"]
 size = Vector3(2.6546097, 1.6783295, 2.7467527)
@@ -15,9 +14,9 @@ size = Vector3(1.8792906, 0.5864792, 1.9651601)
 script = ExtResource("1_ro7nm")
 regrow_time = null
 quest_time = null
-item_info = ExtResource("2_t00ul")
-min_item_amount = null
-max_item_amount = null
+quest_types = Dictionary[int, String]({
+0: "Gather"
+})
 
 [node name="trees" parent="." unique_id=1335934582 instance=ExtResource("1_k4nv7")]
 

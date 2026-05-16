@@ -158,6 +158,6 @@ func generate_structures_for_region() -> void:
 func get_structured_hexes() -> Array[HexBase]:
 	var instances: Array[HexBase];
 	for hex: HexBase in hexes.values():
-		if hex.structure:
+		if hex.structure && not hex.structure.instance is Settlement:
 			instances.append(hex)
 	return instances;

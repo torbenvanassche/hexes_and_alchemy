@@ -1,7 +1,7 @@
 class_name StructureInstance extends SceneInstance
 
 var structure_info: StructureInfo;
-var instance: Node3D;
+var instance: Node;
 
 var meshes: Array[MeshInstance3D]
 

@@ -3,12 +3,32 @@
 [ext_resource type="Script" uid="uid://c2ak30cofsw0q" path="res://scripts/interactions/interactable_locations/farmland.gd" id="1_whuaq"]
 [ext_resource type="PackedScene" uid="uid://b5nvbe2agstv" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/building_dirt.glb" id="2_h10pt"]
 [ext_resource type="PackedScene" uid="uid://bax5moj3u5f0w" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/building_grain.glb" id="3_ypxrj"]
+[ext_resource type="PackedScene" uid="uid://drag6hoa8h7r5" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/building_grain_watered.glb" id="4_54fpy"]
+[ext_resource type="PackedScene" uid="uid://c2hlhjmdl7v77" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/building_grain_seeds.glb" id="4_s8nt4"]
+[ext_resource type="PackedScene" uid="uid://0kpili04lb" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/building_grain_dead.glb" id="6_ox7li"]
 
 [node name="Node3D" type="Node3D" unique_id=75474733]
 script = ExtResource("1_whuaq")
+quest_types = Dictionary[String, bool]({
+"Harvest": false,
+"Plant": false,
+"Water": false
+})
 
-[node name="ground" parent="." unique_id=624363515 instance=ExtResource("2_h10pt")]
+[node name="mesh_fallow" parent="." unique_id=624363515 instance=ExtResource("2_h10pt")]
 
-[node name="wheat" parent="." unique_id=399605343 instance=ExtResource("3_ypxrj")]
+[node name="mesh_planted" parent="." unique_id=1019695208 instance=ExtResource("4_s8nt4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.15312403, 0)
+visible = false
+
+[node name="mesh_watered" parent="." unique_id=31762906 instance=ExtResource("4_54fpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.15463, 0)
+visible = false
+
+[node name="mesh_ready" parent="." unique_id=399605343 instance=ExtResource("3_ypxrj")]
 transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)
+visible = false
+
+[node name="mesh_dead" parent="." unique_id=1060350227 instance=ExtResource("6_ox7li")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.16427466, 0)
 visible = false

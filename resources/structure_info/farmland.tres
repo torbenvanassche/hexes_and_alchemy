@@ -1,16 +1,17 @@
-[gd_resource type="Resource" script_class="StructureInfo" format=3 uid="uid://dbhyrexgkscja"]
+[gd_resource type="Resource" script_class="LootableStructureInfo" format=3 uid="uid://ckc2tmi6risxh"]
 
-[ext_resource type="PackedScene" uid="uid://cvkpa07ijqa1m" path="res://scenes/tops/topper_dirt.tscn" id="1_3mjya"]
-[ext_resource type="Script" uid="uid://btydeamnhd6x" path="res://scripts/structures/structure_info.gd" id="2_wbcrx"]
+[ext_resource type="PackedScene" uid="uid://cvkpa07ijqa1m" path="res://scenes/tops/topper_dirt.tscn" id="1_0mxwp"]
+[ext_resource type="Script" uid="uid://brvtfutnwh30i" path="res://scripts/structures/lootable_info.gd" id="1_rlj5i"]
 
 [sub_resource type="Curve" id="Curve_nqdss"]
-_limits = [0.0, 20.0, 0.0, 50.0]
-_data = [Vector2(4, 20), inf_neg, -1.0, 1, 1, Vector2(20, 4), -1.0, inf_neg, 1, 1]
+_limits = [0.0, 5.0, 0.0, 50.0]
+_data = [Vector2(2, 5), inf_neg, -1.0, 1, 1, Vector2(5, 2), -1.0, inf_neg, 1, 1]
 point_count = 2
 
 [resource]
-script = ExtResource("2_wbcrx")
+script = ExtResource("1_rlj5i")
 max_per_region_size = SubResource("Curve_nqdss")
-packed_scene = ExtResource("1_3mjya")
-type = 4
-metadata/_custom_type_script = "uid://btydeamnhd6x"
+minimum_distance_from_other_structures = 1
+id = "farmland"
+packed_scene = ExtResource("1_0mxwp")
+metadata/_custom_type_script = "uid://brvtfutnwh30i"

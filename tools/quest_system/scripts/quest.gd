@@ -1,10 +1,5 @@
 class_name Quest extends Resource
 
-enum Type {
-	FETCH,
-	SLAY
-}
-
 enum QuestState {
 	WAITING,
 	EN_ROUTE,
@@ -13,7 +8,7 @@ enum QuestState {
 	COMPLETE
 }
 
-var quest_type: Type;
+var quest_key: String;
 var supplies: ContentGroup;
 var location: HexBase;
 
@@ -23,9 +18,7 @@ var party: Array[NPC];
 
 signal completed();
 
-func _init(_location: HexBase = null, _type: Type = Type.FETCH, _supplies: ContentGroup = ContentGroup.new()) -> void:
-	self.quest_type = _type;
-	self.supplies = _supplies;
+func _init(_location: HexBase = null) -> void:
 	self.location = _location;
 	
 	var states: Array[String];

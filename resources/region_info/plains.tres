@@ -6,7 +6,7 @@
 [ext_resource type="Resource" uid="uid://betpu2iylw1qy" path="res://resources/scene_info/hex/hex_simple.tres" id="3_aq4h2"]
 [ext_resource type="Resource" uid="uid://ckpmn3cutb7an" path="res://resources/structure_info/spawnable_mine.tres" id="4_yf7g0"]
 [ext_resource type="Script" uid="uid://btydeamnhd6x" path="res://scripts/structures/structure_info.gd" id="5_v1b04"]
-[ext_resource type="Resource" uid="uid://dbhyrexgkscja" path="res://resources/structure_info/farmland.tres" id="6_yf7g0"]
+[ext_resource type="Resource" uid="uid://ckc2tmi6risxh" path="res://resources/structure_info/farmland.tres" id="6_yf7g0"]
 [ext_resource type="Resource" uid="uid://dijohak4mpf7n" path="res://resources/structure_info/forest.tres" id="8_6utus"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_te6hx"]

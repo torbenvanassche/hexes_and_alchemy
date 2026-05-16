@@ -39,6 +39,7 @@ func execute_quest(q: Quest) -> void:
 	_quest_running = true
 
 	await get_tree().create_timer(quest_time).timeout
+	_set_tree_state(false)
 
 	_start_regrow();
 	q.return_from_quest()

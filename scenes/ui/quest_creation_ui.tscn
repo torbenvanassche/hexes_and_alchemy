@@ -17,19 +17,7 @@ size_flags_horizontal = 1
 layout_mode = 2
 script = ExtResource("2_1mihr")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/VBoxContainer" index="0" unique_id=376979057]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/VBoxContainer/HBoxContainer" index="0" unique_id=844205132]
-custom_minimum_size = Vector2(70, 0)
-layout_mode = 2
-text = "Type"
-
-[node name="QuestType" type="OptionButton" parent="NinePatchRect/VBoxContainer/contentPanel/VBoxContainer/HBoxContainer" index="1" unique_id=675844846]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/VBoxContainer" index="1" unique_id=1452652058]
+[node name="HBoxContainer2" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/VBoxContainer" index="0" unique_id=1452652058]
 layout_mode = 2
 
 [node name="Label2" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/VBoxContainer/HBoxContainer2" index="0" unique_id=474702119]
@@ -38,6 +26,18 @@ layout_mode = 2
 text = "Location"
 
 [node name="QuestLocation" type="OptionButton" parent="NinePatchRect/VBoxContainer/contentPanel/VBoxContainer/HBoxContainer2" index="1" unique_id=90833800]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/VBoxContainer" index="1" unique_id=376979057]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/VBoxContainer/HBoxContainer" index="0" unique_id=844205132]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+text = "Type"
+
+[node name="QuestType" type="OptionButton" parent="NinePatchRect/VBoxContainer/contentPanel/VBoxContainer/HBoxContainer" index="1" unique_id=675844846]
 layout_mode = 2
 size_flags_horizontal = 3
 
