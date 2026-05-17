@@ -18,11 +18,12 @@ func _ready() -> void:
 func _on_location_selected() -> void:
 	var location: HexBase = quest_location.get_item_metadata(quest_location.get_selected_id());
 	
-	quest_type.clear()
-	var types := (location.structure.instance as QuestObjective).get_filtered_quest_types();
-	for state: Quest.Type in types.keys():
-		quest_type.add_item(types[state]);
-		quest_type.set_item_metadata(quest_type.item_count, state)
+	quest_type.clear();
+	var types := (location.structure.instance as QuestObjective);
+	if types:
+		for state: String in types.get_filtered_quest_types():
+			quest_type.add_item(state);
+			quest_type.set_item_metadata(quest_type.item_count - 1, state)
 		
 func force_data(interaction: Interaction) -> void:
 	_reset_ui();
@@ -43,10 +44,10 @@ func on_enter() -> void:
 		
 		if  in_range && is_valid_quest && hex.structure.structure_info.is_quest_target && hex.is_explored:
 			quest_location.add_item("%s (%s tiles)" % [hex.structure.structure_info.id, distance]);
-			quest_location.set_item_metadata(quest_location.item_count, hex);
+			quest_location.set_item_metadata(quest_location.item_count - 1, hex);
 	finish_quest_creation.pressed.connect(_create_quest)
 	quest_type.disabled = true;
 	
 func _create_quest() -> void:
-	quest_created.emit(Quest.new(quest_location.get_item_metadata(quest_location.get_selected_id()), quest_type.get_selected_id()));
+	quest_created.emit(Quest.new(quest_location.get_item_metadata(quest_location.get_selected_id()), quest_type.get_item_metadata(quest_type.get_selected_id())));
 	(owner as DraggableControl).close_requested.emit();

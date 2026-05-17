@@ -14,7 +14,6 @@ size = Vector3(1.173315, 1.3972301, 1.0873525)
 script = ExtResource("1_isasx")
 adventurer = ExtResource("2_56i7v")
 adventurer_spawn = NodePath("spawn_location")
-is_quest = false
 
 [node name="Root Scene" parent="." unique_id=1174146906 instance=ExtResource("1_244u3")]
 

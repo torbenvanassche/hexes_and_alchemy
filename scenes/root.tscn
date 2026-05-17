@@ -17,7 +17,7 @@
 [ext_resource type="Resource" uid="uid://dkibdkuc04rrk" path="res://tools/time_of_day/resources/dusk.tres" id="9_xkeu2"]
 [ext_resource type="Resource" uid="uid://bflckgydmmunp" path="res://resources/region_info/desert.tres" id="9_y3xxt"]
 [ext_resource type="Script" uid="uid://btydeamnhd6x" path="res://scripts/structures/structure_info.gd" id="10_gt4lb"]
-[ext_resource type="Resource" uid="uid://dbhyrexgkscja" path="res://resources/structure_info/farmland.tres" id="11_ya6yc"]
+[ext_resource type="Resource" uid="uid://ckc2tmi6risxh" path="res://resources/structure_info/farmland.tres" id="11_ya6yc"]
 [ext_resource type="Resource" uid="uid://ckpmn3cutb7an" path="res://resources/structure_info/spawnable_mine.tres" id="12_mflgo"]
 [ext_resource type="Resource" uid="uid://ckehcbpixu26o" path="res://resources/scene_info/player.tres" id="12_vgks2"]
 [ext_resource type="Resource" uid="uid://clias4ed18wk0" path="res://resources/structure_info/lumbermill.tres" id="14_8ui5n"]

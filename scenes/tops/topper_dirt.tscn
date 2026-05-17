@@ -10,9 +10,9 @@
 [node name="Node3D" type="Node3D" unique_id=75474733]
 script = ExtResource("1_whuaq")
 quest_types = Dictionary[String, bool]({
-"Harvest": false,
-"Plant": false,
-"Water": false
+"Harvest": true,
+"Plant": true,
+"Water": true
 })
 
 [node name="mesh_fallow" parent="." unique_id=624363515 instance=ExtResource("2_h10pt")]

@@ -8,9 +8,12 @@ func on_interact() -> void:
 	if can_interact():
 		DataManager.instance.get_scene_by_name("quest_creation_ui").queue(_on_create_quest_window_loaded);
 		
-func get_filtered_quest_types() -> Dictionary[String, bool]:
-	#TODO: Filter possible quest types + apply changes bason current state potential
-	return quest_types;
+func get_filtered_quest_types() -> Array[String]:
+	var valid_types: Array[String];
+	for q in quest_types.keys():
+		if quest_types[q]:
+			valid_types.append(q);
+	return valid_types;
 	
 func _on_create_quest_window_loaded(window_info: SceneInfo) -> void:
 	window_instance = SceneManager.add(window_info);

@@ -18,8 +18,9 @@ var party: Array[NPC];
 
 signal completed();
 
-func _init(_location: HexBase = null) -> void:
+func _init(_location: HexBase = null, _type_key: String = "") -> void:
 	self.location = _location;
+	self.quest_key = _type_key;
 	
 	var states: Array[String];
 	for s in QuestState.keys():
