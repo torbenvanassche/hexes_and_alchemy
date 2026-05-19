@@ -14,6 +14,8 @@ var is_paused: bool = false;
 @export var initial_scene: SceneInfo;
 var active_settlement: Settlement;
 
+var settlements: Array[Settlement];
+
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS;
 	instance = self;

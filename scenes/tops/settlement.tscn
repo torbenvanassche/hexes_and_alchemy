@@ -36,6 +36,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.973076, 0, 1.75)
 build_steps = [NodePath("foundation"), NodePath("tavern")]
 
 [node name="foundation" parent="structures/buildable_structure" unique_id=216741624 instance=ExtResource("7_mkm41")]
+visible = false
 script = ExtResource("8_mt1kp")
 quest = ExtResource("9_47cix")
 
@@ -53,7 +54,6 @@ shape = SubResource("BoxShape3D_msdat")
 
 [node name="tavern" parent="structures/buildable_structure" unique_id=1607926184 instance=ExtResource("7_l415u")]
 transform = Transform3D(-0.4999999, 0, -0.86602545, 0, 1, 0, 0.86602545, 0, -0.4999999, 0, 0, 0)
-visible = false
 
 [node name="questboard" parent="structures" unique_id=1065241070 instance=ExtResource("11_mt1kp")]
 transform = Transform3D(0.8660254, 0, -0.5, 0, 1, 0, 0.5, 0, 0.8660254, 2.397221, 0, -0.66254705)

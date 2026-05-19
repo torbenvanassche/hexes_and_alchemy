@@ -6,6 +6,7 @@ var enterable_triggers: Array[Area3D];
 var colliders: Array[StaticBody3D];
 var collision_shapes: Array[CollisionShape3D];
 var window_instance: SceneInstance;
+var settlement: Settlement;
 
 @abstract func interact() -> void;
 @abstract func can_interact() -> bool;
@@ -14,6 +15,10 @@ func _ready() -> void:
 	enterable_triggers.assign(find_children("*", "Area3D", true, false))
 	colliders.assign(find_children("*", "StaticBody3D", true, false))
 	collision_shapes.assign(find_children("*", "CollisionShape3D", true, false))
+	
+	settlement = owner as Settlement;
+	if settlement:
+		settlement.interactions.append(self);
 	
 	for trigger: Area3D in enterable_triggers:
 		trigger.set_meta("target", self)

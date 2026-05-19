@@ -1,4 +1,4 @@
-extends Interaction
+class_name Tavern extends Interaction
 
 @export var adventurer: SceneInfo;
 @export var adventurer_spawn: Node3D;

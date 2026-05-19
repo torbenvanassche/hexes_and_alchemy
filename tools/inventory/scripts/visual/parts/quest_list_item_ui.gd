@@ -20,7 +20,7 @@ func set_data(quest: Quest) -> void:
 	questData = quest;
 	
 	quest_number.text = "%s." % [str(self.get_parent().get_child_count())];
-	quest_type.text = quest.Type.find_key(quest.quest_type);
+	quest_type.text = quest.quest_key;
 	quest_location.text = quest.location.structure.structure_info.id;
 
 	approve_quest.pressed.connect(_start_quest)
@@ -41,6 +41,8 @@ func _on_quest_complete() -> void:
 	queue_free();
 	
 func _start_quest() -> void:
+	#check tavern in range
+	
 	approve_quest.visible = false
 	questData.start();
 	

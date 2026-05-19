@@ -4,11 +4,13 @@ class_name Settlement extends Node3D
 @export var is_active_settlement: bool = false;
 
 var collision_shapes: Array[CollisionShape3D];
+var interactions: Array[Interaction];
 
 @onready var settlement_outline: CSGPolygon3D = $settlement_outline
 
 func _ready() -> void:
 	collision_shapes.assign(find_children("*", "CollisionShape3D", true, false))
+	Manager.instance.settlements.append(self)
 	
 	if is_active_settlement:
 		Manager.instance.set_active_settlement(self);
