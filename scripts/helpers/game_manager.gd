@@ -71,3 +71,9 @@ func pause_game(force: bool = !is_paused) -> void:
 		
 func set_active_settlement(settle: Settlement) -> void:
 	active_settlement = settle;
+	
+func get_settlement(interaction: Interaction) -> Settlement:
+	for settlement in settlements:
+		if settlement.interactions.any(func(s: Interaction) -> bool: return s == interaction):
+			return settlement;
+	return null;

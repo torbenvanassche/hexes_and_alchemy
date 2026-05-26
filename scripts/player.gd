@@ -92,8 +92,6 @@ func add_trigger(other: Area3D) -> void:
 	else:
 		if (other as Node3D) is Interaction:
 			current_triggers.append(other)
-		else:
-			Debug.err("No interaction defined on %s" % [other])
 	
 func remove_trigger(other: Area3D) -> void:
 	if other.has_meta("target"):
@@ -101,8 +99,6 @@ func remove_trigger(other: Area3D) -> void:
 	else:
 		if (other as Node3D) is Interaction:
 			current_triggers.erase(other)
-		else:
-			Debug.err("No interaction defined on %s" % [other])
 
 func get_hex() -> HexBase:
 	var grid := (SceneManager.get_active_scene().node as HexGrid);

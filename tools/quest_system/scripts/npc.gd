@@ -29,8 +29,7 @@ func move_to_quest() -> void:
 	var active_scene := SceneManager.get_active_scene().node as HexGrid
 	var start_hex := active_scene.get_hex_at_world_position(global_position)
 	current_path = active_scene.pathfinder.get_hex_path(start_hex.cube_id, current_quest.location.cube_id)
-	current_path.remove_at(0);
-	current_target_index = 0
+	current_target_index = 1;
 	
 func return_home() -> void:
 	current_path.reverse();
@@ -49,6 +48,7 @@ func _physics_process(_delta: float) -> void:
 			current_path.clear()
 			at_home = true;
 			arrived.emit();
+			queue_free();
 		move_and_slide()
 		return
 

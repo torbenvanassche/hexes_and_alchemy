@@ -8,7 +8,7 @@
 size = Vector3(0.7681427, 0.65410614, 0.5323236)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_56i7v"]
-size = Vector3(1.173315, 1.3972301, 1.0873525)
+size = Vector3(1.173315, 1.3972301, 1.2564573)
 
 [node name="tavern" type="Node3D" unique_id=1607926184 node_paths=PackedStringArray("adventurer_spawn")]
 script = ExtResource("1_isasx")
@@ -20,13 +20,13 @@ adventurer_spawn = NodePath("spawn_location")
 [node name="interaction" type="Area3D" parent="." unique_id=478417135]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="interaction" unique_id=1954448130]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.14795685, 0.24740219, 0.5098027)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.14795685, 0.24740219, 0.6248791)
 shape = SubResource("BoxShape3D_isasx")
 
 [node name="collision" type="StaticBody3D" parent="." unique_id=1279273101]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="collision" unique_id=1330385639]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.010420799, 0.69372463, -0.15895307)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.010420799, 0.69372463, -0.067943454)
 shape = SubResource("BoxShape3D_56i7v")
 
 [node name="spawn_location" type="Node3D" parent="." unique_id=1475512664]

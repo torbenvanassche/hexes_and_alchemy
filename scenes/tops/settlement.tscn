@@ -34,6 +34,7 @@ transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 1.9820508, 
 [node name="buildable_structure" parent="structures" unique_id=147799684 node_paths=PackedStringArray("build_steps") instance=ExtResource("6_l415u")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.973076, 0, 1.75)
 build_steps = [NodePath("foundation"), NodePath("tavern")]
+start_step_index = 1
 
 [node name="foundation" parent="structures/buildable_structure" unique_id=216741624 instance=ExtResource("7_mkm41")]
 visible = false

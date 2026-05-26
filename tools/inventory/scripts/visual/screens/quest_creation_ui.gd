@@ -16,6 +16,9 @@ func _ready() -> void:
 	quest_location.item_selected.connect(_on_location_selected)
 	
 func _on_location_selected(idx: int) -> void:
+	if idx == -1:
+		return;
+	
 	var location: HexBase = quest_location.get_item_metadata(idx);
 	
 	quest_type.clear();

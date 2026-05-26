@@ -12,6 +12,8 @@ func _ready() -> void:
 	collision_shapes.assign(find_children("*", "CollisionShape3D", true, false))
 	Manager.instance.settlements.append(self)
 	
+	interactions.assign(find_children("*", "Interaction", true, false))
+	
 	if is_active_settlement:
 		Manager.instance.set_active_settlement(self);
 	Manager.instance.spawn_in_settlement();
