@@ -8,7 +8,10 @@ func can_interact() -> bool:
 	
 	var ui_is_open := not window_instance || not SceneManager.is_visible(window_instance);
 	var active_settlement_board: bool = settlement && settlement.interactions.any(func(interaction: Interaction) -> bool: return interaction is Tavern);
-	return ui_is_open && active_settlement_board;
+	
+	var tiles_in_radius: Array[SceneInstance] = (SceneManager.get_active_scene().node as HexGrid).get_tiles_in_radius(self.hex.cube_id, Config.gamestate.max_quest_distance);
+	var quest_locations_in_range: bool = tiles_in_radius.any(func(i: SceneInstance) -> bool: return i.node is QuestObjective && i.node.can_interact());
+	return ui_is_open && active_settlement_board && quest_locations_in_range;
 	
 func _open_window(window_info: SceneInfo) -> void:
 	window_instance = SceneManager.add(window_info, false);
