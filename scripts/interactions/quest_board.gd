@@ -6,12 +6,18 @@ func interact() -> void:
 func can_interact() -> bool:
 	var settlement: Settlement = Manager.instance.get_settlement(self);
 	
-	var ui_is_open := not window_instance || not SceneManager.is_visible(window_instance);
+	var ui_is_closed := not window_instance || not SceneManager.is_visible(window_instance);
 	var active_settlement_board: bool = settlement && settlement.interactions.any(func(interaction: Interaction) -> bool: return interaction is Tavern);
 	
-	var tiles_in_radius: Array[SceneInstance] = (SceneManager.get_active_scene().node as HexGrid).get_tiles_in_radius(self.hex.cube_id, Config.gamestate.max_quest_distance);
-	var quest_locations_in_range: bool = tiles_in_radius.any(func(i: SceneInstance) -> bool: return i.node is QuestObjective && i.node.can_interact());
-	return ui_is_open && active_settlement_board && quest_locations_in_range;
+	var grid: HexGrid = (SceneManager.get_active_scene().node as HexGrid);
+	if not hex:
+		var cube_id = grid.world_to_cube_id(global_position)
+		hex = grid.tiles[cube_id].node;
+	
+	var tiles_in_radius: Array[SceneInstance] = grid.get_tiles_in_radius(hex.cube_id, Config.gamestate.max_quest_distance);
+	var possible_quests := tiles_in_radius.filter(func(x: SceneInstance) -> bool: return (x.node as HexBase).structure.instance is QuestObjective);
+	var quest_locations_in_range: bool = possible_quests.any(func(i: SceneInstance) -> bool: return i.node.structure.can_interact());
+	return ui_is_closed && active_settlement_board && quest_locations_in_range;
 	
 func _open_window(window_info: SceneInfo) -> void:
 	window_instance = SceneManager.add(window_info, false);
