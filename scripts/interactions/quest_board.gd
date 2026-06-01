@@ -15,8 +15,8 @@ func can_interact() -> bool:
 		hex = grid.tiles[cube_id].node;
 	
 	var tiles_in_radius: Array[SceneInstance] = grid.get_tiles_in_radius(hex.cube_id, Config.gamestate.max_quest_distance);
-	var possible_quests := tiles_in_radius.filter(func(x: SceneInstance) -> bool: return (x.node as HexBase).structure.instance is QuestObjective);
-	var quest_locations_in_range: bool = possible_quests.any(func(i: SceneInstance) -> bool: return i.node.structure.can_interact());
+	var possible_quests := tiles_in_radius.filter(func(x: SceneInstance) -> bool: return (x.node as HexBase).structure && (x.node as HexBase).structure.instance is QuestObjective);
+	var quest_locations_in_range: bool = possible_quests.any(func(i: SceneInstance) -> bool: return i.node.structure.instance.can_interact());
 	return ui_is_closed && active_settlement_board && quest_locations_in_range;
 	
 func _open_window(window_info: SceneInfo) -> void:
