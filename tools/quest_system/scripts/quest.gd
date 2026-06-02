@@ -70,4 +70,5 @@ func return_from_quest() -> void:
 	
 func parse_reward() -> void:
 	location.structure.instance.complete_quest(self);
+	Config.gamestate.remove_quest(self)
 	completed.emit();

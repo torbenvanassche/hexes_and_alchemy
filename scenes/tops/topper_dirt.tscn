@@ -7,13 +7,21 @@
 [ext_resource type="PackedScene" uid="uid://c2hlhjmdl7v77" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/building_grain_seeds.glb" id="4_s8nt4"]
 [ext_resource type="PackedScene" uid="uid://0kpili04lb" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/building_grain_dead.glb" id="6_ox7li"]
 
+[sub_resource type="BitMap" id="BitMap_uk8kr"]
+data = {
+"data": PackedByteArray(1, 64, 8),
+"size": Vector2i(4, 5)
+}
+
 [node name="Node3D" type="Node3D" unique_id=75474733]
 script = ExtResource("1_whuaq")
-quest_types = Dictionary[String, bool]({
-"Harvest": false,
-"Plant": true,
-"Water": false
-})
+plant_quest_time = null
+water_quest_time = null
+harvest_quest_time = null
+overgrow_time = null
+water_window = null
+quest_types = Array[String](["Plant", "Water", "Harvest", "Clear"])
+bitmap = SubResource("BitMap_uk8kr")
 
 [node name="mesh_fallow" parent="." unique_id=624363515 instance=ExtResource("2_h10pt")]
 

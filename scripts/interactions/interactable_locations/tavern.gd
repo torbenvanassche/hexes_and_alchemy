@@ -17,7 +17,7 @@ func can_interact() -> bool:
 	return buildable_structure && buildable_structure.current_step == self;
 	
 func _adventurer_ready(s: SceneInfo) -> void:
-	if not can_interact():
+	if not can_interact() || Config.gamestate.active_quests.size() != 0:
 		return;
 	
 	var instance := SceneManager.add(s);

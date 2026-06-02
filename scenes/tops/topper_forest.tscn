@@ -12,9 +12,7 @@ size = Vector3(1.8792906, 0.5864792, 1.9651601)
 
 [node name="Node3D" type="Node3D" unique_id=1405714178]
 script = ExtResource("1_ro7nm")
-quest_types = Dictionary[String, bool]({
-"Harvest": true
-})
+quest_types = Array[String](["Harvest"])
 
 [node name="trees" parent="." unique_id=1335934582 instance=ExtResource("1_k4nv7")]
 

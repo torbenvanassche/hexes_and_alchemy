@@ -24,7 +24,7 @@ func _on_location_selected(idx: int) -> void:
 	quest_type.clear();
 	var types := (location.structure.instance as QuestObjective);
 	if types:
-		for state: String in types.get_filtered_quest_types():
+		for state: String in types.get_filtered_quest_types(types.state_machine.get_current_state_index()):
 			quest_type.add_item(state);
 			quest_type.set_item_metadata(quest_type.item_count - 1, state)
 	quest_type.disabled = quest_type.item_count == 0;

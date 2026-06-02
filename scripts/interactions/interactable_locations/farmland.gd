@@ -20,7 +20,6 @@ enum CropState {
 @export var overgrow_time: float = 120.0
 @export var water_window: float = 60.0
 
-var crop_state_machine: StateMachine
 var _quest_running: bool = false
 var _overgrow_timer: SceneTreeTimer = null
 var _wither_timer: SceneTreeTimer = null
@@ -30,16 +29,16 @@ func _ready() -> void:
 	var states: Array[String] = []
 	for s in CropState.keys():
 		states.append(s)
-	crop_state_machine = StateMachine.new(states)
-	crop_state_machine.state_entered.connect(_on_crop_state_entered)
+	state_machine = StateMachine.new(states)
+	state_machine.state_entered.connect(_on_crop_state_entered)
 	_set_crop_state(CropState.FALLOW)
 
 func _set_crop_state(state: CropState) -> void:
-	crop_state_machine.set_state(CropState.keys()[state])
+	state_machine.set_state(CropState.keys()[state])
 	_update_mesh(state)
 
 func _current_crop_state() -> CropState:
-	var key := crop_state_machine.get_current_state()
+	var key := state_machine.get_current_state()
 	return CropState[key] as CropState
 
 func _update_mesh(state: CropState) -> void:

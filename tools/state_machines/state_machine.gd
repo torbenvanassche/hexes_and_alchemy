@@ -2,6 +2,7 @@ class_name StateMachine extends Node
 
 var states: Array = [];
 var _current_state: String;
+var _current_state_index: int;
 var update_bindings: Dictionary[String, Callable];
 var frozen: bool = false;
 
@@ -10,6 +11,7 @@ func set_state(state_name: String) -> bool:
 		if states.has(state_name):
 			state_exited.emit(_current_state);
 			_current_state = state_name;
+			_current_state_index = states.find(state_name);
 			state_entered.emit(state_name);
 			return true;
 		else:
@@ -43,3 +45,6 @@ func get_states() -> Array:
 	
 func get_current_state() -> String:
 	return _current_state;
+	
+func get_current_state_index() -> int:
+	return _current_state_index;
