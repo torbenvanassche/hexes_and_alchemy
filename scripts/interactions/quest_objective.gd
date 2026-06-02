@@ -3,6 +3,8 @@
 @abstract func execute_quest(q: Quest) -> void;
 @export var quest_types: Dictionary[String, bool];
 
+@export var bitmap: BitMap;
+
 func on_interact() -> void:
 	super.on_interact();
 	if can_interact():
