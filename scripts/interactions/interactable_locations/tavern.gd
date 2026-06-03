@@ -22,6 +22,7 @@ func _adventurer_ready(s: SceneInfo) -> void:
 	if not can_interact() || npcs.size() >= Config.gamestate.max_npc_per_tavern:
 		return;
 	var instance := SceneManager.add(s);
+	instance.node.global_position = adventurer_spawn.global_position;
 	npcs.append(instance);
 	
 func get_available_npcs() -> Array[SceneInstance]:

@@ -23,7 +23,7 @@ func _ready() -> void:
 func assign_quest(q: Quest) -> void:
 	current_quest = q;
 	at_quest = false;
-
+ 
 func move_to_quest() -> void:
 	visible = true;
 	var active_scene := SceneManager.get_active_scene().node as HexGrid
