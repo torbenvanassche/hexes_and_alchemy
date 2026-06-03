@@ -25,7 +25,7 @@ vertical_alignment = 1
 
 [node name="QuestType" type="Label" parent="." unique_id=236912205]
 layout_mode = 2
-text = "FETCT"
+text = "FETCH"
 
 [node name="QuestLocation" type="Label" parent="." unique_id=246549521]
 layout_mode = 2

@@ -36,6 +36,7 @@ func add_supply(resource: ContentSlotResource) -> void:
 	
 func add_to_party(npc: NPC) -> void:
 	if not party.has(npc):
+		npc.assign_quest(self)
 		party.append(npc);
 		
 func get_state_as_string(state: QuestState) -> String:

@@ -1,6 +1,6 @@
 class_name ContentSlotResource extends Resource
 
-var _content: ItemInfo;
+var _content: Resource;
 var count: int = 0;
 var maxcount: int = 0;
 var is_unlocked: bool = false;
@@ -8,27 +8,27 @@ var clear_on_empty: bool = true;
 
 signal full();
 
-func _init(_count: int = 0, content: ItemInfo = null, _maxcount: int = 1, _unlocked: bool = true, _clear_on_empty: bool = true) -> void:
+func _init(_count: int = 0, content: Resource = null, _maxcount: int = 1, _unlocked: bool = true, _clear_on_empty: bool = true) -> void:
 	is_unlocked = _unlocked;
 	clear_on_empty = _clear_on_empty;
 	maxcount = _maxcount;
 	set_content(content);
 	count = _count;
 	
-func set_content(content: ItemInfo) -> void:
+func set_content(content: Resource) -> void:
 	_content = content;
 	changed.emit();
 	
-func get_content() -> ItemInfo:
+func get_content() -> Resource:
 	return _content;
 	
 func set_stack_size(max_size: int = 1) -> void:
 	maxcount = max_size;
 	
-func can_add(content: ItemInfo) -> bool:
+func can_add(content: Resource) -> bool:
 	return content != _content && !is_full();
 
-func add(amount: int = 1, content: ItemInfo = null) -> int:
+func add(amount: int = 1, content: Resource = null) -> int:
 	if _content == null && content != null:
 		_content = content;
 	
@@ -51,10 +51,10 @@ func remove(amount: int = 1) -> int:
 	changed.emit();
 	return amount - amount_to_remove
 	
-func match_or_empty(element: ItemInfo) -> bool:
+func match_or_empty(element: Resource) -> bool:
 	return has_content(element) || has_content(null);
 	
-func has_content(element: ItemInfo) -> bool: 
+func has_content(element: Resource) -> bool: 
 	return _content == element
 	
 func is_full() -> bool:

@@ -27,12 +27,6 @@ func set_data(quest: Quest) -> void:
 	complete_quest.pressed.connect(questData.parse_reward);
 	_update_progress(questData.state_machine.get_current_state())
 	
-	for n in quest.party:
-		var img := TextureRect.new();
-		img.texture = n.npc_info.img;
-		img.expand_mode = TextureRect.EXPAND_FIT_WIDTH;
-		party.add_child(img);
-	
 	quest.state_machine.state_entered.connect(_update_progress)
 	quest.completed.connect(_on_quest_complete)
 	
@@ -41,10 +35,18 @@ func _on_quest_complete() -> void:
 	queue_free();
 	
 func _start_quest() -> void:
-	#check tavern in range
-	
 	approve_quest.visible = false
-	questData.start();
+	var taverns: Array[Tavern];
+	taverns.assign(Manager.instance.active_settlement.interactions.filter(func(x: Interaction) -> bool: return x is Tavern));
+	if taverns.size() != 0:
+		var npcs: Array[SceneInstance] = taverns[0].get_available_npcs();
+		if npcs.size() != 0:
+			questData.add_to_party(npcs[0].node)
+			questData.start();
+		else:
+			Debug.err("No NPC available in tavern.")
+	else:
+		Debug.err("Cannot start quest, no tavern was found.")
 	
 func _update_progress(state: String) -> void:
 	label.text = state;             

@@ -75,6 +75,7 @@ size_flags_horizontal = 0
 theme_override_constants/margin_left = 7
 
 [node name="count" type="Label" parent="margin_container/MarginContainer" unique_id=1170717140]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8

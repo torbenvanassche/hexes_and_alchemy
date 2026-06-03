@@ -20,8 +20,8 @@ func _ready() -> void:
 	npc_info = DataManager.instance.npcs.pick_random();
 	visible = false;
 	
-func assign_quest() -> void:
-	current_quest = Config.gamestate.assign_quest(self);
+func assign_quest(q: Quest) -> void:
+	current_quest = q;
 	at_quest = false;
 
 func move_to_quest() -> void:

@@ -6,7 +6,11 @@ class_name ContentSlotUI extends TextureButton
 @onready var counter: Label = $margin_container/MarginContainer/count;
 
 @export_group("Properties")
-@export var show_amount: bool = true;
+@export var show_amount: bool = true:
+	set(value):
+		show_amount = value
+		if is_node_ready():
+			counter.visible = value;
 @export var main_margin_size: int = 2;
 
 @export_group("Drag Settings")
@@ -61,7 +65,6 @@ func set_content(_content: ContentSlotResource) -> void:
 			ready.connect(redraw, CONNECT_ONE_SHOT);
 
 func _get_drag_data(_at_position: Vector2) -> DragData:
-	print(mouse_filter)
 	if !contentSlot.has_content(null) && contentSlot.count != 0:
 		blur();
 		
