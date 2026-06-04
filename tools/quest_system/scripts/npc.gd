@@ -45,6 +45,7 @@ func _physics_process(_delta: float) -> void:
 			at_quest = true;
 			arrived.emit();
 		elif current_quest.is_state(Quest.QuestState.RETURNING):
+			current_quest = null;
 			current_path.clear()
 			at_home = true;
 			arrived.emit();

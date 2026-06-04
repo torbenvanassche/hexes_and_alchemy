@@ -19,8 +19,8 @@ func get_filtered_quest_types(active_state: int = state_machine.get_current_stat
 		return quest_types;
 	
 	var valid_types: Array[String];
-	for b in bitmap.get_size().y:
-		if bitmap.get_bit(active_state, b):
+	for b in bitmap.get_size().x:
+		if bitmap.get_bit(b, active_state):
 			valid_types.append(quest_types[b]);
 	return valid_types;
 	

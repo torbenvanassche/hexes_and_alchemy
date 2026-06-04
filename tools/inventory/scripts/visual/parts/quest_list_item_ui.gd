@@ -41,7 +41,7 @@ func _start_quest() -> void:
 	if taverns.size() != 0:
 		var npcs: Array[SceneInstance] = taverns[0].get_available_npcs();
 		if npcs.size() != 0:
-			questData.add_to_party(npcs[0].node)
+			questData.add_to_party(npcs.pick_random().node)
 			questData.start();
 		else:
 			Debug.err("No NPC available in tavern.")

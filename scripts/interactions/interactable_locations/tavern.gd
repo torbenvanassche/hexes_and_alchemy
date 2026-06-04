@@ -23,6 +23,7 @@ func _adventurer_ready(s: SceneInfo) -> void:
 		return;
 	var instance := SceneManager.add(s);
 	instance.node.global_position = adventurer_spawn.global_position;
+	instance.node.tree_exiting.connect(npcs.erase.bind(instance))
 	npcs.append(instance);
 	
 func get_available_npcs() -> Array[SceneInstance]:
