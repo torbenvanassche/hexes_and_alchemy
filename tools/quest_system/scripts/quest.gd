@@ -47,8 +47,8 @@ func get_state_as_string(state: QuestState) -> String:
 
 func start() -> void:
 	for npc in party:
-		npc.move_to_quest();
 		npc.arrived.connect(_check_party_arrived_at_quest, CONNECT_ONE_SHOT)
+		npc.state_machine.set_state("moving_to_quest")
 	set_state(QuestState.EN_ROUTE)
 	
 func set_state(state: QuestState) -> void:
