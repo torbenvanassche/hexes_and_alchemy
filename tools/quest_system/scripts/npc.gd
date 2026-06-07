@@ -41,10 +41,7 @@ func _on_state_entered(state: String) -> void:
 		_complete_quest()
 
 func get_state_as_string(state: NPCState) -> String:
-	var words: PackedStringArray = NPCState.keys()[state].to_lower().split("_")
-	for i in range(words.size()):
-		words[i] = words[i].capitalize()
-	return " ".join(words)
+	return NPCState.keys()[state].to_lower()
 
 func is_state(state: NPCState) -> bool:
 	return get_state_as_string(state) == state_machine.get_current_state()
@@ -55,12 +52,6 @@ func set_state(state: NPCState) -> void:
 func assign_quest(q: Quest) -> void:
 	current_quest = q
 	set_state(NPCState.READY_TO_MOVE)
-
-func start_move() -> void:
-	set_state(NPCState.MOVING_TO_QUEST)
-
-func start_return() -> void:
-	set_state(NPCState.RETURNING)
 
 func _begin_move_to_quest() -> void:
 	visible = true

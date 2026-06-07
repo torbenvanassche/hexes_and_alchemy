@@ -40,34 +40,31 @@ func add_to_party(npc: NPC) -> void:
 		party.append(npc);
 		
 func get_state_as_string(state: QuestState) -> String:
-	var words: PackedStringArray = QuestState.keys()[state].to_lower().split("_")
-	for i in range(words.size()):
-		words[i] = words[i].capitalize()
-	return " ".join(words)
+	return QuestState.keys()[state].to_lower()
 
 func start() -> void:
 	for npc in party:
 		npc.arrived.connect(_check_party_arrived_at_quest, CONNECT_ONE_SHOT)
-		npc.state_machine.set_state("moving_to_quest")
+		npc.set_state(NPC.NPCState.MOVING_TO_QUEST)
 	set_state(QuestState.EN_ROUTE)
 	
 func set_state(state: QuestState) -> void:
 	state_machine.set_state(get_state_as_string(state))
 	
 func _check_party_arrived_at_quest() -> void:
-	if party.all(func(n: NPC) -> bool: return n.at_quest):
+	if party.all(func(n: NPC) -> bool: return n.is_state(NPC.NPCState.AT_QUEST)):
 		location.structure.instance.execute_quest(self);
 		set_state(QuestState.IN_PROGRESS)
 		
 func return_completed() -> void:
-	if party.all(func(n: NPC) -> bool: return n.at_home):
+	if party.all(func(n: NPC) -> bool: return n.is_state(NPC.NPCState.DONE)):
 		set_state(QuestState.COMPLETE)
 		
 func return_from_quest() -> void:
 	set_state(QuestState.RETURNING)
 	for npc in party:
 		npc.arrived.connect(return_completed, CONNECT_ONE_SHOT)
-		npc.return_home()
+		npc.set_state(NPC.NPCState.RETURNING)
 	
 func parse_reward() -> void:
 	location.structure.instance.complete_quest(self);

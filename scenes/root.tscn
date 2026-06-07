@@ -48,6 +48,7 @@
 [ext_resource type="Resource" uid="uid://c4slhs80lvehm" path="res://resources/scene_info/adventurer.tres" id="39_eirlg"]
 [ext_resource type="Script" uid="uid://du4hbbtmblkj0" path="res://tools/quest_system/scripts/npc_info.gd" id="45_h5su3"]
 [ext_resource type="Resource" uid="uid://c8hkdge0pvgtn" path="res://resources/npc_info/basic_adventurer.tres" id="46_c6i2r"]
+[ext_resource type="Script" uid="uid://c8bmw05frta6c" path="res://scripts/ui/notification.gd" id="49_c6i2r"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_j5px3"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -113,3 +114,25 @@ offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("23_f3p2p")
 element = NodePath(".")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="game_ui" unique_id=1863266253]
+custom_minimum_size = Vector2(300, 50)
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -300.0
+offset_top = 10.0
+offset_bottom = 60.0
+grow_horizontal = 0
+size_flags_horizontal = 4
+fit_content = true
+script = ExtResource("49_c6i2r")
+
+[node name="ColorRect" type="ColorRect" parent="game_ui/RichTextLabel" unique_id=126357012]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.19215687)

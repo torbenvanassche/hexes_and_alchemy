@@ -10,6 +10,7 @@ var is_paused: bool = false;
 
 @onready var interaction_prompt: WSD = $"../game_ui/interaction_prompt";
 @onready var market: MarketManager = $market_manager;
+@onready var toast: Toast = $"../game_ui/RichTextLabel";
 
 @export var initial_scene: SceneInfo;
 var active_settlement: Settlement;

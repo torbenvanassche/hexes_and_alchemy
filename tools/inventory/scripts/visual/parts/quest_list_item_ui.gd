@@ -35,13 +35,13 @@ func _on_quest_complete() -> void:
 	queue_free();
 	
 func _start_quest() -> void:
-	approve_quest.visible = false
 	var taverns: Array[Tavern];
 	taverns.assign(Manager.instance.active_settlement.interactions.filter(func(x: Interaction) -> bool: return x is Tavern));
 	if taverns.size() != 0:
 		var npcs: Array[SceneInstance] = taverns[0].get_available_npcs();
 		if npcs.size() != 0:
 			questData.add_to_party(npcs.pick_random().node)
+			approve_quest.visible = false
 			questData.start();
 		else:
 			Debug.err("No NPC available in tavern.")
