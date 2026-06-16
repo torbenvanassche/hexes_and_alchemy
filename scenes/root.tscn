@@ -127,6 +127,7 @@ grow_horizontal = 0
 size_flags_horizontal = 4
 fit_content = true
 script = ExtResource("49_c6i2r")
+display_time = 4.0
 
 [node name="ColorRect" type="ColorRect" parent="game_ui/RichTextLabel" unique_id=126357012]
 layout_mode = 1
