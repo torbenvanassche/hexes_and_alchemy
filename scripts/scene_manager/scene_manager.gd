@@ -47,7 +47,7 @@ func get_or_create_scene(scene_name: String) -> SceneInfo:
 	var previous_scene_info: SceneInfo = null;
 	if _active_scene != null:
 		previous_scene_info = DataManager.instance.node_to_info(_active_scene.node);
-		if previous_scene_info.id == scene_name:
+		if previous_scene_info != null and previous_scene_info.id == scene_name:
 			return null; 
 		_active_scene.set_processing(false)
 	
@@ -63,15 +63,21 @@ func _check_loaded(to_load: Array[SceneInfo]) -> bool:
 	return to_load.all(func(scene: SceneInfo) -> bool: return scene.is_cached)
 	
 func set_active_scene(info: SceneInfo) -> void:
+	if info == null:
+		return
+	
 	if info.is_unique:
 		_active_scene = info.get_instance();
 	else:
 		Debug.message("Cannot set active scene to non-unique instanced SceneInfo.")
 	
 func _remove_from_stack(info: SceneInfo) -> void:
+	if scene_stack.is_empty():
+		return
+	
 	if scene_stack[-1] == info:
 		var popped_scene: SceneInfo = scene_stack.pop_back();
-		if popped_scene.get_instance() == _active_scene:
+		if popped_scene.get_instance() == _active_scene and not scene_stack.is_empty():
 			set_active_scene(scene_stack[-1])
 			return
 	
@@ -86,6 +92,9 @@ func _pop_stack() -> SceneInfo:
 	return null;
 	
 func remove_scene(info: SceneInfo, permanent: bool = false) -> void:
+	if info == null:
+		return
+	
 	_remove_from_stack(info)
 	if permanent:
 		info.release();
@@ -111,9 +120,12 @@ func set_visible_by_name(scene_name: String, state: bool = true) -> void:
 	set_visible(DataManager.instance.get_scene_by_name(scene_name), state)
 	
 func set_visible(scene_info: SceneInfo, state: bool = true) -> void:
-	for instance in scene_info.instances:
-		if "visible" in instance:
-			instance.visible = state;
+	if scene_info == null:
+		return
+	
+	for instance in scene_info.get_live_instances():
+		if "visible" in instance.node:
+			instance.node.visible = state;
 			
 func is_in_tree(scene_instance: SceneInstance) -> bool:
 	var node := scene_instance.node
@@ -134,7 +146,10 @@ func is_visible(scene_instance: SceneInstance) -> bool:
 	return false;
 
 func transition(scene_info: SceneInfo, activate_after_transition: bool = false) -> void:
-	if "visible" in _active_scene.node:
+	if scene_info == null:
+		return
+	
+	if _active_scene != null and "visible" in _active_scene.node:
 		_active_scene.set_processing(false)
 		_active_scene.node.visible = false;
 	add(scene_info);
@@ -143,6 +158,9 @@ func transition(scene_info: SceneInfo, activate_after_transition: bool = false) 
 		set_active_scene(scene_info);
 	
 func add(n: SceneInfo, vis: bool = true) -> SceneInstance:
+	if n == null:
+		return null
+	
 	var instance_count := scene_stack.count(n);
 	if instance_count > 1 && n.is_unique:
 		return null;

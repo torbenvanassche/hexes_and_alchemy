@@ -30,16 +30,22 @@ func initialize() -> void:
 	if not is_unique:
 		is_unique = type == Type.UI;
 		
+func get_live_instances() -> Array[SceneInstance]:
+	instances = instances.filter(func(i: SceneInstance): return is_instance_valid(i) and is_instance_valid(i.node));
+	return instances
+
 func set_process_mode(instance: SceneInstance, b: bool) -> void:
 	instance.set_processing(b)
 	
 func get_instance() -> SceneInstance:
-	instances = instances.filter(func(i: SceneInstance): return is_instance_valid(i.node));
+	get_live_instances()
 	if is_unique and instances.size() > 0:
 		return instances[0]
 	var instance := SceneInstance.new(packed_scene.instantiate(), self);
 	instance.set_processing(true)
 	instances.append(instance)
+	if DataManager.instance != null:
+		DataManager.instance.register_scene_instance(instance)
 	return instance
 	
 func destroy_instance(instance: SceneInstance) -> void:
@@ -49,21 +55,22 @@ func destroy_instance(instance: SceneInstance) -> void:
 	instance.destroy();
 	
 func has_instance(node: Node) -> bool:
-	for instance in instances:
+	for instance in get_live_instances():
 		if instance.node == node:
 			return true;
 	return false;
 
 func release() -> void:
-	for i in instances:
+	for i in get_live_instances():
 		if is_instance_valid(i):
 			i.destroy()
 	instances.clear()
-	SceneManager.instance.scene_cache.remove(self)
+	SceneManager.scene_cache.remove(self)
 	is_cached = false
+	is_queued = false
 	
 func remove() -> void:
-	for i in instances:
+	for i in get_live_instances():
 		if is_instance_valid(i):
 			i.hide();
 	

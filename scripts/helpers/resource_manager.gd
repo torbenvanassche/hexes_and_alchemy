@@ -8,6 +8,9 @@ class_name DataManager extends Node
 @export var npcs: Array[NpcInfo];
 
 var scene_data: Array[SceneInfo];
+var _scene_lookup: Dictionary[StringName, SceneInfo] = {}
+var _item_lookup: Dictionary[StringName, ItemInfo] = {}
+var _node_lookup: Dictionary[int, SceneInfo] = {}
 
 @onready var ocean_descriptor: RegionInfo = preload("res://resources/region_info/ocean.tres");
 
@@ -26,40 +29,94 @@ func _ready() -> void:
 	
 	for object in scene_data:
 		object.initialize();
+		_index_scene_info(object)
+	
+	for item in items:
+		_index_item_info(item)
+
+func _index_scene_info(scene_info: SceneInfo) -> void:
+	if scene_info == null:
+		return
+	
+	var lookup_key := StringName(scene_info.id)
+	if _scene_lookup.has(lookup_key):
+		Debug.err(scene_info.id + " has multiple references, this is not allowed!")
+		return
+	
+	_scene_lookup[lookup_key] = scene_info
+
+func _index_item_info(item_info: ItemInfo) -> void:
+	if item_info == null:
+		return
+	
+	var lookup_key := StringName(item_info.unique_id)
+	if _item_lookup.has(lookup_key):
+		Debug.err(item_info.unique_id + " has multiple references, this is not allowed!")
+		return
+	
+	_item_lookup[lookup_key] = item_info
+
+func register_scene_instance(scene_instance: SceneInstance) -> void:
+	if scene_instance == null or scene_instance.node == null:
+		return
+	
+	_node_lookup[scene_instance.node.get_instance_id()] = scene_instance.scene_info
+
+func unregister_scene_instance(scene_instance: SceneInstance) -> void:
+	if scene_instance == null or scene_instance.node == null:
+		return
+	
+	unregister_node(scene_instance.node)
+
+func unregister_node(node: Node) -> void:
+	if node == null:
+		return
+	
+	_node_lookup.erase(node.get_instance_id())
 
 func get_scene_by_name(scene_name: String) -> SceneInfo:
-	var filtered := scene_data.filter(func(scene: SceneInfo) -> bool: return scene != null && scene.id == scene_name);
-	if filtered.size() == 1:
-		return filtered[0];
-	elif filtered.size() == 0:
+	var scene_info := _scene_lookup.get(StringName(scene_name)) as SceneInfo
+	if scene_info != null:
+		return scene_info
+	
+	if scene_name != "":
 		Debug.err(scene_name + " was not found!")
-		return null;
-	Debug.err(scene_name + " has multiple references, this is not allowed!")
 	return null;
 	
 func get_item_by_name(item_name: String) -> ItemInfo:
-	var filtered := items.filter(func(item: ItemInfo) -> bool: return item.unique_id == item_name);
-	if filtered.size() == 1:
-		return filtered[0];
-	elif filtered.size() == 0:
+	var item_info := _item_lookup.get(StringName(item_name)) as ItemInfo
+	if item_info != null:
+		return item_info
+	
+	if item_name != "":
 		Debug.err(item_name + " was not found!")
-		return null;
-	Debug.err(item_name + " has multiple references, this is not allowed!")
 	return null;
 
 func node_to_info(node: Node) -> SceneInfo:
-	var filtered: Array[SceneInfo] = scene_data.filter(func(x: SceneInfo) -> bool: return x.has_instance(node));
-	if filtered.size() == 1:
-		return filtered[0];
-	elif filtered.size() > 1:
-		Debug.err(node.name + " has multiple references, this is not allowed!")
-		return null;
+	if node == null:
+		return null
+	
+	var cached_info := _node_lookup.get(node.get_instance_id()) as SceneInfo
+	if cached_info != null:
+		return cached_info
+	
+	for scene_info in scene_data:
+		if scene_info != null and scene_info.has_instance(node):
+			_node_lookup[node.get_instance_id()] = scene_info
+			return scene_info
+	
 	Debug.err("Could not find " + node.name + " in scenes.")
 	return null
 
 func is_active(scene_name: String) -> bool:
 	var scene_info := get_scene_by_name(scene_name);
-	return scene_info.node != null && scene_info.node.visible == true
+	if scene_info == null:
+		return false
+	
+	for scene_instance in scene_info.get_live_instances():
+		if SceneManager.is_visible(scene_instance):
+			return true
+	return false
 	
 func pick_scene(x: int, y: int, region_options: Array[RegionInfo] = regions) -> HexInfo:
 	var region := get_region_for(x, y, region_options)

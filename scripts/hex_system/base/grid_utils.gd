@@ -43,3 +43,23 @@ static func world_to_offset(world_pos: Vector3, inner_radius: float, spacing_ext
 		var gx_offset := (gy & 1) * (spacing.x / 2.0)
 		var gx := int(round((world_pos.x - gx_offset) / spacing.x))
 		return Vector2i(gx, gy)
+
+static func get_hex_polygon(center: Vector3, inner_radius: float, pointy_top: bool) -> PackedVector2Array:
+	var polygon := PackedVector2Array()
+	var outer_radius := inner_radius / cos(deg_to_rad(30.0))
+	var start_angle_deg := -30.0 if pointy_top else 0.0
+	
+	for i in range(6):
+		var angle := deg_to_rad(start_angle_deg + 60.0 * i)
+		polygon.append(Vector2(
+			center.x + cos(angle) * outer_radius,
+			center.z + sin(angle) * outer_radius
+		))
+	
+	return polygon
+
+static func is_point_in_hex(world_pos: Vector3, center: Vector3, inner_radius: float, pointy_top: bool) -> bool:
+	return Geometry2D.is_point_in_polygon(
+		Vector2(world_pos.x, world_pos.z),
+		get_hex_polygon(center, inner_radius, pointy_top)
+	)

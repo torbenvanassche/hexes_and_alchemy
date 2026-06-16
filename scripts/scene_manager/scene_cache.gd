@@ -26,7 +26,7 @@ func queue(scene_info: SceneInfo) -> Signal:
 	return scene_info.cached;
 
 func _check_progress() -> void:
-	for loading in loading_queue:
+	for loading in loading_queue.duplicate():
 		if ResourceLoader.load_threaded_get_status(loading.packed_scene.resource_path) == ResourceLoader.THREAD_LOAD_LOADED:
 			cached_scenes.append(loading)
 			loading_queue.erase(loading)
@@ -51,10 +51,16 @@ func is_cached(scene_info: SceneInfo) -> Variant:
 		
 func remove(scene_info: SceneInfo) -> void:
 	if cached_scenes.has(scene_info):
-		get_from_cache(scene_info).queue_free();
 		cached_scenes.erase(scene_info);
-		if scene_info.node and not scene_info.node.is_queued_for_deletion():
-			scene_info.node.queue_free();
+	
+	if loading_queue.has(scene_info):
+		loading_queue.erase(scene_info)
+	
+	scene_info.is_cached = false
+	scene_info.is_queued = false
+	
+	if loading_queue.is_empty() and not timer.is_stopped():
+		timer.stop()
 			
 func get_with_type(type: SceneInfo.Type) -> Array[SceneInfo]:
 	return cached_scenes.filter(func(x: SceneInfo) -> bool: return x.type == type)

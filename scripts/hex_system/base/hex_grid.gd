@@ -177,21 +177,65 @@ func generate_chunk(cx: int, cy: int) -> HexChunk:
 	for gy in range(start_y, start_y + chunk.CHUNK_HEIGHT):
 		for gx in range(start_x, start_x + chunk.CHUNK_WIDTH):
 			var grid_id := Vector2i(gx, gy)
-			DataManager.instance.pick_scene(gx, gy, region_options).queue(
+			var scene_info := DataManager.instance.pick_scene(gx, gy, region_options)
+			if scene_info == null:
+				continue
+			
+			scene_info.queue(
 				func(sI: SceneInfo) -> void:
 					chunk.add_hex(create_hex(grid_id, sI)))
 	return chunk
 	
 func get_hex_at_world_position(world_pos: Vector3, max_distance: float = 1.2) -> HexBase:
-	var closest: HexBase = null
-	var best_dist := max_distance * max_distance
+	var approx_cube := world_to_cube_id(world_pos)
+	var candidates: Array[HexBase] = []
+	var candidate_hex := get_hex_at_cube_id(approx_cube)
+	if candidate_hex != null:
+		candidates.append(candidate_hex)
+	
+	for dir in DataManager.instance.CUBE_DIRS:
+		var neighbor_hex := get_hex_at_cube_id(approx_cube + dir)
+		if neighbor_hex != null and not candidates.has(neighbor_hex):
+			candidates.append(neighbor_hex)
+	
+	var containing_candidates: Array[HexBase] = []
+	for hex in candidates:
+		if GridUtils.is_point_in_hex(world_pos, hex.global_position, RADIUS_IN, pointy_top):
+			containing_candidates.append(hex)
+	
+	var search_pool := containing_candidates if not containing_candidates.is_empty() else candidates
+	if search_pool.is_empty():
+		return null
+	
+	var closest_hex: HexBase = null
+	var closest_distance := INF
+	for hex in search_pool:
+		var distance := hex.global_position.distance_squared_to(world_pos)
+		if distance < closest_distance:
+			closest_distance = distance
+			closest_hex = hex
+	
+	if closest_hex == null:
+		return null
+	
+	if containing_candidates.is_empty():
+		if max_distance <= 0.0:
+			return null
+		
+		var best_dist := max_distance * max_distance
+		if closest_distance > best_dist:
+			return null
+	
+	return closest_hex
 
-	for scene_instance: SceneInstance in tiles.values():
-		var d: float = scene_instance.node.global_position.distance_squared_to(world_pos)
-		if d < best_dist:
-			best_dist = d
-			closest = scene_instance.node
-	return closest
+func get_hex_at_grid_id(grid_id: Vector2i) -> HexBase:
+	return get_hex_at_cube_id(GridUtils.offset_to_cube(grid_id, pointy_top))
+
+func get_hex_at_cube_id(cube_id: Vector3i) -> HexBase:
+	var scene_instance := tiles.get(cube_id) as SceneInstance
+	if scene_instance == null:
+		return null
+	return scene_instance.node as HexBase
 
 func get_tiles_in_radius(center: Vector3i, radius: int) -> Array[SceneInstance]:
 	var result: Array[SceneInstance] = []
@@ -230,7 +274,7 @@ func replace(hex_instance: SceneInstance, replacement_instance: SceneInstance, r
 
 	replacement.global_transform = hex.global_transform
 
-	if tiles.get(hex.cube_id) == hex:
+	if tiles.get(hex.cube_id) == hex_instance:
 		tiles.erase(hex.cube_id)
 
 	if hex.region_instance != null:
@@ -244,7 +288,7 @@ func replace(hex_instance: SceneInstance, replacement_instance: SceneInstance, r
 	
 	pathfinder.update_hex(replacement);
 	
-	hex.queue_free()
+	hex_instance.destroy()
 
 func world_to_grid_id(world_pos: Vector3) -> Vector2i:
 	return GridUtils.world_to_offset(world_pos, RADIUS_IN, _spacing, pointy_top)

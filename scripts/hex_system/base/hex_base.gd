@@ -16,12 +16,17 @@ var scene_instance: SceneInstance;
 
 var collision_scene: PackedScene = preload("res://scenes/hex_collision.tscn");
 const UNEXPLORED_MATERIAL = preload("uid://bgsi1yhfo1pe2")
+signal structure_loaded(structure_info: StructureInfo, structure_node: Node)
 
 var ground_hex_mesh: MeshInstance3D;
 var is_explored: bool = false:
 	set(value):
+		if is_explored == value:
+			return
+		
 		is_explored = value;
-		set_explored(is_explored)
+		if ground_hex_mesh != null:
+			set_explored(is_explored)
 		
 var blocked: bool = false;
 var movement_cost: float = 1.0;
@@ -31,6 +36,9 @@ func _ready() -> void:
 	set_explored(false)
 
 func set_explored(b: bool) -> void:
+	if ground_hex_mesh == null:
+		return
+	
 	(ground_hex_mesh as MeshInstance3D).material_override = null if b else UNEXPLORED_MATERIAL;
 	(ground_hex_mesh as MeshInstance3D).layers = 1 if b else 2;
 	if structure:
@@ -65,11 +73,18 @@ func is_traversable(method: HexInfo.TraversalTag = HexInfo.TraversalTag.WALK) ->
 		return false
 	return (scene_instance.scene_info as HexInfo).traversal_tags.has(method);
 
-func set_structure(s: StructureInfo) -> void:
+func set_structure(s: StructureInfo, immediate: bool = false) -> void:
 	var required_tiles: Array[SceneInstance] = SceneManager.get_active_scene().node.get_tiles_in_radius(cube_id, s.required_space_radius);
-	required_tiles.all(func(f: SceneInstance) -> void: f.node.can_generate = false);
-	required_tiles = required_tiles.filter(func(f: SceneInstance) -> bool: return not f.node.is_traversable());
-	s.queue(_on_structure_loaded.bind(required_tiles));
+	for required_tile in required_tiles:
+		required_tile.node.can_generate = false
+	required_tiles = required_tiles.filter(
+		func(f: SceneInstance) -> bool:
+			return f.node.cube_id != cube_id and not f.node.is_traversable()
+	)
+	if immediate:
+		_on_structure_loaded(s, required_tiles)
+	else:
+		s.queue(_on_structure_loaded.bind(required_tiles));
 	
 ##When the structure finishes loading, add the instance to the scene and validate adjacent tiles
 func _on_structure_loaded(s: StructureInfo, required_tiles: Array[SceneInstance]) -> void:
@@ -87,3 +102,5 @@ func _on_structure_loaded(s: StructureInfo, required_tiles: Array[SceneInstance]
 	
 	if not is_explored:
 		set_explored(false);
+	
+	structure_loaded.emit(s, structure.instance)

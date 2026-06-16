@@ -21,20 +21,21 @@ func _ready() -> void:
 func _on_back_button() -> void:
 	SceneManager.set_visible_by_name("settings_menu", false);
 	var prev_scene := SceneManager.to_previous_scene()
-	SceneManager.set_visible(prev_scene)
+	if prev_scene != null:
+		SceneManager.set_visible(prev_scene)
 	
 func _on_tab_changed(button: BaseButton) -> void:
 	for tab: SceneInfo in group_buttons.values():
 		if tab:
-			var instance = tab.get_instance();
-			if "visible" in instance:
-				instance.visible = false;
+			for instance in tab.get_live_instances():
+				if "visible" in instance.node:
+					instance.node.visible = false;
 	var scene_info: SceneInfo = group_buttons.get(button)
 	if scene_info:
 		scene_info.queue(_on_tab_change_scene_loaded)
 	
 func _on_tab_change_scene_loaded(scene_info: SceneInfo) -> void:
 	var opened_scene := scene_info.get_instance()
-	if not opened_scene.is_inside_tree():
+	if not opened_scene.node.is_inside_tree():
 		tab_instance_parent.add_child(opened_scene.node)
-	opened_scene.visible = true;
+	opened_scene.node.visible = true;

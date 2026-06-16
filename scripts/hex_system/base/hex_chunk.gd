@@ -60,6 +60,28 @@ func get_center() -> HexBase:
 			closest = hex.node
 	return closest
 
+func get_best_structure_hex() -> HexBase:
+	if hexes.is_empty():
+		return null
+	
+	var center_pos := bounds.position + bounds.size * 0.5
+	var closest: HexBase = null
+	var best_dist := INF
+	
+	for hex_instance in hexes:
+		var hex := hex_instance.node as HexBase
+		if hex == null or not hex.can_generate or not hex.is_traversable():
+			continue
+		
+		var dist := hex.global_position.distance_squared_to(center_pos)
+		if dist < best_dist:
+			best_dist = dist
+			closest = hex
+	
+	if closest != null:
+		return closest
+	return get_center()
+
 
 func get_hex(idx: Vector2i) -> SceneInstance:
 	var rV = hexes.filter(func(h: SceneInstance) -> bool: return h.node.grid_id == idx);

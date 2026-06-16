@@ -25,6 +25,8 @@ func _init(_n: Node, s_info: SceneInfo) -> void:
 
 func destroy() -> void:
 	if is_instance_valid(node):
+		if DataManager.instance != null:
+			DataManager.instance.unregister_scene_instance(self)
 		node.queue_free()
 	queue_free()
 	
