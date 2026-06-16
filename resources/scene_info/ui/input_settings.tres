@@ -8,5 +8,5 @@ script = ExtResource("1_2uhpa")
 id = "input_settings"
 packed_scene = ExtResource("1_5co2y")
 type = 2
-one_instance = true
+is_unique = true
 metadata/_custom_type_script = "uid://6t4u66o5q6po"

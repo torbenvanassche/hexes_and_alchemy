@@ -30,6 +30,7 @@ var dragging := false
 var stored_position:Vector2;
 
 func _ready() -> void:
+	visible = false
 	close_button.pressed.connect(close_window);
 	close_requested.connect(close_window)
 	top_bar.gui_input.connect(handle_input)
@@ -45,6 +46,7 @@ func _fit_to_content() -> void:
 	set_deferred("size", Vector2(content_size.x, height))
 	
 func on_enter() -> void:
+	visible = false
 	match display_mode:
 		"fullscreen":
 			top_bar.visible = false;
@@ -74,11 +76,13 @@ func on_enter() -> void:
 	_fit_to_content();
 
 	await get_tree().process_frame;
-	position = initial_position - size / 2;
-	visible = true;
 	
 	if store_position:
 		position = stored_position;
+	else:
+		position = initial_position - size / 2;
+	
+	visible = true;
 		
 	for c: Control in Helpers.flatten_children(content_panel, true):
 		if c.has_method("on_enter"):
