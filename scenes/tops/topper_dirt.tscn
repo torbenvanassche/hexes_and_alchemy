@@ -9,7 +9,7 @@
 
 [sub_resource type="BitMap" id="BitMap_uk8kr"]
 data = {
-"data": PackedByteArray(33, 64, 8),
+"data": PackedByteArray(33, 4, 8),
 "size": Vector2i(4, 5)
 }
 
