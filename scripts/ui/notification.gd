@@ -9,17 +9,20 @@ var target_position: Vector2
 
 @onready var colorRect: ColorRect = $ColorRect;
 var base_color: Color;
+var base_text_color: Color
 
 func _ready() -> void:
 	await get_tree().process_frame
 	base_color = colorRect.color;
+	base_text_color = get_theme_color("default_color", "RichTextLabel")
 	target_position = position
 	visible = false
 
 func notify(txt: String, c: Color = base_color) -> void:
 	self.text = txt
 	visible = true
-	colorRect.color = c;
+	colorRect.color = base_color;
+	add_theme_color_override("default_color", c if c != base_color else base_text_color)
 
 	await get_tree().process_frame
 	
