@@ -3,12 +3,7 @@ extends Node3D
 
 var target: Node3D
 
-# Follow
 @export var follow_speed := 8.0
-
-# =========================
-# Camera Zoom System
-# =========================
 
 @export var zoom := 0.0 # 0 = close, 1 = top-down
 @export var zoom_speed := 3.0
@@ -22,7 +17,7 @@ var target_zoom := 0.0
 @export var min_pitch_deg := -15.0
 
 # Apex (bird's-eye view)
-@export var max_distance := 8.0 # <-- defines apex distance
+@export var max_distance := 8.0
 @export var max_height := 5.0
 @export var max_pitch_deg := -40.0
 
@@ -43,13 +38,8 @@ var snapping := false
 
 var snap_camera_on_player_moving: bool = true
 
-# Nodes
 var spring_arm: SpringArm3D
 var camera: Camera3D
-
-# =========================
-# Setup
-# =========================
 
 func snap_camera_on_player_moved(b: bool) -> void:
 	snapping = b && snap_camera_on_player_moving
@@ -70,10 +60,6 @@ func _build_camera_hierarchy() -> void:
 
 	camera.current = true
 
-# =========================
-# Main Loop
-# =========================
-
 func _physics_process(delta: float) -> void:
 	if not target:
 		return
@@ -84,11 +70,7 @@ func _physics_process(delta: float) -> void:
 		_snap_to_center(delta)
 	elif not Manager.instance.input_moves_player():
 		_update_pan(delta)
-
-	# Reduce pan when zoomed out
 	var effective_pan = pan_offset * (1.0 - zoom)
-	
-	#zoom smoothing
 	zoom = lerp(zoom, target_zoom, delta * zoom_smoothness)
 
 	var desired_position = target.global_position + effective_pan
@@ -101,10 +83,6 @@ func _physics_process(delta: float) -> void:
 
 	_apply_zoom()
 
-# =========================
-# Zoom
-# =========================
-
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
@@ -113,7 +91,6 @@ func _input(event: InputEvent) -> void:
 			target_zoom += zoom_step
 
 		target_zoom = clamp(target_zoom, 0.0, 1.0)
-
 
 func _apply_zoom() -> void:
 	var distance = lerp(min_distance, max_distance, zoom)
@@ -124,10 +101,6 @@ func _apply_zoom() -> void:
 	spring_arm.position.y = height
 	camera.rotation_degrees.x = pitch
 
-# =========================
-# Rotation
-# =========================
-
 func _handle_rotation_input() -> void:
 	if Input.is_action_just_pressed("camera_rotate_left"):
 		target_yaw += deg_to_rad(rotation_step_deg)
@@ -136,10 +109,6 @@ func _handle_rotation_input() -> void:
 		target_yaw -= deg_to_rad(rotation_step_deg)
 
 	target_yaw = wrapf(target_yaw, -PI, PI)
-
-# =========================
-# Panning
-# =========================
 
 func _snap_to_center(delta: float) -> void:
 	pan_offset = pan_offset.lerp(Vector3.ZERO, delta * snap_speed)
@@ -170,10 +139,6 @@ func _update_pan(delta: float) -> void:
 
 	if pan_offset.length() > max_pan_distance:
 		pan_offset = pan_offset.normalized() * max_pan_distance
-
-# =========================
-# Utility
-# =========================
 
 func get_ray_hit_from_screen_point() -> Dictionary:
 	var screen_point: Vector2 = get_viewport().get_mouse_position()
