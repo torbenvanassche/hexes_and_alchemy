@@ -42,6 +42,7 @@ func _current_crop_state() -> CropState:
 	return CropState[key] as CropState
 
 func _update_mesh(state: CropState) -> void:
+	mesh_fallow.visible = state == CropState.FALLOW
 	mesh_planted.visible = state == CropState.PLANTED
 	mesh_watered.visible = state == CropState.WATERED
 	mesh_ready.visible = state == CropState.READY

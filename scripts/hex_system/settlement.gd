@@ -16,7 +16,7 @@ func _ready() -> void:
 	
 	if is_active_settlement:
 		Manager.instance.set_active_settlement(self);
-	Manager.instance.spawn_in_settlement();
+		Manager.instance.spawn_in_settlement();
 	visibility_changed.connect(_toggle_collision)
 	_ready_deferred.call_deferred();
 	

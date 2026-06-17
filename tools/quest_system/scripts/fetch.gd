@@ -5,6 +5,8 @@ var progress_tracker: ContentGroup;
 
 func initialize() -> void:
 	quest_key = "Fetch"
+	if progress_tracker != null:
+		return
 	
 	progress_tracker = ContentGroup.new();
 	for key: ItemInfo in requested_items.keys():

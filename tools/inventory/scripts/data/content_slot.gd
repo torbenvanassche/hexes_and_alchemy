@@ -26,7 +26,7 @@ func set_stack_size(max_size: int = 1) -> void:
 	maxcount = max_size;
 	
 func can_add(content: Resource) -> bool:
-	return content != _content && !is_full();
+	return (_content == null or _content == content) and not is_full();
 
 func add(amount: int = 1, content: Resource = null) -> int:
 	if _content == null && content != null:

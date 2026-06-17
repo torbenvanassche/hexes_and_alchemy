@@ -8,6 +8,7 @@ var buildable_structure: Buildable;
 var npcs: Array[SceneInstance];
 
 func _ready() -> void:
+	super()
 	Config.gamestate.quest_list_changed.connect(spawn_interval.start)
 	spawn_interval.timeout.connect(adventurer.queue.bind(_adventurer_ready))
 	buildable_structure = get_parent() as Buildable;

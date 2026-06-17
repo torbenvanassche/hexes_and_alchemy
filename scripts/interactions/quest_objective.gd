@@ -29,5 +29,5 @@ func _on_create_quest_window_loaded(window_info: SceneInfo) -> void:
 	var quest_creation: QuestCreationUI = (window_instance.node as DraggableControl).content as QuestCreationUI;
 	if not quest_creation.quest_created.is_connected(Config.gamestate.add_quest):
 		quest_creation.quest_created.connect(Config.gamestate.add_quest)
-		quest_creation.force_data(self)
+	quest_creation.force_data(self)
 	window_instance.on_enter.emit();

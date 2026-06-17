@@ -30,6 +30,7 @@ func can_open_creation_menu() -> bool:
 func _on_create_quest_window_loaded(window_info: SceneInfo) -> void:
 	window_instance = SceneManager.add(window_info);
 	var quest_creation: QuestCreationUI = (window_instance.node as DraggableControl).content as QuestCreationUI;
+	quest_creation.clear_forced_data()
 	if not quest_creation.quest_created.is_connected(Config.gamestate.add_quest):
 		quest_creation.quest_created.connect(Config.gamestate.add_quest)
 	window_instance.on_enter.emit();

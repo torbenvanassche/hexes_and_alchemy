@@ -91,8 +91,14 @@ func _drop_data(_at_position: Vector2, data: Variant) -> void:
 		src_slot.remove(src_slot.count - dest_slot.add(src_slot.count, src_slot.get_content()))
 	else:
 		var dest_content: Resource = dest_slot.get_content();
+		var dest_count := dest_slot.count;
+		var src_count := src_slot.count;
 		dest_slot.set_content(src_slot.get_content());
+		dest_slot.count = src_count;
 		src_slot.set_content(dest_content)
+		src_slot.count = dest_count;
+		dest_slot.changed.emit()
+		src_slot.changed.emit()
 		
 func _notification(what: int) -> void:
 	match what:
