@@ -1,8 +1,8 @@
-class_name QuestCreationUI extends VBoxContainer
+class_name QuestCreationUI extends Control
 
-@onready var quest_type: OptionButton = $HBoxContainer/QuestType
-@onready var quest_location: OptionButton = $HBoxContainer2/QuestLocation
-@onready var finish_quest_creation: Button = $FinishQuestCreation
+@onready var quest_type: OptionButton = $FormPanel/MarginContainer/VBoxContainer/TypeRow/QuestType
+@onready var quest_location: OptionButton = $FormPanel/MarginContainer/VBoxContainer/LocationRow/QuestLocation
+@onready var finish_quest_creation: Button = $FormPanel/MarginContainer/VBoxContainer/Actions/FinishQuestCreation
 
 signal quest_created(quest: Quest)
 
@@ -35,18 +35,26 @@ func _connect_finish_button() -> void:
 
 func _on_location_selected(idx: int) -> void:
 	if idx == -1:
+		quest_type.clear()
+		quest_type.disabled = true
 		finish_quest_creation.disabled = true
 		return;
 
 	var location: HexBase = quest_location.get_item_metadata(idx) as HexBase;
 	if location == null or location.structure == null:
+		quest_type.clear()
+		quest_type.disabled = true
 		finish_quest_creation.disabled = true
 		return;
 
 	quest_type.clear();
 	var objective: QuestObjective = location.structure.instance as QuestObjective;
 	if objective:
-		for state: String in objective.get_filtered_quest_types(objective.state_machine.get_current_state_index()):
+		var available_types := Config.gamestate.get_available_quest_types(
+			location,
+			objective.get_filtered_quest_types(objective.state_machine.get_current_state_index())
+		)
+		for state: String in available_types:
 			quest_type.add_item(state);
 			quest_type.set_item_metadata(quest_type.item_count - 1, state)
 
@@ -60,6 +68,17 @@ func _add_location_option(hex: HexBase) -> void:
 
 	var player_hex: HexBase = Manager.instance.player_instance.get_hex()
 	if player_hex == null:
+		return
+
+	var objective: QuestObjective = hex.structure.instance as QuestObjective
+	if objective == null:
+		return
+
+	var available_types := Config.gamestate.get_available_quest_types(
+		hex,
+		objective.get_filtered_quest_types(objective.state_machine.get_current_state_index())
+	)
+	if available_types.is_empty():
 		return
 
 	var distance: int = GridUtils.cube_distance(hex.cube_id, player_hex.cube_id);
@@ -99,7 +118,10 @@ func on_enter() -> void:
 
 		var distance: int = GridUtils.cube_distance(hex.cube_id, player_hex.cube_id);
 		var in_range: bool = distance <= Config.gamestate.max_quest_distance;
-		var is_valid_quest: bool = quest_objective.get_filtered_quest_types().size() != 0;
+		var is_valid_quest: bool = Config.gamestate.get_available_quest_types(
+			hex,
+			quest_objective.get_filtered_quest_types()
+		).size() != 0;
 
 		if in_range and is_valid_quest and quest_objective.can_interact() and hex.structure.structure_info.is_quest_target and hex.is_explored:
 			_add_location_option(hex);

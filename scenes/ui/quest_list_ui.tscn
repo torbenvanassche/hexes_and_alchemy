@@ -3,30 +3,71 @@
 [ext_resource type="PackedScene" uid="uid://dny1dqcanlco0" path="res://tools/custom_window/base_window.tscn" id="1_guitq"]
 [ext_resource type="Script" uid="uid://di4yd6oc2lo3y" path="res://tools/inventory/scripts/visual/screens/quest_list_ui.gd" id="2_0d8vg"]
 [ext_resource type="PackedScene" uid="uid://bhqw7ckq2j06r" path="res://scenes/ui/components/quest_list_item.tscn" id="3_axeff"]
+[ext_resource type="Texture2D" uid="uid://boj06v8owoifo" path="res://sprites/ui/panel-031.png" id="4_board"]
+[ext_resource type="Theme" uid="uid://whaj7dl14je1" path="res://themes/base_theme.theme" id="5_theme"]
+[ext_resource type="Texture2D" uid="uid://m3yff7hfup7m" path="res://sprites/ui/notepad_write.png" id="6_post"]
 
 [node name="Window" unique_id=1301866213 node_paths=PackedStringArray("content") instance=ExtResource("1_guitq")]
-custom_minimum_size = Vector2(500, 350)
+custom_minimum_size = Vector2(660, 460)
 id = "Quest board"
-content = NodePath("NinePatchRect/VBoxContainer/contentPanel/ScrollContainer/QuestContainer")
+content = NodePath("NinePatchRect/VBoxContainer/contentPanel/QuestBoard")
 
 [node name="contentPanel" parent="NinePatchRect/VBoxContainer" parent_id_path=PackedInt32Array(554725130) index="1" unique_id=1040542232]
-size_flags_horizontal = 1
+size_flags_horizontal = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="NinePatchRect/VBoxContainer/contentPanel" index="0" unique_id=1702041871]
-layout_mode = 2
-
-[node name="QuestContainer" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/ScrollContainer" index="0" unique_id=82514535]
+[node name="QuestBoard" type="Control" parent="NinePatchRect/VBoxContainer/contentPanel" index="0" unique_id=82514535]
+custom_minimum_size = Vector2(620, 395)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-
-[node name="CreateQuestButton" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/ScrollContainer/QuestContainer" index="0" unique_id=1078826420]
-layout_mode = 2
-text = "Create Quest"
-
-[node name="QuestListContainer" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/ScrollContainer/QuestContainer" index="1" unique_id=1016722743]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
+theme = ExtResource("5_theme")
 script = ExtResource("2_0d8vg")
 quest_item_ui = ExtResource("3_axeff")
+
+[node name="BoardSurface" type="NinePatchRect" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard" index="0" unique_id=1702041871]
+self_modulate = Color(0.77, 0.56, 0.36, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_board")
+patch_margin_left = 43
+patch_margin_top = 43
+patch_margin_right = 43
+patch_margin_bottom = 43
+
+[node name="EmptyLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard" index="1" unique_id=1016722743]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -130.0
+offset_top = -13.0
+offset_right = 130.0
+offset_bottom = 13.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.2, 0.12, 0.07, 1)
+text = "No quests are pinned."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CreateQuestButton" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard" index="2" unique_id=1078826420]
+custom_maximum_size = Vector2(50, 50)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -62.0
+offset_top = 19.0
+offset_right = -22.0
+offset_bottom = 59.0
+grow_horizontal = 0
+theme = ExtResource("5_theme")
+icon = ExtResource("6_post")
+flat = true
+expand_icon = true

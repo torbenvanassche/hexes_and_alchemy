@@ -1,17 +1,9 @@
 class_name QuestBoard extends Interaction
 
 func on_interact() -> void:
-	if _has_available_quest_locations():
-		super()
-		return
-
-	_notify_no_available_quests()
+	super()
 
 func interact() -> void:
-	if not _has_available_quest_locations():
-		_notify_no_available_quests()
-		return
-
 	DataManager.instance.get_scene_by_name("quest_list_ui").queue(_open_window)
 	
 func can_interact() -> bool:
@@ -19,7 +11,7 @@ func can_interact() -> bool:
 	
 	var ui_is_closed := not window_instance || not SceneManager.is_visible(window_instance);
 	var active_settlement_board: bool = settlement && settlement.interactions.any(func(interaction: Interaction) -> bool: return interaction is Tavern);
-	return ui_is_closed && active_settlement_board && _has_available_quest_locations();
+	return ui_is_closed && active_settlement_board;
 	
 func _open_window(window_info: SceneInfo) -> void:
 	window_instance = SceneManager.add(window_info, false);
@@ -53,7 +45,11 @@ func _get_available_quest_locations() -> Array[HexBase]:
 			continue
 		if not quest_objective.is_visible_in_tree():
 			continue
-		if quest_objective.get_filtered_quest_types().is_empty():
+		var available_types := Config.gamestate.get_available_quest_types(
+			quest_hex,
+			quest_objective.get_filtered_quest_types()
+		)
+		if available_types.is_empty():
 			continue
 		if not quest_objective.can_interact():
 			continue
@@ -69,10 +65,6 @@ func _ensure_hex(grid: HexGrid) -> void:
 	var cube_id = grid.world_to_cube_id(global_position)
 	if grid.tiles.has(cube_id):
 		hex = grid.tiles[cube_id].node
-
-func _notify_no_available_quests() -> void:
-	if Manager.instance && Manager.instance.toast:
-		Manager.instance.toast.notify("Quest board debug: no visible, interactable quest locations are available.")
 
 func _on_area_exit(other: Area3D) -> void:
 	super(other);

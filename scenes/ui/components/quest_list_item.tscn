@@ -1,67 +1,151 @@
 [gd_scene format=3 uid="uid://bhqw7ckq2j06r"]
 
 [ext_resource type="Script" uid="uid://bspwdi5yrsyab" path="res://tools/inventory/scripts/visual/parts/quest_list_item_ui.gd" id="1_qmdcg"]
-[ext_resource type="PackedScene" uid="uid://c5ocjw6joaemy" path="res://tools/inventory/scenes/content_slot.tscn" id="2_vqdcy"]
 [ext_resource type="Texture2D" uid="uid://m3yff7hfup7m" path="res://sprites/ui/notepad_write.png" id="3_3kdy2"]
+[ext_resource type="Texture2D" uid="uid://cbhlnklu2q6wp" path="res://sprites/ui/panel-015.png" id="3_gg24t"]
 [ext_resource type="Texture2D" uid="uid://c21ya3fh5a86q" path="res://sprites/ui/pouch_add.png" id="4_3kdy2"]
+[ext_resource type="Theme" uid="uid://whaj7dl14je1" path="res://themes/base_theme.theme" id="6_theme"]
 
-[node name="Control" type="HBoxContainer" unique_id=84988057]
-custom_minimum_size = Vector2(0, 25)
-custom_maximum_size = Vector2(-1, 25)
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 10
+[node name="QuestNote" type="Control" unique_id=84988057]
+custom_minimum_size = Vector2(220, 230)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 220.0
+offset_bottom = 256.0
+theme = ExtResource("6_theme")
 script = ExtResource("1_qmdcg")
-supply_slot = ExtResource("2_vqdcy")
 
-[node name="QuestNumber" type="Label" parent="." unique_id=725982639]
-layout_mode = 2
-text = "1."
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="QuestType" type="Label" parent="." unique_id=236912205]
-layout_mode = 2
-text = "FETCH"
-
-[node name="QuestLocation" type="Label" parent="." unique_id=246549521]
-layout_mode = 2
-text = "farmland"
-
-[node name="Party" type="HBoxContainer" parent="." unique_id=1583251630]
-layout_mode = 2
-
-[node name="ProgressBar" type="ProgressBar" parent="." unique_id=1310734486]
-custom_minimum_size = Vector2(0, 25)
-layout_mode = 2
-size_flags_horizontal = 3
-max_value = 1.0
-show_percentage = false
-
-[node name="Label" type="Label" parent="ProgressBar" unique_id=911581269]
+[node name="Paper" type="NinePatchRect" parent="." unique_id=128610021]
+self_modulate = Color(0.93, 0.84, 0.64, 1)
+show_behind_parent = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "IN PROGRESS"
-horizontal_alignment = 1
+texture = ExtResource("3_gg24t")
+patch_margin_left = 42
+patch_margin_top = 42
+patch_margin_right = 42
+patch_margin_bottom = 43
 
-[node name="ApproveQuest" type="Button" parent="." unique_id=2007377950]
-custom_minimum_size = Vector2(25, 0)
+[node name="Pin" type="ColorRect" parent="Paper" unique_id=54231665]
+z_index = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -6.0
+offset_top = 6.0
+offset_right = 6.0
+offset_bottom = 18.0
+grow_horizontal = 2
+color = Color(1, 0, 0, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="Paper" unique_id=1990104491]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Paper/MarginContainer" unique_id=1314253522]
 layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="TopDivider" type="ColorRect" parent="Paper/MarginContainer/VBoxContainer" unique_id=183152230]
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+color = Color(0.28, 0.18, 0.09, 1)
+
+[node name="Header" type="HBoxContainer" parent="Paper/MarginContainer/VBoxContainer" unique_id=1583251630]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="QuestType" type="Label" parent="Paper/MarginContainer/VBoxContainer/Header" unique_id=236912205]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.07, 0.045, 0.025, 1)
+theme_override_font_sizes/font_size = 24
+text = "FETCH"
+text_overrun_behavior = 3
+
+[node name="QuestNumber" type="Label" parent="Paper/MarginContainer/VBoxContainer/Header" unique_id=725982639]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.18, 0.11, 0.055, 1)
+text = "#1"
+horizontal_alignment = 2
+
+[node name="BottomDivider" type="ColorRect" parent="Paper/MarginContainer/VBoxContainer" unique_id=183152231]
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+color = Color(0.28, 0.18, 0.09, 1)
+
+[node name="QuestLocation" type="Label" parent="Paper/MarginContainer/VBoxContainer" unique_id=246549521]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.11, 0.07, 0.035, 1)
+text = "Destination: farmland"
+text_overrun_behavior = 3
+
+[node name="QuestStatus" type="Label" parent="Paper/MarginContainer/VBoxContainer" unique_id=911581269]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.11, 0.07, 0.035, 1)
+text = "Stage: waiting"
+text_overrun_behavior = 3
+
+[node name="Party" type="Label" parent="Paper/MarginContainer/VBoxContainer" unique_id=1583251631]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.11, 0.07, 0.035, 1)
+text = "Company: Unassigned"
+text_overrun_behavior = 3
+
+[node name="ProgressBar" type="ProgressBar" parent="Paper/MarginContainer/VBoxContainer" unique_id=1310734486]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("6_theme")
+max_value = 1.0
+show_percentage = false
+
+[node name="Label" type="Label" parent="Paper/MarginContainer/VBoxContainer/ProgressBar" unique_id=1170717140]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "waiting"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Actions" type="HBoxContainer" parent="Paper/MarginContainer/VBoxContainer" unique_id=605675596]
+layout_mode = 2
+theme_override_constants/separation = 3
+alignment = 2
+
+[node name="ApproveQuest" type="Button" parent="Paper/MarginContainer/VBoxContainer/Actions" unique_id=2007377950]
+self_modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(28, 24)
+layout_mode = 2
+tooltip_text = "Dispatch party"
+theme = ExtResource("6_theme")
 icon = ExtResource("3_3kdy2")
 flat = true
 icon_alignment = 1
 expand_icon = true
 
-[node name="CompleteQuest" type="Button" parent="." unique_id=1614009287]
-custom_minimum_size = Vector2(25, 0)
+[node name="CompleteQuest" type="Button" parent="Paper/MarginContainer/VBoxContainer/Actions" unique_id=1614009287]
+self_modulate = Color(0, 0, 0, 1)
+custom_minimum_size = Vector2(28, 24)
 layout_mode = 2
+tooltip_text = "Claim reward"
+theme = ExtResource("6_theme")
 icon = ExtResource("4_3kdy2")
 flat = true
 icon_alignment = 1

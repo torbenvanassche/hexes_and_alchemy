@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://kyqrlu0hq63c" path="res://scripts/ui/market_ui.gd" id="2_3uv46"]
 [ext_resource type="Texture2D" uid="uid://cbhlnklu2q6wp" path="res://sprites/ui/panel-015.png" id="2_j1hsa"]
 [ext_resource type="PackedScene" uid="uid://b8rer4f8w6ive" path="res://scenes/ui/components/market_slot.tscn" id="3_i7iya"]
+[ext_resource type="Theme" uid="uid://whaj7dl14je1" path="res://themes/base_theme.theme" id="4_theme"]
 
 [node name="Window" unique_id=1224465671 node_paths=PackedStringArray("content") instance=ExtResource("1_w2das")]
 custom_minimum_size = Vector2(220, 200)
@@ -29,6 +30,9 @@ size_flags_horizontal = 1
 [node name="GridContainer" type="GridContainer" parent="NinePatchRect/VBoxContainer/contentPanel" index="0" unique_id=711131856]
 layout_mode = 2
 size_flags_horizontal = 0
+theme = ExtResource("4_theme")
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 4
 columns = 5
 script = ExtResource("2_3uv46")
 packed_slot = ExtResource("3_i7iya")
