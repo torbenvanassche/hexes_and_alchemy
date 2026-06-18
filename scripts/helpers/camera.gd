@@ -1,42 +1,52 @@
 class_name SpringArmFollowCamera
 extends Node3D
 
+enum RotationMode {
+	SNAP,
+	SMOOTH
+}
+
 var target: Node3D
 
-@export var follow_speed := 8.0
+@export var snap_camera_on_player_moving := true
 
-@export var zoom := 0.0 # 0 = close, 1 = top-down
-@export var zoom_speed := 3.0
-@export var zoom_step := 0.08
-@export var zoom_smoothness := 10.0
+@export_group("Follow")
+@export_range(0.0, 30.0, 0.1) var follow_speed := 8.0
+
+@export_group("Zoom")
+@export_range(0.0, 1.0, 0.01) var zoom := 0.0 # 0 = close, 1 = top-down
+@export_range(0.01, 0.5, 0.01) var zoom_step := 0.08
+@export_range(0.0, 30.0, 0.1) var zoom_smoothness := 10.0
 var target_zoom := 0.0
 
-# Default (close view)
-@export var min_distance := 4.0
-@export var min_height := 1.5
-@export var min_pitch_deg := -15.0
+@export_subgroup("Zoom Close View")
+@export_range(0.0, 50.0, 0.1) var min_distance := 4.0
+@export_range(0.0, 20.0, 0.1) var min_height := 1.5
+@export_range(-89.0, 0.0, 0.1) var min_pitch_deg := -15.0
 
-# Apex (bird's-eye view)
-@export var max_distance := 8.0
-@export var max_height := 5.0
-@export var max_pitch_deg := -40.0
+@export_subgroup("Zoom Far View")
+@export_range(0.0, 50.0, 0.1) var max_distance := 8.0
+@export_range(0.0, 20.0, 0.1) var max_height := 5.0
+@export_range(-89.0, 0.0, 0.1) var max_pitch_deg := -40.0
 
-# Rotation
-@export var default_yaw_offset_deg := 30.0
-@export var rotation_step_deg := 60.0
-@export var rotation_speed := 12.0
+@export_group("Rotation")
+@export var rotation_mode: RotationMode = RotationMode.SNAP
+@export_range(-180.0, 180.0, 1.0) var default_yaw_offset_deg := 30.0
+@export_range(0.0, 30.0, 0.1) var rotation_speed := 12.0
+@export_subgroup("Rotation Snap")
+@export_range(1.0, 180.0, 1.0) var rotation_step_deg := 60.0
+@export_subgroup("Rotation Smooth")
+@export_range(1.0, 720.0, 1.0) var smooth_rotation_turn_speed_deg := 180.0
 var target_yaw := 0.0
 
-# Panning
-@export var pan_speed := 6.0
-@export var max_pan_distance := 4.0
-@export var snap_speed := 12.0
-@export var snap_threshold := 0.05
+@export_group("Panning")
+@export_range(0.0, 30.0, 0.1) var pan_speed := 6.0
+@export_range(0.0, 20.0, 0.1) var max_pan_distance := 4.0
+@export_range(0.0, 30.0, 0.1) var snap_speed := 12.0
+@export_range(0.0, 1.0, 0.01) var snap_threshold := 0.05
 
 var pan_offset := Vector3.ZERO
 var snapping := false
-
-var snap_camera_on_player_moving: bool = true
 
 var spring_arm: SpringArm3D
 var camera: Camera3D
@@ -64,7 +74,7 @@ func _physics_process(delta: float) -> void:
 	if not target:
 		return
 
-	_handle_rotation_input()
+	_handle_rotation_input(delta)
 
 	if snapping:
 		_snap_to_center(delta)
@@ -101,12 +111,16 @@ func _apply_zoom() -> void:
 	spring_arm.position.y = height
 	camera.rotation_degrees.x = pitch
 
-func _handle_rotation_input() -> void:
-	if Input.is_action_just_pressed("camera_rotate_left"):
-		target_yaw += deg_to_rad(rotation_step_deg)
-
-	elif Input.is_action_just_pressed("camera_rotate_right"):
-		target_yaw -= deg_to_rad(rotation_step_deg)
+func _handle_rotation_input(delta: float) -> void:
+	if rotation_mode == RotationMode.SMOOTH:
+		var rotation_input := Input.get_action_strength("camera_rotate_left") - Input.get_action_strength("camera_rotate_right")
+		if absf(rotation_input) > 0.0:
+			target_yaw += rotation_input * deg_to_rad(smooth_rotation_turn_speed_deg) * delta
+	else:
+		if Input.is_action_just_pressed("camera_rotate_left"):
+			target_yaw += deg_to_rad(rotation_step_deg)
+		elif Input.is_action_just_pressed("camera_rotate_right"):
+			target_yaw -= deg_to_rad(rotation_step_deg)
 
 	target_yaw = wrapf(target_yaw, -PI, PI)
 
