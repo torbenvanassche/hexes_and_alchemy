@@ -12,6 +12,8 @@ enum Phase {
 @export var environment: WorldEnvironment
 
 @export var phases: Array[TimeOfDayPhase]
+@export_range(0.0, 30.0, 0.1) var min_shadow_elevation_degrees := 10.0
+
 var current_phase: TimeOfDayPhase = null
 signal phase_changed(new_phase: TimeOfDayPhase)
 
@@ -23,6 +25,8 @@ signal day_ended()
 
 func _ready() -> void:
 	current_phase = get_current_phase()
+	_update_sun_rotation()
+	_update_lighting()
 
 func _process(delta: float) -> void:
 	_time += delta
@@ -73,7 +77,14 @@ func _update_sun_rotation() -> void:
 	if not sun:
 		return
 	var t := get_current_time_percentage()
-	sun.rotation_degrees.x = lerpf(-90.0, 270.0, t)
+	var angle := lerpf(-90.0, 270.0, t)
+
+	# Avoid the harshest grazing-angle shadows near the horizon.
+	if angle > -90.0 and angle < 90.0 and min_shadow_elevation_degrees > 0.0:
+		var max_day_angle := 90.0 - min_shadow_elevation_degrees
+		angle = clampf(angle, -max_day_angle, max_day_angle)
+
+	sun.rotation_degrees.x = angle
 
 func _update_lighting() -> void:
 	if current_phase == null or not sun:
@@ -87,13 +98,20 @@ func _update_lighting() -> void:
 	var angle := sun.rotation_degrees.x
 	var t_arc := (angle + 90.0) / 360.0
 	var height_factor := clampf(sin(t_arc * PI), 0.0, 1.0)
+	var sun_strength := smoothstep(0.0, 0.28, height_factor)
 
 	sun.light_color = base_color
-	sun.light_energy = base_energy if height_factor > 0.0 else 0.0
+	sun.light_energy = base_energy * sun_strength
+	sun.directional_shadow_max_distance = lerpf(current_phase.shadow_max_distance, next_phase.shadow_max_distance, blend)
+	sun.directional_shadow_fade_start = lerpf(current_phase.shadow_fade_start, next_phase.shadow_fade_start, blend)
+	sun.shadow_blur = lerpf(current_phase.shadow_blur, next_phase.shadow_blur, blend)
+	sun.light_angular_distance = lerpf(current_phase.shadow_softness, next_phase.shadow_softness, blend)
+	sun.directional_shadow_pancake_size = lerpf(current_phase.shadow_pancake_size, next_phase.shadow_pancake_size, blend)
+	sun.shadow_opacity = lerpf(current_phase.shadow_opacity, next_phase.shadow_opacity, blend) * sun_strength
 
 	if environment and environment.environment:
 		var env := environment.environment
-		var night_ambient := Color(0.02, 0.03, 0.08)
-		var day_ambient := base_color * 0.3
+		var night_ambient := Color(0.18, 0.19, 0.26)
+		var day_ambient := base_color * 0.62
 		env.ambient_light_color = night_ambient.lerp(day_ambient, height_factor)
-		env.ambient_light_energy = lerpf(0.15, 1.2, height_factor)
+		env.ambient_light_energy = lerpf(0.62, 1.05, height_factor)
