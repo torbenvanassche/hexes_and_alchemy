@@ -4,6 +4,7 @@ extends CharacterBody3D
 @export var move_speed := 6.0
 @export var acceleration := 10.0
 @export var dash_modifier := 1.5;
+@export_range(0.0, 1.5, 0.01) var water_edge_stop_distance := 0.3
 
 @onready var interactor: Area3D = $interactor;
 @onready var inventory: Inventory = $Inventory;
@@ -80,6 +81,8 @@ func _handle_movement(delta: float) -> void:
 			var current_hex: HexBase = raw_current_hex if raw_current_hex != null and raw_current_hex.is_traversable() else _last_traversable_hex
 			var next_position := global_position + Vector3(next_velocity.x, 0.0, next_velocity.z) * delta
 			var target_hex := grid.get_hex_at_world_position(next_position, 0.0)
+			var edge_probe_position := next_position + move_dir.normalized() * water_edge_stop_distance
+			var edge_probe_hex := grid.get_hex_at_world_position(edge_probe_position, 0.0)
 			_explore_visible_tiles(grid, current_hex)
 			
 			if current_hex == null:
@@ -90,7 +93,15 @@ func _handle_movement(delta: float) -> void:
 			if target_hex == null:
 				target_hex = current_hex
 			
+			if edge_probe_hex == null:
+				edge_probe_hex = target_hex
+			
 			if target_hex != current_hex and not target_hex.is_traversable():
+				velocity.x = 0.0
+				velocity.z = 0.0
+				return
+			
+			if edge_probe_hex != current_hex and not edge_probe_hex.is_traversable():
 				velocity.x = 0.0
 				velocity.z = 0.0
 				return
