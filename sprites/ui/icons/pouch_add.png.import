@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dwb63f4p3rhtb"
-path="res://.godot/imported/panel-007.png-56b013b5e971752594c7b130baff229c.ctex"
+uid="uid://c21ya3fh5a86q"
+path="res://.godot/imported/pouch_add.png-c7ae9086fdee9f273d5094430fc36d2b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/ui/panel-007.png"
-dest_files=["res://.godot/imported/panel-007.png-56b013b5e971752594c7b130baff229c.ctex"]
+source_file="res://sprites/ui/icons/pouch_add.png"
+dest_files=["res://.godot/imported/pouch_add.png-c7ae9086fdee9f273d5094430fc36d2b.ctex"]
 
 [params]
 

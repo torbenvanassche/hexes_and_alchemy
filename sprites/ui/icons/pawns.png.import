@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://m3yff7hfup7m"
-path="res://.godot/imported/notepad_write.png-8f7efb77fe71064de11380aa48557cde.ctex"
+uid="uid://drasftash875f"
+path="res://.godot/imported/pawns.png-6b90778906cd6086c0cc09214ec87b02.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/ui/notepad_write.png"
-dest_files=["res://.godot/imported/notepad_write.png-8f7efb77fe71064de11380aa48557cde.ctex"]
+source_file="res://sprites/ui/icons/pawns.png"
+dest_files=["res://.godot/imported/pawns.png-6b90778906cd6086c0cc09214ec87b02.ctex"]
 
 [params]
 

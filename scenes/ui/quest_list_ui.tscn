@@ -3,9 +3,9 @@
 [ext_resource type="PackedScene" uid="uid://dny1dqcanlco0" path="res://tools/custom_window/base_window.tscn" id="1_guitq"]
 [ext_resource type="Script" uid="uid://di4yd6oc2lo3y" path="res://tools/inventory/scripts/visual/screens/quest_list_ui.gd" id="2_0d8vg"]
 [ext_resource type="PackedScene" uid="uid://bhqw7ckq2j06r" path="res://scenes/ui/components/quest_list_item.tscn" id="3_axeff"]
-[ext_resource type="Texture2D" uid="uid://boj06v8owoifo" path="res://sprites/ui/panel-031.png" id="4_board"]
+[ext_resource type="Texture2D" uid="uid://boj06v8owoifo" path="res://sprites/ui/panels/panel-031.png" id="4_board"]
 [ext_resource type="Theme" uid="uid://whaj7dl14je1" path="res://themes/base_theme.theme" id="5_theme"]
-[ext_resource type="Texture2D" uid="uid://m3yff7hfup7m" path="res://sprites/ui/notepad_write.png" id="6_post"]
+[ext_resource type="Texture2D" uid="uid://m3yff7hfup7m" path="res://sprites/ui/icons/notepad_write.png" id="6_post"]
 
 [node name="Window" unique_id=1301866213 node_paths=PackedStringArray("content") instance=ExtResource("1_guitq")]
 custom_minimum_size = Vector2(660, 460)

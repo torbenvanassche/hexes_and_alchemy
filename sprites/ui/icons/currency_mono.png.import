@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c21ya3fh5a86q"
-path="res://.godot/imported/pouch_add.png-bffdab05f03d08ea78835765b7abeaf2.ctex"
+uid="uid://fre57rwxdwn"
+path="res://.godot/imported/currency_mono.png-180b4ab1e576f1fd29e23ed686ad0e7d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/ui/pouch_add.png"
-dest_files=["res://.godot/imported/pouch_add.png-bffdab05f03d08ea78835765b7abeaf2.ctex"]
+source_file="res://sprites/ui/icons/currency_mono.png"
+dest_files=["res://.godot/imported/currency_mono.png-180b4ab1e576f1fd29e23ed686ad0e7d.ctex"]
 
 [params]
 

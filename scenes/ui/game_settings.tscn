@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://ughm5jhd4ey6"]
 
+[ext_resource type="Theme" uid="uid://whaj7dl14je1" path="res://themes/base_theme.theme" id="1_theme"]
+
 [node name="Control" type="Control" unique_id=976897692]
 layout_mode = 3
 anchors_preset = 15
@@ -7,6 +9,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_theme")
 
 [node name="Panel" type="Panel" parent="." unique_id=199110682]
 layout_mode = 1

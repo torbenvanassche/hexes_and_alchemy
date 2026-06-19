@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bd0i5jrt7650t"]
 
 [ext_resource type="Script" uid="uid://bem2f43dlfne5" path="res://scripts/scene_controllers/pause_screen.gd" id="1_53068"]
+[ext_resource type="Theme" uid="uid://whaj7dl14je1" path="res://themes/base_theme.theme" id="2_theme"]
 
 [node name="Panel" type="Panel" unique_id=1103910319 node_paths=PackedStringArray("resume_button", "settings_button", "quit_button")]
 process_mode = 2
@@ -9,6 +10,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("2_theme")
 script = ExtResource("1_53068")
 resume_button = NodePath("CenterContainer/VBoxContainer/resume")
 settings_button = NodePath("CenterContainer/VBoxContainer/settings")

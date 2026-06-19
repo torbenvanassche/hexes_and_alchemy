@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://dny1dqcanlco0" path="res://tools/custom_window/base_window.tscn" id="1_w2das"]
 [ext_resource type="Script" uid="uid://kyqrlu0hq63c" path="res://scripts/ui/market_ui.gd" id="2_3uv46"]
-[ext_resource type="Texture2D" uid="uid://cbhlnklu2q6wp" path="res://sprites/ui/panel-015.png" id="2_j1hsa"]
+[ext_resource type="Texture2D" uid="uid://cbhlnklu2q6wp" path="res://sprites/ui/panels/panel-015.png" id="2_j1hsa"]
 [ext_resource type="PackedScene" uid="uid://b8rer4f8w6ive" path="res://scenes/ui/components/market_slot.tscn" id="3_i7iya"]
 [ext_resource type="Theme" uid="uid://whaj7dl14je1" path="res://themes/base_theme.theme" id="4_theme"]
 

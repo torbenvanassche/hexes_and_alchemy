@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://m4gt3l1i1hk2" path="res://tools/inventory/scripts/visual/screens/deposit_ui.gd" id="3_i1cn2"]
 [ext_resource type="PackedScene" uid="uid://cnlkcv8enh20k" path="res://scenes/ui/components/deposit_slot.tscn" id="3_xoce2"]
 [ext_resource type="Theme" uid="uid://whaj7dl14je1" path="res://themes/base_theme.theme" id="4_theme"]
-[ext_resource type="Texture2D" uid="uid://c21ya3fh5a86q" path="res://sprites/ui/pouch_add.png" id="5_pouch"]
+[ext_resource type="Texture2D" uid="uid://c21ya3fh5a86q" path="res://sprites/ui/icons/pouch_add.png" id="5_pouch"]
 
 [node name="Window" unique_id=1301866213 node_paths=PackedStringArray("content") instance=ExtResource("1_xoce2")]
 custom_minimum_size = Vector2(300, 0)
