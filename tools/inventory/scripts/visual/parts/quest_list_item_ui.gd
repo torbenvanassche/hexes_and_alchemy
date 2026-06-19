@@ -2,9 +2,8 @@ class_name QuestListItemUI extends Control
 
 @onready var quest_type: Label = $Paper/MarginContainer/VBoxContainer/Header/QuestType
 @onready var quest_number: Label = $Paper/MarginContainer/VBoxContainer/Header/QuestNumber
-@onready var quest_location: Label = $Paper/MarginContainer/VBoxContainer/QuestLocation
-@onready var quest_status: Label = $Paper/MarginContainer/VBoxContainer/QuestStatus
-@onready var party: Label = $Paper/MarginContainer/VBoxContainer/Party
+@onready var quest_location: Label = $Paper/MarginContainer/VBoxContainer/LocationRow/QuestLocation
+@onready var party: Label = $Paper/MarginContainer/VBoxContainer/PartyRow/Party
 @onready var progress_bar: ProgressBar = $Paper/MarginContainer/VBoxContainer/ProgressBar
 @onready var label: Label = $Paper/MarginContainer/VBoxContainer/ProgressBar/Label
 @onready var approve_quest: Button = $Paper/MarginContainer/VBoxContainer/Actions/ApproveQuest
@@ -28,7 +27,7 @@ func set_data(quest: Quest) -> void:
 	
 	quest_number.text = "#%s" % [str(self.get_parent().get_child_count())];
 	quest_type.text = quest.quest_key.to_upper();
-	quest_location.text = "Destination: %s" % [_get_location_name()];
+	quest_location.text = _get_location_name();
 
 	approve_quest.pressed.connect(_start_quest)
 	complete_quest.pressed.connect(questData.parse_reward);
@@ -57,8 +56,7 @@ func _start_quest() -> void:
 	
 func _update_progress(state: String) -> void:
 	label.text = state;
-	quest_status.text = "Stage: %s" % [state.capitalize()]
-	party.text = "Company: %s" % [_get_party_text()]
+	party.text = _get_party_text()
 	progress_bar.value = _get_state_progress(state)
 	approve_quest.visible = questData.is_state(Quest.QuestState.WAITING);
 	complete_quest.visible = questData.is_state(Quest.QuestState.COMPLETE);

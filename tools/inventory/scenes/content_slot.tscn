@@ -3,7 +3,7 @@
 [ext_resource type="StyleBox" uid="uid://dyequs13mhyp3" path="res://tools/inventory/styles/content_slot_stylebox.tres" id="1_f67vh"]
 [ext_resource type="StyleBox" uid="uid://b3yojughln6fb" path="res://tools/inventory/styles/content_slot_stylebox_disabled.tres" id="1_pdw3o"]
 [ext_resource type="Script" uid="uid://c8weu3p2f5ayn" path="res://tools/inventory/scripts/visual/base/content_slot_ui.gd" id="2_rfq8a"]
-[ext_resource type="Texture2D" uid="uid://bsqv6eysfvkrb" path="res://sprites/ui/panel-border-015.png" id="4_pdw3o"]
+[ext_resource type="Texture2D" uid="uid://bsqv6eysfvkrb" path="res://sprites/ui/panels/panel-border-015.png" id="4_pdw3o"]
 
 [sub_resource type="Theme" id="Theme_ceefl"]
 Button/styles/disabled = ExtResource("1_pdw3o")

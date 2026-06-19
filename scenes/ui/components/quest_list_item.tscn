@@ -1,17 +1,46 @@
 [gd_scene format=3 uid="uid://bhqw7ckq2j06r"]
 
 [ext_resource type="Script" uid="uid://bspwdi5yrsyab" path="res://tools/inventory/scripts/visual/parts/quest_list_item_ui.gd" id="1_qmdcg"]
-[ext_resource type="Texture2D" uid="uid://m3yff7hfup7m" path="res://sprites/ui/notepad_write.png" id="3_3kdy2"]
-[ext_resource type="Texture2D" uid="uid://cbhlnklu2q6wp" path="res://sprites/ui/panel-015.png" id="3_gg24t"]
-[ext_resource type="Texture2D" uid="uid://c21ya3fh5a86q" path="res://sprites/ui/pouch_add.png" id="4_3kdy2"]
-[ext_resource type="Theme" uid="uid://whaj7dl14je1" path="res://themes/base_theme.theme" id="6_theme"]
+[ext_resource type="Texture2D" uid="uid://m3yff7hfup7m" path="res://sprites/ui/icons/notepad_write.png" id="3_3kdy2"]
+[ext_resource type="Texture2D" uid="uid://dg75flawm2vb0" path="res://sprites/ui/panels/panelInset_beigeLight.png" id="3_ic3jt"]
+[ext_resource type="Texture2D" uid="uid://c21ya3fh5a86q" path="res://sprites/ui/icons/pouch_add.png" id="4_3kdy2"]
+[ext_resource type="Texture2D" uid="uid://dwqf3fg4acslg" path="res://sprites/ui/icons/structure_farm.png" id="4_tm2j7"]
+[ext_resource type="Texture2D" uid="uid://drasftash875f" path="res://sprites/ui/icons/pawns.png" id="5_so8rn"]
+[ext_resource type="Theme" uid="uid://dae2b2hfpj0l2" path="res://themes/base_theme.theme" id="6_theme"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_progress_background_notice"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0.180392, 0.12549, 0.0784314, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.403922, 0.278431, 0.145098, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_progress_fill_notice"]
+bg_color = Color(0.741176, 0.517647, 0.192157, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.980392, 0.839216, 0.556863, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
 
 [node name="QuestNote" type="Control" unique_id=84988057]
-custom_minimum_size = Vector2(220, 230)
 layout_mode = 3
 anchors_preset = 0
-offset_right = 220.0
-offset_bottom = 256.0
+offset_right = 147.0
+offset_bottom = 153.0
 theme = ExtResource("6_theme")
 script = ExtResource("1_qmdcg")
 
@@ -22,13 +51,14 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = 17.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("3_gg24t")
-patch_margin_left = 42
-patch_margin_top = 42
-patch_margin_right = 42
-patch_margin_bottom = 43
+texture = ExtResource("3_ic3jt")
+patch_margin_left = 7
+patch_margin_top = 8
+patch_margin_right = 6
+patch_margin_bottom = 6
 
 [node name="Pin" type="ColorRect" parent="Paper" unique_id=54231665]
 z_index = 1
@@ -36,12 +66,12 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -6.0
+offset_left = -5.0
 offset_top = 6.0
-offset_right = 6.0
-offset_bottom = 18.0
+offset_right = 5.0
+offset_bottom = 15.999994
 grow_horizontal = 2
-color = Color(1, 0, 0, 1)
+color = Color(0.821694, 0.21713704, 0.17527667, 1)
 
 [node name="MarginContainer" type="MarginContainer" parent="Paper" unique_id=1990104491]
 layout_mode = 1
@@ -87,29 +117,54 @@ custom_minimum_size = Vector2(0, 2)
 layout_mode = 2
 color = Color(0.28, 0.18, 0.09, 1)
 
-[node name="QuestLocation" type="Label" parent="Paper/MarginContainer/VBoxContainer" unique_id=246549521]
+[node name="LocationRow" type="HBoxContainer" parent="Paper/MarginContainer/VBoxContainer" unique_id=246549520]
 layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="LocationIcon" type="TextureRect" parent="Paper/MarginContainer/VBoxContainer/LocationRow" unique_id=246549522]
+self_modulate = Color(0.11, 0.07, 0.035, 1)
+custom_minimum_size = Vector2(18, 18)
+layout_mode = 2
+texture = ExtResource("4_tm2j7")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="QuestLocation" type="Label" parent="Paper/MarginContainer/VBoxContainer/LocationRow" unique_id=246549521]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.11, 0.07, 0.035, 1)
-text = "Destination: farmland"
+text = "farmland"
+vertical_alignment = 1
 text_overrun_behavior = 3
 
-[node name="QuestStatus" type="Label" parent="Paper/MarginContainer/VBoxContainer" unique_id=911581269]
+[node name="PartyRow" type="HBoxContainer" parent="Paper/MarginContainer/VBoxContainer" unique_id=1583251632]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.11, 0.07, 0.035, 1)
-text = "Stage: waiting"
-text_overrun_behavior = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 8
 
-[node name="Party" type="Label" parent="Paper/MarginContainer/VBoxContainer" unique_id=1583251631]
+[node name="PartyIcon" type="TextureRect" parent="Paper/MarginContainer/VBoxContainer/PartyRow" unique_id=1583251633]
+self_modulate = Color(0.11, 0.07, 0.035, 1)
+custom_minimum_size = Vector2(18, 18)
 layout_mode = 2
+texture = ExtResource("5_so8rn")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Party" type="Label" parent="Paper/MarginContainer/VBoxContainer/PartyRow" unique_id=1583251631]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.11, 0.07, 0.035, 1)
-text = "Company: Unassigned"
+text = "Unassigned"
+vertical_alignment = 1
 text_overrun_behavior = 3
 
 [node name="ProgressBar" type="ProgressBar" parent="Paper/MarginContainer/VBoxContainer" unique_id=1310734486]
-custom_minimum_size = Vector2(0, 20)
+custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("6_theme")
+theme_override_styles/background = SubResource("StyleBoxFlat_progress_background_notice")
+theme_override_styles/fill = SubResource("StyleBoxFlat_progress_fill_notice")
 max_value = 1.0
 show_percentage = false
 
@@ -120,18 +175,28 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_colors/font_color = Color(0.980392, 0.933333, 0.823529, 1)
+theme_override_font_sizes/font_size = 12
 text = "waiting"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Actions" type="HBoxContainer" parent="Paper/MarginContainer/VBoxContainer" unique_id=605675596]
-layout_mode = 2
+[node name="Actions" type="HBoxContainer" parent="Paper" unique_id=605675596]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -59.0
+offset_bottom = 24.0
+grow_horizontal = 0
+size_flags_horizontal = 8
+size_flags_vertical = 0
 theme_override_constants/separation = 3
 alignment = 2
 
-[node name="ApproveQuest" type="Button" parent="Paper/MarginContainer/VBoxContainer/Actions" unique_id=2007377950]
+[node name="ApproveQuest" type="Button" parent="Paper/Actions" unique_id=2007377950]
 self_modulate = Color(0, 0, 0, 1)
-custom_minimum_size = Vector2(28, 24)
+custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
 tooltip_text = "Dispatch party"
 theme = ExtResource("6_theme")
@@ -140,7 +205,8 @@ flat = true
 icon_alignment = 1
 expand_icon = true
 
-[node name="CompleteQuest" type="Button" parent="Paper/MarginContainer/VBoxContainer/Actions" unique_id=1614009287]
+[node name="CompleteQuest" type="Button" parent="Paper/Actions" unique_id=1614009287]
+visible = false
 self_modulate = Color(0, 0, 0, 1)
 custom_minimum_size = Vector2(28, 24)
 layout_mode = 2
