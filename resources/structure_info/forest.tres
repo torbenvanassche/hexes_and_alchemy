@@ -12,6 +12,7 @@ point_count = 2
 [resource]
 script = ExtResource("1_oogor")
 item = ExtResource("1_nvtva")
+max_item_amount = 3
 max_per_region_size = SubResource("Curve_nqdss")
 minimum_distance_from_other_structures = 3
 id = "forest"
