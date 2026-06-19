@@ -42,6 +42,9 @@ func set_explored(b: bool) -> void:
 	(ground_hex_mesh as MeshInstance3D).material_override = null if b else UNEXPLORED_MATERIAL;
 	(ground_hex_mesh as MeshInstance3D).layers = 1 if b else 2;
 	if structure:
+		var quest_objective := structure.instance as QuestObjective;
+		if quest_objective:
+			quest_objective.visibility_changed.emit();
 		for s: MeshInstance3D in structure.instance.find_children("*", "MeshInstance3D", true, false):
 			s.visible = b;
 

@@ -7,6 +7,11 @@ var state_machine: StateMachine = StateMachine.new();
 @export var quest_types: Array[String];
 @export var bitmap: BitMap;
 
+func _on_visibility_changed() -> void:
+	super._on_visibility_changed();
+	if can_interact() && is_visible_in_tree():
+		Config.gamestate.quest_availability_changed.emit();
+
 func on_interact() -> void:
 	super.on_interact();
 	if can_interact():

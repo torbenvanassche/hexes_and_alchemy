@@ -22,6 +22,12 @@ func on_enter() -> void:
 		quest_index += 1
 
 	empty_label.visible = Config.gamestate.active_quests.is_empty()
+	_allow_quest_creation_allowed()
+	
+	if not Config.gamestate.quest_availability_changed.is_connected(_allow_quest_creation_allowed):
+		Config.gamestate.quest_availability_changed.connect(_allow_quest_creation_allowed)
+	
+func _allow_quest_creation_allowed() -> void:
 	create_quest_button.disabled = not _has_available_quests_to_create()
 	
 func _ready() -> void:

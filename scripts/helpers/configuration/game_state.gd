@@ -1,7 +1,10 @@
 class_name GameState extends Resource
 
 var active_quests: Array[Quest] = [];
+
 signal quest_list_changed();
+signal quest_availability_changed();
+
 var max_active_quest: int = 10;
 var max_npc_per_tavern: int = 5;
 
