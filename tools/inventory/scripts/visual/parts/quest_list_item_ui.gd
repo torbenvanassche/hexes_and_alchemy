@@ -6,8 +6,8 @@ class_name QuestListItemUI extends Control
 @onready var party: Label = $Paper/MarginContainer/VBoxContainer/PartyRow/Party
 @onready var progress_bar: ProgressBar = $Paper/MarginContainer/VBoxContainer/ProgressBar
 @onready var label: Label = $Paper/MarginContainer/VBoxContainer/ProgressBar/Label
-@onready var approve_quest: Button = $Paper/MarginContainer/VBoxContainer/Actions/ApproveQuest
-@onready var complete_quest: Button = $Paper/MarginContainer/VBoxContainer/Actions/CompleteQuest
+@onready var approve_quest: Button = $Paper/Actions/ApproveQuest
+@onready var complete_quest: Button = $Paper/Actions/CompleteQuest
 
 @export var supply_slot: PackedScene;
 

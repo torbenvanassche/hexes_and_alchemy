@@ -10,6 +10,9 @@ extends Control
 @onready var v_box_container: VBoxContainer = $NinePatchRect/VBoxContainer
 @onready var content_panel: Control = $NinePatchRect/VBoxContainer/contentPanel;
 @onready var npr: NinePatchRect = $NinePatchRect;
+@onready var resize_handle_x: Control = $NinePatchRect/ResizeHandleX
+@onready var resize_handle_y: Control = $NinePatchRect/ResizeHandleY
+@onready var resize_handle_xy: Control = $NinePatchRect/ResizeHandleXY
 
 @export_enum("fullscreen", "display", "no_header", "none") var display_mode: String = "display"
 @export_enum("mouse", "center", "override") var position_options: String = "center";
@@ -20,6 +23,8 @@ var initial_position: Vector2;
 @export var topbar_height: int = 50;
 @export var topbar_transparent: bool = false;
 @export var show_title: bool = true;
+@export var resizable: bool = true;
+@export var enforce_content_minimum_size: bool = true;
 
 @export var content: Control;
 
@@ -28,22 +33,31 @@ signal change_title(name: String);
 
 var dragging := false
 var stored_position:Vector2;
+var resizing := false
+var resize_start_mouse := Vector2.ZERO
+var resize_start_size := Vector2.ZERO
+var stored_size := Vector2.ZERO
+var resize_axis := Vector2.ONE
 
 func _ready() -> void:
 	visible = false
 	close_button.pressed.connect(close_window);
 	close_requested.connect(close_window)
 	top_bar.gui_input.connect(handle_input)
+	resize_handle_x.gui_input.connect(_handle_resize_input.bind(Vector2(1, 0)))
+	resize_handle_y.gui_input.connect(_handle_resize_input.bind(Vector2(0, 1)))
+	resize_handle_xy.gui_input.connect(_handle_resize_input.bind(Vector2(1, 1)))
 	change_title.connect(_change_title)
 	_change_title(id);
 	
 	top_bar.custom_minimum_size.y = topbar_height
+	_update_resize_handles()
 	
 func _fit_to_content() -> void:
 	var content_size := v_box_container.get_combined_minimum_size()
 	var height := content_size.y
 
-	set_deferred("size", Vector2(content_size.x, height))
+	size = _clamp_window_size(Vector2(content_size.x, height))
 	
 func on_enter() -> void:
 	visible = false
@@ -72,26 +86,34 @@ func on_enter() -> void:
 	if topbar_transparent:
 		top_bar.self_modulate = Color.TRANSPARENT;
 	title.visible = show_title;
-	
-	_fit_to_content();
+	_update_resize_handles()
+
+	for c: Control in Helpers.flatten_children(content_panel, true):
+		if c.has_method("on_enter"):
+			c.on_enter();
 
 	await get_tree().process_frame;
-	
+
+	if resizable and store_position and stored_size != Vector2.ZERO:
+		size = _clamp_window_size(stored_size)
+	else:
+		_fit_to_content();
+
+	await get_tree().process_frame;
+
 	if store_position:
 		position = stored_position;
 	else:
 		position = initial_position - size / 2;
-	
+
 	visible = true;
-		
-	for c: Control in Helpers.flatten_children(content_panel, true):
-		if c.has_method("on_enter"):
-			c.on_enter();
 
 func _change_title(s: String) -> void:
 	title.text = s;
 
 func handle_input(event: InputEvent) -> void:
+	if resizing:
+		return
 	if event is InputEventMouseButton:
 		dragging = event.pressed
 	elif dragging and event is InputEventMouseMotion:
@@ -100,6 +122,27 @@ func handle_input(event: InputEvent) -> void:
 	else:
 		return
 	vp.set_input_as_handled()
+
+func _handle_resize_input(event: InputEvent, axis: Vector2) -> void:
+	if not resizable:
+		return
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		resizing = event.pressed
+		if resizing:
+			dragging = false
+			resize_start_mouse = get_global_mouse_position()
+			resize_start_size = size
+			resize_axis = axis
+		else:
+			_store_window_size()
+		vp.set_input_as_handled()
+
+func _input(event: InputEvent) -> void:
+	if resizing and event is InputEventMouseMotion:
+		var delta := get_global_mouse_position() - resize_start_mouse
+		size = _clamp_window_size(resize_start_size + delta * resize_axis)
+		_store_window_size()
+		vp.set_input_as_handled()
 
 func close_window() -> void:
 	if store_position:
@@ -110,3 +153,26 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("cancel") && visible:
 		vp.set_input_as_handled()
 		close_requested.emit()
+
+func _clamp_window_size(target_size: Vector2) -> Vector2:
+	var min_size := custom_minimum_size
+	if enforce_content_minimum_size:
+		min_size = min_size.max(get_combined_minimum_size())
+	var clamped := Vector2(
+		maxf(target_size.x, min_size.x),
+		maxf(target_size.y, min_size.y)
+	)
+	if custom_maximum_size.x > 0.0:
+		clamped.x = minf(clamped.x, custom_maximum_size.x)
+	if custom_maximum_size.y > 0.0:
+		clamped.y = minf(clamped.y, custom_maximum_size.y)
+	return clamped
+
+func _store_window_size() -> void:
+	if store_position or resizable:
+		stored_size = size
+
+func _update_resize_handles() -> void:
+	resize_handle_x.visible = resizable
+	resize_handle_y.visible = resizable
+	resize_handle_xy.visible = resizable
