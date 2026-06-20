@@ -102,5 +102,8 @@ func complete_quest(_q: Quest) -> void:
 		return
 		
 	var l := (hex.structure.structure_info as LootableStructureInfo)
-	Manager.instance.player_instance.inventory.add(l.item,randi_range(l.min_item_amount, l.max_item_amount))
+	if l != null:
+		var loot := l.roll_loot()
+		for item: ItemInfo in loot.keys():
+			Manager.instance.player_instance.inventory.add(item, loot[item])
 	_set_crop_state(CropState.FALLOW)

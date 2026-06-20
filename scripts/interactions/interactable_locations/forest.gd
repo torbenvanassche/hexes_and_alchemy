@@ -46,5 +46,10 @@ func execute_quest(q: Quest) -> void:
 	_quest_running = false
 	
 func complete_quest(_q: Quest) -> void:
-	var l := (hex.structure.structure_info as LootableStructureInfo);
-	Manager.instance.player_instance.inventory.add(l.item, randi_range(l.min_item_amount, l.max_item_amount))
+	var l := hex.structure.structure_info as LootableStructureInfo
+	if l == null:
+		return
+
+	var loot := l.roll_loot()
+	for item: ItemInfo in loot.keys():
+		Manager.instance.player_instance.inventory.add(item, loot[item])

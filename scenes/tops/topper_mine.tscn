@@ -2,6 +2,9 @@
 
 [ext_resource type="PackedScene" uid="uid://twco3r24bsnx" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_mine_blue.glb" id="1_bbfir"]
 [ext_resource type="Script" uid="uid://dvidxmav7hphs" path="res://scripts/interactions/interactable_locations/mineshaft.gd" id="1_f4m0s"]
+[ext_resource type="PackedScene" path="res://meshes/kay_dungeon/rocks_gold.glb" id="2_h2q0j"]
+[ext_resource type="Resource" path="res://resources/loot_tables/mine_rich.tres" id="3_vxv4c"]
+[ext_resource type="PackedScene" path="res://meshes/kay_dungeon/bucket_pickaxes.glb" id="4_gn08g"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bbfir"]
 size = Vector3(1.1559805, 1.174, 1.513)
@@ -12,17 +15,27 @@ size = Vector3(0.94522744, 0.7539673, 0.41274548)
 [node name="Node3D" type="Node3D" unique_id=2071832704]
 transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, 0, 0, 0)
 script = ExtResource("1_f4m0s")
+quest_types = Array[String](["Prospect", "Extract", "Reinforce", "Deepen"])
+rich_loot_table = ExtResource("3_vxv4c")
 
 [node name="Root Scene" parent="." unique_id=1429542013 instance=ExtResource("1_bbfir")]
 
-[node name="Area3D" type="StaticBody3D" parent="." unique_id=1957721428]
+[node name="rich_marker" parent="." instance=ExtResource("2_h2q0j")]
+transform = Transform3D(0.22, 0, 0, 0, 0.22, 0, 0, 0, 0.22, 0.42, 0.08, 0.36)
+visible = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=1907988473]
+[node name="unstable_marker" parent="." instance=ExtResource("4_gn08g")]
+transform = Transform3D(0.18, 0, 0, 0, 0.18, 0, 0, 0, 0.18, -0.28, 0.02, 0.46)
+visible = false
+
+[node name="collision" type="StaticBody3D" parent="." unique_id=1957721428]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="collision" unique_id=1907988473]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.035767704, 0.58037907, -0.14940524)
 shape = SubResource("BoxShape3D_bbfir")
 
-[node name="trigger" type="Area3D" parent="." unique_id=1246923180]
+[node name="interaction" type="Area3D" parent="." unique_id=1246923180]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="trigger" unique_id=1814591473]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="interaction" unique_id=1814591473]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.002259612, 0.34426928, 0.63651735)
 shape = SubResource("BoxShape3D_f4m0s")

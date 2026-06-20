@@ -1,7 +1,8 @@
-[gd_resource type="Resource" script_class="StructureInfo" format=3 uid="uid://ckpmn3cutb7an"]
+[gd_resource type="Resource" script_class="LootableStructureInfo" format=3 uid="uid://ckpmn3cutb7an"]
 
 [ext_resource type="PackedScene" uid="uid://cy1s6kym2ib68" path="res://scenes/tops/topper_mine.tscn" id="2_ox4ln"]
-[ext_resource type="Script" uid="uid://btydeamnhd6x" path="res://scripts/structures/structure_info.gd" id="3_gi0i3"]
+[ext_resource type="Script" uid="uid://brvtfutnwh30i" path="res://scripts/structures/lootable_info.gd" id="3_gi0i3"]
+[ext_resource type="Resource" path="res://resources/loot_tables/mine.tres" id="4_gi0i3"]
 
 [sub_resource type="Curve" id="Curve_nqdss"]
 _limits = [0.0, 5.0, 0.0, 50.0]
@@ -10,8 +11,9 @@ point_count = 2
 
 [resource]
 script = ExtResource("3_gi0i3")
+loot_table = ExtResource("4_gi0i3")
 max_per_region_size = SubResource("Curve_nqdss")
 id = "spawnable_mines"
 packed_scene = ExtResource("2_ox4ln")
 type = 4
-metadata/_custom_type_script = "uid://btydeamnhd6x"
+metadata/_custom_type_script = "uid://brvtfutnwh30i"
