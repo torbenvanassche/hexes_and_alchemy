@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="MineVeinInfo" format=3 uid="uid://bsungdk7lc1hw"]
+
+[ext_resource type="Script" uid="uid://bf5xfvqkbl1oy" path="res://scripts/structures/mine_vein_info.gd" id="1_umum7"]
+[ext_resource type="Resource" uid="uid://bfaq2iinndysj" path="res://resources/loot_tables/mine_rich.tres" id="2_17ce6"]
+
+[resource]
+script = ExtResource("1_umum7")
+mine_state = 2
+prospect_weight = 0.3
+loot_table = ExtResource("2_17ce6")
+id = "mine_rich_vein"

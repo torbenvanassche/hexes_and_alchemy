@@ -2,9 +2,18 @@
 
 [ext_resource type="PackedScene" uid="uid://twco3r24bsnx" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_mine_blue.glb" id="1_bbfir"]
 [ext_resource type="Script" uid="uid://dvidxmav7hphs" path="res://scripts/interactions/interactable_locations/mineshaft.gd" id="1_f4m0s"]
-[ext_resource type="PackedScene" path="res://meshes/kay_dungeon/rocks_gold.glb" id="2_h2q0j"]
-[ext_resource type="Resource" path="res://resources/loot_tables/mine_rich.tres" id="3_vxv4c"]
-[ext_resource type="PackedScene" path="res://meshes/kay_dungeon/bucket_pickaxes.glb" id="4_gn08g"]
+[ext_resource type="Script" uid="uid://bf5xfvqkbl1oy" path="res://scripts/structures/mine_vein_info.gd" id="1_wd22k"]
+[ext_resource type="PackedScene" uid="uid://xa5dwretrtvq" path="res://meshes/kay_dungeon/rocks_gold.glb" id="2_h2q0j"]
+[ext_resource type="Resource" uid="uid://d1qieqrwwvb3c" path="res://resources/structure_info/mine_poor_vein.tres" id="3_icepf"]
+[ext_resource type="PackedScene" uid="uid://bys16xhhw8hqg" path="res://meshes/kay_dungeon/bucket_pickaxes.glb" id="4_gn08g"]
+[ext_resource type="Resource" uid="uid://bsungdk7lc1hw" path="res://resources/structure_info/mine_rich_vein.tres" id="5_1g1kg"]
+[ext_resource type="Resource" uid="uid://dh5jlylemnft2" path="res://resources/structure_info/mine_unstable_vein.tres" id="6_ngjhr"]
+
+[sub_resource type="BitMap" id="BitMap_3h0bv"]
+data = {
+"data": PackedByteArray(145, 8),
+"size": Vector2i(3, 5)
+}
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bbfir"]
 size = Vector3(1.1559805, 1.174, 1.513)
@@ -15,16 +24,17 @@ size = Vector3(0.94522744, 0.7539673, 0.41274548)
 [node name="Node3D" type="Node3D" unique_id=2071832704]
 transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, 0, 0, 0)
 script = ExtResource("1_f4m0s")
-quest_types = Array[String](["prospect", "extract", "reinforce", "deepen"])
-rich_loot_table = ExtResource("3_vxv4c")
+vein_infos = Array[ExtResource("1_wd22k")]([ExtResource("3_icepf"), ExtResource("5_1g1kg"), ExtResource("6_ngjhr")])
+quest_types = Array[String](["prospect", "extract", "reinforce"])
+bitmap = SubResource("BitMap_3h0bv")
 
 [node name="Root Scene" parent="." unique_id=1429542013 instance=ExtResource("1_bbfir")]
 
-[node name="rich_marker" parent="." instance=ExtResource("2_h2q0j")]
+[node name="rich_marker" parent="." unique_id=440633696 instance=ExtResource("2_h2q0j")]
 transform = Transform3D(0.22, 0, 0, 0, 0.22, 0, 0, 0, 0.22, 0.42, 0.08, 0.36)
 visible = false
 
-[node name="unstable_marker" parent="." instance=ExtResource("4_gn08g")]
+[node name="unstable_marker" parent="." unique_id=583160811 instance=ExtResource("4_gn08g")]
 transform = Transform3D(0.18, 0, 0, 0, 0.18, 0, 0, 0, 0.18, -0.28, 0.02, 0.46)
 visible = false
 

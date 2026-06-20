@@ -36,6 +36,7 @@ func _ready() -> void:
 func _set_crop_state(state: CropState) -> void:
 	state_machine.set_state(CropState.keys()[state])
 	_update_mesh(state)
+	Config.gamestate.quest_availability_changed.emit()
 
 func _current_crop_state() -> CropState:
 	var key := state_machine.get_current_state()
@@ -69,8 +70,7 @@ func _cancel_timers() -> void:
 	_wither_timer = null
 
 func can_interact() -> bool:
-	var s := _current_crop_state()
-	return not _quest_running and s in [CropState.FALLOW, CropState.PLANTED, CropState.WATERED, CropState.DEAD]
+	return not _quest_running and not get_filtered_quest_types().is_empty()
 
 func interact() -> void:
 	pass

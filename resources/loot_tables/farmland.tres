@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="LootTable" format=3]
+
+[ext_resource type="Script" path="res://scripts/structures/loot_table.gd" id="1_o2qkc"]
+[ext_resource type="Script" path="res://scripts/structures/loot_table_entry.gd" id="2_1xh5l"]
+
+[resource]
+script = ExtResource("1_o2qkc")
+entries = Array[ExtResource("2_1xh5l")]([])
