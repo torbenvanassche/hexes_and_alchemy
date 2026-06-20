@@ -29,7 +29,6 @@ func set_data(quest: Quest) -> void:
 	quest_type.text = _get_quest_type_name(quest.quest_key).to_upper();
 	quest_location.text = _get_location_name();
 
-	approve_quest.pressed.connect(_start_quest)
 	complete_quest.pressed.connect(questData.parse_reward);
 	_update_progress(questData.state_machine.get_current_state())
 	
@@ -40,25 +39,11 @@ func _on_quest_complete() -> void:
 	questData = null;
 	queue_free();
 	
-func _start_quest() -> void:
-	var taverns: Array[Tavern];
-	taverns.assign(Manager.instance.active_settlement.interactions.filter(func(x: Interaction) -> bool: return x is Tavern));
-	if taverns.size() != 0:
-		var npcs: Array[SceneInstance] = taverns[0].get_available_npcs();
-		if npcs.size() != 0:
-			questData.add_to_party(npcs.pick_random().node)
-			approve_quest.visible = false
-			questData.start();
-		else:
-			Debug.err("No NPC available in tavern.")
-	else:
-		Debug.err("Cannot start quest, no tavern was found.")
-	
 func _update_progress(state: String) -> void:
 	label.text = _get_state_name(state);
 	party.text = _get_party_text()
 	progress_bar.value = _get_state_progress(state)
-	approve_quest.visible = questData.is_state(Quest.QuestState.WAITING);
+	approve_quest.visible = false
 	complete_quest.visible = questData.is_state(Quest.QuestState.COMPLETE);
 
 func _get_location_name() -> String:

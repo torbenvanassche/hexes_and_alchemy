@@ -54,7 +54,7 @@ func execute_quest(q: Quest) -> void:
 		var origin_state := _current_mine_state()
 		await get_tree().create_timer(extract_time).timeout
 		_pending_reward = _roll_extract_reward(origin_state)
-		_set_mine_state(MineState.EXHAUSTED)
+		_set_mine_state(origin_state)
 	elif q.quest_key == _get_quest_type(QuestTypeIndex.REINFORCE):
 		await get_tree().create_timer(reinforce_time).timeout
 		_set_mine_state(_last_stable_state)

@@ -26,6 +26,7 @@ func _adventurer_ready(s: SceneInfo) -> void:
 	instance.node.global_position = adventurer_spawn.global_position;
 	instance.node.tree_exiting.connect(npcs.erase.bind(instance))
 	npcs.append(instance);
+	Config.gamestate.try_assign_waiting_quests()
 	
 func get_available_npcs() -> Array[SceneInstance]:
 	return npcs.filter(func(x: SceneInstance) -> bool: return (x.node as NPC).current_quest == null);
