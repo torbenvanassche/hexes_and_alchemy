@@ -97,5 +97,22 @@
 	"scroll": [9, 1],
 	"scroll up": [13, 1],
 	"scroll down": [10, 1]
+  },
+
+  "controller": {
+	"joypad_a": [2, 8],
+	"joypad_b": [4, 8],
+	"joypad_x": [6, 8],
+	"joypad_y": [8, 8],
+	"joypad_back": [1, 8],
+	"joypad_guide": [5, 3],
+	"joypad_start": [4, 7],
+	"joypad_left_stick": [0, 2],
+	"joypad_right_stick": [5, 2],
+	"joypad_left_shoulder": [7, 3],
+	"joypad_right_shoulder": [3, 2],
+	"joypad_left_trigger": [1, 2],
+	"joypad_right_trigger": [7, 2],
+	"joypad_dpad": [4, 4]
   }
 }

@@ -35,6 +35,7 @@ var remapping_button: InputDisplayer = null;
 
 var dictionary_path: String = "res://tools/input_prompts/input_prompts.json"
 @onready var keyboard_image: Texture2D = preload("res://tools/input_prompts/textures/kb_mouse_inputs.png");
+@onready var controller_image: Texture2D = preload("res://tools/input_prompts/textures/xbox-controller_inputs.png");
 
 var keys: Dictionary:
 	get:
@@ -53,7 +54,7 @@ func get_input_texture() -> AtlasTexture:
 	if current_input_device == InputDevice.KEYBOARD_MOUSE:
 		a.atlas = keyboard_image;
 	else:
-		a.atlas = keyboard_image;
+		a.atlas = controller_image;
 	return a.duplicate(true);
 
 func get_key(key: String) -> Array:
@@ -79,7 +80,7 @@ func set_action(action: StringName, event: InputEvent) -> void:
 
 func replace_action(action: StringName, event: InputEvent) -> void:
 	set_action(action, event)
-	remapping_button.set_key(event.as_text().trim_suffix(" (Physical)").to_lower(), event)
+	remapping_button.set_key(event_to_key(event), event)
 	Config.input.change_keybinding(action_to_remap, event)
 	
 	is_remapping = false;
@@ -114,6 +115,33 @@ func event_to_key(event: InputEvent) -> String:
 			MOUSE_BUTTON_MIDDLE: return "mouse"
 			MOUSE_BUTTON_WHEEL_UP: return "scroll up"
 			MOUSE_BUTTON_WHEEL_DOWN: return "scroll down"
+
+	if event is InputEventJoypadButton:
+		match event.button_index:
+			JOY_BUTTON_A: return "joypad_a"
+			JOY_BUTTON_B: return "joypad_b"
+			JOY_BUTTON_X: return "joypad_x"
+			JOY_BUTTON_Y: return "joypad_y"
+			JOY_BUTTON_BACK: return "joypad_back"
+			JOY_BUTTON_GUIDE: return "joypad_guide"
+			JOY_BUTTON_START: return "joypad_start"
+			JOY_BUTTON_LEFT_STICK: return "joypad_left_stick"
+			JOY_BUTTON_RIGHT_STICK: return "joypad_right_stick"
+			JOY_BUTTON_LEFT_SHOULDER: return "joypad_left_shoulder"
+			JOY_BUTTON_RIGHT_SHOULDER: return "joypad_right_shoulder"
+			JOY_BUTTON_DPAD_UP, JOY_BUTTON_DPAD_DOWN, JOY_BUTTON_DPAD_LEFT, JOY_BUTTON_DPAD_RIGHT:
+				return "joypad_dpad"
+
+	if event is InputEventJoypadMotion:
+		match event.axis:
+			JOY_AXIS_LEFT_X, JOY_AXIS_LEFT_Y:
+				return "joypad_left_stick"
+			JOY_AXIS_RIGHT_X, JOY_AXIS_RIGHT_Y:
+				return "joypad_right_stick"
+			JOY_AXIS_TRIGGER_LEFT:
+				return "joypad_left_trigger"
+			JOY_AXIS_TRIGGER_RIGHT:
+				return "joypad_right_trigger"
 	return ""
 
 func get_input_icon(action: String) -> Array[int]:

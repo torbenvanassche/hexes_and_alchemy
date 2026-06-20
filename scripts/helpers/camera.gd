@@ -17,6 +17,7 @@ var target: Node3D
 @export_range(0.0, 1.0, 0.01) var zoom := 0.0 # 0 = close, 1 = top-down
 @export_range(0.01, 0.5, 0.01) var zoom_step := 0.08
 @export_range(0.0, 30.0, 0.1) var zoom_smoothness := 10.0
+@export_range(0.0, 4.0, 0.01) var controller_zoom_speed := 0.75
 var target_zoom := 0.0
 
 @export_subgroup("Zoom Close View")
@@ -37,6 +38,7 @@ var target_zoom := 0.0
 @export_range(1.0, 180.0, 1.0) var rotation_step_deg := 60.0
 @export_subgroup("Rotation Smooth")
 @export_range(1.0, 720.0, 1.0) var smooth_rotation_turn_speed_deg := 180.0
+@export_range(0.0, 1.0, 0.01) var controller_stick_deadzone := 0.2
 var target_yaw := 0.0
 
 @export_group("Panning")
@@ -73,6 +75,13 @@ func _build_camera_hierarchy() -> void:
 func _physics_process(delta: float) -> void:
 	if not target:
 		return
+
+	if Input.is_action_just_pressed("camera_zoom_in"):
+		target_zoom -= zoom_step
+	if Input.is_action_just_pressed("camera_zoom_out"):
+		target_zoom += zoom_step
+	_handle_controller_zoom(delta)
+	target_zoom = clamp(target_zoom, 0.0, 1.0)
 
 	_handle_rotation_input(delta)
 
@@ -112,7 +121,10 @@ func _apply_zoom() -> void:
 	camera.rotation_degrees.x = pitch
 
 func _handle_rotation_input(delta: float) -> void:
-	if rotation_mode == RotationMode.SMOOTH:
+	var controller_rotation_input := _get_controller_axis(JOY_AXIS_RIGHT_X)
+	if absf(controller_rotation_input) > controller_stick_deadzone:
+		target_yaw -= controller_rotation_input * deg_to_rad(smooth_rotation_turn_speed_deg) * delta
+	elif rotation_mode == RotationMode.SMOOTH:
 		var rotation_input := Input.get_action_strength("camera_rotate_left") - Input.get_action_strength("camera_rotate_right")
 		if absf(rotation_input) > 0.0:
 			target_yaw += rotation_input * deg_to_rad(smooth_rotation_turn_speed_deg) * delta
@@ -123,6 +135,20 @@ func _handle_rotation_input(delta: float) -> void:
 			target_yaw -= deg_to_rad(rotation_step_deg)
 
 	target_yaw = wrapf(target_yaw, -PI, PI)
+
+func _handle_controller_zoom(delta: float) -> void:
+	var controller_zoom_input := _get_controller_axis(JOY_AXIS_RIGHT_Y)
+	if absf(controller_zoom_input) <= controller_stick_deadzone:
+		return
+
+	target_zoom += controller_zoom_input * controller_zoom_speed * delta
+
+func _get_controller_axis(axis: int) -> float:
+	for device in Input.get_connected_joypads():
+		var value := Input.get_joy_axis(device, axis)
+		if absf(value) > controller_stick_deadzone:
+			return value
+	return 0.0
 
 func _snap_to_center(delta: float) -> void:
 	pan_offset = pan_offset.lerp(Vector3.ZERO, delta * snap_speed)

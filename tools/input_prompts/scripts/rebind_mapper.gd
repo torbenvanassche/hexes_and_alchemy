@@ -7,13 +7,18 @@ class_name InputDisplayer extends Button
 @export var action_texture: Texture2D;
 
 func set_key(string: String, event: InputEvent) -> void:
-	action_image.texture = InputManager.get_input_texture()
-	var entry: Array;
+	var texture := AtlasTexture.new()
+	var entry: Array = []
 	if event is InputEventKey:
+		texture.atlas = InputManager.keyboard_image
 		entry = InputManager.keys.keyboard.get(string)
 	elif event is InputEventMouseButton:
-		string = string.trim_suffix(" (double click)")
-		entry = InputManager.keys.mouse.get(string);
+		texture.atlas = InputManager.keyboard_image
+		entry = InputManager.keys.mouse.get(string)
+	elif event is InputEventJoypadButton or event is InputEventJoypadMotion:
+		texture.atlas = InputManager.controller_image
+		entry = InputManager.keys.controller.get(string)
+	action_image.texture = texture
 	if entry:
 		rebinding_text.visible = false;
 		action_image.visible = true;

@@ -34,8 +34,7 @@ func _reset_bindings() -> void:
 		btn.set_label(InputManager.mappable_actions[action]);
 		var events: Array[InputEvent] = InputMap.action_get_events(action);
 		if events.size() > 0:
-			var key: String = events[0].as_text().to_lower();
-			key = key.trim_suffix(" - physical")
+			var key: String = InputManager.event_to_key(events[0]);
 			btn.set_key(key, events[0]);
 		
 		keybind_container.add_child(btn);
