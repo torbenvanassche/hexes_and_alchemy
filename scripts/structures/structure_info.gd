@@ -23,6 +23,13 @@ class_name StructureInfo extends SceneInfo
 func initialize() -> void:
 	self.type = Type.STRUCTURE;
 	super();
+
+func get_display_name() -> String:
+	var translation_key := "STRUCTURE_%s_NAME" % [id.to_upper()]
+	var translated := tr(translation_key)
+	if translated == translation_key:
+		return id.capitalize()
+	return translated
 	
 func get_max_count(tile_count: int) -> int:
 	return round(max_per_region_size.sample(tile_count))

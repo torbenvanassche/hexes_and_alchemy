@@ -10,7 +10,7 @@
 [node name="Window" unique_id=1301866213 node_paths=PackedStringArray("content") instance=ExtResource("1_xoce2")]
 custom_minimum_size = Vector2(300, 0)
 size_flags_vertical = 3
-id = "Deposit items"
+id = "WINDOW_DEPOSIT_ITEMS"
 store_position = true
 content = NodePath("NinePatchRect/VBoxContainer/contentPanel/InventoryHud")
 
@@ -34,5 +34,5 @@ custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
 theme = ExtResource("4_theme")
 icon = ExtResource("5_pouch")
-text = "Complete order"
+text = "DEPOSIT_COMPLETE_ORDER"
 icon_alignment = 0

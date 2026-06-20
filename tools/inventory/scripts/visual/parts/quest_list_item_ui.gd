@@ -26,7 +26,7 @@ func set_data(quest: Quest) -> void:
 	questData = quest;
 	
 	quest_number.text = "#%s" % [str(self.get_parent().get_child_count())];
-	quest_type.text = quest.quest_key.to_upper();
+	quest_type.text = _get_quest_type_name(quest.quest_key).to_upper();
 	quest_location.text = _get_location_name();
 
 	approve_quest.pressed.connect(_start_quest)
@@ -55,7 +55,7 @@ func _start_quest() -> void:
 		Debug.err("Cannot start quest, no tavern was found.")
 	
 func _update_progress(state: String) -> void:
-	label.text = state;
+	label.text = _get_state_name(state);
 	party.text = _get_party_text()
 	progress_bar.value = _get_state_progress(state)
 	approve_quest.visible = questData.is_state(Quest.QuestState.WAITING);
@@ -63,15 +63,29 @@ func _update_progress(state: String) -> void:
 
 func _get_location_name() -> String:
 	if questData == null or questData.location == null or questData.location.structure == null:
-		return "Unknown"
-	return questData.location.structure.structure_info.id
+		return tr("UNKNOWN")
+	return questData.location.structure.structure_info.get_display_name()
 
 func _get_party_text() -> String:
 	if questData == null or questData.party.is_empty():
-		return "Unassigned"
+		return tr("QUEST_PARTY_UNASSIGNED")
 	if questData.party.size() == 1:
-		return "1 adventurer"
-	return "%s adventurers" % [questData.party.size()]
+		return tr("QUEST_PARTY_ONE_ADVENTURER")
+	return tr("QUEST_PARTY_ADVENTURERS") % [questData.party.size()]
+
+func _get_quest_type_name(quest_type_key: String) -> String:
+	var translation_key := "QUEST_TYPE_%s" % [quest_type_key.to_upper()]
+	var translated := tr(translation_key)
+	if translated == translation_key:
+		return quest_type_key.capitalize()
+	return translated
+
+func _get_state_name(state: String) -> String:
+	var translation_key := "QUEST_STATE_%s" % [state.to_upper()]
+	var translated := tr(translation_key)
+	if translated == translation_key:
+		return state.capitalize()
+	return translated
 
 func _get_state_progress(state: String) -> float:
 	var states := Quest.QuestState.keys()

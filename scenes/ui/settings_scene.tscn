@@ -39,12 +39,12 @@ expand_icon = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
-text = "GAME	"
+text = "SETTINGS_TAB_GAME"
 
 [node name="INPUT" type="Button" parent="tab_buttons" unique_id=4257191]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "INPUT"
+text = "SETTINGS_TAB_INPUT"
 
 [node name="tab_instances" type="Control" parent="." unique_id=1740426083]
 layout_mode = 2

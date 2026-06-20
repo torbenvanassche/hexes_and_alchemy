@@ -36,7 +36,7 @@ func _unhandled_input(_event: InputEvent) -> void:
 		current_triggers[0].on_interact();
 	
 	if Input.is_action_just_pressed("inventory"):
-		DataManager.instance.get_scene_by_name("inventory_ui").queue(_open_inventory)
+		_toggle_inventory()
 
 func _handle_movement(delta: float) -> void:
 	var input := Vector2(
@@ -144,6 +144,14 @@ func _open_inventory(window_info: SceneInfo) -> void:
 	var inventory_ui: InventoryUI = (window_instance.node as DraggableControl).content as InventoryUI;
 	inventory_ui.inventory = inventory;
 	window_instance.on_enter.emit();
+
+func _toggle_inventory() -> void:
+	var inventory_window := DataManager.instance.get_scene_by_name("inventory_ui")
+	for instance in inventory_window.get_live_instances():
+		if SceneManager.is_visible(instance):
+			(instance.node as DraggableControl).close_requested.emit();
+			return
+	inventory_window.queue(_open_inventory)
 
 func add_trigger(other: Area3D) -> void:
 	if other.has_meta("target"):

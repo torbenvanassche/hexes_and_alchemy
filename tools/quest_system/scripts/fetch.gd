@@ -4,7 +4,7 @@ class_name FetchQuest extends Quest
 var progress_tracker: ContentGroup;
 
 func initialize() -> void:
-	quest_key = "Fetch"
+	quest_key = "fetch"
 	if progress_tracker != null:
 		return
 	

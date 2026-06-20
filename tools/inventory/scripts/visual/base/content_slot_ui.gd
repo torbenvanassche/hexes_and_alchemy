@@ -41,10 +41,12 @@ func redraw() -> void:
 		if "texture" in resource:
 			textureRect.texture = resource.texture;
 			textureRect.modulate = default_color;
+		tooltip_text = resource.get_display_name();
 		counter.visible = show_amount;
 		counter.text = "x" + str(contentSlot.count);
 	else:
 		textureRect.texture = null;
+		tooltip_text = "";
 		counter.text = "";
 
 func blur() -> void:

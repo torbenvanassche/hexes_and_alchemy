@@ -29,4 +29,4 @@ grow_vertical = 2
 
 [node name="Label" type="Label" parent="Panel/CenterContainer" unique_id=1116448425]
 layout_mode = 2
-text = "NO SETTINGS HERE YET"
+text = "GAME_SETTINGS_EMPTY"

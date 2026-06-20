@@ -131,6 +131,10 @@ camera_zoom_out={
 ]
 }
 
+[internationalization]
+
+locale/translations=PackedStringArray("res://translations/translations.en.translation", "res://translations/translations.nl.translation")
+
 [navigation]
 
 3d/default_cell_size=0.05

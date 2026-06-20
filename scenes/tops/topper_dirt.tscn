@@ -15,7 +15,7 @@ data = {
 
 [node name="Node3D" type="Node3D" unique_id=75474733]
 script = ExtResource("1_whuaq")
-quest_types = Array[String](["Plant", "Water", "Harvest", "Clear"])
+quest_types = Array[String](["plant", "water", "harvest", "clear"])
 bitmap = SubResource("BitMap_uk8kr")
 
 [node name="mesh_fallow" parent="." unique_id=624363515 instance=ExtResource("2_h10pt")]

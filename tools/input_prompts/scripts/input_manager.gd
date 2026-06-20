@@ -1,24 +1,24 @@
 extends Node
 
 @onready var mappable_actions: Dictionary = {
-	"move_forward": tr("KEYBIND_MOVE_FORWARD"),
-	"move_backward": tr("KEYBIND_MOVE_DOWN"),
-	"move_left": tr("KEYBIND_MOVE_LEFT"),
-	"move_right": tr("KEYBIND_MOVE_RIGHT"),
-	"move_sprint": tr("KEYBIND_SPRINT"),
+	"move_forward": "KEYBIND_MOVE_FORWARD",
+	"move_backward": "KEYBIND_MOVE_DOWN",
+	"move_left": "KEYBIND_MOVE_LEFT",
+	"move_right": "KEYBIND_MOVE_RIGHT",
+	"move_sprint": "KEYBIND_SPRINT",
 	
-	"camera_pan_forward": tr("KEYBIND_CAMERA_PAN_FORWARD"),
-	"camera_pan_backward": tr("KEYBIND_CAMERA_PAN_DOWN"),
-	"camera_pan_left": tr("KEYBIND_CAMERA_PAN_LEFT"),
-	"camera_pan_right": tr("KEYBIND_CAMERA_PAN_RIGHT"),
+	"camera_pan_forward": "KEYBIND_CAMERA_PAN_FORWARD",
+	"camera_pan_backward": "KEYBIND_CAMERA_PAN_DOWN",
+	"camera_pan_left": "KEYBIND_CAMERA_PAN_LEFT",
+	"camera_pan_right": "KEYBIND_CAMERA_PAN_RIGHT",
 	
-	"camera_rotate_left": tr("KEYBIND_CAMERA_ROTATE_LEFT"),
-	"camera_rotate_right": tr("KEYBIND_CAMERA_ROTATE_RIGHT"),
+	"camera_rotate_left": "KEYBIND_CAMERA_ROTATE_LEFT",
+	"camera_rotate_right": "KEYBIND_CAMERA_ROTATE_RIGHT",
 	
-	"toggle_input": tr("KEYBIND_TOGGLE_INPUT"),
-	"primary_action": tr("PRIMARY_ACTION"),
+	"toggle_input": "KEYBIND_TOGGLE_INPUT",
+	"primary_action": "KEYBIND_PRIMARY_ACTION",
 	
-	"cancel": tr("KEYBIND_CANCEL")
+	"cancel": "KEYBIND_CANCEL"
 }
 
 enum InputDevice {

@@ -109,7 +109,7 @@ func on_enter() -> void:
 	visible = true;
 
 func _change_title(s: String) -> void:
-	title.text = s;
+	title.text = tr(s);
 
 func handle_input(event: InputEvent) -> void:
 	if resizing:

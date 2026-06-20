@@ -55,7 +55,7 @@ func _on_location_selected(idx: int) -> void:
 			objective.get_filtered_quest_types(objective.state_machine.get_current_state_index())
 		)
 		for state: String in available_types:
-			quest_type.add_item(state);
+			quest_type.add_item(_get_quest_type_name(state));
 			quest_type.set_item_metadata(quest_type.item_count - 1, state)
 
 	var has_types: bool = quest_type.item_count > 0
@@ -82,7 +82,7 @@ func _add_location_option(hex: HexBase) -> void:
 		return
 
 	var distance: int = GridUtils.cube_distance(hex.cube_id, player_hex.cube_id);
-	quest_location.add_item("%s (%s tiles)" % [hex.structure.structure_info.id, distance])
+	quest_location.add_item(tr("QUEST_LOCATION_DISTANCE") % [hex.structure.structure_info.get_display_name(), distance])
 	quest_location.set_item_metadata(quest_location.item_count - 1, hex)
 
 func _apply_forced_interaction() -> void:
@@ -149,3 +149,10 @@ func _create_quest() -> void:
 
 	quest_created.emit(Quest.new(location, quest_type_key));
 	(owner as DraggableControl).close_requested.emit();
+
+func _get_quest_type_name(quest_type_key: String) -> String:
+	var translation_key := "QUEST_TYPE_%s" % [quest_type_key.to_upper()]
+	var translated := tr(translation_key)
+	if translated == translation_key:
+		return quest_type_key.capitalize()
+	return translated

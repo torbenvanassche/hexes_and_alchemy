@@ -8,7 +8,7 @@
 custom_minimum_size = Vector2(390, 210)
 offset_right = -852.0
 offset_bottom = -648.0
-id = "New Quest"
+id = "WINDOW_NEW_QUEST"
 content = NodePath("NinePatchRect/VBoxContainer/contentPanel/QuestCreation")
 
 [node name="contentPanel" parent="NinePatchRect/VBoxContainer" parent_id_path=PackedInt32Array(554725130) index="1" unique_id=1040542232]
@@ -57,7 +57,7 @@ theme_override_constants/separation = 10
 custom_minimum_size = Vector2(82, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.23, 0.14, 0.07, 1)
-text = "Target"
+text = "QUEST_CREATION_TARGET"
 vertical_alignment = 1
 
 [node name="QuestLocation" type="OptionButton" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer/LocationRow" index="1" unique_id=90833800]
@@ -74,7 +74,7 @@ theme_override_constants/separation = 10
 custom_minimum_size = Vector2(82, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.23, 0.14, 0.07, 1)
-text = "Quest"
+text = "QUEST_CREATION_QUEST"
 vertical_alignment = 1
 
 [node name="QuestType" type="OptionButton" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer/TypeRow" index="1" unique_id=675844846]
@@ -95,4 +95,4 @@ alignment = 2
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("4_theme")
-text = "Create Quest"
+text = "QUEST_CREATION_CREATE"

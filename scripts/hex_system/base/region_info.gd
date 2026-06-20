@@ -18,6 +18,13 @@ var id: String
 func initialize() -> void:
 	id = resource_path.get_file().trim_suffix(".tres");
 
+func get_display_name() -> String:
+	var translation_key := "REGION_%s_NAME" % [id.to_upper()]
+	var translated := tr(translation_key)
+	if translated == translation_key:
+		return id.capitalize()
+	return translated
+
 func matches(x: int, y: int) -> bool:
 	if noise == null:
 		return true

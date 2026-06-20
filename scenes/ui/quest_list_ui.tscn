@@ -9,7 +9,7 @@
 
 [node name="Window" unique_id=1301866213 node_paths=PackedStringArray("content") instance=ExtResource("1_guitq")]
 custom_minimum_size = Vector2(660, 460)
-id = "Quest board"
+id = "WINDOW_QUEST_BOARD"
 content = NodePath("NinePatchRect/VBoxContainer/contentPanel/QuestBoard")
 
 [node name="contentPanel" parent="NinePatchRect/VBoxContainer" parent_id_path=PackedInt32Array(554725130) index="1" unique_id=1040542232]
@@ -52,7 +52,7 @@ offset_bottom = 13.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.2, 0.12, 0.07, 1)
-text = "No quests are pinned."
+text = "QUEST_LIST_EMPTY"
 horizontal_alignment = 1
 vertical_alignment = 1
 

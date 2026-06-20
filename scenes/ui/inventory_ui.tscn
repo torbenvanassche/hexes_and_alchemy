@@ -6,7 +6,7 @@
 [node name="Window" unique_id=1301866213 node_paths=PackedStringArray("content") instance=ExtResource("1_7nagc")]
 z_index = 1
 size_flags_vertical = 3
-id = "Inventory"
+id = "WINDOW_INVENTORY"
 store_position = true
 resizable = false
 content = NodePath("NinePatchRect/VBoxContainer/contentPanel/InventoryHud")

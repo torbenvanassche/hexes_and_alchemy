@@ -68,7 +68,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("3_lstjp")
 theme_override_font_sizes/font_size = 40
-text = "WINDOW TITLE"
+text = "WINDOW_TITLE"
 horizontal_alignment = 1
 
 [node name="Button" type="Button" parent="NinePatchRect/VBoxContainer/topbar/MarginContainer2/HBoxContainer" unique_id=1866505049]

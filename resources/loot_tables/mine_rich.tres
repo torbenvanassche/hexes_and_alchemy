@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="LootTable" load_steps=5 format=3]
+[gd_resource type="Resource" script_class="LootTable" format=3 uid="uid://bfaq2iinndysj"]
 
-[ext_resource type="Script" path="res://scripts/structures/loot_table.gd" id="1_5lffy"]
-[ext_resource type="Script" path="res://scripts/structures/loot_table_entry.gd" id="2_edv6t"]
+[ext_resource type="Script" uid="uid://b2wjb40qlkbuf" path="res://scripts/structures/loot_table.gd" id="1_5lffy"]
+[ext_resource type="Script" uid="uid://ctqcmpru1cvqf" path="res://scripts/structures/loot_table_entry.gd" id="2_edv6t"]
 [ext_resource type="Resource" uid="uid://o03k1cg30nlw" path="res://resources/item_info/iron_ore.tres" id="3_3v8o6"]
 [ext_resource type="Resource" uid="uid://dwrv8ceflmsjy" path="res://resources/item_info/gold_ore.tres" id="4_s7k3n"]
 
@@ -15,7 +15,6 @@ max_amount = 7
 script = ExtResource("2_edv6t")
 item = ExtResource("4_s7k3n")
 chance = 0.45
-min_amount = 1
 max_amount = 2
 
 [resource]

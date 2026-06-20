@@ -8,10 +8,10 @@ enum MineState {
 	EXHAUSTED
 }
 
-const QUEST_PROSPECT := "Prospect"
-const QUEST_EXTRACT := "Extract"
-const QUEST_REINFORCE := "Reinforce"
-const QUEST_DEEPEN := "Deepen"
+const QUEST_PROSPECT := "prospect"
+const QUEST_EXTRACT := "extract"
+const QUEST_REINFORCE := "reinforce"
+const QUEST_DEEPEN := "deepen"
 
 @export var prospect_time: float = 6.0
 @export var extract_time: float = 8.0

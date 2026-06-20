@@ -18,10 +18,10 @@ func add(cmi: ContextMenuItem) -> void:
 	cmi.idx = idx;
 	
 	if cmi.submenu == null: 
-		add_item(cmi.id, cmi.idx);
+		add_item(tr(cmi.id), cmi.idx);
 		set_item_disabled(cmi.idx, !cmi.enabled)
 	else:
-		add_submenu_node_item(cmi.id, cmi.submenu, cmi.idx)
+		add_submenu_node_item(tr(cmi.id), cmi.submenu, cmi.idx)
 
 func _on_idx(index: int) -> void:
 	var found_item: Array[ContextMenuItem] = menu_items.filter(func(x: ContextMenuItem) -> bool: return x.idx == index)

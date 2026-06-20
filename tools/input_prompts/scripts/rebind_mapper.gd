@@ -21,7 +21,7 @@ func set_key(string: String, event: InputEvent) -> void:
 		(action_image.texture as AtlasTexture).region = tex_region;
 
 func set_label(string: String) -> void:
-	action_name.text = string;
+	action_name.text = tr(string);
 	
 func set_rebinding() -> void:
 	rebinding_text.visible = true;

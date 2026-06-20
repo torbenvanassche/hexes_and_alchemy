@@ -103,7 +103,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.07, 0.045, 0.025, 1)
 theme_override_font_sizes/font_size = 24
-text = "FETCH"
+text = "QUEST_TYPE_FETCH"
 text_overrun_behavior = 3
 
 [node name="QuestNumber" type="Label" parent="Paper/MarginContainer/VBoxContainer/Header" unique_id=725982639]
@@ -133,7 +133,7 @@ stretch_mode = 5
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.11, 0.07, 0.035, 1)
-text = "farmland"
+text = "STRUCTURE_FARMLAND_NAME"
 vertical_alignment = 1
 text_overrun_behavior = 3
 
@@ -154,7 +154,7 @@ stretch_mode = 5
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.11, 0.07, 0.035, 1)
-text = "Unassigned"
+text = "QUEST_PARTY_UNASSIGNED"
 vertical_alignment = 1
 text_overrun_behavior = 3
 
@@ -177,7 +177,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.980392, 0.933333, 0.823529, 1)
 theme_override_font_sizes/font_size = 12
-text = "waiting"
+text = "QUEST_STATE_WAITING"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -198,7 +198,7 @@ alignment = 2
 self_modulate = Color(0, 0, 0, 1)
 custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
-tooltip_text = "Dispatch party"
+tooltip_text = "QUEST_ACTION_DISPATCH_PARTY"
 theme = ExtResource("6_theme")
 icon = ExtResource("3_3kdy2")
 flat = true
@@ -210,7 +210,7 @@ visible = false
 self_modulate = Color(0, 0, 0, 1)
 custom_minimum_size = Vector2(28, 24)
 layout_mode = 2
-tooltip_text = "Claim reward"
+tooltip_text = "QUEST_ACTION_CLAIM_REWARD"
 theme = ExtResource("6_theme")
 icon = ExtResource("4_3kdy2")
 flat = true

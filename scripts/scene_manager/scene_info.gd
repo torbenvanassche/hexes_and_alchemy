@@ -25,6 +25,13 @@ var instances: Array[SceneInstance] = [];
 @export var process_mode_enabled: Node.ProcessMode = Node.ProcessMode.PROCESS_MODE_PAUSABLE;
 @export var process_mode_disabled: Node.ProcessMode = Node.ProcessMode.PROCESS_MODE_DISABLED;
 
+func get_display_name() -> String:
+	var translation_key := "SCENE_%s_NAME" % [id.to_upper()]
+	var translated := tr(translation_key)
+	if translated == translation_key:
+		return id.capitalize()
+	return translated
+
 func initialize() -> void:
 	id = resource_path.get_file().trim_suffix(".tres");
 	if not is_unique:

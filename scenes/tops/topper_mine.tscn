@@ -15,7 +15,7 @@ size = Vector3(0.94522744, 0.7539673, 0.41274548)
 [node name="Node3D" type="Node3D" unique_id=2071832704]
 transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, 0, 0, 0)
 script = ExtResource("1_f4m0s")
-quest_types = Array[String](["Prospect", "Extract", "Reinforce", "Deepen"])
+quest_types = Array[String](["prospect", "extract", "reinforce", "deepen"])
 rich_loot_table = ExtResource("3_vxv4c")
 
 [node name="Root Scene" parent="." unique_id=1429542013 instance=ExtResource("1_bbfir")]

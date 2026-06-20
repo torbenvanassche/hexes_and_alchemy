@@ -13,3 +13,12 @@ class_name TimeOfDayPhase extends Resource
 @export_range(0.0, 5.0, 0.01) var shadow_softness: float = 0.35
 @export_range(0.0, 1.0, 0.01) var shadow_opacity: float = 0.9
 @export_range(0.0, 64.0, 0.1) var shadow_pancake_size: float = 10.0
+
+func get_display_name() -> String:
+	var translation_key := display_name
+	if not translation_key.begins_with("TIME_OF_DAY_"):
+		translation_key = "TIME_OF_DAY_%s" % [display_name.to_upper()]
+	var translated := tr(translation_key)
+	if translated == translation_key:
+		return display_name.capitalize()
+	return translated
