@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cnxe4icmn8yi5"]
 
 [ext_resource type="PackedScene" uid="uid://cjeap2dsndlsj" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_home_A_blue.glb" id="1_8d7ft"]
+[ext_resource type="Material" uid="uid://c66vbca7lgh6m" path="res://materials/kay_fantasy_default.tres" id="2_8d7ft"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vdjdw"]
 size = Vector3(0.65734243, 0.711185, 0.8605708)
@@ -9,8 +10,13 @@ size = Vector3(0.65734243, 0.711185, 0.8605708)
 
 [node name="Root Scene" parent="." unique_id=540453184 instance=ExtResource("1_8d7ft")]
 
+[node name="building_home_A_blue" parent="Root Scene/RootNode" index="0"]
+surface_material_override/0 = ExtResource("2_8d7ft")
+
 [node name="collision" type="StaticBody3D" parent="." unique_id=1882614008]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="collision" unique_id=490554640]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00709939, 0.35070205, -0.045562208)
 shape = SubResource("BoxShape3D_vdjdw")
+
+[editable path="Root Scene"]

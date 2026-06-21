@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://btydeamnhd6x" path="res://scripts/structures/structure_info.gd" id="1_3smpn"]
 [ext_resource type="PackedScene" uid="uid://cbcbaivigakxy" path="res://scenes/tops/ladder.tscn" id="1_pa0ai"]
-[ext_resource type="Material" uid="uid://c66vbca7lgh6m" path="res://materials/kay_fantasy_default.tres" id="4_hik3d"]
 
 [sub_resource type="Curve" id="Curve_3smpn"]
 _limits = [0.99, 1.0, 0.0, 1.0]
@@ -13,7 +12,5 @@ point_count = 1
 script = ExtResource("1_3smpn")
 max_per_region_size = SubResource("Curve_3smpn")
 minimum_distance_from_other_structures = 0
-structure_material = ExtResource("4_hik3d")
-use_parent_material = false
 packed_scene = ExtResource("1_pa0ai")
 metadata/_custom_type_script = "uid://btydeamnhd6x"

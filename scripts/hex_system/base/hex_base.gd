@@ -54,22 +54,10 @@ func apply_region(reg: RegionInfo) -> void:
 	if not reg or not reg.material:
 		return
 
-	var structure_meshes := []
-	if structure and structure.instance:
-		structure_meshes = structure.instance.find_children("*", "MeshInstance3D", true, false)
-	for mesh in get_meshes():
-		var material := reg.material
-		if structure_meshes.has(mesh) and not structure.structure_info.use_parent_material:
-			material = structure.structure_info.structure_material
-		mesh.set_surface_override_material(0, material)
-		
-func get_meshes() -> Array[MeshInstance3D]:
-	var meshes: Array[MeshInstance3D]
-	meshes.assign(find_children("*", "MeshInstance3D", true, false))
-	for m in meshes:
-		if m.owner.name == "hidden_hex":
-			meshes.erase(m);
-	return meshes;
+	if ground_hex_mesh == null:
+		ground_hex_mesh = find_child("hex_*", true) as MeshInstance3D
+	if ground_hex_mesh != null:
+		ground_hex_mesh.set_surface_override_material(0, reg.material)
 
 func is_traversable(method: HexInfo.TraversalTag = HexInfo.TraversalTag.WALK) -> bool:
 	if blocked:

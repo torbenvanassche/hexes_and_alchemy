@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://cqqvwgt7wi66o" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/fence_stone_straight_gate.glb" id="1_dtyi4"]
 [ext_resource type="Script" uid="uid://djj3ssvsjjyha" path="res://scripts/gameplay/rotator.gd" id="2_18drs"]
+[ext_resource type="Material" uid="uid://c66vbca7lgh6m" path="res://materials/kay_fantasy_default.tres" id="3_dtyi4"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_h1pun"]
 size = Vector3(0.0059179687, 0.0066503906, 0.0047290036)
@@ -11,8 +12,12 @@ size = Vector3(0.0021044922, 0.0038134765, 0.0027441406)
 
 [node name="Root Scene" unique_id=588626811 instance=ExtResource("1_dtyi4")]
 
+[node name="fence_stone_straight_gate" parent="RootNode" index="0"]
+surface_material_override/0 = ExtResource("3_dtyi4")
+
 [node name="fence_stone_straight_door" parent="RootNode/fence_stone_straight_gate" parent_id_path=PackedInt32Array(1297509043) index="0" unique_id=1342248616]
 script = ExtResource("2_18drs")
+surface_material_override/0 = ExtResource("3_dtyi4")
 max_angle = -80.0
 duration = 0.5
 is_quest = false

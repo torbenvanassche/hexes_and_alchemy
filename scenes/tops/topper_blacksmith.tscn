@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bpm6gm1mj4n65" path="res://scripts/interactions/interactable_locations/blacksmith.gd" id="2_cpkdt"]
 [ext_resource type="PackedScene" uid="uid://6h1kj7hbn5qq" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_blacksmith_blue.glb" id="2_eemul"]
+[ext_resource type="Material" uid="uid://c66vbca7lgh6m" path="res://materials/kay_fantasy_default.tres" id="3_eemul"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_43jb5"]
 size = Vector3(1.602665, 0.30893278, 1.25601)
@@ -14,6 +15,9 @@ script = ExtResource("2_cpkdt")
 
 [node name="Root Scene" parent="." unique_id=19869173 instance=ExtResource("2_eemul")]
 
+[node name="building_blacksmith_blue" parent="Root Scene/RootNode" parent_id_path=PackedInt32Array(19869173, 754087128) index="0" unique_id=1241743657]
+surface_material_override/0 = ExtResource("3_eemul")
+
 [node name="interaction" type="Area3D" parent="." unique_id=1325427929]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="interaction" unique_id=323897064]
@@ -25,3 +29,5 @@ shape = SubResource("BoxShape3D_43jb5")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="collision" unique_id=623158031]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.007247925, 0.31480986, -0.087170124)
 shape = SubResource("BoxShape3D_cpkdt")
+
+[editable path="Root Scene"]

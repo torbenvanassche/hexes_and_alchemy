@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://dgx2trjwvt0vn" path="res://scenes/tops/fence_stone_straight.tscn" id="11_04njl"]
 [ext_resource type="PackedScene" uid="uid://cnxe4icmn8yi5" path="res://scenes/tops/house_simple.tscn" id="11_47cix"]
 [ext_resource type="PackedScene" uid="uid://c6gesglis1r62" path="res://scenes/tops/topper_questboard.tscn" id="11_mt1kp"]
+[ext_resource type="Material" uid="uid://c66vbca7lgh6m" path="res://materials/kay_fantasy_default.tres" id="12_mkm41"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_04njl"]
 size = Vector3(1.602665, 0.30893278, 1.25601)
@@ -40,6 +41,9 @@ start_step_index = 1
 visible = false
 script = ExtResource("8_mt1kp")
 quest = ExtResource("9_47cix")
+
+[node name="building_stage_A" parent="structures/buildable_structure/foundation/RootNode" index="0"]
+surface_material_override/0 = ExtResource("12_mkm41")
 
 [node name="interaction" type="Area3D" parent="structures/buildable_structure/foundation" unique_id=1087166324]
 
@@ -120,3 +124,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.43173504, 0, 1.4711934)
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, -0.5468383, 0)
 visible = false
 polygon = PackedVector2Array(1.0039513, -0.62513447, 1.9908175, -1.1163411, 2.954699, -0.55694604, 2.97191, 0.579056, 3.9271846, 1.1814812, 3.9788213, 2.3260896, 2.9891229, 2.8940907, 2.9977288, 4.0300922, 0.9753003, 4.0128803, 0.9839072, 2.8424542, -0.031610012, 2.3260896, -0.9868846, 2.8940907, -1.985189, 2.3260896, -1.985189, 1.1728752, -1.0127034, 0.579056, -1.0040965, -0.565552, -0.014398098, -1.1163411)
+
+[editable path="structures/buildable_structure/foundation"]

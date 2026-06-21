@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://rggfeth3x6te" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_tavern_blue.glb" id="1_244u3"]
 [ext_resource type="Script" uid="uid://7q4dr2w3g7sa" path="res://scripts/interactions/interactable_locations/tavern.gd" id="1_isasx"]
 [ext_resource type="Resource" uid="uid://c4slhs80lvehm" path="res://resources/scene_info/adventurer.tres" id="2_56i7v"]
+[ext_resource type="Material" uid="uid://c66vbca7lgh6m" path="res://materials/kay_fantasy_default.tres" id="3_244u3"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_isasx"]
 size = Vector3(0.7681427, 0.65410614, 0.5323236)
@@ -16,6 +17,9 @@ adventurer = ExtResource("2_56i7v")
 adventurer_spawn = NodePath("spawn_location")
 
 [node name="Root Scene" parent="." unique_id=1174146906 instance=ExtResource("1_244u3")]
+
+[node name="building_tavern_blue" parent="Root Scene/RootNode" index="0"]
+surface_material_override/0 = ExtResource("3_244u3")
 
 [node name="interaction" type="Area3D" parent="." unique_id=478417135]
 
@@ -34,3 +38,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.13711184, -1.1920929e-07, 
 
 [node name="spawn_interval" type="Timer" parent="." unique_id=1446512628]
 one_shot = true
+
+[editable path="Root Scene"]

@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://bpi6u36qmvxes" path="res://meshes/kay_fantasy_hexagon/decoration/props/ladder.glb" id="1_328ig"]
 [ext_resource type="Script" uid="uid://b253lrr4on1xx" path="res://scripts/interactions/return_to_main.gd" id="1_de2aa"]
+[ext_resource type="Material" uid="uid://c66vbca7lgh6m" path="res://materials/kay_fantasy_default.tres" id="3_328ig"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_3sell"]
 size = Vector3(0.44093704, 0.7843895, 0.5320873)
@@ -14,6 +15,9 @@ script = ExtResource("1_de2aa")
 
 [node name="Root Scene" parent="." unique_id=1674175704 instance=ExtResource("1_328ig")]
 
+[node name="ladder" parent="Root Scene/RootNode" index="0"]
+surface_material_override/0 = ExtResource("3_328ig")
+
 [node name="interaction" type="Area3D" parent="." unique_id=777824050]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="interaction" unique_id=374934557]
@@ -25,3 +29,5 @@ shape = SubResource("BoxShape3D_3sell")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="collision" unique_id=1090936934]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.001999855, 0.38612747, 0.008121431)
 shape = SubResource("BoxShape3D_kgtil")
+
+[editable path="Root Scene"]
