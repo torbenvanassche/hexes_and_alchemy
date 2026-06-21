@@ -73,7 +73,14 @@ func _initialize_generation_seed() -> void:
 		generation_seed = int(Time.get_unix_time_from_system() * 1000000.0) + Time.get_ticks_usec() + get_instance_id()
 		world_seed = generation_seed
 
-	print("World generation seed: %s" % generation_seed)
+	_update_seed_label()
+
+func _update_seed_label() -> void:
+	var seed_label := get_tree().root.find_child("WorldSeedLabel", true, false) as Label
+	if seed_label == null:
+		return
+
+	seed_label.text = tr("WORLD_SEED_LABEL") % generation_seed
 
 func _apply_seed_to_region_noise() -> void:
 	var seeded_regions := region_options.duplicate()

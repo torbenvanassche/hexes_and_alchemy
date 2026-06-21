@@ -13,16 +13,15 @@ func _ready() -> void:
 	for btn in group_buttons.keys():
 		btn.button_group = btn_group;
 		btn.toggle_mode = true;
-	btn_group.pressed.connect(_on_tab_changed)
 	back_button.pressed.connect(_on_back_button)
 	
-	_on_tab_changed(group_buttons.keys()[0])
+	var first_button := group_buttons.keys()[0] as BaseButton
+	first_button.button_pressed = true
+	btn_group.pressed.connect(_on_tab_changed)
+	_on_tab_changed(first_button)
 	
 func _on_back_button() -> void:
-	SceneManager.set_visible_by_name("settings_menu", false);
-	var prev_scene := SceneManager.to_previous_scene()
-	if prev_scene != null:
-		SceneManager.set_visible(prev_scene)
+	SceneManager.remove_current_ui_scene()
 	
 func _on_tab_changed(button: BaseButton) -> void:
 	for tab: SceneInfo in group_buttons.values():
@@ -36,6 +35,18 @@ func _on_tab_changed(button: BaseButton) -> void:
 	
 func _on_tab_change_scene_loaded(scene_info: SceneInfo) -> void:
 	var opened_scene := scene_info.get_instance()
-	if not opened_scene.node.is_inside_tree():
-		tab_instance_parent.add_child(opened_scene.node)
-	opened_scene.node.visible = true;
+	var node := opened_scene.node
+	if node.get_parent() != tab_instance_parent:
+		if node.get_parent() != null:
+			node.reparent(tab_instance_parent)
+		else:
+			tab_instance_parent.add_child(node)
+	
+	if node is Control:
+		var control := node as Control
+		control.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		control.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		control.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	
+	if "visible" in node:
+		node.visible = true;

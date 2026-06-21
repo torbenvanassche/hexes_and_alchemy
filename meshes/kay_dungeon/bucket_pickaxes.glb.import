@@ -43,8 +43,8 @@ _subresources={
 "materials": {
 "texture": {
 "use_external/enabled": true,
-"use_external/fallback_path": "res://materials/kay_fantasy_default.tres",
-"use_external/path": "uid://c66vbca7lgh6m"
+"use_external/fallback_path": "res://materials/kay_dungeons.tres",
+"use_external/path": "uid://dy8cfh1tcryhi"
 }
 },
 "nodes": {

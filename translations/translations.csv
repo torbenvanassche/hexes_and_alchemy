@@ -27,6 +27,20 @@ PAUSE_RESUME,Resume,Resume
 PAUSE_SETTINGS,Settings,Settings
 PAUSE_QUIT,Quit,Quit
 GAME_SETTINGS_EMPTY,No settings here yet,No settings here yet
+WORLD_SEED_LABEL,Seed: %s,Seed: %s
+WORLD_SEED_PLACEHOLDER,Seed: ...,Seed: ...
+SCENE_ADVENTURER_NAME,Adventurer,Adventurer
+SCENE_DEPOSIT_UI_NAME,Deposit items,Deposit items
+SCENE_GAME_SETTINGS_NAME,Game settings,Game settings
+SCENE_GAMEPLAY_MAIN_NAME,Gameplay,Gameplay
+SCENE_INPUT_SETTINGS_NAME,Input settings,Input settings
+SCENE_INVENTORY_UI_NAME,Inventory,Inventory
+SCENE_MARKET_UI_NAME,Market,Market
+SCENE_PAUSE_MENU_NAME,Pause menu,Pause menu
+SCENE_PLAYER_NAME,Player,Player
+SCENE_QUEST_CREATION_UI_NAME,New quest,New quest
+SCENE_QUEST_LIST_UI_NAME,Quest board,Quest board
+SCENE_SETTINGS_MENU_NAME,Settings,Settings
 INPUT_RESET_CONTROL_BINDINGS,Reset control bindings,Reset control bindings
 INPUT_APPLY_CHANGES,Apply changes,Apply changes
 INPUT_ACTION_NAME,action name,action name
@@ -61,6 +75,7 @@ STRUCTURE_FARMLAND_NAME,Farmland,Farmland
 STRUCTURE_FOREST_NAME,Forest,Forest
 STRUCTURE_LADDER_NAME,Ladder,Ladder
 STRUCTURE_LUMBERMILL_NAME,Lumbermill,Lumbermill
+STRUCTURE_MINES_NAME,Mine,Mine
 STRUCTURE_ORE_DEPOSIT_GOLD_NAME,Gold deposit,Gold deposit
 STRUCTURE_ORE_DEPOSIT_IRON_NAME,Iron deposit,Iron deposit
 STRUCTURE_SETTLEMENT_NAME,Settlement,Settlement
@@ -76,6 +91,7 @@ TIME_OF_DAY_DUSK,Dusk,Dusk
 TIME_OF_DAY_NIGHT,Night,Night
 ITEM_CURRENCY_NAME,Coin,Coin
 ITEM_CURRENCY_DESCRIPTION,A coin used for trade.,A coin used for trade.
+ITEM_COUNT_LABEL,x%s,x%s
 ITEM_ORE_GOLD_NAME,Gold ore,Gold ore
 ITEM_ORE_GOLD_DESCRIPTION,Raw gold ore.,Raw gold ore.
 ITEM_ORE_IRON_NAME,Iron ore,Iron ore

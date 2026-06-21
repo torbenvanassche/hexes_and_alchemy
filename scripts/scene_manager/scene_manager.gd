@@ -1,6 +1,7 @@
 extends Node
 
 var scene_stack: Array[SceneInfo] = [];
+var ui_stack: Array[SceneInfo] = [];
 var scene_cache: SceneCache;
 var _ui_z_counter := 0
 
@@ -73,6 +74,10 @@ func set_active_scene(info: SceneInfo) -> void:
 		Debug.message("Cannot set active scene to non-unique instanced SceneInfo.")
 	
 func _remove_from_stack(info: SceneInfo) -> void:
+	if info.type == SceneInfo.Type.UI:
+		_remove_from_ui_stack(info)
+		return
+	
 	if scene_stack.is_empty():
 		return
 	
@@ -84,6 +89,15 @@ func _remove_from_stack(info: SceneInfo) -> void:
 	
 	if scene_stack.has(info):
 		scene_stack.erase(info);
+
+func _remove_from_ui_stack(info: SceneInfo) -> void:
+	if ui_stack.is_empty():
+		return
+	
+	if ui_stack[-1] == info:
+		ui_stack.pop_back()
+	elif ui_stack.has(info):
+		ui_stack.erase(info)
 		
 func _pop_stack() -> SceneInfo:
 	if scene_stack.size() != 0:
@@ -104,6 +118,17 @@ func remove_scene(info: SceneInfo, permanent: bool = false) -> void:
 			
 func remove_scene_by_name(scene_name: String, permanent: bool = false) -> void:
 	remove_scene(DataManager.instance.get_scene_by_name(scene_name), permanent)
+
+func remove_current_ui_scene(show_previous: bool = true) -> SceneInfo:
+	var current_scene := get_current_ui_scene()
+	if current_scene == null:
+		return null
+	
+	remove_scene(current_scene)
+	var previous_scene := get_current_ui_scene()
+	if show_previous and previous_scene != null:
+		set_visible(previous_scene)
+	return previous_scene
 	
 func to_previous_scene() -> SceneInfo:
 	if scene_stack.size() != 0:
@@ -117,6 +142,11 @@ func get_current_scene() -> SceneInfo:
 		return scene_stack[-1];
 	return null;
 
+func get_current_ui_scene() -> SceneInfo:
+	if ui_stack.size() != 0:
+		return ui_stack[-1]
+	return null
+
 func set_visible_by_name(scene_name: String, state: bool = true) -> void:
 	set_visible(DataManager.instance.get_scene_by_name(scene_name), state)
 	
@@ -127,6 +157,8 @@ func set_visible(scene_info: SceneInfo, state: bool = true) -> void:
 	for instance in scene_info.get_live_instances():
 		if "visible" in instance.node:
 			instance.node.visible = state;
+			if state and scene_info.type == SceneInfo.Type.UI and instance.node is Control:
+				_promote_ui_control(instance.node as Control)
 			
 func is_in_tree(scene_instance: SceneInstance) -> bool:
 	var node := scene_instance.node
@@ -162,7 +194,8 @@ func add(n: SceneInfo, vis: bool = true) -> SceneInstance:
 	if n == null:
 		return null
 	
-	var instance_count := scene_stack.count(n);
+	var stack := ui_stack if n.type == SceneInfo.Type.UI else scene_stack
+	var instance_count := stack.count(n);
 	if instance_count > 1 && n.is_unique:
 		return null;
 	
@@ -170,8 +203,10 @@ func add(n: SceneInfo, vis: bool = true) -> SceneInstance:
 	if "visible" in instance.node:
 		instance.node.visible = vis;
 		
-	if n.is_unique && not n.transient && (scene_stack.size() == 0 || scene_stack[-1] != n):
-		scene_stack.append(n)
+	if n.is_unique && not n.transient:
+		if stack.has(n):
+			stack.erase(n)
+		stack.append(n)
 		
 	if instance.node.is_inside_tree():
 		if instance.node is Control:
@@ -194,6 +229,10 @@ func _promote_ui_control(control: Control) -> void:
 	control.move_to_front()
 	
 func is_on_stack(scene: SceneInfo) -> bool:
+	if scene == null:
+		return false
+	if scene.type == SceneInfo.Type.UI:
+		return ui_stack.has(scene)
 	return scene_stack.has(scene);
 	
 func is_on_stack_by_name(scene_name: String) -> bool:

@@ -8,4 +8,5 @@ script = ExtResource("1_7dfbt")
 id = "game_settings"
 packed_scene = ExtResource("1_xecdr")
 type = 2
+process_mode_enabled = 2
 metadata/_custom_type_script = "uid://6t4u66o5q6po"

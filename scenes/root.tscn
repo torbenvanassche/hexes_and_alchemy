@@ -113,6 +113,13 @@ max_pan_distance = 8.0
 
 [node name="game_ui" type="CanvasLayer" parent="." unique_id=2127553330]
 
+[node name="WorldSeedLabel" type="Label" parent="game_ui" unique_id=1260050116]
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 260.0
+offset_bottom = 36.0
+text = "WORLD_SEED_PLACEHOLDER"
+
 [node name="interaction_prompt" type="TextureRect" parent="game_ui" unique_id=286348204 node_paths=PackedStringArray("element")]
 offset_right = 40.0
 offset_bottom = 40.0

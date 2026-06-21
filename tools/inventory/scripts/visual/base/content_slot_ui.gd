@@ -43,7 +43,7 @@ func redraw() -> void:
 			textureRect.modulate = default_color;
 		tooltip_text = resource.get_display_name();
 		counter.visible = show_amount;
-		counter.text = "x" + str(contentSlot.count);
+		counter.text = tr("ITEM_COUNT_LABEL") % contentSlot.count;
 	else:
 		textureRect.texture = null;
 		tooltip_text = "";

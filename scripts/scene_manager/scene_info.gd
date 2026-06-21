@@ -57,7 +57,7 @@ func get_instance() -> SceneInstance:
 	
 func destroy_instance(instance: SceneInstance) -> void:
 	instances.erase(instance);
-	if SceneManager.scene_stack.has(self):
+	if SceneManager.is_on_stack(self):
 		SceneManager._remove_from_stack(self)
 	instance.destroy();
 	

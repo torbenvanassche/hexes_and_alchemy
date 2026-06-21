@@ -4,11 +4,11 @@
 [ext_resource type="Script" uid="uid://di4yd6oc2lo3y" path="res://tools/inventory/scripts/visual/screens/quest_list_ui.gd" id="2_0d8vg"]
 [ext_resource type="PackedScene" uid="uid://bhqw7ckq2j06r" path="res://scenes/ui/components/quest_list_item.tscn" id="3_axeff"]
 [ext_resource type="Texture2D" uid="uid://boj06v8owoifo" path="res://sprites/ui/panels/panel-031.png" id="4_board"]
-[ext_resource type="Theme" uid="uid://whaj7dl14je1" path="res://themes/base_theme.theme" id="5_theme"]
-[ext_resource type="Texture2D" uid="uid://m3yff7hfup7m" path="res://sprites/ui/icons/notepad_write.png" id="6_post"]
+[ext_resource type="Theme" uid="uid://dae2b2hfpj0l2" path="res://themes/base_theme.theme" id="5_theme"]
+[ext_resource type="Theme" uid="uid://bemn0spuaev14" path="res://themes/fantasy_buttons.tres" id="6_xd70g"]
 
 [node name="Window" unique_id=1301866213 node_paths=PackedStringArray("content") instance=ExtResource("1_guitq")]
-custom_minimum_size = Vector2(660, 460)
+custom_minimum_size = Vector2(660, 520)
 id = "WINDOW_QUEST_BOARD"
 content = NodePath("NinePatchRect/VBoxContainer/contentPanel/QuestBoard")
 
@@ -16,7 +16,7 @@ content = NodePath("NinePatchRect/VBoxContainer/contentPanel/QuestBoard")
 size_flags_horizontal = 3
 
 [node name="QuestBoard" type="Control" parent="NinePatchRect/VBoxContainer/contentPanel" index="0" unique_id=82514535]
-custom_minimum_size = Vector2(620, 395)
+custom_minimum_size = Vector2(620, 455)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -30,6 +30,7 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_bottom = -60.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("4_board")
@@ -57,17 +58,19 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="CreateQuestButton" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard" index="2" unique_id=1078826420]
-custom_maximum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(0, 36)
 layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
+anchors_preset = 12
+anchor_top = 1.0
 anchor_right = 1.0
-offset_left = -62.0
-offset_top = 19.0
-offset_right = -22.0
-offset_bottom = 59.0
-grow_horizontal = 0
-theme = ExtResource("5_theme")
-icon = ExtResource("6_post")
-flat = true
+anchor_bottom = 1.0
+offset_left = 18.0
+offset_top = -48.0
+offset_right = -18.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("6_xd70g")
+theme_override_font_sizes/font_size = 30
+text = "QUEST_CREATION_CREATE"
 expand_icon = true

@@ -7,7 +7,6 @@ class_name QuestListItemUI extends Control
 @onready var progress_bar: ProgressBar = $Paper/MarginContainer/VBoxContainer/ProgressBar
 @onready var label: Label = $Paper/MarginContainer/VBoxContainer/ProgressBar/Label
 @onready var claim_reward_button: Button = $Paper/MarginContainer/VBoxContainer/ClaimRewardButton
-@onready var approve_quest: Button = $Paper/Actions/ApproveQuest
 
 @export var supply_slot: PackedScene;
 
@@ -43,7 +42,6 @@ func _update_progress(state: String) -> void:
 	label.text = _get_state_name(state);
 	party.text = _get_party_text()
 	progress_bar.value = _get_state_progress(state)
-	approve_quest.visible = false
 	var is_complete := questData != null and questData.is_state(Quest.QuestState.COMPLETE)
 	progress_bar.visible = not is_complete
 	claim_reward_button.visible = is_complete

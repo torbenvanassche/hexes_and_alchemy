@@ -39,8 +39,10 @@ func _physics_process(_delta: float) -> void:
 		move_player = !move_player;
 		
 	if Input.is_action_just_pressed("cancel"):
-		var current_scene := SceneManager.get_current_scene();
-		if current_scene && current_scene.id == "pause_menu":
+		var current_ui_scene := SceneManager.get_current_ui_scene()
+		if is_paused and current_ui_scene != null and current_ui_scene.id == "settings_menu":
+			SceneManager.remove_current_ui_scene()
+		elif is_paused:
 			pause_game(false);
 		else:
 			pause_game(true);
@@ -64,11 +66,13 @@ func _on_player_loaded(player_scene: SceneInfo, spawn_position: Vector3) -> void
 func pause_game(force: bool = !is_paused) -> void:
 	is_paused = force;
 	get_tree().paused = is_paused;
-	var scene := DataManager.instance.get_scene_by_name("pause_menu");
+	var pause_scene := DataManager.instance.get_scene_by_name("pause_menu");
+	var settings_scene := DataManager.instance.get_scene_by_name("settings_menu");
 	if is_paused:
-		scene.queue(func(s: SceneInfo) -> void: SceneManager.add(s))
+		pause_scene.queue(func(s: SceneInfo) -> void: SceneManager.add(s))
 	else:
-		SceneManager.remove_scene(scene)
+		SceneManager.remove_scene(settings_scene)
+		SceneManager.remove_scene(pause_scene)
 		
 func set_active_settlement(settle: Settlement) -> void:
 	active_settlement = settle;

@@ -5,11 +5,9 @@ class_name QuestListUI extends Control
 @onready var empty_label: Label = $EmptyLabel
 
 @export var quest_item_ui: PackedScene
+@export var board_margin: float = 20.0
+@export var note_spacing: Vector2 = Vector2(16.0, 14.0)
 var window_instance: SceneInstance;
-
-const BOARD_MARGIN := 24.0
-const NOTE_SPACING := Vector2(24.0, 22.0)
-const BUTTON_MARGIN := 20.0
 
 func on_enter() -> void:
 	for c: QuestListItemUI in _get_quest_notes():
@@ -72,11 +70,9 @@ func _layout_board() -> void:
 	if not is_node_ready():
 		return
 
-	_layout_notes()
-	_layout_create_button()
+	_layout_notes(Rect2(Vector2.ZERO, _get_board_size()))
 
-func _layout_notes() -> void:
-	var board_rect := Rect2(Vector2.ZERO, _get_board_size())
+func _layout_notes(board_rect: Rect2) -> void:
 	var occupied_rects: Array[Rect2] = []
 	var notes := _get_ordered_notes()
 
@@ -86,25 +82,7 @@ func _layout_notes() -> void:
 		var note_position := _find_free_rect_position(board_rect, note_size, occupied_rects)
 		note.position = note_position
 		note.z_index = quest_index
-		occupied_rects.append(_with_spacing(Rect2(note_position, note_size), NOTE_SPACING))
-
-func _layout_create_button() -> void:
-	if not create_quest_button.visible:
-		return
-
-	var board_rect := Rect2(Vector2.ZERO, _get_board_size())
-	var button_size := _get_control_size(create_quest_button)
-	var occupied_rects := _get_note_rects_in_board_space()
-	var default_position := Vector2(
-		board_rect.size.x - button_size.x - BUTTON_MARGIN,
-		BUTTON_MARGIN
-	)
-	create_quest_button.position = _find_free_rect_position(
-		board_rect,
-		button_size,
-		occupied_rects,
-		_get_button_candidate_positions(board_rect, button_size, default_position)
-	)
+		occupied_rects.append(_with_spacing(Rect2(note_position, note_size), note_spacing))
 
 func _get_ordered_notes() -> Array[QuestListItemUI]:
 	var ordered_notes: Array[QuestListItemUI] = []
@@ -113,27 +91,6 @@ func _get_ordered_notes() -> Array[QuestListItemUI]:
 		if note != null:
 			ordered_notes.append(note)
 	return ordered_notes
-
-func _get_note_rects_in_board_space() -> Array[Rect2]:
-	var rects: Array[Rect2] = []
-	for note: QuestListItemUI in _get_quest_notes():
-		rects.append(_with_spacing(Rect2(board_surface.position + note.position, _get_control_size(note)), NOTE_SPACING))
-	return rects
-
-func _get_button_candidate_positions(board_rect: Rect2, control_size: Vector2, fallback: Vector2) -> Array[Vector2]:
-	var max_position := (board_rect.size - control_size).max(Vector2.ZERO)
-	return [
-		fallback.clamp(Vector2.ZERO, max_position),
-		Vector2(BUTTON_MARGIN, BUTTON_MARGIN).clamp(Vector2.ZERO, max_position),
-		Vector2(board_rect.size.x - control_size.x - BUTTON_MARGIN, BUTTON_MARGIN).clamp(Vector2.ZERO, max_position),
-		Vector2(BUTTON_MARGIN, board_rect.size.y - control_size.y - BUTTON_MARGIN).clamp(Vector2.ZERO, max_position),
-		Vector2(
-			board_rect.size.x - control_size.x - BUTTON_MARGIN,
-			board_rect.size.y - control_size.y - BUTTON_MARGIN
-		).clamp(Vector2.ZERO, max_position),
-		Vector2((board_rect.size.x - control_size.x) * 0.5, BUTTON_MARGIN).clamp(Vector2.ZERO, max_position),
-		Vector2((board_rect.size.x - control_size.x) * 0.5, board_rect.size.y - control_size.y - BUTTON_MARGIN).clamp(Vector2.ZERO, max_position)
-	]
 
 func _find_free_rect_position(
 	board_rect: Rect2,
@@ -151,9 +108,9 @@ func _find_free_rect_position(
 		maxf(48.0, control_size.x * 0.35),
 		maxf(40.0, control_size.y * 0.35)
 	)
-	var y := BOARD_MARGIN
+	var y := board_margin
 	while y <= max_position.y:
-		var x := BOARD_MARGIN
+		var x := board_margin
 		while x <= max_position.x:
 			var candidate := Vector2(x, y).clamp(Vector2.ZERO, max_position)
 			if _rect_is_free(Rect2(candidate, control_size), occupied_rects):
@@ -161,7 +118,7 @@ func _find_free_rect_position(
 			x += step.x
 		y += step.y
 
-	return Vector2(BOARD_MARGIN, BOARD_MARGIN).clamp(Vector2.ZERO, max_position)
+	return Vector2(board_margin, board_margin).clamp(Vector2.ZERO, max_position)
 
 func _rect_is_free(candidate: Rect2, occupied_rects: Array[Rect2]) -> bool:
 	for occupied_rect: Rect2 in occupied_rects:
