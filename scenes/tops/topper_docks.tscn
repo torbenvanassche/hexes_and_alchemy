@@ -2,12 +2,16 @@
 
 [ext_resource type="PackedScene" uid="uid://bd2agkr628wfh" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_docks_blue.glb" id="1_6b0tr"]
 [ext_resource type="Material" uid="uid://c66vbca7lgh6m" path="res://materials/kay_fantasy_default.tres" id="2_iw1xe"]
+[ext_resource type="PackedScene" uid="uid://bttuym3sphjmk" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_shipyard_blue.glb" id="3_ld8pm"]
 
 [node name="docks" type="Node3D" unique_id=481095020]
 
 [node name="Root Scene" parent="." unique_id=1498254864 instance=ExtResource("1_6b0tr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
 
 [node name="building_docks_blue" parent="Root Scene/RootNode" parent_id_path=PackedInt32Array(1498254864, 2065291227) index="0" unique_id=1780967309]
 surface_material_override/0 = ExtResource("2_iw1xe")
+
+[node name="Root Scene2" parent="." unique_id=1440918395 instance=ExtResource("3_ld8pm")]
 
 [editable path="Root Scene"]
