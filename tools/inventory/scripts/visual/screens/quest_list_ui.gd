@@ -7,32 +7,37 @@ class_name QuestListUI extends Control
 @export var quest_item_ui: PackedScene
 var window_instance: SceneInstance;
 
+const BOARD_MARGIN := 24.0
+const NOTE_SPACING := Vector2(24.0, 22.0)
+const BUTTON_MARGIN := 20.0
+
 func on_enter() -> void:
 	for c: QuestListItemUI in _get_quest_notes():
 		if not Config.gamestate.active_quests.has(c.questData):
 			c.queue_free()
 
-	var quest_index := 0
 	for q: Quest in Config.gamestate.active_quests:
-		if _get_quest_notes().all(func(child: QuestListItemUI) -> bool: return child.questData != q):
+		if _find_note_for_quest(q) == null:
 			var instance: QuestListItemUI = quest_item_ui.instantiate();
 			board_surface.add_child(instance);
 			instance.set_data(q);
-			_post_note(instance, quest_index)
-		quest_index += 1
 
 	empty_label.visible = Config.gamestate.active_quests.is_empty()
 	_allow_quest_creation_allowed()
+	_layout_board()
 	
 	if not Config.gamestate.quest_availability_changed.is_connected(_allow_quest_creation_allowed):
 		Config.gamestate.quest_availability_changed.connect(_allow_quest_creation_allowed)
 	
 func _allow_quest_creation_allowed() -> void:
 	create_quest_button.disabled = not _has_available_quests_to_create()
+	_layout_board()
 	
 func _ready() -> void:
 	create_quest_button.pressed.connect(_open_create_quest_menu)
 	Config.gamestate.quest_list_changed.connect(on_enter)
+	resized.connect(_layout_board)
+	board_surface.resized.connect(_layout_board)
 	on_enter()
 	
 func _open_create_quest_menu() -> void:
@@ -57,20 +62,132 @@ func _get_quest_notes() -> Array[QuestListItemUI]:
 			notes.append(child)
 	return notes
 
-func _post_note(note: QuestListItemUI, quest_index: int) -> void:
+func _find_note_for_quest(quest: Quest) -> QuestListItemUI:
+	for note: QuestListItemUI in _get_quest_notes():
+		if note.questData == quest:
+			return note
+	return null
+
+func _layout_board() -> void:
+	if not is_node_ready():
+		return
+
+	_layout_notes()
+	_layout_create_button()
+
+func _layout_notes() -> void:
+	var board_rect := Rect2(Vector2.ZERO, _get_board_size())
+	var occupied_rects: Array[Rect2] = []
+	var notes := _get_ordered_notes()
+
+	for quest_index in range(notes.size()):
+		var note := notes[quest_index]
+		var note_size := _get_control_size(note)
+		var note_position := _find_free_rect_position(board_rect, note_size, occupied_rects)
+		note.position = note_position
+		note.z_index = quest_index
+		occupied_rects.append(_with_spacing(Rect2(note_position, note_size), NOTE_SPACING))
+
+func _layout_create_button() -> void:
+	if not create_quest_button.visible:
+		return
+
+	var board_rect := Rect2(Vector2.ZERO, _get_board_size())
+	var button_size := _get_control_size(create_quest_button)
+	var occupied_rects := _get_note_rects_in_board_space()
+	var default_position := Vector2(
+		board_rect.size.x - button_size.x - BUTTON_MARGIN,
+		BUTTON_MARGIN
+	)
+	create_quest_button.position = _find_free_rect_position(
+		board_rect,
+		button_size,
+		occupied_rects,
+		_get_button_candidate_positions(board_rect, button_size, default_position)
+	)
+
+func _get_ordered_notes() -> Array[QuestListItemUI]:
+	var ordered_notes: Array[QuestListItemUI] = []
+	for quest: Quest in Config.gamestate.active_quests:
+		var note := _find_note_for_quest(quest)
+		if note != null:
+			ordered_notes.append(note)
+	return ordered_notes
+
+func _get_note_rects_in_board_space() -> Array[Rect2]:
+	var rects: Array[Rect2] = []
+	for note: QuestListItemUI in _get_quest_notes():
+		rects.append(_with_spacing(Rect2(board_surface.position + note.position, _get_control_size(note)), NOTE_SPACING))
+	return rects
+
+func _get_button_candidate_positions(board_rect: Rect2, control_size: Vector2, fallback: Vector2) -> Array[Vector2]:
+	var max_position := (board_rect.size - control_size).max(Vector2.ZERO)
+	return [
+		fallback.clamp(Vector2.ZERO, max_position),
+		Vector2(BUTTON_MARGIN, BUTTON_MARGIN).clamp(Vector2.ZERO, max_position),
+		Vector2(board_rect.size.x - control_size.x - BUTTON_MARGIN, BUTTON_MARGIN).clamp(Vector2.ZERO, max_position),
+		Vector2(BUTTON_MARGIN, board_rect.size.y - control_size.y - BUTTON_MARGIN).clamp(Vector2.ZERO, max_position),
+		Vector2(
+			board_rect.size.x - control_size.x - BUTTON_MARGIN,
+			board_rect.size.y - control_size.y - BUTTON_MARGIN
+		).clamp(Vector2.ZERO, max_position),
+		Vector2((board_rect.size.x - control_size.x) * 0.5, BUTTON_MARGIN).clamp(Vector2.ZERO, max_position),
+		Vector2((board_rect.size.x - control_size.x) * 0.5, board_rect.size.y - control_size.y - BUTTON_MARGIN).clamp(Vector2.ZERO, max_position)
+	]
+
+func _find_free_rect_position(
+	board_rect: Rect2,
+	control_size: Vector2,
+	occupied_rects: Array[Rect2],
+	candidate_positions: Array[Vector2] = []
+) -> Vector2:
+	var max_position := (board_rect.size - control_size).max(Vector2.ZERO)
+	for candidate: Vector2 in candidate_positions:
+		var clamped_candidate := candidate.clamp(Vector2.ZERO, max_position)
+		if _rect_is_free(Rect2(clamped_candidate, control_size), occupied_rects):
+			return clamped_candidate
+
+	var step := Vector2(
+		maxf(48.0, control_size.x * 0.35),
+		maxf(40.0, control_size.y * 0.35)
+	)
+	var y := BOARD_MARGIN
+	while y <= max_position.y:
+		var x := BOARD_MARGIN
+		while x <= max_position.x:
+			var candidate := Vector2(x, y).clamp(Vector2.ZERO, max_position)
+			if _rect_is_free(Rect2(candidate, control_size), occupied_rects):
+				return candidate
+			x += step.x
+		y += step.y
+
+	return Vector2(BOARD_MARGIN, BOARD_MARGIN).clamp(Vector2.ZERO, max_position)
+
+func _rect_is_free(candidate: Rect2, occupied_rects: Array[Rect2]) -> bool:
+	for occupied_rect: Rect2 in occupied_rects:
+		if candidate.intersects(occupied_rect):
+			return false
+	return true
+
+func _with_spacing(rect: Rect2, spacing: Vector2) -> Rect2:
+	return Rect2(
+		rect.position - spacing * 0.5,
+		rect.size + spacing
+	)
+
+func _get_board_size() -> Vector2:
 	var board_size := board_surface.size
 	if board_size == Vector2.ZERO:
 		board_size = board_surface.custom_minimum_size
-	var note_size := note.custom_minimum_size
-	var column_count: int = max(1, int((board_size.x - 36.0) / max(1.0, note_size.x * 0.72)))
-	var column := quest_index % column_count
-	var row := int(quest_index / column_count)
-	var overlap_step := Vector2(note_size.x * 0.62, note_size.y * 0.55)
-	var offset := Vector2(18.0, 18.0) + Vector2(column, row) * overlap_step
-	offset += Vector2(float((quest_index % 3) * 10), float((quest_index % 2) * 12))
-	var max_position := (board_size - note_size).max(Vector2.ZERO)
-	note.position = offset.clamp(Vector2.ZERO, max_position)
-	note.z_index = quest_index
+	return board_size
+
+func _get_control_size(control: Control) -> Vector2:
+	var control_size := control.size
+	if control_size == Vector2.ZERO:
+		control_size = control.get_combined_minimum_size()
+	if control_size == Vector2.ZERO:
+		control_size = control.custom_minimum_size
+	return control_size
 
 func _has_available_quests_to_create() -> bool:
 	var grid := SceneManager.get_active_scene().node as HexGrid

@@ -6,8 +6,8 @@ class_name QuestListItemUI extends Control
 @onready var party: Label = $Paper/MarginContainer/VBoxContainer/PartyRow/Party
 @onready var progress_bar: ProgressBar = $Paper/MarginContainer/VBoxContainer/ProgressBar
 @onready var label: Label = $Paper/MarginContainer/VBoxContainer/ProgressBar/Label
+@onready var claim_reward_button: Button = $Paper/MarginContainer/VBoxContainer/ClaimRewardButton
 @onready var approve_quest: Button = $Paper/Actions/ApproveQuest
-@onready var complete_quest: Button = $Paper/Actions/CompleteQuest
 
 @export var supply_slot: PackedScene;
 
@@ -18,6 +18,7 @@ static var _top_z_index := 10
 
 func _ready() -> void:
 	gui_input.connect(_on_gui_input)
+	claim_reward_button.pressed.connect(_claim_reward)
 
 func set_data(quest: Quest) -> void:
 	if questData:
@@ -29,7 +30,6 @@ func set_data(quest: Quest) -> void:
 	quest_type.text = _get_quest_type_name(quest.quest_key).to_upper();
 	quest_location.text = _get_location_name();
 
-	complete_quest.pressed.connect(questData.parse_reward);
 	_update_progress(questData.state_machine.get_current_state())
 	
 	quest.state_machine.state_entered.connect(_update_progress)
@@ -44,7 +44,14 @@ func _update_progress(state: String) -> void:
 	party.text = _get_party_text()
 	progress_bar.value = _get_state_progress(state)
 	approve_quest.visible = false
-	complete_quest.visible = questData.is_state(Quest.QuestState.COMPLETE);
+	var is_complete := questData != null and questData.is_state(Quest.QuestState.COMPLETE)
+	progress_bar.visible = not is_complete
+	claim_reward_button.visible = is_complete
+
+func _claim_reward() -> void:
+	if questData == null:
+		return
+	questData.parse_reward()
 
 func _get_location_name() -> String:
 	if questData == null or questData.location == null or questData.location.structure == null:

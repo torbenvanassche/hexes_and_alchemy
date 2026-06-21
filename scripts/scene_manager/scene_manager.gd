@@ -2,6 +2,7 @@ extends Node
 
 var scene_stack: Array[SceneInfo] = [];
 var scene_cache: SceneCache;
+var _ui_z_counter := 0
 
 @onready var root: Node3D = $"../game/scene_controller";
 @onready var _ui_container: CanvasLayer = $"../game/game_ui";
@@ -174,17 +175,23 @@ func add(n: SceneInfo, vis: bool = true) -> SceneInstance:
 		
 	if instance.node.is_inside_tree():
 		if instance.node is Control:
-			(instance.node as Control).move_to_front();
+			_promote_ui_control(instance.node as Control)
 		return instance;
 		
 	if n.type == SceneInfo.Type.UI:
 		_ui_container.add_child(instance.node);
-		(instance.node as Control).move_to_front();
+		_promote_ui_control(instance.node as Control)
 	elif not instance.node.get_parent() == root:
 		root.add_child(instance.node);
 	else:
 		Debug.err(n.id + " cannot be directly added to a scene.")
 	return instance;
+
+func _promote_ui_control(control: Control) -> void:
+	_ui_z_counter += 100
+	control.z_as_relative = false
+	control.z_index = _ui_z_counter
+	control.move_to_front()
 	
 func is_on_stack(scene: SceneInfo) -> bool:
 	return scene_stack.has(scene);
