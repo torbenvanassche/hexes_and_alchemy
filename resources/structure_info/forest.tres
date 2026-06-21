@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://brvtfutnwh30i" path="res://scripts/structures/lootable_info.gd" id="1_oogor"]
 [ext_resource type="PackedScene" uid="uid://dpyxy65c7yisb" path="res://scenes/tops/topper_forest.tscn" id="1_u11x1"]
-[ext_resource type="Resource" path="res://resources/loot_tables/forest.tres" id="2_1vq4v"]
+[ext_resource type="Resource" uid="uid://b6arph44hlmyi" path="res://resources/loot_tables/forest.tres" id="2_1vq4v"]
 
 [sub_resource type="Curve" id="Curve_nqdss"]
 _limits = [0.0, 5.0, 0.0, 50.0]

@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="StructureInfo" format=3 uid="uid://bh3h0r4smnwkq"]
+
+[ext_resource type="Script" uid="uid://btydeamnhd6x" path="res://scripts/structures/structure_info.gd" id="1_0j51b"]
+[ext_resource type="PackedScene" uid="uid://bb3m2x7n1a6ek" path="res://scenes/tops/topper_docks.tscn" id="2_lj017"]
+
+[sub_resource type="Curve" id="Curve_0j51b"]
+_limits = [0.0, 3.0, 0.0, 80.0]
+_data = [Vector2(6, 1), inf_neg, -1.0, 1, 1, Vector2(25, 2), 0.0, 0.0, 1, 1, Vector2(80, 3), -1.0, inf_neg, 1, 1]
+point_count = 3
+
+[resource]
+script = ExtResource("1_0j51b")
+max_per_region_size = SubResource("Curve_0j51b")
+minimum_distance_from_other_structures = 4
+spawn_weight = 0.75
+randomize_rotation = false
+is_quest_target = false
+id = "docks"
+packed_scene = ExtResource("2_lj017")
+type = 4
+metadata/_custom_type_script = "uid://btydeamnhd6x"

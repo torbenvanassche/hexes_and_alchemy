@@ -32,6 +32,7 @@
 [ext_resource type="Resource" uid="uid://foly5odh7d4j" path="res://resources/structure_info/ore_deposit_iron.tres" id="18_re66h"]
 [ext_resource type="Resource" uid="uid://c1ypx4o3q73t0" path="res://resources/structure_info/settlement.tres" id="19_isfgf"]
 [ext_resource type="Resource" uid="uid://cs0kfyy871ovd" path="res://resources/scene_info/ui/game_settings.tres" id="20_8ui5n"]
+[ext_resource type="Resource" uid="uid://bh3h0r4smnwkq" path="res://resources/structure_info/docks.tres" id="20_qk31b"]
 [ext_resource type="Resource" uid="uid://cutvod5684gln" path="res://resources/scene_info/sub_scenes/gameplay_main.tres" id="22_jehah"]
 [ext_resource type="Script" uid="uid://p57cg8ml65u0" path="res://scripts/helpers/world_space_ui.gd" id="23_f3p2p"]
 [ext_resource type="Resource" uid="uid://jp3ftcrni36q" path="res://resources/scene_info/ui/inventory_ui.tres" id="26_isfgf"]
@@ -84,7 +85,7 @@ metadata/_custom_type_script = "uid://g8s30q5nqcd8"
 script = ExtResource("2_sqa0i")
 hexes = Array[ExtResource("3_l5cgh")]([ExtResource("4_vgks2"), ExtResource("5_dylgi")])
 regions = Array[ExtResource("5_3hfy5")]([ExtResource("6_7pvxh"), ExtResource("9_y3xxt")])
-structures = Array[ExtResource("10_gt4lb")]([ExtResource("11_ya6yc"), ExtResource("12_mflgo"), ExtResource("14_8ui5n"), ExtResource("16_jehah"), ExtResource("17_re66h"), ExtResource("18_re66h"), ExtResource("19_isfgf"), ExtResource("18_58tnd")])
+structures = Array[ExtResource("10_gt4lb")]([ExtResource("11_ya6yc"), ExtResource("12_mflgo"), ExtResource("14_8ui5n"), ExtResource("16_jehah"), ExtResource("17_re66h"), ExtResource("18_re66h"), ExtResource("19_isfgf"), ExtResource("18_58tnd"), ExtResource("20_qk31b")])
 scenes = Array[ExtResource("15_ya6yc")]([ExtResource("12_vgks2"), ExtResource("16_gt4lb"), ExtResource("18_34frw"), ExtResource("18_mflgo"), ExtResource("20_8ui5n"), ExtResource("22_jehah"), ExtResource("26_isfgf"), ExtResource("29_moyyc"), ExtResource("30_f0nuf"), ExtResource("37_33j8a"), ExtResource("38_eirlg"), ExtResource("39_eirlg")])
 items = Array[ExtResource("27_phl1g")]([ExtResource("28_58tnd"), ExtResource("30_agklt"), ExtResource("31_x7ldt"), ExtResource("32_moyyc"), ExtResource("33_f0nuf")])
 npcs = Array[ExtResource("45_h5su3")]([ExtResource("46_c6i2r")])

@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://bb3m2x7n1a6ek"]
+
+[ext_resource type="PackedScene" uid="uid://bd2agkr628wfh" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_docks_blue.glb" id="1_6b0tr"]
+[ext_resource type="Material" uid="uid://c66vbca7lgh6m" path="res://materials/kay_fantasy_default.tres" id="2_iw1xe"]
+
+[node name="docks" type="Node3D" unique_id=481095020]
+
+[node name="Root Scene" parent="." unique_id=1498254864 instance=ExtResource("1_6b0tr")]
+
+[node name="building_docks_blue" parent="Root Scene/RootNode" parent_id_path=PackedInt32Array(1498254864, 2065291227) index="0" unique_id=1780967309]
+surface_material_override/0 = ExtResource("2_iw1xe")
+
+[editable path="Root Scene"]

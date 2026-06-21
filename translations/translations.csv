@@ -72,6 +72,7 @@ QUEST_ACTION_CLAIM_REWARD,Claim reward,Claim reward
 DEPOSIT_COMPLETE_ORDER,Complete order,Complete order
 UNKNOWN,Unknown,Unknown
 STRUCTURE_FARMLAND_NAME,Farmland,Farmland
+STRUCTURE_DOCKS_NAME,Docks,Docks
 STRUCTURE_FOREST_NAME,Forest,Forest
 STRUCTURE_LADDER_NAME,Ladder,Ladder
 STRUCTURE_LUMBERMILL_NAME,Lumbermill,Lumbermill
