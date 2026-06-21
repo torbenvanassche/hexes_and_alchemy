@@ -97,7 +97,10 @@ func _on_structure_loaded(s: StructureInfo, required_tiles: Array[SceneInstance]
 			(structure.instance as Interaction).hex = self;
 		add_child(structure.instance);
 		if s.randomize_rotation:
-			structure.instance.rotate_y(deg_to_rad(60 * randi_range(0, 5)))
+			var grid := SceneManager.get_active_scene().node as HexGrid
+			var rng := grid.create_rng("structure_rotation:%s:%s" % [cube_id, s.resource_path]) if grid != null else null
+			var rotation_step := rng.randi_range(0, 5) if rng != null else randi_range(0, 5)
+			structure.instance.rotate_y(deg_to_rad(60 * rotation_step))
 	
 	for t in required_tiles:
 		SceneManager.get_active_scene().node.replace(t, scene_instance.scene_info.get_instance(), region);

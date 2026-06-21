@@ -8,6 +8,10 @@ var _spacing: float = 0.25
 @export var chunk_radius: int = 3;
 @export var grid_name: String;
 
+## Set this to reproduce a specific world. Leave it at 0 to generate a new seed on each run.
+@export var world_seed: int = 0;
+var generation_seed: int = 0;
+
 ##Optionally define custom regions that can generate if you don't want to use the global setting
 @export var custom_regions: Array[RegionInfo];
 @export var generate_ocean: bool = true;
@@ -48,15 +52,48 @@ func _init() -> void:
 	generated.connect(_on_map_ready, CONNECT_ONE_SHOT)
 
 func _ready() -> void:
+	_initialize_generation_seed()
+
 	if use_global_regions:
 		region_options = DataManager.instance.regions;
 	for region in custom_regions:
 		if not region_options.has(region):
 			region_options.append(region);
-	
+
+	_apply_seed_to_region_noise()
+
 	for cy in range(-chunk_radius, chunk_radius + 1):
 		for cx in range(-chunk_radius, chunk_radius + 1):
 			generate_chunk(cx, cy)
+
+func _initialize_generation_seed() -> void:
+	if world_seed != 0:
+		generation_seed = world_seed
+	else:
+		generation_seed = int(Time.get_unix_time_from_system() * 1000000.0) + Time.get_ticks_usec() + get_instance_id()
+		world_seed = generation_seed
+
+	print("World generation seed: %s" % generation_seed)
+
+func _apply_seed_to_region_noise() -> void:
+	var seeded_regions := region_options.duplicate()
+	if DataManager.instance.ocean_descriptor != null and not seeded_regions.has(DataManager.instance.ocean_descriptor):
+		seeded_regions.append(DataManager.instance.ocean_descriptor)
+
+	for region: RegionInfo in seeded_regions:
+		if region == null or region.noise == null:
+			continue
+
+		region.noise.seed = get_seeded_int("region_noise:%s" % region.resource_path)
+
+func get_seeded_int(key: String) -> int:
+	var mixed_seed := generation_seed + (int(key.hash()) * 1103515245) + 12345
+	return absi(mixed_seed % 2147483647)
+
+func create_rng(key: String) -> RandomNumberGenerator:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = get_seeded_int(key)
+	return rng
 
 func _on_map_ready() -> void:
 	SceneManager.set_active_scene(DataManager.instance.node_to_info(self))
@@ -177,7 +214,8 @@ func generate_chunk(cx: int, cy: int) -> HexChunk:
 	for gy in range(start_y, start_y + chunk.CHUNK_HEIGHT):
 		for gx in range(start_x, start_x + chunk.CHUNK_WIDTH):
 			var grid_id := Vector2i(gx, gy)
-			var scene_info := DataManager.instance.pick_scene(gx, gy, region_options)
+			var scene_rng := create_rng("tile:%s:%s" % [gx, gy])
+			var scene_info := DataManager.instance.pick_scene(gx, gy, region_options, scene_rng)
 			if scene_info == null:
 				continue
 			

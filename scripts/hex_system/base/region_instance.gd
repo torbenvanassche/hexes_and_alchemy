@@ -29,7 +29,8 @@ func remove_hex(coord: Vector3i) -> void:
 	hexes.erase(coord);
 	
 func render_debug_region() -> void:
-	var clr := Color(randf_range(0, 1), randf_range(0, 1), randf_range(0, 1));
+	var rng := hex_grid.create_rng("debug_region:%s" % _get_seed_key())
+	var clr := Color(rng.randf_range(0, 1), rng.randf_range(0, 1), rng.randf_range(0, 1));
 	for hex: HexBase in hexes.values():
 		var mat := StandardMaterial3D.new();
 		mat.albedo_color = clr;
@@ -42,7 +43,7 @@ func _required_distance(a: StructureInfo, b: StructureInfo) -> int:
 		+ 1
 	)
 		
-func _pick_structure() -> StructureInfo:
+func _pick_structure(rng: RandomNumberGenerator) -> StructureInfo:
 	var total_weight := 0.0
 	var candidates: Array[StructureInfo] = []
 	var cumulative: Array[float] = []
@@ -62,12 +63,36 @@ func _pick_structure() -> StructureInfo:
 	if total_weight == 0.0:
 		return null
 
-	var r := randf() * total_weight
+	var r := rng.randf() * total_weight
 	for i in cumulative.size():
 		if r <= cumulative[i]:
 			return candidates[i]
 
 	return null
+
+func _get_seed_key() -> String:
+	var keys: Array[Vector3i] = hexes.keys()
+	keys.sort_custom(
+		func(a: Vector3i, b: Vector3i) -> bool:
+			if a.x != b.x:
+				return a.x < b.x
+			if a.y != b.y:
+				return a.y < b.y
+			return a.z < b.z
+	)
+
+	var coord_hash := 0
+	for key: Vector3i in keys:
+		coord_hash = int((coord_hash * 31 + key.x * 73856093 + key.y * 19349663 + key.z * 83492791) % 2147483647)
+
+	return "%s:%s:%s" % [info.resource_path, hexes.size(), coord_hash]
+
+func _shuffle_hexes(values: Array[Vector3i], rng: RandomNumberGenerator) -> void:
+	for i in range(values.size() - 1, 0, -1):
+		var swap_idx := rng.randi_range(0, i)
+		var temp := values[i]
+		values[i] = values[swap_idx]
+		values[swap_idx] = temp
 
 func _compute_structure_caps() -> void:
 	structure_caps.clear()
@@ -114,9 +139,10 @@ func generate_structures_for_region() -> void:
 		return
 
 	_compute_structure_caps()
+	var rng := hex_grid.create_rng("structures:%s" % _get_seed_key())
 
 	var available_hexes: Array[Vector3i] = hexes.keys()
-	available_hexes.shuffle()
+	_shuffle_hexes(available_hexes, rng)
 
 	var max_total := 0
 	for cap in structure_caps.values():
@@ -126,14 +152,14 @@ func generate_structures_for_region() -> void:
 	var placed_total := 0
 
 	while placed_total < target_count and not available_hexes.is_empty():
-		var structure := _pick_structure()
+		var structure := _pick_structure(rng)
 		if structure == null:
 			break
 
 		var placed := false
 
 		for attempt in 5:
-			var hex_id: Vector3i = available_hexes.pick_random()
+			var hex_id: Vector3i = available_hexes[rng.randi_range(0, available_hexes.size() - 1)]
 			var hex := hexes[hex_id]
 
 			if not hex or not hex.can_generate:

@@ -118,7 +118,7 @@ func is_active(scene_name: String) -> bool:
 			return true
 	return false
 	
-func pick_scene(x: int, y: int, region_options: Array[RegionInfo] = regions) -> HexInfo:
+func pick_scene(x: int, y: int, region_options: Array[RegionInfo] = regions, rng: RandomNumberGenerator = null) -> HexInfo:
 	var region := get_region_for(x, y, region_options)
 	if region == null:
 		Debug.message("No region found for scene")
@@ -144,7 +144,7 @@ func pick_scene(x: int, y: int, region_options: Array[RegionInfo] = regions) -> 
 		Debug.message("Total weight was <= 0")
 		return null
 
-	var r := randf() * total_weight
+	var r := (rng.randf() if rng != null else randf()) * total_weight
 	for i in cumulative.size():
 		if r <= cumulative[i]:
 			return valid_scenes[i]
