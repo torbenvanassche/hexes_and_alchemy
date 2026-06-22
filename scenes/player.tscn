@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://dbq18q3bbriy7" path="res://scripts/player.gd" id="1_g2els"]
 [ext_resource type="PackedScene" uid="uid://d4ymsokn1evq" path="res://meshes/kay_fantasy_hexagon/units/neutral/unit.glb" id="2_qhqgy"]
 [ext_resource type="Script" uid="uid://b6rgx41co3bur" path="res://tools/inventory/scripts/inventory/inventory.gd" id="3_qhqgy"]
+[ext_resource type="Script" uid="uid://bx2r732rmx6xs" path="res://scripts/player/player_movement.gd" id="4_movement"]
+[ext_resource type="Script" uid="uid://dxdnvhygg0f32" path="res://scripts/player/player_interactor.gd" id="7_interactor"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_g2els"]
 radius = 0.095214844
@@ -13,7 +15,6 @@ size = Vector3(0.7191162, 0.5185547, 0.6298218)
 
 [node name="player" type="CharacterBody3D" unique_id=357255706]
 script = ExtResource("1_g2els")
-move_speed = 3.0
 
 [node name="player_model" parent="." unique_id=998890130 instance=ExtResource("2_qhqgy")]
 
@@ -26,6 +27,13 @@ script = ExtResource("3_qhqgy")
 unlocked_slots = 5
 max_slots = 5
 stack_size = 10
+
+[node name="Movement" type="Node" parent="." unique_id=147313217]
+script = ExtResource("4_movement")
+move_speed = 3.0
+
+[node name="Interactor" type="Node" parent="." unique_id=147313220]
+script = ExtResource("7_interactor")
 
 [node name="interactor" type="Area3D" parent="." unique_id=614406519]
 
