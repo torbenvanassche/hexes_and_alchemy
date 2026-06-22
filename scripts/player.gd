@@ -32,11 +32,41 @@ func _unhandled_input(_event: InputEvent) -> void:
 	if get_viewport().gui_get_focus_owner() != null:
 		return;
 		
-	if Input.is_action_just_pressed("primary_action") && current_triggers.size() != 0:
-		current_triggers[0].on_interact();
+	if Input.is_action_just_pressed("primary_action"):
+		if current_triggers.size() != 0:
+			current_triggers[0].on_interact();
+		else:
+			var picked := pick_hex_from_mouse()
 	
 	if Input.is_action_just_pressed("inventory"):
 		_toggle_inventory()
+
+func pick_hex_from_mouse() -> HexBase:
+	var grid := SceneManager.get_active_scene().node as HexGrid
+	if grid == null:
+		return null
+	
+	var camera_controller := Manager.instance.spring_arm_camera
+	if camera_controller == null or camera_controller.camera == null:
+		return null
+	
+	var camera := camera_controller.camera
+	var mouse_position := get_viewport().get_mouse_position()
+	var ray_origin := camera.project_ray_origin(mouse_position)
+	var ray_direction := camera.project_ray_normal(mouse_position)
+	var grid_plane := Plane(Vector3.UP, grid.global_position.y)
+	var hit_position = grid_plane.intersects_ray(ray_origin, ray_direction)
+	if hit_position == null:
+		return null
+	
+	var picked_hex := grid.get_hex_at_world_position(hit_position, 0.0)
+	if picked_hex == null:
+		return null
+	
+	if grid is MainGrid and (grid as MainGrid).target_position != null:
+		(grid as MainGrid).target_position.global_position = picked_hex.global_position
+	
+	return picked_hex
 
 func _handle_movement(delta: float) -> void:
 	var input := Vector2(
