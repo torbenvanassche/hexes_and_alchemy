@@ -4,12 +4,14 @@
 [ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="1_l1pyo"]
 [ext_resource type="Resource" uid="uid://d0lienvyvqxlh" path="res://resources/item_info/structure_container.tres" id="2_g54ep"]
 [ext_resource type="PackedScene" uid="uid://bb3m2x7n1a6ek" path="res://scenes/tops/topper_docks.tscn" id="2_lj017"]
+[ext_resource type="Script" uid="uid://qb2lstol1uad" path="res://scripts/structures/docks_placement_handler.gd" id="2_wna8t"]
 
 [resource]
 script = ExtResource("1_0j51b")
 build_cost = Dictionary[ExtResource("1_l1pyo"), int]({
 ExtResource("2_g54ep"): 1
 })
+placement_handler = ExtResource("2_wna8t")
 id = "docks"
 packed_scene = ExtResource("2_lj017")
 type = 4

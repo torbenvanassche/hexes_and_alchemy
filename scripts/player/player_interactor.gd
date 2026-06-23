@@ -28,6 +28,12 @@ func interact() -> bool:
 	return true
 
 func pick_hex_from_mouse() -> HexBase:
+	return _get_hex_from_mouse(true)
+
+func peek_hex_from_mouse() -> HexBase:
+	return _get_hex_from_mouse(false)
+
+func _get_hex_from_mouse(update_selection: bool) -> HexBase:
 	var grid := SceneManager.get_active_scene().node as HexGrid
 	if grid == null:
 		return null
@@ -43,17 +49,22 @@ func pick_hex_from_mouse() -> HexBase:
 	var grid_plane := Plane(Vector3.UP, grid.global_position.y)
 	var hit_position = grid_plane.intersects_ray(ray_origin, ray_direction)
 	if hit_position == null:
+		if update_selection:
+			selected_hex = null
 		return null
 	
 	var picked_hex := grid.get_hex_at_world_position(hit_position, 0.0)
 	if picked_hex == null:
+		if update_selection:
+			selected_hex = null
 		return null
-	
-	selected_hex = picked_hex
-	hex_picked.emit(picked_hex)
-	
-	if grid is MainGrid and (grid as MainGrid).target_position != null:
-		(grid as MainGrid).target_position.global_position = picked_hex.global_position
+
+	if update_selection:
+		selected_hex = picked_hex
+		hex_picked.emit(picked_hex)
+
+		if grid is MainGrid and (grid as MainGrid).target_position != null:
+			(grid as MainGrid).target_position.global_position = picked_hex.global_position
 	
 	return picked_hex
 

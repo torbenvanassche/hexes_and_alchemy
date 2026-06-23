@@ -79,6 +79,10 @@ func set_structure(s: StructureInfo, immediate: bool = false) -> void:
 	
 ##When the structure finishes loading, add the instance to the scene and validate adjacent tiles
 func _on_structure_loaded(s: StructureInfo, required_tiles: Array[SceneInstance]) -> void:
+	if region_instance != null:
+		region_instance.structures[cube_id] = s;
+	structure_root_tile = cube_id;
+
 	structure = StructureInstance.new(s.get_instance().node, s);
 	if structure.instance:
 		if structure.instance is Interaction:

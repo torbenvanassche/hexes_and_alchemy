@@ -16,6 +16,19 @@ func get_available_slots(content: Resource, exclude_full: bool = false) -> Array
 		
 func is_full() -> bool:
 	return data.all(func(slot: ContentSlotResource) -> bool: return slot.is_full());
+
+func get_count(content: Resource) -> int:
+	var total := 0;
+	for slot in data:
+		if slot.is_unlocked && slot.has_content(content):
+			total += slot.count;
+	return total;
+
+func has_all(cost: Dictionary) -> bool:
+	for content: Resource in cost.keys():
+		if get_count(content) < int(cost[content]):
+			return false;
+	return true;
 	
 func create_or_unlock_slot() -> ContentSlotResource:
 	for slot in data:
