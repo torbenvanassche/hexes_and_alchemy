@@ -102,14 +102,17 @@ func set_structure(s: StructureInfo, immediate: bool = false) -> void:
 	var required_tiles: Array[SceneInstance] = SceneManager.get_active_scene().node.get_tiles_in_radius(cube_id, s.required_space_radius);
 	for required_tile in required_tiles:
 		required_tile.node.can_generate = false
-	required_tiles = required_tiles.filter(
-		func(f: SceneInstance) -> bool:
-			return f.node.cube_id != cube_id and not f.node.is_traversable()
-	)
+
+	var footprint_replacements: Array[SceneInstance] = [];
+	if s.replace_non_traversable_hex:
+		footprint_replacements.assign(required_tiles.filter(
+			func(f: SceneInstance) -> bool:
+				return f.node.cube_id != cube_id and not f.node.is_traversable()
+		))
 	if immediate:
-		_on_structure_loaded(s, required_tiles)
+		_on_structure_loaded(s, footprint_replacements)
 	else:
-		s.queue(_on_structure_loaded.bind(required_tiles));
+		s.queue(_on_structure_loaded.bind(footprint_replacements));
 	
 ##When the structure finishes loading, add the instance to the scene and validate adjacent tiles
 func _on_structure_loaded(s: StructureInfo, required_tiles: Array[SceneInstance]) -> void:

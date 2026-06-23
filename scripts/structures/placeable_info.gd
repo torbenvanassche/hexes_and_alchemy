@@ -2,10 +2,19 @@ class_name PlaceableStructureInfo extends StructureInfo
 
 @export var build_cost: Dictionary[ItemInfo, int];
 @export var placement_handler: Script;
-var last_placement_debug_reason: String = "";
 
 func can_place_on(hex: HexBase, inventory: ContentGroup = null) -> bool:
-	return bool(get_placement_debug(hex, inventory).get("can_place", false));
+	if hex == null:
+		return false;
+	if not _has_build_cost(inventory):
+		return false;
+	if not _has_explored_space(hex):
+		return false;
+	if not _has_clear_space(hex):
+		return false;
+	if not _has_required_distance(hex):
+		return false;
+	return _passes_handler_checks(hex, inventory);
 
 func place_on(hex: HexBase, inventory: ContentGroup = null) -> bool:
 	if not can_place_on(hex, inventory):
@@ -30,54 +39,12 @@ func get_placement_rotation_y(hex: HexBase) -> Dictionary:
 		"rotation_y": float(handler.get_rotation_y(self, hex))
 	};
 
-func get_placement_debug(hex: HexBase, inventory: ContentGroup = null) -> Dictionary:
-	var result := {
-		"can_place": false,
-		"reason": ""
-	};
-
-	if hex == null:
-		result["reason"] = "No hex is being hovered.";
-	elif not _has_build_cost(inventory):
-		result["reason"] = _get_missing_cost_reason(inventory);
-	elif not _has_explored_space(hex):
-		result["reason"] = "The target space has unexplored tiles.";
-	elif not _has_clear_space(hex):
-		result["reason"] = "The target space already has a structure.";
-	elif not _has_required_distance(hex):
-		result["reason"] = "Too close for this structure's placement spacing.";
-	else:
-		var handler_reason := _get_handler_block_reason(hex, inventory);
-		if handler_reason == "":
-			result["can_place"] = true;
-			result["reason"] = "Placement valid.";
-		else:
-			result["reason"] = handler_reason;
-
-	last_placement_debug_reason = str(result["reason"]);
-	return result;
-
 func _has_build_cost(inventory: ContentGroup) -> bool:
 	if build_cost.is_empty():
 		return true;
 	if inventory == null:
 		return false;
 	return inventory.has_all(build_cost);
-
-func _get_missing_cost_reason(inventory: ContentGroup) -> String:
-	if inventory == null:
-		return "No inventory was available for placement validation.";
-
-	var missing: Array[String] = [];
-	for item: ItemInfo in build_cost.keys():
-		var required := int(build_cost[item]);
-		var owned := inventory.get_count(item);
-		if owned < required:
-			missing.append("%s %d/%d" % [item.get_display_name(), owned, required]);
-
-	if missing.is_empty():
-		return "Missing build cost.";
-	return "Missing build cost: %s" % ", ".join(missing);
 
 func _pay_build_cost(inventory: ContentGroup) -> void:
 	if inventory == null:
@@ -126,19 +93,15 @@ func _has_required_distance(hex: HexBase) -> bool:
 					return false;
 	return true;
 
-func _get_handler_block_reason(hex: HexBase, inventory: ContentGroup) -> String:
+func _passes_handler_checks(hex: HexBase, inventory: ContentGroup) -> bool:
 	if placement_handler == null:
-		return "";
+		return true;
 
 	var handler: RefCounted = placement_handler.new();
 	if handler == null:
-		return "";
+		return true;
 	if not handler.has_method("can_place"):
 		Debug.err("%s placement handler must define can_place(structure_info, hex, inventory)." % id);
-		return "Placement handler is missing can_place().";
+		return false;
 
-	if bool(handler.can_place(self, hex, inventory)):
-		return "";
-	if handler.has_method("get_block_reason"):
-		return str(handler.get_block_reason(self, hex, inventory));
-	return "Placement handler rejected this tile.";
+	return bool(handler.can_place(self, hex, inventory));

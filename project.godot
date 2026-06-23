@@ -22,10 +22,6 @@ InputManager="*uid://de3o0pp6wss2g"
 Config="*uid://du5xhklaf65mb"
 SceneManager="*uid://bbh3tqcpujraq"
 
-[debug_draw_3d]
-
-settings/addon_root_folder="res://addons/debug_draw_3d"
-
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/bitmap_editor/plugin.cfg")

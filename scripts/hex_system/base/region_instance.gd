@@ -109,6 +109,14 @@ func _compute_structure_caps() -> void:
 
 func _can_place_structure_at(pos: Vector3i, candidate: StructureInfo) -> bool:	
 	var hex := hexes[pos]
+	if hex == null:
+		return false;
+
+	if not hex.can_generate:
+		return false;
+
+	if not _has_clear_generation_space(pos, candidate):
+		return false;
 	
 	var chunk_coords := hex_grid.grid_to_chunk_coords(hex.grid_id)
 	if hex_grid.chunks.has(chunk_coords) and not hex_grid.chunks[chunk_coords].generate_structures:
@@ -133,6 +141,22 @@ func _can_place_structure_at(pos: Vector3i, candidate: StructureInfo) -> bool:
 				if dist <= min_dist:
 					return false
 	return true
+
+func _has_clear_generation_space(center: Vector3i, candidate: StructureInfo) -> bool:
+	var footprint := hex_grid.get_tiles_in_radius(center, candidate.required_space_radius);
+	var expected_tile_count := 1 + 3 * candidate.required_space_radius * (candidate.required_space_radius + 1);
+	if footprint.size() != expected_tile_count:
+		return false;
+
+	for scene_instance: SceneInstance in footprint:
+		var tile := scene_instance.node as HexBase;
+		if tile == null:
+			return false;
+
+		if not tile.can_generate or tile.structure != null:
+			return false;
+
+	return true;
 
 func generate_structures_for_region() -> void:
 	if info.structures.is_empty():

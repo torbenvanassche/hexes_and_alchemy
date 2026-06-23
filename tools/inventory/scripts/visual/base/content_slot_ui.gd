@@ -23,8 +23,6 @@ static var drag_data: DragData;
 static var drag_origin: ContentSlotUI;
 static var hovered_hex: HexBase;
 static var hovered_hex_can_drop: bool = false;
-static var last_debug_hover_hex: HexBase;
-static var last_debug_reason: String = "";
 
 signal initialized();
 
@@ -92,11 +90,11 @@ func _get_drag_data(_at_position: Vector2) -> DragData:
 		drag_data = DragData.new(self);
 		drag_origin = self;
 		set_process(true);
-		_debug_drag_start();
 		return drag_data;
 	drag_data = null;
 	drag_origin = null;
-	_clear_hover_debug();
+	hovered_hex = null;
+	hovered_hex_can_drop = false;
 	return null;
 	
 func _can_drop_data(_at_position: Vector2, _data: Variant) -> bool:
@@ -129,7 +127,8 @@ func _notification(what: int) -> void:
 				_clear_placeable_cursor();
 				drag_data = null;
 				drag_origin = null;
-				_clear_hover_debug();
+				hovered_hex = null;
+				hovered_hex_can_drop = false;
 				set_process(false);
 			if !is_drag_successful() && !placed:
 				redraw()
@@ -141,15 +140,13 @@ func _process(_delta: float) -> void:
 
 	var placeable := _get_dragged_placeable();
 	if placeable == null:
-		_clear_hover_debug();
+		hovered_hex = null;
+		hovered_hex_can_drop = false;
 		_clear_placeable_cursor();
 		return;
 
 	hovered_hex = _get_hovered_hex();
-	var placement_debug := placeable.get_placement_debug(hovered_hex, _get_player_inventory());
-	hovered_hex_can_drop = bool(placement_debug.get("can_place", false));
-	var debug_reason := str(placement_debug.get("reason", ""));
-	_update_hover_debug(hovered_hex, hovered_hex_can_drop, debug_reason);
+	hovered_hex_can_drop = placeable.can_place_on(hovered_hex, _get_player_inventory());
 	Input.set_default_cursor_shape(
 		Input.CURSOR_CAN_DROP if hovered_hex_can_drop else Input.CURSOR_FORBIDDEN
 	);
@@ -184,20 +181,6 @@ func _get_dragged_placeable() -> PlaceableStructureInfo:
 			return placeable;
 	return null;
 
-func _debug_drag_start() -> void:
-	var content := contentSlot.get_content() if contentSlot != null else null;
-	var placeable := _get_dragged_placeable();
-	if placeable != null:
-		Debug.message("Drag started for placeable structure: %s" % placeable.id)
-		return;
-
-	var content_name := "empty";
-	if content is ItemInfo:
-		content_name = (content as ItemInfo).get_display_name();
-	elif content is Resource:
-		content_name = (content as Resource).resource_path;
-	Debug.message("Drag started for %s, but no placeable structure uses this item." % content_name)
-
 func _get_player_inventory() -> Inventory:
 	if Manager.instance == null or Manager.instance.player_instance == null:
 		return null;
@@ -210,27 +193,3 @@ func _get_hovered_hex() -> HexBase:
 
 func _clear_placeable_cursor() -> void:
 	Input.set_default_cursor_shape(Input.CURSOR_ARROW);
-
-func _update_hover_debug(next_hovered_hex: HexBase, can_drop: bool, debug_reason: String) -> void:
-	if last_debug_hover_hex != null and last_debug_hover_hex != next_hovered_hex:
-		last_debug_hover_hex.clear_drop_debug_tint()
-
-	if next_hovered_hex != null:
-		next_hovered_hex.set_drop_debug_tint(can_drop)
-
-	var hovered_changed := last_debug_hover_hex != next_hovered_hex
-	var reason_changed := last_debug_reason != debug_reason
-	if hovered_changed or reason_changed:
-		var hovered_label := "none" if next_hovered_hex == null else str(next_hovered_hex.cube_id)
-		Debug.message("Drop hover %s: %s" % [hovered_label, debug_reason])
-
-	last_debug_hover_hex = next_hovered_hex
-	last_debug_reason = debug_reason
-
-func _clear_hover_debug() -> void:
-	if last_debug_hover_hex != null:
-		last_debug_hover_hex.clear_drop_debug_tint()
-	last_debug_hover_hex = null
-	last_debug_reason = ""
-	hovered_hex = null
-	hovered_hex_can_drop = false

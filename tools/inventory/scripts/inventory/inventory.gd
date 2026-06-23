@@ -5,4 +5,4 @@ class_name Inventory extends ContentGroup
 
 func _ready() -> void:
 	for i in range(max_slots):
-		data.append(ContentSlotResource.new(0, null, stack_size, i < unlocked_slots))
+		add_slot(ContentSlotResource.new(0, null, stack_size, i < unlocked_slots));

@@ -12,6 +12,9 @@ class_name StructureInfo extends SceneInfo
 ##How common this item is in the spawning algorithm
 @export var spawn_weight: float = 1;
 
+##Whether blocked terrain inside the structure footprint should be converted to the center tile type
+@export var replace_non_traversable_hex: bool = true;
+
 @export var randomize_rotation: bool = true;
 
 @export var is_quest_target: bool = true;

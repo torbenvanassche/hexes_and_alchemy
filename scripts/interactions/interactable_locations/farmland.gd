@@ -43,11 +43,11 @@ func _current_crop_state() -> CropState:
 	return CropState[key] as CropState
 
 func _update_mesh(state: CropState) -> void:
-	mesh_planted.visible = state == CropState.PLANTED
-	mesh_watered.visible = state == CropState.WATERED
-	mesh_ready.visible = state == CropState.READY
-	mesh_dead.visible = state == CropState.DEAD
-	toggle_collision(state == CropState.READY)
+	mesh_planted.visible = state == CropState.PLANTED;
+	mesh_watered.visible = state == CropState.WATERED;
+	mesh_ready.visible = state == CropState.READY;
+	mesh_dead.visible = state == CropState.DEAD;
+	toggle_collision(state == CropState.READY);
 
 func _on_crop_state_entered(state: String) -> void:
 	_cancel_timers()

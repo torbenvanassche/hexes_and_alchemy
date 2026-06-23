@@ -35,7 +35,7 @@ func input_moves_player() -> bool:
 	
 func _physics_process(_delta: float) -> void:
 	if  InputManager.is_device(InputManager.InputDevice.KEYBOARD_MOUSE) && Input.is_action_just_pressed("toggle_input"):
-		spring_arm_camera.snap_camera_on_player_moved(!move_player)
+		spring_arm_camera.snap_camera_on_player_moved(!move_player);
 		move_player = !move_player;
 		
 	if Input.is_action_just_pressed("cancel"):
@@ -48,20 +48,28 @@ func _physics_process(_delta: float) -> void:
 			pause_game(true);
 
 func spawn_player(spawn_hex: HexBase = null) -> void:
-	DataManager.instance.get_scene_by_name("player").queue(_on_player_loaded.bind(spawn_hex.global_position))
+	var spawn_position := _resolve_spawn_position(spawn_hex);
+	DataManager.instance.get_scene_by_name("player").queue(_on_player_loaded.bind(spawn_position));
+
+func _resolve_spawn_position(spawn_hex: HexBase = null) -> Vector3:
+	if spawn_hex != null:
+		return spawn_hex.global_position;
+	if active_settlement != null and active_settlement.spawn_position != null:
+		return active_settlement.spawn_position.global_position;
+	return Vector3.ZERO;
 	
 func spawn_in_settlement() -> void:
 	if active_settlement:
-		DataManager.instance.get_scene_by_name("player").queue(_on_player_loaded.bind(active_settlement.spawn_position.global_position))
+		DataManager.instance.get_scene_by_name("player").queue(_on_player_loaded.bind(active_settlement.spawn_position.global_position));
 	else:
-		Debug.err("Can't create player in settlement, no settlement is active.")
+		Debug.err("Can't create player in settlement, no settlement is active.");
 
 func _on_player_loaded(player_scene: SceneInfo, spawn_position: Vector3) -> void:
 	if not player_instance:
 		player_instance = SceneManager.add(player_scene, true).node;
 		spring_arm_camera.target = player_instance;
 	player_instance.global_position = spawn_position;
-	Manager.instance.spring_arm_camera.snap_to_target()
+	Manager.instance.spring_arm_camera.snap_to_target();
 	
 func pause_game(force: bool = !is_paused) -> void:
 	is_paused = force;
@@ -69,10 +77,10 @@ func pause_game(force: bool = !is_paused) -> void:
 	var pause_scene := DataManager.instance.get_scene_by_name("pause_menu");
 	var settings_scene := DataManager.instance.get_scene_by_name("settings_menu");
 	if is_paused:
-		pause_scene.queue(func(s: SceneInfo) -> void: SceneManager.add(s))
+		pause_scene.queue(func(s: SceneInfo) -> void: SceneManager.add(s));
 	else:
-		SceneManager.remove_scene(settings_scene)
-		SceneManager.remove_scene(pause_scene)
+		SceneManager.remove_scene(settings_scene);
+		SceneManager.remove_scene(pause_scene);
 		
 func set_active_settlement(settle: Settlement) -> void:
 	active_settlement = settle;
