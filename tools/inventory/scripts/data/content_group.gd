@@ -60,9 +60,14 @@ func add(content: Resource, amount: int = 1, can_exceed_capacity: bool = false) 
 func remove(content: Resource, amount: int = 1) -> int:
 	var remaining_amount: int = amount;
 	while remaining_amount > 0:
-		var slots: Array[ContentSlotResource] = get_available_slots(content);
+		var slots: Array[ContentSlotResource] = data.filter(func(slot: ContentSlotResource) -> bool:
+			return slot.is_unlocked && slot.has_content(content) && slot.count > 0
+		)
 		if slots.size() == 0:
 			break;
-		remaining_amount = slots[0].remove(remaining_amount);
+		var previous_remaining := remaining_amount
+		remaining_amount = slots[0].remove(remaining_amount)
+		if remaining_amount == previous_remaining:
+			break
 	changed.emit();
 	return remaining_amount;

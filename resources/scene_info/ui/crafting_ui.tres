@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="SceneInfo" format=3 uid="uid://ck0i8jm3a1eqw"]
+
+[ext_resource type="Script" uid="uid://6t4u66o5q6po" path="res://scripts/scene_manager/scene_info.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://bfqv1ggh0e7pr" path="res://scenes/ui/crafting_ui.tscn" id="2_scene"]
+
+[resource]
+script = ExtResource("1_script")
+id = "crafting_ui"
+packed_scene = ExtResource("2_scene")
+type = 2
+is_unique = true
+metadata/_custom_type_script = "uid://6t4u66o5q6po"

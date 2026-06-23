@@ -105,10 +105,13 @@ func create_rng(key: String) -> RandomNumberGenerator:
 func _on_map_ready() -> void:
 	SceneManager.set_active_scene(DataManager.instance.node_to_info(self))
 	
+	generate_structures()
+	initialized = true;
+
+func generate_structures() -> void:
 	for reg in region_instances.keys():
 		for rI: RegionInstance in region_instances[reg]:
 			rI.generate_structures_for_region()
-	initialized = true;
 	
 func has_chunk(cx: int, cy: int) -> bool:
 	return chunks.has(Vector2i(cx, cy))

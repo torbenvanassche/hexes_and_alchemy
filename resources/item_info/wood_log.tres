@@ -2,9 +2,13 @@
 
 [ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="1_8ykgy"]
 [ext_resource type="Texture2D" uid="uid://d1h2gdswrgier" path="res://sprites/items/wood_processed.png" id="2_nr6xd"]
+[ext_resource type="Resource" uid="uid://b46nyvtvipor5" path="res://resources/item_info/wood_raw.tres" id="3_raw"]
 
 [resource]
 script = ExtResource("1_8ykgy")
 unique_id = "wood_log"
 texture = ExtResource("2_nr6xd")
+recipe = {
+ExtResource("3_raw"): 2
+}
 metadata/_custom_type_script = "uid://c8ngjbq8w5gjr"

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemInfo" format=3 uid="uid://d0lienvyvqxlh"]
+
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="1_o7t5d"]
+[ext_resource type="Resource" uid="uid://oowfm1lpkvm" path="res://resources/item_info/wood_log.tres" id="2_56876"]
+[ext_resource type="Texture2D" uid="uid://c7m3weld6fl26" path="res://sprites/items/container_pile_small.png" id="2_jlphh"]
+[ext_resource type="Resource" uid="uid://o03k1cg30nlw" path="res://resources/item_info/iron_ore.tres" id="3_og5vk"]
+
+[resource]
+script = ExtResource("1_o7t5d")
+unique_id = "buildable_docks"
+texture = ExtResource("2_jlphh")
+recipe = Dictionary[ExtResource("1_o7t5d"), int]({
+ExtResource("2_56876"): 5,
+ExtResource("3_og5vk"): 3
+})
+metadata/_custom_type_script = "uid://c8ngjbq8w5gjr"

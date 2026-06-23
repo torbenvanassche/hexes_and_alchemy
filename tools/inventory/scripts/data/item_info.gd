@@ -5,6 +5,10 @@ class_name ItemInfo extends Resource
 @export var translation_key_description: String;
 @export var texture: Texture2D;
 @export var base_value: int = 1;
+@export var recipe: Dictionary[ItemInfo, int];
+
+func has_recipe() -> bool:
+	return not recipe.is_empty()
 
 func get_display_name() -> String:
 	return _translate_with_fallback(_get_translation_key("NAME"), unique_id.capitalize())

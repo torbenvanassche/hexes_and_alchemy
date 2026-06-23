@@ -1,0 +1,71 @@
+[gd_scene format=3 uid="uid://bfqv1ggh0e7pr"]
+
+[ext_resource type="PackedScene" uid="uid://dny1dqcanlco0" path="res://tools/custom_window/base_window.tscn" id="1_base"]
+[ext_resource type="Script" path="res://tools/inventory/scripts/visual/screens/crafting_ui.gd" id="2_script"]
+[ext_resource type="PackedScene" uid="uid://c5ocjw6joaemy" path="res://tools/inventory/scenes/content_slot.tscn" id="3_slot"]
+[ext_resource type="Theme" uid="uid://whaj7dl14je1" path="res://themes/base_theme.theme" id="4_theme"]
+
+[node name="Window" node_paths=PackedStringArray("content") instance=ExtResource("1_base")]
+custom_minimum_size = Vector2(480, 440)
+id = "WINDOW_CRAFTING"
+store_position = true
+resizable = false
+content = NodePath("NinePatchRect/VBoxContainer/contentPanel/CraftingPanel")
+
+[node name="topbar" parent="NinePatchRect/VBoxContainer" parent_id_path=PackedInt32Array(554725130) index="0" unique_id=347636229]
+color = Color(0, 0, 0, 0.8117647)
+
+[node name="CraftingPanel" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel" index="0"]
+layout_mode = 2
+theme = ExtResource("4_theme")
+theme_override_constants/separation = 8
+script = ExtResource("2_script")
+packed_slot = ExtResource("3_slot")
+
+[node name="RecipeList" type="ItemList" parent="NinePatchRect/VBoxContainer/contentPanel/CraftingPanel"]
+custom_minimum_size = Vector2(430, 130)
+layout_mode = 2
+size_flags_vertical = 3
+fixed_icon_size = Vector2i(32, 32)
+
+[node name="CraftingRows" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/CraftingPanel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="IngredientsPanel" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/CraftingPanel/CraftingRows"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="IngredientsLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/CraftingPanel/CraftingRows/IngredientsPanel"]
+layout_mode = 2
+text = "CRAFTING_INGREDIENTS"
+
+[node name="IngredientsGrid" type="GridContainer" parent="NinePatchRect/VBoxContainer/contentPanel/CraftingPanel/CraftingRows/IngredientsPanel"]
+layout_mode = 2
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 4
+columns = 4
+
+[node name="ResultPanel" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/CraftingPanel/CraftingRows"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+
+[node name="ResultLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/CraftingPanel/CraftingRows/ResultPanel"]
+layout_mode = 2
+text = "CRAFTING_RESULT"
+horizontal_alignment = 1
+
+[node name="ResultSlot" type="CenterContainer" parent="NinePatchRect/VBoxContainer/contentPanel/CraftingPanel/CraftingRows/ResultPanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CraftButton" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/CraftingPanel"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "CRAFTING_CRAFT"
+
+[node name="StatusLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/CraftingPanel"]
+custom_minimum_size = Vector2(430, 28)
+layout_mode = 2
+horizontal_alignment = 1
+autowrap_mode = 2
