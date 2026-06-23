@@ -16,6 +16,8 @@ var scene_instance: SceneInstance;
 
 var collision_scene: PackedScene = preload("res://scenes/hex_collision.tscn");
 const UNEXPLORED_MATERIAL = preload("uid://bgsi1yhfo1pe2")
+static var _debug_drop_valid_material: StandardMaterial3D;
+static var _debug_drop_invalid_material: StandardMaterial3D;
 signal structure_loaded(structure_info: StructureInfo, structure_node: Node)
 
 var ground_hex_mesh: MeshInstance3D;
@@ -34,6 +36,38 @@ var movement_cost: float = 1.0;
 func _ready() -> void:
 	ground_hex_mesh = find_child("hex_*", true) as MeshInstance3D;
 	set_explored(false)
+
+func set_drop_debug_tint(can_drop: bool) -> void:
+	if ground_hex_mesh == null:
+		ground_hex_mesh = find_child("hex_*", true) as MeshInstance3D;
+	if ground_hex_mesh == null:
+		return
+
+	ground_hex_mesh.material_overlay = _get_drop_debug_material(can_drop)
+
+func clear_drop_debug_tint() -> void:
+	if ground_hex_mesh == null:
+		ground_hex_mesh = find_child("hex_*", true) as MeshInstance3D;
+	if ground_hex_mesh == null:
+		return
+
+	ground_hex_mesh.material_overlay = null
+
+func _get_drop_debug_material(can_drop: bool) -> StandardMaterial3D:
+	if can_drop:
+		if _debug_drop_valid_material == null:
+			_debug_drop_valid_material = StandardMaterial3D.new()
+			_debug_drop_valid_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+			_debug_drop_valid_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+			_debug_drop_valid_material.albedo_color = Color(0.2, 1.0, 0.35, 0.35)
+		return _debug_drop_valid_material
+
+	if _debug_drop_invalid_material == null:
+		_debug_drop_invalid_material = StandardMaterial3D.new()
+		_debug_drop_invalid_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+		_debug_drop_invalid_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		_debug_drop_invalid_material.albedo_color = Color(1.0, 0.2, 0.25, 0.35)
+	return _debug_drop_invalid_material
 
 func set_explored(b: bool) -> void:
 	if ground_hex_mesh == null:
@@ -88,7 +122,10 @@ func _on_structure_loaded(s: StructureInfo, required_tiles: Array[SceneInstance]
 		if structure.instance is Interaction:
 			(structure.instance as Interaction).hex = self;
 		add_child(structure.instance);
-		if s.randomize_rotation:
+		var placement_rotation := _get_structure_placement_rotation(s)
+		if bool(placement_rotation.get("has_rotation", false)):
+			structure.instance.rotation.y = float(placement_rotation["rotation_y"])
+		elif s.randomize_rotation:
 			var grid := SceneManager.get_active_scene().node as HexGrid
 			var rng := grid.create_rng("structure_rotation:%s:%s" % [cube_id, s.resource_path]) if grid != null else null
 			var rotation_step := rng.randi_range(0, 5) if rng != null else randi_range(0, 5)
@@ -102,3 +139,9 @@ func _on_structure_loaded(s: StructureInfo, required_tiles: Array[SceneInstance]
 		set_explored(false);
 	
 	structure_loaded.emit(s, structure.instance)
+
+func _get_structure_placement_rotation(s: StructureInfo) -> Dictionary:
+	var placeable := s as PlaceableStructureInfo
+	if placeable == null:
+		return { "has_rotation": false }
+	return placeable.get_placement_rotation_y(self)
