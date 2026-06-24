@@ -42,7 +42,7 @@ visible = false
 script = ExtResource("8_mt1kp")
 quest = ExtResource("9_47cix")
 
-[node name="building_stage_A" parent="structures/buildable_structure/foundation/RootNode" index="0"]
+[node name="building_stage_A" parent="structures/buildable_structure/foundation/RootNode" parent_id_path=PackedInt32Array(216741624, 151036270) index="0" unique_id=623122469]
 surface_material_override/0 = ExtResource("12_mkm41")
 
 [node name="interaction" type="Area3D" parent="structures/buildable_structure/foundation" unique_id=1087166324]

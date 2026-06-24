@@ -7,5 +7,7 @@
 script = ExtResource("1_umum7")
 mine_state = 2
 prospect_weight = 0.3
+collapse_chance = 0.28
+exhaust_chance = 0.12
 loot_table = ExtResource("2_17ce6")
 id = "mine_rich_vein"

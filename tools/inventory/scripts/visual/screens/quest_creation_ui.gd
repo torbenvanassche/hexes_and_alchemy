@@ -18,6 +18,7 @@ func _reset_ui() -> void:
 
 func _ready() -> void:
 	quest_location.item_selected.connect(_on_location_selected)
+	quest_type.item_selected.connect(_on_quest_type_selected)
 
 func clear_forced_data() -> void:
 	forced_interaction = null
@@ -55,12 +56,20 @@ func _on_location_selected(idx: int) -> void:
 			objective.get_filtered_quest_types(objective.state_machine.get_current_state_index())
 		)
 		for state: String in available_types:
-			quest_type.add_item(_get_quest_type_name(state));
+			quest_type.add_item(_get_quest_type_label(objective, state));
 			quest_type.set_item_metadata(quest_type.item_count - 1, state)
+			quest_type.set_item_disabled(
+				quest_type.item_count - 1,
+				not objective.has_required_supplies(state, _get_player_inventory())
+			)
 
 	var has_types: bool = quest_type.item_count > 0
 	quest_type.disabled = not has_types;
-	finish_quest_creation.disabled = not has_types;
+	_select_first_creatable_quest_type(objective)
+	_update_finish_button()
+
+func _on_quest_type_selected(_idx: int) -> void:
+	_update_finish_button()
 
 func _add_location_option(hex: HexBase) -> void:
 	if hex == null or hex.structure == null:
@@ -147,7 +156,13 @@ func _create_quest() -> void:
 	if location == null or quest_type_key == "":
 		return
 
-	quest_created.emit(Quest.new(location, quest_type_key));
+	var quest := Quest.new(location, quest_type_key)
+	var objective := location.structure.instance as QuestObjective
+	if objective != null and not objective.assign_required_supplies(quest, _get_player_inventory()):
+		_update_finish_button()
+		return
+
+	quest_created.emit(quest);
 	(owner as DraggableControl).close_requested.emit();
 
 func _get_quest_type_name(quest_type_key: String) -> String:
@@ -156,3 +171,62 @@ func _get_quest_type_name(quest_type_key: String) -> String:
 	if translated == translation_key:
 		return quest_type_key.capitalize()
 	return translated
+
+func _get_quest_type_label(objective: QuestObjective, quest_type_key: String) -> String:
+	var quest_name := _get_quest_type_name(quest_type_key)
+	if objective == null:
+		return quest_name
+
+	var required_supplies := objective.get_required_supplies(quest_type_key)
+	if required_supplies.is_empty():
+		return quest_name
+	return "%s (%s)" % [quest_name, _format_supplies(required_supplies)]
+
+func _format_supplies(supplies: Dictionary[ItemInfo, int]) -> String:
+	var parts: Array[String] = []
+	for item: ItemInfo in supplies.keys():
+		if item == null:
+			continue
+		var amount := int(supplies[item])
+		if amount <= 0:
+			continue
+		parts.append("%sx %s" % [amount, item.get_display_name()])
+	return ", ".join(parts)
+
+func _select_first_creatable_quest_type(objective: QuestObjective) -> void:
+	if objective == null:
+		return
+	for i in quest_type.item_count:
+		var quest_type_metadata: Variant = quest_type.get_item_metadata(i)
+		if not (quest_type_metadata is String):
+			continue
+		if objective.has_required_supplies(str(quest_type_metadata), _get_player_inventory()):
+			quest_type.select(i)
+			return
+
+	if quest_type.item_count > 0:
+		quest_type.select(0)
+
+func _update_finish_button() -> void:
+	var location_idx: int = quest_location.selected
+	var quest_type_idx: int = quest_type.selected
+	if location_idx < 0 or quest_type_idx < 0:
+		finish_quest_creation.disabled = true
+		return
+
+	var location: HexBase = quest_location.get_item_metadata(location_idx) as HexBase
+	var quest_type_metadata: Variant = quest_type.get_item_metadata(quest_type_idx)
+	if location == null or location.structure == null or not (quest_type_metadata is String):
+		finish_quest_creation.disabled = true
+		return
+
+	var objective := location.structure.instance as QuestObjective
+	finish_quest_creation.disabled = objective == null or not objective.has_required_supplies(
+		str(quest_type_metadata),
+		_get_player_inventory()
+	)
+
+func _get_player_inventory() -> Inventory:
+	if Manager.instance == null or Manager.instance.player_instance == null:
+		return null
+	return Manager.instance.player_instance.inventory

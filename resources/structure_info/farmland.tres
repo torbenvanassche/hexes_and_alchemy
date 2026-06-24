@@ -13,7 +13,6 @@ point_count = 2
 script = ExtResource("1_rlj5i")
 loot_table = ExtResource("2_5q1dx")
 max_per_region_size = SubResource("Curve_nqdss")
-minimum_distance_from_other_structures = 2
 spawn_weight = 0.9
 id = "farmland"
 packed_scene = ExtResource("1_0mxwp")

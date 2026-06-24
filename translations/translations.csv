@@ -19,7 +19,7 @@ SETTINGS_TAB_GAME,game,game
 SETTINGS_TAB_INPUT,input,input
 WINDOW_TITLE,window title,window title
 WINDOW_INVENTORY,Inventory,Inventory
-WINDOW_CRAFTING,Crafting,Crafting
+WINDOW_CRAFTING,Blacksmith,Blacksmith
 WINDOW_MARKET,Market,Market
 WINDOW_DEPOSIT_ITEMS,Deposit items,Deposit items
 WINDOW_QUEST_BOARD,Quest board,Quest board
@@ -36,7 +36,7 @@ SCENE_GAME_SETTINGS_NAME,Game settings,Game settings
 SCENE_GAMEPLAY_MAIN_NAME,Gameplay,Gameplay
 SCENE_INPUT_SETTINGS_NAME,Input settings,Input settings
 SCENE_INVENTORY_UI_NAME,Inventory,Inventory
-SCENE_CRAFTING_UI_NAME,Crafting,Crafting
+SCENE_CRAFTING_UI_NAME,Blacksmith,Blacksmith
 SCENE_MARKET_UI_NAME,Market,Market
 SCENE_PAUSE_MENU_NAME,Pause menu,Pause menu
 SCENE_PLAYER_NAME,Player,Player
@@ -72,7 +72,6 @@ QUEST_PARTY_ADVENTURERS,%s adventurers,%s adventurers
 QUEST_ACTION_DISPATCH_PARTY,Dispatch party,Dispatch party
 QUEST_ACTION_CLAIM_REWARD,Claim reward,Claim reward
 DEPOSIT_COMPLETE_ORDER,Complete order,Complete order
-CRAFTING_OPEN,Craft,Craft
 CRAFTING_INGREDIENTS,Ingredients,Ingredients
 CRAFTING_RESULT,Result,Result
 CRAFTING_CRAFT,Craft item,Craft item

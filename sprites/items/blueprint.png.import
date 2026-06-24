@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d0m48v3hrurhe"
-path="res://.godot/imported/cut_gem.png-4976c9571c91167bef6a74ecf09fca2d.ctex"
+uid="uid://ckm7ko4v1d4w2"
+path="res://.godot/imported/blueprint.png-c88f72fbe0b7a7070e4d7b9994bda8ed.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/items/cut_gem.png"
-dest_files=["res://.godot/imported/cut_gem.png-4976c9571c91167bef6a74ecf09fca2d.ctex"]
+source_file="res://sprites/items/blueprint.png"
+dest_files=["res://.godot/imported/blueprint.png-c88f72fbe0b7a7070e4d7b9994bda8ed.ctex"]
 
 [params]
 

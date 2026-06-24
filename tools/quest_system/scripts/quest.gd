@@ -32,8 +32,8 @@ func _init(_location: HexBase = null, _type_key: String = "") -> void:
 func is_state(state: QuestState) -> bool:
 	return get_state_as_string(state) == state_machine.get_current_state();
 	
-func add_supply(resource: ContentSlotResource) -> void:
-	supplies.add(resource);
+func add_supply(item: Resource, amount: int = 1) -> void:
+	supplies.add(item, amount, true);
 	
 func add_to_party(npc: NPC) -> void:
 	if not party.has(npc):
@@ -54,7 +54,14 @@ func set_state(state: QuestState) -> void:
 	
 func _check_party_arrived_at_quest() -> void:
 	if party.all(func(n: NPC) -> bool: return n.is_state(NPC.NPCState.AT_QUEST)):
-		location.structure.instance.execute_quest(self);
+		var objective := location.structure.instance as QuestObjective
+		if objective == null:
+			return
+		if not objective.quest_has_required_supplies(self):
+			Debug.warn("Quest '%s' is missing its required supplies." % [quest_key])
+			return_from_quest()
+			return
+		objective.execute_quest(self);
 		set_state(QuestState.IN_PROGRESS);
 		
 func return_completed() -> void:

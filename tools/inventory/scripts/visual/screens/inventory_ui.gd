@@ -18,9 +18,6 @@ var elements: Array[Node] = []
 var selected_slot: ContentSlotUI
 
 func _ready() -> void:
-	var craft_button := get_node_or_null("../../topbar/MarginContainer2/HBoxContainer/CraftButton") as Button
-	if craft_button:
-		craft_button.pressed.connect(_open_crafting_window)
 	_rebuild_inventory()
 
 func _rebuild_inventory() -> void:
@@ -62,19 +59,3 @@ func _set_selected(slot: ContentSlotUI) -> void:
 
 	selected_slot = slot
 	selected_slot.button_pressed = true
-
-func _open_crafting_window() -> void:
-	var crafting_window := DataManager.instance.get_scene_by_name("crafting_ui")
-	if crafting_window == null:
-		return
-	for instance in crafting_window.get_live_instances():
-		if SceneManager.is_visible(instance):
-			SceneManager.add(crafting_window, true)
-			return
-	crafting_window.queue(_show_crafting_window)
-
-func _show_crafting_window(window_info: SceneInfo) -> void:
-	var window_instance := SceneManager.add(window_info, false)
-	var crafting_ui: CraftingUI = (window_instance.node as DraggableControl).content as CraftingUI
-	crafting_ui.inventory = inventory
-	window_instance.on_enter.emit()

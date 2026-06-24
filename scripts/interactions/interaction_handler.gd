@@ -1,6 +1,7 @@
 @abstract class_name Interaction extends Node3D
 
 var hex: HexBase;
+var settlement: Settlement;
 
 var enterable_triggers: Array[Area3D];
 var colliders: Array[StaticBody3D];

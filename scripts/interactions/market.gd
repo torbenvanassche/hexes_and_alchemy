@@ -1,4 +1,4 @@
-class_name Market extends Interaction
+class_name Market extends SettlementService
 
 @onready var inventory: Inventory = $Inventory
 

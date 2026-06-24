@@ -19,6 +19,10 @@ enum QuestTypeIndex {
 @export var reinforce_time: float = 5.0
 @export var vein_infos: Array[MineVeinInfo] = []
 
+@onready var ready_to_mine: Node3D = get_node_or_null("ready_to_mine") as Node3D
+@onready var collapsed: Node3D = get_node_or_null("collapsed") as Node3D
+@onready var no_entry: Node3D = get_node_or_null("no_entry") as Node3D
+
 var _quest_running: bool = false
 var _pending_reward: Dictionary[ItemInfo, int] = {}
 var _last_stable_state: MineState = MineState.POOR_VEIN
@@ -54,7 +58,7 @@ func execute_quest(q: Quest) -> void:
 		var origin_state := _current_mine_state()
 		await get_tree().create_timer(extract_time).timeout
 		_pending_reward = _roll_extract_reward(origin_state)
-		_set_mine_state(origin_state)
+		_set_mine_state(_roll_post_extract_state(origin_state))
 	elif q.quest_key == _get_quest_type(QuestTypeIndex.REINFORCE):
 		await get_tree().create_timer(reinforce_time).timeout
 		_set_mine_state(_last_stable_state)
@@ -87,7 +91,16 @@ func _set_mine_state(state: MineState) -> void:
 	state_machine.set_state(MineState.keys()[state])
 	if state in [MineState.POOR_VEIN, MineState.RICH_VEIN]:
 		_last_stable_state = state
+	_update_markers(state)
 	Config.gamestate.quest_availability_changed.emit()
+
+func _update_markers(state: MineState) -> void:
+	if ready_to_mine != null:
+		ready_to_mine.visible = state in [MineState.POOR_VEIN, MineState.RICH_VEIN]
+	if collapsed != null:
+		collapsed.visible = state == MineState.UNSTABLE
+	if no_entry != null:
+		no_entry.visible = state == MineState.EXHAUSTED
 
 func _roll_discovered_state() -> MineState:
 	var valid_infos: Array[MineVeinInfo] = []
@@ -120,6 +133,21 @@ func _roll_extract_reward(origin_state: MineState) -> Dictionary[ItemInfo, int]:
 	if info == null:
 		return {}
 	return info.roll_loot()
+
+func _roll_post_extract_state(origin_state: MineState) -> MineState:
+	var info := _get_vein_info_for_state(origin_state)
+	if info == null:
+		return origin_state
+
+	var collapse_chance := clampf(info.collapse_chance, 0.0, 1.0)
+	var exhaust_chance := clampf(info.exhaust_chance, 0.0, 1.0 - collapse_chance)
+	var roll := randf()
+
+	if roll < collapse_chance:
+		return MineState.UNSTABLE
+	if roll < collapse_chance + exhaust_chance:
+		return MineState.EXHAUSTED
+	return origin_state
 
 func _get_vein_info_for_state(state: MineState) -> MineVeinInfo:
 	for vein_info in vein_infos:

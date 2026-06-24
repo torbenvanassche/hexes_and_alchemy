@@ -7,6 +7,10 @@
 [ext_resource type="PackedScene" uid="uid://bys16xhhw8hqg" path="res://meshes/kay_dungeon/bucket_pickaxes.glb" id="4_gn08g"]
 [ext_resource type="Resource" uid="uid://bsungdk7lc1hw" path="res://resources/structure_info/mine_rich_vein.tres" id="5_1g1kg"]
 [ext_resource type="Resource" uid="uid://dh5jlylemnft2" path="res://resources/structure_info/mine_unstable_vein.tres" id="6_ngjhr"]
+[ext_resource type="PackedScene" uid="uid://djsfpga0euwr0" path="res://meshes/kay_custom/cross.glb" id="7_58x1d"]
+[ext_resource type="PackedScene" uid="uid://mbedk8b2ca54" path="res://meshes/kay_dungeon/rubble_half.glb" id="8_mbedk"]
+[ext_resource type="Script" path="res://tools/quest_system/scripts/quest_supply_requirement.gd" id="9_supply"]
+[ext_resource type="Resource" uid="uid://oowfm1lpkvm" path="res://resources/item_info/wood_log.tres" id="10_wood"]
 
 [sub_resource type="BitMap" id="BitMap_3h0bv"]
 data = {
@@ -20,17 +24,34 @@ size = Vector3(1.1559805, 1.174, 1.513)
 [sub_resource type="BoxShape3D" id="BoxShape3D_f4m0s"]
 size = Vector3(0.94522744, 0.7539673, 0.41274548)
 
+[sub_resource type="Resource" id="Resource_reinforce_supplies"]
+script = ExtResource("9_supply")
+quest_type = "reinforce"
+supplies = Dictionary[ExtResource("10_wood"), int]({
+ExtResource("10_wood"): 2
+})
+
 [node name="Node3D" type="Node3D" unique_id=2071832704]
 transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, 0, 0, 0)
 script = ExtResource("1_f4m0s")
 vein_infos = Array[ExtResource("1_wd22k")]([ExtResource("3_icepf"), ExtResource("5_1g1kg"), ExtResource("6_ngjhr")])
 quest_types = Array[String](["prospect", "extract", "reinforce"])
 bitmap = SubResource("BitMap_3h0bv")
+quest_supply_requirements = Array[ExtResource("9_supply")]([SubResource("Resource_reinforce_supplies")])
 
 [node name="Root Scene" parent="." unique_id=1429542013 instance=ExtResource("1_bbfir")]
 
+[node name="no_entry" parent="." unique_id=1406159595 instance=ExtResource("7_58x1d")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.008031666, 0.27151197, 0.6068869)
+visible = false
+
+[node name="collapsed" parent="." unique_id=1809170723 instance=ExtResource("8_mbedk")]
+transform = Transform3D(0.14445512, 0, 0.040406864, 0, 0.14999999, 0, -0.040406864, 0, 0.14445512, -0.17365494, 0.02000006, 0.35125306)
+visible = false
+
 [node name="ready_to_mine" parent="." unique_id=583160811 instance=ExtResource("4_gn08g")]
 transform = Transform3D(0.18, 0, 0, 0, 0.18, 0, 0, 0, 0.18, -0.28097305, 0.01999994, 0.69652873)
+visible = false
 
 [node name="collision" type="StaticBody3D" parent="." unique_id=1957721428]
 

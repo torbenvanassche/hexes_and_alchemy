@@ -6,6 +6,7 @@ var state_machine: StateMachine = StateMachine.new();
 ## Bitmap Columns
 @export var quest_types: Array[String];
 @export var bitmap: BitMap;
+@export var quest_supply_requirements: Array[QuestSupplyRequirement] = []
 
 func _on_visibility_changed() -> void:
 	super._on_visibility_changed();
@@ -28,6 +29,35 @@ func get_filtered_quest_types(active_state: int = state_machine.get_current_stat
 		if bitmap.get_bit(b, active_state):
 			valid_types.append(quest_types[b]);
 	return valid_types;
+
+func get_supply_requirement(quest_type_key: String) -> QuestSupplyRequirement:
+	for requirement in quest_supply_requirements:
+		if requirement != null and requirement.matches(quest_type_key):
+			return requirement
+	return null
+
+func get_required_supplies(quest_type_key: String) -> Dictionary[ItemInfo, int]:
+	var requirement := get_supply_requirement(quest_type_key)
+	if requirement != null:
+		return requirement.supplies
+	return {}
+
+func has_required_supplies(quest_type_key: String, inventory: ContentGroup) -> bool:
+	var requirement := get_supply_requirement(quest_type_key)
+	return requirement == null or requirement.has_available_supplies(inventory)
+
+func assign_required_supplies(quest: Quest, inventory: ContentGroup) -> bool:
+	if quest == null:
+		return false
+
+	var requirement := get_supply_requirement(quest.quest_key)
+	return requirement == null or requirement.assign_to_quest(quest, inventory)
+
+func quest_has_required_supplies(quest: Quest) -> bool:
+	if quest == null:
+		return false
+	var requirement := get_supply_requirement(quest.quest_key)
+	return requirement == null or requirement.quest_has_supplies(quest)
 	
 func _on_create_quest_window_loaded(window_info: SceneInfo) -> void:
 	window_instance = SceneManager.add(window_info);

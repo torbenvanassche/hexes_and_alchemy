@@ -13,7 +13,6 @@ point_count = 2
 script = ExtResource("3_gi0i3")
 loot_table = ExtResource("4_gi0i3")
 max_per_region_size = SubResource("Curve_nqdss")
-spawn_weight = 1.0
 id = "mines"
 packed_scene = ExtResource("2_ox4ln")
 type = 4
