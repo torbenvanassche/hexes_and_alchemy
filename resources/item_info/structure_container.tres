@@ -7,7 +7,7 @@
 
 [resource]
 script = ExtResource("1_o7t5d")
-unique_id = "buildable_docks"
+unique_id = "docks_blueprint"
 texture = ExtResource("2_jlphh")
 recipe = Dictionary[ExtResource("1_o7t5d"), int]({
 ExtResource("2_56876"): 5,
