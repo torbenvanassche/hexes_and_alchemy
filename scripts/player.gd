@@ -35,16 +35,15 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	movement.physics_process(delta)
 
-func _unhandled_input(_event: InputEvent) -> void:
-	if get_viewport().gui_get_focus_owner() != null:
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("inventory"):
+		toggle_inventory()
+		get_viewport().set_input_as_handled()
 		return
 	
-	if Input.is_action_just_pressed("primary_action"):
+	if event.is_action_pressed("primary_action"):
 		if not interactor_component.interact():
 			pick_hex_from_mouse()
-	
-	if Input.is_action_just_pressed("inventory"):
-		toggle_inventory()
 
 func pick_hex_from_mouse() -> HexBase:
 	return interactor_component.pick_hex_from_mouse()

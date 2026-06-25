@@ -47,7 +47,7 @@
 [ext_resource type="Resource" uid="uid://c4slhs80lvehm" path="res://resources/scene_info/adventurer.tres" id="39_eirlg"]
 [ext_resource type="Script" uid="uid://du4hbbtmblkj0" path="res://tools/quest_system/scripts/npc_info.gd" id="45_h5su3"]
 [ext_resource type="Resource" uid="uid://c8hkdge0pvgtn" path="res://resources/npc_info/basic_adventurer.tres" id="46_c6i2r"]
-[ext_resource type="Resource" uid="uid://d0lienvyvqxlh" path="res://resources/item_info/structure_container.tres" id="47_742t5"]
+[ext_resource type="Resource" uid="uid://d0lienvyvqxlh" path="res://resources/item_info/dock_blueprint.tres" id="47_742t5"]
 [ext_resource type="Script" uid="uid://c8bmw05frta6c" path="res://scripts/ui/notification.gd" id="49_c6i2r"]
 [ext_resource type="Resource" uid="uid://ck0i8jm3a1eqw" path="res://resources/scene_info/ui/crafting_ui.tres" id="50_craft"]
 
