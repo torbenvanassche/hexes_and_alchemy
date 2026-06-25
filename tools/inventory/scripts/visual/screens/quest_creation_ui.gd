@@ -2,7 +2,12 @@ class_name QuestCreationUI extends Control
 
 @onready var quest_type: OptionButton = $FormPanel/MarginContainer/VBoxContainer/TypeRow/QuestType
 @onready var quest_location: OptionButton = $FormPanel/MarginContainer/VBoxContainer/LocationRow/QuestLocation
+@onready var quest_supplies: Control = $FormPanel/MarginContainer/VBoxContainer/QuestSupplies
+@onready var supplies_grid: GridContainer = $FormPanel/MarginContainer/VBoxContainer/QuestSupplies/SuppliesGrid
 @onready var finish_quest_creation: Button = $FormPanel/MarginContainer/VBoxContainer/Actions/FinishQuestCreation
+
+@export var packed_slot: PackedScene
+@export var slot_size: int = 56
 
 signal quest_created(quest: Quest)
 
@@ -13,6 +18,7 @@ func _reset_ui() -> void:
 	quest_location.clear();
 	quest_type.disabled = true;
 	finish_quest_creation.disabled = true;
+	_refresh_required_supplies()
 	if finish_quest_creation.pressed.is_connected(_create_quest):
 		finish_quest_creation.pressed.disconnect(_create_quest)
 
@@ -66,9 +72,11 @@ func _on_location_selected(idx: int) -> void:
 	var has_types: bool = quest_type.item_count > 0
 	quest_type.disabled = not has_types;
 	_select_first_creatable_quest_type(objective)
+	_refresh_required_supplies()
 	_update_finish_button()
 
 func _on_quest_type_selected(_idx: int) -> void:
+	_refresh_required_supplies()
 	_update_finish_button()
 
 func _add_location_option(hex: HexBase) -> void:
@@ -173,25 +181,7 @@ func _get_quest_type_name(quest_type_key: String) -> String:
 	return translated
 
 func _get_quest_type_label(objective: QuestObjective, quest_type_key: String) -> String:
-	var quest_name := _get_quest_type_name(quest_type_key)
-	if objective == null:
-		return quest_name
-
-	var required_supplies := objective.get_required_supplies(quest_type_key)
-	if required_supplies.is_empty():
-		return quest_name
-	return "%s (%s)" % [quest_name, _format_supplies(required_supplies)]
-
-func _format_supplies(supplies: Dictionary[ItemInfo, int]) -> String:
-	var parts: Array[String] = []
-	for item: ItemInfo in supplies.keys():
-		if item == null:
-			continue
-		var amount := int(supplies[item])
-		if amount <= 0:
-			continue
-		parts.append("%sx %s" % [amount, item.get_display_name()])
-	return ", ".join(parts)
+	return _get_quest_type_name(quest_type_key)
 
 func _select_first_creatable_quest_type(objective: QuestObjective) -> void:
 	if objective == null:
@@ -225,6 +215,47 @@ func _update_finish_button() -> void:
 		str(quest_type_metadata),
 		_get_player_inventory()
 	)
+
+func _refresh_required_supplies() -> void:
+	for child in supplies_grid.get_children():
+		child.queue_free()
+
+	var required_supplies := _get_selected_required_supplies()
+	quest_supplies.visible = not required_supplies.is_empty()
+	if required_supplies.is_empty():
+		return
+
+	for item: ItemInfo in required_supplies.keys():
+		if item == null:
+			continue
+		var amount := int(required_supplies[item])
+		if amount <= 0:
+			continue
+		supplies_grid.add_child(_create_supply_slot(item, amount))
+
+func _get_selected_required_supplies() -> Dictionary[ItemInfo, int]:
+	var location_idx: int = quest_location.selected
+	var quest_type_idx: int = quest_type.selected
+	if location_idx < 0 or quest_type_idx < 0:
+		return {}
+
+	var location: HexBase = quest_location.get_item_metadata(location_idx) as HexBase
+	var quest_type_metadata: Variant = quest_type.get_item_metadata(quest_type_idx)
+	if location == null or location.structure == null or not (quest_type_metadata is String):
+		return {}
+
+	var objective := location.structure.instance as QuestObjective
+	if objective == null:
+		return {}
+
+	return objective.get_required_supplies(str(quest_type_metadata))
+
+func _create_supply_slot(item: ItemInfo, count: int) -> ContentSlotUI:
+	var slot: ContentSlotUI = packed_slot.instantiate()
+	slot.custom_minimum_size = Vector2(slot_size, slot_size)
+	slot.can_drag = false
+	slot.set_content(ContentSlotResource.new(count, item, max(1, count), true, false))
+	return slot
 
 func _get_player_inventory() -> Inventory:
 	if Manager.instance == null or Manager.instance.player_instance == null:

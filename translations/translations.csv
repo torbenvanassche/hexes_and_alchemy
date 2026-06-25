@@ -50,6 +50,7 @@ INPUT_PRESS_KEY_TO_BIND,Press key to bind...,Press key to bind...
 QUEST_LIST_EMPTY,No quests are pinned.,No quests are pinned.
 QUEST_CREATION_TARGET,Target,Target
 QUEST_CREATION_QUEST,Quest,Quest
+QUEST_CREATION_SUPPLIES,Required supplies,Required supplies
 QUEST_CREATION_CREATE,Create quest,Create quest
 QUEST_LOCATION_DISTANCE,%s (%s tiles),%s (%s tiles)
 QUEST_TYPE_FETCH,Fetch,Fetch

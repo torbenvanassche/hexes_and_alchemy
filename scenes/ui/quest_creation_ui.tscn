@@ -2,10 +2,11 @@
 
 [ext_resource type="PackedScene" uid="uid://dny1dqcanlco0" path="res://tools/custom_window/base_window.tscn" id="1_b8c84"]
 [ext_resource type="Script" uid="uid://cp06udl0ffykh" path="res://tools/inventory/scripts/visual/screens/quest_creation_ui.gd" id="2_1mihr"]
-[ext_resource type="Theme" uid="uid://whaj7dl14je1" path="res://themes/base_theme.theme" id="4_theme"]
+[ext_resource type="PackedScene" uid="uid://c5ocjw6joaemy" path="res://tools/inventory/scenes/content_slot.tscn" id="3_slot"]
+[ext_resource type="Theme" uid="uid://dae2b2hfpj0l2" path="res://themes/base_theme.theme" id="4_theme"]
 
 [node name="Window" unique_id=1301866213 node_paths=PackedStringArray("content") instance=ExtResource("1_b8c84")]
-custom_minimum_size = Vector2(390, 210)
+custom_minimum_size = Vector2(390, 280)
 offset_right = -852.0
 offset_bottom = -648.0
 id = "WINDOW_NEW_QUEST"
@@ -19,6 +20,7 @@ custom_minimum_size = Vector2(350, 145)
 layout_mode = 2
 theme = ExtResource("4_theme")
 script = ExtResource("2_1mihr")
+packed_slot = ExtResource("3_slot")
 
 [node name="FormPanel" type="NinePatchRect" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation" index="0" unique_id=1979064244]
 self_modulate = Color(1, 0.94, 0.78, 1)
@@ -83,9 +85,22 @@ size_flags_horizontal = 3
 theme = ExtResource("4_theme")
 text_overrun_behavior = 3
 
-[node name="QuestSupplies" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer" index="2" unique_id=1979064245]
+[node name="QuestSupplies" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer" index="2" unique_id=1979064245]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="SuppliesLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer/QuestSupplies" index="0" unique_id=991655882]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.23, 0.14, 0.07, 1)
+text = "QUEST_CREATION_SUPPLIES"
+
+[node name="SuppliesGrid" type="GridContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer/QuestSupplies" index="1" unique_id=1114575640]
+layout_mode = 2
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 4
+columns = 4
 
 [node name="Actions" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer" index="3" unique_id=605675596]
 layout_mode = 2
