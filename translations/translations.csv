@@ -60,6 +60,7 @@ QUEST_TYPE_HARVEST,Harvest,Harvest
 QUEST_TYPE_CLEAR,Clear,Clear
 QUEST_TYPE_PROSPECT,Prospect,Prospect
 QUEST_TYPE_EXTRACT,Extract,Extract
+QUEST_TYPE_FILL,Fill,Fill
 QUEST_TYPE_REINFORCE,Reinforce,Reinforce
 QUEST_TYPE_DEEPEN,Deepen,Deepen
 QUEST_STATE_WAITING,Waiting,Waiting
@@ -94,6 +95,7 @@ STRUCTURE_ORE_DEPOSIT_GOLD_NAME,Gold deposit,Gold deposit
 STRUCTURE_ORE_DEPOSIT_IRON_NAME,Iron deposit,Iron deposit
 STRUCTURE_SETTLEMENT_NAME,Settlement,Settlement
 STRUCTURE_SPAWNABLE_MINES_NAME,Mine,Mine
+STRUCTURE_WATER_SOURCE_NAME,Well,Well
 REGION_DESERT_NAME,Desert,Desert
 REGION_MINESHAFT_NAME,Mineshaft,Mineshaft
 REGION_OCEAN_NAME,Ocean,Ocean
@@ -106,10 +108,20 @@ TIME_OF_DAY_NIGHT,Night,Night
 ITEM_CURRENCY_NAME,Coin,Coin
 ITEM_CURRENCY_DESCRIPTION,A coin used for trade.,A coin used for trade.
 ITEM_COUNT_LABEL,x%s,x%s
+ITEM_BUCKET_NAME,Bucket,Bucket
+ITEM_BUCKET_DESCRIPTION,An empty bucket that can be filled at a well.,An empty bucket that can be filled at a well.
 ITEM_ORE_GOLD_NAME,Gold ore,Gold ore
 ITEM_ORE_GOLD_DESCRIPTION,Raw gold ore.,Raw gold ore.
 ITEM_ORE_IRON_NAME,Iron ore,Iron ore
 ITEM_ORE_IRON_DESCRIPTION,Raw iron ore.,Raw iron ore.
+ITEM_GRAIN_NAME,Grain,Grain
+ITEM_GRAIN_DESCRIPTION,A harvested crop used for food or seed.,A harvested crop used for food or seed.
+ITEM_SEED_POUCH_NAME,Seed pouch,Seed pouch
+ITEM_SEED_POUCH_DESCRIPTION,Seeds prepared for planting farmland.,Seeds prepared for planting farmland.
+ITEM_SUPPORT_BEAMS_NAME,Support beams,Support beams
+ITEM_SUPPORT_BEAMS_DESCRIPTION,Wooden beams used to reinforce unstable structures.,Wooden beams used to reinforce unstable structures.
+ITEM_WATER_BUCKET_NAME,Water bucket,Water bucket
+ITEM_WATER_BUCKET_DESCRIPTION,A bucket of water for tending crops.,A bucket of water for tending crops.
 ITEM_WOOD_LOG_NAME,Processed wood,Processed wood
 ITEM_WOOD_LOG_DESCRIPTION,Wood prepared for building.,Wood prepared for building.
 ITEM_WOOD_RAW_NAME,Raw wood,Raw wood

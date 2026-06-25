@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemInfo" format=3 uid="uid://cedqercu5lay2"]
+
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="1_seed"]
+[ext_resource type="Texture2D" uid="uid://t1typdl3yash" path="res://sprites/items/flour_bag.png" id="2_seed"]
+[ext_resource type="Resource" uid="uid://75dbm8y87mpo" path="res://resources/item_info/grain.tres" id="3_seed"]
+
+[resource]
+script = ExtResource("1_seed")
+unique_id = "seed_pouch"
+texture = ExtResource("2_seed")
+base_value = 2
+recipe = Dictionary[ExtResource("1_seed"), int]({
+ExtResource("3_seed"): 1
+})
+metadata/_custom_type_script = "uid://c8ngjbq8w5gjr"

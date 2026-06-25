@@ -2,18 +2,17 @@
 
 [ext_resource type="PackedScene" uid="uid://cvkpa07ijqa1m" path="res://scenes/tops/topper_dirt.tscn" id="1_0mxwp"]
 [ext_resource type="Script" uid="uid://brvtfutnwh30i" path="res://scripts/structures/lootable_info.gd" id="1_rlj5i"]
-[ext_resource type="Resource" path="res://resources/loot_tables/farmland.tres" id="2_5q1dx"]
+[ext_resource type="Resource" uid="uid://d2q0ktdbqgw13" path="res://resources/loot_tables/farmland.tres" id="2_5q1dx"]
 
 [sub_resource type="Curve" id="Curve_nqdss"]
 _limits = [0.0, 12.0, 0.0, 50.0]
-_data = [Vector2(0, 2), 0.0, 0.166667, 1, 1, Vector2(12, 4), 0.166667, 0.0, 1, 1]
+_data = [Vector2(0, 1), 0.0, 0.166667, 1, 1, Vector2(12, 3), 0.166667, 0.0, 1, 1]
 point_count = 2
 
 [resource]
 script = ExtResource("1_rlj5i")
 loot_table = ExtResource("2_5q1dx")
 max_per_region_size = SubResource("Curve_nqdss")
-spawn_weight = 0.9
 id = "farmland"
 packed_scene = ExtResource("1_0mxwp")
 metadata/_custom_type_script = "uid://brvtfutnwh30i"

@@ -4,6 +4,8 @@ class_name QuestSupplyRequirement extends Resource
 @export var supplies: Dictionary[ItemInfo, int] = {}
 
 func matches(quest_type_key: String) -> bool:
+	if quest_type_key == "":
+		Debug.err("Invalid quest requirements.")
 	return quest_type == quest_type_key
 
 func has_available_supplies(inventory: ContentGroup) -> bool:

@@ -1,10 +1,14 @@
 [gd_scene format=3 uid="uid://cvkpa07ijqa1m"]
 
 [ext_resource type="Script" uid="uid://c2ak30cofsw0q" path="res://scripts/interactions/interactable_locations/farmland.gd" id="1_whuaq"]
+[ext_resource type="Script" uid="uid://bju85emrqs252" path="res://tools/quest_system/scripts/quest_supply_requirement.gd" id="2_esn6e"]
 [ext_resource type="PackedScene" uid="uid://b5nvbe2agstv" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/building_dirt.glb" id="2_h10pt"]
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="3_h4h0m"]
+[ext_resource type="Resource" path="res://resources/item_info/seed_pouch.tres" id="3_seed"]
 [ext_resource type="PackedScene" uid="uid://bax5moj3u5f0w" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/building_grain.glb" id="3_ypxrj"]
 [ext_resource type="PackedScene" uid="uid://drag6hoa8h7r5" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/building_grain_watered.glb" id="4_54fpy"]
 [ext_resource type="PackedScene" uid="uid://c2hlhjmdl7v77" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/building_grain_seeds.glb" id="4_s8nt4"]
+[ext_resource type="Resource" path="res://resources/item_info/water_bucket.tres" id="4_water"]
 [ext_resource type="PackedScene" uid="uid://0kpili04lb" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/building_grain_dead.glb" id="6_ox7li"]
 
 [sub_resource type="BitMap" id="BitMap_uk8kr"]
@@ -13,6 +17,22 @@ data = {
 "size": Vector2i(4, 5)
 }
 
+[sub_resource type="Resource" id="Resource_hu2ny"]
+script = ExtResource("2_esn6e")
+quest_type = "plant"
+supplies = Dictionary[ExtResource("3_h4h0m"), int]({
+ExtResource("3_seed"): 1
+})
+metadata/_custom_type_script = "uid://bju85emrqs252"
+
+[sub_resource type="Resource" id="Resource_water_supplies"]
+script = ExtResource("2_esn6e")
+quest_type = "water"
+supplies = Dictionary[ExtResource("3_h4h0m"), int]({
+ExtResource("4_water"): 1
+})
+metadata/_custom_type_script = "uid://bju85emrqs252"
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_54fpy"]
 size = Vector3(1.6275806, 1.6783295, 1.7532562)
 
@@ -20,6 +40,7 @@ size = Vector3(1.6275806, 1.6783295, 1.7532562)
 script = ExtResource("1_whuaq")
 quest_types = Array[String](["plant", "water", "harvest", "clear"])
 bitmap = SubResource("BitMap_uk8kr")
+quest_supply_requirements = Array[ExtResource("2_esn6e")]([SubResource("Resource_hu2ny"), SubResource("Resource_water_supplies")])
 
 [node name="mesh_fallow" parent="." unique_id=624363515 instance=ExtResource("2_h10pt")]
 

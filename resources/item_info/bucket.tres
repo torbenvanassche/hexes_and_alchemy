@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemInfo" format=3]
+
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="1_bucket"]
+[ext_resource type="Texture2D" uid="uid://ffulp4bkj5o2" path="res://sprites/items/bucket_empty.png" id="2_bucket"]
+[ext_resource type="Resource" uid="uid://b46nyvtvipor5" path="res://resources/item_info/wood_raw.tres" id="3_bucket"]
+
+[resource]
+script = ExtResource("1_bucket")
+unique_id = "bucket"
+texture = ExtResource("2_bucket")
+base_value = 1
+recipe = Dictionary[ExtResource("1_bucket"), int]({
+ExtResource("3_bucket"): 1
+})
+metadata/_custom_type_script = "uid://c8ngjbq8w5gjr"

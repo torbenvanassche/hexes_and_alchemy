@@ -10,7 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://djsfpga0euwr0" path="res://meshes/kay_custom/cross.glb" id="7_58x1d"]
 [ext_resource type="PackedScene" uid="uid://mbedk8b2ca54" path="res://meshes/kay_dungeon/rubble_half.glb" id="8_mbedk"]
 [ext_resource type="Script" path="res://tools/quest_system/scripts/quest_supply_requirement.gd" id="9_supply"]
-[ext_resource type="Resource" uid="uid://oowfm1lpkvm" path="res://resources/item_info/wood_log.tres" id="10_wood"]
+[ext_resource type="Resource" path="res://resources/item_info/support_beams.tres" id="10_support"]
 
 [sub_resource type="BitMap" id="BitMap_3h0bv"]
 data = {
@@ -27,8 +27,8 @@ size = Vector3(0.94522744, 0.7539673, 0.41274548)
 [sub_resource type="Resource" id="Resource_reinforce_supplies"]
 script = ExtResource("9_supply")
 quest_type = "reinforce"
-supplies = Dictionary[ExtResource("10_wood"), int]({
-ExtResource("10_wood"): 2
+supplies = Dictionary[ExtResource("10_support"), int]({
+ExtResource("10_support"): 1
 })
 
 [node name="Node3D" type="Node3D" unique_id=2071832704]
