@@ -5,6 +5,9 @@ var _spacing: float = 0.25
 
 ##The radius for initial chunk generation, more can be generated on demand
 @export var chunk_radius: int = 3;
+@export var chunk_size: Vector2i = Vector2i(4, 4):
+	set(value):
+		chunk_size = Vector2i(maxi(1, value.x), maxi(1, value.y))
 @export var grid_name: String;
 
 ## Set this to reproduce a specific world. Leave it at 0 to generate a new seed on each run.
@@ -62,9 +65,31 @@ func _ready() -> void:
 
 	_apply_seed_to_region_noise()
 
+	for chunk_coords in _get_initial_chunk_coords():
+		generate_chunk(chunk_coords.x, chunk_coords.y)
+
+func _get_initial_chunk_coords() -> Array[Vector2i]:
+	var coords: Array[Vector2i] = []
 	for cy in range(-chunk_radius, chunk_radius + 1):
 		for cx in range(-chunk_radius, chunk_radius + 1):
-			generate_chunk(cx, cy)
+			coords.append(Vector2i(cx, cy))
+	coords.sort_custom(_sort_chunks_center_first)
+	return coords
+
+func _sort_chunks_center_first(a: Vector2i, b: Vector2i) -> bool:
+	var a_ring := maxi(absi(a.x), absi(a.y))
+	var b_ring := maxi(absi(b.x), absi(b.y))
+	if a_ring != b_ring:
+		return a_ring < b_ring
+
+	var a_distance := a.length_squared()
+	var b_distance := b.length_squared()
+	if a_distance != b_distance:
+		return a_distance < b_distance
+
+	if a.y != b.y:
+		return a.y < b.y
+	return a.x < b.x
 
 func _initialize_generation_seed() -> void:
 	if world_seed != 0:
@@ -121,6 +146,12 @@ func generate_structures() -> void:
 	
 func has_chunk(cx: int, cy: int) -> bool:
 	return chunks.has(Vector2i(cx, cy));
+
+func can_generate_structures_on_grid_id(grid_id: Vector2i) -> bool:
+	return not skipped_chunks.has(grid_to_chunk_coords(grid_id))
+
+func can_generate_structures_on_hex(hex: HexBase) -> bool:
+	return hex != null and can_generate_structures_on_grid_id(hex.grid_id)
 	
 func get_structured_hexes() -> Array[HexBase]:
 	var instances : Array[HexBase];
@@ -216,19 +247,19 @@ func generate_chunk(cx: int, cy: int) -> HexChunk:
 	if chunks.has(key):
 		return chunks[key];
 
-	var chunk := HexChunk.new(cx, cy);
+	var chunk := HexChunk.new(cx, cy, chunk_size);
 	chunks[key] = chunk;
 	add_child(chunk);
 	
 	chunk.generate_structures = not skipped_chunks.has(key);
 
-	var start_x := cx * chunk.CHUNK_WIDTH
-	var start_y := cy * chunk.CHUNK_HEIGHT
+	var start_x := cx * chunk_size.x
+	var start_y := cy * chunk_size.y
 	
 	chunk.generated.connect(_post_process_chunk);
 
-	for gy in range(start_y, start_y + chunk.CHUNK_HEIGHT):
-		for gx in range(start_x, start_x + chunk.CHUNK_WIDTH):
+	for gy in range(start_y, start_y + chunk_size.y):
+		for gx in range(start_x, start_x + chunk_size.x):
 			var grid_id := Vector2i(gx, gy);
 			var scene_rng := create_rng("tile:%s:%s" % [gx, gy]);
 			var scene_info := DataManager.instance.pick_scene(gx, gy, region_options, scene_rng);
@@ -307,8 +338,8 @@ func get_tiles_in_radius(center: Vector3i, radius: int) -> Array[SceneInstance]:
 	
 func grid_to_chunk_coords(grid_id: Vector2i) -> Vector2i:
 	return Vector2i(
-		floori(float(grid_id.x) / HexChunk.CHUNK_WIDTH),
-		floori(float(grid_id.y) / HexChunk.CHUNK_HEIGHT)
+		floori(float(grid_id.x) / float(chunk_size.x)),
+		floori(float(grid_id.y) / float(chunk_size.y))
 	)
 
 func replace(hex_instance: SceneInstance, replacement_instance: SceneInstance, region: RegionInfo) -> void:

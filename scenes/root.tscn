@@ -50,12 +50,12 @@
 [ext_resource type="Resource" uid="uid://d0lienvyvqxlh" path="res://resources/item_info/dock_blueprint.tres" id="47_742t5"]
 [ext_resource type="Script" uid="uid://c8bmw05frta6c" path="res://scripts/ui/notification.gd" id="49_c6i2r"]
 [ext_resource type="Resource" uid="uid://ck0i8jm3a1eqw" path="res://resources/scene_info/ui/crafting_ui.tres" id="50_craft"]
-[ext_resource type="Resource" path="res://resources/item_info/seed_pouch.tres" id="51_seed"]
-[ext_resource type="Resource" path="res://resources/item_info/water_bucket.tres" id="52_water"]
-[ext_resource type="Resource" path="res://resources/item_info/grain.tres" id="53_grain"]
-[ext_resource type="Resource" path="res://resources/item_info/support_beams.tres" id="54_support"]
+[ext_resource type="Resource" uid="uid://cedqercu5lay2" path="res://resources/item_info/seed_pouch.tres" id="51_seed"]
+[ext_resource type="Resource" uid="uid://bt35piqwc5pdt" path="res://resources/item_info/water_bucket.tres" id="52_water"]
+[ext_resource type="Resource" uid="uid://75dbm8y87mpo" path="res://resources/item_info/grain.tres" id="53_grain"]
+[ext_resource type="Resource" uid="uid://m72hate3ge7x" path="res://resources/item_info/support_beams.tres" id="54_support"]
 [ext_resource type="Resource" path="res://resources/item_info/bucket.tres" id="55_bucket"]
-[ext_resource type="Resource" path="res://resources/structure_info/water_source.tres" id="56_water_source"]
+[ext_resource type="Resource" uid="uid://b74kj3l207jju" path="res://resources/structure_info/water_source.tres" id="56_water_source"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_j5px3"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)

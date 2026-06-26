@@ -2,8 +2,15 @@
 
 [ext_resource type="PackedScene" uid="uid://cj47y4xllclub" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_market_blue.glb" id="1_uyef6"]
 [ext_resource type="Script" uid="uid://b6rgx41co3bur" path="res://tools/inventory/scripts/inventory/inventory.gd" id="1_xlvr5"]
+[ext_resource type="Script" uid="uid://bqabkvm20ept7" path="res://tools/inventory/scripts/data/content_slot.gd" id="2_7hx24"]
 [ext_resource type="Script" uid="uid://dsjvnwho537yo" path="res://scripts/interactions/market.gd" id="2_dxohp"]
+[ext_resource type="Resource" uid="uid://cedqercu5lay2" path="res://resources/item_info/seed_pouch.tres" id="3_1ivke"]
 [ext_resource type="Material" uid="uid://c66vbca7lgh6m" path="res://materials/kay_fantasy_default.tres" id="3_uyef6"]
+
+[sub_resource type="Resource" id="Resource_dc7o2"]
+script = ExtResource("2_7hx24")
+content = ExtResource("3_1ivke")
+metadata/_custom_type_script = "uid://bqabkvm20ept7"
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_xlvr5"]
 size = Vector3(1.5101967, 0.85438347, 0.33025742)
@@ -13,17 +20,25 @@ size = Vector3(1.8043289, 1.0020065, 1.2592618)
 
 [node name="market" type="Node3D" unique_id=2075765343]
 script = ExtResource("2_dxohp")
-is_quest = false
+buy_inventory = NodePath("BuyInventory")
+buy_menu = Array[ExtResource("2_7hx24")]([SubResource("Resource_dc7o2")])
 
-[node name="Inventory" type="Node" parent="." unique_id=309232762]
+[node name="BuyInventory" type="Node" parent="." unique_id=309232762]
 script = ExtResource("1_xlvr5")
 unlocked_slots = 3
 max_slots = 3
 metadata/_custom_type_script = "uid://b6rgx41co3bur"
 
+[node name="SellInventory" type="Node" parent="." unique_id=709316836]
+script = ExtResource("1_xlvr5")
+unlocked_slots = 5
+max_slots = 5
+stack_size = 10
+metadata/_custom_type_script = "uid://b6rgx41co3bur"
+
 [node name="Root Scene" parent="." unique_id=1447252904 instance=ExtResource("1_uyef6")]
 
-[node name="building_market_blue" parent="Root Scene/RootNode" index="0"]
+[node name="building_market_blue" parent="Root Scene/RootNode" parent_id_path=PackedInt32Array(1447252904, 83198913) index="0" unique_id=2010980582]
 surface_material_override/0 = ExtResource("3_uyef6")
 
 [node name="interaction" type="Area3D" parent="Root Scene" unique_id=191448897]

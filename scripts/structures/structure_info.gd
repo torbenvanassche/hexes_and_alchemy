@@ -7,7 +7,7 @@ class_name StructureInfo extends SceneInfo
 @export var required_space_radius: int = 0;
 
 ##Minimum distance from structure to nearest adjacent structure
-@export var minimum_distance_from_other_structures: int = 2;
+@export var minimum_distance_from_other_structures: int = 1;
 
 ##How common this item is in the spawning algorithm
 @export var spawn_weight: float = 1;
@@ -17,16 +17,21 @@ class_name StructureInfo extends SceneInfo
 
 @export var randomize_rotation: bool = true;
 
+@export var random_rotation_requires_walkable_neighbor: bool = false;
+
 @export var is_quest_target: bool = true;
+
+@export var translation_key_name: String;
 
 func initialize() -> void:
 	self.type = Type.STRUCTURE;
 	super();
 
 func get_display_name() -> String:
-	var translation_key := "STRUCTURE_%s_NAME" % [id.to_upper()]
-	var translated := tr(translation_key)
-	if translated == translation_key:
+	if translation_key_name == "":
+		return id.capitalize()
+	var translated := tr(translation_key_name)
+	if translated == translation_key_name:
 		return id.capitalize()
 	return translated
 	

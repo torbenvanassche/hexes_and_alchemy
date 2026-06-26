@@ -7,6 +7,12 @@ extends Node
 @export_range(0.0, 1.5, 0.01) var water_edge_stop_distance := 0.3
 @export_range(0, 8, 1) var exploration_radius := 2
 
+enum MovementMode {
+	WALK,
+	WATER
+}
+
+var movement_mode := MovementMode.WALK
 var player: PlayerController
 var _last_explored_hex: Vector3i = Vector3i.ZERO
 var _has_explored_hex := false
@@ -88,15 +94,15 @@ func _can_move_to_next_hex(grid: HexGrid, move_dir: Vector3, next_velocity: Vect
 	if edge_probe_hex == null:
 		edge_probe_hex = target_hex
 	
-	if target_hex != current_hex and not target_hex.is_traversable():
+	if target_hex != current_hex and not _is_hex_traversable(target_hex):
 		_stop()
 		return false
 	
-	if edge_probe_hex != current_hex and not edge_probe_hex.is_traversable():
+	if edge_probe_hex != current_hex and not _is_hex_traversable(edge_probe_hex):
 		_stop()
 		return false
 	
-	if not current_hex.is_traversable():
+	if not _is_hex_traversable(current_hex):
 		_stop()
 		return false
 	
@@ -112,13 +118,13 @@ func update_navigation_state(grid: HexGrid) -> HexBase:
 	
 	var raw_current_hex := grid.get_hex_at_world_position(player.global_position, 0.0)
 	if raw_current_hex != null:
-		if raw_current_hex.is_traversable():
+		if _is_hex_traversable(raw_current_hex):
 			remember_safe_navigation(raw_current_hex)
 		elif _has_safe_position:
 			player.global_position = _last_safe_position
 			raw_current_hex = _last_traversable_hex
 	
-	var current_hex: HexBase = raw_current_hex if raw_current_hex != null and raw_current_hex.is_traversable() else _last_traversable_hex
+	var current_hex: HexBase = raw_current_hex if raw_current_hex != null and _is_hex_traversable(raw_current_hex) else _last_traversable_hex
 	explore_visible_tiles(grid, current_hex)
 	return current_hex
 
@@ -152,10 +158,31 @@ func get_hex() -> HexBase:
 		return null
 	
 	var current_hex := grid.get_hex_at_world_position(player.global_position, 0.0)
-	if current_hex != null and current_hex.is_traversable():
+	if current_hex != null and _is_hex_traversable(current_hex):
 		remember_safe_navigation(current_hex)
 		return current_hex
 	
 	if is_instance_valid(_last_traversable_hex):
 		return _last_traversable_hex
 	return null
+
+func set_movement_mode(mode: MovementMode) -> void:
+	if movement_mode == mode:
+		return
+	
+	movement_mode = mode
+	_last_traversable_hex = null
+	_last_safe_position = Vector3.ZERO
+	_has_safe_position = false
+
+func _is_hex_traversable(hex: HexBase) -> bool:
+	if hex == null:
+		return false
+	return hex.is_traversable(_get_traversal_tag())
+
+func _get_traversal_tag() -> HexInfo.TraversalTag:
+	match movement_mode:
+		MovementMode.WATER:
+			return HexInfo.TraversalTag.BOAT
+		_:
+			return HexInfo.TraversalTag.WALK

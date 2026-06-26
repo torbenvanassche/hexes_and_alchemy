@@ -27,14 +27,6 @@ func merge_from(other: RegionInstance) -> void:
 		
 func remove_hex(coord: Vector3i) -> void:
 	hexes.erase(coord);
-	
-func render_debug_region() -> void:
-	var rng := hex_grid.create_rng("debug_region:%s" % _get_seed_key())
-	var clr := Color(rng.randf_range(0, 1), rng.randf_range(0, 1), rng.randf_range(0, 1));
-	for hex: HexBase in hexes.values():
-		var mat := StandardMaterial3D.new();
-		mat.albedo_color = clr;
-		hex.ground_mesh.material_override = mat;
 		
 func _required_distance(a: StructureInfo, b: StructureInfo) -> int:
 	return (
@@ -44,7 +36,8 @@ func _required_distance(a: StructureInfo, b: StructureInfo) -> int:
 	)
 		
 func _pick_structure(rng: RandomNumberGenerator) -> StructureInfo:
-	var total_weight := 0.0
+	var fail_weight := maxf(0.0, info.structure_fail_weight)
+	var total_weight := fail_weight
 	var candidates: Array[StructureInfo] = []
 	var cumulative: Array[float] = []
 
@@ -64,6 +57,9 @@ func _pick_structure(rng: RandomNumberGenerator) -> StructureInfo:
 		return null
 
 	var r := rng.randf() * total_weight
+	if r <= fail_weight:
+		return null
+
 	for i in cumulative.size():
 		if r <= cumulative[i]:
 			return candidates[i]
@@ -96,7 +92,7 @@ func _shuffle_hexes(values: Array[Vector3i], rng: RandomNumberGenerator) -> void
 
 func _compute_structure_caps() -> void:
 	structure_caps.clear()
-	var region_size := hexes.size()
+	var region_size := _get_structure_generation_hexes().size()
 
 	for s: StructureInfo in info.structures.keys():
 		var cap := s.get_max_count(region_size)
@@ -112,16 +108,18 @@ func _can_place_structure_at(pos: Vector3i, candidate: StructureInfo) -> bool:
 	if hex == null:
 		return false;
 
+	if not hex_grid.can_generate_structures_on_hex(hex):
+		return false;
+
 	if not hex.can_generate:
 		return false;
 
 	if not _has_clear_generation_space(pos, candidate):
 		return false;
+
+	if not hex.has_walkable_random_rotation(candidate):
+		return false;
 	
-	var chunk_coords := hex_grid.grid_to_chunk_coords(hex.grid_id)
-	if hex_grid.chunks.has(chunk_coords) and not hex_grid.chunks[chunk_coords].generate_structures:
-		return false
-		
 	if Manager.instance.player_instance:
 		var player_hex := Manager.instance.player_instance.get_hex();
 		if not player_hex:
@@ -153,10 +151,21 @@ func _has_clear_generation_space(center: Vector3i, candidate: StructureInfo) -> 
 		if tile == null:
 			return false;
 
+		if not hex_grid.can_generate_structures_on_hex(tile):
+			return false;
+
 		if not tile.can_generate or tile.structure != null:
 			return false;
 
 	return true;
+
+func _get_structure_generation_hexes() -> Array[Vector3i]:
+	var generation_hexes: Array[Vector3i] = []
+	for hex_id: Vector3i in hexes.keys():
+		var hex := hexes[hex_id]
+		if hex != null and hex_grid.can_generate_structures_on_hex(hex):
+			generation_hexes.append(hex_id)
+	return generation_hexes
 
 func generate_structures_for_region() -> void:
 	if info.structures.is_empty():
@@ -165,25 +174,29 @@ func generate_structures_for_region() -> void:
 	_compute_structure_caps()
 	var rng := hex_grid.create_rng("structures:%s" % _get_seed_key())
 
-	var available_hexes: Array[Vector3i] = hexes.keys()
+	var available_hexes := _get_structure_generation_hexes()
+	if available_hexes.is_empty():
+		return
 	_shuffle_hexes(available_hexes, rng)
 
 	var max_total := 0
 	for cap in structure_caps.values():
 		max_total += cap
 
-	var target_count := mini(max_total, hexes.size())
-	var placed_total := 0
+	var target_count := mini(max_total, available_hexes.size())
+	var processed_slots := 0
 
-	while placed_total < target_count and not available_hexes.is_empty():
+	while processed_slots < target_count and not available_hexes.is_empty():
+		processed_slots += 1
 		var structure := _pick_structure(rng)
 		if structure == null:
-			break
+			continue
 
 		var placed := false
 
-		for attempt in 5:
-			var hex_id: Vector3i = available_hexes[rng.randi_range(0, available_hexes.size() - 1)]
+		var placement_candidates := available_hexes.duplicate()
+		_shuffle_hexes(placement_candidates, rng)
+		for hex_id: Vector3i in placement_candidates:
 			var hex := hexes[hex_id]
 
 			if not hex or not hex.can_generate:
@@ -198,7 +211,6 @@ func generate_structures_for_region() -> void:
 			structure_counts[structure] += 1
 			available_hexes.erase(hex_id)
 
-			placed_total += 1
 			placed = true
 			break
 

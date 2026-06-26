@@ -15,10 +15,11 @@ size = Vector3(1.173315, 1.3972301, 1.2564573)
 script = ExtResource("1_isasx")
 adventurer = ExtResource("2_56i7v")
 adventurer_spawn = NodePath("spawn_location")
+show_interaction_prompt = false
 
 [node name="Root Scene" parent="." unique_id=1174146906 instance=ExtResource("1_244u3")]
 
-[node name="building_tavern_blue" parent="Root Scene/RootNode" index="0"]
+[node name="building_tavern_blue" parent="Root Scene/RootNode" parent_id_path=PackedInt32Array(1174146906, 1830000281) index="0" unique_id=2005032263]
 surface_material_override/0 = ExtResource("3_244u3")
 
 [node name="interaction" type="Area3D" parent="." unique_id=478417135]

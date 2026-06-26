@@ -26,6 +26,7 @@ spawn_position = NodePath("player_spawn")
 is_active_settlement = true
 
 [node name="structures" type="Node3D" parent="." unique_id=516994821]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9910254, 0, -1.75)
 
 [node name="blacksmith" parent="structures" unique_id=728034513 instance=ExtResource("1_xmt5k")]
 
@@ -61,12 +62,13 @@ shape = SubResource("BoxShape3D_msdat")
 transform = Transform3D(-0.4999999, 0, -0.86602545, 0, 1, 0, 0.86602545, 0, -0.4999999, 0, 0, 0)
 
 [node name="questboard" parent="structures" unique_id=1065241070 instance=ExtResource("11_mt1kp")]
-transform = Transform3D(0.8660254, 0, -0.5, 0, 1, 0, 0.5, 0, 0.8660254, 2.397221, 0, -0.66254705)
+transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, 1.727946, 0, -0.6648607)
 
 [node name="home" parent="structures" unique_id=2074058054 instance=ExtResource("11_47cix")]
 transform = Transform3D(-0.59999985, 0, 1.0392307, 0, 1.1999999, 0, -1.0392307, 0, -0.59999985, -0.9910254, 0, 1.75)
 
 [node name="walls" type="Node3D" parent="." unique_id=854268926]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9910254, 0, -1.75)
 
 [node name="Node3D" parent="walls" unique_id=1934283632 instance=ExtResource("11_04njl")]
 transform = Transform3D(0.49999997, 0, -0.86602545, 0, 1, 0, 0.86602545, 0, 0.49999997, 2, 0, 0)
@@ -110,6 +112,7 @@ transform = Transform3D(-0.4999998, 0, 0.86602545, 0, 0.99999964, 0, -0.86602545
 transform = Transform3D(0.5000001, 0, 0.8660252, 0, 0.99999964, 0, -0.8660252, 0, 0.5000001, -0.9910254, 0, 1.75)
 
 [node name="entrances" type="Node3D" parent="." unique_id=884947801]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9910254, 0, -1.75)
 
 [node name="Root Scene" parent="entrances" unique_id=950763859 instance=ExtResource("7_616a5")]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 1.9786718, 2.3841858e-07, 0.008921385)
@@ -118,10 +121,10 @@ transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 1.97
 transform = Transform3D(0.49999997, 0, 0.86602545, 0, 1, 0, -0.86602545, 0, 0.49999997, 1, 0, 1.7499027)
 
 [node name="player_spawn" type="Node3D" parent="." unique_id=1450424186]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.43173504, 0, 1.4711934)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4227605, 0, -0.27880657)
 
 [node name="settlement_outline" type="CSGPolygon3D" parent="." unique_id=956747366]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, -0.5468383, 0)
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -0.9910254, -0.5468383, -1.75)
 visible = false
 polygon = PackedVector2Array(1.0039513, -0.62513447, 1.9908175, -1.1163411, 2.954699, -0.55694604, 2.97191, 0.579056, 3.9271846, 1.1814812, 3.9788213, 2.3260896, 2.9891229, 2.8940907, 2.9977288, 4.0300922, 0.9753003, 4.0128803, 0.9839072, 2.8424542, -0.031610012, 2.3260896, -0.9868846, 2.8940907, -1.985189, 2.3260896, -1.985189, 1.1728752, -1.0127034, 0.579056, -1.0040965, -0.565552, -0.014398098, -1.1163411)
 

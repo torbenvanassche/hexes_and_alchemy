@@ -75,10 +75,6 @@ func _physics_process(delta: float) -> void:
 	if not target:
 		return;
 
-	if Input.is_action_just_pressed("camera_zoom_in"):
-		target_zoom -= zoom_step;
-	if Input.is_action_just_pressed("camera_zoom_out"):
-		target_zoom += zoom_step;
 	_handle_controller_zoom(delta);
 	target_zoom = clamp(target_zoom, 0.0, 1.0);
 
@@ -101,14 +97,17 @@ func _physics_process(delta: float) -> void:
 
 	_apply_zoom();
 
-func _input(event: InputEvent) -> void:
+func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
 			target_zoom -= zoom_step;
 		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 			target_zoom += zoom_step;
+		else:
+			return
 
 		target_zoom = clamp(target_zoom, 0.0, 1.0);
+		get_viewport().set_input_as_handled()
 
 func _apply_zoom() -> void:
 	var distance = lerp(min_distance, max_distance, zoom);

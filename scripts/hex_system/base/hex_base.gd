@@ -131,8 +131,8 @@ func _on_structure_loaded(s: StructureInfo, required_tiles: Array[SceneInstance]
 		elif s.randomize_rotation:
 			var grid := SceneManager.get_active_scene().node as HexGrid
 			var rng := grid.create_rng("structure_rotation:%s:%s" % [cube_id, s.resource_path]) if grid != null else null
-			var rotation_step := rng.randi_range(0, 5) if rng != null else randi_range(0, 5)
-			structure.instance.rotate_y(deg_to_rad(60 * rotation_step))
+			var rotation_y := _get_random_structure_rotation_y(s, rng)
+			structure.instance.rotation.y = rotation_y
 	
 	for t in required_tiles:
 		SceneManager.get_active_scene().node.replace(t, scene_instance.scene_info.get_instance(), region);
@@ -148,3 +148,57 @@ func _get_structure_placement_rotation(s: StructureInfo) -> Dictionary:
 	if placeable == null:
 		return { "has_rotation": false }
 	return placeable.get_placement_rotation_y(self)
+
+func has_walkable_random_rotation(s: StructureInfo) -> bool:
+	if s == null or not s.random_rotation_requires_walkable_neighbor:
+		return true
+	return not _get_walkable_neighbor_rotations().is_empty()
+
+func _get_random_structure_rotation_y(s: StructureInfo, rng: RandomNumberGenerator = null) -> float:
+	if s.random_rotation_requires_walkable_neighbor:
+		var walkable_rotations := _get_walkable_neighbor_rotations(structure.instance)
+		if not walkable_rotations.is_empty():
+			var index := rng.randi_range(0, walkable_rotations.size() - 1) if rng != null else randi_range(0, walkable_rotations.size() - 1)
+			return walkable_rotations[index]
+
+		Debug.warn("%s has no walkable neighbor rotation at %s." % [s.id, cube_id])
+		return 0.0
+
+	var rotation_step := rng.randi_range(0, 5) if rng != null else randi_range(0, 5)
+	return deg_to_rad(60 * rotation_step)
+
+func _get_walkable_neighbor_rotations(structure_node: Node3D = null) -> Array[float]:
+	var rotations: Array[float] = []
+	var grid := SceneManager.get_active_scene().node as HexGrid
+	if grid == null:
+		return rotations
+
+	var front_direction := _get_structure_front_direction(structure_node)
+	if front_direction == Vector2.ZERO:
+		front_direction = Vector2.RIGHT
+
+	for direction: Vector3i in DataManager.instance.CUBE_DIRS:
+		var neighbor := grid.get_hex_at_cube_id(cube_id + direction)
+		if neighbor == null or not neighbor.is_traversable(HexInfo.TraversalTag.WALK):
+			continue
+
+		var neighbor_direction := neighbor.global_position - global_position
+		var neighbor_direction_2d := Vector2(neighbor_direction.x, neighbor_direction.z).normalized()
+		rotations.append(-front_direction.angle_to(neighbor_direction_2d))
+
+	return rotations
+
+func _get_structure_front_direction(structure_node: Node3D) -> Vector2:
+	if structure_node == null:
+		return Vector2.ZERO
+
+	var front_anchor := structure_node.get_node_or_null("walkable_front_anchor") as Node3D
+	if front_anchor == null:
+		return Vector2.ZERO
+
+	var front_offset := front_anchor.position
+	var front_direction := Vector2(front_offset.x, front_offset.z)
+	if front_direction.length_squared() <= 0.0001:
+		return Vector2.ZERO
+
+	return front_direction.normalized()

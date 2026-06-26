@@ -4,8 +4,7 @@ extends Node3D
 var chunk_x: int
 var chunk_y: int
 
-const CHUNK_WIDTH := 4
-const CHUNK_HEIGHT := 4
+var chunk_size: Vector2i = Vector2i(4, 4)
 
 var hexes: Array[SceneInstance] = []
 var bounds: AABB
@@ -17,9 +16,10 @@ signal generated(chunk: HexChunk);
 
 var generate_structures: bool = true;
 
-func _init(cx: int, cy: int) -> void:
+func _init(cx: int, cy: int, size: Vector2i = Vector2i(4, 4)) -> void:
 	chunk_x = cx
 	chunk_y = cy
+	chunk_size = Vector2i(maxi(1, size.x), maxi(1, size.y))
 	
 	name = "Chunk(%s, %s)" % [chunk_x, chunk_y]
 	visibility_changed.connect(_propagate_visibility)
@@ -37,7 +37,7 @@ func add_hex(instance: SceneInstance) -> void:
 	else:
 		bounds = bounds.expand(pos)
 	
-	if hexes.size() == CHUNK_HEIGHT * CHUNK_WIDTH:
+	if hexes.size() == chunk_size.x * chunk_size.y:
 		is_generated = true;
 		generated.emit(self)
 

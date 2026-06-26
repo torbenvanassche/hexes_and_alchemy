@@ -8,6 +8,8 @@ var colliders: Array[StaticBody3D];
 var collision_shapes: Array[CollisionShape3D];
 var window_instance: SceneInstance;
 
+@export var show_interaction_prompt: bool = true;
+
 @abstract func interact() -> void;
 @abstract func can_interact() -> bool;
 
@@ -41,5 +43,5 @@ func _on_area_exit(other: Area3D) -> void:
 		Manager.instance.interaction_prompt.show_rect(null)
 		
 func _on_area_enter(other: Area3D) -> void:
-	if other.get_parent() is PlayerController && can_interact():
+	if other.get_parent() is PlayerController && can_interact() && show_interaction_prompt:
 		Manager.instance.interaction_prompt.show_rect(self);
