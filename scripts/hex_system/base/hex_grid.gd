@@ -109,8 +109,9 @@ func _update_seed_label() -> void:
 
 func _apply_seed_to_region_noise() -> void:
 	var seeded_regions := region_options.duplicate()
-	if DataManager.instance.ocean_descriptor != null and not seeded_regions.has(DataManager.instance.ocean_descriptor):
-		seeded_regions.append(DataManager.instance.ocean_descriptor)
+	var ocean_descriptor := DataManager.instance.get_ocean_descriptor()
+	if ocean_descriptor != null and not seeded_regions.has(ocean_descriptor):
+		seeded_regions.append(ocean_descriptor)
 
 	for region: RegionInfo in seeded_regions:
 		if region == null or region.noise == null:

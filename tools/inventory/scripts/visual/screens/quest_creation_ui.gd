@@ -72,7 +72,7 @@ func _on_location_selected(idx: int) -> void:
 			objective.get_filtered_quest_types(objective.state_machine.get_current_state_index())
 		)
 		for state: String in available_types:
-			quest_type.add_item(_get_quest_type_label(objective, state));
+			quest_type.add_item(_get_quest_type_label(state));
 			quest_type.set_item_metadata(quest_type.item_count - 1, state)
 			quest_type.set_item_disabled(
 				quest_type.item_count - 1,
@@ -211,7 +211,7 @@ func _get_quest_type_name(quest_type_key: String) -> String:
 		return quest_type_key.capitalize()
 	return translated
 
-func _get_quest_type_label(objective: QuestObjective, quest_type_key: String) -> String:
+func _get_quest_type_label(quest_type_key: String) -> String:
 	return _get_quest_type_name(quest_type_key)
 
 func _select_first_creatable_quest_type(objective: QuestObjective) -> void:

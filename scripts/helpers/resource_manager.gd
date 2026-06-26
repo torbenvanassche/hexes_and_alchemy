@@ -12,7 +12,7 @@ var _scene_lookup: Dictionary[StringName, SceneInfo] = {}
 var _item_lookup: Dictionary[StringName, ItemInfo] = {}
 var _node_lookup: Dictionary[int, SceneInfo] = {}
 
-@onready var ocean_descriptor: RegionInfo = preload("res://resources/region_info/ocean.tres");
+var ocean_descriptor: RegionInfo = preload("res://resources/region_info/ocean.tres");
 
 const CUBE_DIRS : Array[Vector3i] = [
 	Vector3i(1,-1,0), Vector3i(1,0,-1), Vector3i(0,1,-1),
@@ -150,6 +150,9 @@ func pick_scene(x: int, y: int, region_options: Array[RegionInfo] = regions, rng
 			return valid_scenes[i]
 
 	return valid_scenes[-1]
+
+func get_ocean_descriptor() -> RegionInfo:
+	return ocean_descriptor
 	
 func get_region_for(x: int, y: int, region_options: Array[RegionInfo] = regions) -> RegionInfo:
 	var best_region: RegionInfo = null
@@ -164,5 +167,5 @@ func get_region_for(x: int, y: int, region_options: Array[RegionInfo] = regions)
 			best_region = region
 			
 	if not best_region:
-		return DataManager.instance.ocean_descriptor;
+		return get_ocean_descriptor();
 	return best_region
