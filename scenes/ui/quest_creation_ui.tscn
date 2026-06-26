@@ -6,7 +6,7 @@
 [ext_resource type="Theme" uid="uid://dae2b2hfpj0l2" path="res://themes/base_theme.theme" id="4_theme"]
 
 [node name="Window" unique_id=1301866213 node_paths=PackedStringArray("content") instance=ExtResource("1_b8c84")]
-custom_minimum_size = Vector2(390, 280)
+custom_minimum_size = Vector2(390, 205)
 offset_right = -852.0
 offset_bottom = -648.0
 id = "WINDOW_NEW_QUEST"

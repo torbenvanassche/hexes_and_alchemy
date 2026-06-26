@@ -8,6 +8,9 @@ class_name QuestCreationUI extends Control
 
 @export var packed_slot: PackedScene
 @export var slot_size: int = 56
+@export var target_dropdown_max_height: int = 220
+@export var no_supplies_window_min_size := Vector2(390, 205)
+@export var supplies_window_min_size := Vector2(390, 280)
 
 signal quest_created(quest: Quest)
 
@@ -23,8 +26,15 @@ func _reset_ui() -> void:
 		finish_quest_creation.pressed.disconnect(_create_quest)
 
 func _ready() -> void:
+	_configure_location_dropdown()
 	quest_location.item_selected.connect(_on_location_selected)
 	quest_type.item_selected.connect(_on_quest_type_selected)
+
+func _configure_location_dropdown() -> void:
+	var popup := quest_location.get_popup()
+	if popup == null:
+		return
+	popup.max_size = Vector2i(4096, target_dropdown_max_height)
 
 func clear_forced_data() -> void:
 	forced_interaction = null
@@ -102,6 +112,23 @@ func _add_location_option(hex: HexBase) -> void:
 	quest_location.add_item(tr("QUEST_LOCATION_DISTANCE") % [hex.structure.structure_info.get_display_name(), distance])
 	quest_location.set_item_metadata(quest_location.item_count - 1, hex)
 
+func _sort_locations_by_distance(locations: Array[HexBase]) -> Array[HexBase]:
+	var player_hex: HexBase = Manager.instance.player_instance.get_hex()
+	if player_hex == null:
+		return locations
+
+	var sorted_locations := locations.duplicate()
+	sorted_locations.sort_custom(func(a: HexBase, b: HexBase) -> bool:
+		var distance_a := GridUtils.cube_distance(a.cube_id, player_hex.cube_id)
+		var distance_b := GridUtils.cube_distance(b.cube_id, player_hex.cube_id)
+		if distance_a == distance_b:
+			return a.structure.structure_info.get_display_name().nocasecmp_to(
+				b.structure.structure_info.get_display_name()
+			) < 0
+		return distance_a < distance_b
+	)
+	return sorted_locations
+
 func _apply_forced_interaction() -> void:
 	quest_location.disabled = true;
 	if forced_interaction == null:
@@ -123,6 +150,7 @@ func on_enter() -> void:
 
 	quest_location.disabled = false;
 	var structure_hexes: Array[HexBase] = (SceneManager.get_active_scene().node as HexGrid).get_structured_hexes();
+	var available_locations: Array[HexBase] = []
 
 	for hex in structure_hexes:
 		var quest_objective: QuestObjective = hex.structure.instance as QuestObjective
@@ -141,7 +169,10 @@ func on_enter() -> void:
 		).size() != 0;
 
 		if in_range and is_valid_quest and quest_objective.can_interact() and hex.structure.structure_info.is_quest_target and hex.is_explored:
-			_add_location_option(hex);
+			available_locations.append(hex)
+
+	for hex in _sort_locations_by_distance(available_locations):
+		_add_location_option(hex)
 
 	if quest_location.item_count > 0:
 		quest_location.select(0)
@@ -221,10 +252,7 @@ func _refresh_required_supplies() -> void:
 		child.queue_free()
 
 	var required_supplies := _get_selected_required_supplies()
-	quest_supplies.visible = not required_supplies.is_empty()
-	if required_supplies.is_empty():
-		return
-
+	var has_visible_supplies := false
 	for item: ItemInfo in required_supplies.keys():
 		if item == null:
 			continue
@@ -232,6 +260,19 @@ func _refresh_required_supplies() -> void:
 		if amount <= 0:
 			continue
 		supplies_grid.add_child(_create_supply_slot(item, amount))
+		has_visible_supplies = true
+
+	quest_supplies.visible = has_visible_supplies
+	_update_window_supply_space(has_visible_supplies)
+
+func _update_window_supply_space(has_visible_supplies: bool) -> void:
+	var window := owner as DraggableControl
+	if window == null:
+		return
+
+	window.custom_minimum_size = supplies_window_min_size if has_visible_supplies else no_supplies_window_min_size
+	if window.visible:
+		window.call_deferred("_fit_to_content")
 
 func _get_selected_required_supplies() -> Dictionary[ItemInfo, int]:
 	var location_idx: int = quest_location.selected

@@ -2,16 +2,12 @@
 
 [ext_resource type="PackedScene" uid="uid://c5ocjw6joaemy" path="res://tools/inventory/scenes/content_slot.tscn" id="1_0d1ms"]
 [ext_resource type="Script" uid="uid://brtr35b12dwpi" path="res://scripts/ui/market_slot.gd" id="1_2m32k"]
-[ext_resource type="Texture2D" uid="uid://cbhlnklu2q6wp" path="res://sprites/ui/panels/panel-015.png" id="3_eyab0"]
-[ext_resource type="Theme" uid="uid://whaj7dl14je1" path="res://themes/base_theme.theme" id="4_edggb"]
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_eyab0"]
-load_path = "res://.godot/imported/currency_mono.png-9fece7cd79693805f00e7770ad532f2e.ctex"
+[ext_resource type="Theme" uid="uid://dae2b2hfpj0l2" path="res://themes/base_theme.theme" id="4_edggb"]
 
 [node name="Control" type="MarginContainer" unique_id=2049737903]
-self_modulate = Color(1, 1, 1, 0)
-offset_right = 100.0
-offset_bottom = 100.0
+custom_minimum_size = Vector2(112, 170)
+offset_right = 112.0
+offset_bottom = 170.0
 theme = ExtResource("4_edggb")
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
@@ -19,62 +15,33 @@ theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 script = ExtResource("1_2m32k")
 
-[node name="item" parent="." unique_id=930043497 instance=ExtResource("1_0d1ms")]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=738450118]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="item" parent="VBoxContainer" unique_id=930043497 instance=ExtResource("1_0d1ms")]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="item" unique_id=38376321]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-grow_horizontal = 0
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-
-[node name="ListItem" type="Button" parent="item/MarginContainer" unique_id=563905966]
-custom_minimum_size = Vector2(30, 30)
+[node name="PriceRow" type="HBoxContainer" parent="VBoxContainer" unique_id=402255207]
 layout_mode = 2
-toggle_mode = true
-icon = SubResource("CompressedTexture2D_eyab0")
-flat = true
-expand_icon = true
+theme_override_constants/separation = 3
 
-[node name="NinePatchRect" type="NinePatchRect" parent="item" unique_id=1283252793]
-self_modulate = Color(0, 0, 0, 1)
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -35.0
-offset_top = -20.5
-offset_right = 5.0
-offset_bottom = 5.0
-grow_horizontal = 0
-grow_vertical = 0
-texture = ExtResource("3_eyab0")
-patch_margin_left = 4
-patch_margin_top = 4
-patch_margin_right = 4
-patch_margin_bottom = 4
+[node name="PriceLabel" type="Label" parent="VBoxContainer/PriceRow" unique_id=588111566]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+text = "Price"
 
-[node name="price" type="LineEdit" parent="item/NinePatchRect" unique_id=23474697]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -19.125
-offset_top = -15.5
-offset_right = 19.125
-offset_bottom = 15.5
-grow_horizontal = 2
-grow_vertical = 2
+[node name="price" type="LineEdit" parent="VBoxContainer/PriceRow" unique_id=23474697]
+layout_mode = 2
+size_flags_horizontal = 3
 theme = ExtResource("4_edggb")
-theme_override_constants/minimum_character_width = 2
+theme_override_constants/minimum_character_width = 3
 alignment = 1
 max_length = 3
-flat = true
 virtual_keyboard_type = 2
+
+[node name="ActionButton" type="Button" parent="VBoxContainer" unique_id=563905966]
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+toggle_mode = true
+text = "List"

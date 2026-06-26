@@ -11,18 +11,14 @@ func has_recipe() -> bool:
 	return not recipe.is_empty()
 
 func get_display_name() -> String:
-	return _translate_with_fallback(_get_translation_key("NAME"), unique_id.capitalize())
+	return _translate_with_fallback(translation_key_name, unique_id.capitalize())
 
 func get_description() -> String:
-	return _translate_with_fallback(_get_translation_key("DESCRIPTION"), "")
-
-func _get_translation_key(suffix: String) -> String:
-	var configured_key := translation_key_name if suffix == "NAME" else translation_key_description
-	if configured_key != "":
-		return configured_key
-	return "ITEM_%s_%s" % [unique_id.to_upper(), suffix]
+	return _translate_with_fallback(translation_key_description, "")
 
 func _translate_with_fallback(key: String, fallback: String) -> String:
+	if key == "":
+		return fallback
 	var translated := tr(key)
 	if translated == key:
 		return fallback

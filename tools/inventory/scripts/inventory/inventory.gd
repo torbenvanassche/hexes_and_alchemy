@@ -4,5 +4,9 @@ class_name Inventory extends ContentGroup
 @export var max_slots: int = 1;
 
 func _ready() -> void:
-	for i in range(max_slots):
+	for slot in data:
+		if slot.maxcount <= 0:
+			slot.maxcount = stack_size;
+		_prepare_slot(slot);
+	for i in range(data.size(), max_slots):
 		add_slot(ContentSlotResource.new(0, null, stack_size, i < unlocked_slots));

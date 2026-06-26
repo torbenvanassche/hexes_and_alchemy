@@ -1,10 +1,17 @@
 class_name ContentSlotResource extends Resource
 
 var _content: Resource;
-var count: int = 0;
-var maxcount: int = 0;
-var is_unlocked: bool = false;
-var clear_on_empty: bool = true;
+
+@export var content: Resource:
+	set(value):
+		set_content(value);
+	get:
+		return _content;
+
+@export var count: int = 0;
+@export var maxcount: int = 0;
+@export var is_unlocked: bool = false;
+@export var clear_on_empty: bool = true;
 
 signal full();
 

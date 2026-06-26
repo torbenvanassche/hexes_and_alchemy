@@ -38,10 +38,15 @@ func create_or_unlock_slot() -> ContentSlotResource:
 	return add_slot(ContentSlotResource.new(0, null, stack_size, true));
 	
 func add_slot(slot: ContentSlotResource) -> ContentSlotResource:
-	slot.full.connect(_on_slot_full)
-	slot.changed.connect(changed.emit)
+	_prepare_slot(slot);
 	data.append(slot);
 	return slot;
+
+func _prepare_slot(slot: ContentSlotResource) -> void:
+	if not slot.full.is_connected(_on_slot_full):
+		slot.full.connect(_on_slot_full)
+	if not slot.changed.is_connected(changed.emit):
+		slot.changed.connect(changed.emit)
 	
 func _on_slot_full() -> void:
 	if is_full():
