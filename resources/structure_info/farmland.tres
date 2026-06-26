@@ -6,13 +6,14 @@
 
 [sub_resource type="Curve" id="Curve_nqdss"]
 _limits = [0.0, 12.0, 0.0, 50.0]
-_data = [Vector2(0, 1), 0.0, 0.166667, 1, 1, Vector2(12, 3), 0.166667, 0.0, 1, 1]
+_data = [Vector2(0, 1), 0.0, 0.25, 1, 1, Vector2(12, 4), 0.25, 0.0, 1, 1]
 point_count = 2
 
 [resource]
 script = ExtResource("1_rlj5i")
 loot_table = ExtResource("2_5q1dx")
 max_per_region_size = SubResource("Curve_nqdss")
+translation_key_name = "STRUCTURE_FARMLAND_NAME"
 id = "farmland"
 packed_scene = ExtResource("1_0mxwp")
 metadata/_custom_type_script = "uid://brvtfutnwh30i"

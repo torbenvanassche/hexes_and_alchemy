@@ -6,7 +6,7 @@
 
 [sub_resource type="Curve" id="Curve_nqdss"]
 _limits = [0.0, 12.0, 0.0, 50.0]
-_data = [Vector2(0, 1), 0.0, 0.166667, 1, 1, Vector2(12, 2), 0.166667, 0.0, 1, 1]
+_data = [Vector2(0, 1), 0.0, 0.25, 1, 1, Vector2(12, 4), 0.25, 0.0, 1, 1]
 point_count = 2
 
 [resource]
@@ -14,6 +14,7 @@ script = ExtResource("1_oogor")
 loot_table = ExtResource("2_1vq4v")
 max_per_region_size = SubResource("Curve_nqdss")
 spawn_weight = 1.3
+translation_key_name = "STRUCTURE_FOREST_NAME"
 id = "forest"
 packed_scene = ExtResource("1_u11x1")
 type = 4

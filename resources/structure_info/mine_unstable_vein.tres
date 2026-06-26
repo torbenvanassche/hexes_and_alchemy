@@ -6,4 +6,5 @@
 script = ExtResource("1_v4wq5")
 mine_state = 3
 prospect_weight = 0.15
+translation_key_name = "STRUCTURE_MINE_UNSTABLE_VEIN_NAME"
 id = "mine_unstable_vein"

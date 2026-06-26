@@ -10,4 +10,5 @@ prospect_weight = 0.3
 collapse_chance = 0.28
 exhaust_chance = 0.12
 loot_table = ExtResource("2_17ce6")
+translation_key_name = "STRUCTURE_MINE_RICH_VEIN_NAME"
 id = "mine_rich_vein"

@@ -6,5 +6,7 @@
 [resource]
 script = ExtResource("1_g5rcw")
 unique_id = "currency"
+translation_key_name = "ITEM_CURRENCY_NAME"
+translation_key_description = "ITEM_CURRENCY_DESCRIPTION"
 texture = ExtResource("2_aj7lk")
 metadata/_custom_type_script = "uid://c8ngjbq8w5gjr"

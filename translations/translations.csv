@@ -90,6 +90,9 @@ STRUCTURE_DOCKS_NAME,Docks,Docks
 STRUCTURE_FOREST_NAME,Forest,Forest
 STRUCTURE_LADDER_NAME,Ladder,Ladder
 STRUCTURE_LUMBERMILL_NAME,Lumbermill,Lumbermill
+STRUCTURE_MINE_POOR_VEIN_NAME,Poor vein,Poor vein
+STRUCTURE_MINE_RICH_VEIN_NAME,Rich vein,Rich vein
+STRUCTURE_MINE_UNSTABLE_VEIN_NAME,Unstable vein,Unstable vein
 STRUCTURE_MINES_NAME,Mine,Mine
 STRUCTURE_ORE_DEPOSIT_GOLD_NAME,Gold deposit,Gold deposit
 STRUCTURE_ORE_DEPOSIT_IRON_NAME,Iron deposit,Iron deposit
@@ -110,14 +113,16 @@ ITEM_CURRENCY_DESCRIPTION,A coin used for trade.,A coin used for trade.
 ITEM_COUNT_LABEL,x%s,x%s
 ITEM_BUCKET_NAME,Bucket,Bucket
 ITEM_BUCKET_DESCRIPTION,An empty bucket that can be filled at a well.,An empty bucket that can be filled at a well.
+ITEM_DOCK_BLUEPRINT_NAME,Dock blueprint,Dock blueprint
+ITEM_DOCK_BLUEPRINT_DESCRIPTION,A plan for building docks.,A plan for building docks.
 ITEM_ORE_GOLD_NAME,Gold ore,Gold ore
 ITEM_ORE_GOLD_DESCRIPTION,Raw gold ore.,Raw gold ore.
 ITEM_ORE_IRON_NAME,Iron ore,Iron ore
 ITEM_ORE_IRON_DESCRIPTION,Raw iron ore.,Raw iron ore.
 ITEM_GRAIN_NAME,Grain,Grain
 ITEM_GRAIN_DESCRIPTION,A harvested crop used for food or seed.,A harvested crop used for food or seed.
-ITEM_SEED_POUCH_NAME,Seed pouch,Seed pouch
-ITEM_SEED_POUCH_DESCRIPTION,Seeds prepared for planting farmland.,Seeds prepared for planting farmland.
+ITEM_SEED_POUCH_NAME,Grain seeds,Grain seeds
+ITEM_SEED_POUCH_DESCRIPTION,Seeds found in forests or crafted from grain; used for planting farmland.,Seeds found in forests or crafted from grain; used for planting farmland.
 ITEM_SUPPORT_BEAMS_NAME,Support beams,Support beams
 ITEM_SUPPORT_BEAMS_DESCRIPTION,Wooden beams used to reinforce unstable structures.,Wooden beams used to reinforce unstable structures.
 ITEM_WATER_BUCKET_NAME,Water bucket,Water bucket

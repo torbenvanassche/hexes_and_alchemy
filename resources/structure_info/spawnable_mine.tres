@@ -6,13 +6,16 @@
 
 [sub_resource type="Curve" id="Curve_nqdss"]
 _limits = [0.0, 12.0, 0.0, 50.0]
-_data = [Vector2(0, 1), 0.0, 0.166667, 1, 1, Vector2(12, 2), 0.166667, 0.0, 1, 1]
+_data = [Vector2(0, 1), 0.0, 0.166667, 1, 1, Vector2(12, 3), 0.166667, 0.0, 1, 1]
 point_count = 2
 
 [resource]
 script = ExtResource("3_gi0i3")
 loot_table = ExtResource("4_gi0i3")
 max_per_region_size = SubResource("Curve_nqdss")
+spawn_weight = 0.9
+random_rotation_requires_walkable_neighbor = true
+translation_key_name = "STRUCTURE_MINES_NAME"
 id = "mines"
 packed_scene = ExtResource("2_ox4ln")
 type = 4

@@ -7,6 +7,8 @@
 [resource]
 script = ExtResource("1_seed")
 unique_id = "seed_pouch"
+translation_key_name = "ITEM_SEED_POUCH_NAME"
+translation_key_description = "ITEM_SEED_POUCH_DESCRIPTION"
 texture = ExtResource("2_seed")
 base_value = 2
 recipe = Dictionary[ExtResource("1_seed"), int]({

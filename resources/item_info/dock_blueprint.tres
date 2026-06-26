@@ -8,6 +8,8 @@
 [resource]
 script = ExtResource("1_dc7o2")
 unique_id = "docks_blueprint"
+translation_key_name = "ITEM_DOCK_BLUEPRINT_NAME"
+translation_key_description = "ITEM_DOCK_BLUEPRINT_DESCRIPTION"
 texture = ExtResource("4_mb4s3")
 recipe = Dictionary[ExtResource("1_dc7o2"), int]({
 ExtResource("2_gbi6l"): 5,

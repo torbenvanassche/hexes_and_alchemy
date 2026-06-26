@@ -6,6 +6,7 @@
 [ext_resource type="Resource" uid="uid://ckpmn3cutb7an" path="res://resources/structure_info/spawnable_mine.tres" id="4_mine"]
 [ext_resource type="Script" uid="uid://btydeamnhd6x" path="res://scripts/structures/structure_info.gd" id="5_ea2wi"]
 [ext_resource type="Script" uid="uid://m31o3kdm652g" path="res://scripts/hex_system/base/region_info.gd" id="5_ts14k"]
+[ext_resource type="Resource" uid="uid://b74kj3l207jju" path="res://resources/structure_info/water_source.tres" id="6_water_source"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_te6hx"]
 seed = 2
@@ -16,11 +17,12 @@ script = ExtResource("5_ts14k")
 noise = SubResource("FastNoiseLite_te6hx")
 noise_min = 0.0
 noise_max = 0.1
-structure_fail_weight = 5.0
+structure_fail_weight = 0.25
 region_weight = 0.5
 material = ExtResource("1_cjbsg")
 structures = Dictionary[ExtResource("5_ea2wi"), float]({
-ExtResource("4_mine"): 0.65
+ExtResource("6_water_source"): 0.35,
+ExtResource("4_mine"): 0.75
 })
 scene_multipliers = Dictionary[ExtResource("2_ea2wi"), float]({
 ExtResource("3_027p0"): 1.0

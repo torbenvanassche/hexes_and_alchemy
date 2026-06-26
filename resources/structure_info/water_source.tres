@@ -5,13 +5,14 @@
 
 [sub_resource type="Curve" id="Curve_water_source"]
 _limits = [0.0, 12.0, 0.0, 50.0]
-_data = [Vector2(0, 1), 0.0, 0.166667, 1, 1, Vector2(12, 2), 0.166667, 0.0, 1, 1]
+_data = [Vector2(0, 1), 0.0, 0.166667, 1, 1, Vector2(12, 3), 0.166667, 0.0, 1, 1]
 point_count = 2
 
 [resource]
 script = ExtResource("2_structure")
 max_per_region_size = SubResource("Curve_water_source")
 spawn_weight = 0.8
+translation_key_name = "STRUCTURE_WATER_SOURCE_NAME"
 id = "water_source"
 packed_scene = ExtResource("1_water_source")
 metadata/_custom_type_script = "uid://btydeamnhd6x"

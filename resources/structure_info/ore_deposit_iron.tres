@@ -11,6 +11,7 @@ point_count = 2
 [resource]
 script = ExtResource("2_vflgg")
 max_per_region_size = SubResource("Curve_p57q2")
+translation_key_name = "STRUCTURE_ORE_DEPOSIT_IRON_NAME"
 packed_scene = ExtResource("1_a6vwg")
 type = 4
 metadata/_custom_type_script = "uid://btydeamnhd6x"
