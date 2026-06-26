@@ -3,7 +3,7 @@ class_name PlaceableStructureInfo extends StructureInfo
 @export var build_cost: Dictionary[ItemInfo, int];
 @export var placement_handler: Script;
 
-func can_place_on(hex: HexBase, inventory: ContentGroup = null) -> bool:
+func can_place_on(hex: HexBase, inventory: ContentGroup = null, placement_rotation_y: float = NAN) -> bool:
 	if hex == null:
 		return false;
 	if not _has_build_cost(inventory):
@@ -12,21 +12,29 @@ func can_place_on(hex: HexBase, inventory: ContentGroup = null) -> bool:
 		return false;
 	if not _has_clear_space(hex):
 		return false;
+	if not _has_player_clear_space(hex):
+		return false;
 	if not _has_required_distance(hex):
 		return false;
-	return _passes_handler_checks(hex, inventory);
+	return _passes_handler_checks(hex, inventory, placement_rotation_y);
 
-func place_on(hex: HexBase, inventory: ContentGroup = null) -> bool:
-	if not can_place_on(hex, inventory):
+func place_on(hex: HexBase, inventory: ContentGroup = null, placement_rotation_y: float = NAN) -> bool:
+	if not can_place_on(hex, inventory, placement_rotation_y):
 		return false;
 	_pay_build_cost(inventory);
-	hex.set_structure(self);
+	hex.set_structure(self, false, placement_rotation_y);
 	return true;
 
 func uses_content(content: Resource) -> bool:
 	return content == self or build_cost.has(content);
 
-func get_placement_rotation_y(hex: HexBase) -> Dictionary:
+func get_placement_rotation_y(hex: HexBase, placement_rotation_y: float = NAN) -> Dictionary:
+	if placement_rotation_y == placement_rotation_y:
+		return {
+			"has_rotation": true,
+			"rotation_y": float(placement_rotation_y)
+		};
+
 	if placement_handler == null:
 		return { "has_rotation": false };
 
@@ -76,6 +84,25 @@ func _has_clear_space(hex: HexBase) -> bool:
 			return false;
 	return true;
 
+func _has_player_clear_space(hex: HexBase) -> bool:
+	var player := Manager.instance.player_instance if Manager.instance != null else null
+	if player == null:
+		return true;
+
+	var player_hex := player.get_hex();
+	if player_hex == null:
+		return true;
+
+	var grid := SceneManager.get_active_scene().node as HexGrid;
+	if grid == null:
+		return false;
+
+	for scene_instance: SceneInstance in grid.get_tiles_in_radius(hex.cube_id, required_space_radius):
+		var tile := scene_instance.node as HexBase;
+		if tile != null and tile.cube_id == player_hex.cube_id:
+			return false;
+	return true;
+
 func _has_required_distance(hex: HexBase) -> bool:
 	var grid := SceneManager.get_active_scene().node as HexGrid;
 	if grid == null:
@@ -93,7 +120,7 @@ func _has_required_distance(hex: HexBase) -> bool:
 					return false;
 	return true;
 
-func _passes_handler_checks(hex: HexBase, inventory: ContentGroup) -> bool:
+func _passes_handler_checks(hex: HexBase, inventory: ContentGroup, placement_rotation_y: float = NAN) -> bool:
 	if placement_handler == null:
 		return true;
 
@@ -104,4 +131,10 @@ func _passes_handler_checks(hex: HexBase, inventory: ContentGroup) -> bool:
 		Debug.err("%s placement handler must define can_place(structure_info, hex, inventory)." % id);
 		return false;
 
-	return bool(handler.can_place(self, hex, inventory));
+	if not bool(handler.can_place(self, hex, inventory)):
+		return false;
+
+	if placement_rotation_y == placement_rotation_y and handler.has_method("can_place_rotation"):
+		return bool(handler.can_place_rotation(self, hex, inventory, float(placement_rotation_y)));
+
+	return true;

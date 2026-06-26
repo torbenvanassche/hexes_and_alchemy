@@ -119,6 +119,9 @@ func _apply_zoom() -> void:
 	camera.rotation_degrees.x = pitch;
 
 func _handle_rotation_input(delta: float) -> void:
+	if PlaceableContentSlotUI.is_placing_placeable:
+		return;
+
 	var controller_rotation_input := _get_controller_axis(JOY_AXIS_RIGHT_X);
 	if absf(controller_rotation_input) > controller_stick_deadzone:
 		target_yaw -= controller_rotation_input * deg_to_rad(smooth_rotation_turn_speed_deg) * delta;
@@ -196,3 +199,7 @@ func snap_to_target() -> void:
 	if target != null:
 		global_position = target.global_position;
 	_apply_zoom();
+
+func lerp_to_target() -> void:
+	pan_offset = Vector3.ZERO;
+	snapping = false;

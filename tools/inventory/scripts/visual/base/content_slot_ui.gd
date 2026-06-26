@@ -21,8 +21,6 @@ class_name ContentSlotUI extends TextureButton
 var contentSlot: ContentSlotResource;
 static var drag_data: DragData;
 static var drag_origin: ContentSlotUI;
-static var hovered_hex: HexBase;
-static var hovered_hex_can_drop: bool = false;
 
 signal initialized();
 
@@ -89,12 +87,11 @@ func _get_drag_data(_at_position: Vector2) -> DragData:
 		
 		drag_data = DragData.new(self);
 		drag_origin = self;
-		set_process(true);
+		_on_drag_started();
+		set_process(_should_process_drag());
 		return drag_data;
 	drag_data = null;
 	drag_origin = null;
-	hovered_hex = null;
-	hovered_hex_can_drop = false;
 	return null;
 	
 func _can_drop_data(_at_position: Vector2, _data: Variant) -> bool:
@@ -123,12 +120,10 @@ func _notification(what: int) -> void:
 			var placed := false;
 			if drag_origin == self:
 				if !is_drag_successful():
-					placed = _try_drop_placeable_on_hovered_hex();
-				_clear_placeable_cursor();
+					placed = _handle_unsuccessful_drag_end();
+				_on_drag_finished();
 				drag_data = null;
 				drag_origin = null;
-				hovered_hex = null;
-				hovered_hex_can_drop = false;
 				set_process(false);
 			if !is_drag_successful() && !placed:
 				redraw()
@@ -138,18 +133,7 @@ func _process(_delta: float) -> void:
 		set_process(false);
 		return;
 
-	var placeable := _get_dragged_placeable();
-	if placeable == null:
-		hovered_hex = null;
-		hovered_hex_can_drop = false;
-		_clear_placeable_cursor();
-		return;
-
-	hovered_hex = _get_hovered_hex();
-	hovered_hex_can_drop = placeable.can_place_on(hovered_hex, _get_player_inventory());
-	Input.set_default_cursor_shape(
-		Input.CURSOR_CAN_DROP if hovered_hex_can_drop else Input.CURSOR_FORBIDDEN
-	);
+	_process_drag(_delta);
 				
 func _gui_input(_event: InputEvent) -> void:
 	if _event is InputEventMouseButton and _event.is_pressed() and _event.button_index == MOUSE_BUTTON_RIGHT && !contentSlot.has_content(null):
@@ -159,37 +143,17 @@ func _gui_input(_event: InputEvent) -> void:
 		add_child(context);
 		context.open(Vector2(mouse_position.x, mouse_position.y))
 
-func _try_drop_placeable_on_hovered_hex() -> bool:
-	var placeable := _get_dragged_placeable();
-	if placeable == null:
-		return false;
-	if not hovered_hex_can_drop:
-		return false;
-	return placeable.place_on(hovered_hex, _get_player_inventory());
+func _on_drag_started() -> void:
+	pass;
 
-func _get_dragged_placeable() -> PlaceableStructureInfo:
-	if contentSlot == null:
-		return null;
+func _on_drag_finished() -> void:
+	pass;
 
-	var content := contentSlot.get_content();
-	if content is PlaceableStructureInfo:
-		return content as PlaceableStructureInfo;
+func _should_process_drag() -> bool:
+	return false;
 
-	for structure: StructureInfo in DataManager.instance.structures:
-		var placeable := structure as PlaceableStructureInfo;
-		if placeable != null and placeable.uses_content(content):
-			return placeable;
-	return null;
+func _process_drag(_delta: float) -> void:
+	pass;
 
-func _get_player_inventory() -> Inventory:
-	if Manager.instance == null or Manager.instance.player_instance == null:
-		return null;
-	return Manager.instance.player_instance.inventory;
-
-func _get_hovered_hex() -> HexBase:
-	if Manager.instance == null or Manager.instance.player_instance == null:
-		return null;
-	return Manager.instance.player_instance.interactor_component.peek_hex_from_mouse();
-
-func _clear_placeable_cursor() -> void:
-	Input.set_default_cursor_shape(Input.CURSOR_ARROW);
+func _handle_unsuccessful_drag_end() -> bool:
+	return false;

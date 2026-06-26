@@ -40,7 +40,7 @@ func _embark_player(player: PlayerController) -> void:
 	_add_boat_to_player(player)
 	
 	if Manager.instance.spring_arm_camera != null:
-		Manager.instance.spring_arm_camera.snap_to_target()
+		Manager.instance.spring_arm_camera.lerp_to_target()
 
 func _disembark_player(player: PlayerController) -> void:
 	if land_spawn == null:
@@ -52,7 +52,7 @@ func _disembark_player(player: PlayerController) -> void:
 	_remove_boat_from_player(player)
 	
 	if Manager.instance.spring_arm_camera != null:
-		Manager.instance.spring_arm_camera.snap_to_target()
+		Manager.instance.spring_arm_camera.lerp_to_target()
 
 func _add_boat_to_player(player: PlayerController) -> void:
 	_remove_boat_from_player(player)

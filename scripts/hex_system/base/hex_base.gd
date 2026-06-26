@@ -98,7 +98,7 @@ func is_traversable(method: HexInfo.TraversalTag = HexInfo.TraversalTag.WALK) ->
 		return false
 	return (scene_instance.scene_info as HexInfo).traversal_tags.has(method);
 
-func set_structure(s: StructureInfo, immediate: bool = false) -> void:
+func set_structure(s: StructureInfo, immediate: bool = false, placement_rotation_y: float = NAN) -> void:
 	var required_tiles: Array[SceneInstance] = SceneManager.get_active_scene().node.get_tiles_in_radius(cube_id, s.required_space_radius);
 	for required_tile in required_tiles:
 		required_tile.node.can_generate = false
@@ -110,12 +110,12 @@ func set_structure(s: StructureInfo, immediate: bool = false) -> void:
 				return f.node.cube_id != cube_id and not f.node.is_traversable()
 		))
 	if immediate:
-		_on_structure_loaded(s, footprint_replacements)
+		_on_structure_loaded(s, footprint_replacements, placement_rotation_y)
 	else:
-		s.queue(_on_structure_loaded.bind(footprint_replacements));
+		s.queue(_on_structure_loaded.bind(footprint_replacements, placement_rotation_y));
 	
 ##When the structure finishes loading, add the instance to the scene and validate adjacent tiles
-func _on_structure_loaded(s: StructureInfo, required_tiles: Array[SceneInstance]) -> void:
+func _on_structure_loaded(s: StructureInfo, required_tiles: Array[SceneInstance], placement_rotation_y: float = NAN) -> void:
 	if region_instance != null:
 		region_instance.structures[cube_id] = s;
 	structure_root_tile = cube_id;
@@ -125,7 +125,7 @@ func _on_structure_loaded(s: StructureInfo, required_tiles: Array[SceneInstance]
 		if structure.instance is Interaction:
 			(structure.instance as Interaction).hex = self;
 		add_child(structure.instance);
-		var placement_rotation := _get_structure_placement_rotation(s)
+		var placement_rotation := _get_structure_placement_rotation(s, placement_rotation_y)
 		if bool(placement_rotation.get("has_rotation", false)):
 			structure.instance.rotation.y = float(placement_rotation["rotation_y"])
 		elif s.randomize_rotation:
@@ -143,11 +143,11 @@ func _on_structure_loaded(s: StructureInfo, required_tiles: Array[SceneInstance]
 	
 	structure_loaded.emit(s, structure.instance)
 
-func _get_structure_placement_rotation(s: StructureInfo) -> Dictionary:
+func _get_structure_placement_rotation(s: StructureInfo, placement_rotation_y: float = NAN) -> Dictionary:
 	var placeable := s as PlaceableStructureInfo
 	if placeable == null:
 		return { "has_rotation": false }
-	return placeable.get_placement_rotation_y(self)
+	return placeable.get_placement_rotation_y(self, placement_rotation_y)
 
 func has_walkable_random_rotation(s: StructureInfo) -> bool:
 	if s == null or not s.random_rotation_requires_walkable_neighbor:
