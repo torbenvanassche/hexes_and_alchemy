@@ -9,10 +9,12 @@ enum Type {
 	STRUCTURE
 }
 
+@export_group("Identity")
 @export var id: String;
 @export var packed_scene: PackedScene;
 @export var type: Type;
 
+@export_group("Lifecycle")
 @export var is_unique: bool = false;
 @export var transient: bool = false;
 signal cached(scene_info: SceneInfo);
@@ -21,6 +23,7 @@ var is_cached: bool = false;
 var is_queued: bool = false;
 var instances: Array[SceneInstance] = [];
 
+@export_group("Processing")
 @export var destroy_on_player_leave: bool = false;
 @export var process_mode_enabled: Node.ProcessMode = Node.ProcessMode.PROCESS_MODE_PAUSABLE;
 @export var process_mode_disabled: Node.ProcessMode = Node.ProcessMode.PROCESS_MODE_DISABLED;

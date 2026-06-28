@@ -28,11 +28,11 @@ size_flags_vertical = 3
 theme = ExtResource("4_theme")
 theme_override_constants/separation = 8
 script = ExtResource("2_3uv46")
-buy_tab_button_path = NodePath("TopRow/TabSelector/BuyTab")
-sell_tab_button_path = NodePath("TopRow/TabSelector/SellTab")
-item_grid_path = NodePath("ScrollContainer/ItemGrid")
-currency_label_path = NodePath("TopRow/CurrencyPanel/CurrencyAmount")
-empty_label_path = NodePath("../EmptyLabel")
+buy_tab_button = NodePath("TopRow/TabSelector/BuyTab")
+sell_tab_button = NodePath("TopRow/TabSelector/SellTab")
+item_grid = NodePath("ScrollContainer/ItemGrid")
+currency_label = NodePath("TopRow/CurrencyPanel/CurrencyAmount")
+empty_label = NodePath("../EmptyLabel")
 market_tile_scene = ExtResource("3_market_slot")
 
 [node name="TopRow" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/MarketPanel" index="0" unique_id=1570491888]

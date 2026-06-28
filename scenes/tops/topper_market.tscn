@@ -20,7 +20,6 @@ size = Vector3(1.8043289, 1.0020065, 1.2592618)
 
 [node name="market" type="Node3D" unique_id=2075765343]
 script = ExtResource("2_dxohp")
-buy_inventory = NodePath("BuyInventory")
 buy_menu = Array[ExtResource("2_7hx24")]([SubResource("Resource_dc7o2")])
 
 [node name="BuyInventory" type="Node" parent="." unique_id=309232762]

@@ -4,8 +4,8 @@
 [ext_resource type="Script" uid="uid://dpjtl8txjms6k" path="res://scripts/helpers/resource_manager.gd" id="2_sqa0i"]
 [ext_resource type="Script" uid="uid://dt4im1k7j4jn" path="res://scripts/hex_system/base/hex_info.gd" id="3_l5cgh"]
 [ext_resource type="Script" uid="uid://cf50g0p4jcitj" path="res://scripts/helpers/market_manager.gd" id="3_x7ldt"]
-[ext_resource type="Script" path="res://scripts/helpers/quest_manager.gd" id="4_quests"]
 [ext_resource type="Script" uid="uid://g8s30q5nqcd8" path="res://tools/time_of_day/daytime_cycle.gd" id="4_moyyc"]
+[ext_resource type="Script" uid="uid://cbfn48smap6p8" path="res://scripts/helpers/quest_manager.gd" id="4_quests"]
 [ext_resource type="Resource" uid="uid://betpu2iylw1qy" path="res://resources/scene_info/hex/hex_simple.tres" id="4_vgks2"]
 [ext_resource type="Script" uid="uid://m31o3kdm652g" path="res://scripts/hex_system/base/region_info.gd" id="5_3hfy5"]
 [ext_resource type="Resource" uid="uid://bto28untf5lrf" path="res://resources/scene_info/hex/hex_water.tres" id="5_dylgi"]
@@ -80,7 +80,7 @@ initial_scene = ExtResource("22_jehah")
 script = ExtResource("3_x7ldt")
 metadata/_custom_type_script = "uid://cf50g0p4jcitj"
 
-[node name="quest_manager" type="Node" parent="game_manager"]
+[node name="quest_manager" type="Node" parent="game_manager" unique_id=638771837]
 script = ExtResource("4_quests")
 
 [node name="time_of_day" type="Node" parent="game_manager" unique_id=1430942160 node_paths=PackedStringArray("sun", "environment")]
@@ -94,9 +94,9 @@ metadata/_custom_type_script = "uid://g8s30q5nqcd8"
 [node name="resource_manager" type="Node" parent="." unique_id=1025417812]
 script = ExtResource("2_sqa0i")
 hexes = Array[ExtResource("3_l5cgh")]([ExtResource("4_vgks2"), ExtResource("5_dylgi")])
-regions = Array[ExtResource("5_3hfy5")]([ExtResource("6_7pvxh"), ExtResource("9_y3xxt")])
 structures = Array[ExtResource("10_gt4lb")]([ExtResource("11_ya6yc"), ExtResource("12_mflgo"), ExtResource("14_8ui5n"), ExtResource("16_jehah"), ExtResource("19_isfgf"), ExtResource("18_58tnd"), ExtResource("20_qk31b"), ExtResource("56_water_source")])
 scenes = Array[ExtResource("15_ya6yc")]([ExtResource("12_vgks2"), ExtResource("16_gt4lb"), ExtResource("18_34frw"), ExtResource("18_mflgo"), ExtResource("20_8ui5n"), ExtResource("22_jehah"), ExtResource("26_isfgf"), ExtResource("29_moyyc"), ExtResource("30_f0nuf"), ExtResource("37_33j8a"), ExtResource("38_eirlg"), ExtResource("39_eirlg"), ExtResource("50_craft")])
+regions = Array[ExtResource("5_3hfy5")]([ExtResource("6_7pvxh"), ExtResource("9_y3xxt")])
 items = Array[ExtResource("27_phl1g")]([ExtResource("28_58tnd"), ExtResource("30_agklt"), ExtResource("31_x7ldt"), ExtResource("32_moyyc"), ExtResource("33_f0nuf"), ExtResource("47_742t5"), ExtResource("51_seed"), ExtResource("52_water"), ExtResource("53_grain"), ExtResource("54_support"), ExtResource("55_bucket")])
 npcs = Array[ExtResource("45_h5su3")]([ExtResource("46_c6i2r")])
 

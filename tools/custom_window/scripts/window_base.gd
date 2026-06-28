@@ -1,6 +1,7 @@
 class_name DraggableControl
 extends Control
 
+@export_group("Identity")
 @export var id: String = "";
 
 const LOCKED_ICON := preload("res://sprites/ui/icons/locked.png")
@@ -23,16 +24,20 @@ const UNLOCKED_ICON := preload("res://sprites/ui/icons/unlocked.png")
 @export_enum("mouse", "center", "override") var position_options: String = "center";
 var initial_position: Vector2;
 
+@export_group("Layout")
 @export var store_position: bool = false;
 @export var override_position: Vector2;
 @export var topbar_height: int = 50;
 @export var topbar_transparent: bool = false;
 @export var show_title: bool = true;
+
+@export_group("Behavior")
 @export var resizable: bool = true;
 @export var enforce_content_minimum_size: bool = true;
 @export var can_lock := false
 @export var close_locked := false
 
+@export_group("Content")
 @export var content: Control;
 
 signal close_requested();

@@ -4,6 +4,7 @@ var pointy_top: bool = false;
 var _spacing: float = 0.25
 
 ##The radius for initial chunk generation, more can be generated on demand
+@export_group("Chunk Generation")
 @export var chunk_radius: int = 3;
 @export var chunk_size: Vector2i = Vector2i(4, 4):
 	set(value):
@@ -11,10 +12,12 @@ var _spacing: float = 0.25
 @export var grid_name: String;
 
 ## Set this to reproduce a specific world. Leave it at 0 to generate a new seed on each run.
+@export_group("World Seed")
 @export var world_seed: int = 0;
 var generation_seed: int = 0;
 
 ##Optionally define custom regions that can generate if you don't want to use the global setting
+@export_group("Regions")
 @export var custom_regions: Array[RegionInfo];
 @export var generate_ocean: bool = true;
 
@@ -25,6 +28,7 @@ var region_options: Array[RegionInfo];
 var initialized: bool = false;
 
 ##Chunks that should not generate structures
+@export_group("Structure Rules")
 @export var skipped_chunks: Array[Vector2i];
 
 static var RADIUS_IN: float = 1.0

@@ -1,22 +1,21 @@
 class_name PlayerInteractor
 extends Node
 
-@export var interactor_path: NodePath = ^"../interactor"
+@export_group("References")
+@export var interactor_area: Area3D
 
 var current_triggers: Array[Interaction] = []
-var interactor: Area3D
 var selected_hex: HexBase
 var _prompt_refresh_queued := false
 
 signal hex_picked(hex: HexBase)
 
 func _ready() -> void:
-	interactor = get_node_or_null(interactor_path) as Area3D
-	if interactor == null:
+	if interactor_area == null:
 		return
 	
-	interactor.area_entered.connect(add_trigger)
-	interactor.area_exited.connect(remove_trigger)
+	interactor_area.area_entered.connect(add_trigger)
+	interactor_area.area_exited.connect(remove_trigger)
 
 func has_trigger() -> bool:
 	return current_triggers.size() != 0
@@ -71,8 +70,8 @@ func _get_interaction_origin() -> Vector3:
 	if parent != null:
 		return parent.global_position
 
-	if interactor != null:
-		return interactor.global_position
+	if interactor_area != null:
+		return interactor_area.global_position
 
 	return Vector3.ZERO
 

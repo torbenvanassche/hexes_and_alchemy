@@ -1,10 +1,17 @@
 class_name DataManager extends Node
 
+@export_group("Scene Data")
 @export var hexes: Array[HexInfo];
-@export var regions: Array[RegionInfo];
 @export var structures: Array[StructureInfo];
 @export var scenes: Array[SceneInfo];
+
+@export_group("World Data")
+@export var regions: Array[RegionInfo];
+
+@export_group("Item Data")
 @export var items: Array[ItemInfo];
+
+@export_group("NPC Data")
 @export var npcs: Array[NpcInfo];
 
 var scene_data: Array[SceneInfo];

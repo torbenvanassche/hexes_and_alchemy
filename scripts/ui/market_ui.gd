@@ -3,11 +3,14 @@ extends VBoxContainer
 
 enum TradeMode { BUY, SELL }
 
-@export var buy_tab_button_path: NodePath
-@export var sell_tab_button_path: NodePath
-@export var item_grid_path: NodePath
-@export var currency_label_path: NodePath
-@export var empty_label_path: NodePath
+@export_group("References")
+@export var buy_tab_button: Button
+@export var sell_tab_button: Button
+@export var item_grid: GridContainer
+@export var currency_label: Label
+@export var empty_label: Label
+
+@export_group("Layout")
 @export var market_tile_scene: PackedScene
 @export var window_min_size: Vector2 = Vector2(760, 460)
 @export var window_max_size: Vector2 = Vector2(980, 640)
@@ -16,12 +19,6 @@ var buy_inventory: ContentGroup
 var sell_inventory: ContentGroup
 var player_inventory: ContentGroup
 var trade_mode: TradeMode = TradeMode.SELL
-
-@onready var buy_tab_button: Button = get_node_or_null(buy_tab_button_path)
-@onready var sell_tab_button: Button = get_node_or_null(sell_tab_button_path)
-@onready var item_grid: GridContainer = get_node_or_null(item_grid_path)
-@onready var currency_label: Label = get_node_or_null(currency_label_path)
-@onready var empty_label: Label = get_node_or_null(empty_label_path)
 
 func _ready() -> void:
 	_connect_tabs()

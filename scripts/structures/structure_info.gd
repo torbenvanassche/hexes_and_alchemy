@@ -1,6 +1,7 @@
 class_name StructureInfo extends SceneInfo
 
 ##Defines how many times this can appear for a region, size is defined on the X-axis
+@export_group("Spawn Rules")
 @export var max_per_region_size: Curve = Curve.new();
 
 ##The space required for this structure to generate
@@ -13,15 +14,18 @@ class_name StructureInfo extends SceneInfo
 @export var spawn_weight: float = 1;
 
 ##Whether blocked terrain inside the structure footprint should be converted to the center tile type
+@export_group("Placement")
 @export var replace_non_traversable_hex: bool = true;
 
 ##How far from the structure footprint terrain can be converted to preserve a walkable passage
 @export var passage_repair_radius: int = 2;
 
+@export_group("Rotation")
 @export var randomize_rotation: bool = true;
 
 @export var random_rotation_requires_walkable_neighbor: bool = false;
 
+@export_group("Metadata")
 @export var is_quest_target: bool = true;
 
 @export var translation_key_name: String;
