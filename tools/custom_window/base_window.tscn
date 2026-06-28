@@ -73,6 +73,7 @@ text = "WINDOW_TITLE"
 horizontal_alignment = 1
 
 [node name="LockButton" type="Button" parent="NinePatchRect/VBoxContainer/topbar/MarginContainer2/HBoxContainer" unique_id=1870475115]
+visible = false
 custom_minimum_size = Vector2(40, 30)
 layout_mode = 2
 tooltip_text = "Keep open"

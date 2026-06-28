@@ -10,6 +10,7 @@ const UNLOCKED_ICON := preload("res://sprites/ui/icons/unlocked.png")
 @onready var top_bar: ColorRect = $NinePatchRect/VBoxContainer/topbar;
 @onready var lock_button: Button = $NinePatchRect/VBoxContainer/topbar/MarginContainer2/HBoxContainer/LockButton;
 @onready var close_button: Button = $NinePatchRect/VBoxContainer/topbar/MarginContainer2/HBoxContainer/CloseButton;
+@onready var title_margin: MarginContainer = $NinePatchRect/VBoxContainer/topbar/MarginContainer2/HBoxContainer/MarginContainer;
 @onready var title: Label = $NinePatchRect/VBoxContainer/topbar/MarginContainer2/HBoxContainer/MarginContainer/Title;
 @onready var v_box_container: VBoxContainer = $NinePatchRect/VBoxContainer
 @onready var content_panel: Control = $NinePatchRect/VBoxContainer/contentPanel;
@@ -29,6 +30,7 @@ var initial_position: Vector2;
 @export var show_title: bool = true;
 @export var resizable: bool = true;
 @export var enforce_content_minimum_size: bool = true;
+@export var can_lock := false
 @export var close_locked := false
 
 @export var content: Control;
@@ -55,6 +57,7 @@ func _ready() -> void:
 	resize_handle_xy.gui_input.connect(_handle_resize_input.bind(Vector2(1, 1)))
 	change_title.connect(_change_title)
 	_change_title(id);
+	_update_lock_availability()
 	_set_close_locked(close_locked)
 	
 	top_bar.custom_minimum_size.y = topbar_height
@@ -161,7 +164,7 @@ func close_window(force_close: bool = false) -> void:
 	SceneManager.remove_scene(DataManager.instance.node_to_info(self), false);
 
 func can_close() -> bool:
-	return not close_locked
+	return not can_lock or not close_locked
 	
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("cancel") && visible:
@@ -192,7 +195,11 @@ func _update_resize_handles() -> void:
 	resize_handle_xy.visible = resizable
 
 func _set_close_locked(locked: bool) -> void:
-	close_locked = locked
-	lock_button.button_pressed = locked
-	lock_button.icon = LOCKED_ICON if locked else UNLOCKED_ICON
-	lock_button.tooltip_text = "Keep open" if not locked else "Allow close"
+	close_locked = can_lock and locked
+	lock_button.button_pressed = close_locked
+	lock_button.icon = LOCKED_ICON if close_locked else UNLOCKED_ICON
+	lock_button.tooltip_text = "Keep open" if not close_locked else "Allow close"
+
+func _update_lock_availability() -> void:
+	lock_button.visible = can_lock
+	title_margin.add_theme_constant_override("margin_left", 80 if can_lock else 40)
