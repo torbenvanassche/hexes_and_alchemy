@@ -93,7 +93,7 @@ func _rebuild_market() -> void:
 
 func _build_buy_tiles() -> void:
 	if buy_inventory == null:
-		_set_empty_message("No market stock available.")
+		_set_empty_message(tr("MARKET_EMPTY_NO_STOCK"))
 		return
 	var visible_tiles := 0
 	for slot in buy_inventory.data:
@@ -104,11 +104,11 @@ func _build_buy_tiles() -> void:
 		tile.configure_buy(slot, player_inventory)
 		visible_tiles += 1
 	if visible_tiles == 0:
-		_set_empty_message("The market is sold out.")
+		_set_empty_message(tr("MARKET_EMPTY_SOLD_OUT"))
 
 func _build_sell_tiles() -> void:
 	if player_inventory == null:
-		_set_empty_message("No player inventory available.")
+		_set_empty_message(tr("MARKET_EMPTY_NO_PLAYER_INVENTORY"))
 		return
 	var item_counts := _get_inventory_counts(player_inventory)
 	for content in item_counts.keys():
@@ -116,7 +116,7 @@ func _build_sell_tiles() -> void:
 		item_grid.add_child(tile)
 		tile.configure_sell(content, int(item_counts[content]), player_inventory)
 	if item_counts.is_empty():
-		_set_empty_message("You have no items to sell.")
+		_set_empty_message(tr("MARKET_EMPTY_NOTHING_TO_SELL"))
 
 func _create_market_tile() -> MarketSlotUI:
 	var tile := market_tile_scene.instantiate() as MarketSlotUI

@@ -1,5 +1,7 @@
 class_name Manager extends Node
 
+const FILE_PATH := "user://settings.ini"
+
 static var instance: Manager;
 
 var spring_arm_camera: SpringArmFollowCamera;
@@ -8,8 +10,12 @@ var player_instance: PlayerController;
 var move_player: bool = true;
 var is_paused: bool = false;
 
+var config := ConfigFile.new()
+var input: InputSettings
+
 @onready var interaction_prompt: WSD = $"../game_ui/interaction_prompt";
 @onready var market: MarketManager = $market_manager;
+@onready var quests: QuestManager = $quest_manager;
 @onready var toast: Toast = $"../game_ui/RichTextLabel";
 
 @export var initial_scene: SceneInfo;
@@ -20,6 +26,8 @@ var settlements: Array[Settlement];
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS;
 	instance = self;
+	_load_or_create()
+	input = InputSettings.new(config)
 	
 	if DataManager.instance == null:
 		call_deferred("_ready");
@@ -29,6 +37,15 @@ func _ready() -> void:
 	
 func _initialized(_scene_info: SceneInfo) -> void:
 	SceneManager.add(_scene_info);
+
+func _load_or_create() -> void:
+	if FileAccess.file_exists(FILE_PATH):
+		config.load(FILE_PATH)
+	else:
+		config.save(FILE_PATH)
+
+func save() -> void:
+	config.save(FILE_PATH)
 	
 func input_moves_player() -> bool:
 	return move_player || InputManager.is_device(InputManager.InputDevice.CONTROLLER);

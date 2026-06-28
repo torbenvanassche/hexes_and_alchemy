@@ -81,7 +81,7 @@ func set_action(action: StringName, event: InputEvent) -> void:
 func replace_action(action: StringName, event: InputEvent) -> void:
 	set_action(action, event);
 	remapping_button.set_key(event_to_key(event), event);
-	Config.input.change_keybinding(action_to_remap, event);
+	Manager.instance.input.change_keybinding(action_to_remap, event);
 	
 	is_remapping = false;
 	action_to_remap = "";

@@ -92,7 +92,7 @@ func _set_mine_state(state: MineState) -> void:
 	if state in [MineState.POOR_VEIN, MineState.RICH_VEIN]:
 		_last_stable_state = state
 	_update_markers(state)
-	Config.gamestate.quest_availability_changed.emit()
+	Manager.instance.quests.quest_availability_changed.emit()
 
 func _update_markers(state: MineState) -> void:
 	if ready_to_mine != null:

@@ -30,7 +30,7 @@ func _get_available_quest_locations() -> Array[HexBase]:
 		return []
 
 	var available_locations: Array[HexBase] = []
-	var tiles_in_radius: Array[SceneInstance] = grid.get_tiles_in_radius(hex.cube_id, Config.gamestate.max_quest_distance)
+	var tiles_in_radius: Array[SceneInstance] = grid.get_tiles_in_radius(hex.cube_id, Manager.instance.quests.max_quest_distance)
 	for tile: SceneInstance in tiles_in_radius:
 		var quest_hex := tile.node as HexBase
 		if quest_hex == null or quest_hex.structure == null:
@@ -45,7 +45,7 @@ func _get_available_quest_locations() -> Array[HexBase]:
 			continue
 		if not quest_objective.is_visible_in_tree():
 			continue
-		var available_types := Config.gamestate.get_available_quest_types(
+		var available_types := Manager.instance.quests.get_available_quest_types(
 			quest_hex,
 			quest_objective.get_filtered_quest_types()
 		)
@@ -53,7 +53,7 @@ func _get_available_quest_locations() -> Array[HexBase]:
 			continue
 		if not quest_objective.can_interact():
 			continue
-		if not Config.gamestate.is_quest_location_reachable(quest_hex, grid):
+		if not Manager.instance.quests.is_quest_location_reachable(quest_hex, grid):
 			continue
 
 		available_locations.append(quest_hex)

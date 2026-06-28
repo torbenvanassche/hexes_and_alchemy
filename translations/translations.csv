@@ -78,6 +78,15 @@ CRAFTING_INGREDIENTS,Ingredients,Ingredients
 CRAFTING_RESULT,Result,Result
 CRAFTING_CRAFT,Craft item,Craft item
 CRAFTING_READY,Ready to craft.,Ready to craft.
+MARKET_TAB_BUY,Buy,Buy
+MARKET_TAB_SELL,Sell,Sell
+MARKET_CURRENCY,Coins,Coins
+MARKET_EMPTY_DEFAULT,Your inventory is empty.,Your inventory is empty.
+MARKET_EMPTY_NO_STOCK,No market stock available.,No market stock available.
+MARKET_EMPTY_SOLD_OUT,The market is sold out.,The market is sold out.
+MARKET_EMPTY_NO_PLAYER_INVENTORY,No player inventory available.,No player inventory available.
+MARKET_EMPTY_NOTHING_TO_SELL,You have no items to sell.,You have no items to sell.
+MARKET_ITEM_PLACEHOLDER,Item,Item
 CRAFTING_MISSING,Missing: %s,Missing: %s
 CRAFTING_SUCCESS,Crafted %s.,Crafted %s.
 CRAFTING_INVENTORY_FULL,Inventory is full.,Inventory is full.

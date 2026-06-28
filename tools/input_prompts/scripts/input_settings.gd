@@ -20,10 +20,10 @@ func _load_default() -> void:
 	for action: String in InputManager.mappable_actions:
 		var events: Array[InputEvent] = InputMap.action_get_events(action);
 		if events.size() > 0:
-			Config.input.change_keybinding(action, events[0]);
+			Manager.instance.input.change_keybinding(action, events[0]);
 	
 func _on_save() -> void:
-	Config.save();
+	Manager.instance.save();
 
 func _reset_bindings() -> void:
 	for item in keybind_container.get_children():
@@ -41,7 +41,7 @@ func _reset_bindings() -> void:
 		btn.pressed.connect(_on_rebind_key.bind(btn, action))
 		
 func _load_bindings() -> void:
-	var keybindings: Dictionary = Config.input.load_keybindings();
+	var keybindings: Dictionary = Manager.instance.input.load_keybindings();
 	for action: String in keybindings.keys():
 		InputManager.set_action(action, keybindings[action])
 

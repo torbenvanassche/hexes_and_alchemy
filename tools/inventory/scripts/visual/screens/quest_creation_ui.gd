@@ -67,7 +67,7 @@ func _on_location_selected(idx: int) -> void:
 	quest_type.clear();
 	var objective: QuestObjective = location.structure.instance as QuestObjective;
 	if objective:
-		var available_types := Config.gamestate.get_available_quest_types(
+		var available_types := Manager.instance.quests.get_available_quest_types(
 			location,
 			objective.get_filtered_quest_types(objective.state_machine.get_current_state_index())
 		)
@@ -98,7 +98,7 @@ func _add_location_option(hex: HexBase) -> void:
 		return
 
 	var grid := active_scene.node as HexGrid
-	if grid == null or not Config.gamestate.is_quest_location_reachable(hex, grid):
+	if grid == null or not Manager.instance.quests.is_quest_location_reachable(hex, grid):
 		return
 
 	var player_hex: HexBase = Manager.instance.player_instance.get_hex()
@@ -109,7 +109,7 @@ func _add_location_option(hex: HexBase) -> void:
 	if objective == null:
 		return
 
-	var available_types := Config.gamestate.get_available_quest_types(
+	var available_types := Manager.instance.quests.get_available_quest_types(
 		hex,
 		objective.get_filtered_quest_types(objective.state_machine.get_current_state_index())
 	)
@@ -180,9 +180,9 @@ func on_enter() -> void:
 			continue
 
 		var distance: int = GridUtils.cube_distance(hex.cube_id, player_hex.cube_id);
-		var in_range: bool = distance <= Config.gamestate.max_quest_distance;
-		var is_reachable := Config.gamestate.is_quest_location_reachable(hex, grid)
-		var is_valid_quest: bool = Config.gamestate.get_available_quest_types(
+		var in_range: bool = distance <= Manager.instance.quests.max_quest_distance;
+		var is_reachable := Manager.instance.quests.is_quest_location_reachable(hex, grid)
+		var is_valid_quest: bool = Manager.instance.quests.get_available_quest_types(
 			hex,
 			quest_objective.get_filtered_quest_types()
 		).size() != 0;

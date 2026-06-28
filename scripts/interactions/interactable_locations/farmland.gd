@@ -36,7 +36,7 @@ func _ready() -> void:
 func _set_crop_state(state: CropState) -> void:
 	state_machine.set_state(CropState.keys()[state])
 	_update_mesh(state)
-	Config.gamestate.quest_availability_changed.emit()
+	Manager.instance.quests.quest_availability_changed.emit()
 
 func _current_crop_state() -> CropState:
 	var key := state_machine.get_current_state()

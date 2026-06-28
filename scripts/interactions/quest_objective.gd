@@ -11,7 +11,7 @@ var state_machine: StateMachine = StateMachine.new();
 func _on_visibility_changed() -> void:
 	super._on_visibility_changed();
 	if can_interact() && is_visible_in_tree():
-		Config.gamestate.quest_availability_changed.emit();
+		Manager.instance.quests.quest_availability_changed.emit();
 
 func on_interact() -> void:
 	super.on_interact();
@@ -62,7 +62,7 @@ func quest_has_required_supplies(quest: Quest) -> bool:
 func _on_create_quest_window_loaded(window_info: SceneInfo) -> void:
 	window_instance = SceneManager.add(window_info);
 	var quest_creation: QuestCreationUI = (window_instance.node as DraggableControl).content as QuestCreationUI;
-	if not quest_creation.quest_created.is_connected(Config.gamestate.add_quest):
-		quest_creation.quest_created.connect(Config.gamestate.add_quest)
+	if not quest_creation.quest_created.is_connected(Manager.instance.quests.add_quest):
+		quest_creation.quest_created.connect(Manager.instance.quests.add_quest)
 	quest_creation.force_data(self)
 	window_instance.on_enter.emit();

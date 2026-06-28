@@ -19,7 +19,6 @@ config/icon="res://icon.svg"
 
 Debug="*uid://dcud1yf4q7yus"
 InputManager="*uid://de3o0pp6wss2g"
-Config="*uid://du5xhklaf65mb"
 SceneManager="*uid://bbh3tqcpujraq"
 
 [editor_plugins]

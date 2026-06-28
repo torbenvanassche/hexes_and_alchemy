@@ -37,7 +37,7 @@ stretch_mode = 5
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("2_theme")
-text = "Item"
+text = "MARKET_ITEM_PLACEHOLDER"
 vertical_alignment = 1
 clip_text = true
 

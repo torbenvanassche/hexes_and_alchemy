@@ -11,21 +11,21 @@ var window_instance: SceneInstance;
 
 func on_enter() -> void:
 	for c: QuestListItemUI in _get_quest_notes():
-		if not Config.gamestate.active_quests.has(c.questData):
+		if not Manager.instance.quests.active_quests.has(c.questData):
 			c.queue_free()
 
-	for q: Quest in Config.gamestate.active_quests:
+	for q: Quest in Manager.instance.quests.active_quests:
 		if _find_note_for_quest(q) == null:
 			var instance: QuestListItemUI = quest_item_ui.instantiate();
 			board_surface.add_child(instance);
 			instance.set_data(q);
 
-	empty_label.visible = Config.gamestate.active_quests.is_empty()
+	empty_label.visible = Manager.instance.quests.active_quests.is_empty()
 	_allow_quest_creation_allowed()
 	_layout_board()
 	
-	if not Config.gamestate.quest_availability_changed.is_connected(_allow_quest_creation_allowed):
-		Config.gamestate.quest_availability_changed.connect(_allow_quest_creation_allowed)
+	if not Manager.instance.quests.quest_availability_changed.is_connected(_allow_quest_creation_allowed):
+		Manager.instance.quests.quest_availability_changed.connect(_allow_quest_creation_allowed)
 	
 func _allow_quest_creation_allowed() -> void:
 	create_quest_button.disabled = not _has_available_quests_to_create()
@@ -33,7 +33,7 @@ func _allow_quest_creation_allowed() -> void:
 	
 func _ready() -> void:
 	create_quest_button.pressed.connect(_open_create_quest_menu)
-	Config.gamestate.quest_list_changed.connect(on_enter)
+	Manager.instance.quests.quest_list_changed.connect(on_enter)
 	resized.connect(_layout_board)
 	board_surface.resized.connect(_layout_board)
 	on_enter()
@@ -49,8 +49,8 @@ func _on_create_quest_window_loaded(window_info: SceneInfo) -> void:
 	window_instance = SceneManager.add(window_info);
 	var quest_creation: QuestCreationUI = (window_instance.node as DraggableControl).content as QuestCreationUI;
 	quest_creation.clear_forced_data()
-	if not quest_creation.quest_created.is_connected(Config.gamestate.add_quest):
-		quest_creation.quest_created.connect(Config.gamestate.add_quest)
+	if not quest_creation.quest_created.is_connected(Manager.instance.quests.add_quest):
+		quest_creation.quest_created.connect(Manager.instance.quests.add_quest)
 	window_instance.on_enter.emit();
 
 func _get_quest_notes() -> Array[QuestListItemUI]:
@@ -86,7 +86,7 @@ func _layout_notes(board_rect: Rect2) -> void:
 
 func _get_ordered_notes() -> Array[QuestListItemUI]:
 	var ordered_notes: Array[QuestListItemUI] = []
-	for quest: Quest in Config.gamestate.active_quests:
+	for quest: Quest in Manager.instance.quests.active_quests:
 		var note := _find_note_for_quest(quest)
 		if note != null:
 			ordered_notes.append(note)
@@ -168,12 +168,12 @@ func _has_available_quests_to_create() -> bool:
 			continue
 
 		var distance := GridUtils.cube_distance(hex.cube_id, player_hex.cube_id)
-		if distance > Config.gamestate.max_quest_distance:
+		if distance > Manager.instance.quests.max_quest_distance:
 			continue
-		if not Config.gamestate.is_quest_location_reachable(hex, grid):
+		if not Manager.instance.quests.is_quest_location_reachable(hex, grid):
 			continue
 
-		var available_types := Config.gamestate.get_available_quest_types(
+		var available_types := Manager.instance.quests.get_available_quest_types(
 			hex,
 			objective.get_filtered_quest_types(objective.state_machine.get_current_state_index())
 		)

@@ -1,4 +1,4 @@
-class_name GameState extends Resource
+class_name QuestManager extends Node
 
 var active_quests: Array[Quest] = [];
 
@@ -6,10 +6,9 @@ signal quest_list_changed();
 @warning_ignore("unused_signal")
 signal quest_availability_changed();
 
-var max_active_quest: int = 10;
-var max_npc_per_tavern: int = 5;
-
-var max_quest_distance: int = 50;
+@export var max_active_quest: int = 10;
+@export var max_npc_per_tavern: int = 5;
+@export var max_quest_distance: int = 50;
 
 func has_quest_for_location_and_type(location: HexBase, quest_type: String) -> bool:
 	return active_quests.any(func(q: Quest) -> bool:
@@ -94,14 +93,10 @@ func try_assign_waiting_quests() -> void:
 		quest.start();
 
 func _get_active_tavern() -> Tavern:
-	if Manager.instance == null:
+	if Manager.instance == null or Manager.instance.active_settlement == null:
 		return null;
 
-	var settlement := Manager.instance.active_settlement;
-	if settlement == null:
-		return null;
-
-	for interaction: Interaction in settlement.interactions:
+	for interaction: Interaction in Manager.instance.active_settlement.interactions:
 		if interaction is Tavern:
 			return interaction as Tavern;
 	return null;
