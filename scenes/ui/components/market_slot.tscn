@@ -1,47 +1,57 @@
 [gd_scene format=3 uid="uid://b8rer4f8w6ive"]
 
-[ext_resource type="PackedScene" uid="uid://c5ocjw6joaemy" path="res://tools/inventory/scenes/content_slot.tscn" id="1_0d1ms"]
 [ext_resource type="Script" uid="uid://brtr35b12dwpi" path="res://scripts/ui/market_slot.gd" id="1_2m32k"]
-[ext_resource type="Theme" uid="uid://dae2b2hfpj0l2" path="res://themes/base_theme.theme" id="4_edggb"]
+[ext_resource type="Theme" uid="uid://dae2b2hfpj0l2" path="res://themes/base_theme.theme" id="2_theme"]
+[ext_resource type="Theme" uid="uid://3rlxm8752xjm" path="res://themes/base_theme_dark.theme" id="3_dark"]
 
-[node name="Control" type="MarginContainer" unique_id=2049737903]
-custom_minimum_size = Vector2(112, 170)
-offset_right = 112.0
-offset_bottom = 170.0
-theme = ExtResource("4_edggb")
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
+[node name="MarketSlot" type="Button" unique_id=2049737903]
+custom_minimum_size = Vector2(280, 58)
+theme = ExtResource("2_theme")
 script = ExtResource("1_2m32k")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=738450118]
-layout_mode = 2
-theme_override_constants/separation = 4
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=863947063]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
 
-[node name="item" parent="VBoxContainer" unique_id=930043497 instance=ExtResource("1_0d1ms")]
+[node name="Content" type="HBoxContainer" parent="MarginContainer" unique_id=738450118]
 layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
 
-[node name="PriceRow" type="HBoxContainer" parent="VBoxContainer" unique_id=402255207]
+[node name="Icon" type="TextureRect" parent="MarginContainer/Content" unique_id=1058541984]
+custom_minimum_size = Vector2(34, 34)
 layout_mode = 2
-theme_override_constants/separation = 3
+size_flags_vertical = 4
+expand_mode = 1
+stretch_mode = 5
 
-[node name="PriceLabel" type="Label" parent="VBoxContainer/PriceRow" unique_id=588111566]
-custom_minimum_size = Vector2(32, 0)
-layout_mode = 2
-text = "Price"
-
-[node name="price" type="LineEdit" parent="VBoxContainer/PriceRow" unique_id=23474697]
+[node name="Name" type="Label" parent="MarginContainer/Content" unique_id=194722745]
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("4_edggb")
-theme_override_constants/minimum_character_width = 3
-alignment = 1
-max_length = 3
-virtual_keyboard_type = 2
+theme = ExtResource("2_theme")
+text = "Item"
+vertical_alignment = 1
+clip_text = true
 
-[node name="ActionButton" type="Button" parent="VBoxContainer" unique_id=563905966]
-custom_minimum_size = Vector2(0, 26)
+[node name="Price" type="RichTextLabel" parent="MarginContainer/Content" unique_id=311701316]
+custom_minimum_size = Vector2(78, 23)
+custom_maximum_size = Vector2(-1, 23)
 layout_mode = 2
-toggle_mode = true
-text = "List"
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+theme = ExtResource("3_dark")
+bbcode_enabled = true
+text = "0"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 2
+vertical_alignment = 1

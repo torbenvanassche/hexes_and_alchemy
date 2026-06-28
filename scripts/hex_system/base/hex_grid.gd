@@ -149,10 +149,31 @@ func has_chunk(cx: int, cy: int) -> bool:
 	return chunks.has(Vector2i(cx, cy));
 
 func can_generate_structures_on_grid_id(grid_id: Vector2i) -> bool:
-	return not skipped_chunks.has(grid_to_chunk_coords(grid_id))
+	var skipped_chunk: bool = skipped_chunks.has(grid_to_chunk_coords(grid_id));
+	return not skipped_chunk && not _is_near_settlement(GridUtils.offset_to_cube(grid_id, pointy_top))
 
 func can_generate_structures_on_hex(hex: HexBase) -> bool:
 	return hex != null and can_generate_structures_on_grid_id(hex.grid_id)
+
+func _is_near_settlement(cube_id: Vector3i) -> bool:
+	if Manager.instance == null:
+		return false
+
+	for settlement: Settlement in Manager.instance.settlements:
+		if settlement == null or not is_instance_valid(settlement):
+			continue
+		if not is_ancestor_of(settlement):
+			continue
+
+		var settlement_cube_id := world_to_cube_id(settlement.global_position)
+		var settlement_hex := settlement.get_parent() as HexBase
+		if settlement_hex != null:
+			settlement_cube_id = settlement_hex.cube_id
+
+		if GridUtils.cube_distance(cube_id, settlement_cube_id) <= settlement.structure_invalid_range:
+			return true
+
+	return false
 	
 func get_structured_hexes() -> Array[HexBase]:
 	var instances : Array[HexBase];

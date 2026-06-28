@@ -14,10 +14,7 @@ var structure: StructureInstance;
 var static_body: StaticBody3D;
 var scene_instance: SceneInstance;
 
-var collision_scene: PackedScene = preload("res://scenes/hex_collision.tscn");
 const UNEXPLORED_MATERIAL = preload("uid://bgsi1yhfo1pe2")
-static var _debug_drop_valid_material: StandardMaterial3D;
-static var _debug_drop_invalid_material: StandardMaterial3D;
 signal structure_loaded(structure_info: StructureInfo, structure_node: Node)
 
 var ground_hex_mesh: MeshInstance3D;
@@ -36,38 +33,6 @@ var movement_cost: float = 1.0;
 func _ready() -> void:
 	ground_hex_mesh = find_child("hex_*", true) as MeshInstance3D;
 	set_explored(false)
-
-func set_drop_debug_tint(can_drop: bool) -> void:
-	if ground_hex_mesh == null:
-		ground_hex_mesh = find_child("hex_*", true) as MeshInstance3D;
-	if ground_hex_mesh == null:
-		return
-
-	ground_hex_mesh.material_overlay = _get_drop_debug_material(can_drop)
-
-func clear_drop_debug_tint() -> void:
-	if ground_hex_mesh == null:
-		ground_hex_mesh = find_child("hex_*", true) as MeshInstance3D;
-	if ground_hex_mesh == null:
-		return
-
-	ground_hex_mesh.material_overlay = null
-
-func _get_drop_debug_material(can_drop: bool) -> StandardMaterial3D:
-	if can_drop:
-		if _debug_drop_valid_material == null:
-			_debug_drop_valid_material = StandardMaterial3D.new()
-			_debug_drop_valid_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-			_debug_drop_valid_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-			_debug_drop_valid_material.albedo_color = Color(0.2, 1.0, 0.35, 0.35)
-		return _debug_drop_valid_material
-
-	if _debug_drop_invalid_material == null:
-		_debug_drop_invalid_material = StandardMaterial3D.new()
-		_debug_drop_invalid_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-		_debug_drop_invalid_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-		_debug_drop_invalid_material.albedo_color = Color(1.0, 0.2, 0.25, 0.35)
-	return _debug_drop_invalid_material
 
 func set_explored(b: bool) -> void:
 	if ground_hex_mesh == null:

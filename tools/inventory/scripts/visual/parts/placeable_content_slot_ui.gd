@@ -124,7 +124,7 @@ func _step_placement_rotation(placeable: PlaceableStructureInfo, direction: floa
 			return
 
 func _update_placement_preview(placeable: PlaceableStructureInfo) -> void:
-	if hovered_hex == null:
+	if hovered_hex == null or not hovered_hex_can_drop:
 		_clear_placement_preview();
 		return;
 

@@ -10,6 +10,8 @@ unique_id = "wood_log"
 translation_key_name = "ITEM_WOOD_LOG_NAME"
 translation_key_description = "ITEM_WOOD_LOG_DESCRIPTION"
 texture = ExtResource("2_nr6xd")
+buy_value = 5
+sell_value = 3
 recipe = Dictionary[ExtResource("1_8ykgy"), int]({
 ExtResource("3_raw"): 2
 })

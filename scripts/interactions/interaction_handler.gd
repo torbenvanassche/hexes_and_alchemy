@@ -39,9 +39,11 @@ func _on_visibility_changed() -> void:
 		shape.disabled = not is_visible_in_tree();
 
 func _on_area_exit(other: Area3D) -> void:
-	if other.get_parent() is PlayerController:
-		Manager.instance.interaction_prompt.show_rect(null)
+	var player := other.get_parent() as PlayerController
+	if player != null and player.interactor_component != null:
+		player.interactor_component.queue_interaction_prompt_refresh()
 		
 func _on_area_enter(other: Area3D) -> void:
-	if other.get_parent() is PlayerController && can_interact() && show_interaction_prompt:
-		Manager.instance.interaction_prompt.show_rect(self);
+	var player := other.get_parent() as PlayerController
+	if player != null and player.interactor_component != null:
+		player.interactor_component.queue_interaction_prompt_refresh()

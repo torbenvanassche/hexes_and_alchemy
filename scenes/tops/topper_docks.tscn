@@ -5,13 +5,13 @@
 [ext_resource type="PackedScene" uid="uid://bttuym3sphjmk" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_shipyard_blue.glb" id="3_ld8pm"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ld8pm"]
-size = Vector3(3.5049782, 0.30893278, 1.2500159)
+size = Vector3(2.5108643, 0.30893278, 1.2500159)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_dc52g"]
 size = Vector3(1.331, 1.0014648, 1.828)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_7xubu"]
-size = Vector3(2.307115, 1.0014648, 0.53257716)
+size = Vector3(1.4638206, 1.0014648, 0.53257716)
 
 [node name="docks" type="Node3D" unique_id=481095020 node_paths=PackedStringArray("boat_spawn_position", "land_spawn")]
 script = ExtResource("1_dc52g")
@@ -19,14 +19,14 @@ boat_spawn_position = NodePath("boat_spawn")
 land_spawn = NodePath("land_spawn")
 
 [node name="docks" parent="." unique_id=1498254864 instance=ExtResource("1_6b0tr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1025, 0, 0)
 
 [node name="building" parent="." unique_id=1440918395 instance=ExtResource("3_ld8pm")]
 
 [node name="interaction" type="Area3D" parent="." unique_id=780490253]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="interaction" unique_id=1744587988]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2375674, 0.20166093, 0.002753511)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.74051046, 0.20166093, 0.002753511)
 shape = SubResource("BoxShape3D_ld8pm")
 
 [node name="collision" type="StaticBody3D" parent="." unique_id=1959920550]
@@ -36,11 +36,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.181, 0.48608398, -0.06)
 shape = SubResource("BoxShape3D_dc52g")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="collision" unique_id=1536714276]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7487416, 0.48608398, -0.0008804202)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3270943, 0.48608398, -0.0008804202)
 shape = SubResource("BoxShape3D_7xubu")
 
 [node name="boat_spawn" type="Node3D" parent="." unique_id=1960641894]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9911249, 0, 0.4051548)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4074346, 0, 0.38868)
 
 [node name="land_spawn" type="Node3D" parent="." unique_id=1281329540]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.32773054, 0, -0.14697325)

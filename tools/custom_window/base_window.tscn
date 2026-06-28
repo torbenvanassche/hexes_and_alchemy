@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://cbhlnklu2q6wp" path="res://sprites/ui/panels/panel-015.png" id="2_6bca1"]
 [ext_resource type="Texture2D" uid="uid://fg17pv5hrxau" path="res://sprites/ui/icons/cross.png" id="3_6bca1"]
 [ext_resource type="Theme" uid="uid://dae2b2hfpj0l2" path="res://themes/base_theme.theme" id="3_lstjp"]
+[ext_resource type="Texture2D" uid="uid://cgbd8t72ol743" path="res://sprites/ui/icons/unlocked.png" id="5_qutwm"]
 
 [node name="Window2" type="Control" unique_id=1301866213]
 layout_mode = 3
@@ -61,7 +62,7 @@ layout_mode = 2
 [node name="MarginContainer" type="MarginContainer" parent="NinePatchRect/VBoxContainer/topbar/MarginContainer2/HBoxContainer" unique_id=67417564]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/margin_left = 40
+theme_override_constants/margin_left = 80
 
 [node name="Title" type="Label" parent="NinePatchRect/VBoxContainer/topbar/MarginContainer2/HBoxContainer/MarginContainer" unique_id=1155745598]
 layout_mode = 2
@@ -71,9 +72,20 @@ theme_override_font_sizes/font_size = 40
 text = "WINDOW_TITLE"
 horizontal_alignment = 1
 
-[node name="Button" type="Button" parent="NinePatchRect/VBoxContainer/topbar/MarginContainer2/HBoxContainer" unique_id=1866505049]
+[node name="LockButton" type="Button" parent="NinePatchRect/VBoxContainer/topbar/MarginContainer2/HBoxContainer" unique_id=1870475115]
 custom_minimum_size = Vector2(40, 30)
 layout_mode = 2
+tooltip_text = "Keep open"
+icon = ExtResource("5_qutwm")
+flat = true
+toggle_mode = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="CloseButton" type="Button" parent="NinePatchRect/VBoxContainer/topbar/MarginContainer2/HBoxContainer" unique_id=1866505049]
+custom_minimum_size = Vector2(40, 30)
+layout_mode = 2
+tooltip_text = "Close"
 icon = ExtResource("3_6bca1")
 flat = true
 icon_alignment = 1

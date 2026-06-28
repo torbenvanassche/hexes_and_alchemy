@@ -9,4 +9,6 @@ unique_id = "water_bucket"
 translation_key_name = "ITEM_WATER_BUCKET_NAME"
 translation_key_description = "ITEM_WATER_BUCKET_DESCRIPTION"
 texture = ExtResource("2_water")
+buy_value = 10
+sell_value = 5
 metadata/_custom_type_script = "uid://c8ngjbq8w5gjr"

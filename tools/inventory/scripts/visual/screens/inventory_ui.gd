@@ -14,11 +14,18 @@ var elements: Array[Node] = []
 @export var slot_size: int = 100
 
 @onready var grid: GridContainer = self
+@export var money: Label;
 
 var selected_slot: ContentSlotUI
 
 func _ready() -> void:
 	_rebuild_inventory()
+	
+	_set_currency_amount();
+	Manager.instance.player_instance.currency_amount_changed.connect(_set_currency_amount)
+	
+func _set_currency_amount() -> void:
+	money.text = str(Manager.instance.player_instance.currency)
 
 func _rebuild_inventory() -> void:
 	for element in grid.get_children():

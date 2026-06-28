@@ -11,6 +11,8 @@ unique_id = "docks_blueprint"
 translation_key_name = "ITEM_DOCK_BLUEPRINT_NAME"
 translation_key_description = "ITEM_DOCK_BLUEPRINT_DESCRIPTION"
 texture = ExtResource("4_mb4s3")
+buy_value = 30
+sell_value = 18
 recipe = Dictionary[ExtResource("1_dc7o2"), int]({
 ExtResource("2_gbi6l"): 5,
 ExtResource("3_30bli"): 3

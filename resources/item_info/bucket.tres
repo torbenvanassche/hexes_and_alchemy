@@ -10,6 +10,8 @@ unique_id = "bucket"
 translation_key_name = "ITEM_BUCKET_NAME"
 translation_key_description = "ITEM_BUCKET_DESCRIPTION"
 texture = ExtResource("2_bucket")
+buy_value = 8
+sell_value = 4
 recipe = Dictionary[ExtResource("1_bucket"), int]({
 ExtResource("3_bucket"): 1
 })

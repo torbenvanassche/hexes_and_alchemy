@@ -2,6 +2,7 @@ class_name Settlement extends Node3D
 
 @export var spawn_position: Node3D;
 @export var is_active_settlement: bool = false;
+@export var structure_invalid_range: int = 3;
 
 var collision_shapes: Array[CollisionShape3D];
 var interactions: Array[Interaction];

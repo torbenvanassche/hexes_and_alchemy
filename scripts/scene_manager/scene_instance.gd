@@ -31,7 +31,11 @@ func destroy() -> void:
 	queue_free()
 	
 func hide() -> void:
-	if is_instance_valid(node) && "visible" in node:
+	if not is_instance_valid(node):
+		return
+	if node.has_method("can_close") and not node.call("can_close"):
+		return
+	if "visible" in node:
 		node.visible = false;
 
 func set_processing(enabled: bool) -> void:

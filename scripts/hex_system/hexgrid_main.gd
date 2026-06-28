@@ -40,8 +40,6 @@ func settlement_created(sI: StructureInfo) -> void:
 	
 	center_hex.region_instance.structures[center_hex.cube_id] = sI
 	center_hex.set_structure(sI);
-	_finish_map_generation();
-	pathfinder.rebuild();
 
 func _finish_map_generation() -> void:
 	if initialized:
@@ -54,3 +52,6 @@ func _on_starting_structure_loaded(_structure_info: StructureInfo, structure_nod
 		var settlement := structure_node as Settlement;
 		Manager.instance.set_active_settlement(settlement);
 		Manager.instance.spawn_in_settlement();
+
+	_finish_map_generation();
+	pathfinder.rebuild();

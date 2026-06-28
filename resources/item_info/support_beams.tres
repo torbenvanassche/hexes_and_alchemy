@@ -10,7 +10,8 @@ unique_id = "support_beams"
 translation_key_name = "ITEM_SUPPORT_BEAMS_NAME"
 translation_key_description = "ITEM_SUPPORT_BEAMS_DESCRIPTION"
 texture = ExtResource("3_support")
-base_value = 4
+buy_value = 12
+sell_value = 8
 recipe = Dictionary[ExtResource("1_support"), int]({
 ExtResource("2_support"): 2
 })

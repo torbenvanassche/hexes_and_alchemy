@@ -12,6 +12,9 @@ var target: Node3D;
 @export_group("Follow")
 @export_range(0.0, 30.0, 0.1) var follow_speed := 8.0
 
+@export_group("Collision")
+@export var enable_obstacle_avoidance := false
+
 @export_group("Zoom")
 @export_range(0.0, 1.0, 0.01) var zoom := 0.0 # 0 = close, 1 = top-down
 @export_range(0.01, 0.5, 0.01) var zoom_step := 0.08
@@ -63,6 +66,8 @@ func _ready() -> void:
 func _build_camera_hierarchy() -> void:
 	spring_arm = SpringArm3D.new();
 	spring_arm.name = "SpringArm3D";
+	if not enable_obstacle_avoidance:
+		spring_arm.collision_mask = 0;
 	add_child(spring_arm);
 
 	camera = Camera3D.new();
@@ -85,15 +90,15 @@ func _physics_process(delta: float) -> void:
 	elif not Manager.instance.input_moves_player():
 		_update_pan(delta);
 	var effective_pan = pan_offset * (1.0 - zoom);
-	zoom = lerp(zoom, target_zoom, delta * zoom_smoothness);
+	zoom = lerp(zoom, target_zoom, clampf(delta * zoom_smoothness, 0.0, 1.0));
 
 	var desired_position = target.global_position + effective_pan;
 	global_position = global_position.lerp(
 		desired_position,
-		delta * follow_speed
+		clampf(delta * follow_speed, 0.0, 1.0)
 	);
 
-	rotation.y = lerp_angle(rotation.y, target_yaw, delta * rotation_speed);
+	rotation.y = lerp_angle(rotation.y, target_yaw, clampf(delta * rotation_speed, 0.0, 1.0));
 
 	_apply_zoom();
 
@@ -152,7 +157,7 @@ func _get_controller_axis(axis: int) -> float:
 	return 0.0;
 
 func _snap_to_center(delta: float) -> void:
-	pan_offset = pan_offset.lerp(Vector3.ZERO, delta * snap_speed);
+	pan_offset = pan_offset.lerp(Vector3.ZERO, clampf(delta * snap_speed, 0.0, 1.0));
 
 	if pan_offset.length() <= snap_threshold:
 		pan_offset = Vector3.ZERO;

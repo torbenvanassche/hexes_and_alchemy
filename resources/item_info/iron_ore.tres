@@ -9,5 +9,6 @@ unique_id = "ore_iron"
 translation_key_name = "ITEM_ORE_IRON_NAME"
 translation_key_description = "ITEM_ORE_IRON_DESCRIPTION"
 texture = ExtResource("2_mytyu")
-base_value = 2
+buy_value = 6
+sell_value = 4
 metadata/_custom_type_script = "uid://c8ngjbq8w5gjr"

@@ -9,4 +9,6 @@ unique_id = "ore_gold"
 translation_key_name = "ITEM_ORE_GOLD_NAME"
 translation_key_description = "ITEM_ORE_GOLD_DESCRIPTION"
 texture = ExtResource("2_usnr2")
+buy_value = 12
+sell_value = 8
 metadata/_custom_type_script = "uid://c8ngjbq8w5gjr"

@@ -15,15 +15,15 @@ var _content: Resource;
 
 signal full();
 
-func _init(_count: int = 0, content: Resource = null, _maxcount: int = 1, _unlocked: bool = true, _clear_on_empty: bool = true) -> void:
+func _init(_count: int = 0, slot_content: Resource = null, _maxcount: int = 1, _unlocked: bool = true, _clear_on_empty: bool = true) -> void:
 	is_unlocked = _unlocked;
 	clear_on_empty = _clear_on_empty;
 	maxcount = _maxcount;
-	set_content(content);
+	set_content(slot_content);
 	count = _count;
 	
-func set_content(content: Resource) -> void:
-	_content = content;
+func set_content(slot_content: Resource) -> void:
+	_content = slot_content;
 	changed.emit();
 	
 func get_content() -> Resource:
@@ -32,14 +32,14 @@ func get_content() -> Resource:
 func set_stack_size(max_size: int = 1) -> void:
 	maxcount = max_size;
 	
-func can_add(content: Resource) -> bool:
-	return (_content == null or _content == content) and not is_full();
+func can_add(slot_content: Resource) -> bool:
+	return (_content == null or _content == slot_content) and not is_full();
 
-func add(amount: int = 1, content: Resource = null) -> int:
-	if _content == null && content != null:
-		_content = content;
+func add(amount: int = 1, slot_content: Resource = null) -> int:
+	if _content == null && slot_content != null:
+		_content = slot_content;
 	
-	if content != null && _content != content:
+	if slot_content != null && _content != slot_content:
 		return amount;
 		
 	var remaining_space: int = maxcount - count;

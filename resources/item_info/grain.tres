@@ -9,5 +9,5 @@ unique_id = "grain"
 translation_key_name = "ITEM_GRAIN_NAME"
 translation_key_description = "ITEM_GRAIN_DESCRIPTION"
 texture = ExtResource("2_grain")
-base_value = 2
+buy_value = 3
 metadata/_custom_type_script = "uid://c8ngjbq8w5gjr"

@@ -7,7 +7,13 @@ extends CharacterBody3D
 @onready var interactor_component: PlayerInteractor = $Interactor
 
 var return_position: Vector3
-var currency: int
+
+signal currency_amount_changed();
+var currency: int: 
+	set(value):
+		currency = value;
+		currency_amount_changed.emit()
+		
 
 var selected_hex: HexBase:
 	get:

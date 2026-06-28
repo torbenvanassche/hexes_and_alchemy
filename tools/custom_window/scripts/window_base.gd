@@ -3,9 +3,13 @@ extends Control
 
 @export var id: String = "";
 
+const LOCKED_ICON := preload("res://sprites/ui/icons/locked.png")
+const UNLOCKED_ICON := preload("res://sprites/ui/icons/unlocked.png")
+
 @onready var vp := get_viewport()
 @onready var top_bar: ColorRect = $NinePatchRect/VBoxContainer/topbar;
-@onready var close_button: Button = $NinePatchRect/VBoxContainer/topbar/MarginContainer2/HBoxContainer/Button;
+@onready var lock_button: Button = $NinePatchRect/VBoxContainer/topbar/MarginContainer2/HBoxContainer/LockButton;
+@onready var close_button: Button = $NinePatchRect/VBoxContainer/topbar/MarginContainer2/HBoxContainer/CloseButton;
 @onready var title: Label = $NinePatchRect/VBoxContainer/topbar/MarginContainer2/HBoxContainer/MarginContainer/Title;
 @onready var v_box_container: VBoxContainer = $NinePatchRect/VBoxContainer
 @onready var content_panel: Control = $NinePatchRect/VBoxContainer/contentPanel;
@@ -25,6 +29,7 @@ var initial_position: Vector2;
 @export var show_title: bool = true;
 @export var resizable: bool = true;
 @export var enforce_content_minimum_size: bool = true;
+@export var close_locked := false
 
 @export var content: Control;
 
@@ -41,7 +46,8 @@ var resize_axis := Vector2.ONE
 
 func _ready() -> void:
 	visible = false
-	close_button.pressed.connect(close_window);
+	lock_button.toggled.connect(_set_close_locked)
+	close_button.pressed.connect(close_window.bind(true));
 	close_requested.connect(close_window)
 	top_bar.gui_input.connect(handle_input)
 	resize_handle_x.gui_input.connect(_handle_resize_input.bind(Vector2(1, 0)))
@@ -49,6 +55,7 @@ func _ready() -> void:
 	resize_handle_xy.gui_input.connect(_handle_resize_input.bind(Vector2(1, 1)))
 	change_title.connect(_change_title)
 	_change_title(id);
+	_set_close_locked(close_locked)
 	
 	top_bar.custom_minimum_size.y = topbar_height
 	_update_resize_handles()
@@ -144,10 +151,17 @@ func _input(event: InputEvent) -> void:
 		_store_window_size()
 		vp.set_input_as_handled()
 
-func close_window() -> void:
+func close_window(force_close: bool = false) -> void:
+	if not force_close and not can_close():
+		return
+	if force_close:
+		_set_close_locked(false)
 	if store_position:
 		stored_position = position;
 	SceneManager.remove_scene(DataManager.instance.node_to_info(self), false);
+
+func can_close() -> bool:
+	return not close_locked
 	
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("cancel") && visible:
@@ -176,3 +190,9 @@ func _update_resize_handles() -> void:
 	resize_handle_x.visible = resizable
 	resize_handle_y.visible = resizable
 	resize_handle_xy.visible = resizable
+
+func _set_close_locked(locked: bool) -> void:
+	close_locked = locked
+	lock_button.button_pressed = locked
+	lock_button.icon = LOCKED_ICON if locked else UNLOCKED_ICON
+	lock_button.tooltip_text = "Keep open" if not locked else "Allow close"
