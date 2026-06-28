@@ -63,7 +63,7 @@ func is_traversable(method: HexInfo.TraversalTag = HexInfo.TraversalTag.WALK) ->
 		return false
 	return (scene_instance.scene_info as HexInfo).traversal_tags.has(method);
 
-func set_structure(s: StructureInfo, immediate: bool = false, placement_rotation_y: float = NAN) -> void:
+func set_structure(s: StructureInfo, immediate: bool = false, placement_rotation_y: float = NAN, remove_if_passage_repair_failed: bool = false) -> bool:
 	var required_tiles: Array[SceneInstance] = SceneManager.get_active_scene().node.get_tiles_in_radius(cube_id, s.required_space_radius);
 	for required_tile in required_tiles:
 		required_tile.node.can_generate = false
@@ -75,12 +75,15 @@ func set_structure(s: StructureInfo, immediate: bool = false, placement_rotation
 				return f.node.cube_id != cube_id and not f.node.is_traversable()
 		))
 	if immediate:
-		_on_structure_loaded(s, footprint_replacements, placement_rotation_y)
+		_on_structure_loaded(s, footprint_replacements, placement_rotation_y, remove_if_passage_repair_failed, false)
+		return structure != null
 	else:
-		s.queue(_on_structure_loaded.bind(footprint_replacements, placement_rotation_y));
+		var was_cached := s.is_cached
+		s.queue(_on_structure_loaded.bind(footprint_replacements, placement_rotation_y, remove_if_passage_repair_failed, not was_cached));
+		return structure != null if was_cached else true
 	
 ##When the structure finishes loading, add the instance to the scene and validate adjacent tiles
-func _on_structure_loaded(s: StructureInfo, required_tiles: Array[SceneInstance], placement_rotation_y: float = NAN) -> void:
+func _on_structure_loaded(s: StructureInfo, required_tiles: Array[SceneInstance], placement_rotation_y: float = NAN, remove_if_passage_repair_failed: bool = false, unregister_async_failure: bool = false) -> void:
 	if region_instance != null:
 		region_instance.structures[cube_id] = s;
 	structure_root_tile = cube_id;
@@ -102,11 +105,194 @@ func _on_structure_loaded(s: StructureInfo, required_tiles: Array[SceneInstance]
 	for t in required_tiles:
 		SceneManager.get_active_scene().node.replace(t, scene_instance.scene_info.get_instance(), region);
 	apply_region(region)
+
+	if not _repair_passage_around_structure(s) and remove_if_passage_repair_failed:
+		_remove_structure_after_failed_passage_repair(s, unregister_async_failure)
 	
 	if not is_explored:
 		set_explored(false);
 	
-	structure_loaded.emit(s, structure.instance)
+	if structure != null:
+		structure_loaded.emit(s, structure.instance)
+
+func _repair_passage_around_structure(s: StructureInfo) -> bool:
+	if s.passage_repair_radius <= 0:
+		return true
+
+	var grid := SceneManager.get_active_scene().node as HexGrid
+	if grid == null:
+		return true
+
+	var footprint := _get_structure_footprint_coords(s)
+	var perimeter := _get_walkable_structure_perimeter(grid, footprint)
+	if perimeter.size() < 2:
+		return true
+
+	var connected := _get_connected_perimeter(grid, perimeter, footprint, s.passage_repair_radius)
+	if connected.size() == perimeter.size():
+		return true
+
+	var attempts := perimeter.size()
+	while connected.size() < perimeter.size() and attempts > 0:
+		attempts -= 1
+
+		var target := _get_first_unconnected_perimeter(perimeter, connected)
+		var path := _find_passage_repair_path(grid, connected, target, footprint, s.passage_repair_radius)
+		if path.is_empty():
+			return false
+
+		_carve_passage_path(grid, path)
+		connected = _get_connected_perimeter(grid, perimeter, footprint, s.passage_repair_radius)
+
+	return connected.size() == perimeter.size()
+
+func _get_structure_footprint_coords(s: StructureInfo) -> Array[Vector3i]:
+	var result: Array[Vector3i] = []
+	var grid := SceneManager.get_active_scene().node as HexGrid
+	if grid == null:
+		result.append(cube_id)
+		return result
+
+	for scene_instance: SceneInstance in grid.get_tiles_in_radius(cube_id, s.required_space_radius):
+		var tile := scene_instance.node as HexBase
+		if tile != null:
+			result.append(tile.cube_id)
+
+	if result.is_empty():
+		result.append(cube_id)
+	return result
+
+func _get_walkable_structure_perimeter(grid: HexGrid, footprint: Array[Vector3i]) -> Array[Vector3i]:
+	var result: Array[Vector3i] = []
+	for coord: Vector3i in footprint:
+		for direction: Vector3i in DataManager.instance.CUBE_DIRS:
+			var neighbor_coord := coord + direction
+			if footprint.has(neighbor_coord) or result.has(neighbor_coord):
+				continue
+
+			var neighbor := grid.get_hex_at_cube_id(neighbor_coord)
+			if neighbor != null and neighbor.structure == null and neighbor.is_traversable(HexInfo.TraversalTag.WALK):
+				result.append(neighbor_coord)
+	return result
+
+func _get_connected_perimeter(grid: HexGrid, perimeter: Array[Vector3i], blocked_coords: Array[Vector3i], repair_radius: int) -> Array[Vector3i]:
+	var result: Array[Vector3i] = []
+	if perimeter.is_empty():
+		return result
+
+	var origin := perimeter[0]
+	var frontier: Array[Vector3i] = [origin]
+	var visited: Array[Vector3i] = [origin]
+	while not frontier.is_empty():
+		var current := frontier.pop_front() as Vector3i
+		if perimeter.has(current) and not result.has(current):
+			result.append(current)
+
+		for direction: Vector3i in DataManager.instance.CUBE_DIRS:
+			var next := current + direction
+			if visited.has(next) or blocked_coords.has(next):
+				continue
+			if not _is_within_passage_repair_range(next, blocked_coords, repair_radius):
+				continue
+
+			var next_hex := grid.get_hex_at_cube_id(next)
+			if next_hex == null or next_hex.structure != null or not next_hex.is_traversable(HexInfo.TraversalTag.WALK):
+				continue
+
+			visited.append(next)
+			frontier.append(next)
+
+	return result
+
+func _get_first_unconnected_perimeter(perimeter: Array[Vector3i], connected: Array[Vector3i]) -> Vector3i:
+	for coord: Vector3i in perimeter:
+		if not connected.has(coord):
+			return coord
+	return perimeter[0]
+
+func _find_passage_repair_path(grid: HexGrid, starts: Array[Vector3i], target: Vector3i, blocked_coords: Array[Vector3i], repair_radius: int) -> Array[Vector3i]:
+	var frontier: Array[Vector3i] = []
+	var cost_so_far: Dictionary[Vector3i, float] = {}
+	var came_from: Dictionary[Vector3i, Vector3i] = {}
+
+	for start: Vector3i in starts:
+		frontier.append(start)
+		cost_so_far[start] = 0.0
+
+	while not frontier.is_empty():
+		var current := _pop_lowest_cost_coord(frontier, cost_so_far)
+		if current == target:
+			return _reconstruct_passage_path(came_from, current)
+
+		for direction: Vector3i in DataManager.instance.CUBE_DIRS:
+			var next := current + direction
+			if blocked_coords.has(next):
+				continue
+			if not _is_within_passage_repair_range(next, blocked_coords, repair_radius):
+				continue
+
+			var next_hex := grid.get_hex_at_cube_id(next)
+			if next_hex == null:
+				continue
+			if next_hex.structure != null and next != target:
+				continue
+
+			var step_cost := 1.0 if next_hex.is_traversable(HexInfo.TraversalTag.WALK) else 8.0
+			var new_cost := float(cost_so_far[current]) + step_cost
+			if not cost_so_far.has(next) or new_cost < float(cost_so_far[next]):
+				cost_so_far[next] = new_cost
+				came_from[next] = current
+				if not frontier.has(next):
+					frontier.append(next)
+
+	return []
+
+func _is_within_passage_repair_range(coord: Vector3i, footprint: Array[Vector3i], repair_radius: int) -> bool:
+	for footprint_coord: Vector3i in footprint:
+		if GridUtils.cube_distance(coord, footprint_coord) <= repair_radius:
+			return true
+	return false
+
+func _pop_lowest_cost_coord(frontier: Array[Vector3i], cost_so_far: Dictionary[Vector3i, float]) -> Vector3i:
+	var best_index := 0
+	var best_cost := float(cost_so_far[frontier[0]])
+	for i in range(1, frontier.size()):
+		var coord := frontier[i]
+		var cost := float(cost_so_far[coord])
+		if cost < best_cost:
+			best_cost = cost
+			best_index = i
+
+	var result := frontier[best_index]
+	frontier.remove_at(best_index)
+	return result
+
+func _reconstruct_passage_path(came_from: Dictionary[Vector3i, Vector3i], target: Vector3i) -> Array[Vector3i]:
+	var path: Array[Vector3i] = [target]
+	var current := target
+	while came_from.has(current):
+		current = came_from[current]
+		path.push_front(current)
+	return path
+
+func _carve_passage_path(grid: HexGrid, path: Array[Vector3i]) -> void:
+	for coord: Vector3i in path:
+		var tile := grid.get_hex_at_cube_id(coord)
+		if tile == null or tile.is_traversable(HexInfo.TraversalTag.WALK):
+			continue
+
+		tile.can_generate = false
+		var replacement := scene_instance.scene_info.get_instance()
+		grid.replace(tile.scene_instance, replacement, region)
+
+func _remove_structure_after_failed_passage_repair(s: StructureInfo, unregister_async_failure: bool) -> void:
+	if region_instance != null:
+		region_instance.structures.erase(cube_id)
+		if unregister_async_failure:
+			region_instance.unregister_failed_structure_generation.call_deferred(s)
+	if structure != null and is_instance_valid(structure.instance):
+		structure.instance.queue_free()
+	structure = null
 
 func _get_structure_placement_rotation(s: StructureInfo, placement_rotation_y: float = NAN) -> Dictionary:
 	var placeable := s as PlaceableStructureInfo

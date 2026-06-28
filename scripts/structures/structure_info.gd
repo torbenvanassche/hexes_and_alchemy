@@ -15,6 +15,9 @@ class_name StructureInfo extends SceneInfo
 ##Whether blocked terrain inside the structure footprint should be converted to the center tile type
 @export var replace_non_traversable_hex: bool = true;
 
+##How far from the structure footprint terrain can be converted to preserve a walkable passage
+@export var passage_repair_radius: int = 2;
+
 @export var randomize_rotation: bool = true;
 
 @export var random_rotation_requires_walkable_neighbor: bool = false;

@@ -53,6 +53,8 @@ func _get_available_quest_locations() -> Array[HexBase]:
 			continue
 		if not quest_objective.can_interact():
 			continue
+		if not Config.gamestate.is_quest_location_reachable(quest_hex, grid):
+			continue
 
 		available_locations.append(quest_hex)
 

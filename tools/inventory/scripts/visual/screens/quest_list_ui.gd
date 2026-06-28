@@ -39,7 +39,7 @@ func _ready() -> void:
 	on_enter()
 	
 func _open_create_quest_menu() -> void:
-	if can_open_creation_menu():
+	if can_open_creation_menu() and _has_available_quests_to_create():
 		DataManager.instance.get_scene_by_name("quest_creation_ui").queue(_on_create_quest_window_loaded)
 	
 func can_open_creation_menu() -> bool:
@@ -169,6 +169,8 @@ func _has_available_quests_to_create() -> bool:
 
 		var distance := GridUtils.cube_distance(hex.cube_id, player_hex.cube_id)
 		if distance > Config.gamestate.max_quest_distance:
+			continue
+		if not Config.gamestate.is_quest_location_reachable(hex, grid):
 			continue
 
 		var available_types := Config.gamestate.get_available_quest_types(

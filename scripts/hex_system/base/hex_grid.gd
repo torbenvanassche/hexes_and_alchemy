@@ -378,16 +378,20 @@ func replace(hex_instance: SceneInstance, replacement_instance: SceneInstance, r
 	replacement.cube_id = hex.cube_id
 	replacement.region = region
 	replacement.region_instance = null
+	replacement.can_generate = hex.can_generate
 
 	replacement.global_transform = hex.global_transform
 
 	if tiles.get(hex.cube_id) == hex_instance:
 		tiles.erase(hex.cube_id);
 
-	if hex.region_instance != null:
-		hex.region_instance.remove_hex(hex.cube_id);
+	var old_region_instance := hex.region_instance
+	if old_region_instance != null:
+		old_region_instance.remove_hex(hex.cube_id);
 
 	tiles[replacement.cube_id] = replacement_instance
+	if old_region_instance != null:
+		old_region_instance.add_hex(replacement)
 	
 	var chunk_coords := grid_to_chunk_coords(hex.grid_id);
 	chunks[chunk_coords].hexes.erase(hex_instance);

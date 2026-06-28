@@ -23,6 +23,43 @@ func get_available_quest_types(location: HexBase, quest_types: Array[String]) ->
 			available_types.append(quest_type);
 	return available_types;
 
+func get_active_quest_origin_hex(grid: HexGrid) -> HexBase:
+	if grid == null:
+		return null
+
+	var tavern := _get_active_tavern()
+	if tavern != null:
+		var origin := tavern.global_position
+		if tavern.adventurer_spawn != null:
+			origin = tavern.adventurer_spawn.global_position
+
+		var tavern_hex := grid.get_hex_at_world_position(origin)
+		if tavern_hex != null:
+			return tavern_hex
+
+	if Manager.instance != null and Manager.instance.player_instance != null:
+		return Manager.instance.player_instance.get_hex()
+
+	return null
+
+func is_quest_location_reachable(location: HexBase, grid: HexGrid = null) -> bool:
+	if location == null:
+		return false
+
+	if grid == null:
+		var active_scene := SceneManager.get_active_scene()
+		if active_scene == null:
+			return false
+		grid = active_scene.node as HexGrid
+	if grid == null:
+		return false
+
+	var origin_hex := get_active_quest_origin_hex(grid)
+	if origin_hex == null:
+		return false
+
+	return not grid.pathfinder.get_hex_path(origin_hex.cube_id, location.cube_id).is_empty()
+
 func add_quest(q: Quest) -> void:
 	if active_quests.size() >= max_active_quest:
 		return;
@@ -57,6 +94,9 @@ func try_assign_waiting_quests() -> void:
 		quest.start();
 
 func _get_active_tavern() -> Tavern:
+	if Manager.instance == null:
+		return null;
+
 	var settlement := Manager.instance.active_settlement;
 	if settlement == null:
 		return null;

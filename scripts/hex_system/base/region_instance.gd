@@ -206,7 +206,9 @@ func generate_structures_for_region() -> void:
 				continue
 
 			structures[hex_id] = structure
-			hex.set_structure(structure)
+			if not hex.set_structure(structure, false, NAN, true):
+				structures.erase(hex_id)
+				continue
 
 			structure_counts[structure] += 1
 			available_hexes.erase(hex_id)
@@ -223,3 +225,9 @@ func get_structured_hexes() -> Array[HexBase]:
 		if hex.structure && not hex.structure.instance is Settlement:
 			instances.append(hex)
 	return instances;
+
+func unregister_failed_structure_generation(structure: StructureInfo) -> void:
+	if structure == null or not structure_counts.has(structure):
+		return
+
+	structure_counts[structure] = maxi(0, int(structure_counts[structure]) - 1)

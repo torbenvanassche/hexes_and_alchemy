@@ -93,6 +93,14 @@ func _add_location_option(hex: HexBase) -> void:
 	if hex == null or hex.structure == null:
 		return
 
+	var active_scene := SceneManager.get_active_scene()
+	if active_scene == null:
+		return
+
+	var grid := active_scene.node as HexGrid
+	if grid == null or not Config.gamestate.is_quest_location_reachable(hex, grid):
+		return
+
 	var player_hex: HexBase = Manager.instance.player_instance.get_hex()
 	if player_hex == null:
 		return
@@ -149,7 +157,17 @@ func on_enter() -> void:
 		return
 
 	quest_location.disabled = false;
-	var structure_hexes: Array[HexBase] = (SceneManager.get_active_scene().node as HexGrid).get_structured_hexes();
+	var active_scene := SceneManager.get_active_scene()
+	if active_scene == null:
+		_on_location_selected(-1)
+		return
+
+	var grid := active_scene.node as HexGrid
+	if grid == null:
+		_on_location_selected(-1)
+		return
+
+	var structure_hexes: Array[HexBase] = grid.get_structured_hexes();
 	var available_locations: Array[HexBase] = []
 
 	for hex in structure_hexes:
@@ -163,12 +181,13 @@ func on_enter() -> void:
 
 		var distance: int = GridUtils.cube_distance(hex.cube_id, player_hex.cube_id);
 		var in_range: bool = distance <= Config.gamestate.max_quest_distance;
+		var is_reachable := Config.gamestate.is_quest_location_reachable(hex, grid)
 		var is_valid_quest: bool = Config.gamestate.get_available_quest_types(
 			hex,
 			quest_objective.get_filtered_quest_types()
 		).size() != 0;
 
-		if in_range and is_valid_quest and quest_objective.can_interact() and hex.structure.structure_info.is_quest_target and hex.is_explored:
+		if in_range and is_reachable and is_valid_quest and quest_objective.can_interact() and hex.structure.structure_info.is_quest_target and hex.is_explored:
 			available_locations.append(hex)
 
 	for hex in _sort_locations_by_distance(available_locations):
