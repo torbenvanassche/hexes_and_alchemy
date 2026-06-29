@@ -9,4 +9,5 @@ unique_id = "wood_raw"
 translation_key_name = "ITEM_WOOD_RAW_NAME"
 translation_key_description = "ITEM_WOOD_RAW_DESCRIPTION"
 texture = ExtResource("2_sh4vc")
+show_in_hud = true
 metadata/_custom_type_script = "uid://c8ngjbq8w5gjr"

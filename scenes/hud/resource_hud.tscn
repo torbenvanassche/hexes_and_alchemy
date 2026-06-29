@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://dsicy12n7flej"]
+
+[ext_resource type="Script" uid="uid://38wwclgbt8xd" path="res://scripts/ui/resource_hud.gd" id="1_x2f6w"]
+
+[node name="Control" type="Panel" unique_id=814114829]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -12.0
+offset_top = 12.0
+offset_right = -12.0
+offset_bottom = 12.0
+grow_horizontal = 0
+size_flags_horizontal = 8
+mouse_filter = 2
+script = ExtResource("1_x2f6w")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=811246073]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 8.0
+offset_bottom = 8.0
+mouse_filter = 2
+theme_override_constants/separation = 10

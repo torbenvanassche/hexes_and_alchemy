@@ -153,8 +153,8 @@ func _get_structure_footprint_coords(s: StructureInfo) -> Array[Vector3i]:
 		result.append(cube_id)
 		return result
 
-	for scene_instance: SceneInstance in grid.get_tiles_in_radius(cube_id, s.required_space_radius):
-		var tile := scene_instance.node as HexBase
+	for sI: SceneInstance in grid.get_tiles_in_radius(cube_id, s.required_space_radius):
+		var tile := sI.node as HexBase
 		if tile != null:
 			result.append(tile.cube_id)
 

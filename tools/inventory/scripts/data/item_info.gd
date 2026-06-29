@@ -7,6 +7,7 @@ class_name ItemInfo extends Resource
 @export var buy_value: int = 2;
 @export var sell_value: int = 1;
 @export var recipe: Dictionary[ItemInfo, int];
+@export var show_in_hud: bool = false;
 
 func has_recipe() -> bool:
 	return not recipe.is_empty()

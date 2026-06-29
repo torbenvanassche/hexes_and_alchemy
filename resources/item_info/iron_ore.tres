@@ -11,4 +11,5 @@ translation_key_description = "ITEM_ORE_IRON_DESCRIPTION"
 texture = ExtResource("2_mytyu")
 buy_value = 6
 sell_value = 4
+show_in_hud = true
 metadata/_custom_type_script = "uid://c8ngjbq8w5gjr"

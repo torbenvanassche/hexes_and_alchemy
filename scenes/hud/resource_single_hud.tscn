@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://b4e7jgnuao8mp"]
+
+[ext_resource type="Script" uid="uid://ba0e2r0tk3rbm" path="res://scripts/ui/resource_single_hud.gd" id="2_n0x0f"]
+
+[node name="Control" type="HBoxContainer" unique_id=110123588]
+custom_maximum_size = Vector2(-1, 38)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+script = ExtResource("2_n0x0f")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1338632013]
+custom_minimum_size = Vector2(38, 38)
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+
+[node name="Label" type="Label" parent="." unique_id=519300833]
+layout_mode = 2
+mouse_filter = 2
+theme_override_font_sizes/font_size = 25
+text = "0"

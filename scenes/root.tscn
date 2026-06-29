@@ -57,6 +57,7 @@
 [ext_resource type="Resource" uid="uid://m72hate3ge7x" path="res://resources/item_info/support_beams.tres" id="54_support"]
 [ext_resource type="Resource" uid="uid://b0i36ajrv252n" path="res://resources/item_info/bucket.tres" id="55_bucket"]
 [ext_resource type="Resource" uid="uid://b74kj3l207jju" path="res://resources/structure_info/water_source.tres" id="56_water_source"]
+[ext_resource type="PackedScene" uid="uid://dsicy12n7flej" path="res://scenes/hud/resource_hud.tscn" id="57_resource_hud"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_j5px3"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -97,7 +98,7 @@ hexes = Array[ExtResource("3_l5cgh")]([ExtResource("4_vgks2"), ExtResource("5_dy
 structures = Array[ExtResource("10_gt4lb")]([ExtResource("11_ya6yc"), ExtResource("12_mflgo"), ExtResource("14_8ui5n"), ExtResource("16_jehah"), ExtResource("19_isfgf"), ExtResource("18_58tnd"), ExtResource("20_qk31b"), ExtResource("56_water_source")])
 scenes = Array[ExtResource("15_ya6yc")]([ExtResource("12_vgks2"), ExtResource("16_gt4lb"), ExtResource("18_34frw"), ExtResource("18_mflgo"), ExtResource("20_8ui5n"), ExtResource("22_jehah"), ExtResource("26_isfgf"), ExtResource("29_moyyc"), ExtResource("30_f0nuf"), ExtResource("37_33j8a"), ExtResource("38_eirlg"), ExtResource("39_eirlg"), ExtResource("50_craft")])
 regions = Array[ExtResource("5_3hfy5")]([ExtResource("6_7pvxh"), ExtResource("9_y3xxt")])
-items = Array[ExtResource("27_phl1g")]([ExtResource("28_58tnd"), ExtResource("30_agklt"), ExtResource("31_x7ldt"), ExtResource("32_moyyc"), ExtResource("33_f0nuf"), ExtResource("47_742t5"), ExtResource("51_seed"), ExtResource("52_water"), ExtResource("53_grain"), ExtResource("54_support"), ExtResource("55_bucket")])
+items = Array[ExtResource("27_phl1g")]([ExtResource("30_agklt"), ExtResource("28_58tnd"), ExtResource("31_x7ldt"), ExtResource("32_moyyc"), ExtResource("33_f0nuf"), ExtResource("47_742t5"), ExtResource("51_seed"), ExtResource("52_water"), ExtResource("53_grain"), ExtResource("54_support"), ExtResource("55_bucket")])
 npcs = Array[ExtResource("45_h5su3")]([ExtResource("46_c6i2r")])
 
 [node name="shared_components" type="Node" parent="." unique_id=2003265152]
@@ -139,13 +140,16 @@ element = NodePath(".")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="game_ui" unique_id=1863266253]
 custom_minimum_size = Vector2(300, 50)
-anchors_preset = 1
+anchors_preset = 3
 anchor_left = 1.0
+anchor_top = 1.0
 anchor_right = 1.0
+anchor_bottom = 1.0
 offset_left = -300.0
-offset_top = 10.0
-offset_bottom = 60.0
+offset_top = -73.0
+offset_bottom = -23.0
 grow_horizontal = 0
+grow_vertical = 0
 size_flags_horizontal = 4
 fit_content = true
 script = ExtResource("49_c6i2r")
@@ -159,3 +163,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.19215687)
+
+[node name="resource_hud" parent="game_ui" unique_id=1817972187 instance=ExtResource("57_resource_hud")]
+visible = false

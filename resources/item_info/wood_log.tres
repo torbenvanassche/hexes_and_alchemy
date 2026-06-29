@@ -15,4 +15,5 @@ sell_value = 3
 recipe = Dictionary[ExtResource("1_8ykgy"), int]({
 ExtResource("3_raw"): 2
 })
+show_in_hud = true
 metadata/_custom_type_script = "uid://c8ngjbq8w5gjr"
