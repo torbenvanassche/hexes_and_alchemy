@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://ceeffxsbgrta" path="res://scenes/tops/fence_stone_straight_gate_collision.tscn" id="7_616a5"]
 [ext_resource type="PackedScene" uid="uid://clf621pbnvsbw" path="res://scenes/tops/topper_tavern.tscn" id="7_l415u"]
 [ext_resource type="PackedScene" uid="uid://gb2g45tjja61" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/building_stage_A.glb" id="7_mkm41"]
-[ext_resource type="Script" uid="uid://cvpndsdtuqm4i" path="res://tools/quest_system/scripts/fetch_quest.gd" id="8_mt1kp"]
+[ext_resource type="Script" uid="uid://cvpndsdtuqm4i" path="res://tools/quest_system/scripts/fetch_objective.gd" id="8_mt1kp"]
 [ext_resource type="Resource" uid="uid://byeghtr0gkyhp" path="res://tools/quest_system/resources/quests/build_tavern.tres" id="9_47cix"]
 [ext_resource type="PackedScene" uid="uid://dgx2trjwvt0vn" path="res://scenes/tops/fence_stone_straight.tscn" id="11_04njl"]
 [ext_resource type="PackedScene" uid="uid://cnxe4icmn8yi5" path="res://scenes/tops/house_simple.tscn" id="11_47cix"]
@@ -43,7 +43,7 @@ visible = false
 script = ExtResource("8_mt1kp")
 quest = ExtResource("9_47cix")
 
-[node name="building_stage_A" parent="structures/buildable_structure/foundation/RootNode" parent_id_path=PackedInt32Array(216741624, 151036270) index="0" unique_id=623122469]
+[node name="building_stage_A" parent="structures/buildable_structure/foundation/RootNode" parent_id_path=PackedInt32Array(216741624, 1823185849) index="0" unique_id=675824849]
 surface_material_override/0 = ExtResource("12_mkm41")
 
 [node name="interaction" type="Area3D" parent="structures/buildable_structure/foundation" unique_id=1087166324]
