@@ -16,6 +16,7 @@ var input: InputSettings
 @onready var interaction_prompt: WSD = $"../game_ui/interaction_prompt";
 @onready var market: MarketManager = $market_manager;
 @onready var quests: QuestManager = $quest_manager;
+@onready var journal: JournalManager = $journal_manager;
 @onready var toast: Toast = $"../game_ui/RichTextLabel";
 
 @export var initial_scene: SceneInfo;

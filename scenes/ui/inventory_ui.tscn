@@ -10,7 +10,6 @@ id = "WINDOW_INVENTORY"
 store_position = true
 resizable = false
 can_lock = true
-close_locked = true
 content = NodePath("NinePatchRect/VBoxContainer/contentPanel/VBoxContainer/InventoryHud")
 
 [node name="NinePatchRect" parent="." index="0" unique_id=434834391]

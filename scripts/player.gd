@@ -45,6 +45,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		toggle_inventory()
 		get_viewport().set_input_as_handled()
 		return
+
+	if event.is_action_pressed("journal"):
+		toggle_journal()
+		get_viewport().set_input_as_handled()
+		return
 	
 	if event.is_action_pressed("primary_action"):
 		if not interactor_component.interact():
@@ -74,6 +79,18 @@ func _open_inventory(window_info: SceneInfo) -> void:
 	var window_instance := SceneManager.add(window_info, false)
 	var inventory_ui: InventoryUI = (window_instance.node as DraggableControl).content as InventoryUI
 	inventory_ui.inventory = inventory
+	window_instance.on_enter.emit()
+
+func toggle_journal() -> void:
+	var journal_window := DataManager.instance.get_scene_by_name("journal_ui")
+	for instance in journal_window.get_live_instances():
+		if SceneManager.is_visible(instance):
+			(instance.node as DraggableControl).close_requested.emit()
+			return
+	journal_window.queue(_open_journal)
+
+func _open_journal(window_info: SceneInfo) -> void:
+	var window_instance := SceneManager.add(window_info, false)
 	window_instance.on_enter.emit()
 
 func set_return_position() -> void:

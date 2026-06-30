@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://dpjtl8txjms6k" path="res://scripts/helpers/resource_manager.gd" id="2_sqa0i"]
 [ext_resource type="Script" uid="uid://dt4im1k7j4jn" path="res://scripts/hex_system/base/hex_info.gd" id="3_l5cgh"]
 [ext_resource type="Script" uid="uid://cf50g0p4jcitj" path="res://scripts/helpers/market_manager.gd" id="3_x7ldt"]
+[ext_resource type="Script" uid="uid://dvd4ld7oo6add" path="res://scripts/helpers/journal_manager.gd" id="4_journal_manager"]
 [ext_resource type="Script" uid="uid://g8s30q5nqcd8" path="res://tools/time_of_day/daytime_cycle.gd" id="4_moyyc"]
 [ext_resource type="Script" uid="uid://cbfn48smap6p8" path="res://scripts/helpers/quest_manager.gd" id="4_quests"]
 [ext_resource type="Resource" uid="uid://betpu2iylw1qy" path="res://resources/scene_info/hex/hex_simple.tres" id="4_vgks2"]
@@ -43,6 +44,9 @@
 [ext_resource type="Resource" uid="uid://dwrv8ceflmsjy" path="res://resources/item_info/gold_ore.tres" id="31_x7ldt"]
 [ext_resource type="Resource" uid="uid://oowfm1lpkvm" path="res://resources/item_info/wood_log.tres" id="32_moyyc"]
 [ext_resource type="Resource" uid="uid://b46nyvtvipor5" path="res://resources/item_info/wood_raw.tres" id="33_f0nuf"]
+[ext_resource type="Resource" path="res://resources/journal_entries/restore_guild_forge.tres" id="34_journal_one"]
+[ext_resource type="Resource" path="res://resources/journal_entries/establish_trade_route.tres" id="35_journal_two"]
+[ext_resource type="Resource" path="res://resources/journal_entries/earn_grand_charter.tres" id="36_journal_three"]
 [ext_resource type="Resource" uid="uid://bh6dgogp8tk5k" path="res://resources/scene_info/ui/quest_list_ui.tres" id="37_33j8a"]
 [ext_resource type="Resource" uid="uid://ce3u2bjgmkfe7" path="res://resources/scene_info/ui/quest_creation_ui.tres" id="38_eirlg"]
 [ext_resource type="Resource" uid="uid://c4slhs80lvehm" path="res://resources/scene_info/adventurer.tres" id="39_eirlg"]
@@ -58,6 +62,7 @@
 [ext_resource type="Resource" uid="uid://b0i36ajrv252n" path="res://resources/item_info/bucket.tres" id="55_bucket"]
 [ext_resource type="Resource" uid="uid://b74kj3l207jju" path="res://resources/structure_info/water_source.tres" id="56_water_source"]
 [ext_resource type="PackedScene" uid="uid://dsicy12n7flej" path="res://scenes/hud/resource_hud.tscn" id="57_resource_hud"]
+[ext_resource type="Resource" path="res://resources/scene_info/ui/journal_ui.tres" id="58_journal"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_j5px3"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -84,6 +89,10 @@ metadata/_custom_type_script = "uid://cf50g0p4jcitj"
 [node name="quest_manager" type="Node" parent="game_manager" unique_id=638771837]
 script = ExtResource("4_quests")
 
+[node name="journal_manager" type="Node" parent="game_manager" unique_id=1453624016]
+script = ExtResource("4_journal_manager")
+entries = Array[Resource]([ExtResource("34_journal_one"), ExtResource("35_journal_two"), ExtResource("36_journal_three")])
+
 [node name="time_of_day" type="Node" parent="game_manager" unique_id=1430942160 node_paths=PackedStringArray("sun", "environment")]
 script = ExtResource("4_moyyc")
 sun = NodePath("../../shared_components/DirectionalLight3D")
@@ -96,7 +105,7 @@ metadata/_custom_type_script = "uid://g8s30q5nqcd8"
 script = ExtResource("2_sqa0i")
 hexes = Array[ExtResource("3_l5cgh")]([ExtResource("4_vgks2"), ExtResource("5_dylgi")])
 structures = Array[ExtResource("10_gt4lb")]([ExtResource("11_ya6yc"), ExtResource("12_mflgo"), ExtResource("14_8ui5n"), ExtResource("16_jehah"), ExtResource("19_isfgf"), ExtResource("18_58tnd"), ExtResource("20_qk31b"), ExtResource("56_water_source")])
-scenes = Array[ExtResource("15_ya6yc")]([ExtResource("12_vgks2"), ExtResource("16_gt4lb"), ExtResource("18_34frw"), ExtResource("18_mflgo"), ExtResource("20_8ui5n"), ExtResource("22_jehah"), ExtResource("26_isfgf"), ExtResource("29_moyyc"), ExtResource("30_f0nuf"), ExtResource("37_33j8a"), ExtResource("38_eirlg"), ExtResource("39_eirlg"), ExtResource("50_craft")])
+scenes = Array[ExtResource("15_ya6yc")]([ExtResource("12_vgks2"), ExtResource("16_gt4lb"), ExtResource("18_34frw"), ExtResource("18_mflgo"), ExtResource("20_8ui5n"), ExtResource("22_jehah"), ExtResource("26_isfgf"), ExtResource("58_journal"), ExtResource("29_moyyc"), ExtResource("30_f0nuf"), ExtResource("37_33j8a"), ExtResource("38_eirlg"), ExtResource("39_eirlg"), ExtResource("50_craft")])
 regions = Array[ExtResource("5_3hfy5")]([ExtResource("6_7pvxh"), ExtResource("9_y3xxt")])
 items = Array[ExtResource("27_phl1g")]([ExtResource("30_agklt"), ExtResource("28_58tnd"), ExtResource("31_x7ldt"), ExtResource("32_moyyc"), ExtResource("33_f0nuf"), ExtResource("47_742t5"), ExtResource("51_seed"), ExtResource("52_water"), ExtResource("53_grain"), ExtResource("54_support"), ExtResource("55_bucket")])
 npcs = Array[ExtResource("45_h5su3")]([ExtResource("46_c6i2r")])

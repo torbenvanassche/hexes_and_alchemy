@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="JournalEntry" format=3 uid="uid://8efmyr023h7k"]
+
+[ext_resource type="Script" uid="uid://clepex0ir470h" path="res://scripts/ui/journal_entry.gd" id="1_script"]
+[ext_resource type="Resource" path="res://resources/journal_tasks/found_second_guild_outpost.tres" id="2_outpost"]
+[ext_resource type="Resource" path="res://resources/journal_tasks/complete_regional_contracts.tres" id="3_contracts"]
+[ext_resource type="Resource" path="res://resources/journal_tasks/secure_core_resource_sources.tres" id="4_sources"]
+[ext_resource type="Resource" path="res://resources/journal_tasks/become_guild_authority.tres" id="5_authority"]
+
+[resource]
+script = ExtResource("1_script")
+id = "earn_grand_charter"
+title_key = "JOURNAL_CHAPTER_THREE"
+tasks = Array[Resource]([ExtResource("2_outpost"), ExtResource("3_contracts"), ExtResource("4_sources"), ExtResource("5_authority")])

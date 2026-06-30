@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://boimgr5pf6uwf"]
+
+[ext_resource type="Script" uid="uid://ewobo7cf8hrx" path="res://scripts/ui/journal_entry_ui.gd" id="1_script"]
+
+[node name="JournalEntry" type="VBoxContainer" unique_id=631015967]
+custom_minimum_size = Vector2(390, 0)
+size_flags_horizontal = 3
+theme_override_constants/separation = 5
+script = ExtResource("1_script")
+
+[node name="Title" type="Label" parent="." unique_id=11022349]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+
+[node name="Body" type="RichTextLabel" parent="." unique_id=1692212755]
+custom_minimum_size = Vector2(390, 98)
+layout_mode = 2
+size_flags_horizontal = 3
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+
+[node name="Tasks" type="VBoxContainer" parent="." unique_id=791388383]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2

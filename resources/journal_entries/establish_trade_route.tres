@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="JournalEntry" format=3 uid="uid://damqjjujg4gr3"]
+
+[ext_resource type="Script" uid="uid://clepex0ir470h" path="res://scripts/ui/journal_entry.gd" id="1_script"]
+[ext_resource type="Resource" path="res://resources/journal_tasks/build_docks.tres" id="2_docks"]
+[ext_resource type="Resource" path="res://resources/journal_tasks/cross_water.tres" id="3_cross"]
+[ext_resource type="Resource" path="res://resources/journal_tasks/discover_distant_resource_region.tres" id="4_discover"]
+[ext_resource type="Resource" path="res://resources/journal_tasks/return_with_rare_supplies.tres" id="5_return"]
+
+[resource]
+script = ExtResource("1_script")
+id = "establish_trade_route"
+title_key = "JOURNAL_CHAPTER_TWO"
+tasks = Array[Resource]([ExtResource("2_docks"), ExtResource("3_cross"), ExtResource("4_discover"), ExtResource("5_return")])

@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://bxu6gvad8murf"]
+
+[ext_resource type="Theme" uid="uid://dae2b2hfpj0l2" path="res://themes/base_theme.theme" id="1_theme"]
+[ext_resource type="PackedScene" uid="uid://dny1dqcanlco0" path="res://tools/custom_window/base_window.tscn" id="1_window"]
+[ext_resource type="Script" uid="uid://bkoojt24df6m0" path="res://scripts/ui/journal_ui.gd" id="2_journal"]
+[ext_resource type="PackedScene" uid="uid://boimgr5pf6uwf" path="res://scenes/ui/components/journal_entry_ui.tscn" id="3_entry"]
+[ext_resource type="Resource" uid="uid://dfc1pvj5ifntw" path="res://resources/journal_entries/restore_guild_forge.tres" id="4_chapter_one"]
+[ext_resource type="Resource" uid="uid://damqjjujg4gr3" path="res://resources/journal_entries/establish_trade_route.tres" id="5_chapter_two"]
+[ext_resource type="Script" uid="uid://clepex0ir470h" path="res://scripts/ui/journal_entry.gd" id="5_jccj7"]
+[ext_resource type="Resource" uid="uid://8efmyr023h7k" path="res://resources/journal_entries/earn_grand_charter.tres" id="6_chapter_three"]
+
+[node name="Window" unique_id=1454805873 node_paths=PackedStringArray("content") instance=ExtResource("1_window")]
+custom_minimum_size = Vector2(500, 430)
+id = "WINDOW_JOURNAL"
+store_position = true
+resizable = false
+can_lock = true
+content = NodePath("NinePatchRect/VBoxContainer/contentPanel/JournalPage")
+
+[node name="topbar" parent="NinePatchRect/VBoxContainer" parent_id_path=PackedInt32Array(554725130) index="0" unique_id=347636229]
+color = Color(0, 0, 0, 0.8117647)
+
+[node name="contentPanel" parent="NinePatchRect/VBoxContainer" parent_id_path=PackedInt32Array(554725130) index="1" unique_id=1040542232]
+size_flags_horizontal = 3
+
+[node name="JournalPage" type="PanelContainer" parent="NinePatchRect/VBoxContainer/contentPanel" index="0" unique_id=308080393]
+custom_minimum_size = Vector2(430, 330)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_theme")
+script = ExtResource("2_journal")
+entry_scene = ExtResource("3_entry")
+entries = Array[ExtResource("5_jccj7")]([ExtResource("4_chapter_one"), ExtResource("5_chapter_two"), ExtResource("6_chapter_three")])
+
+[node name="MarginContainer" type="MarginContainer" parent="NinePatchRect/VBoxContainer/contentPanel/JournalPage" index="0" unique_id=1003171570]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/JournalPage/MarginContainer" index="0" unique_id=674746973]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Title" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/JournalPage/MarginContainer/VBoxContainer" index="0" unique_id=211397662]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "JOURNAL_TITLE"
+horizontal_alignment = 1
+
+[node name="Divider" type="HSeparator" parent="NinePatchRect/VBoxContainer/contentPanel/JournalPage/MarginContainer/VBoxContainer" index="1" unique_id=872935349]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="NinePatchRect/VBoxContainer/contentPanel/JournalPage/MarginContainer/VBoxContainer" index="2" unique_id=1448233291]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Entries" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/JournalPage/MarginContainer/VBoxContainer/ScrollContainer" index="0" unique_id=51604028]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12

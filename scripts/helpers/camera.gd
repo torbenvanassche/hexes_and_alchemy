@@ -80,7 +80,8 @@ func _physics_process(delta: float) -> void:
 	if not target:
 		return;
 
-	_handle_controller_zoom(delta);
+	if not _ui_blocks_camera_zoom():
+		_handle_controller_zoom(delta);
 	target_zoom = clamp(target_zoom, 0.0, 1.0);
 
 	_handle_rotation_input(delta);
@@ -103,6 +104,9 @@ func _physics_process(delta: float) -> void:
 	_apply_zoom();
 
 func _unhandled_input(event: InputEvent) -> void:
+	if _ui_blocks_camera_zoom():
+		return
+
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
 			target_zoom -= zoom_step;
@@ -113,6 +117,36 @@ func _unhandled_input(event: InputEvent) -> void:
 
 		target_zoom = clamp(target_zoom, 0.0, 1.0);
 		get_viewport().set_input_as_handled()
+
+func _ui_blocks_camera_zoom() -> bool:
+	var focus_owner := get_viewport().gui_get_focus_owner()
+	if focus_owner != null and _control_blocks_camera_zoom(focus_owner):
+		return true
+
+	for ui_scene: SceneInfo in SceneManager.ui_stack:
+		for instance: SceneInstance in ui_scene.get_live_instances():
+			if SceneManager.is_visible(instance) and _node_blocks_camera_zoom(instance.node):
+				return true
+	return false
+
+func _control_blocks_camera_zoom(control: Control) -> bool:
+	var current: Node = control
+	while current != null:
+		if current is DraggableControl:
+			return (current as DraggableControl).blocks_camera_scroll
+		current = current.get_parent()
+	return true
+
+func _node_blocks_camera_zoom(node: Node) -> bool:
+	if node == null:
+		return false
+	if node is DraggableControl:
+		return (node as DraggableControl).blocks_camera_scroll
+	if node is Control:
+		return _control_blocks_camera_zoom(node as Control)
+	if "visible" in node:
+		return true
+	return false
 
 func _apply_zoom() -> void:
 	var distance = lerp(min_distance, max_distance, zoom);

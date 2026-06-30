@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="JournalTask" format=3 uid="uid://cn8ax81evfada"]
+
+[ext_resource type="Script" uid="uid://dteapw377mybo" path="res://scripts/ui/journal_task.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "found_second_guild_outpost"
+text_key = "JOURNAL_TASK_FOUND_SECOND_GUILD_OUTPOST"

@@ -34,8 +34,9 @@ var initial_position: Vector2;
 @export_group("Behavior")
 @export var resizable: bool = true;
 @export var enforce_content_minimum_size: bool = true;
+@export var blocks_camera_scroll := true
 @export var can_lock := false
-@export var close_locked := false
+var close_locked := false
 
 @export_group("Content")
 @export var content: Control;
@@ -104,7 +105,7 @@ func on_enter() -> void:
 	_update_resize_handles()
 
 	for c: Control in Helpers.flatten_children(content_panel, true):
-		if c.has_method("on_enter"):
+		if is_instance_valid(c) and c.has_method("on_enter"):
 			c.on_enter();
 
 	await get_tree().process_frame;

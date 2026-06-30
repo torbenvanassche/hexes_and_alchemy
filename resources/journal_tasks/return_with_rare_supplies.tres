@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="JournalTask" format=3 uid="uid://cil1ew3pc6ce7"]
+
+[ext_resource type="Script" uid="uid://dteapw377mybo" path="res://scripts/ui/journal_task.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "return_with_rare_supplies"
+text_key = "JOURNAL_TASK_RETURN_WITH_RARE_SUPPLIES"

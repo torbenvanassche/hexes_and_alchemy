@@ -15,10 +15,12 @@ KEYBIND_MOVE_RIGHT,move right,move right
 KEYBIND_SPRINT,sprint,sprint
 KEYBIND_PRIMARY_ACTION,primary action,primary action
 KEYBIND_CANCEL,cancel,cancel
+KEYBIND_JOURNAL,journal,journal
 SETTINGS_TAB_GAME,game,game
 SETTINGS_TAB_INPUT,input,input
 WINDOW_TITLE,window title,window title
 WINDOW_INVENTORY,Inventory,Inventory
+WINDOW_JOURNAL,Journal,Journal
 WINDOW_CRAFTING,Blacksmith,Blacksmith
 WINDOW_MARKET,Market,Market
 WINDOW_DEPOSIT_ITEMS,Deposit items,Deposit items
@@ -36,6 +38,7 @@ SCENE_GAME_SETTINGS_NAME,Game settings,Game settings
 SCENE_GAMEPLAY_MAIN_NAME,Gameplay,Gameplay
 SCENE_INPUT_SETTINGS_NAME,Input settings,Input settings
 SCENE_INVENTORY_UI_NAME,Inventory,Inventory
+SCENE_JOURNAL_UI_NAME,Journal,Journal
 SCENE_CRAFTING_UI_NAME,Blacksmith,Blacksmith
 SCENE_MARKET_UI_NAME,Market,Market
 SCENE_PAUSE_MENU_NAME,Pause menu,Pause menu
@@ -73,6 +76,43 @@ QUEST_PARTY_ONE_ADVENTURER,1 adventurer,1 adventurer
 QUEST_PARTY_ADVENTURERS,%s adventurers,%s adventurers
 QUEST_ACTION_DISPATCH_PARTY,Dispatch party,Dispatch party
 QUEST_ACTION_CLAIM_REWARD,Claim reward,Claim reward
+JOURNAL_TITLE,Guild Ledger,Guild Ledger
+JOURNAL_CHAPTER_ONE,Chapter I: Restore the Guild Forge,Chapter I: Restore the Guild Forge
+JOURNAL_CHAPTER_ONE_BODY,"[ ] Build the Blacksmith foundation
+[ ] Deliver the required materials
+[ ] Open the Blacksmith
+[ ] Craft a Dock Blueprint","[ ] Build the Blacksmith foundation
+[ ] Deliver the required materials
+[ ] Open the Blacksmith
+[ ] Craft a Dock Blueprint"
+JOURNAL_CHAPTER_TWO,Chapter II: Establish a Trade Route,Chapter II: Establish a Trade Route
+JOURNAL_CHAPTER_TWO_BODY,"[ ] Build docks on the shore
+[ ] Cross the water
+[ ] Discover a distant resource region
+[ ] Return with rare supplies","[ ] Build docks on the shore
+[ ] Cross the water
+[ ] Discover a distant resource region
+[ ] Return with rare supplies"
+JOURNAL_CHAPTER_THREE,Chapter III: Earn the Grand Charter,Chapter III: Earn the Grand Charter
+JOURNAL_CHAPTER_THREE_BODY,"[ ] Found a second guild outpost
+[ ] Complete regional contracts
+[ ] Secure food, timber, and ore sources
+[ ] Become the recognized guild authority","[ ] Found a second guild outpost
+[ ] Complete regional contracts
+[ ] Secure food, timber, and ore sources
+[ ] Become the recognized guild authority"
+JOURNAL_TASK_BUILD_BLACKSMITH_FOUNDATION,Build the Blacksmith foundation,Build the Blacksmith foundation
+JOURNAL_TASK_DELIVER_BLACKSMITH_MATERIALS,Deliver the required materials,Deliver the required materials
+JOURNAL_TASK_OPEN_BLACKSMITH,Open the Blacksmith,Open the Blacksmith
+JOURNAL_TASK_CRAFT_DOCK_BLUEPRINT,Craft a Dock Blueprint,Craft a Dock Blueprint
+JOURNAL_TASK_BUILD_DOCKS,Build docks on the shore,Build docks on the shore
+JOURNAL_TASK_CROSS_WATER,Cross the water,Cross the water
+JOURNAL_TASK_DISCOVER_DISTANT_RESOURCE_REGION,Discover a distant resource region,Discover a distant resource region
+JOURNAL_TASK_RETURN_WITH_RARE_SUPPLIES,Return with rare supplies,Return with rare supplies
+JOURNAL_TASK_FOUND_SECOND_GUILD_OUTPOST,Found a second guild outpost,Found a second guild outpost
+JOURNAL_TASK_COMPLETE_REGIONAL_CONTRACTS,Complete regional contracts,Complete regional contracts
+JOURNAL_TASK_SECURE_CORE_RESOURCE_SOURCES,"Secure food, timber, and ore sources","Secure food, timber, and ore sources"
+JOURNAL_TASK_BECOME_GUILD_AUTHORITY,Become the recognized guild authority,Become the recognized guild authority
 DEPOSIT_COMPLETE_ORDER,Complete order,Complete order
 CRAFTING_INGREDIENTS,Ingredients,Ingredients
 CRAFTING_RESULT,Result,Result
