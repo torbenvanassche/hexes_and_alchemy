@@ -41,9 +41,9 @@ func _on_visibility_changed() -> void:
 func _on_area_exit(other: Area3D) -> void:
 	var player := other.get_parent() as PlayerController
 	if player != null and player.interactor_component != null:
-		player.interactor_component.queue_interaction_prompt_refresh()
+		player.interactor_component._refresh_interaction_prompt()
 		
 func _on_area_enter(other: Area3D) -> void:
 	var player := other.get_parent() as PlayerController
 	if player != null and player.interactor_component != null:
-		player.interactor_component.queue_interaction_prompt_refresh()
+		player.interactor_component._refresh_interaction_prompt()

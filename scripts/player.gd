@@ -2,7 +2,7 @@ class_name PlayerController
 extends CharacterBody3D
 
 @onready var inventory: Inventory = $Inventory
-@onready var interactor: Area3D = $interactor
+@onready var interactor: Area3D = $Interactor
 @onready var movement: PlayerMovement = $Movement
 @onready var interactor_component: PlayerInteractor = $Interactor
 

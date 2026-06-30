@@ -1,34 +1,19 @@
 class_name PlayerInteractor
-extends Node
-
-@export_group("References")
-@export var interactor_area: Area3D
+extends Area3D
 
 var current_triggers: Array[Interaction] = []
 var selected_hex: HexBase
-var _prompt_refresh_queued := false
 
 signal hex_picked(hex: HexBase)
 
 func _ready() -> void:
-	if interactor_area == null:
-		return
-	
-	interactor_area.area_entered.connect(add_trigger)
-	interactor_area.area_exited.connect(remove_trigger)
+	area_entered.connect(add_trigger)
+	area_exited.connect(remove_trigger)
 
 func has_trigger() -> bool:
 	return current_triggers.size() != 0
 
-func queue_interaction_prompt_refresh() -> void:
-	if _prompt_refresh_queued:
-		return
-
-	_prompt_refresh_queued = true
-	_refresh_interaction_prompt.call_deferred()
-
 func _refresh_interaction_prompt() -> void:
-	_prompt_refresh_queued = false
 	var prompt_target := _get_closest_trigger(true)
 	Manager.instance.interaction_prompt.show_rect(prompt_target)
 
@@ -69,9 +54,6 @@ func _get_interaction_origin() -> Vector3:
 	var parent := get_parent() as Node3D
 	if parent != null:
 		return parent.global_position
-
-	if interactor_area != null:
-		return interactor_area.global_position
 
 	return Vector3.ZERO
 
@@ -123,11 +105,11 @@ func add_trigger(other: Area3D) -> void:
 			current_triggers.append(target)
 	elif (other as Node3D) is Interaction:
 		current_triggers.append(other)
-	queue_interaction_prompt_refresh()
+	_refresh_interaction_prompt()
 
 func remove_trigger(other: Area3D) -> void:
 	if other.has_meta("target"):
 		current_triggers.erase(other.get_meta("target") as Interaction)
 	elif (other as Node3D) is Interaction:
 		current_triggers.erase(other)
-	queue_interaction_prompt_refresh()
+	_refresh_interaction_prompt()

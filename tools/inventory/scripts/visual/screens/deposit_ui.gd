@@ -1,6 +1,6 @@
 class_name DepositUI extends InventoryUI
 
-@onready var complete_order: Button = $"../../complete_order"
+@onready var complete_order: Button = $"../complete_order"
 
 func on_enter() -> void:
 	complete_order.disabled = not inventory.is_full();

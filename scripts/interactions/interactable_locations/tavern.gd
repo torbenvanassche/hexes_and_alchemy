@@ -17,7 +17,7 @@ func interact() -> void:
 	pass
 
 func can_interact() -> bool:
-	return buildable_structure && buildable_structure.current_step == self;
+	return buildable_structure == null or buildable_structure.current_step == self;
 	
 func _adventurer_ready(s: SceneInfo) -> void:
 	if not can_interact() || npcs.size() >= Manager.instance.quests.max_npc_per_tavern:

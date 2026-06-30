@@ -165,4 +165,3 @@ grow_vertical = 2
 color = Color(0, 0, 0, 0.19215687)
 
 [node name="resource_hud" parent="game_ui" unique_id=1817972187 instance=ExtResource("57_resource_hud")]
-visible = false
