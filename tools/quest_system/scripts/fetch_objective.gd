@@ -16,8 +16,9 @@ func _open_window(window_info: SceneInfo) -> void:
 	window_instance = SceneManager.add(window_info, false);
 	var dep_ui: DepositUI = (window_instance.node as DraggableControl).content as DepositUI;
 	dep_ui.inventory = quest.progress_tracker;
-	if not dep_ui.complete_order.pressed.is_connected(completed.emit):
-		dep_ui.complete_order.pressed.connect(completed.emit);
+	dep_ui.source_inventory = Manager.instance.player_instance.inventory;
+	if not dep_ui.supplies_deposited.is_connected(completed.emit):
+		dep_ui.supplies_deposited.connect(completed.emit);
 	window_instance.on_enter.emit();
 
 func _on_area_exit(other: Area3D) -> void:

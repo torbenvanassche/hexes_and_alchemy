@@ -1,15 +1,13 @@
 [gd_scene format=3 uid="uid://dgxfl4ilfepra"]
 
 [ext_resource type="PackedScene" uid="uid://dny1dqcanlco0" path="res://tools/custom_window/base_window.tscn" id="1_xoce2"]
-[ext_resource type="PackedScene" uid="uid://g8cyqkretffu" path="res://tools/inventory/scenes/content_group.tscn" id="3_c8a6s"]
 [ext_resource type="Script" uid="uid://m4gt3l1i1hk2" path="res://tools/inventory/scripts/visual/screens/deposit_ui.gd" id="3_i1cn2"]
-[ext_resource type="PackedScene" uid="uid://cnlkcv8enh20k" path="res://scenes/ui/components/deposit_slot.tscn" id="3_xoce2"]
 [ext_resource type="Theme" uid="uid://dae2b2hfpj0l2" path="res://themes/base_theme.theme" id="4_theme"]
 [ext_resource type="Texture2D" uid="uid://c21ya3fh5a86q" path="res://sprites/ui/icons/pouch_add.png" id="5_pouch"]
 [ext_resource type="Theme" uid="uid://bemn0spuaev14" path="res://themes/fantasy_buttons.tres" id="6_buttons"]
 
 [node name="Window" unique_id=1301866213 node_paths=PackedStringArray("content") instance=ExtResource("1_xoce2")]
-custom_minimum_size = Vector2(300, 0)
+custom_minimum_size = Vector2(420, 0)
 size_flags_vertical = 3
 id = "WINDOW_DEPOSIT_ITEMS"
 store_position = true
@@ -26,13 +24,12 @@ layout_mode = 2
 theme = ExtResource("4_theme")
 theme_override_constants/separation = 8
 
-[node name="InventoryHud" parent="NinePatchRect/VBoxContainer/contentPanel/DepositPanel" index="0" unique_id=195655274 instance=ExtResource("3_c8a6s")]
+[node name="InventoryHud" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/DepositPanel" index="0" unique_id=195655274]
 layout_mode = 2
-theme_override_constants/h_separation = 4
-theme_override_constants/v_separation = 4
-columns = 5
+size_flags_horizontal = 3
+theme = ExtResource("4_theme")
+theme_override_constants/separation = 4
 script = ExtResource("3_i1cn2")
-packed_slot = ExtResource("3_xoce2")
 
 [node name="complete_order" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/DepositPanel" index="1" unique_id=218228005]
 custom_minimum_size = Vector2(0, 36)

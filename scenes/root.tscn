@@ -44,9 +44,9 @@
 [ext_resource type="Resource" uid="uid://dwrv8ceflmsjy" path="res://resources/item_info/gold_ore.tres" id="31_x7ldt"]
 [ext_resource type="Resource" uid="uid://oowfm1lpkvm" path="res://resources/item_info/wood_log.tres" id="32_moyyc"]
 [ext_resource type="Resource" uid="uid://b46nyvtvipor5" path="res://resources/item_info/wood_raw.tres" id="33_f0nuf"]
-[ext_resource type="Resource" path="res://resources/journal_entries/restore_guild_forge.tres" id="34_journal_one"]
-[ext_resource type="Resource" path="res://resources/journal_entries/establish_trade_route.tres" id="35_journal_two"]
-[ext_resource type="Resource" path="res://resources/journal_entries/earn_grand_charter.tres" id="36_journal_three"]
+[ext_resource type="Resource" uid="uid://dfc1pvj5ifntw" path="res://resources/journal_entries/restore_guild_forge.tres" id="34_journal_one"]
+[ext_resource type="Resource" uid="uid://damqjjujg4gr3" path="res://resources/journal_entries/establish_trade_route.tres" id="35_journal_two"]
+[ext_resource type="Resource" uid="uid://8efmyr023h7k" path="res://resources/journal_entries/earn_grand_charter.tres" id="36_journal_three"]
 [ext_resource type="Resource" uid="uid://bh6dgogp8tk5k" path="res://resources/scene_info/ui/quest_list_ui.tres" id="37_33j8a"]
 [ext_resource type="Resource" uid="uid://ce3u2bjgmkfe7" path="res://resources/scene_info/ui/quest_creation_ui.tres" id="38_eirlg"]
 [ext_resource type="Resource" uid="uid://c4slhs80lvehm" path="res://resources/scene_info/adventurer.tres" id="39_eirlg"]
@@ -149,16 +149,14 @@ element = NodePath(".")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="game_ui" unique_id=1863266253]
 custom_minimum_size = Vector2(300, 50)
-anchors_preset = 3
+anchors_preset = 1
 anchor_left = 1.0
-anchor_top = 1.0
 anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -300.0
-offset_top = -73.0
-offset_bottom = -23.0
+offset_left = -301.0
+offset_top = 54.0
+offset_right = -1.0
+offset_bottom = 104.0
 grow_horizontal = 0
-grow_vertical = 0
 size_flags_horizontal = 4
 fit_content = true
 script = ExtResource("49_c6i2r")
@@ -172,5 +170,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.19215687)
+metadata/_edit_lock_ = true
 
 [node name="resource_hud" parent="game_ui" unique_id=1817972187 instance=ExtResource("57_resource_hud")]

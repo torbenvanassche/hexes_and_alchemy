@@ -5,6 +5,7 @@
 [ext_resource type="Resource" uid="uid://d0lienvyvqxlh" path="res://resources/item_info/dock_blueprint.tres" id="2_g54ep"]
 [ext_resource type="PackedScene" uid="uid://bb3m2x7n1a6ek" path="res://scenes/tops/topper_docks.tscn" id="2_lj017"]
 [ext_resource type="Script" uid="uid://qb2lstol1uad" path="res://scripts/structures/docks_placement_handler.gd" id="2_wna8t"]
+[ext_resource type="Resource" uid="uid://dq5awyxdf8jb" path="res://resources/journal_tasks/build_docks.tres" id="3_uc34i"]
 
 [resource]
 script = ExtResource("1_0j51b")
@@ -12,6 +13,7 @@ build_cost = Dictionary[ExtResource("1_l1pyo"), int]({
 ExtResource("2_g54ep"): 1
 })
 placement_handler = ExtResource("2_wna8t")
+journal_task = ExtResource("3_uc34i")
 minimum_distance_from_other_structures = 0
 translation_key_name = "STRUCTURE_DOCKS_NAME"
 id = "docks"

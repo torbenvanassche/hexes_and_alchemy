@@ -1,8 +1,0 @@
-[gd_resource type="Resource" script_class="JournalTask" format=3 uid="uid://du0gdwea68tsu"]
-
-[ext_resource type="Script" uid="uid://dteapw377mybo" path="res://scripts/ui/journal_task.gd" id="1_script"]
-
-[resource]
-script = ExtResource("1_script")
-id = "cross_water"
-text_key = "JOURNAL_TASK_CROSS_WATER"

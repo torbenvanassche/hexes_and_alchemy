@@ -4,5 +4,5 @@
 
 [resource]
 script = ExtResource("1_script")
-id = "craft_dock_blueprint"
+id = "craft_docks_blueprint"
 text_key = "JOURNAL_TASK_CRAFT_DOCK_BLUEPRINT"

@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bpm6gm1mj4n65" path="res://scripts/interactions/interactable_locations/blacksmith.gd" id="2_cpkdt"]
 [ext_resource type="PackedScene" uid="uid://6h1kj7hbn5qq" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_blacksmith_blue.glb" id="2_eemul"]
+[ext_resource type="Resource" uid="uid://cc86jn6hnvvln" path="res://resources/journal_tasks/build_blacksmith_foundation.tres" id="2_ranit"]
 [ext_resource type="Material" uid="uid://c66vbca7lgh6m" path="res://materials/kay_fantasy_default.tres" id="3_eemul"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_43jb5"]
@@ -12,6 +13,7 @@ size = Vector3(1.0518265, 0.6777344, 0.880126)
 
 [node name="Node3D" type="Node3D" unique_id=728034513]
 script = ExtResource("2_cpkdt")
+journal_quest = ExtResource("2_ranit")
 
 [node name="Root Scene" parent="." unique_id=19869173 instance=ExtResource("2_eemul")]
 

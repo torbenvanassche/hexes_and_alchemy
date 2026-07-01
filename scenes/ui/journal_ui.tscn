@@ -7,7 +7,6 @@
 [ext_resource type="Resource" uid="uid://dfc1pvj5ifntw" path="res://resources/journal_entries/restore_guild_forge.tres" id="4_chapter_one"]
 [ext_resource type="Resource" uid="uid://damqjjujg4gr3" path="res://resources/journal_entries/establish_trade_route.tres" id="5_chapter_two"]
 [ext_resource type="Script" uid="uid://clepex0ir470h" path="res://scripts/ui/journal_entry.gd" id="5_jccj7"]
-[ext_resource type="Resource" uid="uid://8efmyr023h7k" path="res://resources/journal_entries/earn_grand_charter.tres" id="6_chapter_three"]
 
 [node name="Window" unique_id=1454805873 node_paths=PackedStringArray("content") instance=ExtResource("1_window")]
 custom_minimum_size = Vector2(500, 430)
@@ -31,7 +30,7 @@ size_flags_vertical = 3
 theme = ExtResource("1_theme")
 script = ExtResource("2_journal")
 entry_scene = ExtResource("3_entry")
-entries = Array[ExtResource("5_jccj7")]([ExtResource("4_chapter_one"), ExtResource("5_chapter_two"), ExtResource("6_chapter_three")])
+entries = Array[ExtResource("5_jccj7")]([ExtResource("4_chapter_one"), ExtResource("5_chapter_two")])
 
 [node name="MarginContainer" type="MarginContainer" parent="NinePatchRect/VBoxContainer/contentPanel/JournalPage" index="0" unique_id=1003171570]
 layout_mode = 2

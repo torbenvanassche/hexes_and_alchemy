@@ -1,6 +1,8 @@
 class_name CraftingUI
 extends VBoxContainer
 
+signal item_crafted(item: ItemInfo)
+
 @export var inventory: ContentGroup:
 	set(value):
 		if inventory and inventory.changed.is_connected(_on_inventory_changed):
@@ -127,6 +129,7 @@ func _craft_selected_item() -> void:
 		status_label.text = tr("CRAFTING_INVENTORY_FULL")
 	else:
 		status_label.text = tr("CRAFTING_SUCCESS") % crafted_item.get_display_name()
+		item_crafted.emit(crafted_item)
 
 	_refresh_recipe_preview()
 
