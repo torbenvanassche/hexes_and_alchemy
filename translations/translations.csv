@@ -55,6 +55,8 @@ QUEST_CREATION_TARGET,Target,Target
 QUEST_CREATION_QUEST,Quest,Quest
 QUEST_CREATION_SUPPLIES,Required supplies,Required supplies
 QUEST_CREATION_CREATE,Create quest,Create quest
+QUEST_CREATION_NO_AVAILABLE_QUESTS,No quests are available here.,No quests are available here.
+QUEST_CREATION_UNREACHABLE,"No adventurer can reach this location from the settlement yet.","No adventurer can reach this location from the settlement yet."
 QUEST_LOCATION_DISTANCE,%s (%s tiles),%s (%s tiles)
 QUEST_TYPE_FETCH,Fetch,Fetch
 QUEST_TYPE_PLANT,Plant,Plant
@@ -66,6 +68,7 @@ QUEST_TYPE_EXTRACT,Extract,Extract
 QUEST_TYPE_FILL,Fill,Fill
 QUEST_TYPE_REINFORCE,Reinforce,Reinforce
 QUEST_TYPE_DEEPEN,Deepen,Deepen
+QUEST_TYPE_INVESTIGATE,Investigate,Investigate
 QUEST_STATE_WAITING,Waiting,Waiting
 QUEST_STATE_EN_ROUTE,En route,En route
 QUEST_STATE_IN_PROGRESS,In progress,In progress
@@ -113,6 +116,12 @@ JOURNAL_TASK_FOUND_SECOND_GUILD_OUTPOST,Found a second guild outpost,Found a sec
 JOURNAL_TASK_COMPLETE_REGIONAL_CONTRACTS,Complete regional contracts,Complete regional contracts
 JOURNAL_TASK_SECURE_CORE_RESOURCE_SOURCES,"Secure food, timber, and ore sources","Secure food, timber, and ore sources"
 JOURNAL_TASK_BECOME_GUILD_AUTHORITY,Become the recognized guild authority,Become the recognized guild authority
+ITEM_ANCIENT_COIN_NAME,Ancient coin,Ancient coin
+ITEM_ANCIENT_COIN_DESCRIPTION,A worn coin from an older guild age.,A worn coin from an older guild age.
+ITEM_RELIC_FRAGMENT_NAME,Relic fragment,Relic fragment
+ITEM_RELIC_FRAGMENT_DESCRIPTION,A broken piece of worked metal recovered from old ruins.,A broken piece of worked metal recovered from old ruins.
+ITEM_OLD_GUILD_SEAL_NAME,Old guild seal,Old guild seal
+ITEM_OLD_GUILD_SEAL_DESCRIPTION,A weathered seal from a guild that once held authority here.,A weathered seal from a guild that once held authority here.
 DEPOSIT_COMPLETE_ORDER,Complete order,Complete order
 CRAFTING_INGREDIENTS,Ingredients,Ingredients
 CRAFTING_RESULT,Result,Result
@@ -135,6 +144,7 @@ CRAFTING_NO_RECIPE_SELECTED,Select a recipe.,Select a recipe.
 CRAFTING_NO_INVENTORY,No inventory assigned.,No inventory assigned.
 UNKNOWN,Unknown,Unknown
 STRUCTURE_FARMLAND_NAME,Farmland,Farmland
+STRUCTURE_ANCIENT_RUINS_NAME,Ancient Ruins,Ancient Ruins
 STRUCTURE_DOCKS_NAME,Docks,Docks
 STRUCTURE_FOREST_NAME,Forest,Forest
 STRUCTURE_LADDER_NAME,Ladder,Ladder
@@ -149,6 +159,7 @@ STRUCTURE_SETTLEMENT_NAME,Settlement,Settlement
 STRUCTURE_SPAWNABLE_MINES_NAME,Mine,Mine
 STRUCTURE_WATER_SOURCE_NAME,Well,Well
 REGION_DESERT_NAME,Desert,Desert
+REGION_ANCIENT_RUINS_NAME,Ancient Ruins,Ancient Ruins
 REGION_MINESHAFT_NAME,Mineshaft,Mineshaft
 REGION_OCEAN_NAME,Ocean,Ocean
 REGION_PLAINS_NAME,Plains,Plains

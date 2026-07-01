@@ -38,6 +38,10 @@ func _ready() -> void:
 		object.initialize();
 		_index_scene_info(object)
 	
+	for region in regions:
+		if region != null:
+			region.initialize()
+	
 	for item in items:
 		_index_item_info(item)
 
@@ -127,6 +131,9 @@ func is_active(scene_name: String) -> bool:
 	
 func pick_scene(x: int, y: int, region_options: Array[RegionInfo] = regions, rng: RandomNumberGenerator = null) -> HexInfo:
 	var region := get_region_for(x, y, region_options)
+	return pick_scene_for_region(region, rng)
+
+func pick_scene_for_region(region: RegionInfo, rng: RandomNumberGenerator = null) -> HexInfo:
 	if region == null:
 		Debug.message("No region found for scene")
 		return null
@@ -161,18 +168,46 @@ func pick_scene(x: int, y: int, region_options: Array[RegionInfo] = regions, rng
 func get_ocean_descriptor() -> RegionInfo:
 	return ocean_descriptor
 	
-func get_region_for(x: int, y: int, region_options: Array[RegionInfo] = regions) -> RegionInfo:
-	var best_region: RegionInfo = null
+func get_region_for(
+	x: int,
+	y: int,
+	region_options: Array[RegionInfo] = regions,
+	rng: RandomNumberGenerator = null,
+	distance: int = -1
+) -> RegionInfo:
+	var candidates: Array[RegionInfo] = []
+	var cumulative: Array[float] = []
 	var best_priority := -INF
+	var total_weight := 0.0
 
 	for region: RegionInfo in region_options:
 		if not region.matches(x, y):
 			continue
 
+		var weight := region.get_generation_weight(distance)
+		if weight <= 0.0:
+			continue
+
 		if region.priority > best_priority:
 			best_priority = region.priority
-			best_region = region
-			
-	if not best_region:
+			candidates.clear()
+			cumulative.clear()
+			total_weight = 0.0
+
+		if region.priority == best_priority:
+			total_weight += weight
+			candidates.append(region)
+			cumulative.append(total_weight)
+
+	if candidates.is_empty():
 		return get_ocean_descriptor();
-	return best_region
+
+	if total_weight <= 0.0:
+		return candidates[0]
+
+	var r := (rng.randf() if rng != null else randf()) * total_weight
+	for i in cumulative.size():
+		if r <= cumulative[i]:
+			return candidates[i]
+
+	return candidates[-1]

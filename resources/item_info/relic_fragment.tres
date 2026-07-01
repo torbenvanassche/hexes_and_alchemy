@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemInfo" format=3]
+
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="1_item"]
+[ext_resource type="Texture2D" path="res://sprites/items/parts_metal.png" id="2_texture"]
+
+[resource]
+script = ExtResource("1_item")
+unique_id = "relic_fragment"
+translation_key_name = "ITEM_RELIC_FRAGMENT_NAME"
+translation_key_description = "ITEM_RELIC_FRAGMENT_DESCRIPTION"
+texture = ExtResource("2_texture")
+buy_value = 20
+sell_value = 12
+metadata/_custom_type_script = "uid://c8ngjbq8w5gjr"

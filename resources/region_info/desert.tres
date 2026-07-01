@@ -18,7 +18,13 @@ noise = SubResource("FastNoiseLite_te6hx")
 noise_min = 0.0
 noise_max = 0.1
 structure_fail_weight = 0.25
+structure_density = 0.45
 region_weight = 0.5
+min_generation_distance = 12
+distance_weight_start = 12
+distance_weight_end = 36
+near_distance_weight = 0.15
+far_distance_weight = 0.85
 material = ExtResource("1_cjbsg")
 structures = Dictionary[ExtResource("5_ea2wi"), float]({
 ExtResource("6_water_source"): 0.35,

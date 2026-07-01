@@ -26,6 +26,7 @@ func interact() -> bool:
 		return false
 
 	closest_trigger.on_interact()
+	_refresh_interaction_prompt()
 	return true
 
 func _get_closest_trigger(prompt_only: bool) -> Interaction:

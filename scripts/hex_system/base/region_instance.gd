@@ -102,6 +102,9 @@ func _compute_structure_caps() -> void:
 	structure_counts.clear()
 	for s in structure_caps.keys():
 		structure_counts[s] = 0
+	for structure in structures.values():
+		if structure_counts.has(structure):
+			structure_counts[structure] += 1
 
 func _can_place_structure_at(pos: Vector3i, candidate: StructureInfo) -> bool:	
 	var hex := hexes[pos]
@@ -183,7 +186,18 @@ func generate_structures_for_region() -> void:
 	for cap in structure_caps.values():
 		max_total += cap
 
-	var target_count := mini(max_total, available_hexes.size())
+	var existing_total := 0
+	for count in structure_counts.values():
+		existing_total += count
+
+	var density := clampf(info.structure_density, 0.0, 1.0)
+	var expected_total := float(min(max_total, available_hexes.size())) * density
+	var target_total := int(floor(expected_total))
+	var fractional_target := expected_total - float(target_total)
+	if fractional_target > 0.0 and rng.randf() < fractional_target:
+		target_total += 1
+
+	var target_count := maxi(0, target_total - existing_total)
 	var processed_slots := 0
 
 	while processed_slots < target_count and not available_hexes.is_empty():

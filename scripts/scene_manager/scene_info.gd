@@ -41,7 +41,7 @@ func initialize() -> void:
 		is_unique = type == Type.UI;
 		
 func get_live_instances() -> Array[SceneInstance]:
-	instances = instances.filter(func(i: SceneInstance): return is_instance_valid(i) and is_instance_valid(i.node));
+	instances.assign(instances.filter(func(i: SceneInstance): return is_instance_valid(i) and is_instance_valid(i.node)));
 	return instances
 
 func set_process_mode(instance: SceneInstance, b: bool) -> void:

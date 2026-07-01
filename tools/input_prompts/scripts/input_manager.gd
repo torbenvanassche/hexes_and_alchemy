@@ -17,6 +17,7 @@ extends Node
 	
 	"toggle_input": "KEYBIND_TOGGLE_INPUT",
 	"primary_action": "KEYBIND_PRIMARY_ACTION",
+	"journal": "KEYBIND_JOURNAL",
 	
 	"cancel": "KEYBIND_CANCEL"
 }

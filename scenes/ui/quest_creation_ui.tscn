@@ -102,7 +102,14 @@ theme_override_constants/h_separation = 4
 theme_override_constants/v_separation = 4
 columns = 4
 
-[node name="Actions" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer" index="3" unique_id=605675596]
+[node name="StatusLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer" index="3" unique_id=1675641502]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.22, 0.08, 1)
+text = "QUEST_CREATION_NO_AVAILABLE_QUESTS"
+autowrap_mode = 3
+
+[node name="Actions" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer" index="4" unique_id=605675596]
 layout_mode = 2
 alignment = 2
 

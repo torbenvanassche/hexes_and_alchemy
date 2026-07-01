@@ -3,6 +3,7 @@ extends Node
 
 var scene_info: SceneInfo
 var node: Node
+var _is_destroyed := false
 
 signal on_leave
 signal on_enter
@@ -10,6 +11,7 @@ signal on_enter
 func _init(_n: Node, s_info: SceneInfo) -> void:
 	node = _n; 
 	scene_info = s_info;
+	node.tree_exiting.connect(_on_node_tree_exiting, CONNECT_ONE_SHOT)
 	
 	if "scene_instance" in node:
 		node.scene_instance = self
@@ -24,11 +26,22 @@ func _init(_n: Node, s_info: SceneInfo) -> void:
 		on_leave.connect(destroy)
 
 func destroy() -> void:
+	_unregister()
 	if is_instance_valid(node):
-		if DataManager.instance != null:
-			DataManager.instance.unregister_scene_instance(self)
 		node.queue_free()
 	queue_free()
+
+func _on_node_tree_exiting() -> void:
+	_unregister()
+
+func _unregister() -> void:
+	if _is_destroyed:
+		return
+	_is_destroyed = true
+	if scene_info != null:
+		scene_info.instances.erase(self)
+	if DataManager.instance != null:
+		DataManager.instance.unregister_scene_instance(self)
 	
 func hide() -> void:
 	if not is_instance_valid(node):

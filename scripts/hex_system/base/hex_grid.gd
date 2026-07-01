@@ -9,6 +9,8 @@ var _spacing: float = 0.25
 @export var chunk_size: Vector2i = Vector2i(4, 4):
 	set(value):
 		chunk_size = Vector2i(maxi(1, value.x), maxi(1, value.y))
+@export var generate_chunks_near_player := true
+@export_range(0, 8, 1) var player_chunk_generation_radius := 1
 @export var grid_name: String;
 
 ## Set this to reproduce a specific world. Leave it at 0 to generate a new seed on each run.
@@ -192,11 +194,11 @@ func _get_instances_for_region(region: RegionInfo) -> Array:
 		region_instances[region] = [];
 	return region_instances[region];
 		
-func create_hex(grid_id: Vector2i, info: SceneInfo) -> SceneInstance:
+func create_hex(grid_id: Vector2i, info: SceneInfo, region: RegionInfo) -> SceneInstance:
 	var scene_instance := info.get_instance();
 	var hex := scene_instance.node;
 	
-	hex.region = DataManager.instance.get_region_for(grid_id.x, grid_id.y, region_options);
+	hex.region = region;
 	var spacing =  GridUtils.get_spacing(RADIUS_IN, _spacing, pointy_top);
 
 	hex.grid_id = grid_id;
@@ -214,6 +216,17 @@ func create_hex(grid_id: Vector2i, info: SceneInfo) -> SceneInstance:
 	hex.position = pos
 	return scene_instance;
 
+func _get_region_for_grid_id(grid_id: Vector2i) -> RegionInfo:
+	var region_rng := create_rng("region:%s:%s" % [grid_id.x, grid_id.y])
+	var distance := GridUtils.cube_distance(GridUtils.offset_to_cube(grid_id, pointy_top), Vector3i.ZERO)
+	return DataManager.instance.get_region_for(
+		grid_id.x,
+		grid_id.y,
+		region_options,
+		region_rng,
+		distance
+	)
+
 func expand_from_chunk(cx: int, cy: int, dir: int) -> void:
 	var offset := CHUNK_DIR_VECTORS[dir]
 	var new_coords := Vector2i(cx + offset.x, cy + offset.y)
@@ -224,8 +237,17 @@ func expand_from_chunk(cx: int, cy: int, dir: int) -> void:
 	generate_chunk(new_coords.x, new_coords.y);
 	
 func _post_process_chunk(chunk: HexChunk) -> void:
+	var touched_region_instances: Array[RegionInstance] = []
 	for hex: SceneInstance in chunk.hexes:
 		_assign_region_instance(hex.node);
+		var region_instance := (hex.node as HexBase).region_instance
+		if region_instance != null and not touched_region_instances.has(region_instance):
+			touched_region_instances.append(region_instance)
+	
+	if initialized and chunk.generate_structures:
+		for region_instance in touched_region_instances:
+			region_instance.generate_structures_for_region()
+		pathfinder.rebuild()
 	
 	var all_chunks_generated: bool = true;
 	for c in chunks.keys():
@@ -287,15 +309,27 @@ func generate_chunk(cx: int, cy: int) -> HexChunk:
 	for gy in range(start_y, start_y + chunk_size.y):
 		for gx in range(start_x, start_x + chunk_size.x):
 			var grid_id := Vector2i(gx, gy);
+			var region := _get_region_for_grid_id(grid_id)
 			var scene_rng := create_rng("tile:%s:%s" % [gx, gy]);
-			var scene_info := DataManager.instance.pick_scene(gx, gy, region_options, scene_rng);
+			var scene_info := DataManager.instance.pick_scene_for_region(region, scene_rng);
 			if scene_info == null:
 				continue;
 			
 			scene_info.queue(
 				func(sI: SceneInfo) -> void:
-					chunk.add_hex(create_hex(grid_id, sI)));
+					chunk.add_hex(create_hex(grid_id, sI, region)));
 	return chunk;
+
+func generate_chunks_around_grid_id(grid_id: Vector2i, radius: int = -1) -> void:
+	if not generate_chunks_near_player:
+		return
+	if radius < 0:
+		radius = player_chunk_generation_radius
+	var center_chunk := grid_to_chunk_coords(grid_id)
+	for cy in range(center_chunk.y - radius, center_chunk.y + radius + 1):
+		for cx in range(center_chunk.x - radius, center_chunk.x + radius + 1):
+			if not chunks.has(Vector2i(cx, cy)):
+				generate_chunk(cx, cy)
 	
 func get_hex_at_world_position(world_pos: Vector3, max_distance: float = 1.2) -> HexBase:
 	var approx_cube := world_to_cube_id(world_pos)

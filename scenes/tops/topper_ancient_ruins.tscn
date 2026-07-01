@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://c2glb5ywya5jg"]
+
+[ext_resource type="Script" uid="uid://jueb1eq3kwsr" path="res://scripts/interactions/interactable_locations/ancient_ruins.gd" id="1_ruins_script"]
+[ext_resource type="PackedScene" uid="uid://bnsfw0m783esj" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/building_destroyed.glb" id="2_gytin"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ruins_interaction"]
+size = Vector3(1.95, 1.2, 1.9474609)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ruins_collision"]
+size = Vector3(1.3815429, 1, 1.1209228)
+
+[node name="ancient_ruins" type="Node3D" unique_id=1985250973]
+script = ExtResource("1_ruins_script")
+quest_types = Array[String](["investigate"])
+
+[node name="Root Scene" parent="." unique_id=1806470452 instance=ExtResource("2_gytin")]
+
+[node name="interaction" type="Area3D" parent="." unique_id=784232890]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="interaction" unique_id=1294215105]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, -9.766221e-05)
+shape = SubResource("BoxShape3D_ruins_interaction")
+
+[node name="collision" type="StaticBody3D" parent="." unique_id=1579331413]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="collision" unique_id=1399759398]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.062158227, 0.45, -0.013269067)
+shape = SubResource("BoxShape3D_ruins_collision")

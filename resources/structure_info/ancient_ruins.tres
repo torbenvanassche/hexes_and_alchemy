@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="LootableStructureInfo" format=3 uid="uid://bmlekxavmwmm"]
+
+[ext_resource type="PackedScene" uid="uid://c2glb5ywya5jg" path="res://scenes/tops/topper_ancient_ruins.tscn" id="1_scene"]
+[ext_resource type="Script" uid="uid://brvtfutnwh30i" path="res://scripts/structures/lootable_info.gd" id="2_structure"]
+[ext_resource type="Resource" uid="uid://senaku4iw2p1" path="res://resources/loot_tables/ancient_ruins.tres" id="3_loot"]
+
+[sub_resource type="Curve" id="Curve_one_per_region"]
+_limits = [0.0, 12.0, 0.0, 50.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 1, 1, Vector2(12, 1), 0.0, 0.0, 1, 1]
+point_count = 2
+
+[resource]
+script = ExtResource("2_structure")
+loot_table = ExtResource("3_loot")
+loot_once = true
+max_per_region_size = SubResource("Curve_one_per_region")
+translation_key_name = "STRUCTURE_ANCIENT_RUINS_NAME"
+id = "ancient_ruins"
+packed_scene = ExtResource("1_scene")
+metadata/_custom_type_script = "uid://brvtfutnwh30i"

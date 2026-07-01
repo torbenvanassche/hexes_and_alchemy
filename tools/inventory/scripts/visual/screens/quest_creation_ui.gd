@@ -4,6 +4,7 @@ class_name QuestCreationUI extends Control
 @onready var quest_location: OptionButton = $FormPanel/MarginContainer/VBoxContainer/LocationRow/QuestLocation
 @onready var quest_supplies: Control = $FormPanel/MarginContainer/VBoxContainer/QuestSupplies
 @onready var supplies_grid: GridContainer = $FormPanel/MarginContainer/VBoxContainer/QuestSupplies/SuppliesGrid
+@onready var status_label: Label = $FormPanel/MarginContainer/VBoxContainer/StatusLabel
 @onready var finish_quest_creation: Button = $FormPanel/MarginContainer/VBoxContainer/Actions/FinishQuestCreation
 
 @export var packed_slot: PackedScene
@@ -21,6 +22,7 @@ func _reset_ui() -> void:
 	quest_location.clear();
 	quest_type.disabled = true;
 	finish_quest_creation.disabled = true;
+	_set_status("")
 	_refresh_required_supplies()
 	if finish_quest_creation.pressed.is_connected(_create_quest):
 		finish_quest_creation.pressed.disconnect(_create_quest)
@@ -55,6 +57,7 @@ func _on_location_selected(idx: int) -> void:
 		quest_type.clear()
 		quest_type.disabled = true
 		finish_quest_creation.disabled = true
+		_refresh_required_supplies()
 		return;
 
 	var location: HexBase = quest_location.get_item_metadata(idx) as HexBase;
@@ -62,6 +65,7 @@ func _on_location_selected(idx: int) -> void:
 		quest_type.clear()
 		quest_type.disabled = true
 		finish_quest_creation.disabled = true
+		_refresh_required_supplies()
 		return;
 
 	quest_type.clear();
@@ -89,36 +93,39 @@ func _on_quest_type_selected(_idx: int) -> void:
 	_refresh_required_supplies()
 	_update_finish_button()
 
-func _add_location_option(hex: HexBase) -> void:
+func _add_location_option(hex: HexBase, require_reachable: bool = true) -> bool:
 	if hex == null or hex.structure == null:
-		return
+		return false
 
 	var active_scene := SceneManager.get_active_scene()
 	if active_scene == null:
-		return
+		return false
 
 	var grid := active_scene.node as HexGrid
-	if grid == null or not Manager.instance.quests.is_quest_location_reachable(hex, grid):
-		return
+	if grid == null:
+		return false
+	if require_reachable and not Manager.instance.quests.is_quest_location_reachable(hex, grid):
+		return false
 
 	var player_hex: HexBase = Manager.instance.player_instance.get_hex()
 	if player_hex == null:
-		return
+		return false
 
 	var objective: QuestObjective = hex.structure.instance as QuestObjective
 	if objective == null:
-		return
+		return false
 
 	var available_types := Manager.instance.quests.get_available_quest_types(
 		hex,
 		objective.get_filtered_quest_types(objective.state_machine.get_current_state_index())
 	)
 	if available_types.is_empty():
-		return
+		return false
 
 	var distance: int = GridUtils.cube_distance(hex.cube_id, player_hex.cube_id);
 	quest_location.add_item(tr("QUEST_LOCATION_DISTANCE") % [hex.structure.structure_info.get_display_name(), distance])
 	quest_location.set_item_metadata(quest_location.item_count - 1, hex)
+	return true
 
 func _sort_locations_by_distance(locations: Array[HexBase]) -> Array[HexBase]:
 	var player_hex: HexBase = Manager.instance.player_instance.get_hex()
@@ -142,10 +149,23 @@ func _apply_forced_interaction() -> void:
 	if forced_interaction == null:
 		return
 
-	_add_location_option(forced_interaction.hex)
-	if quest_location.item_count == 0:
+	if forced_interaction.hex == null:
+		_set_status(tr("QUEST_CREATION_NO_AVAILABLE_QUESTS"))
 		return
 
+	var active_scene := SceneManager.get_active_scene()
+	var grid: HexGrid = null
+	if active_scene != null:
+		grid = active_scene.node as HexGrid
+	if grid != null and not Manager.instance.quests.is_quest_location_reachable(forced_interaction.hex, grid):
+		_set_status(tr("QUEST_CREATION_UNREACHABLE"))
+		return
+
+	if not _add_location_option(forced_interaction.hex):
+		_set_status(tr("QUEST_CREATION_NO_AVAILABLE_QUESTS"))
+		return
+
+	_set_status("")
 	quest_location.select(0)
 	_on_location_selected(0)
 
@@ -197,6 +217,7 @@ func on_enter() -> void:
 		quest_location.select(0)
 		_on_location_selected(0);
 	else:
+		_set_status(tr("QUEST_CREATION_NO_AVAILABLE_QUESTS"))
 		_on_location_selected(-1);
 
 func _create_quest() -> void:
@@ -289,9 +310,17 @@ func _update_window_supply_space(has_visible_supplies: bool) -> void:
 	if window == null:
 		return
 
-	window.custom_minimum_size = supplies_window_min_size if has_visible_supplies else no_supplies_window_min_size
+	var needs_status_space := status_label != null and status_label.visible
+	window.custom_minimum_size = supplies_window_min_size if has_visible_supplies or needs_status_space else no_supplies_window_min_size
 	if window.visible:
 		window.call_deferred("_fit_to_content")
+
+func _set_status(message: String) -> void:
+	if status_label == null:
+		return
+	status_label.text = message
+	status_label.visible = message != ""
+	_update_window_supply_space(quest_supplies != null and quest_supplies.visible)
 
 func _get_selected_required_supplies() -> Dictionary[ItemInfo, int]:
 	var location_idx: int = quest_location.selected

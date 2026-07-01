@@ -125,6 +125,8 @@ func update_navigation_state(grid: HexGrid) -> HexBase:
 			raw_current_hex = _last_traversable_hex
 	
 	var current_hex: HexBase = raw_current_hex if raw_current_hex != null and _is_hex_traversable(raw_current_hex) else _last_traversable_hex
+	if current_hex != null:
+		grid.generate_chunks_around_grid_id(current_hex.grid_id)
 	explore_visible_tiles(grid, current_hex)
 	return current_hex
 
