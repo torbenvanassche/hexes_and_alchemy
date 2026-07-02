@@ -29,9 +29,9 @@ var region_options: Array[RegionInfo];
 
 var initialized: bool = false;
 
-##Chunks that should not generate structures
+##Chunks that should not generate water or structures
 @export_group("Structure Rules")
-@export var skipped_chunks: Array[Vector2i];
+@export var protected_chunks: Array[Vector2i];
 
 static var RADIUS_IN: float = 1.0
 
@@ -155,8 +155,8 @@ func has_chunk(cx: int, cy: int) -> bool:
 	return chunks.has(Vector2i(cx, cy));
 
 func can_generate_structures_on_grid_id(grid_id: Vector2i) -> bool:
-	var skipped_chunk: bool = skipped_chunks.has(grid_to_chunk_coords(grid_id));
-	return not skipped_chunk && not _is_near_settlement(GridUtils.offset_to_cube(grid_id, pointy_top))
+	var protected_chunk: bool = protected_chunks.has(grid_to_chunk_coords(grid_id));
+	return not protected_chunk and not _is_near_settlement(GridUtils.offset_to_cube(grid_id, pointy_top))
 
 func can_generate_structures_on_hex(hex: HexBase) -> bool:
 	return hex != null and can_generate_structures_on_grid_id(hex.grid_id)
@@ -219,13 +219,63 @@ func create_hex(grid_id: Vector2i, info: SceneInfo, region: RegionInfo) -> Scene
 func _get_region_for_grid_id(grid_id: Vector2i) -> RegionInfo:
 	var region_rng := create_rng("region:%s:%s" % [grid_id.x, grid_id.y])
 	var distance := GridUtils.cube_distance(GridUtils.offset_to_cube(grid_id, pointy_top), Vector3i.ZERO)
-	return DataManager.instance.get_region_for(
+	var region := DataManager.instance.get_region_for(
 		grid_id.x,
 		grid_id.y,
 		region_options,
 		region_rng,
 		distance
 	)
+	if _is_protected_grid_id(grid_id) and region == DataManager.instance.get_ocean_descriptor():
+		var fallback := _get_protected_land_region(distance, region_rng)
+		if fallback != null:
+			return fallback
+
+	return region
+
+func _is_protected_grid_id(grid_id: Vector2i) -> bool:
+	return protected_chunks.has(grid_to_chunk_coords(grid_id))
+
+func _get_protected_land_region(distance: int, rng: RandomNumberGenerator) -> RegionInfo:
+	var ocean_descriptor := DataManager.instance.get_ocean_descriptor()
+	var candidates: Array[RegionInfo] = []
+	var cumulative: Array[float] = []
+	var best_priority := -INF
+	var total_weight := 0.0
+
+	for region: RegionInfo in region_options:
+		if region == null or region == ocean_descriptor:
+			continue
+		if region.scene_multipliers.is_empty():
+			continue
+
+		var weight := region.get_generation_weight(distance)
+		if weight <= 0.0:
+			continue
+
+		if region.priority > best_priority:
+			best_priority = region.priority
+			candidates.clear()
+			cumulative.clear()
+			total_weight = 0.0
+
+		if region.priority == best_priority:
+			total_weight += weight
+			candidates.append(region)
+			cumulative.append(total_weight)
+
+	if candidates.is_empty():
+		return null
+
+	if total_weight <= 0.0:
+		return candidates[0]
+
+	var r := rng.randf() * total_weight
+	for i in cumulative.size():
+		if r <= cumulative[i]:
+			return candidates[i]
+
+	return candidates[-1]
 
 func expand_from_chunk(cx: int, cy: int, dir: int) -> void:
 	var offset := CHUNK_DIR_VECTORS[dir]
@@ -299,7 +349,7 @@ func generate_chunk(cx: int, cy: int) -> HexChunk:
 	chunks[key] = chunk;
 	add_child(chunk);
 	
-	chunk.generate_structures = not skipped_chunks.has(key);
+	chunk.generate_structures = not protected_chunks.has(key);
 
 	var start_x := cx * chunk_size.x
 	var start_y := cy * chunk_size.y

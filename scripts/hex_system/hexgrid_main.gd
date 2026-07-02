@@ -3,7 +3,6 @@ class_name MainGrid extends HexGrid
 @export var player_settlement: StructureInfo;
 @export var target_position: Node3D;
 @export_group("Starting Resources")
-@export var guaranteed_starting_resource_radius: int = 6
 @export var guaranteed_starting_structures: Array[StructureInfo] = []
 
 var path: Array[HexBase];
@@ -123,8 +122,6 @@ func _get_starting_resource_candidates(origin_hex: HexBase, structure_info: Stru
 	for scene_instance: SceneInstance in tiles.values():
 		var hex := scene_instance.node as HexBase
 		if hex == null:
-			continue
-		if GridUtils.cube_distance(origin_hex.cube_id, hex.cube_id) > guaranteed_starting_resource_radius:
 			continue
 		if not _is_hex_accessible_from(origin_hex, hex):
 			continue
