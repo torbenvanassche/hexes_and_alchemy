@@ -3,6 +3,7 @@ class_name MainGrid extends HexGrid
 @export var player_settlement: StructureInfo;
 @export var target_position: Node3D;
 @export_group("Starting Resources")
+@export var starting_resource_search_radius: int = 12
 @export var guaranteed_starting_structures: Array[StructureInfo] = []
 
 var path: Array[HexBase];
@@ -84,8 +85,7 @@ func _has_accessible_structure(structure_info: StructureInfo) -> bool:
 	if origin_hex == null:
 		return false
 
-	for scene_instance: SceneInstance in tiles.values():
-		var hex := scene_instance.node as HexBase
+	for hex: HexBase in _get_starting_resource_search_hexes(origin_hex):
 		if hex == null or hex.region_instance == null:
 			continue
 		if hex.region_instance.structures.get(hex.cube_id) != structure_info:
@@ -119,8 +119,7 @@ func _pick_starting_resource_hex(structure_info: StructureInfo) -> HexBase:
 
 func _get_starting_resource_candidates(origin_hex: HexBase, structure_info: StructureInfo) -> Array[HexBase]:
 	var candidates: Array[HexBase] = []
-	for scene_instance: SceneInstance in tiles.values():
-		var hex := scene_instance.node as HexBase
+	for hex: HexBase in _get_starting_resource_search_hexes(origin_hex):
 		if hex == null:
 			continue
 		if not _is_hex_accessible_from(origin_hex, hex):
@@ -129,6 +128,31 @@ func _get_starting_resource_candidates(origin_hex: HexBase, structure_info: Stru
 			continue
 		candidates.append(hex)
 	return candidates
+
+func _get_starting_resource_search_hexes(origin_hex: HexBase) -> Array[HexBase]:
+	var result: Array[HexBase] = []
+	var seen: Dictionary[Vector3i, bool] = {}
+
+	if origin_hex == null:
+		return result
+
+	if origin_hex.region_instance != null:
+		for hex: HexBase in origin_hex.region_instance.hexes.values():
+			_add_starting_resource_search_hex(hex, seen, result)
+
+	for scene_instance: SceneInstance in get_tiles_in_radius(origin_hex.cube_id, starting_resource_search_radius):
+		_add_starting_resource_search_hex(scene_instance.node as HexBase, seen, result)
+
+	return result
+
+func _add_starting_resource_search_hex(hex: HexBase, seen: Dictionary[Vector3i, bool], result: Array[HexBase]) -> void:
+	if hex == null or seen.has(hex.cube_id):
+		return
+	if _is_protected_grid_id(hex.grid_id):
+		return
+
+	seen[hex.cube_id] = true
+	result.append(hex)
 
 func _can_place_guaranteed_starting_resource(hex: HexBase, structure_info: StructureInfo) -> bool:
 	if hex == null or structure_info == null:
