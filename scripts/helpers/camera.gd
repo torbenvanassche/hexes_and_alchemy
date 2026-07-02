@@ -88,12 +88,13 @@ func _physics_process(delta: float) -> void:
 
 	if snapping:
 		_snap_to_center(delta);
-	elif not Manager.instance.input_moves_player():
+
+	if not Manager.instance.input_moves_player():
 		_update_pan(delta);
-	var effective_pan = pan_offset * (1.0 - zoom);
+
 	zoom = lerp(zoom, target_zoom, clampf(delta * zoom_smoothness, 0.0, 1.0));
 
-	var desired_position = target.global_position + effective_pan;
+	var desired_position = target.global_position + pan_offset;
 	global_position = global_position.lerp(
 		desired_position,
 		clampf(delta * follow_speed, 0.0, 1.0)
