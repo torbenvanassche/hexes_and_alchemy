@@ -18,12 +18,12 @@
 [ext_resource type="Resource" uid="uid://d2oshonh138ag" path="res://tools/time_of_day/resources/night.tres" id="8_xkeu2"]
 [ext_resource type="Resource" uid="uid://dkibdkuc04rrk" path="res://tools/time_of_day/resources/dusk.tres" id="9_xkeu2"]
 [ext_resource type="Resource" uid="uid://bflckgydmmunp" path="res://resources/region_info/desert.tres" id="9_y3xxt"]
-[ext_resource type="Resource" path="res://resources/region_info/ancient_ruins.tres" id="10_ancient_ruins_region"]
+[ext_resource type="Resource" uid="uid://mifjntx1haes" path="res://resources/region_info/ancient_ruins.tres" id="10_ancient_ruins_region"]
 [ext_resource type="Script" uid="uid://btydeamnhd6x" path="res://scripts/structures/structure_info.gd" id="10_gt4lb"]
 [ext_resource type="Resource" uid="uid://ckc2tmi6risxh" path="res://resources/structure_info/farmland.tres" id="11_ya6yc"]
 [ext_resource type="Resource" uid="uid://ckpmn3cutb7an" path="res://resources/structure_info/spawnable_mine.tres" id="12_mflgo"]
 [ext_resource type="Resource" uid="uid://ckehcbpixu26o" path="res://resources/scene_info/player.tres" id="12_vgks2"]
-[ext_resource type="Resource" path="res://resources/structure_info/ancient_ruins.tres" id="13_ancient_ruins_structure"]
+[ext_resource type="Resource" uid="uid://bmlekxavmwmm" path="res://resources/structure_info/ancient_ruins.tres" id="13_ancient_ruins_structure"]
 [ext_resource type="Resource" uid="uid://clias4ed18wk0" path="res://resources/structure_info/lumbermill.tres" id="14_8ui5n"]
 [ext_resource type="Script" uid="uid://dcapggl16i04f" path="res://scripts/helpers/camera.gd" id="15_dylgi"]
 [ext_resource type="Script" uid="uid://6t4u66o5q6po" path="res://scripts/scene_manager/scene_info.gd" id="15_ya6yc"]
@@ -48,7 +48,6 @@
 [ext_resource type="Resource" uid="uid://b46nyvtvipor5" path="res://resources/item_info/wood_raw.tres" id="33_f0nuf"]
 [ext_resource type="Resource" uid="uid://dfc1pvj5ifntw" path="res://resources/journal_entries/restore_guild_forge.tres" id="34_journal_one"]
 [ext_resource type="Resource" uid="uid://damqjjujg4gr3" path="res://resources/journal_entries/establish_trade_route.tres" id="35_journal_two"]
-[ext_resource type="Resource" uid="uid://8efmyr023h7k" path="res://resources/journal_entries/earn_grand_charter.tres" id="36_journal_three"]
 [ext_resource type="Resource" uid="uid://bh6dgogp8tk5k" path="res://resources/scene_info/ui/quest_list_ui.tres" id="37_33j8a"]
 [ext_resource type="Resource" uid="uid://ce3u2bjgmkfe7" path="res://resources/scene_info/ui/quest_creation_ui.tres" id="38_eirlg"]
 [ext_resource type="Resource" uid="uid://c4slhs80lvehm" path="res://resources/scene_info/adventurer.tres" id="39_eirlg"]
@@ -96,7 +95,7 @@ script = ExtResource("4_quests")
 
 [node name="journal_manager" type="Node" parent="game_manager" unique_id=1453624016]
 script = ExtResource("4_journal_manager")
-entries = Array[Resource]([ExtResource("34_journal_one"), ExtResource("35_journal_two"), ExtResource("36_journal_three")])
+entries = Array[Resource]([ExtResource("34_journal_one"), ExtResource("35_journal_two")])
 
 [node name="time_of_day" type="Node" parent="game_manager" unique_id=1430942160 node_paths=PackedStringArray("sun", "environment")]
 script = ExtResource("4_moyyc")

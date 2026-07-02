@@ -3,7 +3,6 @@ class_name JournalUI extends PanelContainer
 @onready var entries_container: VBoxContainer = $MarginContainer/VBoxContainer/ScrollContainer/Entries
 
 @export var entry_scene: PackedScene
-@export var entries: Array[JournalEntry] = []
 
 var _refresh_queued := false
 
@@ -46,9 +45,4 @@ func _get_visible_entries() -> Array[JournalEntry]:
 	if Manager.instance != null and Manager.instance.journal != null:
 		return Manager.instance.journal.get_entries()
 
-	var visible_entries: Array[JournalEntry] = []
-	for resource: Resource in entries:
-		var entry := resource as JournalEntry
-		if entry != null and entry.unlocked:
-			visible_entries.append(entry)
-	return visible_entries
+	return []

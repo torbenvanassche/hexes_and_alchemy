@@ -15,6 +15,11 @@ func _ready() -> void:
 	state_machine = StateMachine.new(["available", "looted"])
 	state_machine.set_state("available")
 
+func _on_visibility_changed() -> void:
+	super._on_visibility_changed()
+	if hex.is_explored:
+		Manager.instance.journal.complete_task(journal_quest.id)
+
 func can_interact() -> bool:
 	var lootable := hex.structure.structure_info as LootableStructureInfo
 	if lootable != null and lootable.loot_once and _loot_claimed:

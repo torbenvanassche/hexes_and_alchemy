@@ -1,7 +1,5 @@
 class_name Blacksmith extends SettlementService
 
-@export var journal_quest: JournalTask;
-
 func interact() -> void:
 	var crafting_window: SceneInfo = DataManager.instance.get_scene_by_name("crafting_ui")
 	if crafting_window == null:

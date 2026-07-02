@@ -2,11 +2,10 @@
 
 [ext_resource type="Script" uid="uid://clepex0ir470h" path="res://scripts/ui/journal_entry.gd" id="1_script"]
 [ext_resource type="Resource" uid="uid://dq5awyxdf8jb" path="res://resources/journal_tasks/build_docks.tres" id="2_docks"]
-[ext_resource type="Resource" uid="uid://cwv7tghgt6edu" path="res://resources/journal_tasks/discover_distant_resource_region.tres" id="4_discover"]
-[ext_resource type="Resource" uid="uid://cil1ew3pc6ce7" path="res://resources/journal_tasks/return_with_rare_supplies.tres" id="5_return"]
+[ext_resource type="Resource" uid="uid://cwv7tghgt6edu" path="res://resources/journal_tasks/discover_distant_resource.tres" id="3_gvfqr"]
 
 [resource]
 script = ExtResource("1_script")
 id = "establish_trade_route"
 title_key = "JOURNAL_CHAPTER_TWO"
-tasks = Array[Resource]([ExtResource("2_docks"), ExtResource("4_discover"), ExtResource("5_return")])
+tasks = Array[Resource]([ExtResource("2_docks"), ExtResource("3_gvfqr")])

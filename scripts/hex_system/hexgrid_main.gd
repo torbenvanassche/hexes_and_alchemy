@@ -3,7 +3,7 @@ class_name MainGrid extends HexGrid
 @export var player_settlement: StructureInfo;
 @export var target_position: Node3D;
 @export_group("Starting Resources")
-@export var guaranteed_starting_resource_radius: int = 14
+@export var guaranteed_starting_resource_radius: int = 6
 @export var guaranteed_starting_structures: Array[StructureInfo] = []
 
 var path: Array[HexBase];

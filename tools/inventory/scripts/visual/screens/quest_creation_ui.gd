@@ -94,7 +94,7 @@ func _on_quest_type_selected(_idx: int) -> void:
 	_update_finish_button()
 
 func _add_location_option(hex: HexBase, require_reachable: bool = true) -> bool:
-	if hex == null or hex.structure == null:
+	if not _is_available_location_base(hex):
 		return false
 
 	var active_scene := SceneManager.get_active_scene()
@@ -112,9 +112,6 @@ func _add_location_option(hex: HexBase, require_reachable: bool = true) -> bool:
 		return false
 
 	var objective: QuestObjective = hex.structure.instance as QuestObjective
-	if objective == null:
-		return false
-
 	var available_types := Manager.instance.quests.get_available_quest_types(
 		hex,
 		objective.get_filtered_quest_types(objective.state_machine.get_current_state_index())
@@ -126,6 +123,17 @@ func _add_location_option(hex: HexBase, require_reachable: bool = true) -> bool:
 	quest_location.add_item(tr("QUEST_LOCATION_DISTANCE") % [hex.structure.structure_info.get_display_name(), distance])
 	quest_location.set_item_metadata(quest_location.item_count - 1, hex)
 	return true
+
+func _is_available_location_base(hex: HexBase) -> bool:
+	if hex == null or hex.structure == null:
+		return false
+	if not hex.is_explored or not hex.is_visible_in_tree():
+		return false
+	if not hex.structure.structure_info.is_quest_target:
+		return false
+
+	var objective := hex.structure.instance as QuestObjective
+	return objective != null and objective.is_visible_in_tree() and objective.can_interact()
 
 func _sort_locations_by_distance(locations: Array[HexBase]) -> Array[HexBase]:
 	var player_hex: HexBase = Manager.instance.player_instance.get_hex()
@@ -191,9 +199,10 @@ func on_enter() -> void:
 	var available_locations: Array[HexBase] = []
 
 	for hex in structure_hexes:
-		var quest_objective: QuestObjective = hex.structure.instance as QuestObjective
-		if quest_objective == null:
+		if not _is_available_location_base(hex):
 			continue
+
+		var quest_objective: QuestObjective = hex.structure.instance as QuestObjective
 
 		var player_hex: HexBase = Manager.instance.player_instance.get_hex()
 		if player_hex == null:
@@ -207,7 +216,7 @@ func on_enter() -> void:
 			quest_objective.get_filtered_quest_types()
 		).size() != 0;
 
-		if in_range and is_reachable and is_valid_quest and quest_objective.can_interact() and hex.structure.structure_info.is_quest_target and hex.is_explored:
+		if in_range and is_reachable and is_valid_quest:
 			available_locations.append(hex)
 
 	for hex in _sort_locations_by_distance(available_locations):

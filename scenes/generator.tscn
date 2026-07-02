@@ -10,6 +10,7 @@
 script = ExtResource("1_5yxne")
 player_settlement = ExtResource("2_w5vnv")
 target_position = NodePath("Node3D")
+guaranteed_starting_resource_radius = 0
 guaranteed_starting_structures = Array[ExtResource("3_structure_info")]([ExtResource("4_forest"), ExtResource("5_mine")])
 chunk_radius = 4
 grid_name = "main_world"

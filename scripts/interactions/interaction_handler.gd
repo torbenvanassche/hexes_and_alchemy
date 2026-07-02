@@ -9,6 +9,7 @@ var collision_shapes: Array[CollisionShape3D];
 var window_instance: SceneInstance;
 
 @export var show_interaction_prompt: bool = true;
+@export var journal_quest: JournalTask;
 
 @abstract func interact() -> void;
 @abstract func can_interact() -> bool;

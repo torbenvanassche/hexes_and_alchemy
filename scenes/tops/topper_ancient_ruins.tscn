@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://c2glb5ywya5jg"]
 
 [ext_resource type="Script" uid="uid://jueb1eq3kwsr" path="res://scripts/interactions/interactable_locations/ancient_ruins.gd" id="1_ruins_script"]
+[ext_resource type="Resource" uid="uid://cwv7tghgt6edu" path="res://resources/journal_tasks/discover_distant_resource.tres" id="2_cg5fk"]
 [ext_resource type="PackedScene" uid="uid://bnsfw0m783esj" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/building_destroyed.glb" id="2_gytin"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ruins_interaction"]
@@ -12,6 +13,7 @@ size = Vector3(1.3815429, 1, 1.1209228)
 [node name="ancient_ruins" type="Node3D" unique_id=1985250973]
 script = ExtResource("1_ruins_script")
 quest_types = Array[String](["investigate"])
+journal_quest = ExtResource("2_cg5fk")
 
 [node name="Root Scene" parent="." unique_id=1806470452 instance=ExtResource("2_gytin")]
 
