@@ -67,6 +67,7 @@
 [ext_resource type="Resource" path="res://resources/item_info/ancient_coin.tres" id="59_ancient_coin"]
 [ext_resource type="Resource" path="res://resources/item_info/relic_fragment.tres" id="60_relic_fragment"]
 [ext_resource type="Resource" path="res://resources/item_info/old_guild_seal.tres" id="61_old_guild_seal"]
+[ext_resource type="Resource" path="res://resources/item_info/compass.tres" id="62_compass"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_j5px3"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -111,7 +112,7 @@ hexes = Array[ExtResource("3_l5cgh")]([ExtResource("4_vgks2"), ExtResource("5_dy
 structures = Array[ExtResource("10_gt4lb")]([ExtResource("11_ya6yc"), ExtResource("12_mflgo"), ExtResource("13_ancient_ruins_structure"), ExtResource("14_8ui5n"), ExtResource("16_jehah"), ExtResource("19_isfgf"), ExtResource("18_58tnd"), ExtResource("20_qk31b"), ExtResource("56_water_source")])
 scenes = Array[ExtResource("15_ya6yc")]([ExtResource("12_vgks2"), ExtResource("16_gt4lb"), ExtResource("18_34frw"), ExtResource("18_mflgo"), ExtResource("20_8ui5n"), ExtResource("22_jehah"), ExtResource("26_isfgf"), ExtResource("58_journal"), ExtResource("29_moyyc"), ExtResource("30_f0nuf"), ExtResource("37_33j8a"), ExtResource("38_eirlg"), ExtResource("39_eirlg"), ExtResource("50_craft")])
 regions = Array[ExtResource("5_3hfy5")]([ExtResource("6_7pvxh"), ExtResource("9_y3xxt"), ExtResource("10_ancient_ruins_region")])
-items = Array[ExtResource("27_phl1g")]([ExtResource("30_agklt"), ExtResource("28_58tnd"), ExtResource("31_x7ldt"), ExtResource("32_moyyc"), ExtResource("33_f0nuf"), ExtResource("47_742t5"), ExtResource("51_seed"), ExtResource("52_water"), ExtResource("53_grain"), ExtResource("54_support"), ExtResource("55_bucket"), ExtResource("59_ancient_coin"), ExtResource("60_relic_fragment"), ExtResource("61_old_guild_seal")])
+items = Array[ExtResource("27_phl1g")]([ExtResource("30_agklt"), ExtResource("28_58tnd"), ExtResource("31_x7ldt"), ExtResource("32_moyyc"), ExtResource("33_f0nuf"), ExtResource("47_742t5"), ExtResource("51_seed"), ExtResource("52_water"), ExtResource("53_grain"), ExtResource("54_support"), ExtResource("55_bucket"), ExtResource("59_ancient_coin"), ExtResource("60_relic_fragment"), ExtResource("61_old_guild_seal"), ExtResource("62_compass")])
 npcs = Array[ExtResource("45_h5su3")]([ExtResource("46_c6i2r")])
 
 [node name="shared_components" type="Node" parent="." unique_id=2003265152]

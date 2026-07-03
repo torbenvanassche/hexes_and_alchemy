@@ -34,6 +34,7 @@ signal hex_picked(hex: HexBase)
 
 func _ready() -> void:
 	interactor_component.hex_picked.connect(_on_hex_picked)
+	inventory.add(DataManager.instance.get_item_by_name("ore_iron"), 10)
 
 func _physics_process(delta: float) -> void:
 	movement.physics_process(delta)

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ItemInfo" format=3]
+
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="1_item"]
+[ext_resource type="Resource" uid="uid://o03k1cg30nlw" path="res://resources/item_info/iron_ore.tres" id="2_iron"]
+[ext_resource type="Resource" uid="uid://dwrv8ceflmsjy" path="res://resources/item_info/gold_ore.tres" id="3_gold"]
+[ext_resource type="Texture2D" uid="uid://danvx2po0fjw6" path="res://sprites/items/compass.png" id="4_texture"]
+
+[resource]
+script = ExtResource("1_item")
+unique_id = "compass"
+translation_key_name = "ITEM_COMPASS_NAME"
+translation_key_description = "ITEM_COMPASS_DESCRIPTION"
+texture = ExtResource("4_texture")
+buy_value = 24
+sell_value = 14
+recipe = Dictionary[ExtResource("1_item"), int]({
+ExtResource("2_iron"): 2,
+ExtResource("3_gold"): 1
+})
+metadata/_custom_type_script = "uid://c8ngjbq8w5gjr"

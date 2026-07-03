@@ -144,6 +144,8 @@ ITEM_CURRENCY_DESCRIPTION,A coin used for trade.,A coin used for trade.
 ITEM_COUNT_LABEL,x%s,x%s
 ITEM_BUCKET_NAME,Bucket,Bucket
 ITEM_BUCKET_DESCRIPTION,An empty bucket that can be filled at a well.,An empty bucket that can be filled at a well.
+ITEM_COMPASS_NAME,Compass,Compass
+ITEM_COMPASS_DESCRIPTION,A navigational tool for plotting safer routes through unknown lands.,A navigational tool for plotting safer routes through unknown lands.
 ITEM_DOCK_BLUEPRINT_NAME,Dock blueprint,Dock blueprint
 ITEM_DOCK_BLUEPRINT_DESCRIPTION,A plan for building docks.,A plan for building docks.
 ITEM_ORE_GOLD_NAME,Gold ore,Gold ore
