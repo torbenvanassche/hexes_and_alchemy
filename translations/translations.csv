@@ -12,6 +12,7 @@ KEYBIND_MOVE_LEFT,move left,move left
 KEYBIND_MOVE_RIGHT,move right,move right
 KEYBIND_SPRINT,sprint,sprint
 KEYBIND_PRIMARY_ACTION,primary action,primary action
+KEYBIND_INVENTORY,inventory,inventory
 KEYBIND_CANCEL,cancel,cancel
 KEYBIND_JOURNAL,journal,journal
 SETTINGS_TAB_GAME,game,game
