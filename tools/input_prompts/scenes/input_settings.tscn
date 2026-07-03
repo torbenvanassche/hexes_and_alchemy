@@ -43,11 +43,15 @@ size_flags_horizontal = 3
 layout_mode = 2
 
 [node name="reset" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1115987529]
+custom_minimum_size = Vector2(0, 58)
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 22
 text = "INPUT_RESET_CONTROL_BINDINGS"
 
 [node name="confirm" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=201621034]
+custom_minimum_size = Vector2(0, 58)
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 22
 text = "INPUT_APPLY_CHANGES"

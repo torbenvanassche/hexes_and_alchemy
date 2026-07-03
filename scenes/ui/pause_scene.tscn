@@ -1,7 +1,29 @@
-[gd_scene format=3 uid="uid://bd0i5jrt7650t"]
+[gd_scene load_steps=6 format=3 uid="uid://bd0i5jrt7650t"]
 
 [ext_resource type="Script" uid="uid://bem2f43dlfne5" path="res://scripts/scene_controllers/pause_screen.gd" id="1_53068"]
 [ext_resource type="Theme" uid="uid://dae2b2hfpj0l2" path="res://themes/base_theme.theme" id="2_theme"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_overlay"]
+bg_color = Color(0, 0, 0, 0.58)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_menu_panel"]
+content_margin_left = 44.0
+content_margin_top = 38.0
+content_margin_right = 44.0
+content_margin_bottom = 44.0
+bg_color = Color(0.120000004, 0.086, 0.055, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.44, 0.31, 0.16, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header_line"]
+bg_color = Color(0.62, 0.44, 0.22, 0.75)
 
 [node name="Panel" type="Panel" unique_id=1103910319 node_paths=PackedStringArray("resume_button", "settings_button", "quit_button")]
 process_mode = 2
@@ -11,10 +33,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("2_theme")
+theme_override_styles/panel = SubResource("StyleBoxFlat_overlay")
 script = ExtResource("1_53068")
-resume_button = NodePath("CenterContainer/VBoxContainer/resume")
-settings_button = NodePath("CenterContainer/VBoxContainer/settings")
-quit_button = NodePath("CenterContainer/VBoxContainer/quit")
+resume_button = NodePath("CenterContainer/MenuPanel/MarginContainer/MenuLayout/Actions/resume")
+settings_button = NodePath("CenterContainer/MenuPanel/MarginContainer/MenuLayout/Actions/settings")
+quit_button = NodePath("CenterContainer/MenuPanel/MarginContainer/MenuLayout/Actions/quit")
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=668023114]
 layout_mode = 1
@@ -24,19 +47,47 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=790131330]
+[node name="MenuPanel" type="PanelContainer" parent="CenterContainer"]
+custom_minimum_size = Vector2(620, 0)
 layout_mode = 2
-theme_override_constants/separation = 16
+theme_override_styles/panel = SubResource("StyleBoxFlat_menu_panel")
 
-[node name="resume" type="Button" parent="CenterContainer/VBoxContainer" unique_id=522419469]
-custom_minimum_size = Vector2(150, 0)
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/MenuPanel"]
 layout_mode = 2
+
+[node name="MenuLayout" type="VBoxContainer" parent="CenterContainer/MenuPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 28
+
+[node name="Title" type="Label" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 52
+text = "SCENE_PAUSE_MENU_NAME"
+horizontal_alignment = 1
+
+[node name="HeaderLine" type="Panel" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout"]
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_header_line")
+
+[node name="Actions" type="VBoxContainer" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout" unique_id=790131330]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="resume" type="Button" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout/Actions" unique_id=522419469]
+custom_minimum_size = Vector2(500, 76)
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
 text = "PAUSE_RESUME"
 
-[node name="settings" type="Button" parent="CenterContainer/VBoxContainer" unique_id=2066547482]
+[node name="settings" type="Button" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout/Actions" unique_id=2066547482]
+custom_minimum_size = Vector2(500, 76)
 layout_mode = 2
+theme_override_font_sizes/font_size = 26
 text = "PAUSE_SETTINGS"
 
-[node name="quit" type="Button" parent="CenterContainer/VBoxContainer" unique_id=746646866]
+[node name="quit" type="Button" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout/Actions" unique_id=746646866]
+custom_minimum_size = Vector2(500, 76)
 layout_mode = 2
+theme_override_font_sizes/font_size = 26
 text = "PAUSE_QUIT"

@@ -6,8 +6,44 @@
 [ext_resource type="Texture2D" uid="uid://bfjflheeann5w" path="res://tools/input_prompts/left.png" id="3_xi83m"]
 [ext_resource type="Theme" uid="uid://dae2b2hfpj0l2" path="res://themes/base_theme.theme" id="4_theme"]
 
-[node name="Control" type="VBoxContainer" unique_id=1653328238 node_paths=PackedStringArray("button_group_parent", "tab_instance_parent", "group_buttons", "back_button")]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_overlay"]
+bg_color = Color(0, 0, 0, 0.62)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dialog"]
+content_margin_left = 36.0
+content_margin_top = 30.0
+content_margin_right = 36.0
+content_margin_bottom = 30.0
+bg_color = Color(0.105, 0.076, 0.049, 0.97)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.44, 0.31, 0.16, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_content"]
+content_margin_left = 22.0
+content_margin_top = 20.0
+content_margin_right = 22.0
+content_margin_bottom = 20.0
+bg_color = Color(0.055, 0.04, 0.028, 0.72)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.28, 0.2, 0.12, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="Control" type="Control" unique_id=1653328238 node_paths=PackedStringArray("button_group_parent", "tab_instance_parent", "group_buttons", "back_button")]
 process_mode = 3
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -15,37 +51,103 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("4_theme")
 script = ExtResource("1_pfmrl")
-button_group_parent = NodePath("tab_buttons")
-tab_instance_parent = NodePath("tab_instances")
+button_group_parent = NodePath("CenterContainer/SettingsDialog/MarginContainer/DialogLayout/MainContent/Navigation")
+tab_instance_parent = NodePath("CenterContainer/SettingsDialog/MarginContainer/DialogLayout/MainContent/ContentPanel/MarginContainer/tab_instances")
 group_buttons = {
-NodePath("tab_buttons/GAME"): ExtResource("2_6hi4t"),
-NodePath("tab_buttons/INPUT"): ExtResource("2_j3boo")
+NodePath("CenterContainer/SettingsDialog/MarginContainer/DialogLayout/MainContent/Navigation/GAME"): ExtResource("2_6hi4t"),
+NodePath("CenterContainer/SettingsDialog/MarginContainer/DialogLayout/MainContent/Navigation/INPUT"): ExtResource("2_j3boo")
 }
-back_button = NodePath("tab_buttons/BACK")
+back_button = NodePath("CenterContainer/SettingsDialog/MarginContainer/DialogLayout/Footer/BACK")
 
-[node name="tab_buttons" type="HBoxContainer" parent="." unique_id=1257880228]
-custom_minimum_size = Vector2(0, 30)
+[node name="Overlay" type="Panel" parent="." unique_id=27493984]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_overlay")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=519210432]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SettingsDialog" type="PanelContainer" parent="CenterContainer" unique_id=42747668]
+custom_minimum_size = Vector2(1180, 740)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_dialog")
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/SettingsDialog" unique_id=1032114656]
 layout_mode = 2
 
-[node name="BACK" type="Button" parent="tab_buttons" unique_id=455643234]
-custom_minimum_size = Vector2(30, 30)
+[node name="DialogLayout" type="VBoxContainer" parent="CenterContainer/SettingsDialog/MarginContainer" unique_id=62352839]
+layout_mode = 2
+theme_override_constants/separation = 22
+
+[node name="Header" type="HBoxContainer" parent="CenterContainer/SettingsDialog/MarginContainer/DialogLayout" unique_id=2031921283]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="CenterContainer/SettingsDialog/MarginContainer/DialogLayout/Header" unique_id=874138002]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 44
+text = "SCENE_SETTINGS_MENU_NAME"
+
+[node name="MainContent" type="HBoxContainer" parent="CenterContainer/SettingsDialog/MarginContainer/DialogLayout" unique_id=1280618574]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 22
+
+[node name="Navigation" type="VBoxContainer" parent="CenterContainer/SettingsDialog/MarginContainer/DialogLayout/MainContent" unique_id=1257880228]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="GAME" type="Button" parent="CenterContainer/SettingsDialog/MarginContainer/DialogLayout/MainContent/Navigation" unique_id=406211892]
+custom_minimum_size = Vector2(0, 74)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 26
+text = "SETTINGS_TAB_GAME"
+alignment = 0
+
+[node name="INPUT" type="Button" parent="CenterContainer/SettingsDialog/MarginContainer/DialogLayout/MainContent/Navigation" unique_id=4257191]
+custom_minimum_size = Vector2(0, 74)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 26
+text = "SETTINGS_TAB_INPUT"
+alignment = 0
+
+[node name="ContentPanel" type="PanelContainer" parent="CenterContainer/SettingsDialog/MarginContainer/DialogLayout/MainContent" unique_id=1305293626]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_content")
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/SettingsDialog/MarginContainer/DialogLayout/MainContent/ContentPanel" unique_id=2094888374]
+layout_mode = 2
+
+[node name="tab_instances" type="Control" parent="CenterContainer/SettingsDialog/MarginContainer/DialogLayout/MainContent/ContentPanel/MarginContainer" unique_id=1740426083]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Footer" type="HBoxContainer" parent="CenterContainer/SettingsDialog/MarginContainer/DialogLayout" unique_id=541182191]
+layout_mode = 2
+alignment = 2
+
+[node name="BACK" type="Button" parent="CenterContainer/SettingsDialog/MarginContainer/DialogLayout/Footer" unique_id=455643234]
+custom_minimum_size = Vector2(220, 66)
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 40
+text = "Back"
 icon = ExtResource("3_xi83m")
 expand_icon = true
-
-[node name="GAME" type="Button" parent="tab_buttons" unique_id=406211892]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
-text = "SETTINGS_TAB_GAME"
-
-[node name="INPUT" type="Button" parent="tab_buttons" unique_id=4257191]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "SETTINGS_TAB_INPUT"
-
-[node name="tab_instances" type="Control" parent="." unique_id=1740426083]
-layout_mode = 2
-size_flags_vertical = 3

@@ -8,10 +8,11 @@ func _ready() -> void:
 	resume_button.pressed.connect(Manager.instance.pause_game.bind(false))
 	
 	settings_button.pressed.connect(_on_settings)
+	quit_button.pressed.connect(_on_quit)
 	
 func _on_settings() -> void:
 	SceneManager.set_visible_by_name("pause_menu", false);
 	SceneManager.add(DataManager.instance.get_scene_by_name("settings_menu"))
 	
 func _on_quit() -> void:
-	pass
+	get_tree().quit()
