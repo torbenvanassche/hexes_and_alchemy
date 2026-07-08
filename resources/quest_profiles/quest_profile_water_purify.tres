@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="QuestProfile" format=3]
+
+[ext_resource type="Script" path="res://scripts/quests/quest_profile.gd" id="1_profile"]
+[ext_resource type="Script" path="res://scripts/quests/quest_outcome.gd" id="2_outcome_script"]
+[ext_resource type="Resource" path="res://resources/quest_outcomes/quest_outcome_water_restore.tres" id="3_outcome"]
+
+[resource]
+script = ExtResource("1_profile")
+quest_key = "purify"
+behaviour = "purify"
+translation_key_name = "QUEST_TYPE_PURIFY"
+description_key = "QUEST_DESC_WATER_PURIFY"
+risk_key = "QUEST_RISK_SAFE"
+expected_reward_key = "QUEST_REWARD_SOURCE_RECOVERY"
+duration_seconds = 6.0
+available_states = Array[String](["TAINTED"])
+outcomes = Array[ExtResource("2_outcome_script")]([ExtResource("3_outcome")])

@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="QuestProfile" format=3]
+
+[ext_resource type="Script" path="res://scripts/quests/quest_profile.gd" id="1_profile"]
+[ext_resource type="Script" path="res://scripts/quests/quest_outcome.gd" id="2_outcome_script"]
+[ext_resource type="Resource" path="res://resources/quest_outcomes/quest_outcome_ruins_delve_success.tres" id="3_success"]
+[ext_resource type="Resource" path="res://resources/quest_outcomes/quest_outcome_ruins_delve_danger.tres" id="4_danger"]
+
+[resource]
+script = ExtResource("1_profile")
+quest_key = "delve"
+behaviour = "delve"
+translation_key_name = "QUEST_TYPE_DELVE"
+description_key = "QUEST_DESC_RUINS_DELVE"
+risk_key = "QUEST_RISK_DANGEROUS"
+expected_reward_key = "QUEST_REWARD_DEEP_CACHE"
+duration_seconds = 10.0
+available_states = Array[String](["SURVEYED", "DANGEROUS", "SECURED"])
+outcomes = Array[ExtResource("2_outcome_script")]([ExtResource("3_success"), ExtResource("4_danger")])

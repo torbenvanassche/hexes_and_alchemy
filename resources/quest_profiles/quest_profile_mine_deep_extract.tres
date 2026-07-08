@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="QuestProfile" format=3]
+
+[ext_resource type="Script" path="res://scripts/quests/quest_profile.gd" id="1_profile"]
+
+[resource]
+script = ExtResource("1_profile")
+quest_key = "deep_extract"
+behaviour = "extract"
+translation_key_name = "QUEST_TYPE_DEEP_EXTRACT"
+description_key = "QUEST_DESC_MINE_DEEP_EXTRACT"
+risk_key = "QUEST_RISK_DANGEROUS"
+expected_reward_key = "QUEST_REWARD_MORE_ORE"
+duration_seconds = 11.0
+available_states = Array[String](["POOR_VEIN", "RICH_VEIN"])
+modifiers = {
+"collapse_bonus": 0.18,
+"exhaust_bonus": 0.08,
+"reward_rolls": 2
+}

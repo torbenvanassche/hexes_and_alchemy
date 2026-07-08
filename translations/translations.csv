@@ -56,17 +56,81 @@ QUEST_CREATION_SUPPLIES,Required supplies,Required supplies
 QUEST_CREATION_CREATE,Create quest,Create quest
 QUEST_CREATION_NO_AVAILABLE_QUESTS,No quests are available here.,No quests are available here.
 QUEST_CREATION_UNREACHABLE,"No adventurer can reach this location from the settlement yet.","No adventurer can reach this location from the settlement yet."
+QUEST_DETAIL_DURATION,%ss,%ss
+QUEST_DETAIL_RISK,Risk: %s,Risk: %s
+QUEST_DETAIL_EXPECTED_REWARD,Reward: %s,Reward: %s
 QUEST_LOCATION_DISTANCE,%s (%s tiles),%s (%s tiles)
 QUEST_TYPE_FETCH,Fetch,Fetch
 QUEST_TYPE_PLANT,Plant,Plant
 QUEST_TYPE_WATER,Water,Water
 QUEST_TYPE_HARVEST,Harvest,Harvest
+QUEST_TYPE_RUSH_HARVEST,Rush harvest,Rush harvest
+QUEST_TYPE_CAREFUL_HARVEST,Careful harvest,Careful harvest
 QUEST_TYPE_CLEAR,Clear,Clear
 QUEST_TYPE_PROSPECT,Prospect,Prospect
 QUEST_TYPE_EXTRACT,Extract,Extract
+QUEST_TYPE_DEEP_EXTRACT,Deep extract,Deep extract
+QUEST_TYPE_STABILIZED_EXTRACT,Stabilized extract,Stabilized extract
 QUEST_TYPE_FILL,Fill,Fill
+QUEST_TYPE_DRAW_EXTRA,Draw extra,Draw extra
+QUEST_TYPE_PURIFY,Purify,Purify
+QUEST_TYPE_MAINTAIN,Maintain,Maintain
 QUEST_TYPE_REINFORCE,Reinforce,Reinforce
 QUEST_TYPE_INVESTIGATE,Investigate,Investigate
+QUEST_TYPE_FORAGE,Forage,Forage
+QUEST_TYPE_FELL_TIMBER,Fell timber,Fell timber
+QUEST_TYPE_REPLANT,Replant,Replant
+QUEST_TYPE_SURVEY,Survey,Survey
+QUEST_TYPE_SALVAGE,Salvage,Salvage
+QUEST_TYPE_DELVE,Delve,Delve
+QUEST_TYPE_SECURE,Secure,Secure
+QUEST_RISK_SAFE,Safe,Safe
+QUEST_RISK_UNCERTAIN,Uncertain,Uncertain
+QUEST_RISK_DANGEROUS,Dangerous,Dangerous
+QUEST_RISK_DEPLETES_SITE,Depletes site,Depletes site
+QUEST_RISK_LOW_YIELD,Low yield,Low yield
+QUEST_REWARD_SEEDS_WOOD,Seeds and light wood,Seeds and light wood
+QUEST_REWARD_WOOD_SEEDS,Wood and possible seeds,Wood and possible seeds
+QUEST_REWARD_LOTS_OF_WOOD,A large wood haul,A large wood haul
+QUEST_REWARD_SITE_RECOVERY,Site recovery,Site recovery
+QUEST_REWARD_REVEALS_OPTIONS,New ruin options,New ruin options
+QUEST_REWARD_COINS_RELICS,Coins and relic fragments,Coins and relic fragments
+QUEST_REWARD_DEEP_CACHE,A deep cache,A deep cache
+QUEST_REWARD_SAFER_SITE,Safer future quests,Safer future quests
+QUEST_REWARD_WATER_BUCKET,A water bucket,A water bucket
+QUEST_REWARD_MORE_WATER,Extra water,Extra water
+QUEST_REWARD_SOURCE_RECOVERY,Source recovery,Source recovery
+QUEST_REWARD_CROP_PROGRESS,Crop progress,Crop progress
+QUEST_REWARD_GRAIN_SEEDS,Grain and possible seeds,Grain and possible seeds
+QUEST_REWARD_FAST_GRAIN,Fast grain,Fast grain
+QUEST_REWARD_MORE_GRAIN_SEEDS,More grain and seeds,More grain and seeds
+QUEST_REWARD_CROP_RESET,Cleared field,Cleared field
+QUEST_REWARD_REVEALS_VEIN,Reveals a vein,Reveals a vein
+QUEST_REWARD_ORE,Ore,Ore
+QUEST_REWARD_MORE_ORE,More ore,More ore
+QUEST_DESC_FOREST_FORAGE,Gather loose wood and search for usable seeds.,Gather loose wood and search for usable seeds.
+QUEST_DESC_FOREST_HARVEST,Cut usable wood and let the grove regrow later.,Cut usable wood and let the grove regrow later.
+QUEST_DESC_FOREST_FELL_TIMBER,Take a larger timber haul and deplete the grove.,Take a larger timber haul and deplete the grove.
+QUEST_DESC_FOREST_REPLANT,Spend seeds to restore a depleted grove immediately.,Spend seeds to restore a depleted grove immediately.
+QUEST_DESC_RUINS_SURVEY,Map the ruin before committing to riskier work.,Map the ruin before committing to riskier work.
+QUEST_DESC_RUINS_SALVAGE,Recover easy valuables and close out the site.,Recover easy valuables and close out the site.
+QUEST_DESC_RUINS_DELVE,Push deeper for better finds with a chance of danger.,Push deeper for better finds with a chance of danger.
+QUEST_DESC_RUINS_SECURE,Use support beams to make the ruin safer.,Use support beams to make the ruin safer.
+QUEST_DESC_WATER_FILL,Fill one bucket from the source.,Fill one bucket from the source.
+QUEST_DESC_WATER_DRAW_EXTRA,Draw more water quickly but strain the source.,Draw more water quickly but strain the source.
+QUEST_DESC_WATER_PURIFY,Clear a tainted source.,Clear a tainted source.
+QUEST_DESC_WATER_MAINTAIN,Restore a strained source.,Restore a strained source.
+QUEST_DESC_FARM_PLANT,Sow seeds in a fallow field.,Sow seeds in a fallow field.
+QUEST_DESC_FARM_WATER,Water planted crops.,Water planted crops.
+QUEST_DESC_FARM_HARVEST,Harvest the crop at a normal pace.,Harvest the crop at a normal pace.
+QUEST_DESC_FARM_RUSH_HARVEST,Harvest quickly for a smaller yield.,Harvest quickly for a smaller yield.
+QUEST_DESC_FARM_CAREFUL_HARVEST,Take longer to improve the yield and seed return.,Take longer to improve the yield and seed return.
+QUEST_DESC_FARM_CLEAR,Clear dead growth from the field.,Clear dead growth from the field.
+QUEST_DESC_MINE_PROSPECT,Survey the mine and identify the vein.,Survey the mine and identify the vein.
+QUEST_DESC_MINE_EXTRACT,Extract ore with normal risk.,Extract ore with normal risk.
+QUEST_DESC_MINE_DEEP_EXTRACT,Push deeper for more ore and more danger.,Push deeper for more ore and more danger.
+QUEST_DESC_MINE_STABILIZED_EXTRACT,Spend beams to reduce extraction risk.,Spend beams to reduce extraction risk.
+QUEST_DESC_MINE_REINFORCE,Repair an unstable mine shaft.,Repair an unstable mine shaft.
 QUEST_STATE_WAITING,Waiting,Waiting
 QUEST_STATE_EN_ROUTE,En route,En route
 QUEST_STATE_IN_PROGRESS,In progress,In progress

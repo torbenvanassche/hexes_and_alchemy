@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="QuestProfile" format=3]
+
+[ext_resource type="Script" path="res://scripts/quests/quest_profile.gd" id="1_profile"]
+
+[resource]
+script = ExtResource("1_profile")
+quest_key = "clear"
+behaviour = "clear"
+translation_key_name = "QUEST_TYPE_CLEAR"
+description_key = "QUEST_DESC_FARM_CLEAR"
+risk_key = "QUEST_RISK_SAFE"
+expected_reward_key = "QUEST_REWARD_CROP_RESET"
+duration_seconds = 5.0
+available_states = Array[String](["DEAD"])

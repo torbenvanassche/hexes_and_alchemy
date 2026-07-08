@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="QuestProfile" format=3]
+
+[ext_resource type="Script" path="res://scripts/quests/quest_profile.gd" id="1_profile"]
+[ext_resource type="Script" path="res://scripts/quests/quest_outcome.gd" id="2_outcome_script"]
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="3_item_script"]
+[ext_resource type="Resource" uid="uid://cedqercu5lay2" path="res://resources/item_info/seed_pouch.tres" id="4_seed"]
+[ext_resource type="Resource" path="res://resources/quest_outcomes/quest_outcome_forest_replant.tres" id="5_outcome"]
+
+[resource]
+script = ExtResource("1_profile")
+quest_key = "replant"
+behaviour = "replant"
+translation_key_name = "QUEST_TYPE_REPLANT"
+description_key = "QUEST_DESC_FOREST_REPLANT"
+risk_key = "QUEST_RISK_SAFE"
+expected_reward_key = "QUEST_REWARD_SITE_RECOVERY"
+duration_seconds = 5.0
+available_states = Array[String](["DEPLETED"])
+required_supplies = Dictionary[ExtResource("3_item_script"), int]({
+ExtResource("4_seed"): 1
+})
+outcomes = Array[ExtResource("2_outcome_script")]([ExtResource("5_outcome")])

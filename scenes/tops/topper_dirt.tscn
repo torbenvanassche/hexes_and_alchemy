@@ -10,6 +10,13 @@
 [ext_resource type="PackedScene" uid="uid://c2hlhjmdl7v77" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/building_grain_seeds.glb" id="4_s8nt4"]
 [ext_resource type="Resource" path="res://resources/item_info/water_bucket.tres" id="4_water"]
 [ext_resource type="PackedScene" uid="uid://0kpili04lb" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/building_grain_dead.glb" id="6_ox7li"]
+[ext_resource type="Script" path="res://scripts/quests/quest_profile.gd" id="7_profile_script"]
+[ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_farm_plant.tres" id="8_plant"]
+[ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_farm_water.tres" id="9_water"]
+[ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_farm_harvest.tres" id="10_harvest"]
+[ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_farm_rush_harvest.tres" id="11_rush"]
+[ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_farm_careful_harvest.tres" id="12_careful"]
+[ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_farm_clear.tres" id="13_clear"]
 
 [sub_resource type="BitMap" id="BitMap_uk8kr"]
 data = {
@@ -41,6 +48,7 @@ script = ExtResource("1_whuaq")
 quest_types = Array[String](["plant", "water", "harvest", "clear"])
 bitmap = SubResource("BitMap_uk8kr")
 quest_supply_requirements = Array[ExtResource("2_esn6e")]([SubResource("Resource_hu2ny"), SubResource("Resource_water_supplies")])
+quest_profiles = Array[ExtResource("7_profile_script")]([ExtResource("8_plant"), ExtResource("9_water"), ExtResource("10_harvest"), ExtResource("11_rush"), ExtResource("12_careful"), ExtResource("13_clear")])
 
 [node name="mesh_fallow" parent="." unique_id=624363515 instance=ExtResource("2_h10pt")]
 

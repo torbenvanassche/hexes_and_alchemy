@@ -23,6 +23,7 @@ enum CropState {
 var _quest_running: bool = false
 var _overgrow_timer: SceneTreeTimer = null
 var _wither_timer: SceneTreeTimer = null
+var _pending_reward: Dictionary[ItemInfo, int] = {}
 
 func _ready() -> void:
 	super()
@@ -79,31 +80,49 @@ func execute_quest(q: Quest) -> void:
 	if _quest_running:
 		return
 	_quest_running = true
+	_pending_reward.clear()
+	var behaviour := get_quest_behaviour(q.quest_key)
 
-	match _current_crop_state():
-		CropState.FALLOW:
-			await get_tree().create_timer(plant_quest_time).timeout
+	match behaviour:
+		"plant":
+			await get_tree().create_timer(get_quest_duration(q.quest_key, plant_quest_time)).timeout
 			_set_crop_state(CropState.PLANTED)
-		CropState.PLANTED:
-			await get_tree().create_timer(water_quest_time).timeout
+		"water":
+			await get_tree().create_timer(get_quest_duration(q.quest_key, water_quest_time)).timeout
 			_set_crop_state(CropState.WATERED)
-		CropState.WATERED:
-			await get_tree().create_timer(harvest_quest_time).timeout
+		"harvest":
+			await get_tree().create_timer(get_quest_duration(q.quest_key, harvest_quest_time)).timeout
 			_set_crop_state(CropState.READY)
-		CropState.DEAD:
-			await get_tree().create_timer(plant_quest_time).timeout
+			var watered_outcome := roll_quest_outcome(q.quest_key)
+			if watered_outcome != null:
+				_pending_reward = watered_outcome.roll_loot()
+				watered_outcome.complete_journal_task()
+			else:
+				var watered_lootable := hex.structure.structure_info as LootableStructureInfo
+				if watered_lootable != null:
+					_pending_reward = watered_lootable.roll_loot()
+		"collect":
+			await get_tree().create_timer(get_quest_duration(q.quest_key, harvest_quest_time)).timeout
+			var outcome := roll_quest_outcome(q.quest_key)
+			if outcome != null:
+				_pending_reward = outcome.roll_loot()
+				outcome.complete_journal_task()
+			else:
+				var lootable := hex.structure.structure_info as LootableStructureInfo
+				if lootable != null:
+					_pending_reward = lootable.roll_loot()
+		"clear":
+			await get_tree().create_timer(get_quest_duration(q.quest_key, plant_quest_time)).timeout
 			_set_crop_state(CropState.FALLOW)
 
 	q.return_from_quest()
 	_quest_running = false
 
 func complete_quest(_q: Quest) -> void:
-	if _current_crop_state() != CropState.READY:
+	if _pending_reward.is_empty():
 		return
 		
-	var l := (hex.structure.structure_info as LootableStructureInfo)
-	if l != null:
-		var loot := l.roll_loot()
-		for item: ItemInfo in loot.keys():
-			Manager.instance.player_instance.inventory.add(item, loot[item])
+	for item: ItemInfo in _pending_reward.keys():
+		Manager.instance.player_instance.inventory.add(item, _pending_reward[item])
+	_pending_reward.clear()
 	_set_crop_state(CropState.FALLOW)

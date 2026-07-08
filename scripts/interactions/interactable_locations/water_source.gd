@@ -1,10 +1,29 @@
 class_name WaterSource extends QuestObjective
 
+enum WaterState {
+	FRESH,
+	LOW,
+	TAINTED
+}
+
 @export var fill_time: float = 4.0
 @export var reward_item: ItemInfo
 @export var reward_amount: int = 1
 
+@onready var low_water_marker: Node3D = get_node_or_null("low_water_marker") as Node3D
+@onready var tainted_marker: Node3D = get_node_or_null("tainted_marker") as Node3D
+@onready var maintained_marker: Node3D = get_node_or_null("maintained_marker") as Node3D
+
 var _quest_running: bool = false
+var _pending_reward: Dictionary[ItemInfo, int] = {}
+
+func _ready() -> void:
+	super()
+	var states: Array[String] = []
+	for state_name in WaterState.keys():
+		states.append(state_name)
+	state_machine = StateMachine.new(states)
+	_set_water_state(WaterState.FRESH)
 
 func interact() -> void:
 	pass
@@ -17,12 +36,42 @@ func execute_quest(q: Quest) -> void:
 		return
 
 	_quest_running = true
-	await get_tree().create_timer(fill_time).timeout
+	_pending_reward.clear()
+	var behaviour := get_quest_behaviour(q.quest_key, "fill")
+	await get_tree().create_timer(get_quest_duration(q.quest_key, fill_time)).timeout
+
+	var outcome := roll_quest_outcome(q.quest_key)
+	if outcome != null:
+		_pending_reward = outcome.roll_loot()
+		if outcome.has_next_state():
+			_set_water_state(WaterState[outcome.next_state] as WaterState)
+		outcome.complete_journal_task()
+	elif reward_item != null:
+		_pending_reward[reward_item] = reward_amount
+		match behaviour:
+			"purify", "maintain":
+				_set_water_state(WaterState.FRESH)
+
 	q.return_from_quest()
 	_quest_running = false
 
 func complete_quest(_q: Quest) -> void:
-	if reward_item == null or Manager.instance.player_instance == null:
+	if Manager.instance.player_instance == null:
 		return
 
-	Manager.instance.player_instance.inventory.add(reward_item, reward_amount)
+	for item: ItemInfo in _pending_reward.keys():
+		Manager.instance.player_instance.inventory.add(item, _pending_reward[item])
+	_pending_reward.clear()
+
+func _set_water_state(state: WaterState) -> void:
+	state_machine.set_state(WaterState.keys()[state])
+	_update_markers(state)
+	Manager.instance.quests.quest_availability_changed.emit()
+
+func _update_markers(state: WaterState) -> void:
+	if low_water_marker != null:
+		low_water_marker.visible = state == WaterState.LOW
+	if tainted_marker != null:
+		tainted_marker.visible = state == WaterState.TAINTED
+	if maintained_marker != null:
+		maintained_marker.visible = false

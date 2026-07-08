@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="QuestProfile" format=3]
+
+[ext_resource type="Script" path="res://scripts/quests/quest_profile.gd" id="1_profile"]
+
+[resource]
+script = ExtResource("1_profile")
+quest_key = "prospect"
+behaviour = "prospect"
+translation_key_name = "QUEST_TYPE_PROSPECT"
+description_key = "QUEST_DESC_MINE_PROSPECT"
+risk_key = "QUEST_RISK_SAFE"
+expected_reward_key = "QUEST_REWARD_REVEALS_VEIN"
+duration_seconds = 6.0
+available_states = Array[String](["UNSURVEYED"])

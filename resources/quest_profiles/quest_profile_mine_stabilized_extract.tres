@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="QuestProfile" format=3]
+
+[ext_resource type="Script" path="res://scripts/quests/quest_profile.gd" id="1_profile"]
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="2_item_script"]
+[ext_resource type="Resource" uid="uid://m72hate3ge7x" path="res://resources/item_info/support_beams.tres" id="3_support"]
+
+[resource]
+script = ExtResource("1_profile")
+quest_key = "stabilized_extract"
+behaviour = "extract"
+translation_key_name = "QUEST_TYPE_STABILIZED_EXTRACT"
+description_key = "QUEST_DESC_MINE_STABILIZED_EXTRACT"
+risk_key = "QUEST_RISK_SAFE"
+expected_reward_key = "QUEST_REWARD_ORE"
+duration_seconds = 10.0
+available_states = Array[String](["POOR_VEIN", "RICH_VEIN"])
+required_supplies = Dictionary[ExtResource("2_item_script"), int]({
+ExtResource("3_support"): 1
+})
+modifiers = {
+"collapse_multiplier": 0.35,
+"exhaust_multiplier": 0.75
+}

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="QuestProfile" format=3]
+
+[ext_resource type="Script" path="res://scripts/quests/quest_profile.gd" id="1_profile"]
+[ext_resource type="Script" path="res://scripts/quests/quest_outcome.gd" id="2_outcome_script"]
+[ext_resource type="Resource" path="res://resources/quest_outcomes/quest_outcome_ruins_salvage.tres" id="3_outcome"]
+
+[resource]
+script = ExtResource("1_profile")
+quest_key = "salvage"
+behaviour = "salvage"
+translation_key_name = "QUEST_TYPE_SALVAGE"
+description_key = "QUEST_DESC_RUINS_SALVAGE"
+risk_key = "QUEST_RISK_SAFE"
+expected_reward_key = "QUEST_REWARD_COINS_RELICS"
+duration_seconds = 7.0
+available_states = Array[String](["AVAILABLE", "SURVEYED", "SECURED"])
+outcomes = Array[ExtResource("2_outcome_script")]([ExtResource("3_outcome")])

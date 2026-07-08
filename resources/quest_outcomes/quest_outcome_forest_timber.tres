@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="QuestOutcome" format=3]
+
+[ext_resource type="Script" path="res://scripts/quests/quest_outcome.gd" id="1_outcome"]
+[ext_resource type="Resource" path="res://resources/loot_tables/quest_variants/forest_timber.tres" id="2_loot"]
+
+[resource]
+script = ExtResource("1_outcome")
+loot_table = ExtResource("2_loot")
+next_state = "DEPLETED"

@@ -12,6 +12,12 @@
 [ext_resource type="PackedScene" uid="uid://mbedk8b2ca54" path="res://meshes/kay_dungeon/rubble_half.glb" id="8_mbedk"]
 [ext_resource type="Script" uid="uid://bju85emrqs252" path="res://tools/quest_system/scripts/quest_supply_requirement.gd" id="9_supply"]
 [ext_resource type="Resource" uid="uid://m72hate3ge7x" path="res://resources/item_info/support_beams.tres" id="10_support"]
+[ext_resource type="Script" path="res://scripts/quests/quest_profile.gd" id="11_profile_script"]
+[ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_mine_prospect.tres" id="12_prospect"]
+[ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_mine_extract.tres" id="13_extract"]
+[ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_mine_deep_extract.tres" id="14_deep"]
+[ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_mine_stabilized_extract.tres" id="15_stabilized"]
+[ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_mine_reinforce.tres" id="16_reinforce"]
 
 [sub_resource type="BitMap" id="BitMap_3h0bv"]
 data = {
@@ -39,6 +45,7 @@ vein_infos = Array[ExtResource("1_wd22k")]([ExtResource("3_icepf"), ExtResource(
 quest_types = Array[String](["prospect", "extract", "reinforce"])
 bitmap = SubResource("BitMap_3h0bv")
 quest_supply_requirements = Array[ExtResource("9_supply")]([SubResource("Resource_reinforce_supplies")])
+quest_profiles = Array[ExtResource("11_profile_script")]([ExtResource("12_prospect"), ExtResource("13_extract"), ExtResource("14_deep"), ExtResource("15_stabilized"), ExtResource("16_reinforce")])
 
 [node name="Root Scene" parent="." unique_id=1429542013 instance=ExtResource("1_bbfir")]
 

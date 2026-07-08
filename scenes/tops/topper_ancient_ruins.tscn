@@ -3,6 +3,11 @@
 [ext_resource type="Script" uid="uid://jueb1eq3kwsr" path="res://scripts/interactions/interactable_locations/ancient_ruins.gd" id="1_ruins_script"]
 [ext_resource type="Resource" uid="uid://cwv7tghgt6edu" path="res://resources/journal_tasks/discover_distant_resource.tres" id="2_cg5fk"]
 [ext_resource type="PackedScene" uid="uid://bnsfw0m783esj" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/building_destroyed.glb" id="2_gytin"]
+[ext_resource type="Script" uid="uid://bapqr4qv780fa" path="res://scripts/quests/quest_profile.gd" id="3_profile_script"]
+[ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_ruins_survey.tres" id="4_survey"]
+[ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_ruins_salvage.tres" id="5_salvage"]
+[ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_ruins_delve.tres" id="6_delve"]
+[ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_ruins_secure.tres" id="7_secure"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ruins_interaction"]
 size = Vector3(1.95, 1.2, 1.9474609)
@@ -13,9 +18,19 @@ size = Vector3(1.3815429, 1, 1.1209228)
 [node name="ancient_ruins" type="Node3D" unique_id=1985250973]
 script = ExtResource("1_ruins_script")
 quest_types = Array[String](["investigate"])
+quest_profiles = Array[ExtResource("3_profile_script")]([ExtResource("4_survey"), ExtResource("5_salvage"), ExtResource("6_delve"), ExtResource("7_secure")])
 journal_quest = ExtResource("2_cg5fk")
 
 [node name="Root Scene" parent="." unique_id=1806470452 instance=ExtResource("2_gytin")]
+
+[node name="surveyed_marker" type="Node3D" parent="." unique_id=1815000001]
+visible = false
+
+[node name="danger_marker" type="Node3D" parent="." unique_id=1815000003]
+visible = false
+
+[node name="secured_marker" type="Node3D" parent="." unique_id=1815000005]
+visible = false
 
 [node name="interaction" type="Area3D" parent="." unique_id=784232890]
 

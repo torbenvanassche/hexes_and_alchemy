@@ -8,12 +8,6 @@ enum MineState {
 	EXHAUSTED
 }
 
-enum QuestTypeIndex {
-	PROSPECT,
-	EXTRACT,
-	REINFORCE
-}
-
 @export var prospect_time: float = 6.0
 @export var extract_time: float = 8.0
 @export var reinforce_time: float = 5.0
@@ -49,25 +43,27 @@ func execute_quest(q: Quest) -> void:
 
 	_quest_running = true
 	_pending_reward.clear()
+	var behaviour := get_quest_behaviour(q.quest_key)
+	var profile := get_profile(q.quest_key)
 
-	if q.quest_key == _get_quest_type(QuestTypeIndex.PROSPECT):
-		await get_tree().create_timer(prospect_time).timeout
+	if behaviour == "prospect":
+		await get_tree().create_timer(get_quest_duration(q.quest_key, prospect_time)).timeout
 		var discovered_state := _roll_discovered_state()
 		_set_mine_state(discovered_state)
-	elif q.quest_key == _get_quest_type(QuestTypeIndex.EXTRACT):
+	elif behaviour == "extract":
 		var origin_state := _current_mine_state()
-		await get_tree().create_timer(extract_time).timeout
-		_pending_reward = _roll_extract_reward(origin_state)
-		_set_mine_state(_roll_post_extract_state(origin_state))
-	elif q.quest_key == _get_quest_type(QuestTypeIndex.REINFORCE):
-		await get_tree().create_timer(reinforce_time).timeout
+		await get_tree().create_timer(get_quest_duration(q.quest_key, extract_time)).timeout
+		_pending_reward = _roll_extract_reward(origin_state, _get_profile_int(profile, "reward_rolls", 1))
+		_set_mine_state(_roll_post_extract_state(origin_state, profile))
+	elif behaviour == "reinforce":
+		await get_tree().create_timer(get_quest_duration(q.quest_key, reinforce_time)).timeout
 		_set_mine_state(_last_stable_state)
 
 	q.return_from_quest()
 	_quest_running = false
 
 func complete_quest(q: Quest) -> void:
-	if q.quest_key != _get_quest_type(QuestTypeIndex.EXTRACT):
+	if get_quest_behaviour(q.quest_key) != "extract":
 		return
 
 	if _pending_reward.is_empty():
@@ -81,11 +77,6 @@ func complete_quest(q: Quest) -> void:
 func _current_mine_state() -> MineState:
 	var key := state_machine.get_current_state()
 	return MineState[key] as MineState
-
-func _get_quest_type(index: QuestTypeIndex) -> String:
-	if index < 0 or index >= quest_types.size():
-		return ""
-	return quest_types[index]
 
 func _set_mine_state(state: MineState) -> void:
 	state_machine.set_state(MineState.keys()[state])
@@ -128,19 +119,34 @@ func _roll_discovered_state() -> MineState:
 
 	return valid_infos[-1].mine_state
 
-func _roll_extract_reward(origin_state: MineState) -> Dictionary[ItemInfo, int]:
+func _roll_extract_reward(origin_state: MineState, reward_rolls: int = 1) -> Dictionary[ItemInfo, int]:
 	var info := _get_vein_info_for_state(origin_state)
 	if info == null:
 		return {}
-	return info.roll_loot()
+	var reward: Dictionary[ItemInfo, int] = {}
+	for i in maxi(1, reward_rolls):
+		var loot := info.roll_loot()
+		for item: ItemInfo in loot.keys():
+			reward[item] = reward.get(item, 0) + loot[item]
+	return reward
 
-func _roll_post_extract_state(origin_state: MineState) -> MineState:
+func _roll_post_extract_state(origin_state: MineState, profile: QuestProfile = null) -> MineState:
 	var info := _get_vein_info_for_state(origin_state)
 	if info == null:
 		return origin_state
 
-	var collapse_chance := clampf(info.collapse_chance, 0.0, 1.0)
-	var exhaust_chance := clampf(info.exhaust_chance, 0.0, 1.0 - collapse_chance)
+	var collapse_chance := clampf(
+		info.collapse_chance * _get_profile_float(profile, "collapse_multiplier", 1.0)
+			+ _get_profile_float(profile, "collapse_bonus", 0.0),
+		0.0,
+		1.0
+	)
+	var exhaust_chance := clampf(
+		info.exhaust_chance * _get_profile_float(profile, "exhaust_multiplier", 1.0)
+			+ _get_profile_float(profile, "exhaust_bonus", 0.0),
+		0.0,
+		1.0 - collapse_chance
+	)
 	var roll := randf()
 
 	if roll < collapse_chance:
@@ -154,3 +160,13 @@ func _get_vein_info_for_state(state: MineState) -> MineVeinInfo:
 		if vein_info != null and vein_info.mine_state == state:
 			return vein_info
 	return null
+
+func _get_profile_float(profile: QuestProfile, key: String, fallback: float) -> float:
+	if profile == null:
+		return fallback
+	return float(profile.get_modifier(key, fallback))
+
+func _get_profile_int(profile: QuestProfile, key: String, fallback: int) -> int:
+	if profile == null:
+		return fallback
+	return int(profile.get_modifier(key, fallback))

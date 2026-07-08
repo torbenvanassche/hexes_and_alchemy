@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="LootTable" format=3]
+
+[ext_resource type="Script" path="res://scripts/structures/loot_table.gd" id="1_table"]
+[ext_resource type="Script" path="res://scripts/structures/loot_table_entry.gd" id="2_entry"]
+[ext_resource type="Resource" uid="uid://b46nyvtvipor5" path="res://resources/item_info/wood_raw.tres" id="3_wood"]
+[ext_resource type="Resource" uid="uid://cedqercu5lay2" path="res://resources/item_info/seed_pouch.tres" id="4_seed"]
+
+[sub_resource type="Resource" id="Resource_wood"]
+script = ExtResource("2_entry")
+item = ExtResource("3_wood")
+max_amount = 2
+
+[sub_resource type="Resource" id="Resource_seed"]
+script = ExtResource("2_entry")
+item = ExtResource("4_seed")
+chance = 0.75
+max_amount = 2
+
+[resource]
+script = ExtResource("1_table")
+entries = Array[ExtResource("2_entry")]([SubResource("Resource_wood"), SubResource("Resource_seed")])

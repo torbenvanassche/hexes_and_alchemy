@@ -6,6 +6,11 @@
 [ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="4_item"]
 [ext_resource type="Resource" path="res://resources/item_info/bucket.tres" id="5_bucket"]
 [ext_resource type="Resource" uid="uid://bt35piqwc5pdt" path="res://resources/item_info/water_bucket.tres" id="6_water_bucket"]
+[ext_resource type="Script" path="res://scripts/quests/quest_profile.gd" id="7_profile_script"]
+[ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_water_fill.tres" id="8_fill"]
+[ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_water_draw_extra.tres" id="9_draw_extra"]
+[ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_water_purify.tres" id="10_purify"]
+[ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_water_maintain.tres" id="11_maintain"]
 
 [sub_resource type="Resource" id="Resource_fill_supplies"]
 script = ExtResource("3_supply")
@@ -26,8 +31,30 @@ script = ExtResource("1_water_source")
 reward_item = ExtResource("6_water_bucket")
 quest_types = Array[String](["fill"])
 quest_supply_requirements = Array[ExtResource("3_supply")]([SubResource("Resource_fill_supplies")])
+quest_profiles = Array[ExtResource("7_profile_script")]([ExtResource("8_fill"), ExtResource("9_draw_extra"), ExtResource("10_purify"), ExtResource("11_maintain")])
 
 [node name="well" parent="." unique_id=421820114 instance=ExtResource("2_well")]
+
+[node name="low_water_marker" type="Node3D" parent="." unique_id=421820119]
+visible = false
+
+[node name="low_water" type="Node3D" parent="low_water_marker" unique_id=421820120]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.21, 0)
+
+[node name="tainted_marker" type="Node3D" parent="." unique_id=421820121]
+visible = false
+
+[node name="tainted_water" type="Node3D" parent="tainted_marker" unique_id=421820122]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.23, 0)
+
+[node name="maintained_marker" type="Node3D" parent="." unique_id=421820123]
+visible = false
+
+[node name="stone_a" type="Node3D" parent="maintained_marker" unique_id=421820124]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.34, 0.07, 0.0)
+
+[node name="stone_b" type="Node3D" parent="maintained_marker" unique_id=421820125]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.34, 0.07, 0.0)
 
 [node name="interaction" type="Area3D" parent="." unique_id=421820115]
 

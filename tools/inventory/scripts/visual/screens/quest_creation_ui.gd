@@ -87,10 +87,12 @@ func _on_location_selected(idx: int) -> void:
 	quest_type.disabled = not has_types;
 	_select_first_creatable_quest_type(objective)
 	_refresh_required_supplies()
+	_refresh_quest_details()
 	_update_finish_button()
 
 func _on_quest_type_selected(_idx: int) -> void:
 	_refresh_required_supplies()
+	_refresh_quest_details()
 	_update_finish_button()
 
 func _add_location_option(hex: HexBase, require_reachable: bool = true) -> bool:
@@ -254,6 +256,11 @@ func _create_quest() -> void:
 	(owner as DraggableControl).close_requested.emit();
 
 func _get_quest_type_name(quest_type_key: String) -> String:
+	var objective := _get_selected_objective()
+	if objective != null:
+		var profile := objective.get_profile(quest_type_key)
+		if profile != null:
+			return profile.get_display_name()
 	var translation_key := "QUEST_TYPE_%s" % [quest_type_key.to_upper()]
 	var translated := tr(translation_key)
 	if translated == translation_key:
@@ -332,6 +339,46 @@ func _set_status(message: String) -> void:
 	_update_window_supply_space(quest_supplies != null and quest_supplies.visible)
 
 func _get_selected_required_supplies() -> Dictionary[ItemInfo, int]:
+	var selected := _get_selected_quest_type_and_objective()
+	var objective := selected.get("objective") as QuestObjective
+	var quest_type_key := str(selected.get("quest_type", ""))
+	if objective == null or quest_type_key == "":
+		return {}
+
+	return objective.get_required_supplies(quest_type_key)
+
+func _refresh_quest_details() -> void:
+	var selected := _get_selected_quest_type_and_objective()
+	var objective := selected.get("objective") as QuestObjective
+	var quest_type_key := str(selected.get("quest_type", ""))
+	if objective == null or quest_type_key == "":
+		_set_status("")
+		return
+
+	var details: Array[String] = []
+	var description := objective.get_quest_profile_description(quest_type_key)
+	if description != "":
+		details.append(description)
+
+	var duration := objective.get_quest_duration(quest_type_key, 0.0)
+	if duration > 0.0:
+		details.append(tr("QUEST_DETAIL_DURATION") % [ceil(duration)])
+
+	var risk := objective.get_quest_profile_risk(quest_type_key)
+	if risk != "":
+		details.append(tr("QUEST_DETAIL_RISK") % [risk])
+
+	var expected_reward := objective.get_quest_profile_expected_reward(quest_type_key)
+	if expected_reward != "":
+		details.append(tr("QUEST_DETAIL_EXPECTED_REWARD") % [expected_reward])
+
+	_set_status(" | ".join(details))
+
+func _get_selected_objective() -> QuestObjective:
+	var selected := _get_selected_quest_type_and_objective()
+	return selected.get("objective") as QuestObjective
+
+func _get_selected_quest_type_and_objective() -> Dictionary:
 	var location_idx: int = quest_location.selected
 	var quest_type_idx: int = quest_type.selected
 	if location_idx < 0 or quest_type_idx < 0:
@@ -346,7 +393,10 @@ func _get_selected_required_supplies() -> Dictionary[ItemInfo, int]:
 	if objective == null:
 		return {}
 
-	return objective.get_required_supplies(str(quest_type_metadata))
+	return {
+		"objective": objective,
+		"quest_type": str(quest_type_metadata),
+	}
 
 func _create_supply_slot(item: ItemInfo, count: int) -> ContentSlotUI:
 	var slot: ContentSlotUI = packed_slot.instantiate()

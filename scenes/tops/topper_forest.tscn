@@ -3,6 +3,11 @@
 [ext_resource type="PackedScene" uid="uid://bagl7tnsobw8w" path="res://meshes/kay_fantasy_hexagon/decoration/nature/trees_A_large.glb" id="1_k4nv7"]
 [ext_resource type="Script" uid="uid://cq000e45vtevx" path="res://scripts/interactions/interactable_locations/forest.gd" id="1_ro7nm"]
 [ext_resource type="PackedScene" uid="uid://brdca467mutqb" path="res://meshes/kay_fantasy_hexagon/decoration/nature/trees_A_cut.glb" id="2_c5dpi"]
+[ext_resource type="Script" path="res://scripts/quests/quest_profile.gd" id="3_profile_script"]
+[ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_forest_forage.tres" id="4_forage"]
+[ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_forest_harvest.tres" id="5_harvest"]
+[ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_forest_fell_timber.tres" id="6_timber"]
+[ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_forest_replant.tres" id="7_replant"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_c5dpi"]
 size = Vector3(2.6546097, 1.6783295, 2.7467527)
@@ -12,7 +17,7 @@ size = Vector3(1.6599602, 0.5864792, 1.6642027)
 
 [node name="Node3D" type="Node3D" unique_id=1405714178]
 script = ExtResource("1_ro7nm")
-quest_types = Array[String](["harvest"])
+quest_profiles = Array[ExtResource("3_profile_script")]([ExtResource("4_forage"), ExtResource("5_harvest"), ExtResource("6_timber"), ExtResource("7_replant")])
 
 [node name="trees" parent="." unique_id=1335934582 instance=ExtResource("1_k4nv7")]
 

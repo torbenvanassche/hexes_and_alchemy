@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="LootTable" format=3 uid="uid://bxhhqryludlg4"]
+
+[ext_resource type="Script" uid="uid://b2wjb40qlkbuf" path="res://scripts/structures/loot_table.gd" id="1_table"]
+[ext_resource type="Script" uid="uid://ctqcmpru1cvqf" path="res://scripts/structures/loot_table_entry.gd" id="2_entry"]
+[ext_resource type="Resource" uid="uid://75dbm8y87mpo" path="res://resources/item_info/grain.tres" id="3_grain"]
+
+[sub_resource type="Resource" id="Resource_grain"]
+script = ExtResource("2_entry")
+item = ExtResource("3_grain")
+max_amount = 3
+
+[resource]
+script = ExtResource("1_table")
+entries = Array[ExtResource("2_entry")]([SubResource("Resource_grain")])
