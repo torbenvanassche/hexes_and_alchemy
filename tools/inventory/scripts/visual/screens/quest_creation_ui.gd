@@ -1,31 +1,27 @@
 class_name QuestCreationUI extends Control
 
-@onready var quest_type: OptionButton = $FormPanel/MarginContainer/VBoxContainer/TypeRow/QuestType
-@onready var quest_location: OptionButton = $FormPanel/MarginContainer/VBoxContainer/LocationRow/QuestLocation
-@onready var form_margin: MarginContainer = $FormPanel/MarginContainer
-@onready var form_content: VBoxContainer = $FormPanel/MarginContainer/VBoxContainer
-@onready var details_panel: VBoxContainer = $FormPanel/MarginContainer/VBoxContainer/DetailsPanel
-@onready var description_label: Label = $FormPanel/MarginContainer/VBoxContainer/DetailsPanel/DescriptionLabel
-@onready var details_divider: ColorRect = $FormPanel/MarginContainer/VBoxContainer/DetailsPanel/DetailsDivider
-@onready var meta_row: HBoxContainer = $FormPanel/MarginContainer/VBoxContainer/DetailsPanel/MetaRow
-@onready var duration_box: VBoxContainer = $FormPanel/MarginContainer/VBoxContainer/DetailsPanel/MetaRow/DurationBox
-@onready var duration_label: Label = $FormPanel/MarginContainer/VBoxContainer/DetailsPanel/MetaRow/DurationBox/DurationLabel
-@onready var risk_box: VBoxContainer = $FormPanel/MarginContainer/VBoxContainer/DetailsPanel/MetaRow/RiskBox
-@onready var risk_label: Label = $FormPanel/MarginContainer/VBoxContainer/DetailsPanel/MetaRow/RiskBox/RiskLabel
-@onready var reward_box: VBoxContainer = $FormPanel/MarginContainer/VBoxContainer/DetailsPanel/MetaRow/RewardBox
-@onready var reward_items: FlowContainer = $FormPanel/MarginContainer/VBoxContainer/DetailsPanel/MetaRow/RewardBox/RewardItems
-@onready var reward_text_label: Label = $FormPanel/MarginContainer/VBoxContainer/DetailsPanel/MetaRow/RewardBox/RewardText
-@onready var quest_supplies: Control = $FormPanel/MarginContainer/VBoxContainer/QuestSupplies
-@onready var supplies_grid: GridContainer = $FormPanel/MarginContainer/VBoxContainer/QuestSupplies/SuppliesGrid
-@onready var status_label: Label = $FormPanel/MarginContainer/VBoxContainer/StatusLabel
-@onready var finish_quest_creation: Button = $FormPanel/MarginContainer/VBoxContainer/Actions/FinishQuestCreation
+@onready var quest_type: OptionButton = $MarginContainer/VBoxContainer/TypeRow/QuestType
+@onready var quest_location: OptionButton = $MarginContainer/VBoxContainer/LocationRow/QuestLocation
+@onready var details_panel: VBoxContainer = $MarginContainer/VBoxContainer/DetailsPanel
+@onready var description_label: Label = $MarginContainer/VBoxContainer/DetailsPanel/DescriptionLabel
+@onready var details_divider: ColorRect = $MarginContainer/VBoxContainer/DetailsPanel/DetailsDivider
+@onready var meta_row: HBoxContainer = $MarginContainer/VBoxContainer/DetailsPanel/MetaRow
+@onready var duration_box: VBoxContainer = $MarginContainer/VBoxContainer/DetailsPanel/MetaRow/DurationBox
+@onready var duration_label: Label = $MarginContainer/VBoxContainer/DetailsPanel/MetaRow/DurationBox/DurationLabel
+@onready var risk_box: VBoxContainer = $MarginContainer/VBoxContainer/DetailsPanel/MetaRow/RiskBox
+@onready var risk_label: Label = $MarginContainer/VBoxContainer/DetailsPanel/MetaRow/RiskBox/RiskLabel
+@onready var reward_box: VBoxContainer = $MarginContainer/VBoxContainer/DetailsPanel/MetaRow/RewardBox
+@onready var reward_items: FlowContainer = $MarginContainer/VBoxContainer/DetailsPanel/MetaRow/RewardBox/RewardItems
+@onready var reward_text_label: Label = $MarginContainer/VBoxContainer/DetailsPanel/MetaRow/RewardBox/RewardText
+@onready var quest_supplies: Control = $MarginContainer/VBoxContainer/QuestSupplies
+@onready var supplies_grid: GridContainer = $MarginContainer/VBoxContainer/QuestSupplies/SuppliesGrid
+@onready var status_label: Label = $MarginContainer/VBoxContainer/StatusLabel
+@onready var finish_quest_creation: Button = $MarginContainer/VBoxContainer/Actions/FinishQuestCreation
 @onready var window: DraggableControl = $"../../../.."
 
 @export var packed_slot: PackedScene
 @export var slot_size: int = 56
 @export var target_dropdown_max_height: int = 220
-@export var compact_window_min_size := Vector2(430, 240)
-@export var expanded_window_min_size := Vector2(430, 340)
 
 signal quest_created(quest: Quest)
 
@@ -46,7 +42,7 @@ func _ready() -> void:
 	_configure_location_dropdown()
 	quest_location.item_selected.connect(_on_location_selected)
 	quest_type.item_selected.connect(_on_quest_type_selected)
-	_update_window_supply_space(false)
+	_request_window_refit()
 
 func _configure_location_dropdown() -> void:
 	var popup := quest_location.get_popup()
@@ -349,27 +345,12 @@ func _refresh_required_supplies() -> void:
 		has_visible_supplies = true
 
 	quest_supplies.visible = has_visible_supplies
-	_update_window_supply_space(has_visible_supplies)
+	_request_window_refit()
 
-func _get_form_minimum_size() -> Vector2:
-	if form_margin == null or form_content == null:
-		return compact_window_min_size
-	var content_size := form_content.get_combined_minimum_size()
-	var horizontal_margin := form_margin.get_theme_constant("margin_left") + form_margin.get_theme_constant("margin_right")
-	var vertical_margin := form_margin.get_theme_constant("margin_top") + form_margin.get_theme_constant("margin_bottom")
-	return content_size + Vector2(horizontal_margin, vertical_margin)
-
-func _update_window_supply_space(has_visible_supplies: bool) -> void:
+func _request_window_refit() -> void:
 	if window == null:
 		return
 
-	var has_supply_content := has_visible_supplies or (quest_supplies != null and quest_supplies.visible)
-	var has_item_reward_content := reward_box != null and reward_box.visible
-
-	var variant_min_size := expanded_window_min_size if has_supply_content or has_item_reward_content else compact_window_min_size
-	var content_min_size := _get_form_minimum_size()
-	custom_minimum_size = Vector2(maxf(variant_min_size.x, content_min_size.x), variant_min_size.y)
-	window.custom_minimum_size = custom_minimum_size
 	if window.visible:
 		if window.has_method("request_fit_to_content"):
 			window.request_fit_to_content(2)
@@ -464,14 +445,14 @@ func _set_details(description: String, duration: String = "", risk: String = "",
 	var has_details := has_description or has_meta
 	if details_panel != null:
 		details_panel.visible = has_details
-	_update_window_supply_space(quest_supplies != null and quest_supplies.visible)
+	_request_window_refit()
 
 func _set_status(message: String) -> void:
 	if status_label == null:
 		return
 	status_label.text = message
 	status_label.visible = message != ""
-	_update_window_supply_space(quest_supplies != null and quest_supplies.visible)
+	_request_window_refit()
 
 func _get_selected_required_supplies() -> Dictionary[ItemInfo, int]:
 	var selected := _get_selected_quest_type_and_objective()

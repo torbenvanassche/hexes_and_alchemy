@@ -170,14 +170,23 @@ func on_enter() -> void:
 	else:
 		await fit_to_content_settled(2)
 
-	await get_tree().process_frame;
-
 	if store_position:
 		position = stored_position;
 	else:
 		position = initial_position - size / 2;
 
+	var previous_modulate := modulate
+	var hidden_layout_modulate := modulate
+	hidden_layout_modulate.a = 0.0
+	modulate = hidden_layout_modulate
 	visible = true;
+	await get_tree().process_frame;
+	_fit_to_content()
+	if store_position:
+		position = stored_position;
+	else:
+		position = initial_position - size / 2;
+	modulate = previous_modulate
 
 func _change_title(s: String) -> void:
 	title.text = tr(s);
