@@ -15,7 +15,6 @@ corner_radius_bottom_left = 4
 
 [node name="Window" unique_id=1301866213 node_paths=PackedStringArray("content") instance=ExtResource("1_b8c84")]
 custom_minimum_size = Vector2(460, 0)
-layout_mode = 3
 offset_right = 460.0
 offset_bottom = 233.0
 id = "WINDOW_NEW_QUEST"

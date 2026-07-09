@@ -55,15 +55,32 @@ func _physics_process(_delta: float) -> void:
 	if  InputManager.is_device(InputManager.InputDevice.KEYBOARD_MOUSE) && Input.is_action_just_pressed("toggle_input"):
 		spring_arm_camera.snap_camera_on_player_moved(!move_player);
 		move_player = !move_player;
-		
-	if Input.is_action_just_pressed("cancel"):
-		var current_ui_scene := SceneManager.get_current_ui_scene()
-		if is_paused and current_ui_scene != null and current_ui_scene.id == "settings_menu":
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.echo:
+		return
+	if not event.is_action_pressed("cancel"):
+		return
+
+	_handle_cancel_input()
+	get_viewport().set_input_as_handled()
+
+func _handle_cancel_input() -> void:
+	var current_ui_scene := SceneManager.get_current_ui_scene()
+	if current_ui_scene != null and current_ui_scene.id != "pause_menu":
+		if _can_close_ui_scene(current_ui_scene):
 			SceneManager.remove_current_ui_scene()
-		elif is_paused:
-			pause_game(false);
-		else:
-			pause_game(true);
+		return
+
+	pause_game(not is_paused)
+
+func _can_close_ui_scene(scene_info: SceneInfo) -> bool:
+	for instance in scene_info.get_live_instances():
+		if not SceneManager.is_visible(instance):
+			continue
+		if instance.node.has_method("can_close") and not instance.node.can_close():
+			return false
+	return true
 
 func spawn_player(spawn_hex: HexBase = null) -> void:
 	var spawn_position := _resolve_spawn_position(spawn_hex);
