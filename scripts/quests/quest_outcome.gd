@@ -11,6 +11,11 @@ func roll_loot() -> Dictionary[ItemInfo, int]:
 		return {}
 	return loot_table.roll()
 
+func get_preview_ranges() -> Dictionary[ItemInfo, Vector2i]:
+	if loot_table == null:
+		return {}
+	return loot_table.get_preview_ranges()
+
 func has_next_state() -> bool:
 	return next_state != ""
 

@@ -51,17 +51,23 @@ var resize_start_mouse := Vector2.ZERO
 var resize_start_size := Vector2.ZERO
 var stored_size := Vector2.ZERO
 var resize_axis := Vector2.ONE
+var _fit_request_id := 0
+var _is_fitting := false
 
 func _ready() -> void:
 	visible = false
+	_prepare_floating_layout()
 	lock_button.toggled.connect(_set_close_locked)
 	close_button.pressed.connect(close_window.bind(true));
 	close_requested.connect(close_window)
 	top_bar.gui_input.connect(handle_input)
+
 	resize_handle_x.gui_input.connect(_handle_resize_input.bind(Vector2(1, 0)))
 	resize_handle_y.gui_input.connect(_handle_resize_input.bind(Vector2(0, 1)))
 	resize_handle_xy.gui_input.connect(_handle_resize_input.bind(Vector2(1, 1)))
+
 	change_title.connect(_change_title)
+
 	_change_title(id);
 	_update_lock_availability()
 	_set_close_locked(close_locked)
@@ -69,28 +75,77 @@ func _ready() -> void:
 	top_bar.custom_minimum_size.y = topbar_height
 	_update_resize_handles()
 	
-func _fit_to_content() -> void:
-	var content_size := v_box_container.get_combined_minimum_size()
-	var height := content_size.y
+func _prepare_floating_layout() -> void:
+	anchor_left = 0.0
+	anchor_top = 0.0
+	anchor_right = 0.0
+	anchor_bottom = 0.0
+	grow_horizontal = Control.GROW_DIRECTION_END
+	grow_vertical = Control.GROW_DIRECTION_END
 
-	size = _clamp_window_size(Vector2(content_size.x, height))
+func _fit_to_content() -> void:
+	if _is_fitting:
+		return
+	_is_fitting = true
+	size = _clamp_window_size(_get_content_fit_size())
+	_is_fitting = false
+
+func _get_content_fit_size() -> Vector2:
+	var fit_size := custom_minimum_size
+	var content_size := v_box_container.get_combined_minimum_size()
+	if content != null:
+		content_size = content.get_combined_minimum_size() + _get_content_panel_margins()
+		if top_bar.visible:
+			content_size.y += top_bar.get_combined_minimum_size().y
+	fit_size = fit_size.max(content_size)
+	return fit_size
+
+func _get_content_panel_margins() -> Vector2:
+	return Vector2(
+		content_panel.get_theme_constant("margin_left") + content_panel.get_theme_constant("margin_right"),
+		content_panel.get_theme_constant("margin_top") + content_panel.get_theme_constant("margin_bottom")
+	)
+
+func request_fit_to_content(wait_frames: int = 2) -> void:
+	_fit_request_id += 1
+	_fit_to_content_deferred(_fit_request_id, max(0, wait_frames))
+
+func fit_to_content_settled(wait_frames: int = 2) -> void:
+	_fit_request_id += 1
+	await _fit_to_content_deferred(_fit_request_id, max(0, wait_frames))
+
+func fit_to_content_after_draw() -> void:
+	_fit_request_id += 1
+	var request_id := _fit_request_id
+	await RenderingServer.frame_post_draw
+	if request_id != _fit_request_id:
+		return
+	_fit_to_content()
+
+func _fit_to_content_deferred(request_id: int, wait_frames: int) -> void:
+	for _i in range(wait_frames + 1):
+		await get_tree().process_frame
+		if request_id != _fit_request_id:
+			return
+		_fit_to_content()
 	
 func on_enter() -> void:
 	visible = false
+	_prepare_floating_layout()
 	match display_mode:
 		"fullscreen":
 			top_bar.visible = false;
 			size = get_viewport_rect().size;
 		"display":
 			top_bar.visible = true;
-			pass
+			size = custom_minimum_size
 		"no_header":
 			top_bar.visible = false;
-			pass
+			size = custom_minimum_size
 		"none":
 			top_bar.visible = false;
 			npr.self_modulate = Color.TRANSPARENT;
-			pass
+			size = custom_minimum_size
 	
 	match position_options:
 		"mouse":
@@ -113,7 +168,7 @@ func on_enter() -> void:
 	if resizable and store_position and stored_size != Vector2.ZERO:
 		size = _clamp_window_size(stored_size)
 	else:
-		_fit_to_content();
+		await fit_to_content_settled(2)
 
 	await get_tree().process_frame;
 
@@ -177,10 +232,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		vp.set_input_as_handled()
 		close_requested.emit()
 
-func _clamp_window_size(target_size: Vector2) -> Vector2:
+func _clamp_window_size(target_size: Vector2, include_content_minimum: bool = true) -> Vector2:
 	var min_size := custom_minimum_size
-	if enforce_content_minimum_size:
-		min_size = min_size.max(get_combined_minimum_size())
+	if enforce_content_minimum_size and include_content_minimum:
+		min_size = min_size.max(_get_content_fit_size())
 	var clamped := Vector2(
 		maxf(target_size.x, min_size.x),
 		maxf(target_size.y, min_size.y)

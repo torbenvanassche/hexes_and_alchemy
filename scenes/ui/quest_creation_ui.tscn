@@ -4,36 +4,39 @@
 [ext_resource type="Script" uid="uid://cp06udl0ffykh" path="res://tools/inventory/scripts/visual/screens/quest_creation_ui.gd" id="2_1mihr"]
 [ext_resource type="PackedScene" uid="uid://c5ocjw6joaemy" path="res://tools/inventory/scenes/content_slot.tscn" id="3_slot"]
 [ext_resource type="Theme" uid="uid://dae2b2hfpj0l2" path="res://themes/base_theme.theme" id="4_theme"]
+[ext_resource type="Theme" uid="uid://bemn0spuaev14" path="res://themes/fantasy_buttons.tres" id="6_button_theme"]
 
 [node name="Window" unique_id=1301866213 node_paths=PackedStringArray("content") instance=ExtResource("1_b8c84")]
-custom_minimum_size = Vector2(390, 205)
-offset_right = -852.0
-offset_bottom = -648.0
+custom_minimum_size = Vector2(430, 240)
+offset_right = 430.0
+offset_bottom = 240.0
 id = "WINDOW_NEW_QUEST"
 content = NodePath("NinePatchRect/VBoxContainer/contentPanel/QuestCreation")
 
 [node name="contentPanel" parent="NinePatchRect/VBoxContainer" parent_id_path=PackedInt32Array(554725130) index="1" unique_id=1040542232]
-size_flags_horizontal = 1
+size_flags_horizontal = 3
+size_flags_vertical = 1
 
 [node name="QuestCreation" type="Control" parent="NinePatchRect/VBoxContainer/contentPanel" index="0" unique_id=206947003]
-custom_minimum_size = Vector2(350, 145)
+custom_minimum_size = Vector2(430, 240)
 layout_mode = 2
+size_flags_horizontal = 3
 theme = ExtResource("4_theme")
 script = ExtResource("2_1mihr")
 packed_slot = ExtResource("3_slot")
 
 [node name="FormPanel" type="NinePatchRect" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation" index="0" unique_id=1979064244]
-self_modulate = Color(1, 0.94, 0.78, 1)
+self_modulate = Color(0.97, 0.9, 0.76, 1)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-patch_margin_left = 14
-patch_margin_top = 14
-patch_margin_right = 14
-patch_margin_bottom = 14
+patch_margin_left = 7
+patch_margin_top = 7
+patch_margin_right = 7
+patch_margin_bottom = 7
 
 [node name="MarginContainer" type="MarginContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel" index="0" unique_id=1452652058]
 layout_mode = 1
@@ -42,27 +45,29 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 14
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 12
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 16
 
 [node name="VBoxContainer" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer" index="0" unique_id=376979057]
 layout_mode = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 10
 
 [node name="LocationRow" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer" index="0" unique_id=1452652059]
 layout_mode = 2
 theme_override_constants/separation = 10
 
 [node name="LocationLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer/LocationRow" index="0" unique_id=474702119]
-custom_minimum_size = Vector2(82, 0)
+custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.23, 0.14, 0.07, 1)
+theme_override_font_sizes/font_size = 16
 text = "QUEST_CREATION_TARGET"
 vertical_alignment = 1
 
 [node name="QuestLocation" type="OptionButton" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer/LocationRow" index="1" unique_id=90833800]
+custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("4_theme")
@@ -73,48 +78,130 @@ layout_mode = 2
 theme_override_constants/separation = 10
 
 [node name="TypeLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer/TypeRow" index="0" unique_id=844205132]
-custom_minimum_size = Vector2(82, 0)
+custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.23, 0.14, 0.07, 1)
+theme_override_font_sizes/font_size = 16
 text = "QUEST_CREATION_QUEST"
 vertical_alignment = 1
 
 [node name="QuestType" type="OptionButton" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer/TypeRow" index="1" unique_id=675844846]
+custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("4_theme")
 text_overrun_behavior = 3
 
-[node name="QuestSupplies" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer" index="2" unique_id=1979064245]
+[node name="DetailsPanel" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer" index="2" unique_id=208017456]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="DescriptionLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer/DetailsPanel" index="0" unique_id=95410111]
+visible = false
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.28, 0.18, 0.09, 1)
+autowrap_mode = 3
+
+[node name="DetailsDivider" type="ColorRect" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer/DetailsPanel" index="1" unique_id=184002013]
+visible = false
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+color = Color(0.38, 0.26, 0.14, 0.35)
+
+[node name="MetaRow" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer/DetailsPanel" index="2" unique_id=942240517]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="DurationBox" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer/DetailsPanel/MetaRow" index="0" unique_id=206735510]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 4
+
+[node name="DurationTitle" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer/DetailsPanel/MetaRow/DurationBox" index="0" unique_id=149555129]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.42, 0.31, 0.2, 1)
+text = "QUEST_DETAIL_DURATION_LABEL"
+uppercase = true
+
+[node name="DurationLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer/DetailsPanel/MetaRow/DurationBox" index="1" unique_id=201177203]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.13, 0.06, 1)
+
+[node name="RiskBox" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer/DetailsPanel/MetaRow" index="1" unique_id=201514873]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RiskTitle" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer/DetailsPanel/MetaRow/RiskBox" index="0" unique_id=742164560]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.42, 0.31, 0.2, 1)
+text = "QUEST_DETAIL_RISK_LABEL"
+uppercase = true
+
+[node name="RiskLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer/DetailsPanel/MetaRow/RiskBox" index="1" unique_id=196523800]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.13, 0.06, 1)
+
+[node name="RewardBox" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer/DetailsPanel/MetaRow" index="2" unique_id=187914821]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RewardTitle" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer/DetailsPanel/MetaRow/RewardBox" index="0" unique_id=289349467]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.42, 0.31, 0.2, 1)
+text = "QUEST_DETAIL_REWARD_LABEL"
+uppercase = true
+
+[node name="RewardItems" type="HFlowContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer/DetailsPanel/MetaRow/RewardBox" index="1" unique_id=182900517]
+layout_mode = 2
+
+[node name="RewardText" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer/DetailsPanel/MetaRow/RewardBox" index="2" unique_id=98222171]
+visible = false
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.2, 0.13, 0.06, 1)
+autowrap_mode = 3
+
+[node name="QuestSupplies" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer" index="3" unique_id=1979064245]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
 
 [node name="SuppliesLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer/QuestSupplies" index="0" unique_id=991655882]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.23, 0.14, 0.07, 1)
+theme_override_font_sizes/font_size = 16
 text = "QUEST_CREATION_SUPPLIES"
 
 [node name="SuppliesGrid" type="GridContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer/QuestSupplies" index="1" unique_id=1114575640]
 layout_mode = 2
-theme_override_constants/h_separation = 4
-theme_override_constants/v_separation = 4
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 6
 columns = 4
 
-[node name="StatusLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer" index="3" unique_id=1675641502]
+[node name="StatusLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer" index="4" unique_id=1675641502]
 visible = false
+custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.45, 0.22, 0.08, 1)
 text = "QUEST_CREATION_NO_AVAILABLE_QUESTS"
+horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="Actions" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer" index="4" unique_id=605675596]
-layout_mode = 2
-alignment = 2
-
-[node name="FinishQuestCreation" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer/Actions" index="0" unique_id=860293657]
+[node name="Actions" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer" index="5" unique_id=605675596]
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("4_theme")
+
+[node name="FinishQuestCreation" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer/Actions" index="0" unique_id=860293657]
+custom_minimum_size = Vector2(170, 38)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("6_button_theme")
+theme_override_font_sizes/font_size = 18
 text = "QUEST_CREATION_CREATE"

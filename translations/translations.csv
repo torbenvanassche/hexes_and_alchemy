@@ -56,6 +56,9 @@ QUEST_CREATION_SUPPLIES,Required supplies,Required supplies
 QUEST_CREATION_CREATE,Create quest,Create quest
 QUEST_CREATION_NO_AVAILABLE_QUESTS,No quests are available here.,No quests are available here.
 QUEST_CREATION_UNREACHABLE,"No adventurer can reach this location from the settlement yet.","No adventurer can reach this location from the settlement yet."
+QUEST_DETAIL_DURATION_LABEL,Duration,Duration
+QUEST_DETAIL_RISK_LABEL,Risk,Risk
+QUEST_DETAIL_REWARD_LABEL,Reward,Reward
 QUEST_DETAIL_DURATION,%ss,%ss
 QUEST_DETAIL_RISK,Risk: %s,Risk: %s
 QUEST_DETAIL_EXPECTED_REWARD,Reward: %s,Reward: %s

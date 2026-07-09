@@ -55,6 +55,60 @@ func get_expected_reward_label() -> String:
 		return ""
 	return translated
 
+func get_reward_preview() -> Array[Dictionary]:
+	if outcomes.is_empty():
+		return []
+
+	var item_ranges: Dictionary[ItemInfo, Vector2i] = {}
+	var item_seen_counts: Dictionary[ItemInfo, int] = {}
+	var valid_outcome_count := 0
+
+	for outcome in outcomes:
+		if outcome == null:
+			continue
+
+		var ranges := outcome.get_preview_ranges()
+		if ranges.is_empty():
+			continue
+
+		valid_outcome_count += 1
+		for item: ItemInfo in ranges.keys():
+			if item == null:
+				continue
+
+			var range: Vector2i = ranges[item]
+			var current: Vector2i = item_ranges.get(item, Vector2i(-1, 0))
+			var min_amount := range.x if current.x == -1 else mini(current.x, range.x)
+			item_ranges[item] = Vector2i(min_amount, maxi(current.y, range.y))
+			item_seen_counts[item] = int(item_seen_counts.get(item, 0)) + 1
+
+	if valid_outcome_count == 0:
+		return []
+
+	var preview: Array[Dictionary] = []
+	for item: ItemInfo in item_ranges.keys():
+		if item == null:
+			continue
+
+		var range: Vector2i = item_ranges[item]
+		if int(item_seen_counts.get(item, 0)) < valid_outcome_count:
+			range.x = 0
+
+		preview.append({
+			"item": item,
+			"min": range.x,
+			"max": range.y,
+		})
+
+	preview.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		var item_a := a.get("item") as ItemInfo
+		var item_b := b.get("item") as ItemInfo
+		if item_a == null or item_b == null:
+			return item_a != null
+		return item_a.get_display_name().nocasecmp_to(item_b.get_display_name()) < 0
+	)
+	return preview
+
 func get_required_supplies() -> Dictionary[ItemInfo, int]:
 	return required_supplies
 

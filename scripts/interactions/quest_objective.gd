@@ -119,6 +119,12 @@ func get_quest_profile_expected_reward(quest_type_key: String) -> String:
 		return ""
 	return profile.get_expected_reward_label()
 
+func get_quest_profile_reward_preview(quest_type_key: String) -> Array[Dictionary]:
+	var profile := get_profile(quest_type_key)
+	if profile == null:
+		return []
+	return profile.get_reward_preview()
+
 func _get_configured_quest_types() -> Array[String]:
 	if quest_profiles.is_empty():
 		return quest_types
@@ -141,7 +147,7 @@ func _filter_profile_states(types: Array[String], active_state_name: String) -> 
 	return filtered
 	
 func _on_create_quest_window_loaded(window_info: SceneInfo) -> void:
-	window_instance = SceneManager.add(window_info);
+	window_instance = SceneManager.add(window_info, false);
 	var quest_creation: QuestCreationUI = (window_instance.node as DraggableControl).content as QuestCreationUI;
 	if not quest_creation.quest_created.is_connected(Manager.instance.quests.add_quest):
 		quest_creation.quest_created.connect(Manager.instance.quests.add_quest)

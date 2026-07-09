@@ -7,12 +7,9 @@
 [ext_resource type="Texture2D" uid="uid://cgbd8t72ol743" path="res://sprites/ui/icons/unlocked.png" id="5_qutwm"]
 
 [node name="Window2" type="Control" unique_id=1301866213]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 0
+offset_right = 100.0
+offset_bottom = 100.0
 script = ExtResource("1_6jx1r")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="." unique_id=434834391]

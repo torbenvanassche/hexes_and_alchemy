@@ -46,7 +46,7 @@ func can_open_creation_menu() -> bool:
 	return not window_instance || not SceneManager.is_visible(window_instance)
 	
 func _on_create_quest_window_loaded(window_info: SceneInfo) -> void:
-	window_instance = SceneManager.add(window_info);
+	window_instance = SceneManager.add(window_info, false);
 	var quest_creation: QuestCreationUI = (window_instance.node as DraggableControl).content as QuestCreationUI;
 	quest_creation.clear_forced_data()
 	if not quest_creation.quest_created.is_connected(Manager.instance.quests.add_quest):

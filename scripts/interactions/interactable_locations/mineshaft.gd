@@ -161,6 +161,39 @@ func _get_vein_info_for_state(state: MineState) -> MineVeinInfo:
 			return vein_info
 	return null
 
+func get_quest_profile_reward_preview(quest_type_key: String) -> Array[Dictionary]:
+	var behaviour := get_quest_behaviour(quest_type_key)
+	if behaviour != "extract":
+		return super.get_quest_profile_reward_preview(quest_type_key)
+
+	var info := _get_vein_info_for_state(_current_mine_state())
+	if info == null or info.loot_table == null:
+		return []
+
+	var profile := get_profile(quest_type_key)
+	var reward_rolls := maxi(1, _get_profile_int(profile, "reward_rolls", 1))
+	var preview: Array[Dictionary] = []
+	var ranges := info.loot_table.get_preview_ranges()
+
+	for item: ItemInfo in ranges.keys():
+		if item == null:
+			continue
+		var range: Vector2i = ranges[item]
+		preview.append({
+			"item": item,
+			"min": range.x * reward_rolls,
+			"max": range.y * reward_rolls,
+		})
+
+	preview.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		var item_a := a.get("item") as ItemInfo
+		var item_b := b.get("item") as ItemInfo
+		if item_a == null or item_b == null:
+			return item_a != null
+		return item_a.get_display_name().nocasecmp_to(item_b.get_display_name()) < 0
+	)
+	return preview
+
 func _get_profile_float(profile: QuestProfile, key: String, fallback: float) -> float:
 	if profile == null:
 		return fallback
