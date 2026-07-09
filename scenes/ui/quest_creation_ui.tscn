@@ -8,6 +8,7 @@
 
 [node name="Window" unique_id=1301866213 node_paths=PackedStringArray("content") instance=ExtResource("1_b8c84")]
 custom_minimum_size = Vector2(430, 240)
+layout_mode = 3
 offset_right = 430.0
 offset_bottom = 240.0
 id = "WINDOW_NEW_QUEST"
@@ -62,7 +63,6 @@ theme_override_constants/separation = 10
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.23, 0.14, 0.07, 1)
-theme_override_font_sizes/font_size = 16
 text = "QUEST_CREATION_TARGET"
 vertical_alignment = 1
 
@@ -81,7 +81,6 @@ theme_override_constants/separation = 10
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.23, 0.14, 0.07, 1)
-theme_override_font_sizes/font_size = 16
 text = "QUEST_CREATION_QUEST"
 vertical_alignment = 1
 
@@ -175,8 +174,7 @@ theme_override_constants/separation = 6
 
 [node name="SuppliesLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer/QuestSupplies" index="0" unique_id=991655882]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.23, 0.14, 0.07, 1)
-theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.41960785, 0.30980393, 0.2, 1)
 text = "QUEST_CREATION_SUPPLIES"
 
 [node name="SuppliesGrid" type="GridContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/FormPanel/MarginContainer/VBoxContainer/QuestSupplies" index="1" unique_id=1114575640]
@@ -203,5 +201,4 @@ custom_minimum_size = Vector2(170, 38)
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("6_button_theme")
-theme_override_font_sizes/font_size = 18
 text = "QUEST_CREATION_CREATE"
