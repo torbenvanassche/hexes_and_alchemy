@@ -4,13 +4,17 @@
 [ext_resource type="PackedScene" uid="uid://b40e2lpexmhbw" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_well_blue.glb" id="2_well"]
 [ext_resource type="Script" uid="uid://bju85emrqs252" path="res://tools/quest_system/scripts/quest_supply_requirement.gd" id="3_supply"]
 [ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="4_item"]
-[ext_resource type="Resource" path="res://resources/item_info/bucket.tres" id="5_bucket"]
+[ext_resource type="Resource" uid="uid://b0i36ajrv252n" path="res://resources/item_info/bucket.tres" id="5_bucket"]
 [ext_resource type="Resource" uid="uid://bt35piqwc5pdt" path="res://resources/item_info/water_bucket.tres" id="6_water_bucket"]
-[ext_resource type="Script" path="res://scripts/quests/quest_profile.gd" id="7_profile_script"]
-[ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_water_fill.tres" id="8_fill"]
-[ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_water_draw_extra.tres" id="9_draw_extra"]
+[ext_resource type="Script" uid="uid://bapqr4qv780fa" path="res://scripts/quests/quest_profile.gd" id="7_profile_script"]
+[ext_resource type="Resource" uid="uid://drj2d2u30c12n" path="res://resources/quest_profiles/quest_profile_water_fill.tres" id="8_fill"]
+[ext_resource type="Resource" uid="uid://b6rwhexa1w83i" path="res://resources/quest_profiles/quest_profile_water_draw_extra.tres" id="9_draw_extra"]
 [ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_water_purify.tres" id="10_purify"]
 [ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_water_maintain.tres" id="11_maintain"]
+[ext_resource type="PackedScene" uid="uid://cxd2512nu7lgc" path="res://meshes/kay_fantasy_hexagon/decoration/nature/waterplant_A.glb" id="13_waterplant_a"]
+[ext_resource type="PackedScene" uid="uid://w4qap4smpi74" path="res://meshes/kay_fantasy_hexagon/decoration/nature/waterplant_C.glb" id="14_waterplant_c"]
+[ext_resource type="PackedScene" uid="uid://bvbcia2sapjye" path="res://meshes/kay_dungeon/bottle_A_labeled_green.glb" id="15_green_bottle"]
+[ext_resource type="Material" path="res://materials/tainted_water.tres" id="16_tainted_water"]
 
 [sub_resource type="Resource" id="Resource_fill_supplies"]
 script = ExtResource("3_supply")
@@ -19,6 +23,11 @@ supplies = Dictionary[ExtResource("4_item"), int]({
 ExtResource("5_bucket"): 1
 })
 metadata/_custom_type_script = "uid://bju85emrqs252"
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_565qx"]
+top_radius = 0.17236328
+bottom_radius = 0.17236328
+height = 0.05456543
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_interaction"]
 size = Vector3(1.7, 1.2, 1.7)
@@ -35,26 +44,21 @@ quest_profiles = Array[ExtResource("7_profile_script")]([ExtResource("8_fill"), 
 
 [node name="well" parent="." unique_id=421820114 instance=ExtResource("2_well")]
 
-[node name="low_water_marker" type="Node3D" parent="." unique_id=421820119]
-visible = false
-
-[node name="low_water" type="Node3D" parent="low_water_marker" unique_id=421820120]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.21, 0)
-
 [node name="tainted_marker" type="Node3D" parent="." unique_id=421820121]
-visible = false
 
-[node name="tainted_water" type="Node3D" parent="tainted_marker" unique_id=421820122]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.23, 0)
+[node name="tainted_water" type="MeshInstance3D" parent="tainted_marker" unique_id=272143244]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1159028, 0)
+mesh = SubResource("CylinderMesh_565qx")
+surface_material_override/0 = ExtResource("16_tainted_water")
 
-[node name="maintained_marker" type="Node3D" parent="." unique_id=421820123]
-visible = false
+[node name="waterplant_a" parent="tainted_marker" unique_id=141325972 instance=ExtResource("13_waterplant_a")]
+transform = Transform3D(0.615, 0, 0, 0, 0.615, 0, 0, 0, 0.615, -0.050574966, 0.13864057, -0.084474355)
 
-[node name="stone_a" type="Node3D" parent="maintained_marker" unique_id=421820124]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.34, 0.07, 0.0)
+[node name="waterplant_c" parent="tainted_marker" unique_id=1121113850 instance=ExtResource("14_waterplant_c")]
+transform = Transform3D(0.24, 0, 0, 0, 0.24, 0, 0, 0, 0.24, 0.047664702, 0.13499422, -0.08580954)
 
-[node name="stone_b" type="Node3D" parent="maintained_marker" unique_id=421820125]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.34, 0.07, 0.0)
+[node name="green_bottle" parent="tainted_marker" unique_id=1355572880 instance=ExtResource("15_green_bottle")]
+transform = Transform3D(0.01490745, 0.09079825, 0.13089478, -0.09150437, 0.11249575, -0.06761402, -0.13040213, -0.06855932, 0.062409148, 0.0048181713, 0.09803842, 0.054672807)
 
 [node name="interaction" type="Area3D" parent="." unique_id=421820115]
 

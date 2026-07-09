@@ -52,7 +52,7 @@ func _rebuild_requirements() -> void:
 			continue
 		var row := _create_requirement_row(item)
 		add_child(row)
-		var row_data: Dictionary[String, Variant] = {
+		var row_data: Dictionary[String, Object] = {
 			"slot": slot,
 			"count_label": row.get_node("CountLabel"),
 		}
@@ -101,7 +101,7 @@ func _refresh_deposit_state() -> void:
 		return
 	var required := _get_required_resources()
 	for item: Resource in requirement_rows.keys():
-		var row_data: Dictionary[String, Variant] = requirement_rows[item]
+		var row_data: Dictionary[String, Object] = requirement_rows[item]
 		var slot := row_data["slot"] as ContentSlotResource
 		var count_label := row_data["count_label"] as Label
 		var available := slot.count

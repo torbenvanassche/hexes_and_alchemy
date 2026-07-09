@@ -1,6 +1,6 @@
 class_name Buildable extends Node
 
-@export var build_steps: Array[Interaction];
+@export var build_steps: Array[Interaction] = []
 @export var start_step_index: int = 0;
 var current_step: Interaction;
 

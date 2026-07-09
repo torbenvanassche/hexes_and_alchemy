@@ -12,9 +12,11 @@ enum RuinsState {
 
 @export var investigate_time: float = 8.0
 
+@onready var main_ruins_model: Node3D = get_node_or_null("Root Scene") as Node3D
 @onready var surveyed_marker: Node3D = get_node_or_null("surveyed_marker") as Node3D
 @onready var danger_marker: Node3D = get_node_or_null("danger_marker") as Node3D
 @onready var secured_marker: Node3D = get_node_or_null("secured_marker") as Node3D
+@onready var looted_marker: Node3D = get_node_or_null("looted_marker") as Node3D
 
 var _quest_running: bool = false
 var _pending_reward: Dictionary[ItemInfo, int] = {}
@@ -36,6 +38,8 @@ func _on_visibility_changed() -> void:
 		Manager.instance.journal.complete_task(journal_quest.id)
 
 func can_interact() -> bool:
+	if state_machine.get_current_state() == "LOOTED":
+		return false
 	var lootable := hex.structure.structure_info as LootableStructureInfo
 	if lootable != null and lootable.loot_once and _loot_claimed:
 		return false
@@ -94,9 +98,15 @@ func _set_ruins_state(state: RuinsState) -> void:
 	Manager.instance.quests.quest_availability_changed.emit()
 
 func _update_markers(state: RuinsState) -> void:
+	var is_looted := state == RuinsState.LOOTED
+	show_interaction_prompt = not is_looted
+	if main_ruins_model != null:
+		main_ruins_model.visible = not is_looted
 	if surveyed_marker != null:
 		surveyed_marker.visible = state in [RuinsState.SURVEYED, RuinsState.SECURED]
 	if danger_marker != null:
 		danger_marker.visible = state == RuinsState.DANGEROUS
 	if secured_marker != null:
 		secured_marker.visible = state == RuinsState.SECURED
+	if looted_marker != null:
+		looted_marker.visible = state == RuinsState.LOOTED

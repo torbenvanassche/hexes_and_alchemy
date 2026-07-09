@@ -14,7 +14,7 @@ var location: HexBase;
 
 var state_machine: StateMachine;
 
-var party: Array[NPC];
+var party: Array[NPC] = []
 
 signal completed();
 
@@ -23,7 +23,7 @@ func _init(_location: HexBase = null, _type_key: String = "") -> void:
 	self.quest_key = _type_key;
 	supplies = ContentGroup.new();
 	
-	var states: Array[String];
+	var states: Array[String] = []
 	for s in QuestState.keys():
 		states.append(get_state_as_string(QuestState[s]));
 	state_machine = StateMachine.new(states);

@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://dqrgr40vywkqw"
-path="res://.godot/imported/bottle_A_green.glb-df81c117df855e8184e83efd9f7676c0.scn"
+uid="uid://lm7rokymxyu6"
+path="res://.godot/imported/exclamation.glb-09b4337158784ff3c2a1c4ef9cd7ef05.scn"
 
 [deps]
 
-source_file="res://meshes/kay_dungeon/bottle_A_green.glb"
-dest_files=["res://.godot/imported/bottle_A_green.glb-df81c117df855e8184e83efd9f7676c0.scn"]
+source_file="res://meshes/kay_custom/exclamation.glb"
+dest_files=["res://.godot/imported/exclamation.glb-09b4337158784ff3c2a1c4ef9cd7ef05.scn"]
 
 [params]
 
@@ -41,13 +41,13 @@ materials/extract_format=0
 materials/extract_path=""
 _subresources={
 "materials": {
-"texture": {
+"lambert4SG2.063": {
 "use_external/enabled": true,
-"use_external/fallback_path": "res://materials/kay_dungeons.tres",
-"use_external/path": "uid://dy8cfh1tcryhi"
+"use_external/fallback_path": "res://materials/hay_fantasy_sand.tres",
+"use_external/path": "uid://bsjgt7wkv1u6r"
 }
 }
 }
-gltf/naming_version=0
+gltf/naming_version=2
 gltf/embedded_image_handling=1
 gltf/texture_map_mode=1

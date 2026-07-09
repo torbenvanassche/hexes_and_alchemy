@@ -1,6 +1,6 @@
 extends Node
 
-@onready var mappable_actions: Dictionary = {
+@onready var mappable_actions: Dictionary[String, String] = {
 	"move_forward": "KEYBIND_MOVE_FORWARD",
 	"move_backward": "KEYBIND_MOVE_DOWN",
 	"move_left": "KEYBIND_MOVE_LEFT",
@@ -150,6 +150,6 @@ func event_to_key(event: InputEvent) -> String:
 
 func get_input_icon(action: String) -> Array[int]:
 	var dict_key: String = event_to_key(get_keybind(action));
-	var rV: Array[int];
+	var rV: Array[int] = []
 	rV.assign(get_key(dict_key));
 	return rV;

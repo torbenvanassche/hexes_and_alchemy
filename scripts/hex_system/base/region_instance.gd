@@ -234,7 +234,7 @@ func generate_structures_for_region() -> void:
 			structure_counts[structure] = structure_caps[structure]
 
 func get_structured_hexes() -> Array[HexBase]:
-	var instances: Array[HexBase];
+	var instances: Array[HexBase] = []
 	for hex: HexBase in hexes.values():
 		if hex.structure && not hex.structure.instance is Settlement:
 			instances.append(hex)

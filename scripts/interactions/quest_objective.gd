@@ -4,7 +4,7 @@
 var state_machine: StateMachine = StateMachine.new();
 
 ## Bitmap Columns
-@export var quest_types: Array[String];
+@export var quest_types: Array[String] = []
 @export var bitmap: BitMap;
 @export var quest_supply_requirements: Array[QuestSupplyRequirement] = []
 @export var quest_profiles: Array[QuestProfile] = []
@@ -27,7 +27,7 @@ func get_filtered_quest_types(active_state: int = state_machine.get_current_stat
 	if not bitmap or bitmap.get_size() == Vector2i.ZERO:
 		return _filter_profile_states(available_types, active_state_name);
 	
-	var valid_types: Array[String];
+	var valid_types: Array[String] = []
 	var bitmap_types := available_types
 	for b in bitmap.get_size().x:
 		if b >= bitmap_types.size():

@@ -4,8 +4,8 @@ class_name Settlement extends Node3D
 @export var is_active_settlement: bool = false;
 @export var structure_invalid_range: int = 3;
 
-var collision_shapes: Array[CollisionShape3D];
-var interactions: Array[Interaction];
+var collision_shapes: Array[CollisionShape3D] = []
+var interactions: Array[Interaction] = []
 var interactions_by_type: Dictionary[StringName, Array] = {};
 
 @onready var settlement_outline: CSGPolygon3D = $settlement_outline
@@ -61,7 +61,7 @@ func get_services(type_name: StringName) -> Array[Interaction]:
 	if not interactions_by_type.has(type_name):
 		return services
 	var stored_services: Array = interactions_by_type[type_name]
-	for service: Variant in stored_services:
+	for service in stored_services:
 		var interaction: Interaction = service as Interaction
 		if interaction != null:
 			services.append(interaction)

@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="QuestOutcome" format=3]
+[gd_resource type="Resource" script_class="QuestOutcome" format=3 uid="uid://cv54trrx4psvx"]
 
-[ext_resource type="Script" path="res://scripts/quests/quest_outcome.gd" id="1_outcome"]
-[ext_resource type="Resource" path="res://resources/loot_tables/quest_variants/water_draw_extra.tres" id="2_loot"]
+[ext_resource type="Script" uid="uid://cwu8dwm55ox1u" path="res://scripts/quests/quest_outcome.gd" id="1_outcome"]
+[ext_resource type="Resource" uid="uid://kaqaa16su06m" path="res://resources/loot_tables/quest_variants/water_draw_extra.tres" id="2_loot"]
 
 [resource]
 script = ExtResource("1_outcome")

@@ -1,8 +1,9 @@
-[gd_resource type="Resource" script_class="QuestProfile" format=3]
+[gd_resource type="Resource" script_class="QuestProfile" format=3 uid="uid://dj8sb67n5ecrn"]
 
-[ext_resource type="Script" path="res://scripts/quests/quest_profile.gd" id="1_profile"]
-[ext_resource type="Script" path="res://scripts/quests/quest_outcome.gd" id="2_outcome_script"]
+[ext_resource type="Script" uid="uid://bapqr4qv780fa" path="res://scripts/quests/quest_profile.gd" id="1_profile"]
+[ext_resource type="Script" uid="uid://cwu8dwm55ox1u" path="res://scripts/quests/quest_outcome.gd" id="2_outcome_script"]
 [ext_resource type="Resource" path="res://resources/quest_outcomes/quest_outcome_water_restore.tres" id="3_outcome"]
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="3_ve3w5"]
 
 [resource]
 script = ExtResource("1_profile")
@@ -10,8 +11,6 @@ quest_key = "maintain"
 behaviour = "maintain"
 translation_key_name = "QUEST_TYPE_MAINTAIN"
 description_key = "QUEST_DESC_WATER_MAINTAIN"
-risk_key = "QUEST_RISK_SAFE"
 expected_reward_key = "QUEST_REWARD_SOURCE_RECOVERY"
-duration_seconds = 5.0
-available_states = Array[String](["LOW", "TAINTED"])
+available_states = Array[String](["TAINTED"])
 outcomes = Array[ExtResource("2_outcome_script")]([ExtResource("3_outcome")])

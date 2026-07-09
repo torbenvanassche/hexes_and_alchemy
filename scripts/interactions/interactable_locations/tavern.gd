@@ -5,7 +5,7 @@ class_name Tavern extends SettlementService
 @onready var spawn_interval: Timer = $spawn_interval
 var buildable_structure: Buildable;
 
-var npcs: Array[SceneInstance];
+var npcs: Array[SceneInstance] = []
 
 func _ready() -> void:
 	super()

@@ -6,7 +6,7 @@ class_name MainGrid extends HexGrid
 @export var starting_resource_search_radius: int = 12
 @export var guaranteed_starting_structures: Array[StructureInfo] = []
 
-var path: Array[HexBase];
+var path: Array[HexBase] = []
 
 func _ready() -> void:
 	super();

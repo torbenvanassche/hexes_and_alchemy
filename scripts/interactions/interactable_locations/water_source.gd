@@ -2,7 +2,6 @@ class_name WaterSource extends QuestObjective
 
 enum WaterState {
 	FRESH,
-	LOW,
 	TAINTED
 }
 
@@ -10,9 +9,7 @@ enum WaterState {
 @export var reward_item: ItemInfo
 @export var reward_amount: int = 1
 
-@onready var low_water_marker: Node3D = get_node_or_null("low_water_marker") as Node3D
 @onready var tainted_marker: Node3D = get_node_or_null("tainted_marker") as Node3D
-@onready var maintained_marker: Node3D = get_node_or_null("maintained_marker") as Node3D
 
 var _quest_running: bool = false
 var _pending_reward: Dictionary[ItemInfo, int] = {}
@@ -69,9 +66,5 @@ func _set_water_state(state: WaterState) -> void:
 	Manager.instance.quests.quest_availability_changed.emit()
 
 func _update_markers(state: WaterState) -> void:
-	if low_water_marker != null:
-		low_water_marker.visible = state == WaterState.LOW
 	if tainted_marker != null:
 		tainted_marker.visible = state == WaterState.TAINTED
-	if maintained_marker != null:
-		maintained_marker.visible = false

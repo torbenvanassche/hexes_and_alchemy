@@ -3,9 +3,9 @@
 var hex: HexBase;
 var settlement: Settlement;
 
-var enterable_triggers: Array[Area3D];
-var colliders: Array[StaticBody3D];
-var collision_shapes: Array[CollisionShape3D];
+var enterable_triggers: Array[Area3D] = []
+var colliders: Array[StaticBody3D] = []
+var collision_shapes: Array[CollisionShape3D] = []
 var window_instance: SceneInstance;
 
 @export var show_interaction_prompt: bool = true;

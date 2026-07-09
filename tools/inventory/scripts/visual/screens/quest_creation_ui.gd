@@ -262,11 +262,7 @@ func _create_quest() -> void:
 		return
 
 	var location: HexBase = quest_location.get_item_metadata(location_idx) as HexBase
-	var quest_type_metadata: Variant = quest_type.get_item_metadata(quest_type_idx)
-	if not (quest_type_metadata is String):
-		return
-
-	var quest_type_key: String = str(quest_type_metadata)
+	var quest_type_key := _get_quest_type_key(quest_type_idx)
 	if location == null or quest_type_key == "":
 		return
 
@@ -299,10 +295,10 @@ func _select_first_creatable_quest_type(objective: QuestObjective) -> void:
 	if objective == null:
 		return
 	for i in quest_type.item_count:
-		var quest_type_metadata: Variant = quest_type.get_item_metadata(i)
-		if not (quest_type_metadata is String):
+		var quest_type_key := _get_quest_type_key(i)
+		if quest_type_key == "":
 			continue
-		if objective.has_required_supplies(str(quest_type_metadata), _get_player_inventory()):
+		if objective.has_required_supplies(quest_type_key, _get_player_inventory()):
 			quest_type.select(i)
 			return
 
@@ -317,14 +313,14 @@ func _update_finish_button() -> void:
 		return
 
 	var location: HexBase = quest_location.get_item_metadata(location_idx) as HexBase
-	var quest_type_metadata: Variant = quest_type.get_item_metadata(quest_type_idx)
-	if location == null or location.structure == null or not (quest_type_metadata is String):
+	var quest_type_key := _get_quest_type_key(quest_type_idx)
+	if location == null or location.structure == null or quest_type_key == "":
 		finish_quest_creation.disabled = true
 		return
 
 	var objective := location.structure.instance as QuestObjective
 	finish_quest_creation.disabled = objective == null or not objective.has_required_supplies(
-		str(quest_type_metadata),
+		quest_type_key,
 		_get_player_inventory()
 	)
 
@@ -497,8 +493,8 @@ func _get_selected_quest_type_and_objective() -> Dictionary:
 		return {}
 
 	var location: HexBase = quest_location.get_item_metadata(location_idx) as HexBase
-	var quest_type_metadata: Variant = quest_type.get_item_metadata(quest_type_idx)
-	if location == null or location.structure == null or not (quest_type_metadata is String):
+	var quest_type_key := _get_quest_type_key(quest_type_idx)
+	if location == null or location.structure == null or quest_type_key == "":
 		return {}
 
 	var objective := location.structure.instance as QuestObjective
@@ -507,8 +503,14 @@ func _get_selected_quest_type_and_objective() -> Dictionary:
 
 	return {
 		"objective": objective,
-		"quest_type": str(quest_type_metadata),
+		"quest_type": quest_type_key,
 	}
+
+func _get_quest_type_key(index: int) -> String:
+	if index < 0 or index >= quest_type.item_count:
+		return ""
+	var metadata = quest_type.get_item_metadata(index)
+	return str(metadata) if metadata is String else ""
 
 func _create_supply_slot(item: ItemInfo, count: int) -> ContentSlotUI:
 	var slot: ContentSlotUI = packed_slot.instantiate()

@@ -8,6 +8,10 @@
 [ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_ruins_salvage.tres" id="5_salvage"]
 [ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_ruins_delve.tres" id="6_delve"]
 [ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_ruins_secure.tres" id="7_secure"]
+[ext_resource type="PackedScene" uid="uid://nyf8encrfcc7" path="res://meshes/kay_rpg_tools/journal_open.glb" id="9_ar6dw"]
+[ext_resource type="PackedScene" uid="uid://lm7rokymxyu6" path="res://meshes/kay_custom/exclamation.glb" id="10_cuer0"]
+[ext_resource type="PackedScene" uid="uid://qsfp5ua0nt7t" path="res://meshes/kay_fantasy_hexagon/decoration/props/flag_green.glb" id="10_secure_flag"]
+[ext_resource type="PackedScene" uid="uid://bofdcif23goin" path="res://meshes/kay_resources/Stone_Chunks_Large.glb" id="12_h83um"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ruins_interaction"]
 size = Vector3(1.95, 1.2, 1.9474609)
@@ -26,11 +30,25 @@ journal_quest = ExtResource("2_cg5fk")
 [node name="surveyed_marker" type="Node3D" parent="." unique_id=1815000001]
 visible = false
 
+[node name="journal" parent="surveyed_marker" unique_id=573214732 instance=ExtResource("9_ar6dw")]
+transform = Transform3D(0.42, 0, 0, 0, 0.33767986, 0.24974445, 0, -0.24974445, 0.33767986, 0.09285873, 0.4726159, 0.47548464)
+
 [node name="danger_marker" type="Node3D" parent="." unique_id=1815000003]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2104809, 0)
 visible = false
+
+[node name="exclamation" parent="danger_marker" unique_id=337247587 instance=ExtResource("10_cuer0")]
 
 [node name="secured_marker" type="Node3D" parent="." unique_id=1815000005]
 visible = false
+
+[node name="secure_flag" parent="secured_marker" unique_id=342336463 instance=ExtResource("10_secure_flag")]
+transform = Transform3D(-1.2731496, 0, 1.4704137, 0, 1.945, 0, -1.4704137, 0, -1.2731496, -0.029746294, 0.8511665, 0.047429204)
+
+[node name="looted_marker" type="Node3D" parent="." unique_id=1462379366]
+visible = false
+
+[node name="Root Scene" parent="looted_marker" unique_id=630459341 instance=ExtResource("12_h83um")]
 
 [node name="interaction" type="Area3D" parent="." unique_id=784232890]
 

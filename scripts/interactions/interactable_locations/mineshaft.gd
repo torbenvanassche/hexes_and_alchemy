@@ -197,9 +197,9 @@ func get_quest_profile_reward_preview(quest_type_key: String) -> Array[Dictionar
 func _get_profile_float(profile: QuestProfile, key: String, fallback: float) -> float:
 	if profile == null:
 		return fallback
-	return float(profile.get_modifier(key, fallback))
+	return profile.get_float_modifier(key, fallback)
 
 func _get_profile_int(profile: QuestProfile, key: String, fallback: int) -> int:
 	if profile == null:
 		return fallback
-	return int(profile.get_modifier(key, fallback))
+	return profile.get_int_modifier(key, fallback)

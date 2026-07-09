@@ -17,6 +17,7 @@ KEYBIND_CANCEL,cancel,cancel
 KEYBIND_JOURNAL,journal,journal
 SETTINGS_TAB_GAME,game,game
 SETTINGS_TAB_INPUT,input,input
+SETTINGS_BACK,Back,Back
 WINDOW_TITLE,window title,window title
 WINDOW_INVENTORY,Inventory,Inventory
 WINDOW_JOURNAL,Journal,Journal
@@ -25,6 +26,8 @@ WINDOW_MARKET,Market,Market
 WINDOW_DEPOSIT_ITEMS,Deposit items,Deposit items
 WINDOW_QUEST_BOARD,Quest board,Quest board
 WINDOW_NEW_QUEST,New quest,New quest
+WINDOW_KEEP_OPEN,Keep open,Keep open
+WINDOW_CLOSE,Close,Close
 PAUSE_RESUME,Resume,Resume
 PAUSE_SETTINGS,Settings,Settings
 PAUSE_QUIT,Quit,Quit

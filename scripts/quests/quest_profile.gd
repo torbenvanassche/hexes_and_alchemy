@@ -160,7 +160,8 @@ func roll_outcome() -> QuestOutcome:
 
 	return valid_outcomes[-1]
 
-func get_modifier(key: String, fallback: Variant = null) -> Variant:
-	if modifiers.has(key):
-		return modifiers[key]
-	return fallback
+func get_float_modifier(key: String, fallback: float) -> float:
+	return float(modifiers.get(key, fallback))
+
+func get_int_modifier(key: String, fallback: int) -> int:
+	return int(modifiers.get(key, fallback))

@@ -1,11 +1,11 @@
-[gd_resource type="Resource" script_class="QuestProfile" format=3]
+[gd_resource type="Resource" script_class="QuestProfile" format=3 uid="uid://b6rwhexa1w83i"]
 
-[ext_resource type="Script" path="res://scripts/quests/quest_profile.gd" id="1_profile"]
-[ext_resource type="Script" path="res://scripts/quests/quest_outcome.gd" id="2_outcome_script"]
+[ext_resource type="Script" uid="uid://bapqr4qv780fa" path="res://scripts/quests/quest_profile.gd" id="1_profile"]
+[ext_resource type="Script" uid="uid://cwu8dwm55ox1u" path="res://scripts/quests/quest_outcome.gd" id="2_outcome_script"]
 [ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="3_item_script"]
 [ext_resource type="Resource" uid="uid://b0i36ajrv252n" path="res://resources/item_info/bucket.tres" id="4_bucket"]
-[ext_resource type="Resource" path="res://resources/quest_outcomes/quest_outcome_water_draw_low.tres" id="5_low"]
-[ext_resource type="Resource" path="res://resources/quest_outcomes/quest_outcome_water_draw_tainted.tres" id="6_tainted"]
+[ext_resource type="Resource" uid="uid://p1bqq3kiin6f" path="res://resources/quest_outcomes/quest_outcome_water_draw_low.tres" id="5_low"]
+[ext_resource type="Resource" uid="uid://cv54trrx4psvx" path="res://resources/quest_outcomes/quest_outcome_water_draw_tainted.tres" id="6_tainted"]
 
 [resource]
 script = ExtResource("1_profile")

@@ -43,7 +43,7 @@ func get_from_cache(scene_info: SceneInfo) -> SceneInfo:
 		queue(scene_info)
 		return scene_info;
 		
-func is_cached(scene_info: SceneInfo) -> Variant:
+func is_cached(scene_info: SceneInfo) -> int:
 	if loading_queue.has(scene_info) || cached_scenes.has(scene_info):
 		return ResourceLoader.load_threaded_get_status(scene_info.packed_scene.resource_path)
 	else:

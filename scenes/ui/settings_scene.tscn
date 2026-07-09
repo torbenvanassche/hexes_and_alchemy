@@ -148,6 +148,6 @@ layout_mode = 2
 size_flags_horizontal = 0
 theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 40
-text = "Back"
+text = "SETTINGS_BACK"
 icon = ExtResource("3_xi83m")
 expand_icon = true

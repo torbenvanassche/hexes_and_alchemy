@@ -20,18 +20,18 @@ var generation_seed: int = 0;
 
 ##Optionally define custom regions that can generate if you don't want to use the global setting
 @export_group("Regions")
-@export var custom_regions: Array[RegionInfo];
+@export var custom_regions: Array[RegionInfo] = []
 @export var generate_ocean: bool = true;
 
 ##Whether or not to merge the general list of regions as part of the generation process
 @export var use_global_regions: bool = true;
-var region_options: Array[RegionInfo];
+var region_options: Array[RegionInfo] = []
 
 var initialized: bool = false;
 
 ##Chunks that should not generate water or structures
 @export_group("Structure Rules")
-@export var protected_chunks: Array[Vector2i];
+@export var protected_chunks: Array[Vector2i] = []
 
 static var RADIUS_IN: float = 1.0
 
@@ -64,7 +64,7 @@ func _ready() -> void:
 	_initialize_generation_seed()
 
 	if use_global_regions:
-		region_options = DataManager.instance.regions;
+		region_options = DataManager.instance.regions.duplicate()
 	for region in custom_regions:
 		if not region_options.has(region):
 			region_options.append(region);
@@ -182,7 +182,7 @@ func _is_near_settlement(cube_id: Vector3i) -> bool:
 	return false
 	
 func get_structured_hexes() -> Array[HexBase]:
-	var instances : Array[HexBase];
+	var instances: Array[HexBase] = []
 	for region_instance in region_instances.keys():
 		var region := _get_instances_for_region(region_instance);
 		for instance: RegionInstance in region:
@@ -199,7 +199,7 @@ func create_hex(grid_id: Vector2i, info: SceneInfo, region: RegionInfo) -> Scene
 	var hex := scene_instance.node;
 	
 	hex.region = region;
-	var spacing =  GridUtils.get_spacing(RADIUS_IN, _spacing, pointy_top);
+	var spacing := GridUtils.get_spacing(RADIUS_IN, _spacing, pointy_top);
 
 	hex.grid_id = grid_id;
 	hex.cube_id = GridUtils.offset_to_cube(grid_id, pointy_top)
