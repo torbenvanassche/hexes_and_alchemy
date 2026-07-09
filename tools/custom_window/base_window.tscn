@@ -7,6 +7,8 @@
 [ext_resource type="Texture2D" uid="uid://cgbd8t72ol743" path="res://sprites/ui/icons/unlocked.png" id="5_qutwm"]
 
 [node name="Window2" type="Control" unique_id=1301866213]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 3
 anchors_preset = 0
 offset_right = 100.0
 offset_bottom = 100.0
@@ -53,15 +55,11 @@ grow_vertical = 2
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 
-[node name="HBoxContainer" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/topbar/MarginContainer2" unique_id=1643440073]
-layout_mode = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="NinePatchRect/VBoxContainer/topbar/MarginContainer2/HBoxContainer" unique_id=67417564]
+[node name="MarginContainer" type="MarginContainer" parent="NinePatchRect/VBoxContainer/topbar/MarginContainer2" unique_id=67417564]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/margin_left = 80
 
-[node name="Title" type="Label" parent="NinePatchRect/VBoxContainer/topbar/MarginContainer2/HBoxContainer/MarginContainer" unique_id=1155745598]
+[node name="Title" type="Label" parent="NinePatchRect/VBoxContainer/topbar/MarginContainer2/MarginContainer" unique_id=1155745598]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("3_lstjp")
@@ -69,14 +67,18 @@ theme_override_font_sizes/font_size = 40
 text = "WINDOW_TITLE"
 horizontal_alignment = 1
 
+[node name="HBoxContainer" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/topbar/MarginContainer2" unique_id=1643440073]
+layout_mode = 2
+alignment = 2
+
 [node name="LockButton" type="Button" parent="NinePatchRect/VBoxContainer/topbar/MarginContainer2/HBoxContainer" unique_id=1870475115]
 visible = false
 custom_minimum_size = Vector2(40, 30)
 layout_mode = 2
 tooltip_text = "Keep open"
+toggle_mode = true
 icon = ExtResource("5_qutwm")
 flat = true
-toggle_mode = true
 icon_alignment = 1
 expand_icon = true
 

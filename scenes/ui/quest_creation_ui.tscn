@@ -7,10 +7,10 @@
 [ext_resource type="Theme" uid="uid://bemn0spuaev14" path="res://themes/fantasy_buttons.tres" id="6_button_theme"]
 
 [node name="Window" unique_id=1301866213 node_paths=PackedStringArray("content") instance=ExtResource("1_b8c84")]
-custom_minimum_size = Vector2(430, 240)
+custom_minimum_size = Vector2(460, 313)
 layout_mode = 3
-offset_right = 430.0
-offset_bottom = 240.0
+offset_right = 460.0
+offset_bottom = 313.0
 id = "WINDOW_NEW_QUEST"
 content = NodePath("NinePatchRect/VBoxContainer/contentPanel/QuestCreation")
 
