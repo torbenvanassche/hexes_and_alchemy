@@ -201,4 +201,5 @@ custom_minimum_size = Vector2(170, 38)
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("6_button_theme")
+theme_override_font_sizes/font_size = 30
 text = "QUEST_CREATION_CREATE"
