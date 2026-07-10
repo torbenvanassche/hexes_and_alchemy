@@ -16,9 +16,11 @@ func can_interact() -> bool:
 	
 func _open_window(window_info: SceneInfo) -> void:
 	window_instance = SceneManager.add(window_info, false);
+	_setup_ui_window(window_instance)
 	var inventory_ui: MarketUI = (window_instance.node as DraggableControl).content as MarketUI;
 	inventory_ui.setup(buy_inventory, sell_inventory, Manager.instance.player_instance.inventory);
 	window_instance.on_enter.emit();
+	open_additional_ui_windows()
 
 func _apply_buy_menu() -> void:
 	if buy_menu.is_empty():
@@ -36,8 +38,3 @@ func _apply_buy_menu() -> void:
 			inventory_slot.maxcount = maxi(1, inventory_slot.count);
 		inventory_slot.is_unlocked = true;
 		buy_inventory.add_slot(inventory_slot);
-
-func _on_area_exit(other: Area3D) -> void:
-	if window_instance:
-		window_instance.hide();
-	super(other);

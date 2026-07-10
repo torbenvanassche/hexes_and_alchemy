@@ -20,8 +20,3 @@ func _open_window(window_info: SceneInfo) -> void:
 	if not dep_ui.supplies_deposited.is_connected(completed.emit):
 		dep_ui.supplies_deposited.connect(completed.emit);
 	window_instance.on_enter.emit();
-
-func _on_area_exit(other: Area3D) -> void:
-	if window_instance:
-		window_instance.hide();
-	super(other);

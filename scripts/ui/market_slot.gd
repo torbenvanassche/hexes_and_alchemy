@@ -38,9 +38,12 @@ func configure_sell(_content: Resource, _owned_count: int, inventory: ContentGro
 
 func _set_item(item: Resource) -> void:
 	var item_info := item as ItemInfo
+	var display_name := _get_display_name(item)
 	item_icon.texture = item_info.texture if item_info else null
-	item_icon.tooltip_text = _get_display_name(item)
-	item_name_label.text = _get_display_name(item)
+	item_icon.tooltip_text = display_name
+	item_name_label.text = display_name
+	item_name_label.tooltip_text = display_name
+	tooltip_text = display_name
 	price_label.text = "%s [img=18x18]res://sprites/items/coin_single.png[/img]" % unit_price
 
 func _on_pressed() -> void:

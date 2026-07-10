@@ -92,13 +92,20 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.28, 0.18, 0.09, 1)
 autowrap_mode = 3
 
-[node name="DetailsDivider" type="ColorRect" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/DetailsPanel" index="1" unique_id=184002013]
+[node name="RankRequirementLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/DetailsPanel" index="1"]
+visible = false
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.13, 0.06, 1)
+autowrap_mode = 3
+
+[node name="DetailsDivider" type="ColorRect" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/DetailsPanel" index="2" unique_id=184002013]
 visible = false
 custom_minimum_size = Vector2(0, 2)
 layout_mode = 2
 color = Color(0.38, 0.26, 0.14, 0.35)
 
-[node name="MetaRow" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/DetailsPanel" index="2" unique_id=942240517]
+[node name="MetaRow" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/DetailsPanel" index="3" unique_id=942240517]
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 10

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="SceneInfo" format=3 uid="uid://c02vjxha4podp"]
+
+[ext_resource type="PackedScene" uid="uid://dbln4pvxulw31" path="res://scenes/ui/tavern_roster_ui.tscn" id="1_roster"]
+[ext_resource type="Script" uid="uid://6t4u66o5q6po" path="res://scripts/scene_manager/scene_info.gd" id="2_scene_info"]
+
+[resource]
+script = ExtResource("2_scene_info")
+id = "tavern_roster_ui"
+packed_scene = ExtResource("1_roster")
+type = 2
+is_unique = true
+transient = true
+metadata/_custom_type_script = "uid://6t4u66o5q6po"

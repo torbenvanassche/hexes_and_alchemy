@@ -9,6 +9,7 @@ var collision_shapes: Array[CollisionShape3D] = []
 var window_instance: SceneInstance;
 
 @export var show_interaction_prompt: bool = true;
+@export var close_window_on_area_exit: bool = true
 @export var journal_quest: JournalTask;
 
 @abstract func interact() -> void;
@@ -42,7 +43,12 @@ func _on_visibility_changed() -> void:
 func _on_area_exit(other: Area3D) -> void:
 	var player := other.get_parent() as PlayerController
 	if player != null and player.interactor_component != null:
+		_close_window_on_area_exit()
 		player.interactor_component._refresh_interaction_prompt()
+
+func _close_window_on_area_exit() -> void:
+	if close_window_on_area_exit and window_instance != null:
+		window_instance.hide()
 		
 func _on_area_enter(other: Area3D) -> void:
 	var player := other.get_parent() as PlayerController

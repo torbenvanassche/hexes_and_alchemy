@@ -178,11 +178,11 @@ func get_quest_profile_reward_preview(quest_type_key: String) -> Array[Dictionar
 	for item: ItemInfo in ranges.keys():
 		if item == null:
 			continue
-		var range: Vector2i = ranges[item]
+		var amount_range: Vector2i = ranges[item]
 		preview.append({
 			"item": item,
-			"min": range.x * reward_rolls,
-			"max": range.y * reward_rolls,
+			"min": amount_range.x * reward_rolls,
+			"max": amount_range.y * reward_rolls,
 		})
 
 	preview.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:

@@ -7,6 +7,7 @@ class_name QuestProfile extends Resource
 @export var risk_key: String = "QUEST_RISK_SAFE"
 @export var expected_reward_key: String = ""
 @export var duration_seconds: float = 5.0
+@export var minimum_rank: AdventurerRank.Rank = AdventurerRank.Rank.F
 @export var available_states: Array[String] = []
 @export var required_supplies: Dictionary[ItemInfo, int] = {}
 @export var outcomes: Array[QuestOutcome] = []
@@ -76,10 +77,10 @@ func get_reward_preview() -> Array[Dictionary]:
 			if item == null:
 				continue
 
-			var range: Vector2i = ranges[item]
+			var amount_range: Vector2i = ranges[item]
 			var current: Vector2i = item_ranges.get(item, Vector2i(-1, 0))
-			var min_amount := range.x if current.x == -1 else mini(current.x, range.x)
-			item_ranges[item] = Vector2i(min_amount, maxi(current.y, range.y))
+			var min_amount := amount_range.x if current.x == -1 else mini(current.x, amount_range.x)
+			item_ranges[item] = Vector2i(min_amount, maxi(current.y, amount_range.y))
 			item_seen_counts[item] = int(item_seen_counts.get(item, 0)) + 1
 
 	if valid_outcome_count == 0:
@@ -90,14 +91,14 @@ func get_reward_preview() -> Array[Dictionary]:
 		if item == null:
 			continue
 
-		var range: Vector2i = item_ranges[item]
+		var amount_range: Vector2i = item_ranges[item]
 		if int(item_seen_counts.get(item, 0)) < valid_outcome_count:
-			range.x = 0
+			amount_range.x = 0
 
 		preview.append({
 			"item": item,
-			"min": range.x,
-			"max": range.y,
+			"min": amount_range.x,
+			"max": amount_range.y,
 		})
 
 	preview.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
@@ -108,6 +109,9 @@ func get_reward_preview() -> Array[Dictionary]:
 		return item_a.get_display_name().nocasecmp_to(item_b.get_display_name()) < 0
 	)
 	return preview
+
+func get_minimum_rank() -> AdventurerRank.Rank:
+	return AdventurerRank.clamp_rank(minimum_rank)
 
 func get_required_supplies() -> Dictionary[ItemInfo, int]:
 	return required_supplies

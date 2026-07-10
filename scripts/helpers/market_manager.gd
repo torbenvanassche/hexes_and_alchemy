@@ -25,15 +25,15 @@ func sell_now(inventory: ContentGroup, content: Resource, quantity: int) -> bool
 	if inventory == null or content == null or quantity <= 0:
 		return false
 	if inventory.get_count(content) < quantity:
-		_notify("Not enough items to sell.", Color.RED)
+		_notify(tr("MARKET_SELL_NOT_ENOUGH_ITEMS"), Color.RED)
 		return false
 	var remaining := inventory.remove(content, quantity)
 	if remaining > 0:
-		_notify("Could not remove items from inventory.", Color.RED)
+		_notify(tr("MARKET_SELL_REMOVE_FAILED"), Color.RED)
 		return false
 	var unit_value := get_sell_now_value(content)
 	Manager.instance.player_instance.currency += unit_value * quantity
-	_notify("Sold %sx %s for %s coins." % [quantity, _get_display_name(content), unit_value * quantity])
+	_notify(tr("MARKET_SELL_SUCCESS") % [quantity, _get_display_name(content), unit_value * quantity])
 	return true
 
 func buy_from_slot(source_slot: ContentSlotResource, destination_inventory: ContentGroup, quantity: int) -> bool:
@@ -46,18 +46,18 @@ func buy_from_slot(source_slot: ContentSlotResource, destination_inventory: Cont
 	var unit_price := get_buy_value(content)
 	var total_price := unit_price * amount
 	if Manager.instance.player_instance.currency < total_price:
-		_notify("Not enough coins.", Color.RED) 
+		_notify(tr("MARKET_BUY_NOT_ENOUGH_COINS"), Color.RED)
 		return false
 	if _get_available_capacity(destination_inventory, content) < amount:
-		_notify("Inventory full.", Color.RED)
+		_notify(tr("MARKET_BUY_INVENTORY_FULL"), Color.RED)
 		return false
 	var remaining := destination_inventory.add(content, amount)
 	if remaining > 0:
-		_notify("Inventory full.", Color.RED)
+		_notify(tr("MARKET_BUY_INVENTORY_FULL"), Color.RED)
 		return false
 	Manager.instance.player_instance.currency -= total_price
 	source_slot.remove(amount)
-	_notify("Bought %sx %s for %s coins." % [amount, _get_display_name(content), total_price])
+	_notify(tr("MARKET_BUY_SUCCESS") % [amount, _get_display_name(content), total_price])
 	return true
 
 func _get_display_name(content: Resource) -> String:

@@ -6,10 +6,31 @@
 [ext_resource type="Script" uid="uid://dsjvnwho537yo" path="res://scripts/interactions/market.gd" id="2_dxohp"]
 [ext_resource type="Resource" uid="uid://cedqercu5lay2" path="res://resources/item_info/seed_pouch.tres" id="3_1ivke"]
 [ext_resource type="Material" uid="uid://c66vbca7lgh6m" path="res://materials/kay_fantasy_default.tres" id="3_uyef6"]
+[ext_resource type="Resource" uid="uid://oowfm1lpkvm" path="res://resources/item_info/wood_log.tres" id="4_wood"]
+[ext_resource type="Resource" uid="uid://o03k1cg30nlw" path="res://resources/item_info/iron_ore.tres" id="5_iron"]
 
 [sub_resource type="Resource" id="Resource_dc7o2"]
 script = ExtResource("2_7hx24")
 content = ExtResource("3_1ivke")
+count = 10
+maxcount = 10
+is_unlocked = true
+metadata/_custom_type_script = "uid://bqabkvm20ept7"
+
+[sub_resource type="Resource" id="Resource_wood"]
+script = ExtResource("2_7hx24")
+content = ExtResource("4_wood")
+count = 10
+maxcount = 10
+is_unlocked = true
+metadata/_custom_type_script = "uid://bqabkvm20ept7"
+
+[sub_resource type="Resource" id="Resource_iron"]
+script = ExtResource("2_7hx24")
+content = ExtResource("5_iron")
+count = 6
+maxcount = 6
+is_unlocked = true
 metadata/_custom_type_script = "uid://bqabkvm20ept7"
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_xlvr5"]
@@ -20,7 +41,7 @@ size = Vector3(1.8043289, 1.0020065, 1.2592618)
 
 [node name="market" type="Node3D" unique_id=2075765343]
 script = ExtResource("2_dxohp")
-buy_menu = Array[ExtResource("2_7hx24")]([SubResource("Resource_dc7o2")])
+buy_menu = Array[ExtResource("2_7hx24")]([SubResource("Resource_dc7o2"), SubResource("Resource_wood"), SubResource("Resource_iron")])
 
 [node name="BuyInventory" type="Node" parent="." unique_id=309232762]
 script = ExtResource("1_xlvr5")

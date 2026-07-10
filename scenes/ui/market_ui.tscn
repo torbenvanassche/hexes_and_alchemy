@@ -10,6 +10,7 @@
 custom_minimum_size = Vector2(760, 460)
 custom_maximum_size = Vector2(980, 640)
 id = "WINDOW_MARKET"
+resizable = false
 content = NodePath("NinePatchRect/VBoxContainer/contentPanel/MarketPanel")
 
 [node name="MarginContainer2" parent="NinePatchRect/VBoxContainer/topbar" parent_id_path=PackedInt32Array(347636229) index="0" unique_id=634422055]
@@ -28,11 +29,6 @@ size_flags_vertical = 3
 theme = ExtResource("4_theme")
 theme_override_constants/separation = 8
 script = ExtResource("2_3uv46")
-buy_tab_button = NodePath("TopRow/TabSelector/BuyTab")
-sell_tab_button = NodePath("TopRow/TabSelector/SellTab")
-item_grid = NodePath("ScrollContainer/ItemGrid")
-currency_label = NodePath("TopRow/CurrencyPanel/CurrencyAmount")
-empty_label = NodePath("../EmptyLabel")
 market_tile_scene = ExtResource("3_market_slot")
 
 [node name="TopRow" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/MarketPanel" index="0" unique_id=1570491888]
@@ -91,10 +87,12 @@ theme_override_constants/h_separation = 8
 theme_override_constants/v_separation = 6
 columns = 3
 
-[node name="EmptyLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel" index="1" unique_id=983768139]
+[node name="EmptyLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/MarketPanel" index="2" unique_id=983768139]
+visible = false
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
 size_flags_horizontal = 4
+mouse_filter = 2
 theme = ExtResource("5_dark")
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "MARKET_EMPTY_DEFAULT"

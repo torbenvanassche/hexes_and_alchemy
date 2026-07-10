@@ -1,12 +1,11 @@
 [gd_scene format=3 uid="uid://b8rer4f8w6ive"]
 
 [ext_resource type="Script" uid="uid://brtr35b12dwpi" path="res://scripts/ui/market_slot.gd" id="1_2m32k"]
-[ext_resource type="Theme" uid="uid://dae2b2hfpj0l2" path="res://themes/base_theme.theme" id="2_theme"]
 [ext_resource type="Theme" uid="uid://3rlxm8752xjm" path="res://themes/base_theme_dark.theme" id="3_dark"]
 
 [node name="MarketSlot" type="Button" unique_id=2049737903]
-custom_minimum_size = Vector2(280, 58)
-theme = ExtResource("2_theme")
+custom_minimum_size = Vector2(0, 54)
+theme = ExtResource("3_dark")
 script = ExtResource("1_2m32k")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=863947063]
@@ -16,18 +15,19 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
+mouse_filter = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 7
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 7
 
 [node name="Content" type="HBoxContainer" parent="MarginContainer" unique_id=738450118]
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 6
 
 [node name="Icon" type="TextureRect" parent="MarginContainer/Content" unique_id=1058541984]
-custom_minimum_size = Vector2(34, 34)
+custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 size_flags_vertical = 4
 expand_mode = 1
@@ -36,13 +36,14 @@ stretch_mode = 5
 [node name="Name" type="Label" parent="MarginContainer/Content" unique_id=194722745]
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("2_theme")
+theme = ExtResource("3_dark")
 text = "MARKET_ITEM_PLACEHOLDER"
 vertical_alignment = 1
 clip_text = true
+text_overrun_behavior = 3
 
 [node name="Price" type="RichTextLabel" parent="MarginContainer/Content" unique_id=311701316]
-custom_minimum_size = Vector2(78, 23)
+custom_minimum_size = Vector2(62, 23)
 custom_maximum_size = Vector2(-1, 23)
 layout_mode = 2
 size_flags_horizontal = 4

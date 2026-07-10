@@ -14,8 +14,8 @@ func can_interact() -> bool:
 	return ui_is_closed && active_settlement_board;
 	
 func _open_window(window_info: SceneInfo) -> void:
-	window_instance = SceneManager.add(window_info, false);
-	window_instance.on_enter.emit();
+	window_instance = open_ui_window(window_info);
+	open_additional_ui_windows()
 
 func _has_available_quest_locations() -> bool:
 	return not _get_available_quest_locations().is_empty()
@@ -67,6 +67,3 @@ func _ensure_hex(grid: HexGrid) -> void:
 	var cube_id = grid.world_to_cube_id(global_position)
 	if grid.tiles.has(cube_id):
 		hex = grid.tiles[cube_id].node
-
-func _on_area_exit(other: Area3D) -> void:
-	super(other);

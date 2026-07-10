@@ -4,6 +4,7 @@ class_name QuestCreationUI extends Control
 @onready var quest_location: OptionButton = $MarginContainer/VBoxContainer/LocationRow/QuestLocation
 @onready var details_panel: VBoxContainer = $MarginContainer/VBoxContainer/DetailsPanel
 @onready var description_label: Label = $MarginContainer/VBoxContainer/DetailsPanel/DescriptionLabel
+@onready var rank_requirement_label: Label = $MarginContainer/VBoxContainer/DetailsPanel/RankRequirementLabel
 @onready var details_divider: ColorRect = $MarginContainer/VBoxContainer/DetailsPanel/DetailsDivider
 @onready var meta_row: HBoxContainer = $MarginContainer/VBoxContainer/DetailsPanel/MetaRow
 @onready var duration_box: VBoxContainer = $MarginContainer/VBoxContainer/DetailsPanel/MetaRow/DurationBox
@@ -96,7 +97,7 @@ func _on_location_selected(idx: int) -> void:
 			quest_type.set_item_metadata(quest_type.item_count - 1, state)
 			quest_type.set_item_disabled(
 				quest_type.item_count - 1,
-				not objective.has_required_supplies(state, _get_player_inventory())
+				not _can_create_quest(location, objective, state)
 			)
 
 	var has_types: bool = quest_type.item_count > 0
@@ -268,7 +269,10 @@ func _create_quest() -> void:
 
 	var quest := Quest.new(location, quest_type_key)
 	var objective := location.structure.instance as QuestObjective
-	if objective != null and not objective.assign_required_supplies(quest, _get_player_inventory()):
+	if objective == null or not _can_create_quest(location, objective, quest_type_key):
+		_update_finish_button()
+		return
+	if not objective.assign_required_supplies(quest, _get_player_inventory()):
 		_update_finish_button()
 		return
 
@@ -294,11 +298,12 @@ func _get_quest_type_label(quest_type_key: String) -> String:
 func _select_first_creatable_quest_type(objective: QuestObjective) -> void:
 	if objective == null:
 		return
+	var location := quest_location.get_item_metadata(quest_location.selected) as HexBase
 	for i in quest_type.item_count:
 		var quest_type_key := _get_quest_type_key(i)
 		if quest_type_key == "":
 			continue
-		if objective.has_required_supplies(quest_type_key, _get_player_inventory()):
+		if _can_create_quest(location, objective, quest_type_key):
 			quest_type.select(i)
 			return
 
@@ -319,10 +324,16 @@ func _update_finish_button() -> void:
 		return
 
 	var objective := location.structure.instance as QuestObjective
-	finish_quest_creation.disabled = objective == null or not objective.has_required_supplies(
-		quest_type_key,
-		_get_player_inventory()
-	)
+	finish_quest_creation.disabled = not _can_create_quest(location, objective, quest_type_key)
+
+func _can_create_quest(location: HexBase, objective: QuestObjective, quest_type_key: String) -> bool:
+	if Manager.instance == null or Manager.instance.quests == null:
+		return false
+	if location == null or objective == null or quest_type_key == "":
+		return false
+	if not objective.has_required_supplies(quest_type_key, _get_player_inventory()):
+		return false
+	return Manager.instance.quests.has_eligible_npc_for_quest(location, quest_type_key)
 
 func _refresh_required_supplies() -> void:
 	for child in supplies_grid.get_children():
@@ -357,10 +368,10 @@ func _set_detail_value(label: Label, container: Control, message: String) -> boo
 	if label == null or container == null:
 		return false
 	label.text = message
-	var is_visible := message != ""
-	label.visible = is_visible
-	container.visible = is_visible
-	return is_visible
+	var should_show := message != ""
+	label.visible = should_show
+	container.visible = should_show
+	return should_show
 
 func _clear_reward_preview() -> void:
 	if reward_items == null:
@@ -421,24 +432,36 @@ func _format_reward_range(min_amount: int, max_amount: int) -> String:
 		return str(clamped_max)
 	return "%s-%s" % [clamped_min, clamped_max]
 
-func _set_details(description: String, duration: String = "", risk: String = "", reward_preview: Array[Dictionary] = []) -> void:
+func _set_details(
+	description: String,
+	rank_requirement: String = "",
+	duration: String = "",
+	risk: String = "",
+	reward_preview: Array[Dictionary] = []
+) -> void:
 	var has_description := false
 	if description_label != null:
 		description_label.text = description
 		has_description = description != ""
 		description_label.visible = has_description
 
+	var has_rank_requirement := false
+	if rank_requirement_label != null:
+		rank_requirement_label.text = rank_requirement
+		has_rank_requirement = rank_requirement != ""
+		rank_requirement_label.visible = has_rank_requirement
+
 	var has_duration := _set_detail_value(duration_label, duration_box, duration)
 	var has_risk := _set_detail_value(risk_label, risk_box, risk)
 	var has_reward := _set_reward_preview(reward_preview)
-	var has_meta := has_duration or has_risk or has_reward
+	var has_detail_meta := has_duration or has_risk or has_reward
 
 	if details_divider != null:
-		details_divider.visible = has_description and has_meta
+		details_divider.visible = (has_description or has_rank_requirement) and has_detail_meta
 	if meta_row != null:
-		meta_row.visible = has_meta
+		meta_row.visible = has_detail_meta
 
-	var has_details := has_description or has_meta
+	var has_details := has_description or has_rank_requirement or has_detail_meta
 	if details_panel != null:
 		details_panel.visible = has_details
 	_request_window_refit()
@@ -480,7 +503,13 @@ func _refresh_quest_details() -> void:
 		risk_text = risk
 
 	var reward_preview := objective.get_quest_profile_reward_preview(quest_type_key)
-	_set_details(description, duration_text, risk_text, reward_preview)
+	var rank_text := _get_rank_requirement_text(objective, quest_type_key)
+	_set_details(description, rank_text, duration_text, risk_text, reward_preview)
+
+func _get_rank_requirement_text(objective: QuestObjective, quest_type_key: String) -> String:
+	var minimum_rank := objective.get_quest_minimum_rank(quest_type_key)
+	var rank_label := AdventurerRank.get_display_name(minimum_rank)
+	return tr("QUEST_DETAIL_REQUIRED_RANK") % [rank_label]
 
 func _get_selected_objective() -> QuestObjective:
 	var selected := _get_selected_quest_type_and_objective()

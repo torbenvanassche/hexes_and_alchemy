@@ -75,10 +75,10 @@ func _handle_cancel_input() -> void:
 	pause_game(not is_paused)
 
 func _can_close_ui_scene(scene_info: SceneInfo) -> bool:
-	for instance in scene_info.get_live_instances():
-		if not SceneManager.is_visible(instance):
+	for scene_instance in scene_info.get_live_instances():
+		if not SceneManager.is_visible(scene_instance):
 			continue
-		if instance.node.has_method("can_close") and not instance.node.can_close():
+		if scene_instance.node.has_method("can_close") and not scene_instance.node.can_close():
 			return false
 	return true
 

@@ -3,6 +3,8 @@ class_name NPC extends CharacterBody3D
 @export var material: Material
 @export var move_speed := 5.0
 @export var arrive_distance := 0.1
+@export_range(0.0, 1.0, 0.01) var rank_move_speed_bonus_per_tier := 0.05
+@export var rank: AdventurerRank.Rank = AdventurerRank.Rank.F
 
 enum NPCState { IDLE, READY_TO_MOVE, MOVING_TO_QUEST, AT_QUEST, RETURNING, DONE }
 
@@ -17,9 +19,11 @@ signal arrived()
 func _ready() -> void:
 	$mesh/RootNode/unit.material_override = material
 	npc_info = DataManager.instance.npcs.pick_random()
+	if npc_info != null:
+		rank = npc_info.starting_rank
 	visible = false
 
-	var states: Array[String]
+	var states: Array[String] = []
 	for s in NPCState.keys():
 		states.append(get_state_as_string(NPCState[s]))
 	state_machine = StateMachine.new(states)
@@ -52,6 +56,24 @@ func set_state(state: NPCState) -> void:
 func assign_quest(q: Quest) -> void:
 	current_quest = q
 	set_state(NPCState.READY_TO_MOVE)
+
+func get_rank() -> AdventurerRank.Rank:
+	return rank
+
+func get_rank_label() -> String:
+	return AdventurerRank.get_display_name(rank)
+
+func set_rank(value: AdventurerRank.Rank) -> void:
+	rank = AdventurerRank.clamp_rank(value)
+
+func promote_rank() -> void:
+	set_rank(AdventurerRank.get_next(rank))
+
+func is_rank_at_least(minimum: AdventurerRank.Rank) -> bool:
+	return AdventurerRank.is_at_least(rank, minimum)
+
+func get_effective_move_speed() -> float:
+	return move_speed * AdventurerRank.get_speed_multiplier(rank, rank_move_speed_bonus_per_tier)
 
 func _begin_move_to_quest() -> void:
 	visible = true
@@ -91,7 +113,7 @@ func _follow_path(on_arrived: Callable) -> void:
 	if direction.length() < arrive_distance:
 		current_target_index += 1
 		return
-	velocity = Vector3(direction.normalized().x, 0, direction.normalized().z) * move_speed
+	velocity = Vector3(direction.normalized().x, 0, direction.normalized().z) * get_effective_move_speed()
 	move_and_slide()
 
 func _physics_process(_delta: float) -> void:

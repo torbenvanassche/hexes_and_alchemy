@@ -23,11 +23,13 @@ WINDOW_INVENTORY,Inventory,Inventory
 WINDOW_JOURNAL,Journal,Journal
 WINDOW_CRAFTING,Blacksmith,Blacksmith
 WINDOW_MARKET,Market,Market
+WINDOW_TAVERN,Tavern,Tavern
 WINDOW_DEPOSIT_ITEMS,Deposit items,Deposit items
 WINDOW_QUEST_BOARD,Quest board,Quest board
 WINDOW_NEW_QUEST,New quest,New quest
 WINDOW_KEEP_OPEN,Keep open,Keep open
 WINDOW_CLOSE,Close,Close
+WINDOW_ALLOW_CLOSE,Allow close,Allow close
 PAUSE_RESUME,Resume,Resume
 PAUSE_SETTINGS,Settings,Settings
 PAUSE_QUIT,Quit,Quit
@@ -35,6 +37,13 @@ GAME_SETTINGS_EMPTY,No settings here yet,No settings here yet
 WORLD_SEED_LABEL,Seed: %s,Seed: %s
 WORLD_SEED_PLACEHOLDER,Seed: ...,Seed: ...
 SCENE_ADVENTURER_NAME,Adventurer,Adventurer
+ADVENTURER_RANK_F,F,F
+ADVENTURER_RANK_E,E,E
+ADVENTURER_RANK_D,D,D
+ADVENTURER_RANK_C,C,C
+ADVENTURER_RANK_B,B,B
+ADVENTURER_RANK_A,A,A
+ADVENTURER_RANK_S,S,S
 SCENE_DEPOSIT_UI_NAME,Deposit items,Deposit items
 SCENE_GAME_SETTINGS_NAME,Game settings,Game settings
 SCENE_GAMEPLAY_MAIN_NAME,Gameplay,Gameplay
@@ -56,12 +65,20 @@ QUEST_LIST_EMPTY,No quests are pinned.,No quests are pinned.
 QUEST_CREATION_TARGET,Target,Target
 QUEST_CREATION_QUEST,Quest,Quest
 QUEST_CREATION_SUPPLIES,Required supplies,Required supplies
+ADVENTURER_ROSTER_NAME,Name,Name
+ADVENTURER_ROSTER_RANK_HEADER,Rank,Rank
+ADVENTURER_ROSTER_RANK,Rank %s,Rank %s
+ADVENTURER_ROSTER_STATUS,Status,Status
+ADVENTURER_ROSTER_EMPTY,No adventurers waiting.,No adventurers waiting.
+ADVENTURER_STATUS_AVAILABLE,Available,Available
+ADVENTURER_STATUS_ASSIGNED,Assigned,Assigned
 QUEST_CREATION_CREATE,Create quest,Create quest
 QUEST_CREATION_NO_AVAILABLE_QUESTS,No quests are available here.,No quests are available here.
 QUEST_CREATION_UNREACHABLE,"No adventurer can reach this location from the settlement yet.","No adventurer can reach this location from the settlement yet."
 QUEST_DETAIL_DURATION_LABEL,Duration,Duration
 QUEST_DETAIL_RISK_LABEL,Risk,Risk
 QUEST_DETAIL_REWARD_LABEL,Reward,Reward
+QUEST_DETAIL_REQUIRED_RANK,Required rank: %s,Required rank: %s
 QUEST_DETAIL_DURATION,%ss,%ss
 QUEST_DETAIL_RISK,Risk: %s,Risk: %s
 QUEST_DETAIL_EXPECTED_REWARD,Reward: %s,Reward: %s
@@ -179,6 +196,12 @@ MARKET_EMPTY_SOLD_OUT,The market is sold out.,The market is sold out.
 MARKET_EMPTY_NO_PLAYER_INVENTORY,No player inventory available.,No player inventory available.
 MARKET_EMPTY_NOTHING_TO_SELL,You have no items to sell.,You have no items to sell.
 MARKET_ITEM_PLACEHOLDER,Item,Item
+MARKET_BUY_NOT_ENOUGH_COINS,Not enough coins.,Not enough coins.
+MARKET_BUY_INVENTORY_FULL,Inventory full.,Inventory full.
+MARKET_BUY_SUCCESS,Bought %sx %s for %s coins.,Bought %sx %s for %s coins.
+MARKET_SELL_NOT_ENOUGH_ITEMS,Not enough items to sell.,Not enough items to sell.
+MARKET_SELL_REMOVE_FAILED,Could not remove items from inventory.,Could not remove items from inventory.
+MARKET_SELL_SUCCESS,Sold %sx %s for %s coins.,Sold %sx %s for %s coins.
 CRAFTING_MISSING,Missing: %s,Missing: %s
 CRAFTING_SUCCESS,Crafted %s.,Crafted %s.
 CRAFTING_INVENTORY_FULL,Inventory is full.,Inventory is full.

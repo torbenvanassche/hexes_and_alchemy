@@ -21,9 +21,27 @@ func has_quest_for_location_and_type(location: HexBase, quest_type: String) -> b
 func get_available_quest_types(location: HexBase, quest_types: Array[String]) -> Array[String]:
 	var available_types: Array[String] = [];
 	for quest_type: String in quest_types:
-		if not has_quest_for_location_and_type(location, quest_type):
-			available_types.append(quest_type);
+		if has_quest_for_location_and_type(location, quest_type):
+			continue;
+		if not has_eligible_npc_for_quest(location, quest_type):
+			continue;
+		available_types.append(quest_type);
 	return available_types;
+
+func has_eligible_npc_for_quest(location: HexBase, quest_type: String) -> bool:
+	return not get_available_npcs_for_quest(location, quest_type).is_empty();
+
+func get_available_npcs_for_quest(location: HexBase, quest_type: String) -> Array[SceneInstance]:
+	var tavern := _get_active_tavern();
+	if tavern == null:
+		return [];
+
+	var minimum_rank := _get_minimum_rank_for_quest(location, quest_type);
+	var eligible_npcs: Array[SceneInstance] = [];
+	for npc_scene_instance: SceneInstance in tavern.get_available_npcs():
+		if _is_npc_instance_rank_eligible(npc_scene_instance, minimum_rank):
+			eligible_npcs.append(npc_scene_instance);
+	return eligible_npcs;
 
 func get_active_quest_origin_hex(grid: HexGrid) -> HexBase:
 	if grid == null:
@@ -89,11 +107,37 @@ func try_assign_waiting_quests() -> void:
 		if available_npcs.is_empty():
 			return;
 
-		var selected_npc_instance := available_npcs.pop_front() as SceneInstance;
+		var selected_npc_instance := _pop_first_eligible_npc(available_npcs, quest);
 		if selected_npc_instance == null:
 			continue;
 		quest.add_to_party(selected_npc_instance.node as NPC);
 		quest.start();
+
+func _pop_first_eligible_npc(available_npcs: Array[SceneInstance], quest: Quest) -> SceneInstance:
+	var minimum_rank := _get_minimum_rank_for_quest(quest.location, quest.quest_key);
+	for i in available_npcs.size():
+		var npc_scene_instance := available_npcs[i] as SceneInstance;
+		if _is_npc_instance_rank_eligible(npc_scene_instance, minimum_rank):
+			available_npcs.remove_at(i);
+			return npc_scene_instance;
+	return null;
+
+func _is_npc_instance_rank_eligible(npc_scene_instance: SceneInstance, minimum_rank: AdventurerRank.Rank) -> bool:
+	if npc_scene_instance == null:
+		return false;
+	var npc := npc_scene_instance.node as NPC;
+	return npc != null and npc.is_rank_at_least(minimum_rank);
+
+func _get_minimum_rank_for_quest(location: HexBase, quest_type: String) -> AdventurerRank.Rank:
+	var objective := _get_quest_objective(location);
+	if objective == null:
+		return AdventurerRank.Rank.F;
+	return objective.get_quest_minimum_rank(quest_type);
+
+func _get_quest_objective(location: HexBase) -> QuestObjective:
+	if location == null or location.structure == null:
+		return null;
+	return location.structure.instance as QuestObjective;
 
 func _get_active_tavern() -> Tavern:
 	if Manager.instance == null or Manager.instance.active_settlement == null:

@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://7q4dr2w3g7sa" path="res://scripts/interactions/interactable_locations/tavern.gd" id="1_isasx"]
 [ext_resource type="Resource" uid="uid://c4slhs80lvehm" path="res://resources/scene_info/adventurer.tres" id="2_56i7v"]
 [ext_resource type="Material" uid="uid://c66vbca7lgh6m" path="res://materials/kay_fantasy_default.tres" id="3_244u3"]
+[ext_resource type="Resource" uid="uid://c02vjxha4podp" path="res://resources/scene_info/ui/tavern_roster_ui.tres" id="4_roster"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_isasx"]
 size = Vector3(0.7681427, 0.65410614, 0.5323236)
@@ -15,7 +16,7 @@ size = Vector3(1.173315, 1.3972301, 1.2564573)
 script = ExtResource("1_isasx")
 adventurer = ExtResource("2_56i7v")
 adventurer_spawn = NodePath("spawn_location")
-show_interaction_prompt = false
+additional_ui = Array[ExtResource("4_roster")]([ExtResource("4_roster")])
 
 [node name="Root Scene" parent="." unique_id=1174146906 instance=ExtResource("1_244u3")]
 
