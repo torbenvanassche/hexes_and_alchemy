@@ -33,3 +33,6 @@ static func get_display_name(rank: Rank) -> String:
 
 static func get_speed_multiplier(rank: Rank, bonus_per_rank: float) -> float:
 	return 1.0 + maxf(0.0, bonus_per_rank) * float(int(rank))
+
+static func get_max_rank() -> Rank:
+	return clamp_rank(Rank.keys().size() - 1)

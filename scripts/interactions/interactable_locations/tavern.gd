@@ -36,6 +36,9 @@ func _create_adventurer(s: SceneInfo) -> SceneInstance:
 		return null
 	npc_scene_instance.node.global_position = adventurer_spawn.global_position
 	npc_scene_instance.node.tree_exiting.connect(_remove_adventurer.bind(npc_scene_instance))
+	var npc := npc_scene_instance.node as NPC
+	if npc != null and not npc.rank_progress_changed.is_connected(npc_roster_changed.emit):
+		npc.rank_progress_changed.connect(npc_roster_changed.emit)
 	npcs.append(npc_scene_instance)
 	Manager.instance.quests.try_assign_waiting_quests()
 	npc_roster_changed.emit()

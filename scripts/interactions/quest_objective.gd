@@ -131,6 +131,12 @@ func get_quest_minimum_rank(quest_type_key: String) -> AdventurerRank.Rank:
 		return AdventurerRank.Rank.F
 	return profile.get_minimum_rank()
 
+func get_quest_rank_experience_reward(quest_type_key: String) -> int:
+	var profile := get_profile(quest_type_key)
+	if profile == null:
+		return 1
+	return profile.get_rank_experience_reward()
+
 func _get_configured_quest_types() -> Array[String]:
 	if quest_profiles.is_empty():
 		return quest_types

@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://dwqf3fg4acslg" path="res://sprites/ui/icons/structure_farm.png" id="4_tm2j7"]
 [ext_resource type="Texture2D" uid="uid://drasftash875f" path="res://sprites/ui/icons/pawns.png" id="5_so8rn"]
 [ext_resource type="Theme" uid="uid://bemn0spuaev14" path="res://themes/fantasy_buttons.tres" id="6_ic3jt"]
-[ext_resource type="Theme" uid="uid://dae2b2hfpj0l2" path="res://themes/base_theme.theme" id="6_theme"]
+[ext_resource type="Theme" uid="uid://dae2b2hfpj0l2" path="res://themes/light.theme" id="6_theme"]
 
 [node name="QuestNote" type="Control" unique_id=84988057]
 layout_mode = 3

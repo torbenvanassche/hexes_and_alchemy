@@ -64,10 +64,14 @@ INPUT_PRESS_KEY_TO_BIND,Press key to bind...,Press key to bind...
 QUEST_LIST_EMPTY,No quests are pinned.,No quests are pinned.
 QUEST_CREATION_TARGET,Target,Target
 QUEST_CREATION_QUEST,Quest,Quest
+QUEST_CREATION_MINIMUM_RANK,Minimum rank,Minimum rank
+QUEST_CREATION_REWARD_OFFER,Reward offer,Reward offer
 QUEST_CREATION_SUPPLIES,Required supplies,Required supplies
 ADVENTURER_ROSTER_NAME,Name,Name
 ADVENTURER_ROSTER_RANK_HEADER,Rank,Rank
 ADVENTURER_ROSTER_RANK,Rank %s,Rank %s
+ADVENTURER_RANK_PROGRESS,%s (%s/%s),%s (%s/%s)
+ADVENTURER_RANK_PROGRESS_MAX,%s (max),%s (max)
 ADVENTURER_ROSTER_STATUS,Status,Status
 ADVENTURER_ROSTER_EMPTY,No adventurers waiting.,No adventurers waiting.
 ADVENTURER_STATUS_AVAILABLE,Available,Available
@@ -75,6 +79,7 @@ ADVENTURER_STATUS_ASSIGNED,Assigned,Assigned
 QUEST_CREATION_CREATE,Create quest,Create quest
 QUEST_CREATION_NO_AVAILABLE_QUESTS,No quests are available here.,No quests are available here.
 QUEST_CREATION_UNREACHABLE,"No adventurer can reach this location from the settlement yet.","No adventurer can reach this location from the settlement yet."
+QUEST_CREATION_NOT_ENOUGH_COINS,Not enough coins for this reward.,Not enough coins for this reward.
 QUEST_DETAIL_DURATION_LABEL,Duration,Duration
 QUEST_DETAIL_RISK_LABEL,Risk,Risk
 QUEST_DETAIL_REWARD_LABEL,Reward,Reward

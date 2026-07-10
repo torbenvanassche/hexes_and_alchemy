@@ -8,6 +8,7 @@ class_name QuestProfile extends Resource
 @export var expected_reward_key: String = ""
 @export var duration_seconds: float = 5.0
 @export var minimum_rank: AdventurerRank.Rank = AdventurerRank.Rank.F
+@export_range(0, 100, 1) var rank_experience_reward: int = 1
 @export var available_states: Array[String] = []
 @export var required_supplies: Dictionary[ItemInfo, int] = {}
 @export var outcomes: Array[QuestOutcome] = []
@@ -112,6 +113,9 @@ func get_reward_preview() -> Array[Dictionary]:
 
 func get_minimum_rank() -> AdventurerRank.Rank:
 	return AdventurerRank.clamp_rank(minimum_rank)
+
+func get_rank_experience_reward() -> int:
+	return maxi(0, rank_experience_reward)
 
 func get_required_supplies() -> Dictionary[ItemInfo, int]:
 	return required_supplies

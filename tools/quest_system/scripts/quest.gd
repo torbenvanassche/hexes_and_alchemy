@@ -11,6 +11,8 @@ enum QuestState {
 var quest_key: String;
 var supplies: ContentGroup;
 var location: HexBase;
+var offered_currency_reward: int = 0;
+var minimum_rank_override: int = -1;
 
 var state_machine: StateMachine;
 
@@ -18,9 +20,16 @@ var party: Array[NPC] = []
 
 signal completed();
 
-func _init(_location: HexBase = null, _type_key: String = "") -> void:
+func _init(
+	_location: HexBase = null,
+	_type_key: String = "",
+	_offered_currency_reward: int = 0,
+	_minimum_rank_override: int = -1
+) -> void:
 	self.location = _location;
 	self.quest_key = _type_key;
+	self.offered_currency_reward = maxi(0, _offered_currency_reward);
+	self.minimum_rank_override = _minimum_rank_override;
 	supplies = ContentGroup.new();
 	
 	var states: Array[String] = []
@@ -42,6 +51,28 @@ func add_to_party(npc: NPC) -> void:
 		
 func get_state_as_string(state: QuestState) -> String:
 	return QuestState.keys()[state].to_lower();
+
+func get_objective() -> QuestObjective:
+	if location == null or location.structure == null:
+		return null
+	return location.structure.instance as QuestObjective
+
+func get_minimum_rank() -> AdventurerRank.Rank:
+	if minimum_rank_override >= 0:
+		return AdventurerRank.clamp_rank(minimum_rank_override)
+	var objective := get_objective()
+	if objective == null:
+		return AdventurerRank.Rank.F
+	return objective.get_quest_minimum_rank(quest_key)
+
+func get_rank_experience_reward() -> int:
+	var objective := get_objective()
+	if objective == null:
+		return 1
+	return objective.get_quest_rank_experience_reward(quest_key)
+
+func get_offered_currency_reward() -> int:
+	return offered_currency_reward
 
 func start() -> void:
 	for npc in party:
@@ -75,6 +106,12 @@ func return_from_quest() -> void:
 		npc.set_state(NPC.NPCState.RETURNING);
 	
 func parse_reward() -> void:
-	location.structure.instance.complete_quest(self);
+	var objective := get_objective()
+	var rank_experience_reward := get_rank_experience_reward()
+	if objective != null:
+		objective.complete_quest(self);
+	for npc in party:
+		if npc != null:
+			npc.complete_assigned_quest(self, rank_experience_reward)
 	Manager.instance.quests.remove_quest(self);
 	completed.emit();

@@ -50,13 +50,13 @@ func _create_roster_row(npc: NPC) -> Control:
 	row.add_child(name_label)
 
 	var rank_label := Label.new()
-	rank_label.custom_minimum_size = Vector2(100, 0)
+	rank_label.custom_minimum_size = Vector2(150, 0)
 	rank_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	rank_label.text = tr("ADVENTURER_ROSTER_RANK") % npc.get_rank_label()
+	rank_label.text = tr("ADVENTURER_ROSTER_RANK") % npc.get_rank_progress_label()
 	row.add_child(rank_label)
 
 	var status_label := Label.new()
-	status_label.custom_minimum_size = Vector2(120, 0)
+	status_label.custom_minimum_size = Vector2(90, 0)
 	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	status_label.text = tr("ADVENTURER_STATUS_AVAILABLE") if npc.current_quest == null else tr("ADVENTURER_STATUS_ASSIGNED")
 	row.add_child(status_label)

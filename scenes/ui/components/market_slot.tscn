@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b8rer4f8w6ive"]
 
 [ext_resource type="Script" uid="uid://brtr35b12dwpi" path="res://scripts/ui/market_slot.gd" id="1_2m32k"]
-[ext_resource type="Theme" uid="uid://3rlxm8752xjm" path="res://themes/base_theme_dark.theme" id="3_dark"]
+[ext_resource type="Theme" uid="uid://3rlxm8752xjm" path="res://themes/dark.theme" id="3_dark"]
 
 [node name="MarketSlot" type="Button" unique_id=2049737903]
 custom_minimum_size = Vector2(0, 54)

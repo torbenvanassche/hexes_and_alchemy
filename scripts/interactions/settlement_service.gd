@@ -28,17 +28,17 @@ func open_additional_ui_windows() -> void:
 		scene_info.queue(_open_additional_ui_window)
 
 func open_ui_window(window_info: SceneInfo, vis: bool = false) -> SceneInstance:
-	var window_instance := SceneManager.add(window_info, vis)
-	if window_instance == null:
+	var opened_window_instance := SceneManager.add(window_info, vis)
+	if opened_window_instance == null:
 		return null
-	_setup_ui_window(window_instance)
-	window_instance.on_enter.emit()
-	return window_instance
+	_setup_ui_window(opened_window_instance)
+	opened_window_instance.on_enter.emit()
+	return opened_window_instance
 
 func close_additional_ui_windows() -> void:
-	for window_instance in additional_window_instances:
-		if is_instance_valid(window_instance):
-			window_instance.hide()
+	for additional_window_instance in additional_window_instances:
+		if is_instance_valid(additional_window_instance):
+			additional_window_instance.hide()
 
 func _on_area_exit(other: Area3D) -> void:
 	super(other)
@@ -46,14 +46,14 @@ func _on_area_exit(other: Area3D) -> void:
 		close_additional_ui_windows()
 
 func _open_additional_ui_window(window_info: SceneInfo) -> void:
-	var window_instance := open_ui_window(window_info, false)
-	if window_instance != null and not additional_window_instances.has(window_instance):
-		additional_window_instances.append(window_instance)
+	var opened_window_instance := open_ui_window(window_info, false)
+	if opened_window_instance != null and not additional_window_instances.has(opened_window_instance):
+		additional_window_instances.append(opened_window_instance)
 
-func _setup_ui_window(window_instance: SceneInstance) -> void:
-	if window_instance == null:
+func _setup_ui_window(opened_window_instance: SceneInstance) -> void:
+	if opened_window_instance == null:
 		return
-	var draggable_window := window_instance.node as DraggableControl
+	var draggable_window := opened_window_instance.node as DraggableControl
 	if draggable_window == null:
 		return
 	var content := draggable_window.content

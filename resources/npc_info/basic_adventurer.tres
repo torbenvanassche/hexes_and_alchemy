@@ -4,9 +4,15 @@
 [ext_resource type="Script" uid="uid://du4hbbtmblkj0" path="res://tools/quest_system/scripts/npc_info.gd" id="1_ba3wx"]
 [ext_resource type="Texture2D" uid="uid://chvmvna3iw2ov" path="res://sprites/ui/icons/character.png" id="1_iiktj"]
 
+[sub_resource type="Curve" id="Curve_rank_thresholds"]
+_limits = [0.0, 6.0, 0.0, 28.0]
+_data = [Vector2(0, 0), 0.0, 0.0, 1, 1, Vector2(1, 2), 0.0, 0.0, 1, 1, Vector2(2, 5), 0.0, 0.0, 1, 1, Vector2(3, 9), 0.0, 0.0, 1, 1, Vector2(4, 14), 0.0, 0.0, 1, 1, Vector2(5, 20), 0.0, 0.0, 1, 1, Vector2(6, 28), 0.0, 0.0, 1, 1]
+point_count = 7
+
 [resource]
 script = ExtResource("1_ba3wx")
 img = ExtResource("1_iiktj")
+rank_experience_thresholds = SubResource("Curve_rank_thresholds")
 id = "basic_adventurer"
 packed_scene = ExtResource("1_655wl")
 metadata/_custom_type_script = "uid://du4hbbtmblkj0"

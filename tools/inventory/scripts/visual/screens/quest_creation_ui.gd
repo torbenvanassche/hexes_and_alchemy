@@ -2,7 +2,10 @@ class_name QuestCreationUI extends Control
 
 @onready var quest_type: OptionButton = $MarginContainer/VBoxContainer/TypeRow/QuestType
 @onready var quest_location: OptionButton = $MarginContainer/VBoxContainer/LocationRow/QuestLocation
+@onready var minimum_rank_option: OptionButton = $MarginContainer/VBoxContainer/MinimumRankRow/MinimumRank
+@onready var reward_offer_spin_box: SpinBox = $MarginContainer/VBoxContainer/RewardOfferRow/RewardOfferAmount
 @onready var details_panel: VBoxContainer = $MarginContainer/VBoxContainer/DetailsPanel
+@onready var description_top_divider: ColorRect = $MarginContainer/VBoxContainer/DetailsPanel/DescriptionTopDivider
 @onready var description_label: Label = $MarginContainer/VBoxContainer/DetailsPanel/DescriptionLabel
 @onready var rank_requirement_label: Label = $MarginContainer/VBoxContainer/DetailsPanel/RankRequirementLabel
 @onready var details_divider: ColorRect = $MarginContainer/VBoxContainer/DetailsPanel/DetailsDivider
@@ -32,7 +35,12 @@ func _reset_ui() -> void:
 	quest_type.clear();
 	quest_location.clear();
 	quest_type.disabled = true;
+	if minimum_rank_option != null:
+		minimum_rank_option.clear()
+		minimum_rank_option.disabled = true
 	finish_quest_creation.disabled = true;
+	if reward_offer_spin_box != null:
+		reward_offer_spin_box.value = 0.0
 	_set_details("")
 	_set_status("")
 	_refresh_required_supplies()
@@ -43,6 +51,10 @@ func _ready() -> void:
 	_configure_location_dropdown()
 	quest_location.item_selected.connect(_on_location_selected)
 	quest_type.item_selected.connect(_on_quest_type_selected)
+	if minimum_rank_option != null:
+		minimum_rank_option.item_selected.connect(_on_minimum_rank_selected)
+	if reward_offer_spin_box != null:
+		reward_offer_spin_box.value_changed.connect(_on_reward_offer_changed)
 	_request_window_refit()
 
 func _configure_location_dropdown() -> void:
@@ -90,24 +102,38 @@ func _on_location_selected(idx: int) -> void:
 	if objective:
 		var available_types := Manager.instance.quests.get_available_quest_types(
 			location,
-			objective.get_filtered_quest_types(objective.state_machine.get_current_state_index())
+			objective.get_filtered_quest_types(objective.state_machine.get_current_state_index()),
+			_get_reward_offer_amount()
 		)
 		for state: String in available_types:
 			quest_type.add_item(_get_quest_type_label(state));
 			quest_type.set_item_metadata(quest_type.item_count - 1, state)
-			quest_type.set_item_disabled(
-				quest_type.item_count - 1,
-				not _can_create_quest(location, objective, state)
-			)
 
 	var has_types: bool = quest_type.item_count > 0
 	quest_type.disabled = not has_types;
 	_select_first_creatable_quest_type(objective)
+	_refresh_minimum_rank_options()
+	_refresh_quest_type_availability()
 	_refresh_required_supplies()
 	_refresh_quest_details()
 	_update_finish_button()
 
 func _on_quest_type_selected(_idx: int) -> void:
+	_refresh_minimum_rank_options()
+	_refresh_quest_type_availability()
+	_refresh_required_supplies()
+	_refresh_quest_details()
+	_update_finish_button()
+
+func _on_minimum_rank_selected(_idx: int) -> void:
+	_refresh_quest_type_availability()
+	_refresh_quest_details()
+	_update_finish_button()
+
+func _on_reward_offer_changed(_value: float) -> void:
+	_refresh_quest_type_availability()
+	_select_first_creatable_quest_type(_get_selected_objective())
+	_refresh_minimum_rank_options()
 	_refresh_required_supplies()
 	_refresh_quest_details()
 	_update_finish_button()
@@ -133,7 +159,8 @@ func _add_location_option(hex: HexBase, require_reachable: bool = true) -> bool:
 	var objective: QuestObjective = hex.structure.instance as QuestObjective
 	var available_types := Manager.instance.quests.get_available_quest_types(
 		hex,
-		objective.get_filtered_quest_types(objective.state_machine.get_current_state_index())
+		objective.get_filtered_quest_types(objective.state_machine.get_current_state_index()),
+		_get_reward_offer_amount()
 	)
 	if available_types.is_empty():
 		return false
@@ -237,7 +264,8 @@ func on_enter() -> void:
 		var is_reachable := Manager.instance.quests.is_quest_location_reachable(hex, grid)
 		var is_valid_quest: bool = Manager.instance.quests.get_available_quest_types(
 			hex,
-			quest_objective.get_filtered_quest_types()
+			quest_objective.get_filtered_quest_types(),
+			_get_reward_offer_amount()
 		).size() != 0;
 
 		if in_range and is_reachable and is_valid_quest:
@@ -267,12 +295,17 @@ func _create_quest() -> void:
 	if location == null or quest_type_key == "":
 		return
 
-	var quest := Quest.new(location, quest_type_key)
+	var reward_amount := _get_reward_offer_amount()
+	var quest := Quest.new(location, quest_type_key, reward_amount, _get_minimum_rank_override())
 	var objective := location.structure.instance as QuestObjective
 	if objective == null or not _can_create_quest(location, objective, quest_type_key):
 		_update_finish_button()
 		return
+	if not _try_reserve_reward(reward_amount):
+		_update_finish_button()
+		return
 	if not objective.assign_required_supplies(quest, _get_player_inventory()):
+		_refund_reward(reward_amount)
 		_update_finish_button()
 		return
 
@@ -310,6 +343,45 @@ func _select_first_creatable_quest_type(objective: QuestObjective) -> void:
 	if quest_type.item_count > 0:
 		quest_type.select(0)
 
+func _refresh_minimum_rank_options() -> void:
+	if minimum_rank_option == null:
+		return
+
+	minimum_rank_option.clear()
+	var selected := _get_selected_quest_type_and_objective()
+	var objective := selected.get("objective") as QuestObjective
+	var quest_type_key := str(selected.get("quest_type", ""))
+	if objective == null or quest_type_key == "":
+		minimum_rank_option.disabled = true
+		return
+
+	var profile_minimum := objective.get_quest_minimum_rank(quest_type_key)
+	for rank_index in range(int(profile_minimum), int(AdventurerRank.get_max_rank()) + 1):
+		var rank := AdventurerRank.clamp_rank(rank_index)
+		minimum_rank_option.add_item(AdventurerRank.get_display_name(rank))
+		minimum_rank_option.set_item_metadata(minimum_rank_option.item_count - 1, int(rank))
+
+	minimum_rank_option.disabled = minimum_rank_option.item_count == 0
+	if minimum_rank_option.item_count > 0:
+		minimum_rank_option.select(0)
+
+func _refresh_quest_type_availability() -> void:
+	var location_idx: int = quest_location.selected
+	if location_idx < 0:
+		return
+
+	var location := quest_location.get_item_metadata(location_idx) as HexBase
+	if location == null or location.structure == null:
+		return
+
+	var objective := location.structure.instance as QuestObjective
+	if objective == null:
+		return
+
+	for i in quest_type.item_count:
+		var quest_type_key := _get_quest_type_key(i)
+		quest_type.set_item_disabled(i, not _can_create_quest(location, objective, quest_type_key))
+
 func _update_finish_button() -> void:
 	var location_idx: int = quest_location.selected
 	var quest_type_idx: int = quest_type.selected
@@ -324,6 +396,12 @@ func _update_finish_button() -> void:
 		return
 
 	var objective := location.structure.instance as QuestObjective
+	if not _has_reward_budget():
+		finish_quest_creation.disabled = true
+		_set_status(tr("QUEST_CREATION_NOT_ENOUGH_COINS"))
+		return
+
+	_set_status("")
 	finish_quest_creation.disabled = not _can_create_quest(location, objective, quest_type_key)
 
 func _can_create_quest(location: HexBase, objective: QuestObjective, quest_type_key: String) -> bool:
@@ -331,9 +409,16 @@ func _can_create_quest(location: HexBase, objective: QuestObjective, quest_type_
 		return false
 	if location == null or objective == null or quest_type_key == "":
 		return false
+	if not _has_reward_budget():
+		return false
 	if not objective.has_required_supplies(quest_type_key, _get_player_inventory()):
 		return false
-	return Manager.instance.quests.has_eligible_npc_for_quest(location, quest_type_key)
+	return Manager.instance.quests.has_eligible_npc_for_quest(
+		location,
+		quest_type_key,
+		_get_reward_offer_amount(),
+		_get_minimum_rank_override()
+	)
 
 func _refresh_required_supplies() -> void:
 	for child in supplies_grid.get_children():
@@ -456,8 +541,10 @@ func _set_details(
 	var has_reward := _set_reward_preview(reward_preview)
 	var has_detail_meta := has_duration or has_risk or has_reward
 
+	if description_top_divider != null:
+		description_top_divider.visible = has_description
 	if details_divider != null:
-		details_divider.visible = (has_description or has_rank_requirement) and has_detail_meta
+		details_divider.visible = has_description
 	if meta_row != null:
 		meta_row.visible = has_detail_meta
 
@@ -507,7 +594,8 @@ func _refresh_quest_details() -> void:
 	_set_details(description, rank_text, duration_text, risk_text, reward_preview)
 
 func _get_rank_requirement_text(objective: QuestObjective, quest_type_key: String) -> String:
-	var minimum_rank := objective.get_quest_minimum_rank(quest_type_key)
+	var rank_override := _get_minimum_rank_override()
+	var minimum_rank := AdventurerRank.clamp_rank(rank_override) if rank_override >= 0 else objective.get_quest_minimum_rank(quest_type_key)
 	var rank_label := AdventurerRank.get_display_name(minimum_rank)
 	return tr("QUEST_DETAIL_REQUIRED_RANK") % [rank_label]
 
@@ -552,3 +640,39 @@ func _get_player_inventory() -> Inventory:
 	if Manager.instance == null or Manager.instance.player_instance == null:
 		return null
 	return Manager.instance.player_instance.inventory
+
+func _get_player() -> PlayerController:
+	if Manager.instance == null:
+		return null
+	return Manager.instance.player_instance
+
+func _get_reward_offer_amount() -> int:
+	if reward_offer_spin_box == null:
+		return 0
+	return maxi(0, roundi(reward_offer_spin_box.value))
+
+func _get_minimum_rank_override() -> int:
+	if minimum_rank_option == null or minimum_rank_option.selected < 0:
+		return -1
+	return int(minimum_rank_option.get_item_metadata(minimum_rank_option.selected))
+
+func _has_reward_budget() -> bool:
+	var player := _get_player()
+	return player != null and player.currency >= _get_reward_offer_amount()
+
+func _try_reserve_reward(amount: int) -> bool:
+	if amount <= 0:
+		return true
+	var player := _get_player()
+	if player == null or player.currency < amount:
+		return false
+	player.currency -= amount
+	return true
+
+func _refund_reward(amount: int) -> void:
+	if amount <= 0:
+		return
+	var player := _get_player()
+	if player == null:
+		return
+	player.currency += amount

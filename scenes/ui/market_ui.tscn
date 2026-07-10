@@ -3,8 +3,8 @@
 [ext_resource type="PackedScene" uid="uid://dny1dqcanlco0" path="res://tools/custom_window/base_window.tscn" id="1_w2das"]
 [ext_resource type="Script" uid="uid://kyqrlu0hq63c" path="res://scripts/ui/market_ui.gd" id="2_3uv46"]
 [ext_resource type="PackedScene" uid="uid://b8rer4f8w6ive" path="res://scenes/ui/components/market_slot.tscn" id="3_market_slot"]
-[ext_resource type="Theme" uid="uid://dae2b2hfpj0l2" path="res://themes/base_theme.theme" id="4_theme"]
-[ext_resource type="Theme" uid="uid://3rlxm8752xjm" path="res://themes/base_theme_dark.theme" id="5_dark"]
+[ext_resource type="Theme" uid="uid://dae2b2hfpj0l2" path="res://themes/light.theme" id="4_theme"]
+[ext_resource type="Theme" uid="uid://3rlxm8752xjm" path="res://themes/dark.theme" id="5_dark"]
 
 [node name="Window" unique_id=1224465671 node_paths=PackedStringArray("content") instance=ExtResource("1_w2das")]
 custom_minimum_size = Vector2(760, 460)
@@ -16,7 +16,7 @@ content = NodePath("NinePatchRect/VBoxContainer/contentPanel/MarketPanel")
 [node name="MarginContainer2" parent="NinePatchRect/VBoxContainer/topbar" parent_id_path=PackedInt32Array(347636229) index="0" unique_id=634422055]
 theme_override_constants/margin_right = 25
 
-[node name="CloseButton" parent="NinePatchRect/VBoxContainer/topbar/MarginContainer2/HBoxContainer" parent_id_path=PackedInt32Array(1643440073) index="2" unique_id=1866505049]
+[node name="CloseButton" parent="NinePatchRect/VBoxContainer/topbar/MarginContainer2/HBoxContainer" parent_id_path=PackedInt32Array(1643440073) index="1" unique_id=1866505049]
 custom_minimum_size = Vector2(35, 25)
 
 [node name="contentPanel" parent="NinePatchRect/VBoxContainer" parent_id_path=PackedInt32Array(554725130) index="1" unique_id=1040542232]
@@ -92,7 +92,6 @@ visible = false
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
 size_flags_horizontal = 4
-mouse_filter = 2
 theme = ExtResource("5_dark")
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "MARKET_EMPTY_DEFAULT"

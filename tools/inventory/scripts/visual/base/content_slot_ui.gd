@@ -16,7 +16,11 @@ class_name ContentSlotUI extends TextureButton
 @export_group("Drag Settings")
 @export var default_color: Color = Color.WHITE;
 @export var dragging_color: Color = Color(Color.WHITE, 0.3)
-@export var can_drag: bool = true;
+@export var can_drag: bool = true:
+	set(value):
+		can_drag = value
+		if is_node_ready():
+			_update_mouse_filter()
 
 var contentSlot: ContentSlotResource;
 static var drag_data: DragData;
@@ -29,13 +33,14 @@ func _ready() -> void:
 	
 	counter.visible = show_amount;
 	counter.text = "";
+	_update_mouse_filter()
 	set_process(false);
 	
 func redraw() -> void:
 	if contentSlot == null:
 		return;
 		
-	mouse_filter = Control.MOUSE_FILTER_STOP if can_drag else Control.MOUSE_FILTER_IGNORE;
+	_update_mouse_filter()
 	
 	disabled = !contentSlot.is_unlocked;
 	var resource := contentSlot.get_content()
@@ -75,6 +80,8 @@ func set_content(_content: ContentSlotResource) -> void:
 			ready.connect(redraw, CONNECT_ONE_SHOT);
 
 func _get_drag_data(_at_position: Vector2) -> DragData:
+	if not can_drag:
+		return null
 	if !contentSlot.has_content(null) && contentSlot.count != 0:
 		blur();
 		
@@ -95,7 +102,7 @@ func _get_drag_data(_at_position: Vector2) -> DragData:
 	return null;
 	
 func _can_drop_data(_at_position: Vector2, _data: Variant) -> bool:
-	return contentSlot && contentSlot.is_unlocked;
+	return can_drag and contentSlot != null and contentSlot.is_unlocked;
 
 func _drop_data(_at_position: Vector2, data: Variant) -> void:
 	var src_slot: ContentSlotResource = (data as DragData).slot.contentSlot
@@ -136,6 +143,8 @@ func _process(_delta: float) -> void:
 	_process_drag(_delta);
 				
 func _gui_input(_event: InputEvent) -> void:
+	if not can_drag:
+		return
 	if _event is InputEventMouseButton and _event.is_pressed() and _event.button_index == MOUSE_BUTTON_RIGHT && !contentSlot.has_content(null):
 		var mouse_position := get_global_mouse_position();
 		var context := ContextMenu.new([
@@ -157,3 +166,6 @@ func _process_drag(_delta: float) -> void:
 
 func _handle_unsuccessful_drag_end() -> bool:
 	return false;
+
+func _update_mouse_filter() -> void:
+	mouse_filter = Control.MOUSE_FILTER_STOP
