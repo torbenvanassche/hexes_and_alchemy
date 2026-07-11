@@ -13,5 +13,6 @@ description_key = "QUEST_DESC_FARM_RUSH_HARVEST"
 risk_key = "QUEST_RISK_LOW_YIELD"
 expected_reward_key = "QUEST_REWARD_FAST_GRAIN"
 duration_seconds = 5.0
+rank_experience_reward = 2
 available_states = Array[String](["WATERED"])
 outcomes = Array[ExtResource("2_outcome_script")]([ExtResource("3_outcome")])

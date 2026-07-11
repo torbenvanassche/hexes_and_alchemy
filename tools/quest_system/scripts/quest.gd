@@ -13,6 +13,7 @@ var supplies: ContentGroup;
 var location: HexBase;
 var offered_currency_reward: int = 0;
 var minimum_rank_override: int = -1;
+var rank_experience_reward: int = 1;
 
 var state_machine: StateMachine;
 
@@ -24,12 +25,14 @@ func _init(
 	_location: HexBase = null,
 	_type_key: String = "",
 	_offered_currency_reward: int = 0,
-	_minimum_rank_override: int = -1
+	_minimum_rank_override: int = -1,
+	_rank_experience_reward: int = -1
 ) -> void:
 	self.location = _location;
 	self.quest_key = _type_key;
 	self.offered_currency_reward = maxi(0, _offered_currency_reward);
 	self.minimum_rank_override = _minimum_rank_override;
+	self.rank_experience_reward = _resolve_rank_experience_reward(_rank_experience_reward);
 	supplies = ContentGroup.new();
 	
 	var states: Array[String] = []
@@ -66,10 +69,16 @@ func get_minimum_rank() -> AdventurerRank.Rank:
 	return objective.get_quest_minimum_rank(quest_key)
 
 func get_rank_experience_reward() -> int:
+	return rank_experience_reward
+
+func _resolve_rank_experience_reward(explicit_reward: int) -> int:
+	if explicit_reward >= 0:
+		return maxi(0, explicit_reward)
+
 	var objective := get_objective()
 	if objective == null:
 		return 1
-	return objective.get_quest_rank_experience_reward(quest_key)
+	return objective.get_quest_rank_experience_reward(quest_key, minimum_rank_override)
 
 func get_offered_currency_reward() -> int:
 	return offered_currency_reward

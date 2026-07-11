@@ -13,5 +13,6 @@ description_key = "QUEST_DESC_RUINS_SURVEY"
 risk_key = "QUEST_RISK_SAFE"
 expected_reward_key = "QUEST_REWARD_REVEALS_OPTIONS"
 duration_seconds = 5.0
+rank_experience_reward = 2
 available_states = Array[String](["AVAILABLE"])
 outcomes = Array[ExtResource("2_outcome_script")]([ExtResource("3_outcome")])

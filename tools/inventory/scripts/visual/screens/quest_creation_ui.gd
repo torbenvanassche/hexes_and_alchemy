@@ -296,11 +296,19 @@ func _create_quest() -> void:
 		return
 
 	var reward_amount := _get_reward_offer_amount()
-	var quest := Quest.new(location, quest_type_key, reward_amount, _get_minimum_rank_override())
 	var objective := location.structure.instance as QuestObjective
 	if objective == null or not _can_create_quest(location, objective, quest_type_key):
 		_update_finish_button()
 		return
+	var minimum_rank_override := _get_minimum_rank_override()
+	var rank_experience_reward := objective.get_quest_rank_experience_reward(quest_type_key, minimum_rank_override)
+	var quest := Quest.new(
+		location,
+		quest_type_key,
+		reward_amount,
+		minimum_rank_override,
+		rank_experience_reward
+	)
 	if not _try_reserve_reward(reward_amount):
 		_update_finish_button()
 		return

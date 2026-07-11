@@ -12,5 +12,6 @@ behaviour = "maintain"
 translation_key_name = "QUEST_TYPE_MAINTAIN"
 description_key = "QUEST_DESC_WATER_MAINTAIN"
 expected_reward_key = "QUEST_REWARD_SOURCE_RECOVERY"
+rank_experience_reward = 2
 available_states = Array[String](["TAINTED"])
 outcomes = Array[ExtResource("2_outcome_script")]([ExtResource("3_outcome")])

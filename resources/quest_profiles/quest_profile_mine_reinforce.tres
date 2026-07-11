@@ -13,6 +13,7 @@ description_key = "QUEST_DESC_MINE_REINFORCE"
 risk_key = "QUEST_RISK_SAFE"
 expected_reward_key = "QUEST_REWARD_SITE_RECOVERY"
 duration_seconds = 5.0
+rank_experience_reward = 3
 available_states = Array[String](["UNSTABLE"])
 required_supplies = Dictionary[ExtResource("2_item_script"), int]({
 ExtResource("3_support"): 1

@@ -13,5 +13,6 @@ description_key = "QUEST_DESC_WATER_PURIFY"
 risk_key = "QUEST_RISK_SAFE"
 expected_reward_key = "QUEST_REWARD_SOURCE_RECOVERY"
 duration_seconds = 6.0
+rank_experience_reward = 3
 available_states = Array[String](["TAINTED"])
 outcomes = Array[ExtResource("2_outcome_script")]([ExtResource("3_outcome")])

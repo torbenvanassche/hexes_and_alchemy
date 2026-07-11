@@ -13,5 +13,6 @@ description_key = "QUEST_DESC_FOREST_FELL_TIMBER"
 risk_key = "QUEST_RISK_DEPLETES_SITE"
 expected_reward_key = "QUEST_REWARD_LOTS_OF_WOOD"
 duration_seconds = 8.0
+rank_experience_reward = 3
 available_states = Array[String](["HEALTHY"])
 outcomes = Array[ExtResource("2_outcome_script")]([ExtResource("3_outcome")])

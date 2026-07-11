@@ -14,5 +14,6 @@ description_key = "QUEST_DESC_RUINS_DELVE"
 risk_key = "QUEST_RISK_DANGEROUS"
 expected_reward_key = "QUEST_REWARD_DEEP_CACHE"
 duration_seconds = 10.0
+rank_experience_reward = 5
 available_states = Array[String](["SURVEYED", "DANGEROUS", "SECURED"])
 outcomes = Array[ExtResource("2_outcome_script")]([ExtResource("3_success"), ExtResource("4_danger")])

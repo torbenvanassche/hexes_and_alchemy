@@ -16,6 +16,7 @@ description_key = "QUEST_DESC_WATER_DRAW_EXTRA"
 risk_key = "QUEST_RISK_UNCERTAIN"
 expected_reward_key = "QUEST_REWARD_MORE_WATER"
 duration_seconds = 7.0
+rank_experience_reward = 2
 available_states = Array[String](["FRESH"])
 required_supplies = Dictionary[ExtResource("3_item_script"), int]({
 ExtResource("4_bucket"): 1

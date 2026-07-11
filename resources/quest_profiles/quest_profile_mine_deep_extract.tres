@@ -11,6 +11,7 @@ description_key = "QUEST_DESC_MINE_DEEP_EXTRACT"
 risk_key = "QUEST_RISK_DANGEROUS"
 expected_reward_key = "QUEST_REWARD_MORE_ORE"
 duration_seconds = 11.0
+rank_experience_reward = 4
 available_states = Array[String](["POOR_VEIN", "RICH_VEIN"])
 modifiers = {
 "collapse_bonus": 0.18,

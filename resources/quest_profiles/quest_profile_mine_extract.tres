@@ -11,4 +11,5 @@ description_key = "QUEST_DESC_MINE_EXTRACT"
 risk_key = "QUEST_RISK_UNCERTAIN"
 expected_reward_key = "QUEST_REWARD_ORE"
 duration_seconds = 8.0
+rank_experience_reward = 2
 available_states = Array[String](["POOR_VEIN", "RICH_VEIN"])

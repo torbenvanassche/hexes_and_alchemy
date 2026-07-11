@@ -15,6 +15,7 @@ description_key = "QUEST_DESC_FOREST_REPLANT"
 risk_key = "QUEST_RISK_SAFE"
 expected_reward_key = "QUEST_REWARD_SITE_RECOVERY"
 duration_seconds = 5.0
+rank_experience_reward = 2
 available_states = Array[String](["DEPLETED"])
 required_supplies = Dictionary[ExtResource("3_item_script"), int]({
 ExtResource("4_seed"): 1

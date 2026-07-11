@@ -114,8 +114,11 @@ func get_reward_preview() -> Array[Dictionary]:
 func get_minimum_rank() -> AdventurerRank.Rank:
 	return AdventurerRank.clamp_rank(minimum_rank)
 
-func get_rank_experience_reward() -> int:
-	return maxi(0, rank_experience_reward)
+func get_rank_experience_reward(minimum_rank_override: int = -1) -> int:
+	var reward := maxi(0, rank_experience_reward)
+	if minimum_rank_override < 0:
+		return reward
+	return maxi(reward, int(AdventurerRank.clamp_rank(minimum_rank_override)) + 1)
 
 func get_required_supplies() -> Dictionary[ItemInfo, int]:
 	return required_supplies
