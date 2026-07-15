@@ -2,11 +2,15 @@
 
 [ext_resource type="PackedScene" uid="uid://cjeap2dsndlsj" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_home_A_blue.glb" id="1_8d7ft"]
 [ext_resource type="Material" uid="uid://c66vbca7lgh6m" path="res://materials/kay_fantasy_default.tres" id="2_8d7ft"]
+[ext_resource type="Script" path="res://scripts/interactions/interactable_locations/settlement_home.gd" id="3_home"]
+[ext_resource type="Resource" path="res://resources/scene_info/ui/settlement_upgrade_ui.tres" id="4_upgrade_ui"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vdjdw"]
 size = Vector3(0.65734243, 0.711185, 0.8605708)
 
 [node name="Node3D" type="Node3D" unique_id=2074058054]
+script = ExtResource("3_home")
+upgrade_window = ExtResource("4_upgrade_ui")
 
 [node name="Root Scene" parent="." unique_id=540453184 instance=ExtResource("1_8d7ft")]
 
@@ -16,6 +20,12 @@ surface_material_override/0 = ExtResource("2_8d7ft")
 [node name="collision" type="StaticBody3D" parent="." unique_id=1882614008]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="collision" unique_id=490554640]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00709939, 0.35070205, -0.045562208)
+shape = SubResource("BoxShape3D_vdjdw")
+
+[node name="interaction" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="interaction"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00709939, 0.35070205, -0.045562208)
 shape = SubResource("BoxShape3D_vdjdw")
 

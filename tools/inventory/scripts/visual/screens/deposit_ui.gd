@@ -32,9 +32,11 @@ func _ready() -> void:
 
 func on_enter() -> void:
 	_refresh_deposit_state()
+	_request_window_fit()
 	
 func _on_inventory_changed() -> void:
 	_refresh_deposit_state()
+	_request_window_fit()
 
 func _rebuild_requirements() -> void:
 	if not is_node_ready():
@@ -58,6 +60,8 @@ func _rebuild_requirements() -> void:
 		}
 		requirement_rows[item] = row_data
 	_refresh_deposit_state()
+	minimum_size_changed.emit()
+	_request_window_fit()
 
 func _create_requirement_row(item: Resource) -> HBoxContainer:
 	var row := HBoxContainer.new()
@@ -112,6 +116,7 @@ func _refresh_deposit_state() -> void:
 		count_label.text = "x%s" % required_amount
 		count_label.modulate = Color.WHITE if has_requirement else Color(1.0, 0.65, 0.65)
 	complete_order.disabled = source_inventory == null or inventory == null or required.is_empty() or not source_inventory.has_all(required)
+	minimum_size_changed.emit()
 
 func _get_required_resources() -> Dictionary[Resource, int]:
 	var required: Dictionary[Resource, int] = {}
@@ -144,3 +149,16 @@ func _get_display_name(item: Resource) -> String:
 	if item.has_method("get_display_name"):
 		return item.get_display_name()
 	return str(item)
+
+func _request_window_fit() -> void:
+	var window := _get_window()
+	if window != null and window.has_method("request_fit_to_content"):
+		window.request_fit_to_content(2)
+
+func _get_window() -> Control:
+	var current := get_parent()
+	while current != null:
+		if current is DraggableControl:
+			return current as Control
+		current = current.get_parent()
+	return null

@@ -1,0 +1,107 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://eyyrdjphljp8" path="res://scenes/hexes/hex_simple_champfer.tscn" id="1_hex"]
+
+[node name="hex_grid_reference" type="Node3D"]
+
+[node name="grid_spacing" type="Node3D" parent="."]
+metadata/flat_top = true
+metadata/inner_radius = 1.0
+metadata/spacing_extra = 0.25
+metadata/spacing_x = 1.9820508
+metadata/spacing_z = 1.75
+metadata/odd_row_x_offset = 0.9910254
+
+[node name="hexes" type="Node3D" parent="."]
+
+[node name="hex_-2_-2" parent="hexes" instance=ExtResource("1_hex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.9641016, 0, -3.5)
+
+[node name="hex_-1_-2" parent="hexes" instance=ExtResource("1_hex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9820508, 0, -3.5)
+
+[node name="hex_0_-2" parent="hexes" instance=ExtResource("1_hex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.5)
+
+[node name="hex_1_-2" parent="hexes" instance=ExtResource("1_hex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9820508, 0, -3.5)
+
+[node name="hex_2_-2" parent="hexes" instance=ExtResource("1_hex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.9641016, 0, -3.5)
+
+[node name="hex_-2_-1" parent="hexes" instance=ExtResource("1_hex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9730762, 0, -1.75)
+
+[node name="hex_-1_-1" parent="hexes" instance=ExtResource("1_hex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9910254, 0, -1.75)
+
+[node name="hex_0_-1" parent="hexes" instance=ExtResource("1_hex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9910254, 0, -1.75)
+
+[node name="hex_1_-1" parent="hexes" instance=ExtResource("1_hex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.9730762, 0, -1.75)
+
+[node name="hex_2_-1" parent="hexes" instance=ExtResource("1_hex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.955127, 0, -1.75)
+
+[node name="hex_-2_0" parent="hexes" instance=ExtResource("1_hex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.9641016, 0, 0)
+
+[node name="hex_-1_0" parent="hexes" instance=ExtResource("1_hex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9820508, 0, 0)
+
+[node name="hex_0_0" parent="hexes" instance=ExtResource("1_hex")]
+
+[node name="hex_1_0" parent="hexes" instance=ExtResource("1_hex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9820508, 0, 0)
+
+[node name="hex_2_0" parent="hexes" instance=ExtResource("1_hex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.9641016, 0, 0)
+
+[node name="hex_-2_1" parent="hexes" instance=ExtResource("1_hex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9730762, 0, 1.75)
+
+[node name="hex_-1_1" parent="hexes" instance=ExtResource("1_hex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9910254, 0, 1.75)
+
+[node name="hex_0_1" parent="hexes" instance=ExtResource("1_hex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9910254, 0, 1.75)
+
+[node name="hex_1_1" parent="hexes" instance=ExtResource("1_hex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.9730762, 0, 1.75)
+
+[node name="hex_2_1" parent="hexes" instance=ExtResource("1_hex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.955127, 0, 1.75)
+
+[node name="hex_-2_2" parent="hexes" instance=ExtResource("1_hex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.9641016, 0, 3.5)
+
+[node name="hex_-1_2" parent="hexes" instance=ExtResource("1_hex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9820508, 0, 3.5)
+
+[node name="hex_0_2" parent="hexes" instance=ExtResource("1_hex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.5)
+
+[node name="hex_1_2" parent="hexes" instance=ExtResource("1_hex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9820508, 0, 3.5)
+
+[node name="hex_2_2" parent="hexes" instance=ExtResource("1_hex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.9641016, 0, 3.5)
+
+[node name="snap_points" type="Node3D" parent="."]
+
+[node name="x_step" type="Node3D" parent="snap_points"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9820508, 0.1, 0)
+
+[node name="z_step" type="Node3D" parent="snap_points"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 1.75)
+
+[node name="odd_row_offset" type="Node3D" parent="snap_points"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9910254, 0.1, 1.75)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.42261824, 0.9063078, 0, -0.9063078, 0.42261824, 0, 8, 7)
+current = true
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.70710677, -0.35355338, 0.6123724, 0, 0.8660254, 0.5, -0.70710677, -0.35355338, 0.6123724, 0, 6, 0)

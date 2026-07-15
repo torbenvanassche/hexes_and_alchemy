@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="FetchQuest" format=3]
+
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="1_item_script"]
+[ext_resource type="Resource" uid="uid://d0lienvyvqxlh" path="res://resources/item_info/dock_blueprint.tres" id="2_blueprint"]
+[ext_resource type="Resource" uid="uid://m72hate3ge7x" path="res://resources/item_info/support_beams.tres" id="3_support"]
+[ext_resource type="Script" uid="uid://cde3uflp35v2j" path="res://tools/quest_system/scripts/fetch.gd" id="4_fetch"]
+
+[resource]
+script = ExtResource("4_fetch")
+requested_items = Dictionary[ExtResource("1_item_script"), int]({
+ExtResource("2_blueprint"): 1,
+ExtResource("3_support"): 2
+})
+metadata/_custom_type_script = "uid://cde3uflp35v2j"

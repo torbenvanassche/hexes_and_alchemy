@@ -1,0 +1,112 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://tools/custom_window/base_window.tscn" id="1_window"]
+[ext_resource type="Script" path="res://scripts/ui/settlement_upgrade_ui.gd" id="2_upgrade"]
+[ext_resource type="Theme" uid="uid://dae2b2hfpj0l2" path="res://themes/light.theme" id="3_theme"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_upgrade"]
+bg_color = Color(0.97, 0.9, 0.76, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="Window" node_paths=PackedStringArray("content") instance=ExtResource("1_window")]
+custom_minimum_size = Vector2(460, 0)
+id = "WINDOW_SETTLEMENT_UPGRADE"
+store_position = true
+content = NodePath("NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade")
+
+[node name="contentPanel" parent="NinePatchRect/VBoxContainer" index="1"]
+size_flags_horizontal = 3
+
+[node name="SettlementUpgrade" type="PanelContainer" parent="NinePatchRect/VBoxContainer/contentPanel" index="0"]
+custom_minimum_size = Vector2(430, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("3_theme")
+theme_override_styles/panel = SubResource("StyleBoxFlat_upgrade")
+script = ExtResource("2_upgrade")
+
+[node name="MarginContainer" type="MarginContainer" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade" index="0"]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer" index="0"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="CurrentRow" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer/VBoxContainer" index="0"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="CurrentLevelLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer/VBoxContainer/CurrentRow" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.42, 0.31, 0.2, 1)
+text = "SETTLEMENT_UPGRADE_CURRENT_LEVEL_LABEL"
+uppercase = true
+
+[node name="CurrentLevelValue" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer/VBoxContainer/CurrentRow" index="1"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.23, 0.14, 0.07, 1)
+text = "1"
+horizontal_alignment = 2
+
+[node name="TopDivider" type="ColorRect" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer/VBoxContainer" index="1"]
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+color = Color(0.38, 0.26, 0.14, 0.35)
+
+[node name="NextSection" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer/VBoxContainer" index="2"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="NextHeader" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer/VBoxContainer/NextSection" index="0"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.42, 0.31, 0.2, 1)
+text = "SETTLEMENT_UPGRADE_NEXT_HEADER"
+uppercase = true
+
+[node name="NextLevelLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer/VBoxContainer/NextSection" index="1"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.23, 0.14, 0.07, 1)
+text = "SETTLEMENT_UPGRADE_NEXT"
+
+[node name="UnlockLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer/VBoxContainer/NextSection" index="2"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.34, 0.23, 0.12, 1)
+text = "SETTLEMENT_UPGRADE_UNLOCK_LEVEL_2"
+autowrap_mode = 3
+
+[node name="RequirementsDivider" type="ColorRect" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer/VBoxContainer" index="3"]
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+color = Color(0.38, 0.26, 0.14, 0.35)
+
+[node name="RequirementsHeader" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer/VBoxContainer" index="4"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.42, 0.31, 0.2, 1)
+text = "SETTLEMENT_UPGRADE_REQUIREMENTS_HEADER"
+uppercase = true
+
+[node name="RequirementsList" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer/VBoxContainer" index="5"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="StatusLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer/VBoxContainer" index="6"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.22, 0.08, 1)
+text = "SETTLEMENT_UPGRADE_REQUIREMENTS_MISSING"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="UpgradeButton" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer/VBoxContainer" index="7"]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SETTLEMENT_UPGRADE_BUTTON"

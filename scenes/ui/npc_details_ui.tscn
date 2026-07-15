@@ -1,0 +1,83 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://dny1dqcanlco0" path="res://tools/custom_window/base_window.tscn" id="1_window"]
+[ext_resource type="Script" path="res://scripts/ui/npc_details_ui.gd" id="2_details"]
+[ext_resource type="Theme" uid="uid://dae2b2hfpj0l2" path="res://themes/light.theme" id="3_theme"]
+[ext_resource type="PackedScene" path="res://scenes/ui/components/equipment_slot.tscn" id="4_slot"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_details"]
+bg_color = Color(0.97, 0.9, 0.76, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="Window" node_paths=PackedStringArray("content") instance=ExtResource("1_window")]
+custom_minimum_size = Vector2(440, 0)
+id = "WINDOW_NPC_DETAILS"
+store_position = true
+content = NodePath("NinePatchRect/VBoxContainer/contentPanel/NpcDetails")
+
+[node name="contentPanel" parent="NinePatchRect/VBoxContainer" index="1"]
+size_flags_horizontal = 3
+
+[node name="NpcDetails" type="PanelContainer" parent="NinePatchRect/VBoxContainer/contentPanel" index="0"]
+custom_minimum_size = Vector2(410, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("3_theme")
+theme_override_styles/panel = SubResource("StyleBoxFlat_details")
+script = ExtResource("2_details")
+equipment_slot_scene = ExtResource("4_slot")
+
+[node name="MarginContainer" type="MarginContainer" parent="NinePatchRect/VBoxContainer/contentPanel/NpcDetails" index="0"]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/NpcDetails/MarginContainer" index="0"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Header" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/NpcDetails/MarginContainer/VBoxContainer" index="0"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="NameLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/NpcDetails/MarginContainer/VBoxContainer/Header" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.23, 0.14, 0.07, 1)
+text = "SCENE_ADVENTURER_NAME"
+clip_text = true
+
+[node name="RankLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/NpcDetails/MarginContainer/VBoxContainer/Header" index="1"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.42, 0.31, 0.2, 1)
+text = "ADVENTURER_ROSTER_RANK"
+horizontal_alignment = 2
+
+[node name="StatusLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/NpcDetails/MarginContainer/VBoxContainer" index="1"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.34, 0.23, 0.12, 1)
+text = "ADVENTURER_STATUS_AVAILABLE"
+
+[node name="Divider" type="ColorRect" parent="NinePatchRect/VBoxContainer/contentPanel/NpcDetails/MarginContainer/VBoxContainer" index="2"]
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+color = Color(0.38, 0.26, 0.14, 0.35)
+
+[node name="EquipmentHeader" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/NpcDetails/MarginContainer/VBoxContainer" index="3"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.42, 0.31, 0.2, 1)
+text = "NPC_EQUIPMENT_HEADER"
+uppercase = true
+
+[node name="SlotsGrid" type="GridContainer" parent="NinePatchRect/VBoxContainer/contentPanel/NpcDetails/MarginContainer/VBoxContainer" index="4"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 6
+columns = 4

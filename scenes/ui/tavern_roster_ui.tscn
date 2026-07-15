@@ -12,7 +12,7 @@ corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
 [node name="Window" unique_id=1301866213 node_paths=PackedStringArray("content") instance=ExtResource("1_window")]
-custom_minimum_size = Vector2(520, 0)
+custom_minimum_size = Vector2(620, 0)
 id = "WINDOW_TAVERN"
 store_position = true
 content = NodePath("NinePatchRect/VBoxContainer/contentPanel/TavernRoster")
@@ -21,7 +21,7 @@ content = NodePath("NinePatchRect/VBoxContainer/contentPanel/TavernRoster")
 size_flags_horizontal = 3
 
 [node name="TavernRoster" type="PanelContainer" parent="NinePatchRect/VBoxContainer/contentPanel" index="0" unique_id=1948780101]
-custom_minimum_size = Vector2(490, 0)
+custom_minimum_size = Vector2(590, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("3_theme")
@@ -65,6 +65,14 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.42, 0.31, 0.2, 1)
 text = "ADVENTURER_ROSTER_STATUS"
 horizontal_alignment = 2
+uppercase = true
+
+[node name="DetailsHeader" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/TavernRoster/MarginContainer/VBoxContainer/RosterHeader" index="3"]
+custom_minimum_size = Vector2(86, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.42, 0.31, 0.2, 1)
+text = "ADVENTURER_ROSTER_DETAILS"
+horizontal_alignment = 1
 uppercase = true
 
 [node name="RosterRows" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/TavernRoster/MarginContainer/VBoxContainer" index="1" unique_id=1948780108]

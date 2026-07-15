@@ -45,11 +45,11 @@ func _get_available_quest_locations() -> Array[HexBase]:
 			continue
 		if not quest_objective.is_visible_in_tree():
 			continue
-		var available_types := Manager.instance.quests.get_available_quest_types(
+		var postable_types := Manager.instance.quests.get_postable_quest_types(
 			quest_hex,
 			quest_objective.get_filtered_quest_types()
 		)
-		if available_types.is_empty():
+		if postable_types.is_empty():
 			continue
 		if not quest_objective.can_interact():
 			continue

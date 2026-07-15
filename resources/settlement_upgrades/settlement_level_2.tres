@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="SettlementUpgradeInfo" format=3]
+
+[ext_resource type="Script" path="res://scripts/hex_system/settlement_upgrade_info.gd" id="1_upgrade"]
+
+[resource]
+script = ExtResource("1_upgrade")
+target_level = 2
+required_services = Array[StringName]([&"Blacksmith"])
+unlock_translation_key = "SETTLEMENT_UPGRADE_UNLOCK_LEVEL_2"

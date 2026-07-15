@@ -37,6 +37,7 @@ var initial_position: Vector2;
 @export var blocks_camera_scroll := true
 @export var can_lock := false
 var close_locked := false
+var scene_instance: SceneInstance
 
 @export_group("Content")
 @export var content: Control;
@@ -130,6 +131,8 @@ func _fit_to_content_deferred(request_id: int, wait_frames: int) -> void:
 		_fit_to_content()
 	
 func on_enter() -> void:
+	if scene_instance != null:
+		SceneManager.promote_scene_instance(scene_instance)
 	visible = false
 	_prepare_floating_layout()
 	match display_mode:
@@ -187,6 +190,8 @@ func on_enter() -> void:
 	else:
 		position = initial_position - size / 2;
 	modulate = previous_modulate
+	if scene_instance != null:
+		SceneManager.promote_scene_instance(scene_instance)
 
 func _change_title(s: String) -> void:
 	title.text = tr(s);
@@ -195,6 +200,8 @@ func handle_input(event: InputEvent) -> void:
 	if resizing:
 		return
 	if event is InputEventMouseButton:
+		if event.pressed and scene_instance != null:
+			SceneManager.promote_scene_instance(scene_instance)
 		dragging = event.pressed
 	elif dragging and event is InputEventMouseMotion:
 		position += event.relative
@@ -207,6 +214,8 @@ func _handle_resize_input(event: InputEvent, axis: Vector2) -> void:
 	if not resizable:
 		return
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed and scene_instance != null:
+			SceneManager.promote_scene_instance(scene_instance)
 		resizing = event.pressed
 		if resizing:
 			dragging = false
@@ -231,6 +240,9 @@ func close_window(force_close: bool = false) -> void:
 		_set_close_locked(false)
 	if store_position:
 		stored_position = position;
+	if scene_instance != null and scene_instance.scene_info != null and scene_instance.scene_info.allow_multiple_instances:
+		scene_instance.hide()
+		return
 	SceneManager.remove_scene(DataManager.instance.node_to_info(self), false);
 
 func can_close() -> bool:

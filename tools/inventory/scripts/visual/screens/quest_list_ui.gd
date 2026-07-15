@@ -1,6 +1,7 @@
 class_name QuestListUI extends Control
 
-@onready var create_quest_button: Button = $CreateQuestButton
+@onready var create_quest_button: Button = $Actions/CreateQuestButton
+@onready var scout_quest_button: Button = $Actions/ScoutQuestButton
 @onready var board_surface: Control = $BoardSurface
 @onready var empty_label: Label = $EmptyLabel
 
@@ -29,10 +30,12 @@ func on_enter() -> void:
 	
 func _allow_quest_creation_allowed() -> void:
 	create_quest_button.disabled = not _has_available_quests_to_create()
+	scout_quest_button.disabled = not _has_available_scouting_to_create()
 	_layout_board()
 	
 func _ready() -> void:
 	create_quest_button.pressed.connect(_open_create_quest_menu)
+	scout_quest_button.pressed.connect(_open_scout_quest_menu)
 	Manager.instance.quests.quest_list_changed.connect(on_enter)
 	resized.connect(_layout_board)
 	board_surface.resized.connect(_layout_board)
@@ -41,6 +44,10 @@ func _ready() -> void:
 func _open_create_quest_menu() -> void:
 	if can_open_creation_menu() and _has_available_quests_to_create():
 		DataManager.instance.get_scene_by_name("quest_creation_ui").queue(_on_create_quest_window_loaded)
+
+func _open_scout_quest_menu() -> void:
+	if can_open_creation_menu() and _has_available_scouting_to_create():
+		DataManager.instance.get_scene_by_name("quest_creation_ui").queue(_on_scout_quest_window_loaded)
 	
 func can_open_creation_menu() -> bool:
 	return not window_instance || not SceneManager.is_visible(window_instance)
@@ -49,6 +56,14 @@ func _on_create_quest_window_loaded(window_info: SceneInfo) -> void:
 	window_instance = SceneManager.add(window_info, false);
 	var quest_creation: QuestCreationUI = (window_instance.node as DraggableControl).content as QuestCreationUI;
 	quest_creation.clear_forced_data()
+	if not quest_creation.quest_created.is_connected(Manager.instance.quests.add_quest):
+		quest_creation.quest_created.connect(Manager.instance.quests.add_quest)
+	window_instance.on_enter.emit();
+
+func _on_scout_quest_window_loaded(window_info: SceneInfo) -> void:
+	window_instance = SceneManager.add(window_info, false);
+	var quest_creation: QuestCreationUI = (window_instance.node as DraggableControl).content as QuestCreationUI;
+	quest_creation.setup_scouting_request()
 	if not quest_creation.quest_created.is_connected(Manager.instance.quests.add_quest):
 		quest_creation.quest_created.connect(Manager.instance.quests.add_quest)
 	window_instance.on_enter.emit();
@@ -147,7 +162,11 @@ func _get_control_size(control: Control) -> Vector2:
 	return control_size
 
 func _has_available_quests_to_create() -> bool:
-	var grid := SceneManager.get_active_scene().node as HexGrid
+	var active_scene := SceneManager.get_active_scene()
+	if active_scene == null:
+		return false
+
+	var grid := active_scene.node as HexGrid
 	if grid == null:
 		return false
 
@@ -173,11 +192,22 @@ func _has_available_quests_to_create() -> bool:
 		if not Manager.instance.quests.is_quest_location_reachable(hex, grid):
 			continue
 
-		var available_types := Manager.instance.quests.get_available_quest_types(
+		var postable_types := Manager.instance.quests.get_postable_quest_types(
 			hex,
 			objective.get_filtered_quest_types(objective.state_machine.get_current_state_index())
 		)
-		if not available_types.is_empty():
+		if not postable_types.is_empty():
 			return true
 
 	return false
+
+func _has_available_scouting_to_create() -> bool:
+	var active_scene := SceneManager.get_active_scene()
+	if active_scene == null:
+		return false
+
+	var grid := active_scene.node as HexGrid
+	if grid == null:
+		return false
+
+	return not Manager.instance.quests.get_available_scout_locations(grid).is_empty()

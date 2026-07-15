@@ -164,8 +164,8 @@ func set_visible(scene_info: SceneInfo, state: bool = true) -> void:
 	for instance in scene_info.get_live_instances():
 		if "visible" in instance.node:
 			instance.node.visible = state;
-			if state and scene_info.type == SceneInfo.Type.UI and instance.node is Control:
-				_promote_ui_control(instance.node as Control);
+			if state:
+				promote_scene_instance(instance);
 			
 func is_in_tree(scene_instance: SceneInstance) -> bool:
 	var node := scene_instance.node;
@@ -216,24 +216,62 @@ func add(n: SceneInfo, vis: bool = true) -> SceneInstance:
 		stack.append(n);
 		
 	if instance.node.is_inside_tree():
-		if instance.node is Control:
-			_promote_ui_control(instance.node as Control);
+		promote_scene_instance(instance);
 		return instance;
 		
 	if n.type == SceneInfo.Type.UI:
 		_ui_container.add_child(instance.node);
-		_promote_ui_control(instance.node as Control);
+		promote_scene_instance(instance);
 	elif not instance.node.get_parent() == root:
 		root.add_child(instance.node);
 	else:
 		Debug.err(n.id + " cannot be directly added to a scene.")
 	return instance;
 
+func promote_scene_instance(scene_instance: SceneInstance) -> void:
+	if scene_instance == null or scene_instance.scene_info == null:
+		return
+	if scene_instance.scene_info.type != SceneInfo.Type.UI:
+		return
+	var control := scene_instance.node as Control
+	if control == null:
+		return
+	if ui_stack.has(scene_instance.scene_info):
+		ui_stack.erase(scene_instance.scene_info)
+		ui_stack.append(scene_instance.scene_info)
+	_promote_ui_control(control)
+
 func _promote_ui_control(control: Control) -> void:
-	_ui_z_counter += 100;
-	control.z_as_relative = false;
-	control.z_index = _ui_z_counter;
-	control.move_to_front();
+	if control == null:
+		return
+	var ui_root := _get_top_level_ui_control(control)
+	if ui_root == null:
+		return
+	if _ui_z_counter >= 4000:
+		_normalize_ui_z_order()
+	_ui_z_counter += 1
+	ui_root.z_as_relative = false
+	ui_root.z_index = _ui_z_counter
+	ui_root.move_to_front()
+
+func _get_top_level_ui_control(control: Control) -> Control:
+	var current: Node = control
+	var top_level := control
+	while current != null and current != _ui_container:
+		if current is Control:
+			top_level = current as Control
+		current = current.get_parent()
+	return top_level if current == _ui_container else control
+
+func _normalize_ui_z_order() -> void:
+	_ui_z_counter = 0
+	for child in _ui_container.get_children():
+		var control := child as Control
+		if control == null:
+			continue
+		_ui_z_counter += 1
+		control.z_as_relative = false
+		control.z_index = _ui_z_counter
 	
 func is_on_stack(scene: SceneInfo) -> bool:
 	if scene == null:

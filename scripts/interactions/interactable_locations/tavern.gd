@@ -12,7 +12,6 @@ signal npc_roster_changed()
 
 func _ready() -> void:
 	super()
-	Manager.instance.quests.quest_list_changed.connect(spawn_interval.start)
 	spawn_interval.timeout.connect(adventurer.queue.bind(_adventurer_ready))
 	buildable_structure = get_parent() as Buildable;
 	_spawn_starting_adventurers.call_deferred()

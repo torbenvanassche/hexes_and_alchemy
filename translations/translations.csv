@@ -24,6 +24,8 @@ WINDOW_JOURNAL,Journal,Journal
 WINDOW_CRAFTING,Blacksmith,Blacksmith
 WINDOW_MARKET,Market,Market
 WINDOW_TAVERN,Tavern,Tavern
+WINDOW_NPC_DETAILS,Adventurer,Adventurer
+WINDOW_SETTLEMENT_UPGRADE,Settlement,Settlement
 WINDOW_DEPOSIT_ITEMS,Deposit items,Deposit items
 WINDOW_QUEST_BOARD,Quest board,Quest board
 WINDOW_NEW_QUEST,New quest,New quest
@@ -67,28 +69,59 @@ QUEST_CREATION_QUEST,Quest,Quest
 QUEST_CREATION_MINIMUM_RANK,Minimum rank,Minimum rank
 QUEST_CREATION_REWARD_OFFER,Reward offer,Reward offer
 QUEST_CREATION_SUPPLIES,Required supplies,Required supplies
+SETTLEMENT_UPGRADE_CURRENT_LEVEL_LABEL,Current level,Current level
+SETTLEMENT_UPGRADE_NEXT_HEADER,Next upgrade,Next upgrade
+SETTLEMENT_UPGRADE_NEXT,Upgrade to level %s,Upgrade to level %s
+SETTLEMENT_UPGRADE_MAX_LEVEL_HEADER,Fully upgraded,Fully upgraded
+SETTLEMENT_UPGRADE_MAX_LEVEL,Settlement is fully upgraded.,Settlement is fully upgraded.
+SETTLEMENT_UPGRADE_BUTTON,Upgrade to level %s,Upgrade to level %s
+SETTLEMENT_UPGRADE_COMPLETE,Complete,Complete
+SETTLEMENT_UPGRADE_REQUIREMENTS_MISSING,Complete the requirements to upgrade.,Complete the requirements to upgrade.
+SETTLEMENT_UPGRADE_REQUIREMENTS_HEADER,Requirements,Requirements
+SETTLEMENT_UPGRADE_NO_SETTLEMENT,No settlement found.,No settlement found.
+SETTLEMENT_UPGRADE_READY,Ready,Ready
+SETTLEMENT_UPGRADE_MISSING,Missing,Missing
+SETTLEMENT_UPGRADE_UNLOCK_LEVEL_2,Allows advanced construction projects such as the shipyard foundation.,Allows advanced construction projects such as the shipyard foundation.
+SETTLEMENT_UPGRADE_UNLOCK_LEVEL_3,Allows advanced services such as the shipyard to operate.,Allows advanced services such as the shipyard to operate.
+SETTLEMENT_SERVICE_BLACKSMITH,Blacksmith,Blacksmith
 ADVENTURER_ROSTER_NAME,Name,Name
 ADVENTURER_ROSTER_RANK_HEADER,Rank,Rank
 ADVENTURER_ROSTER_RANK,Rank %s,Rank %s
 ADVENTURER_RANK_PROGRESS,%s (%s/%s),%s (%s/%s)
 ADVENTURER_RANK_PROGRESS_MAX,%s (max),%s (max)
 ADVENTURER_ROSTER_STATUS,Status,Status
+ADVENTURER_ROSTER_DETAILS,Details,Details
 ADVENTURER_ROSTER_EMPTY,No adventurers waiting.,No adventurers waiting.
 ADVENTURER_STATUS_AVAILABLE,Available,Available
 ADVENTURER_STATUS_ASSIGNED,Assigned,Assigned
+NPC_DETAILS_OPEN,Details,Details
+NPC_DETAILS_NO_NPC,No adventurer selected.,No adventurer selected.
+NPC_EQUIPMENT_HEADER,Equipment,Equipment
+NPC_EQUIPMENT_WEAPON,Weapon,Weapon
+NPC_EQUIPMENT_ARMOR,Armor,Armor
+NPC_EQUIPMENT_TOOL,Tool,Tool
+NPC_EQUIPMENT_ACCESSORY,Accessory,Accessory
 QUEST_CREATION_CREATE,Create quest,Create quest
 QUEST_CREATION_NO_AVAILABLE_QUESTS,No quests are available here.,No quests are available here.
 QUEST_CREATION_UNREACHABLE,"No adventurer can reach this location from the settlement yet.","No adventurer can reach this location from the settlement yet."
 QUEST_CREATION_NOT_ENOUGH_COINS,Not enough coins for this reward.,Not enough coins for this reward.
+QUEST_CREATION_NO_SCOUTING_AVAILABLE,No reachable scouting target is available right now.,No reachable scouting target is available right now.
+QUEST_CREATION_SCOUT_FRONTIER,Scout,Scout
+QUEST_CREATION_SCOUT_DISTANCE,Distance,Distance
+QUEST_CREATION_INTEREST_NONE,No adventurers are interested in this offer.,No adventurers are interested in this offer.
+QUEST_CREATION_INTEREST_ONE,1 adventurer is interested in this offer.,1 adventurer is interested in this offer.
+QUEST_CREATION_INTEREST_COUNT,%s adventurers are interested in this offer.,%s adventurers are interested in this offer.
 QUEST_DETAIL_DURATION_LABEL,Duration,Duration
+QUEST_DETAIL_DISTANCE_LABEL,Distance,Distance
 QUEST_DETAIL_RISK_LABEL,Risk,Risk
 QUEST_DETAIL_REWARD_LABEL,Reward,Reward
-QUEST_DETAIL_REQUIRED_RANK,Required rank: %s,Required rank: %s
 QUEST_DETAIL_DURATION,%ss,%ss
 QUEST_DETAIL_RISK,Risk: %s,Risk: %s
 QUEST_DETAIL_EXPECTED_REWARD,Reward: %s,Reward: %s
 QUEST_LOCATION_DISTANCE,%s (%s tiles),%s (%s tiles)
+QUEST_LOCATION_SCOUT_SELECTED,Scout target (%s tiles),Scout target (%s tiles)
 QUEST_TYPE_FETCH,Fetch,Fetch
+QUEST_TYPE_SCOUT,Scout,Scout
 QUEST_TYPE_PLANT,Plant,Plant
 QUEST_TYPE_WATER,Water,Water
 QUEST_TYPE_HARVEST,Harvest,Harvest
@@ -159,6 +192,8 @@ QUEST_DESC_MINE_EXTRACT,Extract ore with normal risk.,Extract ore with normal ri
 QUEST_DESC_MINE_DEEP_EXTRACT,Push deeper for more ore and more danger.,Push deeper for more ore and more danger.
 QUEST_DESC_MINE_STABILIZED_EXTRACT,Spend beams to reduce extraction risk.,Spend beams to reduce extraction risk.
 QUEST_DESC_MINE_REINFORCE,Repair an unstable mine shaft.,Repair an unstable mine shaft.
+QUEST_DESC_SCOUT,Send an adventurer to scout the wilds and reveal nearby tiles.,Send an adventurer to scout the wilds and reveal nearby tiles.
+QUEST_DETAIL_SCOUT_DISTANCE,%s tiles,%s tiles
 QUEST_STATE_WAITING,Waiting,Waiting
 QUEST_STATE_EN_ROUTE,En route,En route
 QUEST_STATE_IN_PROGRESS,In progress,In progress

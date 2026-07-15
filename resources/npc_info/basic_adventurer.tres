@@ -3,6 +3,10 @@
 [ext_resource type="PackedScene" uid="uid://xay4s33jokxl" path="res://scenes/adventurer.tscn" id="1_655wl"]
 [ext_resource type="Script" uid="uid://du4hbbtmblkj0" path="res://tools/quest_system/scripts/npc_info.gd" id="1_ba3wx"]
 [ext_resource type="Texture2D" uid="uid://chvmvna3iw2ov" path="res://sprites/ui/icons/character.png" id="1_iiktj"]
+[ext_resource type="Script" uid="uid://dagiwcn4e51i1" path="res://tools/quest_system/scripts/npc_equipment_slots.gd" id="2_equipment"]
+
+[sub_resource type="Resource" id="Resource_equipment_slots"]
+script = ExtResource("2_equipment")
 
 [sub_resource type="Curve" id="Curve_rank_thresholds"]
 _limits = [0.0, 6.0, 0.0, 28.0]
@@ -13,6 +17,7 @@ point_count = 7
 script = ExtResource("1_ba3wx")
 img = ExtResource("1_iiktj")
 rank_experience_thresholds = SubResource("Curve_rank_thresholds")
+default_equipment = SubResource("Resource_equipment_slots")
 id = "basic_adventurer"
 packed_scene = ExtResource("1_655wl")
 metadata/_custom_type_script = "uid://du4hbbtmblkj0"

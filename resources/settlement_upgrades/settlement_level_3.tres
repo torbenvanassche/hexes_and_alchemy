@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="SettlementUpgradeInfo" format=3]
+
+[ext_resource type="Script" path="res://scripts/hex_system/settlement_upgrade_info.gd" id="1_upgrade"]
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="2_item_script"]
+[ext_resource type="Resource" uid="uid://m72hate3ge7x" path="res://resources/item_info/support_beams.tres" id="3_support"]
+[ext_resource type="Resource" uid="uid://b46nyvtvipor5" path="res://resources/item_info/wood_raw.tres" id="4_wood"]
+
+[resource]
+script = ExtResource("1_upgrade")
+target_level = 3
+item_cost = Dictionary[ExtResource("2_item_script"), int]({
+ExtResource("3_support"): 2,
+ExtResource("4_wood"): 6
+})
+unlock_translation_key = "SETTLEMENT_UPGRADE_UNLOCK_LEVEL_3"

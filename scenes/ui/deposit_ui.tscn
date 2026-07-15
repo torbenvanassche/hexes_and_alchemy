@@ -8,10 +8,9 @@
 
 [node name="Window" unique_id=1301866213 node_paths=PackedStringArray("content") instance=ExtResource("1_xoce2")]
 custom_minimum_size = Vector2(420, 0)
-size_flags_vertical = 3
 id = "WINDOW_DEPOSIT_ITEMS"
 store_position = true
-content = NodePath("NinePatchRect/VBoxContainer/contentPanel/DepositPanel/InventoryHud")
+content = NodePath("NinePatchRect/VBoxContainer/contentPanel/DepositPanel")
 
 [node name="NinePatchRect" parent="." index="0" unique_id=434834391]
 region_rect = Rect2(0, 0, 48, 48)
@@ -19,8 +18,14 @@ region_rect = Rect2(0, 0, 48, 48)
 [node name="topbar" parent="NinePatchRect/VBoxContainer" parent_id_path=PackedInt32Array(554725130) index="0" unique_id=347636229]
 color = Color(0, 0, 0, 0.8117647)
 
+[node name="contentPanel" parent="NinePatchRect/VBoxContainer" parent_id_path=PackedInt32Array(554725130) index="1" unique_id=1040542232]
+size_flags_horizontal = 3
+size_flags_vertical = 1
+
 [node name="DepositPanel" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel" parent_id_path=PackedInt32Array(1040542232) index="0" unique_id=1544552581]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
 theme = ExtResource("4_theme")
 theme_override_constants/separation = 8
 

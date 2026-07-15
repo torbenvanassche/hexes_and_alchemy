@@ -3,10 +3,18 @@ class_name NPC extends CharacterBody3D
 @export var material: Material
 @export var move_speed := 5.0
 @export var arrive_distance := 0.1
+@export var stuck_repath_seconds := 1.5
+@export var stuck_distance_epsilon := 0.05
 
 @export_group("Rank")
 @export var rank: AdventurerRank.Rank = AdventurerRank.Rank.F
 @export var rank_experience: int = 0
+
+@export_group("Scouting")
+@export_range(0, 8, 1) var scouting_exploration_radius := 2
+
+@export_group("Equipment")
+@export var equipment: NpcEquipmentSlots
 
 enum NPCState { IDLE, READY_TO_MOVE, MOVING_TO_QUEST, AT_QUEST, RETURNING, DONE }
 
@@ -15,8 +23,12 @@ var current_target_index := 0
 var state_machine: StateMachine
 var current_quest: Quest
 var npc_info: NpcInfo
+var home_position := Vector3.ZERO
+var _last_progress_position := Vector3.ZERO
+var _stuck_time := 0.0
 
 signal arrived()
+signal movement_failed(npc: NPC)
 signal rank_progress_changed()
 
 func _ready() -> void:
@@ -25,7 +37,9 @@ func _ready() -> void:
 		npc_info = DataManager.instance.npcs.pick_random()
 	if npc_info != null:
 		rank = npc_info.starting_rank
+	_initialize_equipment()
 	_rank_up_from_experience()
+	home_position = global_position
 	visible = false
 
 	var states: Array[String] = []
@@ -59,8 +73,18 @@ func set_state(state: NPCState) -> void:
 	state_machine.set_state(get_state_as_string(state))
 
 func assign_quest(q: Quest) -> void:
+	home_position = global_position
 	current_quest = q
 	set_state(NPCState.READY_TO_MOVE)
+
+func cancel_assigned_quest(quest: Quest) -> void:
+	if current_quest != quest:
+		return
+	current_quest = null
+	current_path.clear()
+	velocity = Vector3.ZERO
+	visible = false
+	set_state(NPCState.IDLE)
 
 func get_rank() -> AdventurerRank.Rank:
 	return rank
@@ -83,6 +107,11 @@ func is_rank_at_least(minimum: AdventurerRank.Rank) -> bool:
 
 func get_effective_move_speed() -> float:
 	return move_speed * AdventurerRank.get_speed_multiplier(rank, _get_rank_move_speed_bonus_per_tier())
+
+func get_equipped_items() -> Array[EquipmentInfo]:
+	if equipment == null:
+		return []
+	return equipment.get_equipped_items()
 
 func evaluate_quest(quest: Quest) -> float:
 	if not can_consider_quest(quest):
@@ -121,6 +150,7 @@ func complete_assigned_quest(quest: Quest, rank_experience_reward: int) -> void:
 		return
 	add_rank_experience(rank_experience_reward)
 	current_quest = null
+	current_path.clear()
 	set_state(NPCState.IDLE)
 
 func get_rank_progress_label() -> String:
@@ -134,16 +164,29 @@ func get_rank_progress_label() -> String:
 
 func _begin_move_to_quest() -> void:
 	visible = true
-	var active_scene := SceneManager.get_active_scene().node as HexGrid
-	var start_hex := active_scene.get_hex_at_world_position(global_position)
-	current_path = active_scene.pathfinder.get_hex_path(
-		start_hex.cube_id, current_quest.location.cube_id
-	)
+	var active_scene := SceneManager.get_active_scene()
+	var grid: HexGrid = null
+	if active_scene != null:
+		grid = active_scene.node as HexGrid
+	var start_hex := grid.get_hex_at_world_position(global_position) if grid != null else null
+	current_path = _get_path_to_quest(grid, start_hex)
 	current_target_index = 1
+	_reset_stuck_tracking()
+	if current_path.is_empty():
+		_fail_current_movement()
 
 func _begin_return_home() -> void:
-	current_path.reverse()
-	current_target_index = 0
+	var active_scene := SceneManager.get_active_scene()
+	var grid: HexGrid = null
+	if active_scene != null:
+		grid = active_scene.node as HexGrid
+	var start_hex := grid.get_hex_at_world_position(global_position) if grid != null else null
+	var home_hex := grid.get_hex_at_world_position(home_position) if grid != null else null
+	current_path = _get_path_to_home(grid, start_hex, home_hex)
+	current_target_index = 1
+	_reset_stuck_tracking()
+	if current_path.is_empty():
+		_finish_return_at_home()
 
 func _complete_quest() -> void:
 	visible = false
@@ -158,7 +201,9 @@ func _update_returning() -> void:
 
 func _follow_path(on_arrived: Callable) -> void:
 	if current_path.is_empty():
+		_handle_empty_path()
 		return
+	_explore_for_scouting_quest()
 	if current_target_index >= current_path.size():
 		velocity = Vector3.ZERO
 		move_and_slide()
@@ -168,9 +213,11 @@ func _follow_path(on_arrived: Callable) -> void:
 	direction.y = 0
 	if direction.length() < arrive_distance:
 		current_target_index += 1
+		_reset_stuck_tracking()
 		return
 	velocity = Vector3(direction.normalized().x, 0, direction.normalized().z) * get_effective_move_speed()
 	move_and_slide()
+	_update_stuck_tracking()
 
 func _physics_process(_delta: float) -> void:
 	state_machine.update()
@@ -187,6 +234,15 @@ func _rank_up_from_experience() -> bool:
 	if promoted:
 		rank_progress_changed.emit()
 	return promoted
+
+func _initialize_equipment() -> void:
+	if equipment != null:
+		equipment = equipment.duplicate(true) as NpcEquipmentSlots
+		return
+	if npc_info != null and npc_info.default_equipment != null:
+		equipment = npc_info.default_equipment.duplicate(true) as NpcEquipmentSlots
+		return
+	equipment = NpcEquipmentSlots.new()
 
 func _get_rank_threshold(target_rank: AdventurerRank.Rank) -> int:
 	if npc_info == null or npc_info.rank_experience_thresholds == null:
@@ -245,3 +301,104 @@ func _get_distance_to_quest(quest: Quest) -> float:
 	if start_hex == null:
 		return 0.0
 	return float(GridUtils.cube_distance(start_hex.cube_id, quest.location.cube_id))
+
+func _get_path_to_quest(grid: HexGrid, start_hex: HexBase) -> Array[HexBase]:
+	if grid == null or start_hex == null or current_quest == null or current_quest.location == null:
+		return []
+	if _can_use_boats_from_active_settlement():
+		return grid.pathfinder.get_hex_path_for_methods(
+			start_hex.cube_id,
+			current_quest.location.cube_id,
+			[HexInfo.TraversalTag.WALK, HexInfo.TraversalTag.BOAT]
+		)
+	return grid.pathfinder.get_hex_path(start_hex.cube_id, current_quest.location.cube_id)
+
+func _get_path_to_home(grid: HexGrid, start_hex: HexBase, home_hex: HexBase) -> Array[HexBase]:
+	if grid == null or start_hex == null or home_hex == null:
+		return []
+	if _can_use_boats_from_active_settlement():
+		return grid.pathfinder.get_hex_path_for_methods(
+			start_hex.cube_id,
+			home_hex.cube_id,
+			[HexInfo.TraversalTag.WALK, HexInfo.TraversalTag.BOAT]
+		)
+	return grid.pathfinder.get_hex_path(start_hex.cube_id, home_hex.cube_id)
+
+func _handle_empty_path() -> void:
+	if is_state(NPCState.RETURNING):
+		_finish_return_at_home()
+		return
+	_fail_current_movement()
+
+func _fail_current_movement() -> void:
+	velocity = Vector3.ZERO
+	current_path.clear()
+	movement_failed.emit(self)
+
+func _finish_return_at_home() -> void:
+	global_position = home_position
+	current_path.clear()
+	velocity = Vector3.ZERO
+	set_state(NPCState.DONE)
+
+func _reset_stuck_tracking() -> void:
+	_last_progress_position = global_position
+	_stuck_time = 0.0
+
+func _update_stuck_tracking() -> void:
+	var flat_position := Vector2(global_position.x, global_position.z)
+	var flat_last_position := Vector2(_last_progress_position.x, _last_progress_position.z)
+	if flat_position.distance_to(flat_last_position) > stuck_distance_epsilon:
+		_reset_stuck_tracking()
+		return
+
+	_stuck_time += get_physics_process_delta_time()
+	if _stuck_time < stuck_repath_seconds:
+		return
+
+	if not _try_repath_current_movement():
+		_handle_empty_path()
+		return
+	_reset_stuck_tracking()
+
+func _try_repath_current_movement() -> bool:
+	var active_scene := SceneManager.get_active_scene()
+	if active_scene == null:
+		return false
+	var grid := active_scene.node as HexGrid
+	if grid == null:
+		return false
+
+	var start_hex := grid.get_hex_at_world_position(global_position)
+	if is_state(NPCState.RETURNING):
+		var home_hex := grid.get_hex_at_world_position(home_position)
+		current_path = _get_path_to_home(grid, start_hex, home_hex)
+	else:
+		current_path = _get_path_to_quest(grid, start_hex)
+	current_target_index = 1
+	return not current_path.is_empty()
+
+func _can_use_boats_from_active_settlement() -> bool:
+	return (
+		Manager.instance != null
+		and Manager.instance.active_settlement != null
+		and Manager.instance.active_settlement.has_service(&"Shipyard")
+	)
+
+func _explore_for_scouting_quest() -> void:
+	if current_quest == null or current_quest.quest_key != "scout":
+		return
+	var active_scene := SceneManager.get_active_scene()
+	if active_scene == null:
+		return
+	var grid := active_scene.node as HexGrid
+	if grid == null:
+		return
+	var current_hex := grid.get_hex_at_world_position(global_position)
+	if current_hex == null:
+		return
+	grid.generate_chunks_around_grid_id(current_hex.grid_id)
+	for nearby_tile: SceneInstance in grid.get_tiles_in_radius(current_hex.cube_id, scouting_exploration_radius):
+		var tile := nearby_tile.node as HexBase
+		if tile != null:
+			tile.is_explored = true

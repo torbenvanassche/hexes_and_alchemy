@@ -57,7 +57,7 @@ text = "QUEST_LIST_EMPTY"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="CreateQuestButton" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard" index="2" unique_id=1078826420]
+[node name="Actions" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard" index="2"]
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 1
 anchors_preset = 12
@@ -70,7 +70,22 @@ offset_right = -18.0
 offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 0
+theme_override_constants/separation = 12
+
+[node name="CreateQuestButton" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Actions" index="0" unique_id=1078826420]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+size_flags_horizontal = 3
 theme = ExtResource("6_xd70g")
 theme_override_font_sizes/font_size = 30
 text = "QUEST_CREATION_CREATE"
+expand_icon = true
+
+[node name="ScoutQuestButton" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Actions" index="1"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("6_xd70g")
+theme_override_font_sizes/font_size = 30
+text = "QUEST_CREATION_SCOUT_FRONTIER"
 expand_icon = true

@@ -16,6 +16,7 @@ enum Type {
 
 @export_group("Lifecycle")
 @export var is_unique: bool = false;
+@export var allow_multiple_instances: bool = false;
 @export var transient: bool = false;
 signal cached(scene_info: SceneInfo);
 
@@ -37,7 +38,7 @@ func get_display_name() -> String:
 
 func initialize() -> void:
 	id = resource_path.get_file().trim_suffix(".tres");
-	if not is_unique:
+	if not is_unique and not allow_multiple_instances:
 		is_unique = type == Type.UI;
 		
 func get_live_instances() -> Array[SceneInstance]:

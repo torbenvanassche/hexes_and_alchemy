@@ -1,10 +1,13 @@
 class_name TavernRosterUI
 extends PanelContainer
 
+const NPC_DETAILS_WINDOW := preload("res://resources/scene_info/ui/npc_details_ui.tres")
+
 @onready var roster_rows: VBoxContainer = $MarginContainer/VBoxContainer/RosterRows
 @onready var empty_label: Label = $MarginContainer/VBoxContainer/EmptyRosterLabel
 
 var tavern: Tavern
+var detail_windows: Dictionary[int, SceneInstance] = {}
 
 func setup_interaction(interaction: Interaction) -> void:
 	var new_tavern := interaction as Tavern
@@ -61,7 +64,38 @@ func _create_roster_row(npc: NPC) -> Control:
 	status_label.text = tr("ADVENTURER_STATUS_AVAILABLE") if npc.current_quest == null else tr("ADVENTURER_STATUS_ASSIGNED")
 	row.add_child(status_label)
 
+	var details_button := Button.new()
+	details_button.custom_minimum_size = Vector2(86, 28)
+	details_button.text = tr("NPC_DETAILS_OPEN")
+	details_button.pressed.connect(_open_npc_details.bind(npc))
+	row.add_child(details_button)
+
 	return row
+
+func _open_npc_details(npc: NPC) -> void:
+	if npc == null or not is_instance_valid(npc):
+		return
+	var npc_id := npc.get_instance_id()
+	var existing := detail_windows.get(npc_id) as SceneInstance
+	if existing != null and is_instance_valid(existing.node):
+		if "visible" in existing.node:
+			existing.node.visible = true
+		SceneManager.promote_scene_instance(existing)
+		var existing_ui := (existing.node as DraggableControl).content as NpcDetailsUI
+		if existing_ui != null:
+			existing_ui.setup_npc(npc)
+			existing.on_enter.emit()
+		return
+
+	var window_instance := SceneManager.add(NPC_DETAILS_WINDOW, false)
+	if window_instance == null:
+		return
+	var details_ui := (window_instance.node as DraggableControl).content as NpcDetailsUI
+	if details_ui == null:
+		return
+	details_ui.setup_npc(npc)
+	window_instance.on_enter.emit()
+	detail_windows[npc_id] = window_instance
 
 func _get_npc_display_name(npc: NPC) -> String:
 	if npc == null or npc.npc_info == null:

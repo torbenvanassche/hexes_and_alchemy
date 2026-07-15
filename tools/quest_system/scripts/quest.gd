@@ -49,8 +49,8 @@ func add_supply(item: Resource, amount: int = 1) -> void:
 	
 func add_to_party(npc: NPC) -> void:
 	if not party.has(npc):
-		npc.assign_quest(self);
 		party.append(npc);
+		npc.assign_quest(self);
 		
 func get_state_as_string(state: QuestState) -> String:
 	return QuestState.keys()[state].to_lower();
@@ -84,9 +84,16 @@ func get_offered_currency_reward() -> int:
 	return offered_currency_reward
 
 func start() -> void:
-	for npc in party:
-		npc.arrived.connect(_check_party_arrived_at_quest, CONNECT_ONE_SHOT);
+	for npc in party.duplicate():
+		if not npc.arrived.is_connected(_check_party_arrived_at_quest):
+			npc.arrived.connect(_check_party_arrived_at_quest, CONNECT_ONE_SHOT);
+		if not npc.movement_failed.is_connected(_on_party_movement_failed):
+			npc.movement_failed.connect(_on_party_movement_failed, CONNECT_ONE_SHOT);
 		npc.set_state(NPC.NPCState.MOVING_TO_QUEST);
+		if party.is_empty():
+			break
+	if party.is_empty():
+		return
 	set_state(QuestState.EN_ROUTE);
 	
 func set_state(state: QuestState) -> void:
@@ -94,8 +101,17 @@ func set_state(state: QuestState) -> void:
 	
 func _check_party_arrived_at_quest() -> void:
 	if party.all(func(n: NPC) -> bool: return n.is_state(NPC.NPCState.AT_QUEST)):
-		var objective := location.structure.instance as QuestObjective
+		for npc in party:
+			if npc != null and npc.movement_failed.is_connected(_on_party_movement_failed):
+				npc.movement_failed.disconnect(_on_party_movement_failed)
+		if quest_key == "scout":
+			set_state(QuestState.IN_PROGRESS);
+			return_from_quest()
+			return
+		var objective := get_objective()
 		if objective == null:
+			Debug.warn("Quest '%s' no longer has a valid objective." % [quest_key])
+			return_from_quest()
 			return
 		if not objective.quest_has_required_supplies(self):
 			Debug.warn("Quest '%s' is missing its required supplies." % [quest_key])
@@ -107,11 +123,25 @@ func _check_party_arrived_at_quest() -> void:
 func return_completed() -> void:
 	if party.all(func(n: NPC) -> bool: return n.is_state(NPC.NPCState.DONE)):
 		set_state(QuestState.COMPLETE);
+
+func _on_party_movement_failed(_failed_npc: NPC) -> void:
+	for npc in party:
+		if npc != null and npc.movement_failed.is_connected(_on_party_movement_failed):
+			npc.movement_failed.disconnect(_on_party_movement_failed)
+		if npc != null and npc.arrived.is_connected(_check_party_arrived_at_quest):
+			npc.arrived.disconnect(_check_party_arrived_at_quest)
+		if npc != null:
+			npc.cancel_assigned_quest(self)
+	party.clear()
+	set_state(QuestState.WAITING)
+	if Manager.instance != null and Manager.instance.quests != null:
+		Manager.instance.quests.quest_list_changed.emit()
 		
 func return_from_quest() -> void:
 	set_state(QuestState.RETURNING);
 	for npc in party:
-		npc.arrived.connect(return_completed, CONNECT_ONE_SHOT);
+		if not npc.arrived.is_connected(return_completed):
+			npc.arrived.connect(return_completed, CONNECT_ONE_SHOT);
 		npc.set_state(NPC.NPCState.RETURNING);
 	
 func parse_reward() -> void:

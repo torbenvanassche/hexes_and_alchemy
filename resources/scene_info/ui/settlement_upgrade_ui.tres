@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="SceneInfo" format=3]
+
+[ext_resource type="Script" uid="uid://6t4u66o5q6po" path="res://scripts/scene_manager/scene_info.gd" id="1_scene_info"]
+[ext_resource type="PackedScene" path="res://scenes/ui/settlement_upgrade_ui.tscn" id="2_scene"]
+
+[resource]
+script = ExtResource("1_scene_info")
+id = "settlement_upgrade_ui"
+packed_scene = ExtResource("2_scene")
+type = 2
+is_unique = true
+transient = true
+metadata/_custom_type_script = "uid://6t4u66o5q6po"

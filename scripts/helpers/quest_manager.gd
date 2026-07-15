@@ -12,11 +12,80 @@ signal quest_availability_changed();
 
 @export_group("Generation")
 @export var max_quest_distance: int = 50;
+@export var max_scout_targets: int = 12;
 
 func has_quest_for_location_and_type(location: HexBase, quest_type: String) -> bool:
 	return active_quests.any(func(q: Quest) -> bool:
 		return q != null and q.location == location and q.quest_key == quest_type
 	);
+
+func get_available_scout_locations(grid: HexGrid, limit_results: bool = true) -> Array[HexBase]:
+	var origin_hex := get_active_quest_origin_hex(grid)
+	if grid == null or origin_hex == null:
+		return []
+
+	var scout_locations: Array[HexBase] = []
+	for scene_instance: SceneInstance in grid.get_tiles_in_radius(origin_hex.cube_id, max_quest_distance):
+		var scout_hex := scene_instance.node as HexBase
+		if not is_valid_scout_location(scout_hex, grid):
+			continue
+		if not is_quest_location_reachable(scout_hex, grid):
+			continue
+
+		scout_locations.append(scout_hex)
+
+	scout_locations.sort_custom(func(a: HexBase, b: HexBase) -> bool:
+		return GridUtils.cube_distance(origin_hex.cube_id, a.cube_id) < GridUtils.cube_distance(origin_hex.cube_id, b.cube_id)
+	)
+	if limit_results and max_scout_targets > 0 and scout_locations.size() > max_scout_targets:
+		scout_locations.resize(max_scout_targets)
+
+	return scout_locations
+
+func get_scout_location_for_distance(grid: HexGrid, requested_distance: int) -> HexBase:
+	var origin_hex := get_active_quest_origin_hex(grid)
+	if grid == null or origin_hex == null:
+		return null
+
+	var scout_locations := get_available_scout_locations(grid, false)
+	if scout_locations.is_empty():
+		return null
+
+	var target_distance := clampi(requested_distance, 1, max_quest_distance)
+	scout_locations.sort_custom(func(a: HexBase, b: HexBase) -> bool:
+		var distance_a := GridUtils.cube_distance(origin_hex.cube_id, a.cube_id)
+		var distance_b := GridUtils.cube_distance(origin_hex.cube_id, b.cube_id)
+		var delta_a := absi(distance_a - target_distance)
+		var delta_b := absi(distance_b - target_distance)
+		if delta_a == delta_b:
+			return distance_a > distance_b
+		return delta_a < delta_b
+	)
+	return scout_locations[0]
+
+func is_valid_scout_location(location: HexBase, grid: HexGrid = null) -> bool:
+	if location == null or location.is_explored or not location.is_visible_in_tree():
+		return false
+	if location.structure != null:
+		return false
+	if has_quest_for_location_and_type(location, "scout"):
+		return false
+
+	if grid == null:
+		var active_scene := SceneManager.get_active_scene()
+		if active_scene == null:
+			return false
+		grid = active_scene.node as HexGrid
+	if grid == null:
+		return false
+
+	var origin_hex := get_active_quest_origin_hex(grid)
+	if origin_hex == null:
+		return false
+	if GridUtils.cube_distance(origin_hex.cube_id, location.cube_id) > max_quest_distance:
+		return false
+
+	return _is_adjacent_to_explored_tile(location, grid)
 
 func get_available_quest_types(
 	location: HexBase,
@@ -32,6 +101,14 @@ func get_available_quest_types(
 			continue;
 		available_types.append(quest_type);
 	return available_types;
+
+func get_postable_quest_types(location: HexBase, quest_types: Array[String]) -> Array[String]:
+	var postable_types: Array[String] = []
+	for quest_type: String in quest_types:
+		if has_quest_for_location_and_type(location, quest_type):
+			continue
+		postable_types.append(quest_type)
+	return postable_types
 
 func has_eligible_npc_for_quest(
 	location: HexBase,
@@ -99,6 +176,12 @@ func is_quest_location_reachable(location: HexBase, grid: HexGrid = null) -> boo
 	if origin_hex == null:
 		return false
 
+	if _active_settlement_allows_boat_travel():
+		return not grid.pathfinder.get_hex_path_for_methods(
+			origin_hex.cube_id,
+			location.cube_id,
+			[HexInfo.TraversalTag.WALK, HexInfo.TraversalTag.BOAT]
+		).is_empty()
 	return not grid.pathfinder.get_hex_path(origin_hex.cube_id, location.cube_id).is_empty()
 
 func add_quest(q: Quest) -> void:
@@ -176,3 +259,17 @@ func _get_active_tavern() -> Tavern:
 		if interaction is Tavern:
 			return interaction as Tavern;
 	return null;
+
+func _active_settlement_allows_boat_travel() -> bool:
+	return (
+		Manager.instance != null
+		and Manager.instance.active_settlement != null
+		and Manager.instance.active_settlement.has_service(&"Shipyard")
+	)
+
+func _is_adjacent_to_explored_tile(location: HexBase, grid: HexGrid) -> bool:
+	for direction: Vector3i in DataManager.instance.CUBE_DIRS:
+		var neighbor := grid.get_hex_at_cube_id(location.cube_id + direction)
+		if neighbor != null and neighbor.is_explored:
+			return true
+	return false
