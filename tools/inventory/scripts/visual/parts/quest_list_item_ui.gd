@@ -11,8 +11,10 @@ class_name QuestListItemUI extends Control
 @export var supply_slot: PackedScene;
 
 var questData: Quest;
+var auto_resolve_enabled := false
 var _dragging := false
 var _drag_offset := Vector2.ZERO
+var _auto_claim_queued := false
 static var _top_z_index := 10
 
 func _ready() -> void:
@@ -45,11 +47,24 @@ func _update_progress(state: String) -> void:
 	var is_complete := questData != null and questData.is_state(Quest.QuestState.COMPLETE)
 	progress_bar.visible = not is_complete
 	claim_reward_button.visible = is_complete
+	if is_complete and auto_resolve_enabled:
+		_queue_auto_claim()
 
 func _claim_reward() -> void:
 	if questData == null:
 		return
 	questData.parse_reward()
+
+func set_auto_resolve_enabled(enabled: bool) -> void:
+	auto_resolve_enabled = enabled
+	if enabled and questData != null and questData.is_state(Quest.QuestState.COMPLETE):
+		_queue_auto_claim()
+
+func _queue_auto_claim() -> void:
+	if _auto_claim_queued:
+		return
+	_auto_claim_queued = true
+	_claim_reward.call_deferred()
 
 func _get_location_name() -> String:
 	if questData == null or questData.location == null or questData.location.structure == null:

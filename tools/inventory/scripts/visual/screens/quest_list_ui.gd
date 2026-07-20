@@ -2,6 +2,7 @@ class_name QuestListUI extends Control
 
 @onready var create_quest_button: Button = $Actions/CreateQuestButton
 @onready var scout_quest_button: Button = $Actions/ScoutQuestButton
+@onready var auto_resolve_button: TextureButton = $"../../topbar/MarginContainer2/HBoxContainer/AutoResolveButton"
 @onready var board_surface: Control = $BoardSurface
 @onready var empty_label: Label = $EmptyLabel
 
@@ -9,16 +10,21 @@ class_name QuestListUI extends Control
 @export var board_margin: float = 20.0
 @export var note_spacing: Vector2 = Vector2(16.0, 14.0)
 var window_instance: SceneInstance;
+var auto_resolve_enabled := false
 
 func on_enter() -> void:
+	_sync_auto_resolve_button()
 	for c: QuestListItemUI in _get_quest_notes():
 		if not Manager.instance.quests.active_quests.has(c.questData):
 			c.queue_free()
+		else:
+			c.set_auto_resolve_enabled(auto_resolve_enabled)
 
 	for q: Quest in Manager.instance.quests.active_quests:
 		if _find_note_for_quest(q) == null:
 			var instance: QuestListItemUI = quest_item_ui.instantiate();
 			board_surface.add_child(instance);
+			instance.set_auto_resolve_enabled(auto_resolve_enabled)
 			instance.set_data(q);
 
 	empty_label.visible = Manager.instance.quests.active_quests.is_empty()
@@ -36,10 +42,21 @@ func _allow_quest_creation_allowed() -> void:
 func _ready() -> void:
 	create_quest_button.pressed.connect(_open_create_quest_menu)
 	scout_quest_button.pressed.connect(_open_scout_quest_menu)
+	auto_resolve_button.toggled.connect(_on_auto_resolve_toggled)
 	Manager.instance.quests.quest_list_changed.connect(on_enter)
 	resized.connect(_layout_board)
 	board_surface.resized.connect(_layout_board)
 	on_enter()
+
+func _on_auto_resolve_toggled(enabled: bool) -> void:
+	auto_resolve_enabled = enabled
+	for note in _get_quest_notes():
+		note.set_auto_resolve_enabled(auto_resolve_enabled)
+
+func _sync_auto_resolve_button() -> void:
+	if auto_resolve_button == null:
+		return
+	auto_resolve_button.set_pressed_no_signal(auto_resolve_enabled)
 	
 func _open_create_quest_menu() -> void:
 	if can_open_creation_menu() and _has_available_quests_to_create():
