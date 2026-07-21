@@ -56,8 +56,7 @@ func complete_quest(_q: Quest) -> void:
 	if Manager.instance.player_instance == null:
 		return
 
-	for item: ItemInfo in _pending_reward.keys():
-		Manager.instance.player_instance.inventory.add(item, _pending_reward[item])
+	grant_player_inventory_rewards(_pending_reward)
 	_pending_reward.clear()
 
 func _set_water_state(state: WaterState) -> void:

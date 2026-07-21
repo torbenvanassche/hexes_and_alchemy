@@ -139,6 +139,28 @@ func get_quest_rank_experience_reward(quest_type_key: String, minimum_rank_overr
 		return int(AdventurerRank.clamp_rank(minimum_rank_override)) + 1
 	return profile.get_rank_experience_reward(minimum_rank_override)
 
+func grant_player_inventory_rewards(rewards: Dictionary[ItemInfo, int]) -> void:
+	if rewards.is_empty() or Manager.instance.player_instance == null:
+		return
+
+	var inventory := Manager.instance.player_instance.inventory
+	if inventory == null:
+		return
+
+	for item: ItemInfo in rewards.keys():
+		if item == null:
+			continue
+		var amount := maxi(0, rewards[item])
+		if amount <= 0:
+			continue
+
+		var remaining := inventory.add(item, amount)
+		var added := amount - remaining
+		if added > 0:
+			_notify_item_reward(item, added)
+		if remaining > 0:
+			_notify_reward(tr("QUEST_REWARD_INVENTORY_FULL") % [remaining, item.get_display_name()], Color.RED)
+
 func _get_configured_quest_types() -> Array[String]:
 	if quest_profiles.is_empty():
 		return quest_types
@@ -159,6 +181,14 @@ func _filter_profile_states(types: Array[String], active_state_name: String) -> 
 		if profile == null or profile.is_available_for_state(active_state_name):
 			filtered.append(quest_type)
 	return filtered
+
+func _notify_reward(message: String, color: Color = Color.WHITE) -> void:
+	if Manager.instance != null and Manager.instance.toast != null:
+		Manager.instance.toast.notify(message, color)
+
+func _notify_item_reward(item: ItemInfo, amount: int, color: Color = Color.WHITE) -> void:
+	if Manager.instance != null and Manager.instance.toast != null:
+		Manager.instance.toast.notify_item_reward(item, amount, color)
 	
 func _on_create_quest_window_loaded(window_info: SceneInfo) -> void:
 	window_instance = SceneManager.add(window_info, false);

@@ -112,6 +112,8 @@ QUEST_CREATION_INTEREST_NONE,No adventurers are interested in this offer.,No adv
 QUEST_CREATION_INTEREST_ONE,1 adventurer is interested in this offer.,1 adventurer is interested in this offer.
 QUEST_CREATION_INTEREST_COUNT,%s adventurers are interested in this offer.,%s adventurers are interested in this offer.
 QUEST_AUTO_RESOLVE,Auto resolve,Auto resolve
+QUEST_REWARD_ITEM_GAINED,+%s %s,+%s %s
+QUEST_REWARD_INVENTORY_FULL,%s %s could not fit in your inventory.,%s %s could not fit in your inventory.
 QUEST_DETAIL_DURATION_LABEL,Duration,Duration
 QUEST_DETAIL_DISTANCE_LABEL,Distance,Distance
 QUEST_DETAIL_RISK_LABEL,Risk,Risk

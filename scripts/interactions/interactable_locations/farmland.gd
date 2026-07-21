@@ -122,7 +122,6 @@ func complete_quest(_q: Quest) -> void:
 	if _pending_reward.is_empty():
 		return
 		
-	for item: ItemInfo in _pending_reward.keys():
-		Manager.instance.player_instance.inventory.add(item, _pending_reward[item])
+	grant_player_inventory_rewards(_pending_reward)
 	_pending_reward.clear()
 	_set_crop_state(CropState.FALLOW)

@@ -70,8 +70,7 @@ func complete_quest(q: Quest) -> void:
 		Debug.message("The miners came back empty-handed.")
 		return
 
-	for item: ItemInfo in _pending_reward.keys():
-		Manager.instance.player_instance.inventory.add(item, _pending_reward[item])
+	grant_player_inventory_rewards(_pending_reward)
 	_pending_reward.clear()
 
 func _current_mine_state() -> MineState:

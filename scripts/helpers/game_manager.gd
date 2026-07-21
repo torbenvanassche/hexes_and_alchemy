@@ -17,7 +17,7 @@ var input: InputSettings
 @onready var market: MarketManager = $market_manager;
 @onready var quests: QuestManager = $quest_manager;
 @onready var journal: JournalManager = $journal_manager;
-@onready var toast: Toast = $"../game_ui/RichTextLabel";
+@onready var toast: Toast = $"../game_ui/ToastNotifications";
 
 @export var initial_scene: SceneInfo;
 var active_settlement: Settlement;
