@@ -27,7 +27,7 @@ func interact() -> void:
 	pass;
 
 func can_interact() -> bool:
-	return not _quest_running and not get_filtered_quest_types().is_empty();
+	return has_visible_quest_activity() or (not _quest_running and not get_filtered_quest_types().is_empty());
 
 func _set_tree_state(tree_enabled: bool) -> void:
 	trees.visible = tree_enabled;

@@ -13,11 +13,24 @@ signal quest_availability_changed();
 @export_group("Generation")
 @export var max_quest_distance: int = 50;
 @export var max_scout_targets: int = 12;
+@export_range(0.0, 1.0, 0.01) var scout_direction_weight: float = 0.65;
 
 func has_quest_for_location_and_type(location: HexBase, quest_type: String) -> bool:
 	return active_quests.any(func(q: Quest) -> bool:
 		return q != null and q.location == location and q.quest_key == quest_type
 	);
+
+func has_quests_for_location(location: HexBase) -> bool:
+	return not get_quests_for_location(location).is_empty()
+
+func get_quests_for_location(location: HexBase) -> Array[Quest]:
+	var quests: Array[Quest] = []
+	if location == null:
+		return quests
+	for quest: Quest in active_quests:
+		if quest != null and quest.location == location:
+			quests.append(quest)
+	return quests
 
 func get_available_scout_locations(grid: HexGrid, limit_results: bool = true) -> Array[HexBase]:
 	var origin_hex := get_active_quest_origin_hex(grid)
@@ -63,6 +76,39 @@ func get_scout_location_for_distance(grid: HexGrid, requested_distance: int) -> 
 	)
 	return scout_locations[0]
 
+func get_scout_location_for_direction_and_distance(
+	grid: HexGrid,
+	direction_index: int,
+	requested_distance: int
+) -> HexBase:
+	var origin_hex := get_active_quest_origin_hex(grid)
+	if grid == null or origin_hex == null:
+		return null
+
+	var scout_locations := get_available_scout_locations(grid, false)
+	if scout_locations.is_empty():
+		return null
+
+	var directions := DataManager.instance.CUBE_DIRS
+	if direction_index < 0 or direction_index >= directions.size():
+		return get_scout_location_for_distance(grid, requested_distance)
+
+	var target_distance := clampi(requested_distance, 1, max_quest_distance)
+	var direction: Vector3i = directions[direction_index]
+	var ideal_cube := origin_hex.cube_id + Vector3i(
+		direction.x * target_distance,
+		direction.y * target_distance,
+		direction.z * target_distance
+	)
+	scout_locations.sort_custom(func(a: HexBase, b: HexBase) -> bool:
+		var score_a := _get_scout_direction_score(origin_hex.cube_id, a.cube_id, ideal_cube, target_distance)
+		var score_b := _get_scout_direction_score(origin_hex.cube_id, b.cube_id, ideal_cube, target_distance)
+		if is_equal_approx(score_a, score_b):
+			return GridUtils.cube_distance(origin_hex.cube_id, a.cube_id) > GridUtils.cube_distance(origin_hex.cube_id, b.cube_id)
+		return score_a < score_b
+	)
+	return scout_locations[0]
+
 func is_valid_scout_location(location: HexBase, grid: HexGrid = null) -> bool:
 	if location == null or location.is_explored or not location.is_visible_in_tree():
 		return false
@@ -85,7 +131,7 @@ func is_valid_scout_location(location: HexBase, grid: HexGrid = null) -> bool:
 	if GridUtils.cube_distance(origin_hex.cube_id, location.cube_id) > max_quest_distance:
 		return false
 
-	return _is_adjacent_to_explored_tile(location, grid)
+	return true
 
 func get_available_quest_types(
 	location: HexBase,
@@ -267,9 +313,13 @@ func _active_settlement_allows_boat_travel() -> bool:
 		and Manager.instance.active_settlement.has_service(&"Shipyard")
 	)
 
-func _is_adjacent_to_explored_tile(location: HexBase, grid: HexGrid) -> bool:
-	for direction: Vector3i in DataManager.instance.CUBE_DIRS:
-		var neighbor := grid.get_hex_at_cube_id(location.cube_id + direction)
-		if neighbor != null and neighbor.is_explored:
-			return true
-	return false
+func _get_scout_direction_score(
+	origin_cube: Vector3i,
+	candidate_cube: Vector3i,
+	ideal_cube: Vector3i,
+	target_distance: int
+) -> float:
+	var candidate_distance := GridUtils.cube_distance(origin_cube, candidate_cube)
+	var distance_delta := absi(candidate_distance - target_distance)
+	var direction_delta := GridUtils.cube_distance(candidate_cube, ideal_cube)
+	return float(distance_delta) * (1.0 - scout_direction_weight) + float(direction_delta) * scout_direction_weight

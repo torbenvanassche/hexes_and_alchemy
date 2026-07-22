@@ -29,6 +29,7 @@ WINDOW_SETTLEMENT_UPGRADE,Settlement,Settlement
 WINDOW_DEPOSIT_ITEMS,Deposit items,Deposit items
 WINDOW_QUEST_BOARD,Quest board,Quest board
 WINDOW_NEW_QUEST,New quest,New quest
+WINDOW_QUEST_STATUS,Quest status,Quest status
 WINDOW_KEEP_OPEN,Keep open,Keep open
 WINDOW_CLOSE,Close,Close
 WINDOW_ALLOW_CLOSE,Allow close,Allow close
@@ -108,6 +109,7 @@ QUEST_CREATION_NOT_ENOUGH_COINS,Not enough coins for this reward.,Not enough coi
 QUEST_CREATION_NO_SCOUTING_AVAILABLE,No reachable scouting target is available right now.,No reachable scouting target is available right now.
 QUEST_CREATION_SCOUT_FRONTIER,Scout,Scout
 QUEST_CREATION_SCOUT_DISTANCE,Distance,Distance
+QUEST_CREATION_SCOUT_DIRECTION,Direction,Direction
 QUEST_CREATION_INTEREST_NONE,No adventurers are interested in this offer.,No adventurers are interested in this offer.
 QUEST_CREATION_INTEREST_ONE,1 adventurer is interested in this offer.,1 adventurer is interested in this offer.
 QUEST_CREATION_INTEREST_COUNT,%s adventurers are interested in this offer.,%s adventurers are interested in this offer.
@@ -122,9 +124,18 @@ QUEST_DETAIL_DURATION,%ss,%ss
 QUEST_DETAIL_RISK,Risk: %s,Risk: %s
 QUEST_DETAIL_EXPECTED_REWARD,Reward: %s,Reward: %s
 QUEST_LOCATION_DISTANCE,%s (%s tiles),%s (%s tiles)
-QUEST_LOCATION_SCOUT_SELECTED,Scout target (%s tiles),Scout target (%s tiles)
+QUEST_LOCATION_SCOUT_SELECTED,Scout target: %s (%s tiles),Scout target: %s (%s tiles)
+QUEST_SCOUT_DIRECTION_0,East,East
+QUEST_SCOUT_DIRECTION_1,Northeast,Northeast
+QUEST_SCOUT_DIRECTION_2,Northwest,Northwest
+QUEST_SCOUT_DIRECTION_3,West,West
+QUEST_SCOUT_DIRECTION_4,Southwest,Southwest
+QUEST_SCOUT_DIRECTION_5,Southeast,Southeast
 QUEST_TYPE_FETCH,Fetch,Fetch
 QUEST_TYPE_SCOUT,Scout,Scout
+QUEST_SCOUT_REPORT_NOTHING,Scout returned without revealing anything new.,Scout returned without revealing anything new.
+QUEST_SCOUT_REPORT_TILES,Scout revealed %s new tiles.,Scout revealed %s new tiles.
+QUEST_SCOUT_REPORT_DISCOVERIES,Scout revealed %s new tiles and found: %s.,Scout revealed %s new tiles and found: %s.
 QUEST_TYPE_PLANT,Plant,Plant
 QUEST_TYPE_WATER,Water,Water
 QUEST_TYPE_HARVEST,Harvest,Harvest
@@ -206,6 +217,7 @@ QUEST_PARTY_UNASSIGNED,Unassigned,Unassigned
 QUEST_PARTY_ONE_ADVENTURER,1 adventurer,1 adventurer
 QUEST_PARTY_ADVENTURERS,%s adventurers,%s adventurers
 QUEST_ACTION_CLAIM_REWARD,Claim reward,Claim reward
+QUEST_ACTIVE_AT_LOCATION,Current work,Current work
 JOURNAL_TITLE,Guild Ledger,Guild Ledger
 JOURNAL_CHAPTER_ONE,Chapter I: Restore the Guild Forge,Chapter I: Restore the Guild Forge
 JOURNAL_CHAPTER_TWO,Chapter II: Establish a Trade Route,Chapter II: Establish a Trade Route

@@ -6,9 +6,15 @@ class_name QuestCreationUI extends Control
 @onready var quest_location: OptionButton = $MarginContainer/VBoxContainer/LocationRow/QuestLocation
 @onready var scout_distance_row: HBoxContainer = $MarginContainer/VBoxContainer/ScoutDistanceRow
 @onready var scout_distance_spin_box: SpinBox = $MarginContainer/VBoxContainer/ScoutDistanceRow/ScoutDistance
+@onready var scout_direction_row: HBoxContainer = $MarginContainer/VBoxContainer/ScoutDirectionRow
+@onready var scout_direction_option: OptionButton = $MarginContainer/VBoxContainer/ScoutDirectionRow/ScoutDirection
+@onready var minimum_rank_row: HBoxContainer = $MarginContainer/VBoxContainer/MinimumRankRow
 @onready var minimum_rank_option: OptionButton = $MarginContainer/VBoxContainer/MinimumRankRow/MinimumRank
+@onready var reward_offer_row: HBoxContainer = $MarginContainer/VBoxContainer/RewardOfferRow
 @onready var reward_offer_spin_box: SpinBox = $MarginContainer/VBoxContainer/RewardOfferRow/RewardOfferAmount
 @onready var interest_label: Label = $MarginContainer/VBoxContainer/InterestLabel
+@onready var active_quests_section: VBoxContainer = $MarginContainer/VBoxContainer/ActiveQuestsSection
+@onready var active_quests_list: VBoxContainer = $MarginContainer/VBoxContainer/ActiveQuestsSection/ActiveQuestsList
 @onready var details_panel: VBoxContainer = $MarginContainer/VBoxContainer/DetailsPanel
 @onready var description_top_divider: ColorRect = $MarginContainer/VBoxContainer/DetailsPanel/DescriptionTopDivider
 @onready var description_label: Label = $MarginContainer/VBoxContainer/DetailsPanel/DescriptionLabel
@@ -25,6 +31,7 @@ class_name QuestCreationUI extends Control
 @onready var quest_supplies: Control = $MarginContainer/VBoxContainer/QuestSupplies
 @onready var supplies_grid: GridContainer = $MarginContainer/VBoxContainer/QuestSupplies/SuppliesGrid
 @onready var status_label: Label = $MarginContainer/VBoxContainer/StatusLabel
+@onready var actions_row: HBoxContainer = $MarginContainer/VBoxContainer/Actions
 @onready var finish_quest_creation: Button = $MarginContainer/VBoxContainer/Actions/FinishQuestCreation
 @onready var window: DraggableControl = $"../../../.."
 
@@ -44,6 +51,7 @@ func _reset_ui() -> void:
 	quest_type.clear();
 	quest_location.clear();
 	quest_type.disabled = true;
+	_clear_active_quest_cards()
 	if minimum_rank_option != null:
 		minimum_rank_option.clear()
 		minimum_rank_option.disabled = true
@@ -68,6 +76,9 @@ func _ready() -> void:
 		reward_offer_spin_box.value_changed.connect(_on_reward_offer_changed)
 	if scout_distance_spin_box != null:
 		scout_distance_spin_box.value_changed.connect(_on_scout_distance_changed)
+	if scout_direction_option != null:
+		_setup_scout_direction_options()
+		scout_direction_option.item_selected.connect(_on_scout_direction_selected)
 	_connect_player_currency_signal()
 	_refresh_reward_offer_limit()
 	_request_window_refit()
@@ -106,6 +117,7 @@ func _connect_finish_button() -> void:
 
 func _on_location_selected(idx: int) -> void:
 	if idx == -1:
+		_refresh_active_quests_for_location(null)
 		quest_type.clear()
 		quest_type.disabled = true
 		finish_quest_creation.disabled = true
@@ -117,6 +129,7 @@ func _on_location_selected(idx: int) -> void:
 
 	var location: HexBase = quest_location.get_item_metadata(idx) as HexBase;
 	if location == null:
+		_refresh_active_quests_for_location(null)
 		quest_type.clear()
 		quest_type.disabled = true
 		finish_quest_creation.disabled = true
@@ -125,6 +138,7 @@ func _on_location_selected(idx: int) -> void:
 		_set_interest_feedback("")
 		_refresh_required_supplies()
 		return;
+	_refresh_active_quests_for_location(location)
 
 	if _is_scout_location(location):
 		quest_type.clear()
@@ -140,6 +154,8 @@ func _on_location_selected(idx: int) -> void:
 		return
 
 	if location.structure == null:
+		_refresh_active_quests_for_location(location)
+		_set_creation_controls_visible(false)
 		quest_type.clear()
 		quest_type.disabled = true
 		finish_quest_creation.disabled = true
@@ -161,6 +177,16 @@ func _on_location_selected(idx: int) -> void:
 			quest_type.set_item_metadata(quest_type.item_count - 1, state)
 
 	var has_types: bool = quest_type.item_count > 0
+	_set_creation_controls_visible(has_types)
+	if not has_types:
+		quest_type.disabled = true
+		finish_quest_creation.disabled = true
+		_set_details("")
+		_set_status("")
+		_set_interest_feedback("")
+		_refresh_required_supplies()
+		return
+
 	quest_type.disabled = not has_types;
 	_select_first_creatable_quest_type(objective)
 	_refresh_minimum_rank_options()
@@ -199,13 +225,19 @@ func _on_scout_distance_changed(_value: float) -> void:
 	_apply_scouting_request()
 	_request_window_refit()
 
+func _on_scout_direction_selected(_idx: int) -> void:
+	if not scout_only:
+		return
+	_apply_scouting_request()
+	_request_window_refit()
+
 func _on_player_currency_amount_changed() -> void:
 	_refresh_reward_offer_limit()
 	_refresh_quest_type_availability()
 	_refresh_interest_feedback()
 	_update_finish_button()
 
-func _add_location_option(hex: HexBase, require_reachable: bool = true) -> bool:
+func _add_location_option(hex: HexBase, require_reachable: bool = true, allow_active_location: bool = false) -> bool:
 	if _is_scout_location(hex):
 		return false
 
@@ -231,7 +263,7 @@ func _add_location_option(hex: HexBase, require_reachable: bool = true) -> bool:
 		hex,
 		objective.get_filtered_quest_types(objective.state_machine.get_current_state_index())
 	)
-	if postable_types.is_empty():
+	if postable_types.is_empty() and not (allow_active_location and Manager.instance.quests.has_quests_for_location(hex)):
 		return false
 
 	var distance: int = GridUtils.cube_distance(hex.cube_id, player_hex.cube_id);
@@ -293,7 +325,7 @@ func _apply_forced_interaction() -> void:
 		_set_status(tr("QUEST_CREATION_UNREACHABLE"))
 		return
 
-	if not _add_location_option(forced_interaction.hex):
+	if not _add_location_option(forced_interaction.hex, true, true):
 		_set_details("")
 		_set_status(tr("QUEST_CREATION_NO_AVAILABLE_QUESTS"))
 		return
@@ -320,14 +352,21 @@ func _apply_scouting_request() -> void:
 		return
 
 	_configure_scout_distance_limit()
-	var scout_location := Manager.instance.quests.get_scout_location_for_distance(grid, _get_requested_scout_distance())
+	var scout_location := Manager.instance.quests.get_scout_location_for_direction_and_distance(
+		grid,
+		_get_requested_scout_direction(),
+		_get_requested_scout_distance()
+	)
 	if scout_location == null:
 		_set_details("")
 		_set_status(tr("QUEST_CREATION_NO_SCOUTING_AVAILABLE"))
 		return
 
 	_set_status("")
-	quest_location.add_item(tr("QUEST_LOCATION_SCOUT_SELECTED") % [_get_scout_distance_from_origin(grid, scout_location)])
+	quest_location.add_item(tr("QUEST_LOCATION_SCOUT_SELECTED") % [
+		_get_scout_direction_label(_get_requested_scout_direction()),
+		_get_scout_distance_from_origin(grid, scout_location),
+	])
 	quest_location.set_item_metadata(0, scout_location)
 	quest_location.select(0)
 	quest_type.add_item(_get_quest_type_label(SCOUT_QUEST_KEY))
@@ -596,6 +635,154 @@ func _can_create_quest(location: HexBase, objective: QuestObjective, quest_type_
 		_get_reward_offer_amount(),
 		_get_minimum_rank_override()
 	)
+
+func _refresh_active_quests_for_location(location: HexBase) -> void:
+	_clear_active_quest_cards()
+	if active_quests_section == null or active_quests_list == null:
+		return
+	if Manager.instance == null or Manager.instance.quests == null or location == null:
+		active_quests_section.visible = false
+		_request_window_refit()
+		return
+
+	var quests := Manager.instance.quests.get_quests_for_location(location)
+	for quest in quests:
+		if quest == null:
+			continue
+		active_quests_list.add_child(_create_active_quest_row(quest))
+		var state_callable := _on_active_location_quest_changed.bind(location)
+		if not quest.state_machine.state_entered.is_connected(state_callable):
+			quest.state_machine.state_entered.connect(state_callable)
+		var completed_callable := _on_active_location_quest_completed.bind(location)
+		if not quest.completed.is_connected(completed_callable):
+			quest.completed.connect(completed_callable, CONNECT_ONE_SHOT)
+
+	active_quests_section.visible = not active_quests_list.get_children().is_empty()
+	_request_window_refit()
+
+func _create_active_quest_row(quest: Quest) -> Control:
+	var panel := PanelContainer.new()
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0.74, 0.62, 0.42, 0.22)
+	style.border_color = Color(0.38, 0.26, 0.14, 0.55)
+	style.set_border_width_all(1)
+	style.set_corner_radius_all(4)
+	style.set_content_margin(SIDE_LEFT, 10)
+	style.set_content_margin(SIDE_TOP, 8)
+	style.set_content_margin(SIDE_RIGHT, 10)
+	style.set_content_margin(SIDE_BOTTOM, 8)
+	panel.add_theme_stylebox_override("panel", style)
+
+	var content := VBoxContainer.new()
+	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	content.add_theme_constant_override("separation", 5)
+	panel.add_child(content)
+
+	var header := HBoxContainer.new()
+	header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	content.add_child(header)
+
+	var title := Label.new()
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title.add_theme_font_size_override("font_size", 18)
+	title.add_theme_color_override("font_color", Color(0.17, 0.1, 0.04, 1.0))
+	title.text = _get_quest_type_name(quest.quest_key)
+	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	header.add_child(title)
+
+	var state_label := Label.new()
+	state_label.add_theme_font_size_override("font_size", 14)
+	state_label.add_theme_color_override("font_color", Color(0.32, 0.22, 0.12, 1.0))
+	state_label.text = _get_quest_state_name(quest.state_machine.get_current_state())
+	state_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	header.add_child(state_label)
+
+	var party_label := Label.new()
+	party_label.text = _get_quest_party_text(quest)
+	party_label.modulate = Color(0.32, 0.22, 0.12, 1.0)
+	party_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	content.add_child(party_label)
+
+	var progress := ProgressBar.new()
+	progress.custom_minimum_size = Vector2(0, 12)
+	progress.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	progress.max_value = 1.0
+	progress.show_percentage = false
+	progress.value = _get_quest_state_progress(quest.state_machine.get_current_state())
+	progress.visible = not quest.is_state(Quest.QuestState.COMPLETE)
+	content.add_child(progress)
+
+	if quest.is_state(Quest.QuestState.COMPLETE):
+		var claim_button := Button.new()
+		claim_button.text = "QUEST_ACTION_CLAIM_REWARD"
+		claim_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		claim_button.pressed.connect(_claim_active_location_quest.bind(quest, quest.location))
+		content.add_child(claim_button)
+
+	return panel
+
+func _claim_active_location_quest(quest: Quest, location: HexBase) -> void:
+	if quest == null:
+		return
+	quest.parse_reward()
+	_close_status_if_no_claimable_quests.call_deferred(location)
+
+func _close_status_if_no_claimable_quests(location: HexBase) -> void:
+	if Manager.instance != null and Manager.instance.quests != null:
+		for quest in Manager.instance.quests.get_quests_for_location(location):
+			if quest != null and quest.is_state(Quest.QuestState.COMPLETE):
+				return
+	if window != null:
+		window.close_requested.emit()
+
+func _clear_active_quest_cards() -> void:
+	if active_quests_list == null:
+		return
+	for child in active_quests_list.get_children():
+		active_quests_list.remove_child(child)
+		child.queue_free()
+	if active_quests_section != null:
+		active_quests_section.visible = false
+
+func _on_active_location_quest_changed(_state: String, location: HexBase) -> void:
+	if not is_inside_tree():
+		return
+	var selected_location: HexBase = null
+	if quest_location != null and quest_location.selected >= 0:
+		selected_location = quest_location.get_item_metadata(quest_location.selected) as HexBase
+	if selected_location == location:
+		_refresh_active_quests_for_location.call_deferred(location)
+
+func _on_active_location_quest_completed(location: HexBase) -> void:
+	if not is_inside_tree():
+		return
+	var selected_location: HexBase = null
+	if quest_location != null and quest_location.selected >= 0:
+		selected_location = quest_location.get_item_metadata(quest_location.selected) as HexBase
+	if selected_location == location:
+		_refresh_active_quests_for_location.call_deferred(location)
+
+func _get_quest_state_name(state: String) -> String:
+	var translation_key := "QUEST_STATE_%s" % [state.to_upper()]
+	var translated := tr(translation_key)
+	if translated == translation_key:
+		return state.capitalize()
+	return translated
+
+func _get_quest_party_text(quest: Quest) -> String:
+	if quest == null or quest.party.is_empty():
+		return tr("QUEST_PARTY_UNASSIGNED")
+	if quest.party.size() == 1:
+		return tr("QUEST_PARTY_ONE_ADVENTURER")
+	return tr("QUEST_PARTY_ADVENTURERS") % [quest.party.size()]
+
+func _get_quest_state_progress(state: String) -> float:
+	var states := Quest.QuestState.keys()
+	var state_index := states.find(state.to_upper())
+	if state_index == -1:
+		return 0.0
+	return float(state_index) / float(max(1, states.size() - 1))
 
 func _refresh_required_supplies() -> void:
 	for child in supplies_grid.get_children():
@@ -927,14 +1114,27 @@ func _refund_reward(amount: int) -> void:
 func _apply_mode_visibility() -> void:
 	if location_row != null:
 		location_row.visible = not scout_only
-	if type_row != null:
-		type_row.visible = not scout_only
 	if scout_distance_row != null:
 		scout_distance_row.visible = scout_only
+	if scout_direction_row != null:
+		scout_direction_row.visible = scout_only
+	_set_creation_controls_visible(true)
 	if finish_quest_creation != null:
 		finish_quest_creation.text = "QUEST_CREATION_SCOUT_FRONTIER" if scout_only else "QUEST_CREATION_CREATE"
 	if window != null:
 		window.change_title.emit("QUEST_CREATION_SCOUT_FRONTIER" if scout_only else "WINDOW_NEW_QUEST")
+
+func _set_creation_controls_visible(visible: bool) -> void:
+	if type_row != null:
+		type_row.visible = visible and not scout_only
+	if minimum_rank_row != null:
+		minimum_rank_row.visible = visible and not scout_only
+	if reward_offer_row != null:
+		reward_offer_row.visible = visible and not scout_only
+	if actions_row != null:
+		actions_row.visible = visible
+	if window != null and not scout_only:
+		window.change_title.emit("WINDOW_NEW_QUEST" if visible else "WINDOW_QUEST_STATUS")
 
 func _configure_scout_distance_limit() -> void:
 	if scout_distance_spin_box == null or Manager.instance == null or Manager.instance.quests == null:
@@ -952,6 +1152,26 @@ func _get_requested_scout_distance() -> int:
 	if scout_distance_spin_box == null:
 		return 1
 	return maxi(1, roundi(scout_distance_spin_box.value))
+
+func _setup_scout_direction_options() -> void:
+	if scout_direction_option == null:
+		return
+	if scout_direction_option.item_count > 0:
+		return
+	for direction_index in range(6):
+		scout_direction_option.add_item(_get_scout_direction_label(direction_index))
+		scout_direction_option.set_item_metadata(direction_index, direction_index)
+	scout_direction_option.select(0)
+
+func _get_requested_scout_direction() -> int:
+	if scout_direction_option == null or scout_direction_option.selected < 0:
+		return 0
+	return int(scout_direction_option.get_item_metadata(scout_direction_option.selected))
+
+func _get_scout_direction_label(direction_index: int) -> String:
+	var translation_key := "QUEST_SCOUT_DIRECTION_%s" % [direction_index]
+	var translated := tr(translation_key)
+	return translated if translated != translation_key else str(direction_index + 1)
 
 func _get_scout_distance_from_origin(grid: HexGrid, location: HexBase) -> int:
 	if Manager.instance == null or Manager.instance.quests == null or grid == null or location == null:

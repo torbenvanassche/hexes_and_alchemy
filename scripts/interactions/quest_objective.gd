@@ -14,6 +14,9 @@ func _on_visibility_changed() -> void:
 	if can_interact() && is_visible_in_tree():
 		Manager.instance.quests.quest_availability_changed.emit();
 
+func has_visible_quest_activity() -> bool:
+	return Manager.instance != null and Manager.instance.quests != null and Manager.instance.quests.has_quests_for_location(hex)
+
 func on_interact() -> void:
 	super.on_interact();
 	if can_interact():

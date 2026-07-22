@@ -8,6 +8,9 @@
 radius = 0.095214844
 height = 0.36999512
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_interaction_trigger"]
+size = Vector3(0.7191162, 0.5185547, 0.6298218)
+
 [node name="npc" type="CharacterBody3D" unique_id=989589569]
 collision_layer = 0
 collision_mask = 0
@@ -20,5 +23,11 @@ move_speed = 1.0
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=70279412]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15617341, 0)
 shape = SubResource("CapsuleShape3D_h70i8")
+
+[node name="InteractionTrigger" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractionTrigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.008117676, 0.26100588, -0.002960205)
+shape = SubResource("BoxShape3D_interaction_trigger")
 
 [editable path="mesh"]

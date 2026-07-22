@@ -16,6 +16,8 @@ class_name NPC extends CharacterBody3D
 @export_group("Equipment")
 @export var equipment: NpcEquipmentSlots
 
+@onready var interaction_trigger: Area3D = get_node_or_null("InteractionTrigger") as Area3D
+
 enum NPCState { IDLE, READY_TO_MOVE, MOVING_TO_QUEST, AT_QUEST, RETURNING, DONE }
 
 var current_path: Array[HexBase] = []
@@ -33,6 +35,8 @@ signal rank_progress_changed()
 
 func _ready() -> void:
 	$mesh/RootNode/unit.material_override = material
+	if interaction_trigger != null and not interaction_trigger.area_entered.is_connected(_on_interaction_trigger_area_entered):
+		interaction_trigger.area_entered.connect(_on_interaction_trigger_area_entered)
 	if npc_info == null:
 		npc_info = DataManager.instance.npcs.pick_random()
 	if npc_info != null:
@@ -71,6 +75,18 @@ func is_state(state: NPCState) -> bool:
 
 func set_state(state: NPCState) -> void:
 	state_machine.set_state(get_state_as_string(state))
+
+func _on_interaction_trigger_area_entered(other: Area3D) -> void:
+	if current_quest == null or not (is_state(NPCState.MOVING_TO_QUEST) or is_state(NPCState.RETURNING)):
+		return
+
+	var target: Interaction = null
+	if other.has_meta("target"):
+		target = other.get_meta("target") as Interaction
+	if target == null or not target.can_be_triggered_by_npc:
+		return
+
+	target.on_npc_triggered(self)
 
 func assign_quest(q: Quest) -> void:
 	home_position = global_position
@@ -400,5 +416,6 @@ func _explore_for_scouting_quest() -> void:
 	grid.generate_chunks_around_grid_id(current_hex.grid_id)
 	for nearby_tile: SceneInstance in grid.get_tiles_in_radius(current_hex.cube_id, scouting_exploration_radius):
 		var tile := nearby_tile.node as HexBase
-		if tile != null:
+		if tile != null and not tile.is_explored:
 			tile.is_explored = true
+			current_quest.record_scouted_hex(tile)

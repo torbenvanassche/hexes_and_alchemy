@@ -14,6 +14,8 @@ var location: HexBase;
 var offered_currency_reward: int = 0;
 var minimum_rank_override: int = -1;
 var rank_experience_reward: int = 1;
+var scout_revealed_tiles: int = 0
+var scout_discovered_structures: Dictionary[String, int] = {}
 
 var state_machine: StateMachine;
 
@@ -83,6 +85,17 @@ func _resolve_rank_experience_reward(explicit_reward: int) -> int:
 func get_offered_currency_reward() -> int:
 	return offered_currency_reward
 
+func record_scouted_hex(hex: HexBase) -> void:
+	if quest_key != "scout" or hex == null:
+		return
+	scout_revealed_tiles += 1
+	if hex.structure == null or hex.structure.structure_info == null:
+		return
+	var structure_name := hex.structure.structure_info.get_display_name()
+	if structure_name == "":
+		return
+	scout_discovered_structures[structure_name] = int(scout_discovered_structures.get(structure_name, 0)) + 1
+
 func start() -> void:
 	for npc in party.duplicate():
 		if not npc.arrived.is_connected(_check_party_arrived_at_quest):
@@ -149,8 +162,31 @@ func parse_reward() -> void:
 	var rank_experience_reward := get_rank_experience_reward()
 	if objective != null:
 		objective.complete_quest(self);
+	if quest_key == "scout":
+		_notify_scout_report()
 	for npc in party:
 		if npc != null:
 			npc.complete_assigned_quest(self, rank_experience_reward)
 	Manager.instance.quests.remove_quest(self);
 	completed.emit();
+
+func _notify_scout_report() -> void:
+	if Manager.instance == null or Manager.instance.toast == null:
+		return
+	if scout_revealed_tiles <= 0:
+		Manager.instance.toast.notify(tr("QUEST_SCOUT_REPORT_NOTHING"))
+		return
+
+	if scout_discovered_structures.is_empty():
+		Manager.instance.toast.notify(tr("QUEST_SCOUT_REPORT_TILES") % [scout_revealed_tiles])
+		return
+
+	var discoveries: Array[String] = []
+	for structure_name in scout_discovered_structures.keys():
+		var count := int(scout_discovered_structures[structure_name])
+		discoveries.append(structure_name if count == 1 else "%s x%s" % [structure_name, count])
+	discoveries.sort()
+	Manager.instance.toast.notify(tr("QUEST_SCOUT_REPORT_DISCOVERIES") % [
+		scout_revealed_tiles,
+		", ".join(discoveries),
+	])

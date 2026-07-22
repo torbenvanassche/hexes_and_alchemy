@@ -10,6 +10,7 @@ var window_instance: SceneInstance;
 
 @export var show_interaction_prompt: bool = true;
 @export var close_window_on_area_exit: bool = true
+@export var can_be_triggered_by_npc: bool = false
 @export var journal_quest: JournalTask;
 
 @abstract func interact() -> void;
@@ -35,6 +36,10 @@ func toggle_collision(b: bool) -> void:
 func on_interact() -> void:
 	if can_interact():
 		interact();
+
+func on_npc_triggered(_npc: NPC) -> void:
+	if can_be_triggered_by_npc and can_interact():
+		interact()
 
 func _on_visibility_changed() -> void:
 	for shape in collision_shapes:

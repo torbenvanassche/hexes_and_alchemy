@@ -36,6 +36,11 @@ func interact() -> void:
 	else:
 		_set_axis_rotation(target_angle);
 
+func on_npc_triggered(_npc: NPC) -> void:
+	if not can_be_triggered_by_npc or not can_interact() or at_max:
+		return
+	interact()
+
 func _get_axis_rotation() -> float:
 	match axis:
 		RotationAxis.X:

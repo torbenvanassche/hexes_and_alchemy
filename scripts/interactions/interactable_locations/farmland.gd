@@ -71,7 +71,7 @@ func _cancel_timers() -> void:
 	_wither_timer = null
 
 func can_interact() -> bool:
-	return not _quest_running and not get_filtered_quest_types().is_empty()
+	return has_visible_quest_activity() or (not _quest_running and not get_filtered_quest_types().is_empty())
 
 func interact() -> void:
 	pass

@@ -40,7 +40,7 @@ func _ready() -> void:
 	_ready_deferred.call_deferred();
 	
 func _ready_deferred() -> void:
-	var grid := SceneManager.get_active_scene().node as HexGrid
+	var grid := _get_active_grid()
 	if grid == null:
 		return
 
@@ -53,6 +53,20 @@ func _ready_deferred() -> void:
 		hex.is_explored = true
 
 	_render_reveal_debug_shape(grid, reveal_hexes)
+
+func _get_active_grid() -> HexGrid:
+	var active_scene := SceneManager.get_active_scene()
+	if active_scene != null:
+		var active_grid := active_scene.node as HexGrid
+		if active_grid != null:
+			return active_grid
+
+	var current := get_parent()
+	while current != null:
+		if current is HexGrid:
+			return current as HexGrid
+		current = current.get_parent()
+	return null
 	
 func _toggle_collision() -> void:
 	for collision in collision_shapes:

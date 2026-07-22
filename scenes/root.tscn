@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cdjrbv2tvjlvw" path="res://scripts/helpers/game_manager.gd" id="1_l5cgh"]
 [ext_resource type="Script" uid="uid://beb2p3obw00h8" path="res://scripts/hex_system/settlement.gd" id="1_x28sa"]
+[ext_resource type="Script" uid="uid://df1yhyfp6xqgs" path="res://scripts/hex_system/settlement_upgrade_info.gd" id="2_kgph3"]
 [ext_resource type="Resource" path="res://resources/settlement_upgrades/settlement_level_2.tres" id="2_pkchf"]
 [ext_resource type="Script" uid="uid://dpjtl8txjms6k" path="res://scripts/helpers/resource_manager.gd" id="2_sqa0i"]
 [ext_resource type="Resource" path="res://resources/settlement_upgrades/settlement_level_3.tres" id="3_kgph3"]
@@ -88,8 +89,7 @@ tonemap_mode = 2
 
 [node name="game" type="Node3D" unique_id=1531349496]
 script = ExtResource("1_x28sa")
-spawn_position = NodePath("")
-upgrade_requirements = [ExtResource("2_pkchf"), ExtResource("3_kgph3")]
+upgrade_requirements = Array[ExtResource("2_kgph3")]([ExtResource("2_pkchf"), ExtResource("3_kgph3")])
 
 [node name="game_manager" type="Node" parent="." unique_id=299541562]
 script = ExtResource("1_l5cgh")

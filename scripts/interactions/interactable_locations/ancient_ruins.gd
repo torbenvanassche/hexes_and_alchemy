@@ -43,7 +43,7 @@ func can_interact() -> bool:
 	var lootable := hex.structure.structure_info as LootableStructureInfo
 	if lootable != null and lootable.loot_once and _loot_claimed:
 		return false
-	return not _quest_running and not get_filtered_quest_types().is_empty()
+	return has_visible_quest_activity() or (not _quest_running and not get_filtered_quest_types().is_empty())
 
 func interact() -> void:
 	pass
