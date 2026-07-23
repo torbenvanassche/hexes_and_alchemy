@@ -39,6 +39,8 @@
 [ext_resource type="Resource" uid="uid://c1ypx4o3q73t0" path="res://resources/structure_info/settlement.tres" id="19_isfgf"]
 [ext_resource type="Resource" uid="uid://cs0kfyy871ovd" path="res://resources/scene_info/ui/game_settings.tres" id="20_8ui5n"]
 [ext_resource type="Resource" uid="uid://des3sdhs2l6yq" path="res://resources/structure_info/docks.tres" id="20_qk31b"]
+[ext_resource type="Resource" path="res://resources/structure_info/forge.tres" id="21_forge"]
+[ext_resource type="Resource" path="res://resources/structure_info/wharf.tres" id="21_wharf"]
 [ext_resource type="Resource" uid="uid://cutvod5684gln" path="res://resources/scene_info/sub_scenes/gameplay_main.tres" id="22_jehah"]
 [ext_resource type="Script" uid="uid://p57cg8ml65u0" path="res://scripts/helpers/world_space_ui.gd" id="23_f3p2p"]
 [ext_resource type="Resource" uid="uid://jp3ftcrni36q" path="res://resources/scene_info/ui/inventory_ui.tres" id="26_isfgf"]
@@ -58,6 +60,8 @@
 [ext_resource type="Script" uid="uid://du4hbbtmblkj0" path="res://tools/quest_system/scripts/npc_info.gd" id="45_h5su3"]
 [ext_resource type="Resource" uid="uid://c8hkdge0pvgtn" path="res://resources/npc_info/basic_adventurer.tres" id="46_c6i2r"]
 [ext_resource type="Resource" uid="uid://d0lienvyvqxlh" path="res://resources/item_info/dock_blueprint.tres" id="47_742t5"]
+[ext_resource type="Resource" path="res://resources/item_info/forge_blueprint.tres" id="48_forge_blueprint"]
+[ext_resource type="Resource" path="res://resources/item_info/wharf_blueprint.tres" id="48_wharf_blueprint"]
 [ext_resource type="Script" uid="uid://c8bmw05frta6c" path="res://scripts/ui/notification.gd" id="49_c6i2r"]
 [ext_resource type="Resource" uid="uid://ck0i8jm3a1eqw" path="res://resources/scene_info/ui/crafting_ui.tres" id="50_craft"]
 [ext_resource type="Resource" uid="uid://cedqercu5lay2" path="res://resources/item_info/seed_pouch.tres" id="51_seed"]
@@ -117,10 +121,10 @@ metadata/_custom_type_script = "uid://g8s30q5nqcd8"
 [node name="resource_manager" type="Node" parent="." unique_id=1025417812]
 script = ExtResource("2_sqa0i")
 hexes = Array[ExtResource("3_l5cgh")]([ExtResource("4_vgks2"), ExtResource("5_dylgi")])
-structures = Array[ExtResource("10_gt4lb")]([ExtResource("11_ya6yc"), ExtResource("12_mflgo"), ExtResource("13_ancient_ruins_structure"), ExtResource("14_8ui5n"), ExtResource("16_jehah"), ExtResource("19_isfgf"), ExtResource("18_58tnd"), ExtResource("20_qk31b"), ExtResource("56_water_source")])
+structures = Array[ExtResource("10_gt4lb")]([ExtResource("11_ya6yc"), ExtResource("12_mflgo"), ExtResource("13_ancient_ruins_structure"), ExtResource("14_8ui5n"), ExtResource("16_jehah"), ExtResource("19_isfgf"), ExtResource("18_58tnd"), ExtResource("20_qk31b"), ExtResource("21_forge"), ExtResource("21_wharf"), ExtResource("56_water_source")])
 scenes = Array[ExtResource("15_ya6yc")]([ExtResource("12_vgks2"), ExtResource("16_gt4lb"), ExtResource("18_34frw"), ExtResource("18_mflgo"), ExtResource("20_8ui5n"), ExtResource("22_jehah"), ExtResource("26_isfgf"), ExtResource("58_journal"), ExtResource("29_moyyc"), ExtResource("30_f0nuf"), ExtResource("37_33j8a"), ExtResource("38_eirlg"), ExtResource("39_eirlg"), ExtResource("50_craft"), ExtResource("63_tavern_roster")])
 regions = Array[ExtResource("5_3hfy5")]([ExtResource("6_7pvxh"), ExtResource("9_y3xxt"), ExtResource("10_ancient_ruins_region")])
-items = Array[ExtResource("27_phl1g")]([ExtResource("30_agklt"), ExtResource("28_58tnd"), ExtResource("31_x7ldt"), ExtResource("32_moyyc"), ExtResource("33_f0nuf"), ExtResource("47_742t5"), ExtResource("51_seed"), ExtResource("52_water"), ExtResource("53_grain"), ExtResource("54_support"), ExtResource("55_bucket"), ExtResource("59_ancient_coin"), ExtResource("60_relic_fragment"), ExtResource("61_old_guild_seal"), ExtResource("62_compass")])
+items = Array[ExtResource("27_phl1g")]([ExtResource("30_agklt"), ExtResource("28_58tnd"), ExtResource("31_x7ldt"), ExtResource("32_moyyc"), ExtResource("33_f0nuf"), ExtResource("47_742t5"), ExtResource("48_forge_blueprint"), ExtResource("48_wharf_blueprint"), ExtResource("51_seed"), ExtResource("52_water"), ExtResource("53_grain"), ExtResource("54_support"), ExtResource("55_bucket"), ExtResource("59_ancient_coin"), ExtResource("60_relic_fragment"), ExtResource("61_old_guild_seal"), ExtResource("62_compass")])
 npcs = Array[ExtResource("45_h5su3")]([ExtResource("46_c6i2r")])
 
 [node name="shared_components" type="Node" parent="." unique_id=2003265152]

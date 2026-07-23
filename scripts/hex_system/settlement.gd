@@ -80,6 +80,8 @@ func _register_interactions() -> void:
 func register_interaction(interaction: Interaction) -> void:
 	if interaction == null:
 		return
+	if not interactions.has(interaction):
+		interactions.append(interaction)
 	interaction.settlement = self
 	if interaction.has_method("refresh_service_state"):
 		interaction.refresh_service_state()
@@ -87,10 +89,50 @@ func register_interaction(interaction: Interaction) -> void:
 	if not interactions_by_type.has(type_name):
 		interactions_by_type[type_name] = []
 	var services: Array = interactions_by_type[type_name]
-	services.append(interaction)
+	if not services.has(interaction):
+		services.append(interaction)
+
+func register_structure_node(structure_node: Node) -> void:
+	if structure_node == null:
+		return
+	_register_buildable(structure_node as Buildable)
+	for interaction: Interaction in structure_node.find_children("*", "Interaction", true, false):
+		register_interaction(interaction)
+	for buildable: Buildable in structure_node.find_children("*", "Buildable", true, false):
+		_register_buildable(buildable)
+	refresh_service_states()
+	level_changed.emit(level)
+
+func _register_buildable(buildable: Buildable) -> void:
+	if buildable == null or buildables.has(buildable):
+		return
+	buildables.append(buildable)
+	if not buildable.step_changed.is_connected(_on_buildable_step_changed):
+		buildable.step_changed.connect(_on_buildable_step_changed)
+	buildable.refresh_step_state(self)
 
 func contains_interaction(interaction: Interaction) -> bool:
 	return interaction != null and interactions.has(interaction)
+
+func contains_hex(grid: HexGrid, hex: HexBase) -> bool:
+	if grid == null or hex == null:
+		return false
+	if not grid.is_ancestor_of(self):
+		return false
+
+	var origin_hex := _get_settlement_origin_hex(grid)
+	if origin_hex == null:
+		return false
+
+	for settlement_hex in _get_settlement_reveal_hexes(grid, origin_hex):
+		if settlement_hex != null and settlement_hex.cube_id == hex.cube_id:
+			return true
+	return false
+
+func has_boundary_between(grid: HexGrid, a: HexBase, b: HexBase) -> bool:
+	if grid == null or a == null or b == null:
+		return false
+	return _get_settlement_boundary_edges(grid).has(_get_boundary_edge_key(a.cube_id, b.cube_id))
 
 func get_service(type_name: StringName) -> Interaction:
 	var services: Array[Interaction] = get_services(type_name)

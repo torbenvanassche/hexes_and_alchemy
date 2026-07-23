@@ -8,6 +8,8 @@
 [ext_resource type="Material" uid="uid://c66vbca7lgh6m" path="res://materials/kay_fantasy_default.tres" id="3_uyef6"]
 [ext_resource type="Resource" uid="uid://oowfm1lpkvm" path="res://resources/item_info/wood_log.tres" id="4_wood"]
 [ext_resource type="Resource" uid="uid://o03k1cg30nlw" path="res://resources/item_info/iron_ore.tres" id="5_iron"]
+[ext_resource type="Resource" path="res://resources/item_info/forge_blueprint.tres" id="6_forge_blueprint"]
+[ext_resource type="Resource" path="res://resources/item_info/wharf_blueprint.tres" id="7_wharf_blueprint"]
 
 [sub_resource type="Resource" id="Resource_dc7o2"]
 script = ExtResource("2_7hx24")
@@ -33,6 +35,22 @@ maxcount = 6
 is_unlocked = true
 metadata/_custom_type_script = "uid://bqabkvm20ept7"
 
+[sub_resource type="Resource" id="Resource_forge_blueprint"]
+script = ExtResource("2_7hx24")
+content = ExtResource("6_forge_blueprint")
+count = 1
+maxcount = 1
+is_unlocked = true
+metadata/_custom_type_script = "uid://bqabkvm20ept7"
+
+[sub_resource type="Resource" id="Resource_wharf_blueprint"]
+script = ExtResource("2_7hx24")
+content = ExtResource("7_wharf_blueprint")
+count = 1
+maxcount = 1
+is_unlocked = true
+metadata/_custom_type_script = "uid://bqabkvm20ept7"
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_xlvr5"]
 size = Vector3(1.5101967, 0.85438347, 0.33025742)
 
@@ -41,12 +59,12 @@ size = Vector3(1.8043289, 1.0020065, 1.2592618)
 
 [node name="market" type="Node3D" unique_id=2075765343]
 script = ExtResource("2_dxohp")
-buy_menu = Array[ExtResource("2_7hx24")]([SubResource("Resource_dc7o2"), SubResource("Resource_wood"), SubResource("Resource_iron")])
+buy_menu = Array[ExtResource("2_7hx24")]([SubResource("Resource_dc7o2"), SubResource("Resource_wood"), SubResource("Resource_iron"), SubResource("Resource_forge_blueprint"), SubResource("Resource_wharf_blueprint")])
 
 [node name="BuyInventory" type="Node" parent="." unique_id=309232762]
 script = ExtResource("1_xlvr5")
-unlocked_slots = 3
-max_slots = 3
+unlocked_slots = 5
+max_slots = 5
 metadata/_custom_type_script = "uid://b6rgx41co3bur"
 
 [node name="SellInventory" type="Node" parent="." unique_id=709316836]

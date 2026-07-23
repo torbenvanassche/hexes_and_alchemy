@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemInfo" format=3 uid="uid://s7exnodoxb8d"]
+
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://ckm7ko4v1d4w2" path="res://sprites/items/blueprint.png" id="4_icon"]
+
+[resource]
+script = ExtResource("1_script")
+unique_id = "forge_blueprint"
+translation_key_name = "ITEM_FORGE_BLUEPRINT_NAME"
+translation_key_description = "ITEM_FORGE_BLUEPRINT_DESCRIPTION"
+texture = ExtResource("4_icon")
+buy_value = 30
+sell_value = 18
+metadata/_custom_type_script = "uid://c8ngjbq8w5gjr"

@@ -1,11 +1,10 @@
 [gd_resource type="Resource" script_class="JournalEntry" format=3 uid="uid://dfc1pvj5ifntw"]
 
 [ext_resource type="Script" uid="uid://clepex0ir470h" path="res://scripts/ui/journal_entry.gd" id="1_script"]
-[ext_resource type="Resource" uid="uid://cc86jn6hnvvln" path="res://resources/journal_tasks/build_blacksmith_foundation.tres" id="2_foundation"]
-[ext_resource type="Resource" uid="uid://c7q2vfakpef7g" path="res://resources/journal_tasks/craft_dock_blueprint.tres" id="5_blueprint"]
+[ext_resource type="Resource" path="res://resources/journal_tasks/build_forge.tres" id="2_forge"]
 
 [resource]
 script = ExtResource("1_script")
 id = "restore_guild_forge"
 title_key = "JOURNAL_CHAPTER_ONE"
-tasks = Array[Resource]([ExtResource("2_foundation"), ExtResource("5_blueprint")])
+tasks = Array[Resource]([ExtResource("2_forge")])

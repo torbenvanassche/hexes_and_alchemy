@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="PlaceableStructureInfo" format=3]
+
+[ext_resource type="Script" uid="uid://cb60xvgnby7oa" path="res://scripts/structures/placeable_info.gd" id="1_placeable"]
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="2_item_script"]
+[ext_resource type="Resource" path="res://resources/item_info/forge_blueprint.tres" id="3_blueprint"]
+[ext_resource type="PackedScene" path="res://scenes/tops/buildable_forge.tscn" id="4_scene"]
+[ext_resource type="Script" path="res://scripts/structures/settlement_placement_handler.gd" id="5_handler"]
+
+[resource]
+script = ExtResource("1_placeable")
+build_cost = Dictionary[ExtResource("2_item_script"), int]({
+ExtResource("3_blueprint"): 1
+})
+placement_handler = ExtResource("5_handler")
+minimum_distance_from_other_structures = 0
+randomize_rotation = false
+translation_key_name = "STRUCTURE_FORGE_NAME"
+id = "forge"
+packed_scene = ExtResource("4_scene")
+type = 4
+metadata/_custom_type_script = "uid://cb60xvgnby7oa"

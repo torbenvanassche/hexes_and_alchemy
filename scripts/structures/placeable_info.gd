@@ -2,6 +2,7 @@ class_name PlaceableStructureInfo extends StructureInfo
 
 @export var build_cost: Dictionary[ItemInfo, int];
 @export var placement_handler: Script;
+@export_range(1, 10, 1) var required_settlement_level: int = 1
 
 @export var journal_task: JournalTask;
 
@@ -25,7 +26,8 @@ func place_on(hex: HexBase, inventory: ContentGroup = null, placement_rotation_y
 		return false;
 	_pay_build_cost(inventory);
 	hex.set_structure(self, false, placement_rotation_y);
-	Manager.instance.journal.complete_task(journal_task.id)
+	if journal_task != null and Manager.instance != null and Manager.instance.journal != null:
+		Manager.instance.journal.complete_task(journal_task.id)
 	return true;
 
 func uses_content(content: Resource) -> bool:

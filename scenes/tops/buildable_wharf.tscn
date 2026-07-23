@@ -1,0 +1,42 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://8hv1i8bxhtup" path="res://scenes/tops/buildable_structure.tscn" id="1_buildable"]
+[ext_resource type="PackedScene" uid="uid://gb2g45tjja61" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/building_stage_A.glb" id="2_foundation"]
+[ext_resource type="Script" uid="uid://cvpndsdtuqm4i" path="res://tools/quest_system/scripts/fetch_objective.gd" id="3_build_request"]
+[ext_resource type="Resource" path="res://tools/quest_system/resources/quests/build_wharf.tres" id="4_build_quest"]
+[ext_resource type="Material" uid="uid://c66vbca7lgh6m" path="res://materials/kay_fantasy_default.tres" id="5_material"]
+[ext_resource type="PackedScene" path="res://scenes/tops/topper_shipyard.tscn" id="6_wharf"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_interaction"]
+size = Vector3(1.602665, 0.30893278, 1.25601)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_collision"]
+size = Vector3(1.0518265, 0.28567123, 0.880126)
+
+[node name="buildable_wharf" node_paths=PackedStringArray("build_steps") instance=ExtResource("1_buildable")]
+build_steps = [NodePath("foundation"), NodePath("wharf")]
+
+[node name="foundation" parent="." instance=ExtResource("2_foundation")]
+script = ExtResource("3_build_request")
+quest = ExtResource("4_build_quest")
+required_settlement_level = 2
+
+[node name="building_stage_A" parent="foundation/RootNode" index="0"]
+surface_material_override/0 = ExtResource("5_material")
+
+[node name="interaction" type="Area3D" parent="foundation"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="foundation/interaction"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.016907275, 0.14401507, 0.122535765)
+shape = SubResource("BoxShape3D_interaction")
+
+[node name="collision" type="StaticBody3D" parent="foundation"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="foundation/collision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.043712616, 0.14244652, 0.09556866)
+shape = SubResource("BoxShape3D_collision")
+
+[node name="wharf" parent="." instance=ExtResource("6_wharf")]
+visible = false
+
+[editable path="foundation"]

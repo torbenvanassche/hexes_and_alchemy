@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="FetchQuest" format=3]
+
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="1_item_script"]
+[ext_resource type="Resource" uid="uid://b46nyvtvipor5" path="res://resources/item_info/wood_raw.tres" id="2_wood_raw"]
+[ext_resource type="Resource" uid="uid://o03k1cg30nlw" path="res://resources/item_info/iron_ore.tres" id="3_iron"]
+[ext_resource type="Script" uid="uid://cde3uflp35v2j" path="res://tools/quest_system/scripts/fetch.gd" id="4_fetch"]
+
+[resource]
+script = ExtResource("4_fetch")
+requested_items = Dictionary[ExtResource("1_item_script"), int]({
+ExtResource("2_wood_raw"): 2,
+ExtResource("3_iron"): 5
+})
+metadata/_custom_type_script = "uid://cde3uflp35v2j"

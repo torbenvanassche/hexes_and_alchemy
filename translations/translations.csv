@@ -222,7 +222,7 @@ JOURNAL_TITLE,Guild Ledger,Guild Ledger
 JOURNAL_CHAPTER_ONE,Chapter I: Restore the Guild Forge,Chapter I: Restore the Guild Forge
 JOURNAL_CHAPTER_TWO,Chapter II: Establish a Trade Route,Chapter II: Establish a Trade Route
 JOURNAL_CHAPTER_THREE,Chapter III: Earn the Grand Charter,Chapter III: Earn the Grand Charter
-JOURNAL_TASK_BUILD_BLACKSMITH_FOUNDATION,Build the Blacksmith foundation,Build the Blacksmith foundation
+JOURNAL_TASK_BUILD_FORGE,Place the Forge inside the settlement,Place the Forge inside the settlement
 JOURNAL_TASK_CRAFT_DOCK_BLUEPRINT,Craft a Dock Blueprint,Craft a Dock Blueprint
 JOURNAL_TASK_BUILD_DOCKS,Build docks on the shore,Build docks on the shore
 JOURNAL_TASK_DISCOVER_DISTANT_RESOURCE,Discover a distant resource,Discover a distant resource
@@ -267,6 +267,8 @@ UNKNOWN,Unknown,Unknown
 STRUCTURE_FARMLAND_NAME,Farmland,Farmland
 STRUCTURE_ANCIENT_RUINS_NAME,Ancient Ruins,Ancient Ruins
 STRUCTURE_DOCKS_NAME,Docks,Docks
+STRUCTURE_FORGE_NAME,Forge,Forge
+STRUCTURE_WHARF_NAME,Wharf,Wharf
 STRUCTURE_FOREST_NAME,Forest,Forest
 STRUCTURE_LADDER_NAME,Ladder,Ladder
 STRUCTURE_LUMBERMILL_NAME,Lumbermill,Lumbermill
@@ -296,6 +298,10 @@ ITEM_COMPASS_NAME,Compass,Compass
 ITEM_COMPASS_DESCRIPTION,A navigational tool for plotting safer routes through unknown lands.,A navigational tool for plotting safer routes through unknown lands.
 ITEM_DOCK_BLUEPRINT_NAME,Dock blueprint,Dock blueprint
 ITEM_DOCK_BLUEPRINT_DESCRIPTION,A plan for building docks.,A plan for building docks.
+ITEM_FORGE_BLUEPRINT_NAME,Forge blueprint,Forge blueprint
+ITEM_FORGE_BLUEPRINT_DESCRIPTION,A plan for placing the settlement forge.,A plan for placing the settlement forge.
+ITEM_WHARF_BLUEPRINT_NAME,Wharf blueprint,Wharf blueprint
+ITEM_WHARF_BLUEPRINT_DESCRIPTION,A plan for placing the settlement wharf.,A plan for placing the settlement wharf.
 ITEM_ORE_GOLD_NAME,Gold ore,Gold ore
 ITEM_ORE_GOLD_DESCRIPTION,Raw gold ore.,Raw gold ore.
 ITEM_ORE_IRON_NAME,Iron ore,Iron ore

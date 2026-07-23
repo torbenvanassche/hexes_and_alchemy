@@ -1,29 +1,15 @@
 [gd_scene format=3 uid="uid://b0hwbv6450ror"]
 
 [ext_resource type="Script" uid="uid://beb2p3obw00h8" path="res://scripts/hex_system/settlement.gd" id="1_l415u"]
-[ext_resource type="PackedScene" uid="uid://d4ck04oubluj3" path="res://scenes/tops/topper_blacksmith.tscn" id="1_xmt5k"]
 [ext_resource type="PackedScene" uid="uid://bidvvqjxevoc3" path="res://scenes/tops/topper_market.tscn" id="6_616a5"]
-[ext_resource type="PackedScene" uid="uid://8hv1i8bxhtup" path="res://scenes/tops/buildable_structure.tscn" id="6_l415u"]
 [ext_resource type="PackedScene" uid="uid://ceeffxsbgrta" path="res://scenes/tops/fence_stone_straight_gate_collision.tscn" id="7_616a5"]
 [ext_resource type="PackedScene" uid="uid://clf621pbnvsbw" path="res://scenes/tops/topper_tavern.tscn" id="7_l415u"]
-[ext_resource type="PackedScene" uid="uid://gb2g45tjja61" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/building_stage_A.glb" id="7_mkm41"]
-[ext_resource type="Script" uid="uid://cvpndsdtuqm4i" path="res://tools/quest_system/scripts/fetch_objective.gd" id="8_mt1kp"]
-[ext_resource type="Resource" uid="uid://byeghtr0gkyhp" path="res://tools/quest_system/resources/quests/build_blacksmith.tres" id="9_47cix"]
 [ext_resource type="PackedScene" uid="uid://dgx2trjwvt0vn" path="res://scenes/tops/fence_stone_straight.tscn" id="11_04njl"]
 [ext_resource type="PackedScene" uid="uid://cnxe4icmn8yi5" path="res://scenes/tops/house_simple.tscn" id="11_47cix"]
 [ext_resource type="PackedScene" uid="uid://c6gesglis1r62" path="res://scenes/tops/topper_questboard.tscn" id="11_mt1kp"]
-[ext_resource type="Material" uid="uid://c66vbca7lgh6m" path="res://materials/kay_fantasy_default.tres" id="12_mkm41"]
-[ext_resource type="PackedScene" path="res://scenes/tops/topper_shipyard.tscn" id="14_shipyard"]
-[ext_resource type="Resource" path="res://tools/quest_system/resources/quests/build_shipyard.tres" id="15_shipyard_quest"]
 [ext_resource type="Resource" path="res://resources/settlement_upgrades/settlement_level_2.tres" id="16_upgrade_2"]
 [ext_resource type="Resource" path="res://resources/settlement_upgrades/settlement_level_3.tres" id="17_upgrade_3"]
 [ext_resource type="Script" path="res://scripts/hex_system/settlement_upgrade_info.gd" id="18_upgrade_info"]
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_04njl"]
-size = Vector3(1.602665, 0.30893278, 1.25601)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_msdat"]
-size = Vector3(1.0518265, 0.28567123, 0.880126)
 
 [node name="starting_settlement" type="Node3D" unique_id=1143800928 node_paths=PackedStringArray("spawn_position")]
 script = ExtResource("1_l415u")
@@ -37,31 +23,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9910254, 0, -1.75)
 [node name="market" parent="structures" unique_id=2075765343 instance=ExtResource("6_616a5")]
 transform = Transform3D(0.9999999, 0, 0, 0, 1, 0, 0, 0, 0.9999999, 0.9910254, 0, 5.25)
 
-[node name="buildable_structure" parent="structures" unique_id=147799684 node_paths=PackedStringArray("build_steps") instance=ExtResource("6_l415u")]
-build_steps = [NodePath("foundation"), NodePath("blacksmith")]
-
-[node name="foundation" parent="structures/buildable_structure" unique_id=216741624 instance=ExtResource("7_mkm41")]
-script = ExtResource("8_mt1kp")
-quest = ExtResource("9_47cix")
-
-[node name="building_stage_A" parent="structures/buildable_structure/foundation/RootNode" parent_id_path=PackedInt32Array(216741624, 151036270) index="0" unique_id=623122469]
-surface_material_override/0 = ExtResource("12_mkm41")
-
-[node name="interaction" type="Area3D" parent="structures/buildable_structure/foundation" unique_id=1087166324]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="structures/buildable_structure/foundation/interaction" unique_id=1366150295]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.016907275, 0.14401507, 0.122535765)
-shape = SubResource("BoxShape3D_04njl")
-
-[node name="collision" type="StaticBody3D" parent="structures/buildable_structure/foundation" unique_id=258863365]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="structures/buildable_structure/foundation/collision" unique_id=1289901415]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.043712616, 0.14244652, 0.09556866)
-shape = SubResource("BoxShape3D_msdat")
-
-[node name="blacksmith" parent="structures/buildable_structure" unique_id=728034513 instance=ExtResource("1_xmt5k")]
-visible = false
-
 [node name="tavern" parent="structures" unique_id=1607926184 instance=ExtResource("7_l415u")]
 transform = Transform3D(-0.4999999, 0, -0.86602545, 0, 1, 0, 0.86602545, 0, -0.4999999, 2.973076, 0, 1.75)
 
@@ -70,33 +31,6 @@ transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, 1.727946
 
 [node name="home" parent="structures" unique_id=2074058054 instance=ExtResource("11_47cix")]
 transform = Transform3D(-0.59999985, 0, 1.0392307, 0, 1.1999999, 0, -1.0392307, 0, -0.59999985, -0.9910254, 0, 1.75)
-
-[node name="buildable_shipyard" parent="structures" unique_id=1155992019 node_paths=PackedStringArray("build_steps") instance=ExtResource("6_l415u")]
-transform = Transform3D(0.4999999, 0, -0.8660253, 0, 1, 0, 0.8660253, 0, 0.4999999, 2, 0, 3.5)
-build_steps = [NodePath("foundation"), NodePath("shipyard")]
-
-[node name="foundation" parent="structures/buildable_shipyard" unique_id=584562873 instance=ExtResource("7_mkm41")]
-script = ExtResource("8_mt1kp")
-quest = ExtResource("15_shipyard_quest")
-required_settlement_level = 2
-
-[node name="building_stage_A" parent="structures/buildable_shipyard/foundation/RootNode" parent_id_path=PackedInt32Array(584562873, 151036270) index="0" unique_id=623122470]
-surface_material_override/0 = ExtResource("12_mkm41")
-
-[node name="interaction" type="Area3D" parent="structures/buildable_shipyard/foundation" unique_id=418156358]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="structures/buildable_shipyard/foundation/interaction" unique_id=1870778616]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.016907275, 0.14401507, 0.122535765)
-shape = SubResource("BoxShape3D_04njl")
-
-[node name="collision" type="StaticBody3D" parent="structures/buildable_shipyard/foundation" unique_id=1791282148]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="structures/buildable_shipyard/foundation/collision" unique_id=2086862310]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.043712616, 0.14244652, 0.09556866)
-shape = SubResource("BoxShape3D_msdat")
-
-[node name="shipyard" parent="structures/buildable_shipyard" unique_id=1982906435 instance=ExtResource("14_shipyard")]
-visible = false
 
 [node name="walls" type="Node3D" parent="." unique_id=854268926]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9910254, 0, -1.75)
@@ -159,6 +93,3 @@ transform = Transform3D(0.49999997, 0, 0.86602545, 0, 1, 0, -0.86602545, 0, 0.49
 
 [node name="player_spawn" type="Node3D" parent="." unique_id=1450424186]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4227605, 0, -0.27880657)
-
-[editable path="structures/buildable_structure/foundation"]
-[editable path="structures/buildable_shipyard/foundation"]

@@ -113,7 +113,28 @@ func _on_structure_loaded(s: StructureInfo, required_tiles: Array[SceneInstance]
 		set_explored(false);
 	
 	if structure != null:
+		_register_structure_with_settlement(structure.instance)
 		structure_loaded.emit(s, structure.instance)
+
+func _register_structure_with_settlement(structure_node: Node) -> void:
+	if structure_node == null or Manager.instance == null:
+		return
+
+	var active_scene := SceneManager.get_active_scene()
+	if active_scene == null:
+		return
+	var grid := active_scene.node as HexGrid
+	if grid == null:
+		return
+
+	for settlement: Settlement in Manager.instance.settlements:
+		if settlement == null or not is_instance_valid(settlement):
+			continue
+		if not grid.is_ancestor_of(settlement):
+			continue
+		if settlement.contains_hex(grid, self):
+			settlement.register_structure_node(structure_node)
+			return
 
 func _repair_passage_around_structure(s: StructureInfo) -> bool:
 	if s.passage_repair_radius <= 0:
