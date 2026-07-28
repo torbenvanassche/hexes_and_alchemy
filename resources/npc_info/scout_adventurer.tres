@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="NpcInfo" format=3]
+
+[ext_resource type="PackedScene" uid="uid://xay4s33jokxl" path="res://scenes/adventurer.tscn" id="1_scene"]
+[ext_resource type="Script" uid="uid://du4hbbtmblkj0" path="res://tools/quest_system/scripts/npc_info.gd" id="2_info"]
+[ext_resource type="Texture2D" uid="uid://chvmvna3iw2ov" path="res://sprites/ui/icons/character.png" id="3_icon"]
+
+[resource]
+script = ExtResource("2_info")
+img = ExtResource("3_icon")
+id = "pathfinder"
+packed_scene = ExtResource("1_scene")
+profession = "Scout"
+role = "Pathfinder"
+traits = Array[String](["curious", "brave"])
+preferred_jobs = Array[String](["scout", "survey", "prospect"])
+disliked_jobs = Array[String](["extract", "reinforce"])
+minimum_quest_score = 3.0
+metadata/_custom_type_script = "uid://du4hbbtmblkj0"

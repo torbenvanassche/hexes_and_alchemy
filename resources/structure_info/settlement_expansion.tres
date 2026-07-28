@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="SettlementExpansionInfo" format=3]
+
+[ext_resource type="Script" path="res://scripts/structures/settlement_expansion_info.gd" id="1_expansion"]
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="2_item_script"]
+[ext_resource type="Resource" path="res://resources/item_info/settlement_expansion_permit.tres" id="3_permit"]
+
+[resource]
+script = ExtResource("1_expansion")
+build_cost = Dictionary[ExtResource("2_item_script"), int]({
+ExtResource("3_permit"): 1
+})
+minimum_distance_from_other_structures = 0
+randomize_rotation = false
+translation_key_name = "STRUCTURE_SETTLEMENT_EXPANSION_NAME"
+id = "settlement_expansion"
+type = 4

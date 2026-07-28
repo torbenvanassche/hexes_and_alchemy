@@ -16,6 +16,7 @@ var minimum_rank_override: int = -1;
 var rank_experience_reward: int = 1;
 var scout_revealed_tiles: int = 0
 var scout_discovered_structures: Dictionary[String, int] = {}
+var context: Dictionary = {}
 
 var state_machine: StateMachine;
 
@@ -84,6 +85,10 @@ func _resolve_rank_experience_reward(explicit_reward: int) -> int:
 
 func get_offered_currency_reward() -> int:
 	return offered_currency_reward
+
+func get_profile() -> QuestProfile:
+	var objective := get_objective()
+	return objective.get_profile(quest_key) if objective != null else null
 
 func record_scouted_hex(hex: HexBase) -> void:
 	if quest_key != "scout" or hex == null:
@@ -159,14 +164,16 @@ func return_from_quest() -> void:
 	
 func parse_reward() -> void:
 	var objective := get_objective()
-	var rank_experience_reward := get_rank_experience_reward()
+	var earned_rank_experience := get_rank_experience_reward()
 	if objective != null:
 		objective.complete_quest(self);
 	if quest_key == "scout":
 		_notify_scout_report()
 	for npc in party:
 		if npc != null:
-			npc.complete_assigned_quest(self, rank_experience_reward)
+			npc.complete_assigned_quest(self, earned_rank_experience, offered_currency_reward)
+	if Manager.instance != null and Manager.instance.reputation != null:
+		Manager.instance.reputation.record_quest(self)
 	Manager.instance.quests.remove_quest(self);
 	completed.emit();
 

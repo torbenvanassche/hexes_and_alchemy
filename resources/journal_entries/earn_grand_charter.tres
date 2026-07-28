@@ -5,9 +5,13 @@
 [ext_resource type="Resource" uid="uid://iqpiyuis6vfj" path="res://resources/journal_tasks/complete_regional_contracts.tres" id="3_contracts"]
 [ext_resource type="Resource" uid="uid://de33c2y07pjvm" path="res://resources/journal_tasks/secure_core_resource_sources.tres" id="4_sources"]
 [ext_resource type="Resource" uid="uid://cptgegxjs047i" path="res://resources/journal_tasks/become_guild_authority.tres" id="5_authority"]
+[ext_resource type="Resource" path="res://resources/journal_tasks/raise_guild_reputation.tres" id="6_reputation"]
+[ext_resource type="Resource" path="res://resources/journal_tasks/gain_guild_notoriety.tres" id="7_notoriety"]
+[ext_resource type="Resource" path="res://resources/journal_tasks/deepen_a_mine.tres" id="8_deepen"]
+[ext_resource type="Resource" path="res://resources/journal_tasks/reach_settlement_level_3.tres" id="9_level"]
 
 [resource]
 script = ExtResource("1_script")
 id = "earn_grand_charter"
 title_key = "JOURNAL_CHAPTER_THREE"
-tasks = Array[Resource]([ExtResource("2_outpost"), ExtResource("3_contracts"), ExtResource("4_sources"), ExtResource("5_authority")])
+tasks = Array[Resource]([ExtResource("2_outpost"), ExtResource("3_contracts"), ExtResource("4_sources"), ExtResource("8_deepen"), ExtResource("9_level"), ExtResource("6_reputation"), ExtResource("7_notoriety"), ExtResource("5_authority")])

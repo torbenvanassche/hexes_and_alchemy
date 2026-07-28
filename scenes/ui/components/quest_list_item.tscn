@@ -11,7 +11,7 @@
 layout_mode = 3
 anchors_preset = 0
 offset_right = 147.0
-offset_bottom = 153.0
+offset_bottom = 176.0
 theme = ExtResource("6_theme")
 script = ExtResource("1_qmdcg")
 
@@ -129,7 +129,14 @@ text = "QUEST_PARTY_UNASSIGNED"
 vertical_alignment = 1
 text_overrun_behavior = 3
 
-[node name="ProgressBar" type="ProgressBar" parent="Paper/MarginContainer/VBoxContainer" unique_id=1310734486]
+[node name="PaymentLabel" type="Label" parent="Paper/MarginContainer/VBoxContainer" index="5"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.28, 0.18, 0.09, 1)
+text = "QUEST_PAYMENT_OFFERED"
+horizontal_alignment = 1
+
+[node name="ProgressBar" type="ProgressBar" parent="Paper/MarginContainer/VBoxContainer" index="6" unique_id=1310734486]
 custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -150,7 +157,7 @@ text = "QUEST_STATE_WAITING"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ClaimRewardButton" type="Button" parent="Paper/MarginContainer/VBoxContainer" unique_id=2008819152]
+[node name="ClaimRewardButton" type="Button" parent="Paper/MarginContainer/VBoxContainer" index="7" unique_id=2008819152]
 visible = false
 custom_minimum_size = Vector2(0, 22)
 layout_mode = 2

@@ -4,6 +4,7 @@ class_name QuestListItemUI extends Control
 @onready var quest_number: Label = $Paper/MarginContainer/VBoxContainer/Header/QuestNumber
 @onready var quest_location: Label = $Paper/MarginContainer/VBoxContainer/LocationRow/QuestLocation
 @onready var party: Label = $Paper/MarginContainer/VBoxContainer/PartyRow/Party
+@onready var payment_label: Label = $Paper/MarginContainer/VBoxContainer/PaymentLabel
 @onready var progress_bar: ProgressBar = $Paper/MarginContainer/VBoxContainer/ProgressBar
 @onready var label: Label = $Paper/MarginContainer/VBoxContainer/ProgressBar/Label
 @onready var claim_reward_button: Button = $Paper/MarginContainer/VBoxContainer/ClaimRewardButton
@@ -43,6 +44,9 @@ func _on_quest_complete() -> void:
 func _update_progress(state: String) -> void:
 	label.text = _get_state_name(state);
 	party.text = _get_party_text()
+	var payment := questData.get_offered_currency_reward() if questData != null else 0
+	payment_label.text = tr("QUEST_PAYMENT_OFFERED") % [payment]
+	payment_label.visible = payment > 0
 	progress_bar.value = _get_state_progress(state)
 	var is_complete := questData != null and questData.is_state(Quest.QuestState.COMPLETE)
 	progress_bar.visible = not is_complete
@@ -74,9 +78,7 @@ func _get_location_name() -> String:
 func _get_party_text() -> String:
 	if questData == null or questData.party.is_empty():
 		return tr("QUEST_PARTY_UNASSIGNED")
-	if questData.party.size() == 1:
-		return tr("QUEST_PARTY_ONE_ADVENTURER")
-	return tr("QUEST_PARTY_ADVENTURERS") % [questData.party.size()]
+	return tr("QUEST_PARTY_ONE_ADVENTURER") if questData.party.size() == 1 else tr("QUEST_PARTY_ADVENTURERS") % [questData.party.size()]
 
 func _get_quest_type_name(quest_type_key: String) -> String:
 	var translation_key := "QUEST_TYPE_%s" % [quest_type_key.to_upper()]

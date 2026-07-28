@@ -48,9 +48,16 @@ func _create_roster_row(npc: NPC) -> Control:
 	var name_label := Label.new()
 	name_label.custom_minimum_size = Vector2(190, 0)
 	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	name_label.text = _get_npc_display_name(npc)
 	name_label.clip_text = true
+	name_label.text = _get_npc_display_name(npc)
 	row.add_child(name_label)
+
+	var profession_label := Label.new()
+	profession_label.custom_minimum_size = Vector2(120, 0)
+	profession_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	profession_label.text = npc.get_profession_label()
+	profession_label.clip_text = true
+	row.add_child(profession_label)
 
 	var rank_label := Label.new()
 	rank_label.custom_minimum_size = Vector2(150, 0)

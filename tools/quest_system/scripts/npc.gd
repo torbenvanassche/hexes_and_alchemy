@@ -26,6 +26,7 @@ var state_machine: StateMachine
 var current_quest: Quest
 var npc_info: NpcInfo
 var home_position := Vector3.ZERO
+var earned_currency: int = 0
 var _last_progress_position := Vector3.ZERO
 var _stuck_time := 0.0
 
@@ -129,6 +130,24 @@ func get_equipped_items() -> Array[EquipmentInfo]:
 		return []
 	return equipment.get_equipped_items()
 
+func get_profession_label() -> String:
+	if npc_info == null:
+		return tr("NPC_PROFESSION_GENERALIST")
+	return npc_info.profession
+
+func get_role_label() -> String:
+	if npc_info == null:
+		return tr("NPC_ROLE_ADVENTURER")
+	return npc_info.role
+
+func get_traits_label() -> String:
+	if npc_info == null or npc_info.traits.is_empty():
+		return tr("NPC_TRAITS_NONE")
+	var trait_labels: Array[String] = []
+	for trait_name in npc_info.traits:
+		trait_labels.append(trait_name.capitalize())
+	return ", ".join(trait_labels)
+
 func evaluate_quest(quest: Quest) -> float:
 	if not can_consider_quest(quest):
 		return 0.0
@@ -139,6 +158,8 @@ func evaluate_quest(quest: Quest) -> float:
 	score += float(quest.get_offered_currency_reward()) * _get_offered_currency_reward_weight()
 	score += maxf(0.0, float(int(rank) - int(minimum_rank))) * _get_rank_surplus_weight()
 	score -= _get_distance_to_quest(quest) * _get_distance_penalty_per_tile()
+	score += _get_job_interest_score(quest)
+	score += _get_trait_interest_score(quest)
 	return maxf(0.0, score)
 
 func can_consider_quest(quest: Quest) -> bool:
@@ -161,10 +182,11 @@ func add_rank_experience(amount: int) -> void:
 		return
 	rank_progress_changed.emit()
 
-func complete_assigned_quest(quest: Quest, rank_experience_reward: int) -> void:
+func complete_assigned_quest(quest: Quest, rank_experience_reward: int, payment: int = 0) -> void:
 	if current_quest != quest:
 		return
 	add_rank_experience(rank_experience_reward)
+	earned_currency += maxi(0, payment)
 	current_quest = null
 	current_path.clear()
 	set_state(NPCState.IDLE)
@@ -261,7 +283,7 @@ func _initialize_equipment() -> void:
 	equipment = NpcEquipmentSlots.new()
 
 func _get_rank_threshold(target_rank: AdventurerRank.Rank) -> int:
-	if npc_info == null or npc_info.rank_experience_thresholds == null:
+	if npc_info == null or npc_info.rank_experience_thresholds == null or npc_info.rank_experience_thresholds.get_point_count() == 0:
 		return _get_fallback_rank_threshold(target_rank)
 	return maxi(0, roundi(npc_info.rank_experience_thresholds.sample(float(int(target_rank)))))
 
@@ -276,17 +298,17 @@ func _get_fallback_rank_threshold(target_rank: AdventurerRank.Rank) -> int:
 
 func _get_minimum_quest_score() -> float:
 	if npc_info == null:
-		return 1.0
+		return 3.0
 	return npc_info.minimum_quest_score
 
 func _get_base_eligible_quest_score() -> float:
 	if npc_info == null:
-		return 10.0
+		return 0.0
 	return npc_info.base_eligible_quest_score
 
 func _get_rank_experience_reward_weight() -> float:
 	if npc_info == null:
-		return 2.0
+		return 1.0
 	return npc_info.rank_experience_reward_weight
 
 func _get_offered_currency_reward_weight() -> float:
@@ -317,6 +339,59 @@ func _get_distance_to_quest(quest: Quest) -> float:
 	if start_hex == null:
 		return 0.0
 	return float(GridUtils.cube_distance(start_hex.cube_id, quest.location.cube_id))
+
+func _get_job_interest_score(quest: Quest) -> float:
+	if npc_info == null:
+		return 0.0
+	var job_keys := _get_quest_job_keys(quest)
+	var score := 0.0
+	for job_key in job_keys:
+		if npc_info.preferred_jobs.has(job_key):
+			score += 5.0
+		if npc_info.disliked_jobs.has(job_key):
+			score -= 4.0
+	return score
+
+func _get_trait_interest_score(quest: Quest) -> float:
+	if npc_info == null:
+		return 0.0
+	var profile := quest.get_profile()
+	var risk_key := profile.risk_key if profile != null else ""
+	var job_keys := _get_quest_job_keys(quest)
+	var score := 0.0
+	for trait_name in npc_info.traits:
+		match trait_name.to_lower():
+			"brave":
+				if risk_key == "QUEST_RISK_DANGEROUS":
+					score += 4.0
+			"cautious":
+				if risk_key == "QUEST_RISK_DANGEROUS":
+					score -= 3.0
+			"curious":
+				if _has_any_job(job_keys, ["scout", "survey", "prospect", "delve"]):
+					score += 3.0
+			"greedy":
+				score += float(quest.get_offered_currency_reward()) * 0.25
+			"stout":
+				if _has_any_job(job_keys, ["extract", "reinforce", "deepen"]):
+					score += 2.0
+			"green_thumb":
+				if _has_any_job(job_keys, ["plant", "water", "harvest", "replant", "forage"]):
+					score += 2.0
+	return score
+
+func _has_any_job(job_keys: Array[String], matching_jobs: Array[String]) -> bool:
+	for job_name in job_keys:
+		if matching_jobs.has(job_name):
+			return true
+	return false
+
+func _get_quest_job_keys(quest: Quest) -> Array[String]:
+	var keys: Array[String] = [quest.quest_key]
+	var profile := quest.get_profile()
+	if profile != null and profile.get_behaviour() != quest.quest_key:
+		keys.append(profile.get_behaviour())
+	return keys
 
 func _get_path_to_quest(grid: HexGrid, start_hex: HexBase) -> Array[HexBase]:
 	if grid == null or start_hex == null or current_quest == null or current_quest.location == null:

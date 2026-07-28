@@ -11,6 +11,10 @@ const SLOT_ACCESSORY := &"accessory"
 @onready var name_label: Label = $MarginContainer/VBoxContainer/Header/NameLabel
 @onready var rank_label: Label = $MarginContainer/VBoxContainer/Header/RankLabel
 @onready var status_label: Label = $MarginContainer/VBoxContainer/StatusLabel
+@onready var identity_label: Label = $MarginContainer/VBoxContainer/IdentityLabel
+@onready var role_label: Label = $MarginContainer/VBoxContainer/RoleLabel
+@onready var traits_label: Label = $MarginContainer/VBoxContainer/TraitsLabel
+@onready var earnings_label: Label = $MarginContainer/VBoxContainer/EarningsLabel
 @onready var slots_grid: GridContainer = $MarginContainer/VBoxContainer/SlotsGrid
 
 var npc: NPC
@@ -33,11 +37,19 @@ func _refresh() -> void:
 		name_label.text = tr("NPC_DETAILS_NO_NPC")
 		rank_label.text = ""
 		status_label.text = ""
+		identity_label.text = ""
+		role_label.text = ""
+		traits_label.text = ""
+		earnings_label.text = ""
 		return
 
 	name_label.text = _get_npc_display_name()
 	rank_label.text = tr("ADVENTURER_ROSTER_RANK") % npc.get_rank_progress_label()
 	status_label.text = tr("ADVENTURER_STATUS_AVAILABLE") if npc.current_quest == null else tr("ADVENTURER_STATUS_ASSIGNED")
+	identity_label.text = "%s: %s" % [tr("NPC_PROFESSION"), npc.get_profession_label()]
+	role_label.text = "%s: %s" % [tr("NPC_ROLE"), npc.get_role_label()]
+	traits_label.text = "%s: %s" % [tr("NPC_TRAITS"), npc.get_traits_label()]
+	earnings_label.text = "%s: %s" % [tr("NPC_EARNINGS"), npc.earned_currency]
 	_update_window_title()
 
 	_add_equipment_slot(SLOT_WEAPON, tr("NPC_EQUIPMENT_WEAPON"), npc.equipment.weapon)

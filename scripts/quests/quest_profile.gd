@@ -11,8 +11,16 @@ class_name QuestProfile extends Resource
 @export_range(0, 100, 1) var rank_experience_reward: int = 1
 @export var available_states: Array[String] = []
 @export var required_supplies: Dictionary[ItemInfo, int] = {}
+## Additional supplies for each mine depth beyond the first. Used by mine-deepening quests.
+@export var required_supplies_per_level: Dictionary[ItemInfo, int] = {}
 @export var outcomes: Array[QuestOutcome] = []
 @export var modifiers: Dictionary = {}
+
+@export_group("Guild Impact")
+@export_range(-10, 10, 1) var guild_reputation_reward: int = 1
+@export_range(-10, 10, 1) var notoriety_reward: int = 0
+@export_range(-10, 10, 1) var stewardship_change: int = 0
+@export_range(-10, 10, 1) var regional_hazard_change: int = 0
 
 func matches(quest_type_key: String) -> bool:
 	return quest_key == quest_type_key
@@ -122,6 +130,33 @@ func get_rank_experience_reward(minimum_rank_override: int = -1) -> int:
 
 func get_required_supplies() -> Dictionary[ItemInfo, int]:
 	return required_supplies
+
+func get_required_supplies_for_level(level: int) -> Dictionary[ItemInfo, int]:
+	var result: Dictionary[ItemInfo, int] = {}
+	for item: ItemInfo in required_supplies.keys():
+		result[item] = int(required_supplies[item])
+	var extra_levels := maxi(0, level - 1)
+	for item: ItemInfo in required_supplies_per_level.keys():
+		result[item] = int(result.get(item, 0)) + int(required_supplies_per_level[item]) * extra_levels
+	return result
+
+func has_available_supplies_for_level(inventory: ContentGroup, level: int) -> bool:
+	return inventory != null and inventory.has_all(get_required_supplies_for_level(level))
+
+func assign_required_supplies_for_level(quest: Quest, inventory: ContentGroup, level: int) -> bool:
+	var requirements := get_required_supplies_for_level(level)
+	if quest == null or inventory == null or not inventory.has_all(requirements):
+		return false
+	for item: ItemInfo in requirements.keys():
+		var amount := int(requirements[item])
+		if amount <= 0:
+			continue
+		inventory.remove(item, amount)
+		quest.add_supply(item, amount)
+	return true
+
+func quest_has_supplies_for_level(quest: Quest, level: int) -> bool:
+	return quest != null and quest.supplies != null and quest.supplies.has_all(get_required_supplies_for_level(level))
 
 func has_available_supplies(inventory: ContentGroup) -> bool:
 	if required_supplies.is_empty():

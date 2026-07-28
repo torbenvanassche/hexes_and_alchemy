@@ -15,6 +15,8 @@ func _init(hex_grid: HexGrid, traverse_method: HexInfo.TraversalTag = HexInfo.Tr
 
 func _is_blocked(a: Vector3i, b: Vector3i) -> bool:
 	for o in obstacles:
+		if o == null or not is_instance_valid(o):
+			continue
 		if (o.cube_id == a and o.adjacent_id == b) or (o.cube_id == b and o.adjacent_id == a):
 			return true
 	return false
@@ -29,6 +31,8 @@ func rebuild() -> void:
 		var hex: HexBase = scene_instance.node
 
 		if hex == null:
+			continue
+		if not hex.is_inside_tree():
 			continue
 
 		if not hex.is_traversable(method):
@@ -216,3 +220,10 @@ func apply_obstacle(obstacle: Obstacle) -> void:
 
 	if not obstacles.has(obstacle):
 		obstacles.append(obstacle)
+
+func remove_obstacle(obstacle: Obstacle, rebuild_now: bool = true) -> void:
+	if obstacle == null:
+		return
+	obstacles.erase(obstacle)
+	if rebuild_now:
+		rebuild()

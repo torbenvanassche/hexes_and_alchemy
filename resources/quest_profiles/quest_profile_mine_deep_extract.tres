@@ -18,3 +18,6 @@ modifiers = {
 "exhaust_bonus": 0.08,
 "reward_rolls": 2
 }
+guild_reputation_reward = 2
+notoriety_reward = 1
+regional_hazard_change = 1

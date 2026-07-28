@@ -64,18 +64,38 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.34, 0.23, 0.12, 1)
 text = "ADVENTURER_STATUS_AVAILABLE"
 
-[node name="Divider" type="ColorRect" parent="NinePatchRect/VBoxContainer/contentPanel/NpcDetails/MarginContainer/VBoxContainer" index="2"]
+[node name="IdentityLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/NpcDetails/MarginContainer/VBoxContainer" index="2"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.34, 0.23, 0.12, 1)
+text = "NPC_PROFESSION"
+
+[node name="RoleLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/NpcDetails/MarginContainer/VBoxContainer" index="3"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.34, 0.23, 0.12, 1)
+text = "NPC_ROLE"
+
+[node name="TraitsLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/NpcDetails/MarginContainer/VBoxContainer" index="4"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.34, 0.23, 0.12, 1)
+text = "NPC_TRAITS"
+
+[node name="EarningsLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/NpcDetails/MarginContainer/VBoxContainer" index="5"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.34, 0.23, 0.12, 1)
+text = "NPC_EARNINGS"
+
+[node name="Divider" type="ColorRect" parent="NinePatchRect/VBoxContainer/contentPanel/NpcDetails/MarginContainer/VBoxContainer" index="6"]
 custom_minimum_size = Vector2(0, 2)
 layout_mode = 2
 color = Color(0.38, 0.26, 0.14, 0.35)
 
-[node name="EquipmentHeader" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/NpcDetails/MarginContainer/VBoxContainer" index="3"]
+[node name="EquipmentHeader" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/NpcDetails/MarginContainer/VBoxContainer" index="7"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.42, 0.31, 0.2, 1)
 text = "NPC_EQUIPMENT_HEADER"
 uppercase = true
 
-[node name="SlotsGrid" type="GridContainer" parent="NinePatchRect/VBoxContainer/contentPanel/NpcDetails/MarginContainer/VBoxContainer" index="4"]
+[node name="SlotsGrid" type="GridContainer" parent="NinePatchRect/VBoxContainer/contentPanel/NpcDetails/MarginContainer/VBoxContainer" index="8"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/h_separation = 8

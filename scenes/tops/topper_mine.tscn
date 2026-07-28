@@ -18,6 +18,10 @@
 [ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_mine_deep_extract.tres" id="14_deep"]
 [ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_mine_stabilized_extract.tres" id="15_stabilized"]
 [ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_mine_reinforce.tres" id="16_reinforce"]
+[ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_mine_deepen.tres" id="17_deepen"]
+[ext_resource type="Resource" path="res://resources/loot_tables/mine_depth_2.tres" id="18_depth_2"]
+[ext_resource type="Resource" path="res://resources/loot_tables/mine_depth_3.tres" id="19_depth_3"]
+[ext_resource type="Script" path="res://scripts/structures/loot_table.gd" id="20_loot_table"]
 
 [sub_resource type="BitMap" id="BitMap_3h0bv"]
 data = {
@@ -45,7 +49,8 @@ vein_infos = Array[ExtResource("1_wd22k")]([ExtResource("3_icepf"), ExtResource(
 quest_types = Array[String](["prospect", "extract", "reinforce"])
 bitmap = SubResource("BitMap_3h0bv")
 quest_supply_requirements = Array[ExtResource("9_supply")]([SubResource("Resource_reinforce_supplies")])
-quest_profiles = Array[ExtResource("11_profile_script")]([ExtResource("12_prospect"), ExtResource("13_extract"), ExtResource("14_deep"), ExtResource("15_stabilized"), ExtResource("16_reinforce")])
+quest_profiles = Array[ExtResource("11_profile_script")]([ExtResource("12_prospect"), ExtResource("13_extract"), ExtResource("14_deep"), ExtResource("15_stabilized"), ExtResource("16_reinforce"), ExtResource("17_deepen")])
+depth_loot_tables = Array[ExtResource("20_loot_table")]([ExtResource("18_depth_2"), ExtResource("19_depth_3")])
 
 [node name="Root Scene" parent="." unique_id=1429542013 instance=ExtResource("1_bbfir")]
 

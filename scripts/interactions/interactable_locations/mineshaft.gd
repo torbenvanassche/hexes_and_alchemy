@@ -12,6 +12,11 @@ enum MineState {
 @export var extract_time: float = 8.0
 @export var reinforce_time: float = 5.0
 @export var vein_infos: Array[MineVeinInfo] = []
+@export_group("Depth")
+@export_range(1, 10, 1) var max_depth: int = 3
+@export_range(1, 10, 1) var depth: int = 1
+## Extra loot tables unlocked at depth 2, depth 3, and so on.
+@export var depth_loot_tables: Array[LootTable] = []
 
 @onready var ready_to_mine: Node3D = get_node_or_null("ready_to_mine") as Node3D
 @onready var collapsed: Node3D = get_node_or_null("collapsed") as Node3D
@@ -37,6 +42,40 @@ func interact() -> void:
 func can_interact() -> bool:
 	return has_visible_quest_activity() or (not _quest_running and not get_filtered_quest_types().is_empty())
 
+func get_filtered_quest_types(active_state: int = state_machine.get_current_state_index()) -> Array[String]:
+	var quest_types := super.get_filtered_quest_types(active_state)
+	if depth >= max_depth:
+		quest_types.erase("deepen")
+	return quest_types
+
+func get_required_supplies(quest_type_key: String) -> Dictionary[ItemInfo, int]:
+	var profile := get_profile(quest_type_key)
+	if quest_type_key == "deepen" and profile != null:
+		return profile.get_required_supplies_for_level(depth)
+	return super.get_required_supplies(quest_type_key)
+
+func has_required_supplies(quest_type_key: String, inventory: ContentGroup) -> bool:
+	var profile := get_profile(quest_type_key)
+	if quest_type_key == "deepen" and profile != null:
+		return profile.has_available_supplies_for_level(inventory, depth)
+	return super.has_required_supplies(quest_type_key, inventory)
+
+func assign_required_supplies(quest: Quest, inventory: ContentGroup) -> bool:
+	if quest != null and quest.quest_key == "deepen":
+		var profile := get_profile(quest.quest_key)
+		if profile == null:
+			return false
+		quest.context["mine_depth"] = depth
+		return profile.assign_required_supplies_for_level(quest, inventory, depth)
+	return super.assign_required_supplies(quest, inventory)
+
+func quest_has_required_supplies(quest: Quest) -> bool:
+	if quest != null and quest.quest_key == "deepen":
+		var profile := get_profile(quest.quest_key)
+		var quest_depth := int(quest.context.get("mine_depth", depth))
+		return profile != null and profile.quest_has_supplies_for_level(quest, quest_depth)
+	return super.quest_has_required_supplies(quest)
+
 func execute_quest(q: Quest) -> void:
 	if _quest_running:
 		return
@@ -58,6 +97,11 @@ func execute_quest(q: Quest) -> void:
 	elif behaviour == "reinforce":
 		await get_tree().create_timer(get_quest_duration(q.quest_key, reinforce_time)).timeout
 		_set_mine_state(_last_stable_state)
+	elif behaviour == "deepen":
+		await get_tree().create_timer(get_quest_duration(q.quest_key, extract_time)).timeout
+		depth = mini(max_depth, depth + 1)
+		_notify_reward(tr("QUEST_MINE_DEEPENED") % [depth])
+		Manager.instance.quests.quest_availability_changed.emit()
 
 	q.return_from_quest()
 	_quest_running = false
@@ -127,6 +171,13 @@ func _roll_extract_reward(origin_state: MineState, reward_rolls: int = 1) -> Dic
 		var loot := info.roll_loot()
 		for item: ItemInfo in loot.keys():
 			reward[item] = reward.get(item, 0) + loot[item]
+	for table_index in mini(depth - 1, depth_loot_tables.size()):
+		var depth_table := depth_loot_tables[table_index]
+		if depth_table == null:
+			continue
+		var depth_loot := depth_table.roll()
+		for item: ItemInfo in depth_loot.keys():
+			reward[item] = reward.get(item, 0) + depth_loot[item]
 	return reward
 
 func _roll_post_extract_state(origin_state: MineState, profile: QuestProfile = null) -> MineState:
@@ -140,6 +191,7 @@ func _roll_post_extract_state(origin_state: MineState, profile: QuestProfile = n
 		0.0,
 		1.0
 	)
+	collapse_chance = clampf(collapse_chance + 0.04 * float(maxi(0, depth - 1)), 0.0, 1.0)
 	var exhaust_chance := clampf(
 		info.exhaust_chance * _get_profile_float(profile, "exhaust_multiplier", 1.0)
 			+ _get_profile_float(profile, "exhaust_bonus", 0.0),
@@ -173,6 +225,14 @@ func get_quest_profile_reward_preview(quest_type_key: String) -> Array[Dictionar
 	var reward_rolls := maxi(1, _get_profile_int(profile, "reward_rolls", 1))
 	var preview: Array[Dictionary] = []
 	var ranges := info.loot_table.get_preview_ranges()
+	for table_index in mini(depth - 1, depth_loot_tables.size()):
+		var depth_table := depth_loot_tables[table_index]
+		if depth_table == null:
+			continue
+		for item: ItemInfo in depth_table.get_preview_ranges().keys():
+			var depth_range := depth_table.get_preview_ranges()[item] as Vector2i
+			var current_range := ranges.get(item, Vector2i.ZERO) as Vector2i
+			ranges[item] = current_range + depth_range
 
 	for item: ItemInfo in ranges.keys():
 		if item == null:
@@ -192,6 +252,14 @@ func get_quest_profile_reward_preview(quest_type_key: String) -> Array[Dictionar
 		return item_a.get_display_name().nocasecmp_to(item_b.get_display_name()) < 0
 	)
 	return preview
+
+func get_quest_profile_expected_reward(quest_type_key: String) -> String:
+	return super.get_quest_profile_expected_reward(quest_type_key)
+
+func get_quest_context_label(quest_type_key: String) -> String:
+	if quest_type_key != "deepen":
+		return ""
+	return tr("QUEST_MINE_DEPTH_STATUS") % [depth, max_depth]
 
 func _get_profile_float(profile: QuestProfile, key: String, fallback: float) -> float:
 	if profile == null:

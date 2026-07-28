@@ -16,3 +16,5 @@ duration_seconds = 6.0
 rank_experience_reward = 3
 available_states = Array[String](["TAINTED"])
 outcomes = Array[ExtResource("2_outcome_script")]([ExtResource("3_outcome")])
+guild_reputation_reward = 2
+stewardship_change = 2

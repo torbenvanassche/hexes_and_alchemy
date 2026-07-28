@@ -24,3 +24,12 @@ func _ready() -> void:
 		_on_level_initialized();
 	elif not grid.initialized_changed.is_connected(_on_level_initialized):
 		grid.initialized_changed.connect(_on_level_initialized, CONNECT_ONE_SHOT);
+
+func _exit_tree() -> void:
+	var active_scene := SceneManager.get_active_scene()
+	if active_scene == null:
+		return
+	var grid := active_scene.node as HexGrid;
+	if grid == null or grid.pathfinder == null:
+		return;
+	grid.pathfinder.remove_obstacle(self, false);

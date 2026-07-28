@@ -18,3 +18,5 @@ available_states = Array[String](["UNSTABLE"])
 required_supplies = Dictionary[ExtResource("2_item_script"), int]({
 ExtResource("3_support"): 1
 })
+guild_reputation_reward = 2
+stewardship_change = 2

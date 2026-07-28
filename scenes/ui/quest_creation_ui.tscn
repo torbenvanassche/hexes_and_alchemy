@@ -266,6 +266,22 @@ size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.2, 0.13, 0.06, 1)
 autowrap_mode = 3
 
+[node name="ContextBox" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/DetailsPanel/MetaRow" index="3"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ContextTitle" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/DetailsPanel/MetaRow/ContextBox" index="0"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.42, 0.31, 0.2, 1)
+text = "QUEST_DETAIL_CONTEXT_LABEL"
+uppercase = true
+
+[node name="ContextLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/DetailsPanel/MetaRow/ContextBox" index="1"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.13, 0.06, 1)
+autowrap_mode = 3
+
 [node name="QuestSupplies" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer" index="9" unique_id=1979064245]
 visible = false
 layout_mode = 2

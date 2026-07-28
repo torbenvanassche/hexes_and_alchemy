@@ -28,6 +28,8 @@ class_name QuestCreationUI extends Control
 @onready var reward_box: VBoxContainer = $MarginContainer/VBoxContainer/DetailsPanel/MetaRow/RewardBox
 @onready var reward_items: FlowContainer = $MarginContainer/VBoxContainer/DetailsPanel/MetaRow/RewardBox/RewardItems
 @onready var reward_text_label: Label = $MarginContainer/VBoxContainer/DetailsPanel/MetaRow/RewardBox/RewardText
+@onready var context_box: VBoxContainer = $MarginContainer/VBoxContainer/DetailsPanel/MetaRow/ContextBox
+@onready var context_label: Label = $MarginContainer/VBoxContainer/DetailsPanel/MetaRow/ContextBox/ContextLabel
 @onready var quest_supplies: Control = $MarginContainer/VBoxContainer/QuestSupplies
 @onready var supplies_grid: GridContainer = $MarginContainer/VBoxContainer/QuestSupplies/SuppliesGrid
 @onready var status_label: Label = $MarginContainer/VBoxContainer/StatusLabel
@@ -465,13 +467,13 @@ func _create_quest() -> void:
 		_update_finish_button()
 		return
 	var minimum_rank_override := _get_minimum_rank_override()
-	var rank_experience_reward := objective.get_quest_rank_experience_reward(quest_type_key, minimum_rank_override)
+	var quest_rank_experience := objective.get_quest_rank_experience_reward(quest_type_key, minimum_rank_override)
 	var quest := Quest.new(
 		location,
 		quest_type_key,
 		reward_amount,
 		minimum_rank_override,
-		rank_experience_reward
+		quest_rank_experience
 	)
 	if not _try_reserve_reward(reward_amount):
 		_update_finish_button()
@@ -885,7 +887,8 @@ func _set_details(
 	description: String,
 	duration: String = "",
 	risk: String = "",
-	reward_preview: Array[Dictionary] = []
+	reward_preview: Array[Dictionary] = [],
+	context: String = ""
 ) -> void:
 	var has_description := false
 	if description_label != null:
@@ -896,7 +899,8 @@ func _set_details(
 	var has_duration := _set_detail_value(duration_label, duration_box, duration)
 	var has_risk := _set_detail_value(risk_label, risk_box, risk)
 	var has_reward := _set_reward_preview(reward_preview)
-	var has_detail_meta := has_duration or has_risk or has_reward
+	var has_context := _set_detail_value(context_label, context_box, context)
+	var has_detail_meta := has_duration or has_risk or has_reward or has_context
 
 	if description_top_divider != null:
 		description_top_divider.visible = has_description
@@ -987,7 +991,8 @@ func _refresh_quest_details() -> void:
 		risk_text = risk
 
 	var reward_preview := objective.get_quest_profile_reward_preview(quest_type_key)
-	_set_details(description, duration_text, risk_text, reward_preview)
+	var context_text := objective.get_quest_context_label(quest_type_key)
+	_set_details(description, duration_text, risk_text, reward_preview, context_text)
 
 func _get_selected_objective() -> QuestObjective:
 	var selected := _get_selected_quest_type_and_objective()
@@ -1124,17 +1129,17 @@ func _apply_mode_visibility() -> void:
 	if window != null:
 		window.change_title.emit("QUEST_CREATION_SCOUT_FRONTIER" if scout_only else "WINDOW_NEW_QUEST")
 
-func _set_creation_controls_visible(visible: bool) -> void:
+func _set_creation_controls_visible(controls_visible: bool) -> void:
 	if type_row != null:
-		type_row.visible = visible and not scout_only
+		type_row.visible = controls_visible and not scout_only
 	if minimum_rank_row != null:
-		minimum_rank_row.visible = visible and not scout_only
+		minimum_rank_row.visible = controls_visible and not scout_only
 	if reward_offer_row != null:
-		reward_offer_row.visible = visible and not scout_only
+		reward_offer_row.visible = controls_visible and not scout_only
 	if actions_row != null:
-		actions_row.visible = visible
+		actions_row.visible = controls_visible
 	if window != null and not scout_only:
-		window.change_title.emit("WINDOW_NEW_QUEST" if visible else "WINDOW_QUEST_STATUS")
+		window.change_title.emit("WINDOW_NEW_QUEST" if controls_visible else "WINDOW_QUEST_STATUS")
 
 func _configure_scout_distance_limit() -> void:
 	if scout_distance_spin_box == null or Manager.instance == null or Manager.instance.quests == null:
@@ -1214,15 +1219,15 @@ func _create_scout_quest(location: HexBase, reward_amount: int) -> void:
 		return
 
 	var minimum_rank_override := _get_minimum_rank_override()
-	var rank_experience_reward := 1
+	var scout_rank_experience := 1
 	if minimum_rank_override >= 0:
-		rank_experience_reward = int(AdventurerRank.clamp_rank(minimum_rank_override)) + 1
+		scout_rank_experience = int(AdventurerRank.clamp_rank(minimum_rank_override)) + 1
 	var quest := Quest.new(
 		location,
 		SCOUT_QUEST_KEY,
 		reward_amount,
 		minimum_rank_override,
-		rank_experience_reward
+		scout_rank_experience
 	)
 	quest_created.emit(quest)
 	if window != null:

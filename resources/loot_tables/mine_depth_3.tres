@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="LootTable" format=3 uid="uid://m7jnxhlhf63g"]
+
+[ext_resource type="Script" uid="uid://b2wjb40qlkbuf" path="res://scripts/structures/loot_table.gd" id="1_table"]
+[ext_resource type="Script" uid="uid://ctqcmpru1cvqf" path="res://scripts/structures/loot_table_entry.gd" id="2_entry"]
+[ext_resource type="Resource" uid="uid://o03k1cg30nlw" path="res://resources/item_info/iron_ore.tres" id="3_iron"]
+[ext_resource type="Resource" uid="uid://dwrv8ceflmsjy" path="res://resources/item_info/gold_ore.tres" id="4_gold"]
+
+[sub_resource type="Resource" id="Resource_iron"]
+script = ExtResource("2_entry")
+item = ExtResource("3_iron")
+chance = 0.7
+max_amount = 3
+
+[sub_resource type="Resource" id="Resource_gold"]
+script = ExtResource("2_entry")
+item = ExtResource("4_gold")
+chance = 0.5
+max_amount = 2
+
+[resource]
+script = ExtResource("1_table")
+entries = Array[ExtResource("2_entry")]([SubResource("Resource_iron"), SubResource("Resource_gold")])

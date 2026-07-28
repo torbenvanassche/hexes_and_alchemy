@@ -21,3 +21,6 @@ required_supplies = Dictionary[ExtResource("3_item_script"), int]({
 ExtResource("4_support"): 1
 })
 outcomes = Array[ExtResource("2_outcome_script")]([ExtResource("5_outcome")])
+guild_reputation_reward = 3
+notoriety_reward = 1
+stewardship_change = 2

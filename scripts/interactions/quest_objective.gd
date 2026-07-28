@@ -122,6 +122,9 @@ func get_quest_profile_expected_reward(quest_type_key: String) -> String:
 		return ""
 	return profile.get_expected_reward_label()
 
+func get_quest_context_label(_quest_type_key: String) -> String:
+	return ""
+
 func get_quest_profile_reward_preview(quest_type_key: String) -> Array[Dictionary]:
 	var profile := get_profile(quest_type_key)
 	if profile == null:

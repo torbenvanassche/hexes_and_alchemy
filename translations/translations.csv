@@ -19,7 +19,7 @@ SETTINGS_TAB_GAME,game,game
 SETTINGS_TAB_INPUT,input,input
 SETTINGS_BACK,Back,Back
 WINDOW_TITLE,window title,window title
-WINDOW_INVENTORY,Inventory,Inventory
+WINDOW_INVENTORY,Guild Warehouse,Guild Warehouse
 WINDOW_JOURNAL,Journal,Journal
 WINDOW_CRAFTING,Blacksmith,Blacksmith
 WINDOW_MARKET,Market,Market
@@ -51,7 +51,7 @@ SCENE_DEPOSIT_UI_NAME,Deposit items,Deposit items
 SCENE_GAME_SETTINGS_NAME,Game settings,Game settings
 SCENE_GAMEPLAY_MAIN_NAME,Gameplay,Gameplay
 SCENE_INPUT_SETTINGS_NAME,Input settings,Input settings
-SCENE_INVENTORY_UI_NAME,Inventory,Inventory
+SCENE_INVENTORY_UI_NAME,Guild Warehouse,Guild Warehouse
 SCENE_JOURNAL_UI_NAME,Journal,Journal
 SCENE_CRAFTING_UI_NAME,Blacksmith,Blacksmith
 SCENE_MARKET_UI_NAME,Market,Market
@@ -68,7 +68,7 @@ QUEST_LIST_EMPTY,No quests are pinned.,No quests are pinned.
 QUEST_CREATION_TARGET,Target,Target
 QUEST_CREATION_QUEST,Quest,Quest
 QUEST_CREATION_MINIMUM_RANK,Minimum rank,Minimum rank
-QUEST_CREATION_REWARD_OFFER,Reward offer,Reward offer
+QUEST_CREATION_REWARD_OFFER,Offered payment,Offered payment
 QUEST_CREATION_SUPPLIES,Required supplies,Required supplies
 SETTLEMENT_UPGRADE_CURRENT_LEVEL_LABEL,Current level,Current level
 SETTLEMENT_UPGRADE_NEXT_HEADER,Next upgrade,Next upgrade
@@ -87,6 +87,7 @@ SETTLEMENT_UPGRADE_UNLOCK_LEVEL_3,Allows advanced services such as the shipyard 
 SETTLEMENT_SERVICE_BLACKSMITH,Blacksmith,Blacksmith
 ADVENTURER_ROSTER_NAME,Name,Name
 ADVENTURER_ROSTER_RANK_HEADER,Rank,Rank
+ADVENTURER_ROSTER_PROFESSION,Profession,Profession
 ADVENTURER_ROSTER_RANK,Rank %s,Rank %s
 ADVENTURER_RANK_PROGRESS,%s (%s/%s),%s (%s/%s)
 ADVENTURER_RANK_PROGRESS_MAX,%s (max),%s (max)
@@ -115,11 +116,12 @@ QUEST_CREATION_INTEREST_ONE,1 adventurer is interested in this offer.,1 adventur
 QUEST_CREATION_INTEREST_COUNT,%s adventurers are interested in this offer.,%s adventurers are interested in this offer.
 QUEST_AUTO_RESOLVE,Auto resolve,Auto resolve
 QUEST_REWARD_ITEM_GAINED,+%s %s,+%s %s
-QUEST_REWARD_INVENTORY_FULL,%s %s could not fit in your inventory.,%s %s could not fit in your inventory.
+QUEST_REWARD_INVENTORY_FULL,%s %s could not fit in the guild warehouse.,%s %s could not fit in the guild warehouse.
 QUEST_DETAIL_DURATION_LABEL,Duration,Duration
 QUEST_DETAIL_DISTANCE_LABEL,Distance,Distance
 QUEST_DETAIL_RISK_LABEL,Risk,Risk
 QUEST_DETAIL_REWARD_LABEL,Reward,Reward
+QUEST_DETAIL_CONTEXT_LABEL,Context,Context
 QUEST_DETAIL_DURATION,%ss,%ss
 QUEST_DETAIL_RISK,Risk: %s,Risk: %s
 QUEST_DETAIL_EXPECTED_REWARD,Reward: %s,Reward: %s
@@ -245,10 +247,10 @@ CRAFTING_READY,Ready to craft.,Ready to craft.
 MARKET_TAB_BUY,Buy,Buy
 MARKET_TAB_SELL,Sell,Sell
 MARKET_CURRENCY,Coins,Coins
-MARKET_EMPTY_DEFAULT,Your inventory is empty.,Your inventory is empty.
+MARKET_EMPTY_DEFAULT,Your guild warehouse is empty.,Your guild warehouse is empty.
 MARKET_EMPTY_NO_STOCK,No market stock available.,No market stock available.
 MARKET_EMPTY_SOLD_OUT,The market is sold out.,The market is sold out.
-MARKET_EMPTY_NO_PLAYER_INVENTORY,No player inventory available.,No player inventory available.
+MARKET_EMPTY_NO_PLAYER_INVENTORY,No guild warehouse available.,No guild warehouse available.
 MARKET_EMPTY_NOTHING_TO_SELL,You have no items to sell.,You have no items to sell.
 MARKET_ITEM_PLACEHOLDER,Item,Item
 MARKET_BUY_NOT_ENOUGH_COINS,Not enough coins.,Not enough coins.
@@ -279,6 +281,7 @@ STRUCTURE_MINES_NAME,Mine,Mine
 STRUCTURE_ORE_DEPOSIT_GOLD_NAME,Gold deposit,Gold deposit
 STRUCTURE_ORE_DEPOSIT_IRON_NAME,Iron deposit,Iron deposit
 STRUCTURE_SETTLEMENT_NAME,Settlement,Settlement
+STRUCTURE_SETTLEMENT_EXPANSION_NAME,Settlement expansion,Settlement expansion
 STRUCTURE_WATER_SOURCE_NAME,Well,Well
 REGION_DESERT_NAME,Desert,Desert
 REGION_ANCIENT_RUINS_NAME,Ancient Ruins,Ancient Ruins
@@ -310,6 +313,8 @@ ITEM_GRAIN_NAME,Grain,Grain
 ITEM_GRAIN_DESCRIPTION,A harvested crop used for food or seed.,A harvested crop used for food or seed.
 ITEM_SEED_POUCH_NAME,Grain seeds,Grain seeds
 ITEM_SEED_POUCH_DESCRIPTION,Seeds found in forests or crafted from grain; used for planting farmland.,Seeds found in forests or crafted from grain; used for planting farmland.
+ITEM_SETTLEMENT_EXPANSION_PERMIT_NAME,Settlement expansion permit,Settlement expansion permit
+ITEM_SETTLEMENT_EXPANSION_PERMIT_DESCRIPTION,A marker that expands a settlement by one adjacent tile.,A marker that expands a settlement by one adjacent tile.
 ITEM_SUPPORT_BEAMS_NAME,Support beams,Support beams
 ITEM_SUPPORT_BEAMS_DESCRIPTION,Wooden beams used to reinforce unstable structures.,Wooden beams used to reinforce unstable structures.
 ITEM_WATER_BUCKET_NAME,Water bucket,Water bucket
@@ -318,3 +323,34 @@ ITEM_WOOD_LOG_NAME,Processed wood,Processed wood
 ITEM_WOOD_LOG_DESCRIPTION,Wood prepared for building.,Wood prepared for building.
 ITEM_WOOD_RAW_NAME,Raw wood,Raw wood
 ITEM_WOOD_RAW_DESCRIPTION,Freshly gathered wood.,Freshly gathered wood.
+NPC_PROFESSION,Profession,Profession
+NPC_ROLE,Role,Role
+NPC_TRAITS,Traits,Traits
+NPC_PROFESSION_GENERALIST,Generalist,Generalist
+NPC_ROLE_ADVENTURER,Adventurer,Adventurer
+NPC_TRAITS_NONE,None,None
+NPC_EARNINGS,Earnings,Earnings
+GUILD_STANDING_SUMMARY,Rep %s | Notoriety %s,Rep %s | Notoriety %s
+GUILD_STANDING_HEADER,Guild standing,Guild standing
+GUILD_REPUTATION_LABEL,Reputation,Reputation
+GUILD_NOTORIETY_LABEL,Notoriety,Notoriety
+GUILD_HUD_REPUTATION,Rep: %s,Rep: %s
+GUILD_HUD_NOTORIETY,Notoriety: %s,Notoriety: %s
+GUILD_REPUTATION,Reputation: %s,Reputation: %s
+GUILD_NOTORIETY,Notoriety: %s,Notoriety: %s
+GUILD_STEWARDSHIP,Regional care: %s,Regional care: %s
+GUILD_REGIONAL_HAZARD,Regional danger: %s,Regional danger: %s
+GUILD_COMPLETED_MISSIONS,Completed missions: %s,Completed missions: %s
+GUILD_STANDING_DETAILS,Reputation: %s · Notoriety: %s · Regional care: %s · Regional danger: %s · Completed missions: %s,Reputation: %s · Notoriety: %s · Regional care: %s · Regional danger: %s · Completed missions: %s
+QUEST_TYPE_DEEPEN,Deepen mine,Deepen mine
+QUEST_DESC_MINE_DEEPEN,Spend supplies to open a deeper level with richer ore and greater collapse risk.,Spend supplies to open a deeper level with richer ore and greater collapse risk.
+QUEST_REWARD_MINE_DEEPER,A deeper and richer mine,A deeper and richer mine
+QUEST_MINE_DEEPENED,Mine deepened to level %s.,Mine deepened to level %s.
+QUEST_MINE_NEXT_DEPTH,level %s,level %s
+QUEST_MINE_DEPTH_STATUS,Current mine depth: %s/%s,Current mine depth: %s/%s
+QUEST_PARTY_WITH_PAYMENT,%s · Pay: %s,%s · Pay: %s
+QUEST_PAYMENT_OFFERED,Payment: %s,Payment: %s
+JOURNAL_TASK_DEEPEN_A_MINE,Deepen a mine to level 2,Deepen a mine to level 2
+JOURNAL_TASK_REACH_SETTLEMENT_LEVEL_3,Upgrade the settlement to level 3,Upgrade the settlement to level 3
+JOURNAL_TASK_RAISE_GUILD_REPUTATION,Reach 10 guild reputation,Reach 10 guild reputation
+JOURNAL_TASK_GAIN_GUILD_NOTORIETY,Gain 5 fame,Gain 5 fame

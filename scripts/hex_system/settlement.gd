@@ -4,6 +4,7 @@ class_name Settlement extends Node3D
 @export var is_active_settlement: bool = false;
 @export var level: int = 1;
 @export var upgrade_requirements: Array[SettlementUpgradeInfo] = []
+@export var boundary_wall_scene: PackedScene = preload("uid://dgx2trjwvt0vn")
 @export var structure_invalid_range: int = 3;
 @export_group("Settlement Reveal")
 @export_range(1, 32, 1) var reveal_search_range: int = 8;
@@ -17,6 +18,7 @@ var collision_shapes: Array[CollisionShape3D] = []
 var interactions: Array[Interaction] = []
 var interactions_by_type: Dictionary[StringName, Array] = {};
 var buildables: Array[Buildable] = []
+var expanded_tiles: Array[Vector3i] = []
 
 signal level_changed(new_level: int)
 
@@ -120,14 +122,63 @@ func contains_hex(grid: HexGrid, hex: HexBase) -> bool:
 	if not grid.is_ancestor_of(self):
 		return false
 
-	var origin_hex := _get_settlement_origin_hex(grid)
-	if origin_hex == null:
-		return false
-
-	for settlement_hex in _get_settlement_reveal_hexes(grid, origin_hex):
+	for settlement_hex in get_settlement_hexes(grid):
 		if settlement_hex != null and settlement_hex.cube_id == hex.cube_id:
 			return true
 	return false
+
+func get_settlement_hexes(grid: HexGrid) -> Array[HexBase]:
+	var result: Array[HexBase] = []
+	if grid == null or not grid.is_ancestor_of(self):
+		return result
+
+	var origin_hex := _get_settlement_origin_hex(grid)
+	if origin_hex != null:
+		result.append_array(_get_settlement_reveal_hexes(grid, origin_hex))
+
+	for cube_id in expanded_tiles:
+		var hex := grid.get_hex_at_cube_id(cube_id)
+		if hex != null and not _has_hex(result, hex):
+			result.append(hex)
+
+	return result
+
+func can_expand_to_hex(grid: HexGrid, hex: HexBase) -> bool:
+	if grid == null or hex == null:
+		return false
+	if contains_hex(grid, hex):
+		return false
+	if not hex.is_traversable(HexInfo.TraversalTag.WALK):
+		return false
+
+	var settlement_hexes := get_settlement_hexes(grid)
+	var has_adjacent_settlement_hex := false
+	var settlement_coords := _get_hex_coord_lookup(settlement_hexes)
+	for settlement_hex in settlement_hexes:
+		if settlement_hex == null:
+			continue
+		if GridUtils.cube_distance(settlement_hex.cube_id, hex.cube_id) != 1:
+			continue
+		has_adjacent_settlement_hex = true
+		var entrance := _get_entrance_between(grid, settlement_hex.cube_id, hex.cube_id)
+		if entrance == null:
+			continue
+		var preferred_direction := hex.cube_id - settlement_hex.cube_id
+		return _has_walkable_replacement_wall_slot(grid, hex, settlement_coords, preferred_direction)
+	return has_adjacent_settlement_hex
+
+func expand_to_hex(grid: HexGrid, hex: HexBase) -> bool:
+	if not can_expand_to_hex(grid, hex):
+		return false
+	var previous_settlement_hexes := get_settlement_hexes(grid)
+	if not expanded_tiles.has(hex.cube_id):
+		expanded_tiles.append(hex.cube_id)
+	hex.is_explored = true
+	var settlement_hexes := get_settlement_hexes(grid)
+	_regenerate_boundary_walls(grid, settlement_hexes)
+	_replace_generated_wall_with_entrance_for_expansion(grid, hex, previous_settlement_hexes, settlement_hexes)
+	_render_reveal_debug_shape(grid, settlement_hexes)
+	return true
 
 func has_boundary_between(grid: HexGrid, a: HexBase, b: HexBase) -> bool:
 	if grid == null or a == null or b == null:
@@ -183,6 +234,10 @@ func try_upgrade(source_inventory: ContentGroup) -> bool:
 		source_inventory.remove(item, int(upgrade.item_cost[item]))
 	level = upgrade.target_level
 	refresh_service_states()
+	if level >= 3 and Manager.instance != null and Manager.instance.journal != null:
+		Manager.instance.journal.complete_task("reach_settlement_level_3")
+		if Manager.instance.reputation != null and Manager.instance.reputation.reputation >= 10:
+			Manager.instance.journal.complete_task("become_guild_authority")
 	level_changed.emit(level)
 	return true
 
@@ -197,6 +252,196 @@ func get_missing_service_requirements(upgrade: SettlementUpgradeInfo) -> Array[S
 
 func _has_required_services(upgrade: SettlementUpgradeInfo) -> bool:
 	return get_missing_service_requirements(upgrade).is_empty()
+
+func _has_hex(hexes: Array[HexBase], target_hex: HexBase) -> bool:
+	if target_hex == null:
+		return false
+	for hex in hexes:
+		if hex != null and hex.cube_id == target_hex.cube_id:
+			return true
+	return false
+
+func _get_hex_coord_lookup(hexes: Array[HexBase]) -> Dictionary[Vector3i, bool]:
+	var result: Dictionary[Vector3i, bool] = {}
+	for hex in hexes:
+		if hex != null:
+			result[hex.cube_id] = true
+	return result
+
+func _has_walkable_replacement_wall_slot(
+	grid: HexGrid,
+	claimed_hex: HexBase,
+	settlement_coords: Dictionary[Vector3i, bool],
+	preferred_direction: Vector3i
+) -> bool:
+	if _get_walkable_boundary_neighbor(grid, claimed_hex, settlement_coords, preferred_direction) != null:
+		return true
+	for direction: Vector3i in DataManager.instance.CUBE_DIRS:
+		if _get_walkable_boundary_neighbor(grid, claimed_hex, settlement_coords, direction) != null:
+			return true
+	return false
+
+func _replace_generated_wall_with_entrance_for_expansion(
+	grid: HexGrid,
+	claimed_hex: HexBase,
+	previous_settlement_hexes: Array[HexBase],
+	settlement_hexes: Array[HexBase]
+) -> void:
+	if grid == null or claimed_hex == null:
+		return
+	var entrance: Node3D = null
+	var preferred_direction := Vector3i.ZERO
+	for settlement_hex in previous_settlement_hexes:
+		if settlement_hex == null:
+			continue
+		if GridUtils.cube_distance(settlement_hex.cube_id, claimed_hex.cube_id) != 1:
+			continue
+		entrance = _get_entrance_between(grid, settlement_hex.cube_id, claimed_hex.cube_id)
+		if entrance != null:
+			preferred_direction = claimed_hex.cube_id - settlement_hex.cube_id
+			break
+	if entrance == null:
+		return
+
+	var settlement_coords := _get_hex_coord_lookup(settlement_hexes)
+	var replacement_wall := _get_replacement_wall_for_entrance(grid, claimed_hex, settlement_coords, preferred_direction)
+	if replacement_wall == null:
+		return
+
+	entrance.global_transform = replacement_wall.global_transform
+	var replacement_obstacle := replacement_wall as Obstacle
+	var wall_parent := replacement_wall.get_parent()
+	if wall_parent != null:
+		wall_parent.remove_child(replacement_wall)
+	if grid.pathfinder != null and replacement_obstacle != null:
+		grid.pathfinder.remove_obstacle(replacement_obstacle, false)
+		grid.pathfinder.rebuild()
+	replacement_wall.queue_free()
+
+func _get_replacement_wall_for_entrance(
+	grid: HexGrid,
+	claimed_hex: HexBase,
+	settlement_coords: Dictionary[Vector3i, bool],
+	preferred_direction: Vector3i
+) -> Node3D:
+	var preferred_neighbor := _get_walkable_boundary_neighbor(grid, claimed_hex, settlement_coords, preferred_direction)
+	if preferred_neighbor != null:
+		var preferred_wall := _get_wall_between(grid, claimed_hex.cube_id, preferred_neighbor.cube_id)
+		if preferred_wall != null:
+			return preferred_wall
+
+	for direction: Vector3i in DataManager.instance.CUBE_DIRS:
+		var neighbor := _get_walkable_boundary_neighbor(grid, claimed_hex, settlement_coords, direction)
+		if neighbor == null:
+			continue
+		var wall := _get_wall_between(grid, claimed_hex.cube_id, neighbor.cube_id)
+		if wall != null:
+			return wall
+	return null
+
+func _get_walkable_boundary_neighbor(
+	grid: HexGrid,
+	claimed_hex: HexBase,
+	settlement_coords: Dictionary[Vector3i, bool],
+	direction: Vector3i
+) -> HexBase:
+	if grid == null or claimed_hex == null:
+		return null
+	var neighbor_coord := claimed_hex.cube_id + direction
+	if settlement_coords.has(neighbor_coord):
+		return null
+	var neighbor := grid.get_hex_at_cube_id(neighbor_coord)
+	if neighbor == null or not neighbor.is_traversable(HexInfo.TraversalTag.WALK):
+		return null
+	return neighbor
+
+func _regenerate_boundary_walls(grid: HexGrid, settlement_hexes: Array[HexBase]) -> void:
+	if grid == null or boundary_wall_scene == null:
+		return
+	var walls_root := _get_or_create_boundary_root()
+	for child in walls_root.get_children():
+		walls_root.remove_child(child)
+		child.queue_free()
+
+	var settlement_coords: Dictionary[Vector3i, bool] = {}
+	for hex in settlement_hexes:
+		if hex != null:
+			settlement_coords[hex.cube_id] = true
+
+	for hex in settlement_hexes:
+		if hex == null:
+			continue
+		for direction: Vector3i in DataManager.instance.CUBE_DIRS:
+			var neighbor_coord := hex.cube_id + direction
+			if settlement_coords.has(neighbor_coord):
+				continue
+			if _has_entrance_boundary_between(grid, hex.cube_id, neighbor_coord):
+				continue
+			_add_boundary_wall(walls_root, hex, neighbor_coord, grid)
+
+	if grid.pathfinder != null:
+		grid.pathfinder.rebuild()
+
+func _get_or_create_boundary_root() -> Node3D:
+	var walls_root := get_node_or_null("walls") as Node3D
+	if walls_root != null:
+		return walls_root
+	walls_root = Node3D.new()
+	walls_root.name = "walls"
+	add_child(walls_root)
+	return walls_root
+
+func _add_boundary_wall(walls_root: Node3D, hex: HexBase, neighbor_coord: Vector3i, grid: HexGrid) -> void:
+	var neighbor := grid.get_hex_at_cube_id(neighbor_coord)
+	if neighbor == null:
+		return
+	var wall := boundary_wall_scene.instantiate() as Node3D
+	if wall == null:
+		return
+	wall.name = "generated_wall_%s_%s_%s_to_%s_%s_%s" % [
+		hex.cube_id.x, hex.cube_id.y, hex.cube_id.z,
+		neighbor_coord.x, neighbor_coord.y, neighbor_coord.z
+	]
+	walls_root.add_child(wall)
+	wall.global_position = hex.global_position
+	var direction := neighbor.global_position - hex.global_position
+	wall.rotation.y = _get_wall_rotation_y(direction)
+
+func _get_wall_rotation_y(direction: Vector3) -> float:
+	var direction_2d := Vector2(direction.x, direction.z).normalized()
+	if direction_2d.length_squared() <= 0.0:
+		return 0.0
+	return -Vector2.LEFT.angle_to(direction_2d)
+
+func _has_entrance_boundary_between(grid: HexGrid, a: Vector3i, b: Vector3i) -> bool:
+	return _get_entrance_between(grid, a, b) != null
+
+func _get_wall_between(grid: HexGrid, a: Vector3i, b: Vector3i) -> Node3D:
+	var walls := get_node_or_null("walls")
+	if walls == null:
+		return null
+	return _get_boundary_node_between(walls, grid, a, b)
+
+func _get_entrance_between(grid: HexGrid, a: Vector3i, b: Vector3i) -> Node3D:
+	var entrances := get_node_or_null("entrances")
+	if entrances == null:
+		return null
+	return _get_boundary_node_between(entrances, grid, a, b)
+
+func _get_boundary_node_between(root: Node, grid: HexGrid, a: Vector3i, b: Vector3i) -> Node3D:
+	var target_key := _get_boundary_edge_key(a, b)
+	for child in root.get_children():
+		var node_3d := child as Node3D
+		if node_3d == null:
+			continue
+		var current_hex := grid.get_hex_at_world_position(node_3d.global_position)
+		var adjacent_world := node_3d.global_transform * (Vector3.LEFT * 2.0)
+		var adjacent_hex := grid.get_hex_at_world_position(adjacent_world)
+		if current_hex == null or adjacent_hex == null:
+			continue
+		if _get_boundary_edge_key(current_hex.cube_id, adjacent_hex.cube_id) == target_key:
+			return node_3d
+	return null
 
 func refresh_service_states() -> void:
 	for interaction: Interaction in interactions:
@@ -399,7 +644,7 @@ func _append_debug_polygon_mesh(
 func _get_debug_hex_polygon(grid: HexGrid) -> PackedVector2Array:
 	var world_polygon := GridUtils.get_hex_polygon(Vector3.ZERO, HexGrid.RADIUS_IN * reveal_debug_hex_scale, grid.pointy_top)
 	var local_polygon := PackedVector2Array()
-	var rotation := deg_to_rad(reveal_debug_rotation_degrees)
+	var debug_rotation := deg_to_rad(reveal_debug_rotation_degrees)
 	for point in world_polygon:
-		local_polygon.append(point.rotated(rotation))
+		local_polygon.append(point.rotated(debug_rotation))
 	return local_polygon
