@@ -1,0 +1,20 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/journal_task_ui.gd" id="1_script"]
+
+[node name="JournalTask" type="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+script = ExtResource("1_script")
+
+[node name="Completed" type="CheckBox" parent="."]
+layout_mode = 2
+disabled = true
+focus_mode = 0
+
+[node name="Text" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+autowrap_mode = 2

@@ -224,6 +224,9 @@ JOURNAL_TITLE,Guild Ledger,Guild Ledger
 JOURNAL_CHAPTER_ONE,Chapter I: Restore the Guild Forge,Chapter I: Restore the Guild Forge
 JOURNAL_CHAPTER_TWO,Chapter II: Establish a Trade Route,Chapter II: Establish a Trade Route
 JOURNAL_CHAPTER_THREE,Chapter III: Earn the Grand Charter,Chapter III: Earn the Grand Charter
+JOURNAL_CHAPTER_SELECTOR,Choose a journal chapter,Choose a journal chapter
+JOURNAL_PREVIOUS_CHAPTER,Previous chapter,Previous chapter
+JOURNAL_NEXT_CHAPTER,Next chapter,Next chapter
 JOURNAL_TASK_BUILD_FORGE,Place the Forge inside the settlement,Place the Forge inside the settlement
 JOURNAL_TASK_CRAFT_DOCK_BLUEPRINT,Craft a Dock Blueprint,Craft a Dock Blueprint
 JOURNAL_TASK_BUILD_DOCKS,Build docks on the shore,Build docks on the shore

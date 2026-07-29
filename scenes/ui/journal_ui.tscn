@@ -3,7 +3,8 @@
 [ext_resource type="Theme" uid="uid://dae2b2hfpj0l2" path="res://themes/light.theme" id="1_theme"]
 [ext_resource type="PackedScene" uid="uid://dny1dqcanlco0" path="res://tools/custom_window/base_window.tscn" id="1_window"]
 [ext_resource type="Script" uid="uid://bkoojt24df6m0" path="res://scripts/ui/journal_ui.gd" id="2_journal"]
-[ext_resource type="PackedScene" uid="uid://boimgr5pf6uwf" path="res://scenes/ui/components/journal_entry_ui.tscn" id="3_entry"]
+[ext_resource type="PackedScene" path="res://scenes/ui/components/journal_page.tscn" id="3_page"]
+[ext_resource type="Theme" uid="uid://bemn0spuaev14" path="res://themes/fantasy_buttons.tres" id="4_buttons"]
 
 [node name="Window" unique_id=1454805873 node_paths=PackedStringArray("content") instance=ExtResource("1_window")]
 custom_minimum_size = Vector2(500, 430)
@@ -16,52 +17,59 @@ content = NodePath("NinePatchRect/VBoxContainer/contentPanel/JournalPage")
 [node name="topbar" parent="NinePatchRect/VBoxContainer" parent_id_path=PackedInt32Array(554725130) index="0" unique_id=347636229]
 color = Color(0, 0, 0, 0.8117647)
 
+[node name="Title" parent="NinePatchRect/VBoxContainer/topbar/MarginContainer2/MarginContainer" parent_id_path=PackedInt32Array(67417564) index="0" unique_id=1155745598]
+text = "JOURNAL_TITLE"
+
 [node name="contentPanel" parent="NinePatchRect/VBoxContainer" parent_id_path=PackedInt32Array(554725130) index="1" unique_id=1040542232]
 size_flags_horizontal = 3
 
-[node name="JournalPage" type="PanelContainer" parent="NinePatchRect/VBoxContainer/contentPanel" index="0" unique_id=308080393]
+[node name="JournalPage" type="Control" parent="NinePatchRect/VBoxContainer/contentPanel" index="0" unique_id=308080393]
 custom_minimum_size = Vector2(430, 330)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource("1_theme")
 script = ExtResource("2_journal")
-entry_scene = ExtResource("3_entry")
+page_scene = ExtResource("3_page")
 
 [node name="MarginContainer" type="MarginContainer" parent="NinePatchRect/VBoxContainer/contentPanel/JournalPage" index="0" unique_id=1003171570]
-layout_mode = 2
-theme_override_constants/margin_left = 14
-theme_override_constants/margin_top = 12
-theme_override_constants/margin_right = 14
-theme_override_constants/margin_bottom = 12
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
 
 [node name="VBoxContainer" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/JournalPage/MarginContainer" index="0" unique_id=674746973]
 layout_mode = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 10
 
-[node name="Title" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/JournalPage/MarginContainer/VBoxContainer" index="0" unique_id=211397662]
+[node name="GuildStanding" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/JournalPage/MarginContainer/VBoxContainer" index="0"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "JOURNAL_TITLE"
-horizontal_alignment = 1
-
-[node name="Divider" type="HSeparator" parent="NinePatchRect/VBoxContainer/contentPanel/JournalPage/MarginContainer/VBoxContainer" index="1" unique_id=872935349]
-layout_mode = 2
-
-[node name="GuildStanding" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/JournalPage/MarginContainer/VBoxContainer" index="2"]
-layout_mode = 2
-theme_override_constants/separation = 2
+theme_override_constants/separation = 4
 
 [node name="StandingHeader" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/JournalPage/MarginContainer/VBoxContainer/GuildStanding" index="0"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.42, 0.31, 0.2, 1)
+theme_override_font_sizes/font_size = 14
 text = "GUILD_STANDING_HEADER"
 uppercase = true
 
-[node name="ReputationTitle" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/JournalPage/MarginContainer/VBoxContainer/GuildStanding" index="1"]
+[node name="ReputationRow" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/JournalPage/MarginContainer/VBoxContainer/GuildStanding" index="1"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.23, 0.14, 0.07, 1)
+
+[node name="ReputationTitle" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/JournalPage/MarginContainer/VBoxContainer/GuildStanding/ReputationRow" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
 text = "GUILD_REPUTATION_LABEL"
+
+[node name="ReputationValue" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/JournalPage/MarginContainer/VBoxContainer/GuildStanding/ReputationRow" index="1"]
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+horizontal_alignment = 2
 
 [node name="ReputationProgress" type="ProgressBar" parent="NinePatchRect/VBoxContainer/contentPanel/JournalPage/MarginContainer/VBoxContainer/GuildStanding" index="2"]
 custom_minimum_size = Vector2(0, 18)
@@ -69,10 +77,18 @@ layout_mode = 2
 max_value = 10.0
 show_percentage = false
 
-[node name="NotorietyTitle" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/JournalPage/MarginContainer/VBoxContainer/GuildStanding" index="3"]
+[node name="NotorietyRow" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/JournalPage/MarginContainer/VBoxContainer/GuildStanding" index="3"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.23, 0.14, 0.07, 1)
+
+[node name="NotorietyTitle" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/JournalPage/MarginContainer/VBoxContainer/GuildStanding/NotorietyRow" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
 text = "GUILD_NOTORIETY_LABEL"
+
+[node name="NotorietyValue" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/JournalPage/MarginContainer/VBoxContainer/GuildStanding/NotorietyRow" index="1"]
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+horizontal_alignment = 2
 
 [node name="NotorietyProgress" type="ProgressBar" parent="NinePatchRect/VBoxContainer/contentPanel/JournalPage/MarginContainer/VBoxContainer/GuildStanding" index="4"]
 custom_minimum_size = Vector2(0, 18)
@@ -80,12 +96,38 @@ layout_mode = 2
 max_value = 5.0
 show_percentage = false
 
-[node name="ScrollContainer" type="ScrollContainer" parent="NinePatchRect/VBoxContainer/contentPanel/JournalPage/MarginContainer/VBoxContainer" index="3" unique_id=1448233291]
+[node name="ChapterNavigation" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/JournalPage/MarginContainer/VBoxContainer" index="1"]
+custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
-size_flags_vertical = 3
-horizontal_scroll_mode = 0
+theme = ExtResource("4_buttons")
+theme_override_constants/separation = 8
 
-[node name="Entries" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/JournalPage/MarginContainer/VBoxContainer/ScrollContainer" index="0" unique_id=51604028]
+[node name="PreviousPageButton" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/JournalPage/MarginContainer/VBoxContainer/ChapterNavigation" index="0"]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+tooltip_text = "JOURNAL_PREVIOUS_CHAPTER"
+theme_override_font_sizes/font_size = 18
+text = "<"
+
+[node name="ChapterSelector" type="OptionButton" parent="NinePatchRect/VBoxContainer/contentPanel/JournalPage/MarginContainer/VBoxContainer/ChapterNavigation" index="1"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 12
+tooltip_text = "JOURNAL_CHAPTER_SELECTOR"
+theme_override_font_sizes/font_size = 18
+alignment = 1
+
+[node name="NextPageButton" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/JournalPage/MarginContainer/VBoxContainer/ChapterNavigation" index="2"]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+tooltip_text = "JOURNAL_NEXT_CHAPTER"
+theme_override_font_sizes/font_size = 18
+text = ">"
+
+[node name="PageDivider" type="HSeparator" parent="NinePatchRect/VBoxContainer/contentPanel/JournalPage/MarginContainer/VBoxContainer" index="2"]
+layout_mode = 2
+
+[node name="PageHost" type="Control" parent="NinePatchRect/VBoxContainer/contentPanel/JournalPage/MarginContainer/VBoxContainer" index="3"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+clip_contents = true
