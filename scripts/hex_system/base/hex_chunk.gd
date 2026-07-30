@@ -37,7 +37,7 @@ func add_hex(instance: SceneInstance) -> void:
 	else:
 		bounds = bounds.expand(pos)
 	
-	if hexes.size() == chunk_size.x * chunk_size.y:
+	if not is_generated and hexes.size() == chunk_size.x * chunk_size.y:
 		is_generated = true;
 		generated.emit(self)
 

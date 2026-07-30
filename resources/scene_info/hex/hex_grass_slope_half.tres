@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="HexInfo" format=3]
+
+[ext_resource type="Script" path="res://scripts/hex_system/base/hex_info.gd" id="1_info"]
+[ext_resource type="PackedScene" path="res://scenes/hexes/hex_grass_slope_half.tscn" id="2_scene"]
+
+[resource]
+script = ExtResource("1_info")
+id = "hex_grass_slope_half"
+packed_scene = ExtResource("2_scene")

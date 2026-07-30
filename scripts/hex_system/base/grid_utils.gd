@@ -12,6 +12,16 @@ static func offset_to_cube(grid: Vector2i, pointy_top: bool) -> Vector3i:
 		var y: int = -x - z
 		return Vector3i(x, y, z)
 
+static func cube_to_offset(cube: Vector3i, pointy_top: bool) -> Vector2i:
+	if pointy_top:
+		var column := cube.x
+		var row := cube.z + ((column - (column & 1)) >> 1)
+		return Vector2i(column, row)
+	else:
+		var row := cube.z
+		var column := cube.x + ((row - (row & 1)) >> 1)
+		return Vector2i(column, row)
+
 static func get_spacing(inner_radius: float, spacing: float, pointy_top: bool) -> Vector2:
 	if pointy_top:
 		return Vector2(3.0 * inner_radius / 2.0 + spacing, sqrt(3.0) * inner_radius + spacing)

@@ -48,6 +48,7 @@ func rebuild() -> void:
 	# rebuild connections (OBSTACLES RESPECTED)
 	for cube_id: Vector3i in cube_to_id.keys():
 		var from_id := cube_to_id[cube_id]
+		var from_hex := grid.tiles[cube_id].node as HexBase
 
 		for dir in DataManager.instance.CUBE_DIRS:
 			var neighbor_cube := cube_id + dir
@@ -56,6 +57,9 @@ func rebuild() -> void:
 				continue
 
 			if _is_blocked(cube_id, neighbor_cube):
+				continue
+			var neighbor: HexBase = grid.tiles[neighbor_cube].node
+			if not grid.can_traverse_between(from_hex, neighbor, method):
 				continue
 
 			var to_id := cube_to_id[neighbor_cube]
@@ -89,6 +93,9 @@ func update_hex(hex: HexBase) -> void:
 				continue
 
 			var neighbor_id := cube_to_id[neighbor_cube]
+			var neighbor: HexBase = grid.tiles[neighbor_cube].node
+			if not grid.can_traverse_between(hex, neighbor, method):
+				continue
 
 			if not are_points_connected(point_id, neighbor_id):
 				connect_points(point_id, neighbor_id, true)
@@ -111,14 +118,13 @@ func update_hex(hex: HexBase) -> void:
 
 		var neighbor_id := _cube_to_astar_id(neighbor_cube)
 
-		if not neighbor.is_traversable():
-			if has_point(neighbor_id):
-				if are_points_connected(neighbor_id, point_id):
-					disconnect_points(neighbor_id, point_id)
-		else:
-			if has_point(point_id) and has_point(neighbor_id):
-				if not are_points_connected(point_id, neighbor_id):
-					connect_points(point_id, neighbor_id, true)
+		if not has_point(point_id) or not has_point(neighbor_id):
+			continue
+		if grid.can_traverse_between(hex, neighbor, method):
+			if not are_points_connected(point_id, neighbor_id):
+				connect_points(point_id, neighbor_id, true)
+		elif are_points_connected(point_id, neighbor_id):
+			disconnect_points(point_id, neighbor_id)
 
 func get_hex_path(start_cube: Vector3i, end_cube: Vector3i) -> Array[HexBase]:
 	var result: Array[HexBase] = []
@@ -173,6 +179,10 @@ func get_hex_path_for_methods(
 			if not path_cube_to_id.has(neighbor_cube):
 				continue
 			if _is_blocked(cube_id, neighbor_cube):
+				continue
+			var from_hex := grid.tiles[cube_id].node as HexBase
+			var to_hex := grid.tiles[neighbor_cube].node as HexBase
+			if not grid.can_traverse_between_for_methods(from_hex, to_hex, traversal_methods):
 				continue
 
 			var to_id: int = path_cube_to_id[neighbor_cube]

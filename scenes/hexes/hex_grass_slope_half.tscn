@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://bh76ewutrp3m2"]
+
+[ext_resource type="Script" uid="uid://clcapg06y123e" path="res://scripts/hex_system/base/hex_slope.gd" id="1_slope"]
+[ext_resource type="PackedScene" uid="uid://bjaslg3aj8bh3" path="res://meshes/kay_fantasy_hexagon/tiles/base/hex_grass_sloped_low.glb" id="2_mesh"]
+
+[node name="hex_grass_slope_half" type="Node3D" unique_id=1446541247]
+script = ExtResource("1_slope")
+navigation_only_mask = 34
+edge_height_offsets = PackedInt32Array(1, 1, 0, 0, 0, 1)
+metadata/asset_uphill_edge = "EDGE_0 is the high end of this unrotated mesh; confirm visually in the editor before terrain replacement is enabled."
+
+[node name="mesh" parent="." unique_id=1079750971 instance=ExtResource("2_mesh")]
+
+[editable path="mesh"]

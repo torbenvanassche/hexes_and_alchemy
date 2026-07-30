@@ -24,6 +24,8 @@ func has_hex(coord: Vector3i) -> bool:
 func merge_from(other: RegionInstance) -> void:
 	for coord in other.hexes:
 		add_hex(other.hexes[coord])
+	for coord in other.structures:
+		structures[coord] = other.structures[coord]
 		
 func remove_hex(coord: Vector3i) -> void:
 	hexes.erase(coord);
@@ -141,6 +143,19 @@ func _can_place_structure_at(pos: Vector3i, candidate: StructureInfo) -> bool:
 				var min_dist := _required_distance(candidate, other)
 				if dist <= min_dist:
 					return false
+	return true
+
+func try_place_required_structure_at(pos: Vector3i, candidate: StructureInfo) -> bool:
+	if candidate == null or not hexes.has(pos):
+		return false
+	if not _can_place_structure_at(pos, candidate):
+		return false
+
+	var hex := hexes[pos]
+	structures[pos] = candidate
+	if not hex.set_structure(candidate, true, NAN, true):
+		structures.erase(pos)
+		return false
 	return true
 
 func _has_clear_generation_space(center: Vector3i, candidate: StructureInfo) -> bool:

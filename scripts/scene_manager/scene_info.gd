@@ -42,7 +42,13 @@ func initialize() -> void:
 		is_unique = type == Type.UI;
 		
 func get_live_instances() -> Array[SceneInstance]:
-	instances.assign(instances.filter(func(i: SceneInstance): return is_instance_valid(i) and is_instance_valid(i.node)));
+	var live_instances: Array[SceneInstance] = []
+	for scene_instance: SceneInstance in instances:
+		if is_instance_valid(scene_instance) and is_instance_valid(scene_instance.node):
+			live_instances.append(scene_instance)
+	instances.clear()
+	for scene_instance: SceneInstance in live_instances:
+		instances.append(scene_instance)
 	return instances
 
 func set_process_mode(instance: SceneInstance, b: bool) -> void:
@@ -52,7 +58,8 @@ func get_instance() -> SceneInstance:
 	get_live_instances()
 	if is_unique and instances.size() > 0:
 		return instances[0]
-	var instance := SceneInstance.new(packed_scene.instantiate(), self);
+	var scene_node: Node = packed_scene.instantiate()
+	var instance: SceneInstance = SceneInstance.new(scene_node, self);
 	instance.set_processing(true)
 	instances.append(instance)
 	if DataManager.instance != null:

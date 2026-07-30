@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" uid="uid://dq87du7mc0w23" path="res://scripts/hex_system/hexgrid_main.gd" id="1_5yxne"]
 [ext_resource type="Resource" uid="uid://c1ypx4o3q73t0" path="res://resources/structure_info/settlement.tres" id="2_w5vnv"]
+[ext_resource type="Resource" uid="uid://ckpmn3cutb7an" path="res://resources/structure_info/spawnable_mine.tres" id="3_mine"]
+[ext_resource type="Resource" uid="uid://dijohak4mpf7n" path="res://resources/structure_info/forest.tres" id="4_forest"]
 
 [node name="generator" type="Node3D" unique_id=1069964981 node_paths=PackedStringArray("target_position")]
 script = ExtResource("1_5yxne")
@@ -10,5 +12,10 @@ target_position = NodePath("Node3D")
 chunk_radius = 4
 grid_name = "main_world"
 protected_chunks = Array[Vector2i]([Vector2i(0, 0)])
+protected_chunk_elevation_buffer = 2
+slope_entrance_density = 0.5
+minimum_slope_entrances_per_area = 3
+elevated_tiles_per_extra_slope_entrance = 8
+required_starting_structures = Array[ExtResource("1_5yxne")]([ExtResource("3_mine"), ExtResource("4_forest")])
 
 [node name="Node3D" type="Node3D" parent="." unique_id=2022336031]

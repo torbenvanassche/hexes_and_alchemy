@@ -18,6 +18,20 @@ var _spacing: float = 0.25
 @export var world_seed: int = 0;
 var generation_seed: int = 0;
 
+@export_group("Elevation")
+@export var generate_elevation := true
+@export_range(0.01, 5.0, 0.01) var elevation_unit_height := 0.5
+@export_range(4, 32, 1) var elevation_feature_cell_size := 14
+@export_range(0.0, 1.0, 0.01) var elevation_feature_density := 0.65
+@export_range(3, 16, 1) var elevation_min_radius := 6
+@export_range(3, 16, 1) var elevation_max_radius := 10
+@export var keep_protected_chunks_flat := true
+@export_range(0, 4, 1) var protected_chunk_elevation_buffer := 2
+@export var generate_slope_entrances := true
+@export_range(0.05, 1.0, 0.05) var slope_entrance_density := 0.50
+@export_range(1, 8, 1) var minimum_slope_entrances_per_area := 3
+@export_range(4, 64, 1) var elevated_tiles_per_extra_slope_entrance := 8
+
 ##Optionally define custom regions that can generate if you don't want to use the global setting
 @export_group("Regions")
 @export var custom_regions: Array[RegionInfo] = []
@@ -32,12 +46,19 @@ var initialized: bool = false;
 ##Chunks that should not generate water or structures
 @export_group("Structure Rules")
 @export var protected_chunks: Array[Vector2i] = []
+@export_range(0, 4, 1) var protected_chunk_feature_buffer := 1
+@export_range(0, 8, 1) var settlement_feature_buffer := 1
 
 static var RADIUS_IN: float = 1.0
+const HALF_SLOPE_INFO := preload("res://resources/scene_info/hex/hex_grass_slope_half.tres")
 
 var chunks: Dictionary[Vector2i, HexChunk] = {}
 var region_instances: Dictionary[RegionInfo, Array] = {} 
 var tiles: Dictionary[Vector3i, SceneInstance] = {}
+var elevation_areas: Dictionary[int, ElevationArea] = {}
+var generated_regions: Dictionary[Vector2i, RegionInfo] = {}
+var generated_elevations: Dictionary[Vector2i, int] = {}
+var _pathfinder_rebuild_queued := false
 @onready var pathfinder: HexAStar = HexAStar.new(self)
 
 signal generated();
@@ -141,9 +162,11 @@ func mark_initialized() -> void:
 	initialized_changed.emit();
 
 func _on_map_ready() -> void:
+	_ensure_elevated_areas_have_entrances()
 	SceneManager.set_active_scene(DataManager.instance.node_to_info(self));
 	
 	generate_structures();
+	pathfinder.rebuild()
 	mark_initialized();
 
 func generate_structures() -> void:
@@ -155,11 +178,17 @@ func has_chunk(cx: int, cy: int) -> bool:
 	return chunks.has(Vector2i(cx, cy));
 
 func can_generate_structures_on_grid_id(grid_id: Vector2i) -> bool:
-	var protected_chunk: bool = protected_chunks.has(grid_to_chunk_coords(grid_id));
-	return not protected_chunk and not _is_near_settlement(GridUtils.offset_to_cube(grid_id, pointy_top))
+	if _is_within_protected_chunk_buffer(grid_id):
+		return false
+	return not _is_near_settlement(GridUtils.offset_to_cube(grid_id, pointy_top))
 
 func can_generate_structures_on_hex(hex: HexBase) -> bool:
-	return hex != null and can_generate_structures_on_grid_id(hex.grid_id)
+	return hex != null and not hex is HexSlope and can_generate_structures_on_grid_id(hex.grid_id)
+
+func can_generate_slope_entrance_on_hex(hex: HexBase) -> bool:
+	if hex == null:
+		return false
+	return not _is_near_settlement(hex.cube_id)
 
 func _is_near_settlement(cube_id: Vector3i) -> bool:
 	if Manager.instance == null:
@@ -171,13 +200,12 @@ func _is_near_settlement(cube_id: Vector3i) -> bool:
 		if not is_ancestor_of(settlement):
 			continue
 
-		var settlement_cube_id := world_to_cube_id(settlement.global_position)
-		var settlement_hex := settlement.get_parent() as HexBase
-		if settlement_hex != null:
-			settlement_cube_id = settlement_hex.cube_id
-
-		if GridUtils.cube_distance(cube_id, settlement_cube_id) <= settlement.structure_invalid_range:
-			return true
+		var exclusion_radius := settlement.structure_invalid_range + settlement_feature_buffer
+		for settlement_hex in settlement.get_settlement_hexes(self):
+			if settlement_hex == null:
+				continue
+			if GridUtils.cube_distance(cube_id, settlement_hex.cube_id) <= exclusion_radius:
+				return true
 
 	return false
 	
@@ -194,7 +222,12 @@ func _get_instances_for_region(region: RegionInfo) -> Array:
 		region_instances[region] = [];
 	return region_instances[region];
 		
-func create_hex(grid_id: Vector2i, info: SceneInfo, region: RegionInfo) -> SceneInstance:
+func create_hex(
+	grid_id: Vector2i,
+	info: SceneInfo,
+	region: RegionInfo,
+	generated_elevation: int = -1
+) -> SceneInstance:
 	var scene_instance := info.get_instance();
 	var hex := scene_instance.node;
 	
@@ -214,9 +247,88 @@ func create_hex(grid_id: Vector2i, info: SceneInfo, region: RegionInfo) -> Scene
 		pos.x = grid_id.x * spacing.x + (grid_id.y & 1) * (spacing.x / 2)
 		pos.z = grid_id.y * spacing.y
 	hex.position = pos
+	if generated_elevation < 0:
+		generated_elevation = get_generated_elevation_units(grid_id)
+	hex.generated_elevation_units = generated_elevation
+	hex.set_elevation(hex.generated_elevation_units, elevation_unit_height)
 	return scene_instance;
 
+func _get_elevation_units(grid_id: Vector2i, region: RegionInfo) -> int:
+	if not generate_elevation:
+		return 0
+	if keep_protected_chunks_flat and _is_within_protected_chunk_elevation_buffer(grid_id):
+		return 0
+	if region == DataManager.instance.get_ocean_descriptor():
+		return 0
+
+	var cell_size := maxi(1, elevation_feature_cell_size)
+	var max_radius := maxi(elevation_min_radius, elevation_max_radius)
+	var search_radius := ceili(float(max_radius) / float(cell_size)) + 1
+	var cell := Vector2i(
+		floori(float(grid_id.x) / float(cell_size)),
+		floori(float(grid_id.y) / float(cell_size))
+	)
+	var elevation := 0
+
+	for y in range(cell.y - search_radius, cell.y + search_radius + 1):
+		for x in range(cell.x - search_radius, cell.x + search_radius + 1):
+			elevation = maxi(elevation, _get_elevation_feature_units(grid_id, Vector2i(x, y), cell_size))
+			if elevation == 2:
+				return _limit_elevation_at_flat_boundaries(grid_id, elevation)
+
+	return _limit_elevation_at_flat_boundaries(grid_id, elevation)
+
+func get_generated_elevation_units(grid_id: Vector2i) -> int:
+	if generated_elevations.has(grid_id):
+		return int(generated_elevations[grid_id])
+	var elevation := _get_elevation_units(grid_id, _get_region_for_grid_id(grid_id))
+	generated_elevations[grid_id] = elevation
+	return elevation
+
+func _get_elevation_feature_units(grid_id: Vector2i, cell: Vector2i, cell_size: int) -> int:
+	var rng := create_rng("elevation_feature_v1:%s:%s" % [cell.x, cell.y])
+	if rng.randf() > elevation_feature_density:
+		return 0
+
+	var center := Vector2i(
+		cell.x * cell_size + rng.randi_range(0, cell_size - 1),
+		cell.y * cell_size + rng.randi_range(0, cell_size - 1)
+	)
+	var outer_radius := rng.randi_range(
+		mini(elevation_min_radius, elevation_max_radius),
+		maxi(elevation_min_radius, elevation_max_radius)
+	)
+	var plateau_radius := maxi(2, floori(float(outer_radius) / 2.0))
+	var distance := GridUtils.cube_distance(
+		GridUtils.offset_to_cube(grid_id, pointy_top),
+		GridUtils.offset_to_cube(center, pointy_top)
+	)
+
+	if distance <= plateau_radius:
+		return 2
+	if distance <= outer_radius:
+		return 1
+	return 0
+
+func _limit_elevation_at_flat_boundaries(grid_id: Vector2i, elevation: int) -> int:
+	if elevation < 2:
+		return elevation
+
+	var cube_id := GridUtils.offset_to_cube(grid_id, pointy_top)
+	for direction in DataManager.instance.CUBE_DIRS:
+		var neighbor_id := GridUtils.cube_to_offset(cube_id + direction, pointy_top)
+		if keep_protected_chunks_flat and _is_within_protected_chunk_elevation_buffer(neighbor_id):
+			return 1
+		if _get_region_for_grid_id(neighbor_id) == DataManager.instance.get_ocean_descriptor():
+			return 1
+
+	return elevation
+
 func _get_region_for_grid_id(grid_id: Vector2i) -> RegionInfo:
+	if generated_regions.has(grid_id):
+		var cached_region: RegionInfo = generated_regions[grid_id]
+		return cached_region
+
 	var region_rng := create_rng("region:%s:%s" % [grid_id.x, grid_id.y])
 	var distance := GridUtils.cube_distance(GridUtils.offset_to_cube(grid_id, pointy_top), Vector3i.ZERO)
 	var region := DataManager.instance.get_region_for(
@@ -229,12 +341,31 @@ func _get_region_for_grid_id(grid_id: Vector2i) -> RegionInfo:
 	if _is_protected_grid_id(grid_id) and region == DataManager.instance.get_ocean_descriptor():
 		var fallback := _get_protected_land_region(distance, region_rng)
 		if fallback != null:
-			return fallback
+			region = fallback
 
+	generated_regions[grid_id] = region
 	return region
 
 func _is_protected_grid_id(grid_id: Vector2i) -> bool:
 	return protected_chunks.has(grid_to_chunk_coords(grid_id))
+
+func _is_within_protected_chunk_buffer(grid_id: Vector2i) -> bool:
+	var chunk_coords := grid_to_chunk_coords(grid_id)
+	for protected_chunk in protected_chunks:
+		var within_x_buffer := absi(chunk_coords.x - protected_chunk.x) <= protected_chunk_feature_buffer
+		var within_y_buffer := absi(chunk_coords.y - protected_chunk.y) <= protected_chunk_feature_buffer
+		if within_x_buffer and within_y_buffer:
+			return true
+	return false
+
+func _is_within_protected_chunk_elevation_buffer(grid_id: Vector2i) -> bool:
+	var chunk_coords := grid_to_chunk_coords(grid_id)
+	for protected_chunk in protected_chunks:
+		var within_x_buffer := absi(chunk_coords.x - protected_chunk.x) <= protected_chunk_elevation_buffer
+		var within_y_buffer := absi(chunk_coords.y - protected_chunk.y) <= protected_chunk_elevation_buffer
+		if within_x_buffer and within_y_buffer:
+			return true
+	return false
 
 func _get_protected_land_region(distance: int, rng: RandomNumberGenerator) -> RegionInfo:
 	var ocean_descriptor := DataManager.instance.get_ocean_descriptor()
@@ -281,12 +412,14 @@ func expand_from_chunk(cx: int, cy: int, dir: int) -> void:
 	var offset := CHUNK_DIR_VECTORS[dir]
 	var new_coords := Vector2i(cx + offset.x, cy + offset.y)
 
-	if chunks.has(new_coords):
+	if has_chunk(new_coords.x, new_coords.y):
 		return;
 
 	generate_chunk(new_coords.x, new_coords.y);
 	
 func _post_process_chunk(chunk: HexChunk) -> void:
+	_resolve_slope_entrances(chunk)
+
 	var touched_region_instances: Array[RegionInstance] = []
 	for hex: SceneInstance in chunk.hexes:
 		_assign_region_instance(hex.node);
@@ -294,17 +427,403 @@ func _post_process_chunk(chunk: HexChunk) -> void:
 		if region_instance != null and not touched_region_instances.has(region_instance):
 			touched_region_instances.append(region_instance)
 	
-	if initialized and chunk.generate_structures:
-		for region_instance in touched_region_instances:
-			region_instance.generate_structures_for_region()
-		pathfinder.rebuild()
+	if initialized:
+		if chunk.generate_structures:
+			for region_instance in touched_region_instances:
+				region_instance.generate_structures_for_region()
+		_queue_pathfinder_rebuild()
 	
-	var all_chunks_generated: bool = true;
+	var all_chunks_generated: bool = true
 	for c in chunks.keys():
 		if not chunks[c].is_generated:
 			all_chunks_generated = false;
 	if all_chunks_generated:
 		generated.emit();
+
+func _queue_pathfinder_rebuild() -> void:
+	if _pathfinder_rebuild_queued:
+		return
+	_pathfinder_rebuild_queued = true
+	call_deferred("_rebuild_pathfinder")
+
+func _rebuild_pathfinder() -> void:
+	_pathfinder_rebuild_queued = false
+	if is_inside_tree():
+		pathfinder.rebuild()
+
+func _resolve_slope_entrances(chunk: HexChunk) -> void:
+	if not initialized or not generate_elevation or not generate_slope_entrances:
+		return
+	var slope_profile := HALF_SLOPE_INFO.packed_scene.instantiate() as HexSlope
+	if slope_profile == null:
+		return
+
+	for scene_instance: SceneInstance in chunk.hexes.duplicate():
+		_try_replace_with_slope_entrance(scene_instance, slope_profile)
+	slope_profile.free()
+	_reserve_slope_approaches(chunk)
+
+func _try_replace_with_slope_entrance(
+	scene_instance: SceneInstance,
+	slope_profile: HexSlope,
+	force_placement: bool = false,
+	reachable_low_tiles: Dictionary = {}
+) -> bool:
+	if scene_instance == null:
+		return false
+	var hex := scene_instance.node as HexBase
+	if hex == null or hex is HexSlope or hex.structure != null:
+		return false
+	if not force_placement and not hex.can_generate:
+		return false
+	if not can_generate_slope_entrance_on_hex(hex):
+		return false
+	if _has_adjacent_slope(hex):
+		return false
+
+	var sampled_elevation := hex.generated_elevation_units
+	if sampled_elevation <= 0:
+		return false
+
+	var rotation_steps := _get_slope_placement_rotation(
+		hex, sampled_elevation, slope_profile, reachable_low_tiles
+	)
+	if rotation_steps < 0:
+		return false
+	if not force_placement and not _should_generate_slope(hex.grid_id, rotation_steps):
+		return false
+
+	var cube_id := hex.cube_id
+	_replace_with_half_slope(scene_instance, sampled_elevation, rotation_steps)
+	var slope: HexSlope = get_hex_at_cube_id(cube_id) as HexSlope
+	_reserve_slope_approach(slope)
+	return true
+
+func _ensure_elevated_areas_have_entrances() -> void:
+	if not generate_elevation or not generate_slope_entrances:
+		return
+	var slope_profile := HALF_SLOPE_INFO.packed_scene.instantiate() as HexSlope
+	if slope_profile == null:
+		return
+
+	_rebuild_elevation_areas()
+	var area_ids: Array[int] = []
+	for area_id_variant in elevation_areas.keys():
+		area_ids.append(int(area_id_variant))
+	area_ids.sort()
+	for area_id in area_ids:
+		var area: ElevationArea = elevation_areas[area_id]
+		var target_entrances := _get_elevation_area_entrance_target(area)
+		while area.entrance_count < target_entrances:
+			if not _place_required_component_entrance(area, slope_profile):
+				break
+			area.entrance_count += 1
+
+	slope_profile.free()
+
+func ensure_elevated_areas_reachable_from(start_hex: HexBase) -> void:
+	if start_hex == null or not generate_elevation or not generate_slope_entrances:
+		return
+	var slope_profile := HALF_SLOPE_INFO.packed_scene.instantiate() as HexSlope
+	if slope_profile == null:
+		return
+
+	_rebuild_elevation_areas()
+	var reachable_tiles := _get_walk_reachable_tiles(start_hex)
+	var max_elevation := 0
+	for area_id_variant in elevation_areas.keys():
+		var area_id := int(area_id_variant)
+		var area: ElevationArea = elevation_areas[area_id]
+		max_elevation = maxi(max_elevation, area.elevation_units)
+
+	for elevation in range(1, max_elevation + 1):
+		var area_ids: Array[int] = []
+		for area_id_variant in elevation_areas.keys():
+			var area_id := int(area_id_variant)
+			var area: ElevationArea = elevation_areas[area_id]
+			if area.elevation_units == elevation:
+				area_ids.append(area_id)
+		area_ids.sort()
+
+		for area_id in area_ids:
+			var area: ElevationArea = elevation_areas[area_id]
+			while not _is_elevation_area_reachable(area, reachable_tiles):
+				if not _place_required_component_entrance(
+					area, slope_profile, reachable_tiles, true
+				):
+					break
+				reachable_tiles = _get_walk_reachable_tiles(start_hex)
+			area.is_reachable_from_start = _is_elevation_area_reachable(area, reachable_tiles)
+			if not area.is_reachable_from_start:
+				continue
+
+			var target_entrances := _get_elevation_area_entrance_target(area)
+			while area.entrance_count < target_entrances:
+				if not _place_required_component_entrance(area, slope_profile, reachable_tiles):
+					break
+				area.entrance_count += 1
+				reachable_tiles = _get_walk_reachable_tiles(start_hex)
+
+	slope_profile.free()
+
+func _get_walk_reachable_tiles(start_hex: HexBase) -> Dictionary:
+	var reachable: Dictionary = {start_hex.cube_id: true}
+	var frontier: Array[HexBase] = [start_hex]
+	var index := 0
+	while index < frontier.size():
+		var current := frontier[index]
+		index += 1
+		for direction in DataManager.instance.CUBE_DIRS:
+			var neighbor := get_hex_at_cube_id(current.cube_id + direction)
+			if neighbor == null or reachable.has(neighbor.cube_id):
+				continue
+			if not can_traverse_between(current, neighbor, HexInfo.TraversalTag.WALK):
+				continue
+			reachable[neighbor.cube_id] = true
+			frontier.append(neighbor)
+	return reachable
+
+func _is_elevation_area_reachable(area: ElevationArea, reachable_tiles: Dictionary) -> bool:
+	for previous_hex in area.hexes:
+		if reachable_tiles.has(previous_hex.cube_id):
+			return true
+	return false
+
+func _rebuild_elevation_areas() -> void:
+	elevation_areas.clear()
+	var visited: Dictionary = {}
+	var cube_ids: Array[Vector3i] = []
+	for cube_id in tiles.keys():
+		cube_ids.append(cube_id)
+	cube_ids.sort_custom(_sort_cube_ids)
+
+	var next_area_id := 0
+	for cube_id in cube_ids:
+		if visited.has(cube_id):
+			continue
+		var hex := get_hex_at_cube_id(cube_id)
+		if hex == null or not hex.is_traversable(HexInfo.TraversalTag.WALK):
+			continue
+		var elevation := hex.generated_elevation_units
+		if elevation <= 0:
+			continue
+		var component := _get_elevation_component(hex, elevation, visited)
+		var area := ElevationArea.new()
+		area.id = next_area_id
+		area.elevation_units = elevation
+		area.hexes = component
+		for component_hex in component:
+			if component_hex is HexSlope:
+				area.entrance_count += 1
+		elevation_areas[area.id] = area
+		next_area_id += 1
+
+func _get_elevation_area_entrance_target(area: ElevationArea) -> int:
+	var extra_entrances := ceili(
+		float(area.hexes.size()) / float(elevated_tiles_per_extra_slope_entrance)
+	)
+	return maxi(minimum_slope_entrances_per_area, extra_entrances)
+
+func _sort_cube_ids(a: Vector3i, b: Vector3i) -> bool:
+	if a.x != b.x:
+		return a.x < b.x
+	if a.y != b.y:
+		return a.y < b.y
+	return a.z < b.z
+
+func _sort_hexes_by_cube_id(a: HexBase, b: HexBase) -> bool:
+	return _sort_cube_ids(a.cube_id, b.cube_id)
+
+func _get_elevation_component(start: HexBase, elevation: int, visited: Dictionary) -> Array[HexBase]:
+	var component: Array[HexBase] = []
+	var frontier: Array[HexBase] = [start]
+	visited[start.cube_id] = true
+	var index := 0
+	while index < frontier.size():
+		var current := frontier[index]
+		index += 1
+		component.append(current)
+		for direction in DataManager.instance.CUBE_DIRS:
+			var neighbor := get_hex_at_cube_id(current.cube_id + direction)
+			if neighbor == null or visited.has(neighbor.cube_id):
+				continue
+			if not neighbor.is_traversable(HexInfo.TraversalTag.WALK):
+				continue
+			if neighbor.generated_elevation_units != elevation:
+				continue
+			visited[neighbor.cube_id] = true
+			frontier.append(neighbor)
+	return component
+
+func _place_required_component_entrance(
+	area: ElevationArea,
+	slope_profile: HexSlope,
+	reachable_low_tiles: Dictionary = {},
+	allow_reorientation: bool = false
+) -> bool:
+	area.hexes.sort_custom(_sort_hexes_by_cube_id)
+	if allow_reorientation:
+		for previous_hex in area.hexes:
+			var existing_slope: HexSlope = get_hex_at_cube_id(previous_hex.cube_id) as HexSlope
+			if existing_slope != null and _try_reorient_slope_entrance(existing_slope, reachable_low_tiles):
+				return true
+
+	for previous_hex in area.hexes:
+		var hex := get_hex_at_cube_id(previous_hex.cube_id)
+		if hex == null or hex is HexSlope:
+			continue
+		if _try_replace_with_slope_entrance(
+			hex.scene_instance, slope_profile, true, reachable_low_tiles
+		):
+			return true
+	return false
+
+func _try_reorient_slope_entrance(slope: HexSlope, reachable_low_tiles: Dictionary) -> bool:
+	if slope == null or not can_generate_slope_entrance_on_hex(slope):
+		return false
+	var sampled_elevation := slope.generated_elevation_units
+	var rotation_steps := _get_slope_placement_rotation(
+		slope, sampled_elevation, slope, reachable_low_tiles
+	)
+	if rotation_steps < 0:
+		return false
+
+	slope.rotation.y = float(rotation_steps) * TAU / 6.0
+	slope.set_elevation(sampled_elevation - slope.slope_rise_units, elevation_unit_height)
+	_reserve_slope_approach(slope)
+	return true
+
+func _get_slope_placement_rotation(
+	hex: HexBase,
+	sampled_elevation: int,
+	slope_profile: HexSlope,
+	reachable_low_tiles: Dictionary = {}
+) -> int:
+	var base_elevation := sampled_elevation - slope_profile.slope_rise_units
+	if base_elevation < 0 or slope_profile.connector_mask == 0:
+		return -1
+
+	var best_rotation := -1
+	var best_navigation_connections := -1
+	for rotation_steps in range(6):
+		var has_low_connection := false
+		var has_high_connection := false
+		var has_reachable_low_connection := reachable_low_tiles.is_empty()
+		var valid := true
+
+		for local_edge in range(6):
+			if (slope_profile.connector_mask & (1 << local_edge)) == 0:
+				continue
+			var edge_offset: int = 0
+			if local_edge < slope_profile.edge_height_offsets.size():
+				edge_offset = int(slope_profile.edge_height_offsets[local_edge])
+			var world_edge := posmod(local_edge + rotation_steps, 6)
+			var expected_elevation := base_elevation + edge_offset
+			if not _is_valid_slope_neighbor(hex, world_edge, expected_elevation):
+				valid = false
+				break
+			if edge_offset == 0:
+				has_low_connection = true
+				var low_neighbor_cube_id := hex.cube_id + DataManager.instance.CUBE_DIRS[world_edge]
+				if reachable_low_tiles.has(low_neighbor_cube_id):
+					has_reachable_low_connection = true
+			if edge_offset == slope_profile.slope_rise_units:
+				has_high_connection = true
+
+		if valid and has_low_connection and has_high_connection and has_reachable_low_connection:
+			var navigation_connections := _count_matching_navigation_edges(
+				hex, base_elevation, rotation_steps, slope_profile
+			)
+			if navigation_connections > best_navigation_connections:
+				best_navigation_connections = navigation_connections
+				best_rotation = rotation_steps
+
+	return best_rotation
+
+func _count_matching_navigation_edges(
+	hex: HexBase,
+	base_elevation: int,
+	rotation_steps: int,
+	slope_profile: HexSlope
+) -> int:
+	var connections := 0
+	for local_edge in range(6):
+		if (slope_profile.navigation_only_mask & (1 << local_edge)) == 0:
+			continue
+		var edge_offset: int = 0
+		if local_edge < slope_profile.edge_height_offsets.size():
+			edge_offset = int(slope_profile.edge_height_offsets[local_edge])
+		var world_edge := posmod(local_edge + rotation_steps, 6)
+		if _is_valid_slope_neighbor(hex, world_edge, base_elevation + edge_offset):
+			connections += 1
+	return connections
+
+func _is_valid_slope_neighbor(hex: HexBase, edge: int, expected_elevation: int) -> bool:
+	var neighbor_cube_id := hex.cube_id + DataManager.instance.CUBE_DIRS[edge]
+	var neighbor_grid_id := GridUtils.cube_to_offset(neighbor_cube_id, pointy_top)
+	var neighbor := get_hex_at_cube_id(neighbor_cube_id)
+	var neighbor_elevation := get_generated_elevation_units(neighbor_grid_id)
+	if neighbor != null:
+		neighbor_elevation = neighbor.generated_elevation_units
+	if neighbor_elevation != expected_elevation:
+		return false
+	if _get_region_for_grid_id(neighbor_grid_id) == DataManager.instance.get_ocean_descriptor():
+		return false
+
+	if neighbor == null:
+		return true
+	if neighbor is HexSlope or neighbor.structure != null:
+		return false
+	return neighbor.is_traversable(HexInfo.TraversalTag.WALK)
+
+func _replace_with_half_slope(scene_instance: SceneInstance, sampled_elevation: int, rotation_steps: int) -> void:
+	var previous_hex := scene_instance.node as HexBase
+	if previous_hex == null:
+		return
+
+	var region := previous_hex.region
+	var was_explored := previous_hex.is_explored
+	var replacement_instance := HALF_SLOPE_INFO.get_instance()
+	replace(scene_instance, replacement_instance, region)
+
+	var slope := replacement_instance.node as HexSlope
+	if slope == null:
+		return
+
+	slope.rotation.y = float(rotation_steps) * TAU / 6.0
+	slope.set_elevation(sampled_elevation - slope.slope_rise_units, elevation_unit_height)
+	slope.apply_region(region)
+	slope.is_explored = was_explored
+
+func _should_generate_slope(grid_id: Vector2i, rotation_steps: int) -> bool:
+	var rng := create_rng("slope_entrance_v2:%s:%s:%s" % [grid_id.x, grid_id.y, rotation_steps])
+	return rng.randf() <= slope_entrance_density
+
+func _has_adjacent_slope(hex: HexBase) -> bool:
+	for direction in DataManager.instance.CUBE_DIRS:
+		var neighbor := get_hex_at_cube_id(hex.cube_id + direction)
+		if neighbor is HexSlope:
+			return true
+	return false
+
+func _reserve_slope_approaches(chunk: HexChunk) -> void:
+	for scene_instance: SceneInstance in chunk.hexes:
+		var hex := scene_instance.node as HexBase
+		if hex == null:
+			continue
+		if hex is HexSlope:
+			_reserve_slope_approach(hex as HexSlope)
+		elif _has_adjacent_slope(hex):
+			hex.can_generate = false
+
+func _reserve_slope_approach(slope: HexSlope) -> void:
+	if slope == null:
+		return
+	slope.can_generate = false
+	for direction in DataManager.instance.CUBE_DIRS:
+		var neighbor := get_hex_at_cube_id(slope.cube_id + direction)
+		if neighbor != null:
+			neighbor.can_generate = false
 
 func _assign_region_instance(hex: HexBase) -> void:
 	if hex.region_instance != null:
@@ -336,8 +855,7 @@ func _assign_region_instance(hex: HexBase) -> void:
 			primary.add_hex(hex);
 			for i in range(1, touching_instances.size()):
 				var other := touching_instances[i];
-				for h: HexBase in other.hexes.values():
-					primary.add_hex(h);
+				primary.merge_from(other)
 				_get_instances_for_region(hex.region).erase(other);
 
 func generate_chunk(cx: int, cy: int) -> HexChunk:
@@ -347,28 +865,26 @@ func generate_chunk(cx: int, cy: int) -> HexChunk:
 
 	var chunk := HexChunk.new(cx, cy, chunk_size);
 	chunks[key] = chunk;
-	add_child(chunk);
-	
-	chunk.generate_structures = not protected_chunks.has(key);
+	add_child(chunk)
+	chunk.generate_structures = not protected_chunks.has(key)
+	chunk.generated.connect(_post_process_chunk)
 
 	var start_x := cx * chunk_size.x
 	var start_y := cy * chunk_size.y
-	
-	chunk.generated.connect(_post_process_chunk);
-
 	for gy in range(start_y, start_y + chunk_size.y):
 		for gx in range(start_x, start_x + chunk_size.x):
-			var grid_id := Vector2i(gx, gy);
+			var grid_id := Vector2i(gx, gy)
 			var region := _get_region_for_grid_id(grid_id)
-			var scene_rng := create_rng("tile:%s:%s" % [gx, gy]);
-			var scene_info := DataManager.instance.pick_scene_for_region(region, scene_rng);
+			var scene_rng := create_rng("tile:%s:%s" % [gx, gy])
+			var scene_info := DataManager.instance.pick_scene_for_region(region, scene_rng)
 			if scene_info == null:
-				continue;
-			
+				continue
+			var elevation_units := get_generated_elevation_units(grid_id)
 			scene_info.queue(
 				func(sI: SceneInfo) -> void:
-					chunk.add_hex(create_hex(grid_id, sI, region)));
-	return chunk;
+					chunk.add_hex(create_hex(grid_id, sI, region, elevation_units))
+			)
+	return chunk
 
 func generate_chunks_around_grid_id(grid_id: Vector2i, radius: int = -1) -> void:
 	if not generate_chunks_near_player:
@@ -378,7 +894,7 @@ func generate_chunks_around_grid_id(grid_id: Vector2i, radius: int = -1) -> void
 	var center_chunk := grid_to_chunk_coords(grid_id)
 	for cy in range(center_chunk.y - radius, center_chunk.y + radius + 1):
 		for cx in range(center_chunk.x - radius, center_chunk.x + radius + 1):
-			if not chunks.has(Vector2i(cx, cy)):
+			if not has_chunk(cx, cy):
 				generate_chunk(cx, cy)
 	
 func get_hex_at_world_position(world_pos: Vector3, max_distance: float = 1.2) -> HexBase:
@@ -405,7 +921,9 @@ func get_hex_at_world_position(world_pos: Vector3, max_distance: float = 1.2) ->
 	var closest_hex: HexBase = null;
 	var closest_distance := INF;
 	for hex in search_pool:
-		var distance := hex.global_position.distance_squared_to(world_pos);
+		var distance := Vector2(hex.global_position.x, hex.global_position.z).distance_squared_to(
+			Vector2(world_pos.x, world_pos.z)
+		)
 		if distance < closest_distance:
 			closest_distance = distance;
 			closest_hex = hex;
@@ -431,6 +949,33 @@ func get_hex_at_cube_id(cube_id: Vector3i) -> HexBase:
 	if scene_instance == null:
 		return null;
 	return scene_instance.node as HexBase;
+
+func can_traverse_between(
+	from_hex: HexBase,
+	to_hex: HexBase,
+	method: HexInfo.TraversalTag = HexInfo.TraversalTag.WALK
+) -> bool:
+	if from_hex == null or to_hex == null:
+		return false
+	if not from_hex.is_traversable(method) or not to_hex.is_traversable(method):
+		return false
+
+	var from_edge := DataManager.instance.CUBE_DIRS.find(to_hex.cube_id - from_hex.cube_id)
+	if from_edge < 0:
+		return false
+	var to_edge := posmod(from_edge + 3, DataManager.instance.CUBE_DIRS.size())
+	if not from_hex.can_traverse_edge(from_edge, method):
+		return false
+	if not to_hex.can_traverse_edge(to_edge, method):
+		return false
+
+	return from_hex.get_edge_elevation_units(from_edge) == to_hex.get_edge_elevation_units(to_edge)
+
+func can_traverse_between_for_methods(from_hex: HexBase, to_hex: HexBase, methods: Array) -> bool:
+	for method in methods:
+		if can_traverse_between(from_hex, to_hex, method):
+			return true
+	return false
 
 func get_tiles_in_radius(center: Vector3i, radius: int) -> Array[SceneInstance]:
 	var result: Array[SceneInstance] = [];
@@ -467,6 +1012,9 @@ func replace(hex_instance: SceneInstance, replacement_instance: SceneInstance, r
 	replacement.region = region
 	replacement.region_instance = null
 	replacement.can_generate = hex.can_generate
+	replacement.elevation_units = hex.elevation_units
+	replacement.elevation_unit_height = hex.elevation_unit_height
+	replacement.generated_elevation_units = hex.generated_elevation_units
 
 	replacement.global_transform = hex.global_transform
 
@@ -484,8 +1032,10 @@ func replace(hex_instance: SceneInstance, replacement_instance: SceneInstance, r
 	var chunk_coords := grid_to_chunk_coords(hex.grid_id);
 	chunks[chunk_coords].hexes.erase(hex_instance);
 	chunks[chunk_coords].add_hex(replacement_instance);
+	replacement.apply_region(region)
 	
-	pathfinder.update_hex(replacement);
+	if initialized:
+		pathfinder.update_hex(replacement);
 	
 	hex_instance.destroy();
 

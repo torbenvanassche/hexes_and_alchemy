@@ -30,6 +30,24 @@ var is_explored: bool = false:
 var blocked: bool = false;
 var movement_cost: float = 1.0;
 
+var elevation_units: int = 0;
+var elevation_unit_height: float = 0.5;
+var generated_elevation_units: int = 0;
+
+func set_elevation(units: int, unit_height: float) -> void:
+	elevation_units = maxi(0, units)
+	elevation_unit_height = maxf(0.001, unit_height)
+	position.y = float(elevation_units) * elevation_unit_height
+
+func get_edge_elevation_units(_edge: int) -> int:
+	return elevation_units
+
+func can_traverse_edge(_edge: int, method: HexInfo.TraversalTag) -> bool:
+	return is_traversable(method)
+
+func get_surface_height_at(_world_position: Vector3) -> float:
+	return global_position.y
+
 func _ready() -> void:
 	ground_hex_mesh = find_child("hex_*", true) as MeshInstance3D;
 	set_explored(false)

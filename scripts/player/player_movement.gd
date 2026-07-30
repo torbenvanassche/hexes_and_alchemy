@@ -19,6 +19,7 @@ var _has_explored_hex := false
 var _last_traversable_hex: HexBase
 var _last_safe_position := Vector3.ZERO
 var _has_safe_position := false
+const SLOPE_SURFACE_COLLISION_MASK := 1 << 3
 
 func _ready() -> void:
 	player = get_parent() as PlayerController
@@ -28,8 +29,10 @@ func physics_process(delta: float) -> void:
 		return
 	
 	if Manager.instance.input_moves_player():
+		_follow_terrain()
 		_handle_movement(delta)
 		player.move_and_slide()
+		_follow_terrain()
 
 func _handle_movement(delta: float) -> void:
 	var input := Vector2(
@@ -94,11 +97,12 @@ func _can_move_to_next_hex(grid: HexGrid, move_dir: Vector3, next_velocity: Vect
 	if edge_probe_hex == null:
 		edge_probe_hex = target_hex
 	
-	if target_hex != current_hex and not _is_hex_traversable(target_hex):
+	if target_hex != current_hex and not grid.can_traverse_between(current_hex, target_hex, _get_traversal_tag()):
 		_stop()
 		return false
 	
-	if edge_probe_hex != current_hex and not _is_hex_traversable(edge_probe_hex):
+	var probe_origin := target_hex if target_hex != current_hex else current_hex
+	if edge_probe_hex != probe_origin and not grid.can_traverse_between(probe_origin, edge_probe_hex, _get_traversal_tag()):
 		_stop()
 		return false
 	
@@ -111,6 +115,28 @@ func _can_move_to_next_hex(grid: HexGrid, move_dir: Vector3, next_velocity: Vect
 func _stop() -> void:
 	player.velocity.x = 0.0
 	player.velocity.z = 0.0
+
+func _follow_terrain() -> void:
+	var grid := SceneManager.get_active_scene().node as HexGrid
+	if grid == null:
+		return
+	var hex := grid.get_hex_at_world_position(player.global_position, 0.0)
+	if hex == null or not _is_hex_traversable(hex):
+		return
+	player.global_position.y = _get_surface_height(hex)
+	player.velocity.y = 0.0
+
+func _get_surface_height(hex: HexBase) -> float:
+	if hex is HexSlope:
+		var ray_start := player.global_position + Vector3.UP * 3.0
+		var ray_end := player.global_position - Vector3.UP * 3.0
+		var query := PhysicsRayQueryParameters3D.create(
+			ray_start, ray_end, SLOPE_SURFACE_COLLISION_MASK, [player.get_rid()]
+		)
+		var hit := player.get_world_3d().direct_space_state.intersect_ray(query)
+		if not hit.is_empty():
+			return (hit["position"] as Vector3).y
+	return hex.get_surface_height_at(player.global_position)
 
 func update_navigation_state(grid: HexGrid) -> HexBase:
 	if player == null or grid == null:

@@ -43,10 +43,10 @@ func can_interact() -> bool:
 	return has_visible_quest_activity() or (not _quest_running and not get_filtered_quest_types().is_empty())
 
 func get_filtered_quest_types(active_state: int = state_machine.get_current_state_index()) -> Array[String]:
-	var quest_types := super.get_filtered_quest_types(active_state)
+	var filtered_types: Array[String] = super.get_filtered_quest_types(active_state)
 	if depth >= max_depth:
-		quest_types.erase("deepen")
-	return quest_types
+		filtered_types.erase("deepen")
+	return filtered_types
 
 func get_required_supplies(quest_type_key: String) -> Dictionary[ItemInfo, int]:
 	var profile := get_profile(quest_type_key)

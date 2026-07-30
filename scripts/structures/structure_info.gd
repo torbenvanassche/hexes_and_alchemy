@@ -37,10 +37,10 @@ func initialize() -> void:
 func get_display_name() -> String:
 	if translation_key_name == "":
 		return id.capitalize()
-	var translated := tr(translation_key_name)
-	if translated == translation_key_name:
+	var translated_name := tr(translation_key_name)
+	if translated_name == translation_key_name:
 		return id.capitalize()
-	return translated
+	return translated_name
 	
 func get_max_count(tile_count: int) -> int:
 	return round(max_per_region_size.sample(tile_count))
