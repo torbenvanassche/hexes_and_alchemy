@@ -23,7 +23,7 @@ SceneManager="*uid://bbh3tqcpujraq"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/bitmap_editor/plugin.cfg", "res://addons/settlement_designer/plugin.cfg")
+enabled=PackedStringArray("res://addons/bitmap_editor/plugin.cfg", "res://addons/terrain_tile_setup/plugin.cfg")
 
 [input]
 
