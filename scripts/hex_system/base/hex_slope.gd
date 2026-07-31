@@ -26,6 +26,7 @@ const EDGE_DIRECTIONS: Array[Vector3] = [
 	Vector3(0.5, 0.0, 0.8660254),
 ]
 const SURFACE_COLLISION_LAYER := 1 << 3
+static var _surface_collision_shape_cache: Dictionary = {}
 
 func _ready() -> void:
 	super()
@@ -69,6 +70,12 @@ func _add_surface_collision() -> void:
 	if ground_hex_mesh == null or ground_hex_mesh.mesh == null:
 		return
 
+	var mesh_rid := ground_hex_mesh.mesh.get_rid()
+	var surface_shape := _surface_collision_shape_cache.get(mesh_rid) as Shape3D
+	if surface_shape == null:
+		surface_shape = ground_hex_mesh.mesh.create_trimesh_shape()
+		_surface_collision_shape_cache[mesh_rid] = surface_shape
+
 	var body := StaticBody3D.new()
 	body.name = "SlopeSurface"
 	body.collision_layer = SURFACE_COLLISION_LAYER
@@ -76,7 +83,7 @@ func _add_surface_collision() -> void:
 	body.set_meta("slope_surface", true)
 
 	var collision_shape := CollisionShape3D.new()
-	collision_shape.shape = ground_hex_mesh.mesh.create_trimesh_shape()
+	collision_shape.shape = surface_shape
 	body.add_child(collision_shape)
 	ground_hex_mesh.add_child(body)
 	static_body = body

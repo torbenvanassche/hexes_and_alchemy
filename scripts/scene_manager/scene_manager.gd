@@ -58,7 +58,6 @@ func get_or_create_scene(scene_name: String) -> SceneInfo:
 		previous_scene_info = DataManager.instance.node_to_info(_active_scene.node);
 		if previous_scene_info != null and previous_scene_info.id == scene_name:
 			return null; 
-		_active_scene.set_processing(false);
 	
 	var scene_info: SceneInfo = DataManager.instance.get_scene_by_name(scene_name);
 	if scene_info.is_cached:

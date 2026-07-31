@@ -18,6 +18,7 @@ var scene_data: Array[SceneInfo] = []
 var _scene_lookup: Dictionary[StringName, SceneInfo] = {}
 var _item_lookup: Dictionary[StringName, ItemInfo] = {}
 var _node_lookup: Dictionary[int, SceneInfo] = {}
+var _region_scene_tables: Dictionary[RegionInfo, Dictionary] = {}
 
 var ocean_descriptor: RegionInfo = preload("res://resources/region_info/ocean.tres");
 
@@ -44,6 +45,21 @@ func _ready() -> void:
 	
 	for item in items:
 		_index_item_info(item)
+
+	_warm_world_scene_cache()
+
+func _warm_world_scene_cache() -> void:
+	var world_scenes: Array[SceneInfo] = []
+	for hex_info in hexes:
+		world_scenes.append(hex_info)
+	for structure_info in structures:
+		world_scenes.append(structure_info)
+	for scene_info in world_scenes:
+		if scene_info == null or scene_info.packed_scene == null:
+			continue
+		if scene_info.is_cached or scene_info.is_queued:
+			continue
+		SceneManager.scene_cache.queue(scene_info)
 
 func _index_scene_info(scene_info: SceneInfo) -> void:
 	if scene_info == null:
@@ -138,6 +154,26 @@ func pick_scene_for_region(region: RegionInfo, rng: RandomNumberGenerator = null
 		Debug.message("No region found for scene")
 		return null
 
+	var table := _get_region_scene_table(region)
+	var total_weight := float(table["total_weight"])
+	var cumulative: Array[float] = table["cumulative"]
+	var valid_scenes: Array[HexInfo] = table["scenes"]
+
+	if total_weight <= 0.0:
+		Debug.message("Total weight was <= 0")
+		return null
+
+	var r := (rng.randf() if rng != null else randf()) * total_weight
+	for i in cumulative.size():
+		if r <= cumulative[i]:
+			return valid_scenes[i]
+
+	return valid_scenes[-1]
+
+func _get_region_scene_table(region: RegionInfo) -> Dictionary:
+	if _region_scene_tables.has(region):
+		return _region_scene_tables[region]
+
 	var total_weight := 0.0
 	var cumulative: Array[float] = []
 	var valid_scenes: Array[HexInfo] = []
@@ -154,16 +190,13 @@ func pick_scene_for_region(region: RegionInfo, rng: RandomNumberGenerator = null
 		cumulative.append(total_weight)
 		valid_scenes.append(info)
 
-	if total_weight <= 0.0:
-		Debug.message("Total weight was <= 0")
-		return null
-
-	var r := (rng.randf() if rng != null else randf()) * total_weight
-	for i in cumulative.size():
-		if r <= cumulative[i]:
-			return valid_scenes[i]
-
-	return valid_scenes[-1]
+	var table := {
+		"total_weight": total_weight,
+		"cumulative": cumulative,
+		"scenes": valid_scenes,
+	}
+	_region_scene_tables[region] = table
+	return table
 
 func get_ocean_descriptor() -> RegionInfo:
 	return ocean_descriptor

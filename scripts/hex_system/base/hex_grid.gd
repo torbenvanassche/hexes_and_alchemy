@@ -13,6 +13,11 @@ var _spacing: float = 0.25
 @export_range(0, 8, 1) var player_chunk_generation_radius := 1
 @export var grid_name: String;
 
+@export_group("Chunk Streaming")
+@export_range(0.25, 16.0, 0.25) var runtime_streaming_budget_ms := 3.0
+@export_range(0.25, 33.0, 0.25) var initial_streaming_budget_ms := 10.0
+@export_range(1, 256, 1) var max_streaming_steps_per_frame := 128
+
 ## Set this to reproduce a specific world. Leave it at 0 to generate a new seed on each run.
 @export_group("World Seed")
 @export var world_seed: int = 0;
@@ -58,7 +63,16 @@ var tiles: Dictionary[Vector3i, SceneInstance] = {}
 var elevation_areas: Dictionary[int, ElevationArea] = {}
 var generated_regions: Dictionary[Vector2i, RegionInfo] = {}
 var generated_elevations: Dictionary[Vector2i, int] = {}
+var _elevation_feature_cache: Dictionary[Vector3i, Vector4] = {}
+var _cached_spacing := Vector2.ZERO
 var _pathfinder_rebuild_queued := false
+var _chunk_generation_queue: Array[Dictionary] = []
+var _tile_instantiation_queue: Array[Dictionary] = []
+var _chunk_post_process_queue: Array[Dictionary] = []
+var _pending_structure_hexes: Dictionary[Vector3i, bool] = {}
+var _structure_generation_queue: Array[Dictionary] = []
+var _initial_generation_completed := false
+var _cached_slope_profile: HexSlope
 @onready var pathfinder: HexAStar = HexAStar.new(self)
 
 signal generated();
@@ -83,6 +97,7 @@ func _init() -> void:
 
 func _ready() -> void:
 	_initialize_generation_seed()
+	_cached_spacing = GridUtils.get_spacing(RADIUS_IN, _spacing, pointy_top)
 
 	if use_global_regions:
 		region_options = DataManager.instance.regions.duplicate()
@@ -94,6 +109,38 @@ func _ready() -> void:
 
 	for chunk_coords in _get_initial_chunk_coords():
 		generate_chunk(chunk_coords.x, chunk_coords.y)
+
+func _process(_delta: float) -> void:
+	_process_streaming_work()
+
+func _exit_tree() -> void:
+	if is_instance_valid(_cached_slope_profile):
+		_cached_slope_profile.free()
+	_cached_slope_profile = null
+
+func _process_streaming_work() -> void:
+	var budget_ms := initial_streaming_budget_ms if not _initial_generation_completed else runtime_streaming_budget_ms
+	var deadline_usec := Time.get_ticks_usec() + int(budget_ms * 1000.0)
+	var steps := 0
+
+	while steps < max_streaming_steps_per_frame:
+		var did_work := false
+		if not _tile_instantiation_queue.is_empty():
+			did_work = _process_tile_instantiation_step()
+		elif not _chunk_generation_queue.is_empty():
+			did_work = _process_chunk_generation_step()
+		elif not _chunk_post_process_queue.is_empty():
+			did_work = _process_chunk_post_process_step()
+		elif not _pending_structure_hexes.is_empty():
+			did_work = _prepare_structure_generation_jobs()
+		elif not _structure_generation_queue.is_empty():
+			did_work = _process_structure_generation_step()
+
+		if not did_work:
+			break
+		steps += 1
+		if Time.get_ticks_usec() >= deadline_usec:
+			break
 
 func _get_initial_chunk_coords() -> Array[Vector2i]:
 	var coords: Array[Vector2i] = []
@@ -232,7 +279,7 @@ func create_hex(
 	var hex := scene_instance.node;
 	
 	hex.region = region;
-	var spacing := GridUtils.get_spacing(RADIUS_IN, _spacing, pointy_top);
+	var spacing := _cached_spacing
 
 	hex.grid_id = grid_id;
 	hex.cube_id = GridUtils.offset_to_cube(grid_id, pointy_top)
@@ -286,19 +333,12 @@ func get_generated_elevation_units(grid_id: Vector2i) -> int:
 	return elevation
 
 func _get_elevation_feature_units(grid_id: Vector2i, cell: Vector2i, cell_size: int) -> int:
-	var rng := create_rng("elevation_feature_v1:%s:%s" % [cell.x, cell.y])
-	if rng.randf() > elevation_feature_density:
+	var feature := _get_cached_elevation_feature(cell, cell_size)
+	var outer_radius := int(feature.z)
+	if outer_radius < 0:
 		return 0
-
-	var center := Vector2i(
-		cell.x * cell_size + rng.randi_range(0, cell_size - 1),
-		cell.y * cell_size + rng.randi_range(0, cell_size - 1)
-	)
-	var outer_radius := rng.randi_range(
-		mini(elevation_min_radius, elevation_max_radius),
-		maxi(elevation_min_radius, elevation_max_radius)
-	)
-	var plateau_radius := maxi(2, floori(float(outer_radius) / 2.0))
+	var center := Vector2i(int(feature.x), int(feature.y))
+	var plateau_radius := int(feature.w)
 	var distance := GridUtils.cube_distance(
 		GridUtils.offset_to_cube(grid_id, pointy_top),
 		GridUtils.offset_to_cube(center, pointy_top)
@@ -309,6 +349,30 @@ func _get_elevation_feature_units(grid_id: Vector2i, cell: Vector2i, cell_size: 
 	if distance <= outer_radius:
 		return 1
 	return 0
+
+func _get_cached_elevation_feature(cell: Vector2i, cell_size: int) -> Vector4:
+	var cache_key := Vector3i(cell.x, cell.y, cell_size)
+	if _elevation_feature_cache.has(cache_key):
+		return _elevation_feature_cache[cache_key]
+
+	var rng := create_rng("elevation_feature_v1:%s:%s" % [cell.x, cell.y])
+	if rng.randf() > elevation_feature_density:
+		var empty_feature := Vector4(0.0, 0.0, -1.0, 0.0)
+		_elevation_feature_cache[cache_key] = empty_feature
+		return empty_feature
+
+	var center := Vector2i(
+		cell.x * cell_size + rng.randi_range(0, cell_size - 1),
+		cell.y * cell_size + rng.randi_range(0, cell_size - 1)
+	)
+	var outer_radius := rng.randi_range(
+		mini(elevation_min_radius, elevation_max_radius),
+		maxi(elevation_min_radius, elevation_max_radius)
+	)
+	var plateau_radius := maxi(2, floori(float(outer_radius) / 2.0))
+	var feature := Vector4(center.x, center.y, outer_radius, plateau_radius)
+	_elevation_feature_cache[cache_key] = feature
+	return feature
 
 func _limit_elevation_at_flat_boundaries(grid_id: Vector2i, elevation: int) -> int:
 	if elevation < 2:
@@ -417,28 +481,143 @@ func expand_from_chunk(cx: int, cy: int, dir: int) -> void:
 
 	generate_chunk(new_coords.x, new_coords.y);
 	
-func _post_process_chunk(chunk: HexChunk) -> void:
-	_resolve_slope_entrances(chunk)
+func _queue_chunk_post_processing(chunk: HexChunk) -> void:
+	_chunk_post_process_queue.append({
+		"chunk": chunk,
+		"stage": 0,
+		"index": 0,
+		"slope_candidates": chunk.hexes.duplicate(),
+	})
 
-	var touched_region_instances: Array[RegionInstance] = []
-	for hex: SceneInstance in chunk.hexes:
-		_assign_region_instance(hex.node);
-		var region_instance := (hex.node as HexBase).region_instance
-		if region_instance != null and not touched_region_instances.has(region_instance):
-			touched_region_instances.append(region_instance)
-	
-	if initialized:
-		if chunk.generate_structures:
-			for region_instance in touched_region_instances:
-				region_instance.generate_structures_for_region()
-		_queue_pathfinder_rebuild()
-	
-	var all_chunks_generated: bool = true
-	for c in chunks.keys():
-		if not chunks[c].is_generated:
-			all_chunks_generated = false;
-	if all_chunks_generated:
-		generated.emit();
+func _process_chunk_post_process_step() -> bool:
+	if _chunk_post_process_queue.is_empty():
+		return false
+
+	var job: Dictionary = _chunk_post_process_queue[0]
+	var chunk := job["chunk"] as HexChunk
+	if not is_instance_valid(chunk):
+		_chunk_post_process_queue.pop_front()
+		return true
+
+	var stage := int(job["stage"])
+	var index := int(job["index"])
+
+	if stage == 0:
+		if initialized and generate_elevation and generate_slope_entrances:
+			var slope_candidates: Array = job["slope_candidates"]
+			if index < slope_candidates.size():
+				var slope_profile := _get_cached_slope_profile()
+				if slope_profile != null:
+					_try_replace_with_slope_entrance(slope_candidates[index], slope_profile)
+				job["index"] = index + 1
+				return true
+			_reserve_slope_approaches(chunk)
+		job["stage"] = 1
+		job["index"] = 0
+		return true
+
+	if stage == 1:
+		if index < chunk.hexes.size():
+			var scene_instance := chunk.hexes[index] as SceneInstance
+			if scene_instance != null:
+				_assign_region_instance(scene_instance.node as HexBase)
+			job["index"] = index + 1
+			return true
+		job["stage"] = 2
+		job["index"] = 0
+		return true
+
+	if stage == 2:
+		if initialized and index < chunk.hexes.size():
+			var scene_instance := chunk.hexes[index] as SceneInstance
+			var hex := scene_instance.node as HexBase if scene_instance != null else null
+			if hex != null and hex.is_inside_tree():
+				pathfinder.update_hex(hex)
+			job["index"] = index + 1
+			return true
+		job["stage"] = 3
+		job["index"] = 0
+		return true
+
+	if initialized and chunk.generate_structures:
+		for scene_instance: SceneInstance in chunk.hexes:
+			var hex := scene_instance.node as HexBase
+			if hex != null:
+				_pending_structure_hexes[hex.cube_id] = true
+
+	chunk.is_post_processed = true
+	_chunk_post_process_queue.pop_front()
+	_check_initial_generation_complete()
+	return true
+
+func _prepare_structure_generation_jobs() -> bool:
+	if _pending_structure_hexes.is_empty():
+		return false
+
+	var grouped_candidates: Dictionary = {}
+	for cube_id: Vector3i in _pending_structure_hexes.keys():
+		var hex := get_hex_at_cube_id(cube_id)
+		if hex == null or hex.region_instance == null:
+			continue
+		if not grouped_candidates.has(hex.region_instance):
+			grouped_candidates[hex.region_instance] = [] as Array[Vector3i]
+		var candidates := grouped_candidates[hex.region_instance] as Array[Vector3i]
+		candidates.append(cube_id)
+	_pending_structure_hexes.clear()
+
+	var prepared_jobs: Array[Dictionary] = []
+	for region_instance: RegionInstance in grouped_candidates.keys():
+		var candidates := grouped_candidates[region_instance] as Array[Vector3i]
+		candidates.sort_custom(_sort_cube_ids)
+		prepared_jobs.append({
+			"region_instance": region_instance,
+			"candidates": candidates,
+			"generation_state": {},
+		})
+	prepared_jobs.sort_custom(
+		func(a: Dictionary, b: Dictionary) -> bool:
+			var a_candidates := a["candidates"] as Array[Vector3i]
+			var b_candidates := b["candidates"] as Array[Vector3i]
+			return _sort_cube_ids(a_candidates[0], b_candidates[0])
+	)
+	_structure_generation_queue.append_array(prepared_jobs)
+	return true
+
+func _process_structure_generation_step() -> bool:
+	if _structure_generation_queue.is_empty():
+		return false
+	var job: Dictionary = _structure_generation_queue[0]
+	var region_instance := job["region_instance"] as RegionInstance
+	if region_instance == null:
+		_structure_generation_queue.pop_front()
+		return true
+	var candidates := job["candidates"] as Array[Vector3i]
+	if not _get_instances_for_region(region_instance.info).has(region_instance):
+		for cube_id in candidates:
+			_pending_structure_hexes[cube_id] = true
+		_structure_generation_queue.pop_front()
+		return true
+
+	var generation_state := job["generation_state"] as Dictionary
+	if generation_state.is_empty():
+		generation_state = region_instance.create_structure_generation_job(candidates)
+		job["generation_state"] = generation_state
+		if generation_state.is_empty():
+			_structure_generation_queue.pop_front()
+			return true
+
+	if region_instance.process_structure_generation_job(generation_state):
+		_structure_generation_queue.pop_front()
+	return true
+
+func _check_initial_generation_complete() -> void:
+	if _initial_generation_completed or chunks.is_empty():
+		return
+	for chunk: HexChunk in chunks.values():
+		if not chunk.is_post_processed:
+			return
+	_initial_generation_completed = true
+	generated.emit()
 
 func _queue_pathfinder_rebuild() -> void:
 	if _pathfinder_rebuild_queued:
@@ -454,14 +633,18 @@ func _rebuild_pathfinder() -> void:
 func _resolve_slope_entrances(chunk: HexChunk) -> void:
 	if not initialized or not generate_elevation or not generate_slope_entrances:
 		return
-	var slope_profile := HALF_SLOPE_INFO.packed_scene.instantiate() as HexSlope
+	var slope_profile := _get_cached_slope_profile()
 	if slope_profile == null:
 		return
 
 	for scene_instance: SceneInstance in chunk.hexes.duplicate():
 		_try_replace_with_slope_entrance(scene_instance, slope_profile)
-	slope_profile.free()
 	_reserve_slope_approaches(chunk)
+
+func _get_cached_slope_profile() -> HexSlope:
+	if not is_instance_valid(_cached_slope_profile):
+		_cached_slope_profile = HALF_SLOPE_INFO.packed_scene.instantiate() as HexSlope
+	return _cached_slope_profile
 
 func _try_replace_with_slope_entrance(
 	scene_instance: SceneInstance,
@@ -502,7 +685,7 @@ func _try_replace_with_slope_entrance(
 func _ensure_elevated_areas_have_entrances() -> void:
 	if not generate_elevation or not generate_slope_entrances:
 		return
-	var slope_profile := HALF_SLOPE_INFO.packed_scene.instantiate() as HexSlope
+	var slope_profile := _get_cached_slope_profile()
 	if slope_profile == null:
 		return
 
@@ -519,12 +702,10 @@ func _ensure_elevated_areas_have_entrances() -> void:
 				break
 			area.entrance_count += 1
 
-	slope_profile.free()
-
 func ensure_elevated_areas_reachable_from(start_hex: HexBase) -> void:
 	if start_hex == null or not generate_elevation or not generate_slope_entrances:
 		return
-	var slope_profile := HALF_SLOPE_INFO.packed_scene.instantiate() as HexSlope
+	var slope_profile := _get_cached_slope_profile()
 	if slope_profile == null:
 		return
 
@@ -563,8 +744,6 @@ func ensure_elevated_areas_reachable_from(start_hex: HexBase) -> void:
 					break
 				area.entrance_count += 1
 				reachable_tiles = _get_walk_reachable_tiles(start_hex)
-
-	slope_profile.free()
 
 func _get_walk_reachable_tiles(start_hex: HexBase) -> Dictionary:
 	var reachable: Dictionary = {start_hex.cube_id: true}
@@ -851,6 +1030,10 @@ func _assign_region_instance(hex: HexBase) -> void:
 		1:
 			touching_instances[0].add_hex(hex);
 		_:
+			touching_instances.sort_custom(
+				func(a: RegionInstance, b: RegionInstance) -> bool:
+					return a.hexes.size() > b.hexes.size()
+			)
 			var primary := touching_instances[0];
 			primary.add_hex(hex);
 			for i in range(1, touching_instances.size()):
@@ -867,24 +1050,69 @@ func generate_chunk(cx: int, cy: int) -> HexChunk:
 	chunks[key] = chunk;
 	add_child(chunk)
 	chunk.generate_structures = not protected_chunks.has(key)
-	chunk.generated.connect(_post_process_chunk)
-
-	var start_x := cx * chunk_size.x
-	var start_y := cy * chunk_size.y
-	for gy in range(start_y, start_y + chunk_size.y):
-		for gx in range(start_x, start_x + chunk_size.x):
-			var grid_id := Vector2i(gx, gy)
-			var region := _get_region_for_grid_id(grid_id)
-			var scene_rng := create_rng("tile:%s:%s" % [gx, gy])
-			var scene_info := DataManager.instance.pick_scene_for_region(region, scene_rng)
-			if scene_info == null:
-				continue
-			var elevation_units := get_generated_elevation_units(grid_id)
-			scene_info.queue(
-				func(sI: SceneInfo) -> void:
-					chunk.add_hex(create_hex(grid_id, sI, region, elevation_units))
-			)
+	chunk.generated.connect(_queue_chunk_post_processing, CONNECT_ONE_SHOT)
+	_chunk_generation_queue.append({
+		"chunk": chunk,
+		"next_cell": 0,
+	})
 	return chunk
+
+func _process_chunk_generation_step() -> bool:
+	if _chunk_generation_queue.is_empty():
+		return false
+
+	var job: Dictionary = _chunk_generation_queue[0]
+	var chunk := job["chunk"] as HexChunk
+	if not is_instance_valid(chunk):
+		_chunk_generation_queue.pop_front()
+		return true
+
+	var next_cell := int(job["next_cell"])
+	var cell_count := chunk_size.x * chunk_size.y
+	if next_cell >= cell_count:
+		_chunk_generation_queue.pop_front()
+		return true
+
+	var local_x := next_cell % chunk_size.x
+	var local_y := next_cell / chunk_size.x
+	var gx := chunk.chunk_x * chunk_size.x + local_x
+	var gy := chunk.chunk_y * chunk_size.y + local_y
+	var grid_id := Vector2i(gx, gy)
+	var region := _get_region_for_grid_id(grid_id)
+	var scene_rng := create_rng("tile:%s:%s" % [gx, gy])
+	var scene_info := DataManager.instance.pick_scene_for_region(region, scene_rng)
+	job["next_cell"] = next_cell + 1
+
+	if scene_info == null:
+		Debug.err("No tile scene could be generated at %s." % grid_id)
+		return true
+
+	var elevation_units := get_generated_elevation_units(grid_id)
+	scene_info.queue(
+		func(sI: SceneInfo) -> void:
+			_tile_instantiation_queue.append({
+				"chunk": chunk,
+				"grid_id": grid_id,
+				"scene_info": sI,
+				"region": region,
+				"elevation_units": elevation_units,
+			})
+	)
+	return true
+
+func _process_tile_instantiation_step() -> bool:
+	if _tile_instantiation_queue.is_empty():
+		return false
+	var tile_job: Dictionary = _tile_instantiation_queue.pop_front()
+	var chunk := tile_job["chunk"] as HexChunk
+	var scene_info := tile_job["scene_info"] as SceneInfo
+	var region := tile_job["region"] as RegionInfo
+	if not is_instance_valid(chunk) or scene_info == null:
+		return true
+	var grid_id := tile_job["grid_id"] as Vector2i
+	var elevation_units := int(tile_job["elevation_units"])
+	chunk.add_hex(create_hex(grid_id, scene_info, region, elevation_units))
+	return true
 
 func generate_chunks_around_grid_id(grid_id: Vector2i, radius: int = -1) -> void:
 	if not generate_chunks_near_player:
@@ -892,10 +1120,18 @@ func generate_chunks_around_grid_id(grid_id: Vector2i, radius: int = -1) -> void
 	if radius < 0:
 		radius = player_chunk_generation_radius
 	var center_chunk := grid_to_chunk_coords(grid_id)
+
+	var requested_chunks: Array[Vector2i] = []
 	for cy in range(center_chunk.y - radius, center_chunk.y + radius + 1):
 		for cx in range(center_chunk.x - radius, center_chunk.x + radius + 1):
 			if not has_chunk(cx, cy):
-				generate_chunk(cx, cy)
+				requested_chunks.append(Vector2i(cx, cy))
+	requested_chunks.sort_custom(
+		func(a: Vector2i, b: Vector2i) -> bool:
+			return a.distance_squared_to(center_chunk) < b.distance_squared_to(center_chunk)
+	)
+	for chunk_coords in requested_chunks:
+		generate_chunk(chunk_coords.x, chunk_coords.y)
 	
 func get_hex_at_world_position(world_pos: Vector3, max_distance: float = 1.2) -> HexBase:
 	var approx_cube := world_to_cube_id(world_pos)

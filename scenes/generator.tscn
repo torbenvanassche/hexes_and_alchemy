@@ -4,6 +4,7 @@
 [ext_resource type="Resource" uid="uid://c1ypx4o3q73t0" path="res://resources/structure_info/settlement.tres" id="2_w5vnv"]
 [ext_resource type="Resource" uid="uid://ckpmn3cutb7an" path="res://resources/structure_info/spawnable_mine.tres" id="3_mine"]
 [ext_resource type="Resource" uid="uid://dijohak4mpf7n" path="res://resources/structure_info/forest.tres" id="4_forest"]
+[ext_resource type="Script" uid="uid://btydeamnhd6x" path="res://scripts/structures/structure_info.gd" id="5_structure_info"]
 
 [node name="generator" type="Node3D" unique_id=1069964981 node_paths=PackedStringArray("target_position")]
 script = ExtResource("1_5yxne")
@@ -16,6 +17,6 @@ protected_chunk_elevation_buffer = 2
 slope_entrance_density = 0.5
 minimum_slope_entrances_per_area = 3
 elevated_tiles_per_extra_slope_entrance = 8
-required_starting_structures = Array[ExtResource("1_5yxne")]([ExtResource("3_mine"), ExtResource("4_forest")])
+required_starting_structures = Array[ExtResource("5_structure_info")]([ExtResource("3_mine"), ExtResource("4_forest")])
 
 [node name="Node3D" type="Node3D" parent="." unique_id=2022336031]

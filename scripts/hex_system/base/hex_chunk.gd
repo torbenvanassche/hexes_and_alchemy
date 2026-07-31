@@ -12,6 +12,7 @@ var bounds: AABB
 var _bounds_initialized := false
 
 var is_generated: bool = false;
+var is_post_processed: bool = false
 signal generated(chunk: HexChunk);
 
 var generate_structures: bool = true;

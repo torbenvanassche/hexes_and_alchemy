@@ -87,8 +87,9 @@ func _can_move_to_next_hex(grid: HexGrid, move_dir: Vector3, next_velocity: Vect
 		return false
 	
 	var next_position := player.global_position + Vector3(next_velocity.x, 0.0, next_velocity.z) * delta
-	var target_hex := grid.get_hex_at_world_position(next_position, 0.0)
 	var edge_probe_position := next_position + move_dir.normalized() * water_edge_stop_distance
+	grid.generate_chunks_around_grid_id(grid.world_to_grid_id(edge_probe_position))
+	var target_hex := grid.get_hex_at_world_position(next_position, 0.0)
 	var edge_probe_hex := grid.get_hex_at_world_position(edge_probe_position, 0.0)
 	
 	if target_hex == null:

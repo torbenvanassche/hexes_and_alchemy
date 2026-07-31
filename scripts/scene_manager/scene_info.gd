@@ -55,9 +55,10 @@ func set_process_mode(instance: SceneInstance, b: bool) -> void:
 	instance.set_processing(b)
 	
 func get_instance() -> SceneInstance:
-	get_live_instances()
-	if is_unique and instances.size() > 0:
-		return instances[0]
+	if is_unique:
+		get_live_instances()
+		if instances.size() > 0:
+			return instances[0]
 	var scene_node: Node = packed_scene.instantiate()
 	var instance: SceneInstance = SceneInstance.new(scene_node, self);
 	instance.set_processing(true)

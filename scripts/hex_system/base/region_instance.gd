@@ -9,6 +9,9 @@ var hex_grid: HexGrid;
 var structure_caps: Dictionary[StructureInfo, int] = {}
 var structure_counts: Dictionary[StructureInfo, int] = {}
 
+var _cached_seed_key := ""
+var _seed_key_dirty := true
+
 func _init(p_info: RegionInfo, grid: HexGrid) -> void:
 	hex_grid = grid;
 	info = p_info
@@ -17,6 +20,7 @@ func add_hex(hex: HexBase) -> void:
 	hexes[hex.cube_id] = hex
 	hex.region_instance = self;
 	hex.apply_region(info)
+	_seed_key_dirty = true
 
 func has_hex(coord: Vector3i) -> bool:
 	return hexes.has(coord)
@@ -26,9 +30,11 @@ func merge_from(other: RegionInstance) -> void:
 		add_hex(other.hexes[coord])
 	for coord in other.structures:
 		structures[coord] = other.structures[coord]
+	_seed_key_dirty = true
 		
 func remove_hex(coord: Vector3i) -> void:
 	hexes.erase(coord);
+	_seed_key_dirty = true
 		
 func _required_distance(a: StructureInfo, b: StructureInfo) -> int:
 	return (
@@ -69,21 +75,26 @@ func _pick_structure(rng: RandomNumberGenerator) -> StructureInfo:
 	return null
 
 func _get_seed_key() -> String:
+	if not _seed_key_dirty:
+		return _cached_seed_key
+
 	var keys: Array[Vector3i] = hexes.keys()
-	keys.sort_custom(
-		func(a: Vector3i, b: Vector3i) -> bool:
-			if a.x != b.x:
-				return a.x < b.x
-			if a.y != b.y:
-				return a.y < b.y
-			return a.z < b.z
-	)
+	keys.sort_custom(_sort_hex_ids)
 
 	var coord_hash := 0
 	for key: Vector3i in keys:
 		coord_hash = int((coord_hash * 31 + key.x * 73856093 + key.y * 19349663 + key.z * 83492791) % 2147483647)
 
-	return "%s:%s:%s" % [info.resource_path, hexes.size(), coord_hash]
+	_cached_seed_key = "%s:%s:%s" % [info.resource_path, hexes.size(), coord_hash]
+	_seed_key_dirty = false
+	return _cached_seed_key
+
+func _sort_hex_ids(a: Vector3i, b: Vector3i) -> bool:
+	if a.x != b.x:
+		return a.x < b.x
+	if a.y != b.y:
+		return a.y < b.y
+	return a.z < b.z
 
 func _shuffle_hexes(values: Array[Vector3i], rng: RandomNumberGenerator) -> void:
 	for i in range(values.size() - 1, 0, -1):
@@ -92,9 +103,10 @@ func _shuffle_hexes(values: Array[Vector3i], rng: RandomNumberGenerator) -> void
 		values[i] = values[swap_idx]
 		values[swap_idx] = temp
 
-func _compute_structure_caps() -> void:
+func _compute_structure_caps(region_size: int = -1) -> void:
 	structure_caps.clear()
-	var region_size := _get_structure_generation_hexes().size()
+	if region_size < 0:
+		region_size = _get_structure_generation_hexes().size()
 
 	for s: StructureInfo in info.structures.keys():
 		var cap := s.get_max_count(region_size)
@@ -185,16 +197,27 @@ func _get_structure_generation_hexes() -> Array[Vector3i]:
 			generation_hexes.append(hex_id)
 	return generation_hexes
 
-func generate_structures_for_region() -> void:
+func create_structure_generation_job(candidate_hexes: Array[Vector3i] = []) -> Dictionary:
 	if info.structures.is_empty():
-		return
+		return {}
 
-	_compute_structure_caps()
+	var generation_hexes := _get_structure_generation_hexes()
+	_compute_structure_caps(generation_hexes.size())
 	var rng := hex_grid.create_rng("structures:%s" % _get_seed_key())
 
-	var available_hexes := _get_structure_generation_hexes()
+	var available_hexes: Array[Vector3i] = []
+	if candidate_hexes.is_empty():
+		available_hexes = generation_hexes
+	else:
+		for hex_id in candidate_hexes:
+			if not hexes.has(hex_id):
+				continue
+			var candidate_hex := hexes[hex_id] as HexBase
+			if candidate_hex != null and hex_grid.can_generate_structures_on_hex(candidate_hex):
+				available_hexes.append(hex_id)
 	if available_hexes.is_empty():
-		return
+		return {}
+	available_hexes.sort_custom(_sort_hex_ids)
 	_shuffle_hexes(available_hexes, rng)
 
 	var max_total := 0
@@ -206,47 +229,67 @@ func generate_structures_for_region() -> void:
 		existing_total += count
 
 	var density := clampf(info.structure_density, 0.0, 1.0)
-	var expected_total := float(min(max_total, available_hexes.size())) * density
+	var expected_total := float(min(max_total, generation_hexes.size())) * density
 	var target_total := int(floor(expected_total))
 	var fractional_target := expected_total - float(target_total)
 	if fractional_target > 0.0 and rng.randf() < fractional_target:
 		target_total += 1
 
 	var target_count := maxi(0, target_total - existing_total)
-	var processed_slots := 0
+	if target_count <= 0:
+		return {}
 
-	while processed_slots < target_count and not available_hexes.is_empty():
-		processed_slots += 1
-		var structure := _pick_structure(rng)
-		if structure == null:
+	return {
+		"rng": rng,
+		"available_hexes": available_hexes,
+		"remaining_slots": target_count,
+	}
+
+func process_structure_generation_job(job: Dictionary) -> bool:
+	if job.is_empty():
+		return true
+
+	var remaining_slots := int(job["remaining_slots"])
+	var available_hexes := job["available_hexes"] as Array[Vector3i]
+	if remaining_slots <= 0 or available_hexes.is_empty():
+		return true
+
+	job["remaining_slots"] = remaining_slots - 1
+	var rng := job["rng"] as RandomNumberGenerator
+	var structure := _pick_structure(rng)
+	if structure == null:
+		return int(job["remaining_slots"]) <= 0
+
+	var placed := false
+	var start_index := rng.randi_range(0, available_hexes.size() - 1)
+	for offset in available_hexes.size():
+		var hex_id: Vector3i = available_hexes[(start_index + offset) % available_hexes.size()]
+		var hex := hexes[hex_id] as HexBase
+
+		if hex == null or not hex.can_generate:
+			continue
+		if not _can_place_structure_at(hex_id, structure):
 			continue
 
-		var placed := false
+		structures[hex_id] = structure
+		if not hex.set_structure(structure, false, NAN, true):
+			structures.erase(hex_id)
+			continue
 
-		var placement_candidates := available_hexes.duplicate()
-		_shuffle_hexes(placement_candidates, rng)
-		for hex_id: Vector3i in placement_candidates:
-			var hex := hexes[hex_id]
+		structure_counts[structure] += 1
+		available_hexes.erase(hex_id)
+		placed = true
+		break
 
-			if not hex or not hex.can_generate:
-				continue
+	if not placed:
+		structure_counts[structure] = structure_caps[structure]
 
-			if not _can_place_structure_at(hex_id, structure):
-				continue
+	return int(job["remaining_slots"]) <= 0 or available_hexes.is_empty()
 
-			structures[hex_id] = structure
-			if not hex.set_structure(structure, false, NAN, true):
-				structures.erase(hex_id)
-				continue
-
-			structure_counts[structure] += 1
-			available_hexes.erase(hex_id)
-
-			placed = true
-			break
-
-		if not placed:
-			structure_counts[structure] = structure_caps[structure]
+func generate_structures_for_region(candidate_hexes: Array[Vector3i] = []) -> void:
+	var job := create_structure_generation_job(candidate_hexes)
+	while not process_structure_generation_job(job):
+		pass
 
 func get_structured_hexes() -> Array[HexBase]:
 	var instances: Array[HexBase] = []
