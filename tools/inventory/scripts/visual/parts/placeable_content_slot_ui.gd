@@ -147,7 +147,10 @@ func _update_placement_preview(placeable: PlaceableStructureInfo) -> void:
 			active_scene.node.add_child(_preview_node);
 
 	_preview_node.visible = true;
-	_preview_node.global_position = hovered_hex.global_position;
+	_preview_node.global_position = (
+		hovered_hex.global_position
+		+ placeable.get_placement_offset(hovered_hex, placement_rotation_y)
+	);
 	_preview_node.rotation.y = 0.0 if placement_rotation_y != placement_rotation_y else placement_rotation_y;
 
 func _clear_placement_preview() -> void:

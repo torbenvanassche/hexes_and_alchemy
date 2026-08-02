@@ -286,6 +286,7 @@ STRUCTURE_ORE_DEPOSIT_IRON_NAME,Iron deposit,Iron deposit
 STRUCTURE_SETTLEMENT_NAME,Settlement,Settlement
 STRUCTURE_SETTLEMENT_EXPANSION_NAME,Settlement expansion,Settlement expansion
 STRUCTURE_WATER_SOURCE_NAME,Well,Well
+STRUCTURE_BRIDGE_NAME,Bridge,Bridge
 REGION_DESERT_NAME,Desert,Desert
 REGION_ANCIENT_RUINS_NAME,Ancient Ruins,Ancient Ruins
 REGION_OCEAN_NAME,Ocean,Ocean
@@ -308,6 +309,8 @@ ITEM_FORGE_BLUEPRINT_NAME,Forge blueprint,Forge blueprint
 ITEM_FORGE_BLUEPRINT_DESCRIPTION,A plan for placing the settlement forge.,A plan for placing the settlement forge.
 ITEM_WHARF_BLUEPRINT_NAME,Wharf blueprint,Wharf blueprint
 ITEM_WHARF_BLUEPRINT_DESCRIPTION,A plan for placing the settlement wharf.,A plan for placing the settlement wharf.
+ITEM_BRIDGE_BLUEPRINT_NAME,Bridge blueprint,Bridge blueprint
+ITEM_BRIDGE_BLUEPRINT_DESCRIPTION,A plan for building a bridge across elevated banks.,A plan for building a bridge across elevated banks.
 ITEM_ORE_GOLD_NAME,Gold ore,Gold ore
 ITEM_ORE_GOLD_DESCRIPTION,Raw gold ore.,Raw gold ore.
 ITEM_ORE_IRON_NAME,Iron ore,Iron ore

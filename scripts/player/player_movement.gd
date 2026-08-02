@@ -98,6 +98,14 @@ func _can_move_to_next_hex(grid: HexGrid, move_dir: Vector3, next_velocity: Vect
 	if edge_probe_hex == null:
 		edge_probe_hex = target_hex
 	
+	if not _can_stand_at(target_hex, next_position):
+		_stop()
+		return false
+	
+	if not _can_stand_at(edge_probe_hex, edge_probe_position):
+		_stop()
+		return false
+	
 	if target_hex != current_hex and not grid.can_traverse_between(current_hex, target_hex, _get_traversal_tag()):
 		_stop()
 		return false
@@ -137,7 +145,7 @@ func _get_surface_height(hex: HexBase) -> float:
 		var hit := player.get_world_3d().direct_space_state.intersect_ray(query)
 		if not hit.is_empty():
 			return (hit["position"] as Vector3).y
-	return hex.get_surface_height_at(player.global_position)
+	return hex.get_surface_height_at_for_method(player.global_position, _get_traversal_tag())
 
 func update_navigation_state(grid: HexGrid) -> HexBase:
 	if player == null or grid == null:
@@ -145,13 +153,13 @@ func update_navigation_state(grid: HexGrid) -> HexBase:
 	
 	var raw_current_hex := grid.get_hex_at_world_position(player.global_position, 0.0)
 	if raw_current_hex != null:
-		if _is_hex_traversable(raw_current_hex):
+		if _is_hex_traversable(raw_current_hex) and _can_stand_at(raw_current_hex, player.global_position):
 			remember_safe_navigation(raw_current_hex)
 		elif _has_safe_position:
 			player.global_position = _last_safe_position
 			raw_current_hex = _last_traversable_hex
 	
-	var current_hex: HexBase = raw_current_hex if raw_current_hex != null and _is_hex_traversable(raw_current_hex) else _last_traversable_hex
+	var current_hex: HexBase = raw_current_hex if raw_current_hex != null and _is_hex_traversable(raw_current_hex) and _can_stand_at(raw_current_hex, player.global_position) else _last_traversable_hex
 	if current_hex != null:
 		grid.generate_chunks_around_grid_id(current_hex.grid_id)
 	explore_visible_tiles(grid, current_hex)
@@ -187,7 +195,7 @@ func get_hex() -> HexBase:
 		return null
 	
 	var current_hex := grid.get_hex_at_world_position(player.global_position, 0.0)
-	if current_hex != null and _is_hex_traversable(current_hex):
+	if current_hex != null and _is_hex_traversable(current_hex) and _can_stand_at(current_hex, player.global_position):
 		remember_safe_navigation(current_hex)
 		return current_hex
 	
@@ -208,6 +216,11 @@ func _is_hex_traversable(hex: HexBase) -> bool:
 	if hex == null:
 		return false
 	return hex.is_traversable(_get_traversal_tag())
+
+func _can_stand_at(hex: HexBase, world_position: Vector3) -> bool:
+	if hex == null:
+		return false
+	return hex.can_stand_at_for_method(world_position, _get_traversal_tag())
 
 func _get_traversal_tag() -> HexInfo.TraversalTag:
 	match movement_mode:

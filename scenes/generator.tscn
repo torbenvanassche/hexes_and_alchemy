@@ -10,13 +10,9 @@
 script = ExtResource("1_5yxne")
 player_settlement = ExtResource("2_w5vnv")
 target_position = NodePath("Node3D")
+required_starting_structures = Array[ExtResource("5_structure_info")]([ExtResource("3_mine"), ExtResource("4_forest")])
 chunk_radius = 4
 grid_name = "main_world"
 protected_chunks = Array[Vector2i]([Vector2i(0, 0)])
-protected_chunk_elevation_buffer = 2
-slope_entrance_density = 0.5
-minimum_slope_entrances_per_area = 3
-elevated_tiles_per_extra_slope_entrance = 8
-required_starting_structures = Array[ExtResource("5_structure_info")]([ExtResource("3_mine"), ExtResource("4_forest")])
 
 [node name="Node3D" type="Node3D" parent="." unique_id=2022336031]

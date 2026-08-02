@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ItemInfo" format=3]
+
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="1_item"]
+[ext_resource type="Texture2D" uid="uid://ckm7ko4v1d4w2" path="res://sprites/items/blueprint.png" id="2_icon"]
+[ext_resource type="Resource" uid="uid://oowfm1lpkvm" path="res://resources/item_info/wood_log.tres" id="3_wood"]
+[ext_resource type="Resource" uid="uid://o03k1cg30nlw" path="res://resources/item_info/iron_ore.tres" id="4_iron"]
+
+[resource]
+script = ExtResource("1_item")
+unique_id = "bridge_blueprint"
+translation_key_name = "ITEM_BRIDGE_BLUEPRINT_NAME"
+translation_key_description = "ITEM_BRIDGE_BLUEPRINT_DESCRIPTION"
+texture = ExtResource("2_icon")
+buy_value = 30
+sell_value = 18
+recipe = Dictionary[ExtResource("1_item"), int]({
+ExtResource("3_wood"): 5,
+ExtResource("4_iron"): 2
+})
+metadata/_custom_type_script = "uid://c8ngjbq8w5gjr"

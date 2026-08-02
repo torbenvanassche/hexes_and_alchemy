@@ -25,6 +25,9 @@ signal level_changed(new_level: int)
 func _ready() -> void:
 	collision_shapes.assign(find_children("*", "CollisionShape3D", true, false))
 	Manager.instance.settlements.append(self)
+	var grid := _get_active_grid()
+	if grid != null:
+		grid.invalidate_settlement_structure_exclusion_cache()
 	
 	interactions.assign(find_children("*", "Interaction", true, false))
 	_register_interactions()
@@ -173,6 +176,7 @@ func expand_to_hex(grid: HexGrid, hex: HexBase) -> bool:
 	var previous_settlement_hexes := get_settlement_hexes(grid)
 	if not expanded_tiles.has(hex.cube_id):
 		expanded_tiles.append(hex.cube_id)
+	grid.invalidate_settlement_structure_exclusion_cache()
 	hex.is_explored = true
 	var settlement_hexes := get_settlement_hexes(grid)
 	_regenerate_boundary_walls(grid, settlement_hexes)

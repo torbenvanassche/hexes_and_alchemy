@@ -52,6 +52,14 @@ func get_placement_rotation_y(hex: HexBase, placement_rotation_y: float = NAN) -
 		"rotation_y": float(handler.get_rotation_y(self, hex))
 	};
 
+func get_placement_offset(hex: HexBase, placement_rotation_y: float = NAN) -> Vector3:
+	if placement_handler == null:
+		return Vector3.ZERO
+	var handler: RefCounted = placement_handler.new()
+	if handler == null or not handler.has_method("get_placement_offset"):
+		return Vector3.ZERO
+	return handler.call("get_placement_offset", self, hex, placement_rotation_y) as Vector3
+
 func _has_build_cost(inventory: ContentGroup) -> bool:
 	if build_cost.is_empty():
 		return true;
@@ -114,16 +122,7 @@ func _has_required_distance(hex: HexBase) -> bool:
 		return false;
 
 	var required_distance := required_space_radius + minimum_distance_from_other_structures;
-	for region_list: Array in grid.region_instances.values():
-		for region_instance: RegionInstance in region_list:
-			for other_pos: Vector3i in region_instance.structures.keys():
-				var other := region_instance.structures[other_pos] as StructureInfo;
-				if other == null:
-					continue;
-
-				if GridUtils.cube_distance(hex.cube_id, other_pos) <= required_distance:
-					return false;
-	return true;
+	return not grid.has_generated_structure_in_radius(hex.cube_id, required_distance);
 
 func _passes_handler_checks(hex: HexBase, inventory: ContentGroup, placement_rotation_y: float = NAN) -> bool:
 	if placement_handler == null:

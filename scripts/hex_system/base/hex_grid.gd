@@ -63,6 +63,11 @@ var tiles: Dictionary[Vector3i, SceneInstance] = {}
 var elevation_areas: Dictionary[int, ElevationArea] = {}
 var generated_regions: Dictionary[Vector2i, RegionInfo] = {}
 var generated_elevations: Dictionary[Vector2i, int] = {}
+var _generated_structure_index: Dictionary[Vector3i, StructureInfo] = {}
+var _maximum_structure_space_radius := 0
+var _maximum_structure_minimum_distance := 0
+var _settlement_structure_exclusion_cache: Dictionary[Vector3i, bool] = {}
+var _settlement_structure_exclusion_cache_valid := false
 var _elevation_feature_cache: Dictionary[Vector3i, Vector4] = {}
 var _cached_spacing := Vector2.ZERO
 var _pathfinder_rebuild_queued := false
@@ -232,15 +237,73 @@ func can_generate_structures_on_grid_id(grid_id: Vector2i) -> bool:
 func can_generate_structures_on_hex(hex: HexBase) -> bool:
 	return hex != null and not hex is HexSlope and can_generate_structures_on_grid_id(hex.grid_id)
 
+func register_generated_structure(cube_id: Vector3i, structure_info: StructureInfo) -> void:
+	if structure_info == null:
+		return
+	_generated_structure_index[cube_id] = structure_info
+	_maximum_structure_space_radius = maxi(_maximum_structure_space_radius, structure_info.required_space_radius)
+	_maximum_structure_minimum_distance = maxi(
+		_maximum_structure_minimum_distance,
+		structure_info.minimum_distance_from_other_structures
+	)
+
+func unregister_generated_structure(cube_id: Vector3i, structure_info: StructureInfo = null) -> void:
+	if structure_info != null and _generated_structure_index.get(cube_id) != structure_info:
+		return
+	_generated_structure_index.erase(cube_id)
+
+func has_generated_structure_in_radius(center: Vector3i, radius: int) -> bool:
+	for dx in range(-radius, radius + 1):
+		for dy in range(maxi(-radius, -dx - radius), mini(radius, -dx + radius) + 1):
+			var cube := center + Vector3i(dx, dy, -dx - dy)
+			if _generated_structure_index.has(cube):
+				return true
+	return false
+
+func has_generated_structure_too_close(center: Vector3i, candidate: StructureInfo) -> bool:
+	var search_radius := (
+		maxi(candidate.required_space_radius, _maximum_structure_space_radius)
+		+ maxi(candidate.minimum_distance_from_other_structures, _maximum_structure_minimum_distance)
+		+ 1
+	)
+	for dx in range(-search_radius, search_radius + 1):
+		for dy in range(
+			maxi(-search_radius, -dx - search_radius),
+			mini(search_radius, -dx + search_radius) + 1
+		):
+			var other_pos := center + Vector3i(dx, dy, -dx - dy)
+			var other := _generated_structure_index.get(other_pos) as StructureInfo
+			if other == null:
+				continue
+			var required_distance := (
+				maxi(candidate.required_space_radius, other.required_space_radius)
+				+ maxi(
+					candidate.minimum_distance_from_other_structures,
+					other.minimum_distance_from_other_structures
+				)
+				+ 1
+			)
+			if GridUtils.cube_distance(center, other_pos) <= required_distance:
+				return true
+	return false
+
 func can_generate_slope_entrance_on_hex(hex: HexBase) -> bool:
 	if hex == null:
 		return false
 	return not _is_near_settlement(hex.cube_id)
 
+func invalidate_settlement_structure_exclusion_cache() -> void:
+	_settlement_structure_exclusion_cache_valid = false
+
 func _is_near_settlement(cube_id: Vector3i) -> bool:
 	if Manager.instance == null:
 		return false
+	if not _settlement_structure_exclusion_cache_valid:
+		_rebuild_settlement_structure_exclusion_cache()
+	return _settlement_structure_exclusion_cache.has(cube_id)
 
+func _rebuild_settlement_structure_exclusion_cache() -> void:
+	_settlement_structure_exclusion_cache.clear()
 	for settlement: Settlement in Manager.instance.settlements:
 		if settlement == null or not is_instance_valid(settlement):
 			continue
@@ -251,10 +314,14 @@ func _is_near_settlement(cube_id: Vector3i) -> bool:
 		for settlement_hex in settlement.get_settlement_hexes(self):
 			if settlement_hex == null:
 				continue
-			if GridUtils.cube_distance(cube_id, settlement_hex.cube_id) <= exclusion_radius:
-				return true
-
-	return false
+			for dx in range(-exclusion_radius, exclusion_radius + 1):
+				for dy in range(
+					maxi(-exclusion_radius, -dx - exclusion_radius),
+					mini(exclusion_radius, -dx + exclusion_radius) + 1
+				):
+					var offset := Vector3i(dx, dy, -dx - dy)
+					_settlement_structure_exclusion_cache[settlement_hex.cube_id + offset] = true
+	_settlement_structure_exclusion_cache_valid = true
 	
 func get_structured_hexes() -> Array[HexBase]:
 	var instances: Array[HexBase] = []
@@ -1205,7 +1272,10 @@ func can_traverse_between(
 	if not to_hex.can_traverse_edge(to_edge, method):
 		return false
 
-	return from_hex.get_edge_elevation_units(from_edge) == to_hex.get_edge_elevation_units(to_edge)
+	return (
+		from_hex.get_edge_elevation_units_for_method(from_edge, method)
+		== to_hex.get_edge_elevation_units_for_method(to_edge, method)
+	)
 
 func can_traverse_between_for_methods(from_hex: HexBase, to_hex: HexBase, methods: Array) -> bool:
 	for method in methods:

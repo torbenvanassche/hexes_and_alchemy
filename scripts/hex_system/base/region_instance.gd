@@ -1,6 +1,11 @@
 class_name RegionInstance
 extends RefCounted
 
+const REQUIRED_PLACEMENT_STANDARD := 0
+const REQUIRED_PLACEMENT_ALLOW_EXCLUDED := 1
+const REQUIRED_PLACEMENT_ALLOW_SETTLEMENT_SPACING := 2
+const REQUIRED_PLACEMENT_ALLOW_RESERVED := 3
+
 var info: RegionInfo
 var hexes: Dictionary[Vector3i, HexBase] = {}
 var structures: Dictionary[Vector3i, StructureInfo] = {}
@@ -29,19 +34,24 @@ func merge_from(other: RegionInstance) -> void:
 	for coord in other.hexes:
 		add_hex(other.hexes[coord])
 	for coord in other.structures:
-		structures[coord] = other.structures[coord]
+		register_structure(coord, other.structures[coord])
 	_seed_key_dirty = true
+
+func register_structure(coord: Vector3i, structure_info: StructureInfo) -> void:
+	structures[coord] = structure_info
+	if hex_grid != null:
+		hex_grid.register_generated_structure(coord, structure_info)
+
+func unregister_structure(coord: Vector3i, structure_info: StructureInfo = null) -> void:
+	if structure_info != null and structures.get(coord) != structure_info:
+		return
+	structures.erase(coord)
+	if hex_grid != null:
+		hex_grid.unregister_generated_structure(coord, structure_info)
 		
 func remove_hex(coord: Vector3i) -> void:
 	hexes.erase(coord);
 	_seed_key_dirty = true
-		
-func _required_distance(a: StructureInfo, b: StructureInfo) -> int:
-	return (
-		max(a.required_space_radius, b.required_space_radius)
-		+ max(a.minimum_distance_from_other_structures, b.minimum_distance_from_other_structures)
-		+ 1
-	)
 		
 func _pick_structure(rng: RandomNumberGenerator) -> StructureInfo:
 	var fail_weight := maxf(0.0, info.structure_fail_weight)
@@ -120,18 +130,28 @@ func _compute_structure_caps(region_size: int = -1) -> void:
 		if structure_counts.has(structure):
 			structure_counts[structure] += 1
 
-func _can_place_structure_at(pos: Vector3i, candidate: StructureInfo) -> bool:	
+func _can_place_structure_at(
+	pos: Vector3i,
+	candidate: StructureInfo,
+	placement_mode: int = REQUIRED_PLACEMENT_STANDARD
+) -> bool:
 	var hex := hexes[pos]
 	if hex == null:
 		return false;
 
-	if not hex_grid.can_generate_structures_on_hex(hex):
+	if hex is HexSlope:
 		return false;
 
-	if not hex.can_generate:
+	if (
+		placement_mode == REQUIRED_PLACEMENT_STANDARD
+		and not hex_grid.can_generate_structures_on_hex(hex)
+	):
 		return false;
 
-	if not _has_clear_generation_space(pos, candidate):
+	if placement_mode != REQUIRED_PLACEMENT_ALLOW_RESERVED and not hex.can_generate:
+		return false;
+
+	if not _has_clear_generation_space(pos, candidate, placement_mode):
 		return false;
 
 	if not hex.has_walkable_random_rotation(candidate):
@@ -146,31 +166,44 @@ func _can_place_structure_at(pos: Vector3i, candidate: StructureInfo) -> bool:
 		if hex.cube_id == player_hex.cube_id:
 			return false;
 	
-	for region_list in hex_grid.region_instances.values():
-		for region_instance: RegionInstance in region_list:
-			for other_pos: Vector3i in region_instance.structures.keys():
-				var other := region_instance.structures[other_pos]
-
-				var dist := GridUtils.cube_distance(pos, other_pos)
-				var min_dist := _required_distance(candidate, other)
-				if dist <= min_dist:
-					return false
+	if (
+		placement_mode < REQUIRED_PLACEMENT_ALLOW_SETTLEMENT_SPACING
+		and hex_grid.has_generated_structure_too_close(pos, candidate)
+	):
+		return false
 	return true
 
-func try_place_required_structure_at(pos: Vector3i, candidate: StructureInfo) -> bool:
+func can_place_required_structure_at(
+	pos: Vector3i,
+	candidate: StructureInfo,
+	placement_mode: int = REQUIRED_PLACEMENT_STANDARD
+) -> bool:
 	if candidate == null or not hexes.has(pos):
 		return false
-	if not _can_place_structure_at(pos, candidate):
+	return _can_place_structure_at(pos, candidate, placement_mode)
+
+func try_place_required_structure_at(
+	pos: Vector3i,
+	candidate: StructureInfo,
+	placement_mode: int = REQUIRED_PLACEMENT_STANDARD
+) -> bool:
+	if candidate == null or not hexes.has(pos):
+		return false
+	if not _can_place_structure_at(pos, candidate, placement_mode):
 		return false
 
 	var hex := hexes[pos]
-	structures[pos] = candidate
+	register_structure(pos, candidate)
 	if not hex.set_structure(candidate, true, NAN, true):
-		structures.erase(pos)
+		unregister_structure(pos, candidate)
 		return false
 	return true
 
-func _has_clear_generation_space(center: Vector3i, candidate: StructureInfo) -> bool:
+func _has_clear_generation_space(
+	center: Vector3i,
+	candidate: StructureInfo,
+	placement_mode: int = REQUIRED_PLACEMENT_STANDARD
+) -> bool:
 	var footprint := hex_grid.get_tiles_in_radius(center, candidate.required_space_radius);
 	var expected_tile_count := 1 + 3 * candidate.required_space_radius * (candidate.required_space_radius + 1);
 	if footprint.size() != expected_tile_count:
@@ -181,10 +214,19 @@ func _has_clear_generation_space(center: Vector3i, candidate: StructureInfo) -> 
 		if tile == null:
 			return false;
 
-		if not hex_grid.can_generate_structures_on_hex(tile):
+		if tile is HexSlope:
 			return false;
 
-		if not tile.can_generate or tile.structure != null:
+		if (
+			placement_mode == REQUIRED_PLACEMENT_STANDARD
+			and not hex_grid.can_generate_structures_on_hex(tile)
+		):
+			return false;
+
+		if placement_mode != REQUIRED_PLACEMENT_ALLOW_RESERVED and not tile.can_generate:
+			return false;
+
+		if tile.structure != null:
 			return false;
 
 	return true;
@@ -271,9 +313,9 @@ func process_structure_generation_job(job: Dictionary) -> bool:
 		if not _can_place_structure_at(hex_id, structure):
 			continue
 
-		structures[hex_id] = structure
+		register_structure(hex_id, structure)
 		if not hex.set_structure(structure, false, NAN, true):
-			structures.erase(hex_id)
+			unregister_structure(hex_id, structure)
 			continue
 
 		structure_counts[structure] += 1

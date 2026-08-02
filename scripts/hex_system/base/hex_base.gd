@@ -43,10 +43,47 @@ func get_edge_elevation_units(_edge: int) -> int:
 	return elevation_units
 
 func can_traverse_edge(_edge: int, method: HexInfo.TraversalTag) -> bool:
-	return is_traversable(method)
+	if blocked:
+		return false
+	if _has_native_traversal(method):
+		return true
+	var provider := _get_structure_traversal_provider()
+	if provider == null or not bool(provider.call("supports_traversal", method)):
+		return false
+	if provider.has_method("can_traverse_edge"):
+		return bool(provider.call("can_traverse_edge", _edge, method, self))
+	return true
+
+func get_edge_elevation_units_for_method(edge: int, method: HexInfo.TraversalTag) -> int:
+	if _has_native_traversal(method):
+		return get_edge_elevation_units(edge)
+	var provider := _get_structure_traversal_provider()
+	if provider != null and provider.has_method("get_edge_elevation_units"):
+		return int(provider.call("get_edge_elevation_units", edge, method, self))
+	return get_edge_elevation_units(edge)
 
 func get_surface_height_at(_world_position: Vector3) -> float:
 	return global_position.y
+
+func get_surface_height_at_for_method(world_position: Vector3, method: HexInfo.TraversalTag) -> float:
+	if _has_native_traversal(method):
+		return get_surface_height_at(world_position)
+	var provider := _get_structure_traversal_provider()
+	if provider != null and provider.has_method("get_surface_height_at"):
+		return float(provider.call("get_surface_height_at", world_position, method, self))
+	return get_surface_height_at(world_position)
+
+func can_stand_at_for_method(world_position: Vector3, method: HexInfo.TraversalTag) -> bool:
+	if blocked:
+		return false
+	if _has_native_traversal(method):
+		return true
+	var provider := _get_structure_traversal_provider()
+	if provider == null or not bool(provider.call("supports_traversal", method)):
+		return false
+	if provider.has_method("can_stand_at"):
+		return bool(provider.call("can_stand_at", world_position, method, self))
+	return true
 
 func _ready() -> void:
 	ground_hex_mesh = find_child("hex_*", true) as MeshInstance3D;
@@ -79,7 +116,23 @@ func apply_region(reg: RegionInfo) -> void:
 func is_traversable(method: HexInfo.TraversalTag = HexInfo.TraversalTag.WALK) -> bool:
 	if blocked:
 		return false
-	return (scene_instance.scene_info as HexInfo).traversal_tags.has(method);
+	if _has_native_traversal(method):
+		return true
+	var provider := _get_structure_traversal_provider()
+	return provider != null and bool(provider.call("supports_traversal", method))
+
+func _has_native_traversal(method: HexInfo.TraversalTag) -> bool:
+	if scene_instance == null:
+		return false
+	var hex_info := scene_instance.scene_info as HexInfo
+	return hex_info != null and hex_info.traversal_tags.has(method)
+
+func _get_structure_traversal_provider() -> Node:
+	if structure == null or not is_instance_valid(structure.instance):
+		return null
+	if not structure.instance.has_method("supports_traversal"):
+		return null
+	return structure.instance
 
 func set_structure(s: StructureInfo, immediate: bool = false, placement_rotation_y: float = NAN, remove_if_passage_repair_failed: bool = false) -> bool:
 	var required_tiles: Array[SceneInstance] = SceneManager.get_active_scene().node.get_tiles_in_radius(cube_id, s.required_space_radius);
@@ -103,7 +156,7 @@ func set_structure(s: StructureInfo, immediate: bool = false, placement_rotation
 ##When the structure finishes loading, add the instance to the scene and validate adjacent tiles
 func _on_structure_loaded(s: StructureInfo, required_tiles: Array[SceneInstance], placement_rotation_y: float = NAN, remove_if_passage_repair_failed: bool = false, unregister_async_failure: bool = false) -> void:
 	if region_instance != null:
-		region_instance.structures[cube_id] = s;
+		region_instance.register_structure(cube_id, s);
 	structure_root_tile = cube_id;
 
 	structure = StructureInstance.new(s.get_instance().node, s);
@@ -112,13 +165,19 @@ func _on_structure_loaded(s: StructureInfo, required_tiles: Array[SceneInstance]
 			(structure.instance as Interaction).hex = self;
 		add_child(structure.instance);
 		var placement_rotation := _get_structure_placement_rotation(s, placement_rotation_y)
+		var resolved_rotation_y := NAN
 		if bool(placement_rotation.get("has_rotation", false)):
-			structure.instance.rotation.y = float(placement_rotation["rotation_y"])
+			resolved_rotation_y = float(placement_rotation["rotation_y"])
+			structure.instance.rotation.y = resolved_rotation_y
 		elif s.randomize_rotation:
 			var grid := SceneManager.get_active_scene().node as HexGrid
 			var rng := grid.create_rng("structure_rotation:%s:%s" % [cube_id, s.resource_path]) if grid != null else null
 			var rotation_y := _get_random_structure_rotation_y(s, rng)
 			structure.instance.rotation.y = rotation_y
+			resolved_rotation_y = rotation_y
+		var placeable := s as PlaceableStructureInfo
+		if placeable != null:
+			structure.instance.position += placeable.get_placement_offset(self, resolved_rotation_y)
 	
 	for t in required_tiles:
 		SceneManager.get_active_scene().node.replace(t, scene_instance.scene_info.get_instance(), region);
@@ -132,6 +191,9 @@ func _on_structure_loaded(s: StructureInfo, required_tiles: Array[SceneInstance]
 	
 	if structure != null:
 		_register_structure_with_settlement(structure.instance)
+		var grid := SceneManager.get_active_scene().node as HexGrid
+		if grid != null and grid.initialized:
+			grid.pathfinder.update_hex(self)
 		structure_loaded.emit(s, structure.instance)
 
 func _register_structure_with_settlement(structure_node: Node) -> void:
@@ -326,7 +388,7 @@ func _carve_passage_path(grid: HexGrid, path: Array[Vector3i]) -> void:
 
 func _remove_structure_after_failed_passage_repair(s: StructureInfo, unregister_async_failure: bool) -> void:
 	if region_instance != null:
-		region_instance.structures.erase(cube_id)
+		region_instance.unregister_structure(cube_id, s)
 		if unregister_async_failure:
 			region_instance.unregister_failed_structure_generation.call_deferred(s)
 	if structure != null and is_instance_valid(structure.instance):

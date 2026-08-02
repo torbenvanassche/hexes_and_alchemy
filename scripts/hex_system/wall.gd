@@ -5,6 +5,11 @@ var adjacent_id: Vector3i;
 
 func _on_level_initialized() -> void:
 	var grid := SceneManager.get_active_scene().node as HexGrid;
+	register_with_grid(grid)
+
+func register_with_grid(grid: HexGrid) -> void:
+	if grid == null:
+		return
 	var target_world := global_transform * (Vector3.LEFT * 2.0);
 	var current_hex := grid.get_hex_at_world_position(global_position);
 	var adjacent_hex := grid.get_hex_at_world_position(target_world);

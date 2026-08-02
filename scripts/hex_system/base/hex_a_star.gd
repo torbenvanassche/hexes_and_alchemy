@@ -147,6 +147,33 @@ func get_hex_path(start_cube: Vector3i, end_cube: Vector3i) -> Array[HexBase]:
 
 	return result
 
+func get_reachable_distances(start_cube: Vector3i, max_distance: int) -> Dictionary[Vector3i, int]:
+	var distances: Dictionary[Vector3i, int] = {}
+	if not cube_to_id.has(start_cube):
+		return distances
+
+	var frontier: Array[int] = [int(cube_to_id[start_cube])]
+	distances[start_cube] = 0
+	var index := 0
+	while index < frontier.size():
+		var current_id := frontier[index]
+		index += 1
+		var current_cube := id_to_cube[current_id]
+		var current_distance := distances[current_cube]
+		if current_distance >= max_distance:
+			continue
+
+		for neighbor_id_variant in get_point_connections(current_id):
+			var neighbor_id := int(neighbor_id_variant)
+			if not id_to_cube.has(neighbor_id):
+				continue
+			var neighbor_cube := id_to_cube[neighbor_id]
+			if distances.has(neighbor_cube):
+				continue
+			distances[neighbor_cube] = current_distance + 1
+			frontier.append(neighbor_id)
+	return distances
+
 func get_hex_path_for_methods(
 	start_cube: Vector3i,
 	end_cube: Vector3i,
