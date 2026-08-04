@@ -32,7 +32,10 @@ func sell_now(inventory: ContentGroup, content: Resource, quantity: int) -> bool
 		_notify(tr("MARKET_SELL_REMOVE_FAILED"), Color.RED)
 		return false
 	var unit_value := get_sell_now_value(content)
-	Manager.instance.player_instance.currency += unit_value * quantity
+	if Manager.instance.hub != null:
+		Manager.instance.hub.add_currency(unit_value * quantity)
+	else:
+		Manager.instance.player_instance.currency += unit_value * quantity
 	_notify(tr("MARKET_SELL_SUCCESS") % [quantity, _get_display_name(content), unit_value * quantity])
 	return true
 
@@ -45,7 +48,8 @@ func buy_from_slot(source_slot: ContentSlotResource, destination_inventory: Cont
 	var amount := mini(quantity, source_slot.count)
 	var unit_price := get_buy_value(content)
 	var total_price := unit_price * amount
-	if Manager.instance.player_instance.currency < total_price:
+	var available_currency := Manager.instance.hub.currency if Manager.instance.hub != null else Manager.instance.player_instance.currency
+	if available_currency < total_price:
 		_notify(tr("MARKET_BUY_NOT_ENOUGH_COINS"), Color.RED)
 		return false
 	if _get_available_capacity(destination_inventory, content) < amount:
@@ -55,7 +59,10 @@ func buy_from_slot(source_slot: ContentSlotResource, destination_inventory: Cont
 	if remaining > 0:
 		_notify(tr("MARKET_BUY_INVENTORY_FULL"), Color.RED)
 		return false
-	Manager.instance.player_instance.currency -= total_price
+	if Manager.instance.hub != null:
+		Manager.instance.hub.reserve_currency(total_price)
+	else:
+		Manager.instance.player_instance.currency -= total_price
 	source_slot.remove(amount)
 	_notify(tr("MARKET_BUY_SUCCESS") % [amount, _get_display_name(content), total_price])
 	return true

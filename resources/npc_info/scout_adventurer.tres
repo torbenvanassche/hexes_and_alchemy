@@ -11,6 +11,7 @@ id = "pathfinder"
 packed_scene = ExtResource("1_scene")
 profession = "Scout"
 role = "Pathfinder"
+operation_roles = Array[String](["hunter"])
 traits = Array[String](["curious", "brave"])
 preferred_jobs = Array[String](["scout", "survey", "prospect"])
 disliked_jobs = Array[String](["extract", "reinforce"])

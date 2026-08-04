@@ -1,6 +1,6 @@
 class_name AncientRuins extends QuestObjective
 
-const QUEST_TYPE_INVESTIGATE := "investigate"
+const QUEST_TYPE_SURVEY := "survey"
 
 enum RuinsState {
 	AVAILABLE,
@@ -25,7 +25,7 @@ var _loot_claimed: bool = false
 func _ready() -> void:
 	super()
 	if quest_types.is_empty():
-		quest_types = [QUEST_TYPE_INVESTIGATE]
+		quest_types = [QUEST_TYPE_SURVEY]
 	var states: Array[String] = []
 	for state_name in RuinsState.keys():
 		states.append(state_name)

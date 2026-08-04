@@ -13,7 +13,10 @@ func interact() -> void:
 	hex.structure = null
 	if mined_structure:
 		mined_structure.destroy()
-	Manager.instance.player_instance.inventory.add(item_info, 1)
+	if Manager.instance.hub != null:
+		Manager.instance.hub.stockpile.add(item_info, 1, true)
+	else:
+		Manager.instance.player_instance.inventory.add(item_info, 1)
 	
 func can_interact() -> bool:
 	return true;

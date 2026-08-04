@@ -40,12 +40,17 @@ func _physics_process(delta: float) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("inventory"):
-		toggle_inventory()
+		toggle_hub_tab("inventory")
 		get_viewport().set_input_as_handled()
 		return
 
 	if event.is_action_pressed("journal"):
-		toggle_journal()
+		toggle_hub_tab("journal")
+		get_viewport().set_input_as_handled()
+		return
+
+	if event.is_action_pressed("hub"):
+		toggle_hub_tab("operations")
 		get_viewport().set_input_as_handled()
 		return
 	
@@ -66,29 +71,39 @@ func get_hex() -> HexBase:
 	return movement.get_hex()
 
 func toggle_inventory() -> void:
-	var inventory_window := DataManager.instance.get_scene_by_name("inventory_ui")
-	for instance in inventory_window.get_live_instances():
-		if SceneManager.is_visible(instance):
-			(instance.node as DraggableControl).close_requested.emit()
-			return
-	inventory_window.queue(_open_inventory)
-
-func _open_inventory(window_info: SceneInfo) -> void:
-	var window_instance := SceneManager.add(window_info, false)
-	var inventory_ui: InventoryUI = (window_instance.node as DraggableControl).content as InventoryUI
-	inventory_ui.inventory = inventory
-	window_instance.on_enter.emit()
+	toggle_hub_tab("inventory")
 
 func toggle_journal() -> void:
-	var journal_window := DataManager.instance.get_scene_by_name("journal_ui")
-	for instance in journal_window.get_live_instances():
-		if SceneManager.is_visible(instance):
-			(instance.node as DraggableControl).close_requested.emit()
-			return
-	journal_window.queue(_open_journal)
+	toggle_hub_tab("journal")
 
-func _open_journal(window_info: SceneInfo) -> void:
+func toggle_hub_tab(tab_id: String) -> void:
+	if DataManager.instance == null:
+		return
+	var hub_window := DataManager.instance.get_scene_by_name("hub_window")
+	if hub_window == null:
+		return
+	for instance in hub_window.get_live_instances():
+		if not SceneManager.is_visible(instance):
+			continue
+		var window := instance.node as DraggableControl
+		var hub_ui := window.content as HubWindowUI if window != null else null
+		if hub_ui != null and hub_ui.active_tab != tab_id:
+			hub_ui.show_tab(tab_id)
+			SceneManager.promote_scene_instance(instance)
+			return
+		if window != null:
+			window.close_requested.emit()
+		return
+	hub_window.queue(_open_hub_window.bind(tab_id))
+
+func _open_hub_window(window_info: SceneInfo, tab_id: String) -> void:
 	var window_instance := SceneManager.add(window_info, false)
+	if window_instance == null:
+		return
+	var window := window_instance.node as DraggableControl
+	var hub_ui := window.content as HubWindowUI if window != null else null
+	if hub_ui != null:
+		hub_ui.show_tab(tab_id)
 	window_instance.on_enter.emit()
 
 func set_return_position() -> void:

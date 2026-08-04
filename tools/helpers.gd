@@ -12,6 +12,8 @@ static func flatten_children(node: Node, include_self: bool = false) -> Array[No
 		result.append(node);
 
 	for child in node.get_children():
+		if not is_instance_valid(child):
+			continue
 		result.append(child)
 		result.append_array(flatten_children(child))
 

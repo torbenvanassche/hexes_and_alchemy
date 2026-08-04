@@ -162,9 +162,12 @@ func on_enter() -> void:
 	title.visible = show_title;
 	_update_resize_handles()
 
-	for c: Control in Helpers.flatten_children(content_panel, true):
-		if is_instance_valid(c) and c.has_method("on_enter"):
-			c.on_enter();
+	for child in Helpers.flatten_children(content_panel, true):
+		if not is_instance_valid(child) or not child is Control:
+			continue
+		var control := child as Control
+		if control.has_method("on_enter"):
+			control.on_enter();
 
 	await get_tree().process_frame;
 

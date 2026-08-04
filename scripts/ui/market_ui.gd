@@ -69,6 +69,8 @@ func _on_sell_tab_pressed() -> void:
 	_set_trade_mode(TradeMode.SELL)
 
 func _connect_market_signals() -> void:
+	if Manager.instance and Manager.instance.hub != null and not Manager.instance.hub.changed.is_connected(_update_currency):
+		Manager.instance.hub.changed.connect(_update_currency)
 	if Manager.instance and Manager.instance.player_instance and not Manager.instance.player_instance.currency_amount_changed.is_connected(_update_currency):
 		Manager.instance.player_instance.currency_amount_changed.connect(_update_currency)
 
@@ -98,8 +100,8 @@ func _update_tabs() -> void:
 		sell_tab_button.button_pressed = trade_mode == TradeMode.SELL
 
 func _update_currency() -> void:
-	if currency_label and Manager.instance and Manager.instance.player_instance:
-		currency_label.text = str(Manager.instance.player_instance.currency)
+	if currency_label and Manager.instance:
+		currency_label.text = str(Manager.instance.hub.currency if Manager.instance.hub != null else Manager.instance.player_instance.currency)
 
 func _on_market_layout_resized() -> void:
 	call_deferred("_apply_tile_widths")

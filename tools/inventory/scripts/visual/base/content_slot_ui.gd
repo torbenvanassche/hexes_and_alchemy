@@ -105,8 +105,19 @@ func _can_drop_data(_at_position: Vector2, _data: Variant) -> bool:
 	return can_drag and contentSlot != null and contentSlot.is_unlocked;
 
 func _drop_data(_at_position: Vector2, data: Variant) -> void:
-	var src_slot: ContentSlotResource = (data as DragData).slot.contentSlot
+	var drag := data as DragData
+	if drag == null or drag.slot == null or not is_instance_valid(drag.slot) or drag.slot.contentSlot == null or contentSlot == null:
+		return
+	var source_ui := drag.slot
+	var src_slot: ContentSlotResource = source_ui.contentSlot
 	var dest_slot: ContentSlotResource = contentSlot
+
+	source_ui._on_inventory_drop_completed(self)
+	source_ui.redraw()
+	if drag_origin == source_ui:
+		source_ui.set_process(false)
+		drag_data = null
+		drag_origin = null
 	
 	if dest_slot.has_content(null) or dest_slot.has_content(src_slot.get_content()):
 		src_slot.remove(src_slot.count - dest_slot.add(src_slot.count, src_slot.get_content()))
@@ -120,7 +131,7 @@ func _drop_data(_at_position: Vector2, data: Variant) -> void:
 		src_slot.count = dest_count;
 		dest_slot.changed.emit()
 		src_slot.changed.emit()
-		
+
 func _notification(what: int) -> void:
 	match what:
 		NOTIFICATION_DRAG_END:
@@ -156,6 +167,9 @@ func _on_drag_started() -> void:
 	pass;
 
 func _on_drag_finished() -> void:
+	pass;
+
+func _on_inventory_drop_completed(_destination_slot: ContentSlotUI) -> void:
 	pass;
 
 func _should_process_drag() -> bool:

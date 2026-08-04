@@ -23,6 +23,9 @@ func _exit_tree() -> void:
 		player.currency_amount_changed.disconnect(_refresh_counts)
 	if player != null and player.inventory != null and player.inventory.changed.is_connected(_refresh_counts):
 		player.inventory.changed.disconnect(_refresh_counts)
+	var hub := _get_hub()
+	if hub != null and hub.changed.is_connected(_refresh_counts):
+		hub.changed.disconnect(_refresh_counts)
 
 func _process(_delta: float) -> void:
 	_connect_signals()
@@ -45,6 +48,9 @@ func _build_entries() -> void:
 	_fit_to_content.call_deferred()
 
 func _connect_signals() -> void:
+	var hub := _get_hub()
+	if hub != null and not hub.changed.is_connected(_refresh_counts):
+		hub.changed.connect(_refresh_counts)
 	var player := _get_player()
 	if player == null:
 		return
@@ -79,10 +85,15 @@ func _fit_to_content() -> void:
 	_list.size = Vector2(maxf(0.0, panel_size.x - _content_margin.x * 2.0), content_size.y)
 
 func _get_item_count(player: PlayerController, item: ItemInfo) -> int:
-	if player == null or item == null:
+	if item == null:
 		return 0
+	var hub := _get_hub()
 	if item.unique_id == "currency":
-		return player.currency
+		return hub.currency if hub != null else (player.currency if player != null else 0)
+	if hub != null and hub.stockpile != null:
+		return hub.stockpile.get_count(item)
+	if player == null:
+		return 0
 	if player.inventory == null:
 		return 0
 	return player.inventory.get_count(item)
@@ -91,3 +102,8 @@ func _get_player() -> PlayerController:
 	if Manager.instance == null:
 		return null
 	return Manager.instance.player_instance
+
+func _get_hub() -> HubState:
+	if Manager.instance == null:
+		return null
+	return Manager.instance.hub

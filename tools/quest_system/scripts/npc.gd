@@ -140,6 +140,18 @@ func get_role_label() -> String:
 		return tr("NPC_ROLE_ADVENTURER")
 	return npc_info.role
 
+func get_operation_roles() -> Array[String]:
+	if npc_info == null or npc_info.operation_roles.is_empty():
+		return ["adventurer"]
+	return npc_info.operation_roles
+
+func can_perform_role(required_role: String) -> bool:
+	if required_role == "":
+		return true
+	if get_operation_roles().has(required_role):
+		return true
+	return required_role == "laborer" and get_operation_roles().has("hunter")
+
 func get_traits_label() -> String:
 	if npc_info == null or npc_info.traits.is_empty():
 		return tr("NPC_TRAITS_NONE")
@@ -169,6 +181,13 @@ func can_consider_quest(quest: Quest) -> bool:
 		return false
 	if not quest.is_state(Quest.QuestState.WAITING) or not quest.party.is_empty():
 		return false
+	if Manager.instance != null and Manager.instance.hub != null:
+		var required_role := Manager.instance.hub.get_required_role_for_quest(quest)
+		if not can_perform_role(required_role):
+			return false
+		var objective := quest.get_objective()
+		if objective != null and not objective.has_required_supplies(quest.quest_key, Manager.instance.hub.stockpile):
+			return false
 	return is_rank_at_least(quest.get_minimum_rank())
 
 func wants_quest(quest: Quest) -> bool:

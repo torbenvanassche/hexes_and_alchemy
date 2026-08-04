@@ -39,6 +39,8 @@ func _create_adventurer(s: SceneInfo) -> SceneInstance:
 	if npc != null and not npc.rank_progress_changed.is_connected(npc_roster_changed.emit):
 		npc.rank_progress_changed.connect(npc_roster_changed.emit)
 	npcs.append(npc_scene_instance)
+	if npc != null and Manager.instance != null and Manager.instance.hub != null:
+		Manager.instance.hub.register_npc(npc)
 	Manager.instance.quests.try_assign_waiting_quests()
 	npc_roster_changed.emit()
 	return npc_scene_instance
@@ -63,5 +65,8 @@ func _spawn_starting_adventurers_ready(s: SceneInfo) -> void:
 		_create_adventurer(s)
 
 func _remove_adventurer(npc_scene_instance: SceneInstance) -> void:
+	var npc := npc_scene_instance.node as NPC if npc_scene_instance != null else null
+	if npc != null and Manager.instance != null and Manager.instance.hub != null:
+		Manager.instance.hub.unregister_npc(npc)
 	npcs.erase(npc_scene_instance)
 	npc_roster_changed.emit()

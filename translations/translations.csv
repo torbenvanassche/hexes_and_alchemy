@@ -15,6 +15,9 @@ KEYBIND_PRIMARY_ACTION,primary action,primary action
 KEYBIND_INVENTORY,inventory,inventory
 KEYBIND_CANCEL,cancel,cancel
 KEYBIND_JOURNAL,journal,journal
+KEYBIND_HUB,guild hub,guild hub
+GUILD_HUB_TITLE,guild hall,guild hall
+GUILD_PRESTIGE_LABEL,prestige,prestige
 SETTINGS_TAB_GAME,game,game
 SETTINGS_TAB_INPUT,input,input
 SETTINGS_BACK,Back,Back

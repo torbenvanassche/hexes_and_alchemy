@@ -23,8 +23,7 @@ func _open_window(window_info: SceneInfo) -> void:
 	var crafting_ui: CraftingUI = draggable_window.content as CraftingUI
 	if crafting_ui == null:
 		return
-	var player: PlayerController = Manager.instance.player_instance
-	crafting_ui.inventory = player.inventory if player != null else null
+	crafting_ui.inventory = Manager.instance.hub.stockpile if Manager.instance != null and Manager.instance.hub != null else null
 	if not crafting_ui.item_crafted.is_connected(_on_item_crafted):
 		crafting_ui.item_crafted.connect(_on_item_crafted)
 	window_instance.on_enter.emit()

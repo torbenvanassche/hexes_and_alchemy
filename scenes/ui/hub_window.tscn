@@ -1,0 +1,128 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://tools/custom_window/base_window.tscn" id="1_window"]
+[ext_resource type="Script" path="res://scripts/ui/hub_window_ui.gd" id="2_hub"]
+[ext_resource type="Theme" path="res://themes/fantasy_buttons.tres" id="3_buttons"]
+[ext_resource type="PackedScene" path="res://tools/inventory/scenes/content_group.tscn" id="4_inventory"]
+[ext_resource type="PackedScene" path="res://scenes/ui/journal_panel.tscn" id="5_journal"]
+[ext_resource type="PackedScene" path="res://scenes/hud/hub_overview.tscn" id="6_operations"]
+
+[node name="Window" type="Control" node_paths=PackedStringArray("content") instance=ExtResource("1_window")]
+custom_minimum_size = Vector2(620, 500)
+id = "WINDOW_GUILD_HUB"
+store_position = true
+resizable = false
+can_lock = true
+content = NodePath("NinePatchRect/VBoxContainer/contentPanel/HubWindow")
+
+[node name="NinePatchRect" parent="." index="0"]
+region_rect = Rect2(0, 0, 48, 48)
+
+[node name="topbar" parent="NinePatchRect/VBoxContainer" index="0"]
+color = Color(0, 0, 0, 0.8117647)
+
+[node name="Title" parent="NinePatchRect/VBoxContainer/topbar/MarginContainer2/MarginContainer" index="0"]
+text = "GUILD_HUB_TITLE"
+
+[node name="contentPanel" parent="NinePatchRect/VBoxContainer" index="1"]
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HubWindow" type="Control" parent="NinePatchRect/VBoxContainer/contentPanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("2_hub")
+
+[node name="VBox" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/HubWindow"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 8
+
+[node name="TabButtons" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/HubWindow/VBox"]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme = ExtResource("3_buttons")
+theme_override_constants/separation = 6
+
+[node name="Inventory" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/HubWindow/VBox/TabButtons"]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "INVENTORY"
+
+[node name="Journal" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/HubWindow/VBox/TabButtons"]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "JOURNAL"
+
+[node name="Operations" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/HubWindow/VBox/TabButtons"]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "OPERATIONS"
+
+[node name="PageHost" type="Control" parent="NinePatchRect/VBoxContainer/contentPanel/HubWindow/VBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+clip_contents = true
+
+[node name="InventoryPage" type="PanelContainer" parent="NinePatchRect/VBoxContainer/contentPanel/HubWindow/VBox/PageHost"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Margin" type="MarginContainer" parent="NinePatchRect/VBoxContainer/contentPanel/HubWindow/VBox/PageHost/InventoryPage"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="Scroll" type="ScrollContainer" parent="NinePatchRect/VBoxContainer/contentPanel/HubWindow/VBox/PageHost/InventoryPage/Margin"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="GridCenter" type="CenterContainer" parent="NinePatchRect/VBoxContainer/contentPanel/HubWindow/VBox/PageHost/InventoryPage/Margin/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="InventoryHud" parent="NinePatchRect/VBoxContainer/contentPanel/HubWindow/VBox/PageHost/InventoryPage/Margin/Scroll/GridCenter" instance=ExtResource("4_inventory")]
+custom_minimum_size = Vector2(520, 420)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 4
+columns = 5
+
+[node name="JournalPage" parent="NinePatchRect/VBoxContainer/contentPanel/HubWindow/VBox/PageHost" instance=ExtResource("5_journal")]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="OperationsPage" parent="NinePatchRect/VBoxContainer/contentPanel/HubWindow/VBox/PageHost" instance=ExtResource("6_operations")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

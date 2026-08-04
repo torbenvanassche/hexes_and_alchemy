@@ -21,7 +21,7 @@ size = Vector3(1.3815429, 1, 1.1209228)
 
 [node name="ancient_ruins" type="Node3D" unique_id=1985250973]
 script = ExtResource("1_ruins_script")
-quest_types = Array[String](["investigate"])
+quest_types = Array[String](["survey", "delve", "secure", "salvage"])
 quest_profiles = Array[ExtResource("3_profile_script")]([ExtResource("4_survey"), ExtResource("5_salvage"), ExtResource("6_delve"), ExtResource("7_secure")])
 journal_quest = ExtResource("2_cg5fk")
 

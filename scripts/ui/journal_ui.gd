@@ -4,6 +4,7 @@ class_name JournalUI extends Control
 @onready var notoriety_progress: ProgressBar = $MarginContainer/VBoxContainer/GuildStanding/NotorietyProgress
 @onready var reputation_value: Label = $MarginContainer/VBoxContainer/GuildStanding/ReputationRow/ReputationValue
 @onready var notoriety_value: Label = $MarginContainer/VBoxContainer/GuildStanding/NotorietyRow/NotorietyValue
+@onready var prestige_value: Label = $MarginContainer/VBoxContainer/GuildStanding/PrestigeRow/PrestigeValue
 @onready var page_host: Control = $MarginContainer/VBoxContainer/PageHost
 @onready var previous_page_button: Button = $MarginContainer/VBoxContainer/ChapterNavigation/PreviousPageButton
 @onready var chapter_selector: OptionButton = $MarginContainer/VBoxContainer/ChapterNavigation/ChapterSelector
@@ -27,6 +28,8 @@ func _ready() -> void:
 		Manager.instance.journal.journal_changed.connect(_request_refresh_pages)
 	if Manager.instance != null and Manager.instance.reputation != null:
 		Manager.instance.reputation.changed.connect(_refresh_guild_standing)
+	if Manager.instance != null and Manager.instance.hub != null:
+		Manager.instance.hub.changed.connect(_refresh_guild_standing)
 	_refresh_guild_standing()
 	_request_refresh_pages()
 
@@ -37,6 +40,9 @@ func _exit_tree() -> void:
 	if Manager.instance != null and Manager.instance.reputation != null:
 		if Manager.instance.reputation.changed.is_connected(_refresh_guild_standing):
 			Manager.instance.reputation.changed.disconnect(_refresh_guild_standing)
+	if Manager.instance != null and Manager.instance.hub != null:
+		if Manager.instance.hub.changed.is_connected(_refresh_guild_standing):
+			Manager.instance.hub.changed.disconnect(_refresh_guild_standing)
 
 func _refresh_guild_standing() -> void:
 	if Manager.instance == null or Manager.instance.reputation == null:
@@ -44,12 +50,14 @@ func _refresh_guild_standing() -> void:
 		notoriety_progress.value = 0
 		reputation_value.text = "0 / %d" % int(reputation_progress.max_value)
 		notoriety_value.text = "0 / %d" % int(notoriety_progress.max_value)
+		prestige_value.text = "0"
 		return
 	var standing := Manager.instance.reputation
 	reputation_progress.value = clampi(standing.reputation, 0, int(reputation_progress.max_value))
 	notoriety_progress.value = clampi(standing.notoriety, 0, int(notoriety_progress.max_value))
 	reputation_value.text = "%d / %d" % [int(reputation_progress.value), int(reputation_progress.max_value)]
 	notoriety_value.text = "%d / %d" % [int(notoriety_progress.value), int(notoriety_progress.max_value)]
+	prestige_value.text = str(Manager.instance.hub.prestige if Manager.instance.hub != null else 0)
 
 func _request_refresh_pages() -> void:
 	if _refresh_queued:

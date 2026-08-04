@@ -21,8 +21,7 @@ func _ready() -> void:
 func setup_interaction(interaction: Interaction) -> void:
 	var service := interaction as SettlementService
 	settlement = service.get_settlement() if service != null else null
-	var player := Manager.instance.player_instance if Manager.instance != null else null
-	player_inventory = player.inventory if player != null else null
+	player_inventory = Manager.instance.hub.stockpile if Manager.instance != null and Manager.instance.hub != null else null
 	if settlement != null and not settlement.level_changed.is_connected(_on_settlement_changed):
 		settlement.level_changed.connect(_on_settlement_changed)
 	if player_inventory != null and not player_inventory.changed.is_connected(_refresh):

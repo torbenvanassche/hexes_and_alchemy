@@ -146,9 +146,18 @@ func get_quest_rank_experience_reward(quest_type_key: String, minimum_rank_overr
 	return profile.get_rank_experience_reward(minimum_rank_override)
 
 func grant_player_inventory_rewards(rewards: Dictionary[ItemInfo, int]) -> void:
-	if rewards.is_empty() or Manager.instance.player_instance == null:
+	if rewards.is_empty() or Manager.instance == null:
 		return
 
+	if Manager.instance.hub != null:
+		Manager.instance.hub.deposit_items(rewards)
+		for item: ItemInfo in rewards.keys():
+			if item != null and int(rewards[item]) > 0:
+				_notify_item_reward(item, int(rewards[item]))
+		return
+
+	if Manager.instance.player_instance == null:
+		return
 	var inventory := Manager.instance.player_instance.inventory
 	if inventory == null:
 		return

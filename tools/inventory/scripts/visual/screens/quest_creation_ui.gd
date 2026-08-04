@@ -483,6 +483,7 @@ func _create_quest() -> void:
 		_update_finish_button()
 		return
 
+	quest.context["supplies_reserved"] = true
 	quest_created.emit(quest);
 	if window != null:
 		window.close_requested.emit();
@@ -1040,8 +1041,12 @@ func _create_supply_slot(item: ItemInfo, count: int) -> ContentSlotUI:
 	slot.set_content(ContentSlotResource.new(count, item, max(1, count), true, false))
 	return slot
 
-func _get_player_inventory() -> Inventory:
-	if Manager.instance == null or Manager.instance.player_instance == null:
+func _get_player_inventory() -> ContentGroup:
+	if Manager.instance == null:
+		return null
+	if Manager.instance.hub != null and Manager.instance.hub.stockpile != null:
+		return Manager.instance.hub.stockpile
+	if Manager.instance.player_instance == null:
 		return null
 	return Manager.instance.player_instance.inventory
 
@@ -1051,6 +1056,8 @@ func _get_player() -> PlayerController:
 	return Manager.instance.player_instance
 
 func _connect_player_currency_signal() -> void:
+	if Manager.instance != null and Manager.instance.hub != null and not Manager.instance.hub.changed.is_connected(_on_player_currency_amount_changed):
+		Manager.instance.hub.changed.connect(_on_player_currency_amount_changed)
 	var player := _get_player()
 	if player == null:
 		return
@@ -1061,7 +1068,7 @@ func _refresh_reward_offer_limit() -> void:
 	if reward_offer_spin_box == null:
 		return
 	var player := _get_player()
-	var available_currency := player.currency if player != null else 0
+	var available_currency := Manager.instance.hub.currency if Manager.instance != null and Manager.instance.hub != null else (player.currency if player != null else 0)
 	reward_offer_spin_box.allow_greater = false
 	reward_offer_spin_box.max_value = maxf(0.0, float(available_currency))
 	if reward_offer_spin_box.value > reward_offer_spin_box.max_value:
@@ -1079,6 +1086,8 @@ func _get_minimum_rank_override() -> int:
 
 func _has_reward_budget() -> bool:
 	var player := _get_player()
+	if Manager.instance != null and Manager.instance.hub != null:
+		return Manager.instance.hub.currency >= _get_reward_offer_amount()
 	return player != null and player.currency >= _get_reward_offer_amount()
 
 func _get_interested_npc_count() -> int:
@@ -1102,6 +1111,8 @@ func _get_interested_npc_count() -> int:
 func _try_reserve_reward(amount: int) -> bool:
 	if amount <= 0:
 		return true
+	if Manager.instance != null and Manager.instance.hub != null:
+		return Manager.instance.hub.reserve_currency(amount)
 	var player := _get_player()
 	if player == null or player.currency < amount:
 		return false
@@ -1110,6 +1121,9 @@ func _try_reserve_reward(amount: int) -> bool:
 
 func _refund_reward(amount: int) -> void:
 	if amount <= 0:
+		return
+	if Manager.instance != null and Manager.instance.hub != null:
+		Manager.instance.hub.add_currency(amount)
 		return
 	var player := _get_player()
 	if player == null:

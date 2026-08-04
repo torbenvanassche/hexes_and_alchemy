@@ -235,6 +235,8 @@ func add_quest(q: Quest) -> void:
 		return;
 	if not active_quests.has(q):
 		active_quests.append(q);
+		if Manager.instance != null and Manager.instance.operations != null:
+			Manager.instance.operations.register_quest(q, str(q.context.get("parent_operation_id", "")))
 		quest_list_changed.emit();
 		try_assign_waiting_quests();
 
@@ -265,6 +267,8 @@ func try_assign_waiting_quests() -> void:
 		var selected_quest := _get_best_quest_for_npc(npc, waiting_quests)
 		if selected_quest == null:
 			continue
+		if not _reserve_quest_supplies(selected_quest):
+			continue
 		selected_quest.add_to_party(npc)
 		selected_quest.start()
 		waiting_quests.erase(selected_quest)
@@ -272,6 +276,20 @@ func try_assign_waiting_quests() -> void:
 
 	if assigned_quests > 0:
 		quest_list_changed.emit()
+
+func _reserve_quest_supplies(quest: Quest) -> bool:
+	if quest == null or quest.context.get("supplies_reserved", false):
+		return true
+	var objective := quest.get_objective()
+	if objective == null:
+		quest.context["supplies_reserved"] = true
+		return true
+	if Manager.instance == null or Manager.instance.hub == null:
+		return false
+	if not objective.assign_required_supplies(quest, Manager.instance.hub.stockpile):
+		return false
+	quest.context["supplies_reserved"] = true
+	return true
 
 func _get_waiting_quests() -> Array[Quest]:
 	var waiting_quests: Array[Quest] = []

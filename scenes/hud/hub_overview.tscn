@@ -1,0 +1,74 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/hub_overview_ui.gd" id="1_hub"]
+[ext_resource type="Theme" path="res://themes/fantasy_buttons.tres" id="2_buttons"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hub"]
+bg_color = Color(0.97, 0.9, 0.76, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.42, 0.31, 0.2, 0.45)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="HubOverview" type="PanelContainer"]
+theme_override_styles/panel = SubResource("StyleBoxFlat_hub")
+script = ExtResource("1_hub")
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 14
+
+[node name="Scroll" type="ScrollContainer" parent="Margin"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="VBox" type="VBoxContainer" parent="Margin/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="Header" type="Label" parent="Margin/Scroll/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.28, 0.2, 0.13, 1)
+theme_override_font_sizes/font_size = 18
+text = "HUB OPERATIONS"
+uppercase = true
+
+[node name="Subtitle" type="Label" parent="Margin/Scroll/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.42, 0.31, 0.2, 0.85)
+text = "Manage the work of your guild from one place."
+
+[node name="FactionsHeader" type="Label" parent="Margin/Scroll/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.28, 0.2, 0.13, 1)
+text = "FACTIONS"
+uppercase = true
+
+[node name="FactionTabs" type="HBoxContainer" parent="Margin/Scroll/VBox"]
+layout_mode = 2
+theme = ExtResource("2_buttons")
+theme_override_constants/separation = 5
+
+[node name="FactionDetails" type="VBoxContainer" parent="Margin/Scroll/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="OperationsHeader" type="Label" parent="Margin/Scroll/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.28, 0.2, 0.13, 1)
+text = "ACTIVE OPERATIONS"
+uppercase = true
+
+[node name="Operations" type="VBoxContainer" parent="Margin/Scroll/VBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 5

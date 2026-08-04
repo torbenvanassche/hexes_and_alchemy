@@ -11,6 +11,7 @@ id = "warden"
 packed_scene = ExtResource("1_scene")
 profession = "Warden"
 role = "Forager"
+operation_roles = Array[String](["hunter", "laborer"])
 traits = Array[String](["green_thumb", "cautious"])
 preferred_jobs = Array[String](["forage", "harvest", "plant", "water", "replant", "purify"])
 disliked_jobs = Array[String](["delve", "deepen"])

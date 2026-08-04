@@ -19,6 +19,7 @@ extends Node
 	"primary_action": "KEYBIND_PRIMARY_ACTION",
 	"inventory": "KEYBIND_INVENTORY",
 	"journal": "KEYBIND_JOURNAL",
+	"hub": "KEYBIND_HUB",
 	
 	"cancel": "KEYBIND_CANCEL"
 }

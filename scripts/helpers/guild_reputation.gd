@@ -27,6 +27,8 @@ func record_quest(quest: Quest) -> void:
 	elif quest.quest_key == "scout":
 		reputation += 1
 		notoriety += 1 if quest.scout_revealed_tiles >= 8 else 0
+	if Manager.instance != null and Manager.instance.hub != null:
+		Manager.instance.hub.add_prestige(maxi(1, profile.guild_reputation_reward) if profile != null else 1)
 
 	_record_world_site(quest)
 	_update_journal_progress(quest)

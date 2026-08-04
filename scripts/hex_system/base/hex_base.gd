@@ -26,6 +26,8 @@ var is_explored: bool = false:
 		is_explored = value;
 		if ground_hex_mesh != null:
 			set_explored(is_explored)
+		if is_explored and Manager.instance != null and Manager.instance.hub != null:
+			Manager.instance.hub.mark_mapped(self)
 		
 var blocked: bool = false;
 var movement_cost: float = 1.0;

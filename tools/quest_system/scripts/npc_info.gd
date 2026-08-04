@@ -5,6 +5,7 @@ class_name NpcInfo extends SceneInfo
 @export_group("Identity")
 @export var profession: String = "Generalist"
 @export var role: String = "Adventurer"
+@export var operation_roles: Array[String] = ["adventurer"]
 @export var traits: Array[String] = []
 ## Quest keys or behaviours this adventurer prefers. Examples: scout, prospect, extract.
 @export var preferred_jobs: Array[String] = []

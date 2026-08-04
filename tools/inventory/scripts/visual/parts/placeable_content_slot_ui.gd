@@ -11,8 +11,10 @@ var _preview_node: Node3D;
 var _preview_placeable: PlaceableStructureInfo;
 var _preview_hex: HexBase;
 var _placement_rotation_axis_ready: bool = true;
+var _inventory_drop_completed: bool = false;
 
 func _on_drag_started() -> void:
+	_inventory_drop_completed = false;
 	is_placing_placeable = _get_dragged_placeable() != null;
 
 func _on_drag_finished() -> void:
@@ -22,6 +24,10 @@ func _on_drag_finished() -> void:
 	hovered_hex_can_drop = false;
 	placement_rotation_y = NAN;
 	is_placing_placeable = false;
+
+func _on_inventory_drop_completed(_destination_slot: ContentSlotUI) -> void:
+	_inventory_drop_completed = true;
+	_on_drag_finished();
 
 func _should_process_drag() -> bool:
 	return is_placing_placeable;
@@ -44,6 +50,8 @@ func _process_drag(_delta: float) -> void:
 	);
 
 func _handle_unsuccessful_drag_end() -> bool:
+	if _inventory_drop_completed:
+		return false;
 	var placeable := _get_dragged_placeable();
 	if placeable == null:
 		return false;
@@ -65,10 +73,14 @@ func _get_dragged_placeable() -> PlaceableStructureInfo:
 			return placeable;
 	return null;
 
-func _get_player_inventory() -> Inventory:
-	if Manager.instance == null or Manager.instance.player_instance == null:
-		return null;
-	return Manager.instance.player_instance.inventory;
+func _get_player_inventory() -> ContentGroup:
+	if Manager.instance == null:
+		return null
+	if Manager.instance.hub != null and Manager.instance.hub.stockpile != null:
+		return Manager.instance.hub.stockpile
+	if Manager.instance.player_instance == null:
+		return null
+	return Manager.instance.player_instance.inventory
 
 func _get_hovered_hex() -> HexBase:
 	if Manager.instance == null or Manager.instance.player_instance == null:
