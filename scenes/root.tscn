@@ -67,6 +67,7 @@
 [ext_resource type="Resource" path="res://resources/npc_info/scout_adventurer.tres" id="46_scout"]
 [ext_resource type="Resource" path="res://resources/npc_info/delver_adventurer.tres" id="46_delver"]
 [ext_resource type="Resource" path="res://resources/npc_info/warden_adventurer.tres" id="46_warden"]
+[ext_resource type="Resource" path="res://resources/npc_info/crafter_adventurer.tres" id="46_crafter"]
 [ext_resource type="Resource" uid="uid://d0lienvyvqxlh" path="res://resources/item_info/dock_blueprint.tres" id="47_742t5"]
 [ext_resource type="Resource" path="res://resources/item_info/forge_blueprint.tres" id="48_forge_blueprint"]
 [ext_resource type="Resource" path="res://resources/item_info/wharf_blueprint.tres" id="48_wharf_blueprint"]
@@ -88,6 +89,10 @@
 [ext_resource type="Resource" path="res://resources/item_info/compass.tres" id="62_compass"]
 [ext_resource type="Resource" uid="uid://c02vjxha4podp" path="res://resources/scene_info/ui/tavern_roster_ui.tres" id="63_tavern_roster"]
 [ext_resource type="PackedScene" path="res://scenes/ui/components/toast_notification.tscn" id="64_toast_notification"]
+[ext_resource type="Resource" path="res://resources/item_info/game_meat.tres" id="65_game_meat"]
+[ext_resource type="Resource" path="res://resources/item_info/travel_rations.tres" id="66_travel_rations"]
+[ext_resource type="Resource" path="res://resources/item_info/work_supplies.tres" id="67_work_supplies"]
+[ext_resource type="Resource" path="res://resources/item_info/hunting_traps.tres" id="68_hunting_traps"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_j5px3"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -143,8 +148,8 @@ hexes = Array[ExtResource("3_l5cgh")]([ExtResource("4_vgks2"), ExtResource("5_dy
 structures = Array[ExtResource("10_gt4lb")]([ExtResource("11_ya6yc"), ExtResource("12_mflgo"), ExtResource("13_ancient_ruins_structure"), ExtResource("14_8ui5n"), ExtResource("16_jehah"), ExtResource("19_isfgf"), ExtResource("18_58tnd"), ExtResource("20_qk31b"), ExtResource("21_forge"), ExtResource("21_wharf"), ExtResource("21_expansion"), ExtResource("21_bridge"), ExtResource("56_water_source")])
 scenes = Array[ExtResource("15_ya6yc")]([ExtResource("12_vgks2"), ExtResource("16_gt4lb"), ExtResource("18_34frw"), ExtResource("18_mflgo"), ExtResource("20_8ui5n"), ExtResource("22_jehah"), ExtResource("58_hub_window"), ExtResource("29_moyyc"), ExtResource("30_f0nuf"), ExtResource("37_33j8a"), ExtResource("38_eirlg"), ExtResource("39_eirlg"), ExtResource("50_craft"), ExtResource("63_tavern_roster")])
 regions = Array[ExtResource("5_3hfy5")]([ExtResource("6_7pvxh"), ExtResource("9_y3xxt"), ExtResource("10_ancient_ruins_region")])
-items = Array[ExtResource("27_phl1g")]([ExtResource("30_agklt"), ExtResource("28_58tnd"), ExtResource("31_x7ldt"), ExtResource("32_moyyc"), ExtResource("33_f0nuf"), ExtResource("47_742t5"), ExtResource("48_forge_blueprint"), ExtResource("48_wharf_blueprint"), ExtResource("48_expansion_permit"), ExtResource("48_bridge_blueprint"), ExtResource("51_seed"), ExtResource("52_water"), ExtResource("53_grain"), ExtResource("54_support"), ExtResource("55_bucket"), ExtResource("59_ancient_coin"), ExtResource("60_relic_fragment"), ExtResource("61_old_guild_seal"), ExtResource("62_compass")])
-npcs = Array[ExtResource("45_h5su3")]([ExtResource("46_c6i2r"), ExtResource("46_scout"), ExtResource("46_delver"), ExtResource("46_warden")])
+items = Array[ExtResource("27_phl1g")]([ExtResource("30_agklt"), ExtResource("28_58tnd"), ExtResource("31_x7ldt"), ExtResource("32_moyyc"), ExtResource("33_f0nuf"), ExtResource("47_742t5"), ExtResource("48_forge_blueprint"), ExtResource("48_wharf_blueprint"), ExtResource("48_expansion_permit"), ExtResource("48_bridge_blueprint"), ExtResource("51_seed"), ExtResource("52_water"), ExtResource("53_grain"), ExtResource("65_game_meat"), ExtResource("66_travel_rations"), ExtResource("67_work_supplies"), ExtResource("68_hunting_traps"), ExtResource("54_support"), ExtResource("55_bucket"), ExtResource("59_ancient_coin"), ExtResource("60_relic_fragment"), ExtResource("61_old_guild_seal"), ExtResource("62_compass")])
+npcs = Array[ExtResource("45_h5su3")]([ExtResource("46_c6i2r"), ExtResource("46_scout"), ExtResource("46_delver"), ExtResource("46_warden"), ExtResource("46_crafter")])
 
 [node name="shared_components" type="Node" parent="." unique_id=2003265152]
 
@@ -185,12 +190,42 @@ element = NodePath(".")
 
 [node name="ToastNotifications" type="Control" parent="game_ui" unique_id=1863266253]
 layout_mode = 3
-anchors_preset = 0
-offset_top = 76.0
-offset_right = 1.0
-offset_bottom = 77.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("49_c6i2r")
 notification_scene = ExtResource("64_toast_notification")
-display_time = 4.0
+display_time = 5.0
+
+[node name="SafeMargin" type="MarginContainer" parent="game_ui/ToastNotifications"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 76
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="Alignment" type="HBoxContainer" parent="game_ui/ToastNotifications/SafeMargin"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Spacer" type="Control" parent="game_ui/ToastNotifications/SafeMargin/Alignment"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="NotificationStack" type="VBoxContainer" parent="game_ui/ToastNotifications/SafeMargin/Alignment"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
 
 [node name="resource_hud" parent="game_ui" unique_id=1817972187 instance=ExtResource("57_resource_hud")]

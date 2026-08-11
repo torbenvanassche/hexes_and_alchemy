@@ -6,6 +6,7 @@
 script = ExtResource("1_profile")
 quest_key = "extract"
 behaviour = "extract"
+required_role = "delver"
 translation_key_name = "QUEST_TYPE_EXTRACT"
 description_key = "QUEST_DESC_MINE_EXTRACT"
 risk_key = "QUEST_RISK_UNCERTAIN"

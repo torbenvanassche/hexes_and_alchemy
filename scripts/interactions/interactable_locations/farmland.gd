@@ -93,7 +93,7 @@ func execute_quest(q: Quest) -> void:
 		"harvest":
 			await get_tree().create_timer(get_quest_duration(q.quest_key, harvest_quest_time)).timeout
 			_set_crop_state(CropState.READY)
-			var watered_outcome := roll_quest_outcome(q.quest_key)
+			var watered_outcome := roll_quest_outcome(q)
 			if watered_outcome != null:
 				_pending_reward = watered_outcome.roll_loot()
 				watered_outcome.complete_journal_task()
@@ -103,7 +103,7 @@ func execute_quest(q: Quest) -> void:
 					_pending_reward = watered_lootable.roll_loot()
 		"collect":
 			await get_tree().create_timer(get_quest_duration(q.quest_key, harvest_quest_time)).timeout
-			var outcome := roll_quest_outcome(q.quest_key)
+			var outcome := roll_quest_outcome(q)
 			if outcome != null:
 				_pending_reward = outcome.roll_loot()
 				outcome.complete_journal_task()

@@ -59,6 +59,9 @@ func get_instance() -> SceneInstance:
 		get_live_instances()
 		if instances.size() > 0:
 			return instances[0]
+	if packed_scene == null:
+		Debug.err("SceneInfo '%s' has no packed scene." % id)
+		return null
 	var scene_node: Node = packed_scene.instantiate()
 	var instance: SceneInstance = SceneInstance.new(scene_node, self);
 	instance.set_processing(true)

@@ -8,6 +8,7 @@
 script = ExtResource("1_profile")
 quest_key = "purify"
 behaviour = "purify"
+required_role = "tender"
 translation_key_name = "QUEST_TYPE_PURIFY"
 description_key = "QUEST_DESC_WATER_PURIFY"
 risk_key = "QUEST_RISK_SAFE"

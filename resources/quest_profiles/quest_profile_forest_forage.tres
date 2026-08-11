@@ -8,10 +8,12 @@
 script = ExtResource("1_profile")
 quest_key = "forage"
 behaviour = "forage"
+required_role = "tender"
 translation_key_name = "QUEST_TYPE_FORAGE"
 description_key = "QUEST_DESC_FOREST_FORAGE"
 risk_key = "QUEST_RISK_SAFE"
 expected_reward_key = "QUEST_REWARD_SEEDS_WOOD"
 duration_seconds = 4.0
 available_states = Array[String](["HEALTHY"])
+blocked_by_active_occupation = true
 outcomes = Array[ExtResource("2_outcome_script")]([ExtResource("3_outcome")])

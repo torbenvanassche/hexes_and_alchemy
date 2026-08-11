@@ -11,6 +11,7 @@
 script = ExtResource("1_profile")
 quest_key = "draw_extra"
 behaviour = "draw"
+required_role = "tender"
 translation_key_name = "QUEST_TYPE_DRAW_EXTRA"
 description_key = "QUEST_DESC_WATER_DRAW_EXTRA"
 risk_key = "QUEST_RISK_UNCERTAIN"
@@ -20,5 +21,8 @@ rank_experience_reward = 2
 available_states = Array[String](["FRESH"])
 required_supplies = Dictionary[ExtResource("3_item_script"), int]({
 ExtResource("4_bucket"): 1
+})
+required_supply_effect_keys = Dictionary[ExtResource("3_item_script"), String]({
+ExtResource("4_bucket"): "QUEST_SUPPLY_EFFECT_BUCKET_DRAW_EXTRA"
 })
 outcomes = Array[ExtResource("2_outcome_script")]([ExtResource("5_low"), ExtResource("6_tainted")])

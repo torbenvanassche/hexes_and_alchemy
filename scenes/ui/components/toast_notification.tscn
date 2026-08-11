@@ -1,20 +1,66 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://rw8d36yv38k"]
 
-[node name="ToastNotification" type="RichTextLabel"]
-custom_minimum_size = Vector2(120, 44)
-offset_right = 120.0
-offset_bottom = 44.0
+[ext_resource type="Theme" uid="uid://dae2b2hfpj0l2" path="res://themes/light.theme" id="1_theme"]
+[ext_resource type="Script" uid="uid://ck86kmho8abvr" path="res://scripts/ui/toast_notification_ui.gd" id="2_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_toast"]
+bg_color = Color(0.97, 0.9, 0.76, 0.98)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.35, 0.24, 0.14, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color(0.08, 0.06, 0.04, 0.45)
+shadow_size = 4
+shadow_offset = Vector2(0, 2)
+
+[node name="ToastNotification" type="PanelContainer" unique_id=781162060]
+custom_minimum_size = Vector2(0, 58)
 mouse_filter = 2
+theme = ExtResource("1_theme")
+theme_override_styles/panel = SubResource("StyleBoxFlat_toast")
+script = ExtResource("2_script")
+
+[node name="Margin" type="MarginContainer" parent="." unique_id=70169360]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 9
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 9
+
+[node name="Content" type="HBoxContainer" parent="Margin" unique_id=646639585]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="Accent" type="ColorRect" parent="Margin/Content" unique_id=595925451]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 2
+mouse_filter = 2
+color = Color(0.42, 0.31, 0.2, 1)
+
+[node name="Icon" type="TextureRect" parent="Margin/Content" unique_id=745747977]
+visible = false
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Message" type="RichTextLabel" parent="Margin/Content" unique_id=1037242734]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_colors/default_color = Color(0.28, 0.2, 0.13, 1)
+theme_override_colors/font_shadow_color = Color(1, 0.96, 0.85, 0.55)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
 bbcode_enabled = true
 fit_content = true
-
-[node name="ColorRect" type="ColorRect" parent="."]
-show_behind_parent = true
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 0.19215687)
-metadata/_edit_lock_ = true
+scroll_active = false

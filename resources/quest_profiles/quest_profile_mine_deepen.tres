@@ -9,6 +9,8 @@
 script = ExtResource("1_profile")
 quest_key = "deepen"
 behaviour = "deepen"
+required_role = "delver"
+translation_key_name = "QUEST_TYPE_DEEPEN"
 description_key = "QUEST_DESC_MINE_DEEPEN"
 risk_key = "QUEST_RISK_DANGEROUS"
 expected_reward_key = "QUEST_REWARD_MINE_DEEPER"
@@ -17,6 +19,10 @@ rank_experience_reward = 4
 available_states = Array[String](["POOR_VEIN", "RICH_VEIN"])
 required_supplies = Dictionary[ExtResource("2_item"), int]({
 ExtResource("3_support"): 1
+})
+required_supply_effect_keys = Dictionary[ExtResource("2_item"), String]({
+ExtResource("3_support"): "QUEST_SUPPLY_EFFECT_BEAMS_DEEPEN_MINE",
+ExtResource("4_wood"): "QUEST_SUPPLY_EFFECT_WOOD_DEEPEN_MINE"
 })
 required_supplies_per_level = Dictionary[ExtResource("2_item"), int]({
 ExtResource("4_wood"): 2

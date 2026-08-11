@@ -71,14 +71,28 @@ func _queue_auto_claim() -> void:
 	_claim_reward.call_deferred()
 
 func _get_location_name() -> String:
-	if questData == null or questData.location == null or questData.location.structure == null:
+	if questData == null:
+		return tr("UNKNOWN")
+	if questData.quest_key == "scout":
+		var direction_key := str(questData.context.get("scout_direction_key", ""))
+		var direction := tr(direction_key) if direction_key != "" else ""
+		var distance := int(questData.context.get("scout_distance", 0))
+		if direction != "" and direction != direction_key and distance > 0:
+			return tr("QUEST_LOCATION_SCOUT_BOARD") % [direction, distance]
+		return tr("QUEST_LOCATION_UNCHARTED_FRONTIER")
+	if questData.location == null or questData.location.structure == null:
 		return tr("UNKNOWN")
 	return questData.location.structure.structure_info.get_display_name()
 
 func _get_party_text() -> String:
 	if questData == null or questData.party.is_empty():
 		return tr("QUEST_PARTY_UNASSIGNED")
-	return tr("QUEST_PARTY_ONE_ADVENTURER") if questData.party.size() == 1 else tr("QUEST_PARTY_ADVENTURERS") % [questData.party.size()]
+	var names: Array[String] = []
+	for npc: NPC in questData.party:
+		if npc == null or not is_instance_valid(npc):
+			continue
+		names.append(npc.npc_info.get_display_name() if npc.npc_info != null else tr("SCENE_ADVENTURER_NAME"))
+	return ", ".join(names) if not names.is_empty() else tr("QUEST_PARTY_UNASSIGNED")
 
 func _get_quest_type_name(quest_type_key: String) -> String:
 	var translation_key := "QUEST_TYPE_%s" % [quest_type_key.to_upper()]

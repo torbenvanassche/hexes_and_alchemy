@@ -5,3 +5,4 @@
 [resource]
 script = ExtResource("1_outcome")
 next_state = "SECURED"
+message_key = "QUEST_REPORT_RUINS_SECURED"

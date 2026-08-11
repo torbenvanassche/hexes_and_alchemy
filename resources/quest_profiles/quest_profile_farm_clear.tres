@@ -6,6 +6,7 @@
 script = ExtResource("1_profile")
 quest_key = "clear"
 behaviour = "clear"
+required_role = "tender"
 translation_key_name = "QUEST_TYPE_CLEAR"
 description_key = "QUEST_DESC_FARM_CLEAR"
 risk_key = "QUEST_RISK_SAFE"

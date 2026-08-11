@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="MonsterOccupationDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/quests/monster_occupation_definition.gd" id="1_monster"]
+
+[resource]
+script = ExtResource("1_monster")
+id = &"goblin_raiders"
+display_name = "Goblin Raiders"
+translation_key_name = "MONSTER_GOBLIN_RAIDERS_NAME"
+description = "An organized raiding band is using the location as a fortified hideout."
+description_key = "MONSTER_GOBLIN_RAIDERS_DESCRIPTION"
+spawn_weight = 0.65
+difficulty = 2
+danger_level = 3
+danger_weight_multiplier = 2.0
+security_duration_multiplier = 1.35

@@ -16,13 +16,17 @@ var minimum_rank_override: int = -1;
 var rank_experience_reward: int = 1;
 var scout_revealed_tiles: int = 0
 var scout_discovered_structures: Dictionary[String, int] = {}
+var outcome: QuestOutcome
 var context: Dictionary = {}
 
 var state_machine: StateMachine;
 
 var party: Array[NPC] = []
+var primary_member: NPC
+var support_members: Dictionary[StringName, NPC] = {}
 
 signal completed();
+signal outcome_ready(resolved_outcome: QuestOutcome)
 
 func _init(
 	_location: HexBase = null,
@@ -37,6 +41,8 @@ func _init(
 	self.minimum_rank_override = _minimum_rank_override;
 	self.rank_experience_reward = _resolve_rank_experience_reward(_rank_experience_reward);
 	supplies = ContentGroup.new();
+	if quest_key == "scout":
+		outcome = ScoutingQuestOutcome.new()
 	
 	var states: Array[String] = []
 	for s in QuestState.keys():
@@ -50,10 +56,72 @@ func is_state(state: QuestState) -> bool:
 func add_supply(item: Resource, amount: int = 1) -> void:
 	supplies.add(item, amount, true);
 	
-func add_to_party(npc: NPC) -> void:
-	if not party.has(npc):
-		party.append(npc);
-		npc.assign_quest(self);
+func add_to_party(npc: NPC, support_id: StringName = &"") -> bool:
+	if npc == null or party.has(npc) or not is_state(QuestState.WAITING) or not npc.is_available_for_quest():
+		return false
+	party.append(npc);
+	if support_id == &"" and primary_member == null:
+		primary_member = npc
+	elif support_id != &"":
+		support_members[support_id] = npc
+	npc.assign_quest(self);
+	return true
+
+func clear_party_assignments() -> void:
+	party.clear()
+	primary_member = null
+	support_members.clear()
+
+func set_selected_support_ids(ids: Array[String]) -> void:
+	var selected: Array[String] = []
+	for support_id: String in ids:
+		if support_id != "" and not selected.has(support_id):
+			selected.append(support_id)
+	context["selected_support_ids"] = selected
+
+func get_selected_support_ids() -> Array[String]:
+	var selected: Array[String] = []
+	var stored: Array = context.get("selected_support_ids", [])
+	for value in stored:
+		var support_id := str(value)
+		if support_id != "" and not selected.has(support_id):
+			selected.append(support_id)
+	return selected
+
+func has_selected_support(support_id: StringName) -> bool:
+	return get_selected_support_ids().has(str(support_id))
+
+func get_selected_support_definitions() -> Array[QuestSupportDefinition]:
+	var selected: Array[QuestSupportDefinition] = []
+	var profile := get_profile()
+	if profile == null:
+		return selected
+	var selected_ids := get_selected_support_ids()
+	for definition: QuestSupportDefinition in profile.get_optional_supports():
+		if definition != null and selected_ids.has(str(definition.id)):
+			selected.append(definition)
+	return selected
+
+func get_danger_weight_multiplier() -> float:
+	var multiplier := 1.0
+	for definition: QuestSupportDefinition in get_selected_support_definitions():
+		multiplier *= maxf(0.0, definition.danger_weight_multiplier)
+	return multiplier
+
+func get_effective_risk_key() -> String:
+	var profile := get_profile()
+	if profile == null:
+		return ""
+	var risk_key := profile.risk_key
+	var objective := get_objective()
+	if objective != null and objective.has_occupation() and objective.is_occupation_revealed():
+		risk_key = "QUEST_RISK_DANGEROUS"
+	for definition: QuestSupportDefinition in get_selected_support_definitions():
+		if definition.risk_key_when_selected != "":
+			risk_key = definition.risk_key_when_selected
+	if outcome != null and outcome.is_dangerous:
+		risk_key = "QUEST_RISK_DANGEROUS"
+	return risk_key
 		
 func get_state_as_string(state: QuestState) -> String:
 	return QuestState.keys()[state].to_lower();
@@ -93,13 +161,11 @@ func get_profile() -> QuestProfile:
 func record_scouted_hex(hex: HexBase) -> void:
 	if quest_key != "scout" or hex == null:
 		return
-	scout_revealed_tiles += 1
-	if hex.structure == null or hex.structure.structure_info == null:
-		return
-	var structure_name := hex.structure.structure_info.get_display_name()
-	if structure_name == "":
-		return
-	scout_discovered_structures[structure_name] = int(scout_discovered_structures.get(structure_name, 0)) + 1
+	var scouting_outcome := outcome as ScoutingQuestOutcome
+	if scouting_outcome == null:
+		scouting_outcome = ScoutingQuestOutcome.new()
+		outcome = scouting_outcome
+	scouting_outcome.record_hex(hex)
 
 func start() -> void:
 	for npc in party.duplicate():
@@ -140,6 +206,7 @@ func _check_party_arrived_at_quest() -> void:
 		
 func return_completed() -> void:
 	if party.all(func(n: NPC) -> bool: return n.is_state(NPC.NPCState.DONE)):
+		_resolve_return_outcome()
 		set_state(QuestState.COMPLETE);
 
 func _on_party_movement_failed(_failed_npc: NPC) -> void:
@@ -150,7 +217,9 @@ func _on_party_movement_failed(_failed_npc: NPC) -> void:
 			npc.arrived.disconnect(_check_party_arrived_at_quest)
 		if npc != null:
 			npc.cancel_assigned_quest(self)
-	party.clear()
+	if Manager.instance != null and Manager.instance.quests != null:
+		Manager.instance.quests.release_quest_supplies(self)
+	clear_party_assignments()
 	set_state(QuestState.WAITING)
 	if Manager.instance != null and Manager.instance.quests != null:
 		Manager.instance.quests.quest_list_changed.emit()
@@ -163,37 +232,41 @@ func return_from_quest() -> void:
 		npc.set_state(NPC.NPCState.RETURNING);
 	
 func parse_reward() -> void:
+	if context.get("reward_claimed", false) or not is_state(QuestState.COMPLETE):
+		return
+	_resolve_return_outcome()
+	if outcome != null and not outcome.is_applied():
+		return
 	var objective := get_objective()
 	var earned_rank_experience := get_rank_experience_reward()
 	if objective != null:
 		objective.complete_quest(self);
-	if quest_key == "scout":
-		_notify_scout_report()
-	for npc in party:
+	var valid_party: Array[NPC] = []
+	for npc: NPC in party:
 		if npc != null:
-			npc.complete_assigned_quest(self, earned_rank_experience, offered_currency_reward)
+			valid_party.append(npc)
+	var payment_per_member := floori(float(offered_currency_reward) / float(valid_party.size())) if not valid_party.is_empty() else 0
+	var payment_remainder := offered_currency_reward % valid_party.size() if not valid_party.is_empty() else 0
+	for index in valid_party.size():
+		var npc := valid_party[index]
+		if npc != null:
+			var payment := payment_per_member + (1 if index < payment_remainder else 0)
+			npc.complete_assigned_quest(self, earned_rank_experience, payment)
 	if Manager.instance != null and Manager.instance.reputation != null:
 		Manager.instance.reputation.record_quest(self)
+	context["reward_resolved"] = true
+	context["reward_claimed"] = true
 	Manager.instance.quests.remove_quest(self);
 	completed.emit();
 
-func _notify_scout_report() -> void:
-	if Manager.instance == null or Manager.instance.toast == null:
+func _resolve_return_outcome() -> void:
+	if outcome == null or outcome.is_applied():
 		return
-	if scout_revealed_tiles <= 0:
-		Manager.instance.toast.notify(tr("QUEST_SCOUT_REPORT_NOTHING"))
+	outcome.apply(self)
+	if not outcome.is_applied():
 		return
-
-	if scout_discovered_structures.is_empty():
-		Manager.instance.toast.notify(tr("QUEST_SCOUT_REPORT_TILES") % [scout_revealed_tiles])
-		return
-
-	var discoveries: Array[String] = []
-	for structure_name in scout_discovered_structures.keys():
-		var count := int(scout_discovered_structures[structure_name])
-		discoveries.append(structure_name if count == 1 else "%s x%s" % [structure_name, count])
-	discoveries.sort()
-	Manager.instance.toast.notify(tr("QUEST_SCOUT_REPORT_DISCOVERIES") % [
-		scout_revealed_tiles,
-		", ".join(discoveries),
-	])
+	if outcome is ScoutingQuestOutcome:
+		var scouting_outcome := outcome as ScoutingQuestOutcome
+		scout_revealed_tiles = scouting_outcome.get_revealed_tile_count()
+		scout_discovered_structures = scouting_outcome.get_discovered_structure_counts()
+	outcome_ready.emit(outcome)

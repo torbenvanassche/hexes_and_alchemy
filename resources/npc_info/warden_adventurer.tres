@@ -6,14 +6,15 @@
 
 [resource]
 script = ExtResource("2_info")
+faction_id = &"tenders"
 img = ExtResource("3_icon")
 id = "warden"
 packed_scene = ExtResource("1_scene")
 profession = "Warden"
-role = "Forager"
-operation_roles = Array[String](["hunter", "laborer"])
+role = "Tender"
+operation_roles = Array[String](["tender"])
 traits = Array[String](["green_thumb", "cautious"])
-preferred_jobs = Array[String](["forage", "harvest", "plant", "water", "replant", "purify"])
+preferred_jobs = Array[String](["forage", "harvest", "clear", "plant", "water", "replant", "fill", "draw", "purify"])
 disliked_jobs = Array[String](["delve", "deepen"])
 minimum_quest_score = 3.0
 metadata/_custom_type_script = "uid://du4hbbtmblkj0"

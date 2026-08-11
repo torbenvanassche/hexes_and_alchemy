@@ -12,6 +12,9 @@
 [ext_resource type="PackedScene" uid="uid://lm7rokymxyu6" path="res://meshes/kay_custom/exclamation.glb" id="10_cuer0"]
 [ext_resource type="PackedScene" uid="uid://qsfp5ua0nt7t" path="res://meshes/kay_fantasy_hexagon/decoration/props/flag_green.glb" id="10_secure_flag"]
 [ext_resource type="PackedScene" uid="uid://bofdcif23goin" path="res://meshes/kay_resources/Stone_Chunks_Large.glb" id="12_h83um"]
+[ext_resource type="Script" path="res://scripts/quests/monster_occupation_definition.gd" id="13_monster_script"]
+[ext_resource type="Resource" path="res://resources/monster_occupations/ruin_spiders.tres" id="14_spiders"]
+[ext_resource type="Resource" path="res://resources/monster_occupations/goblin_raiders.tres" id="15_goblins"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ruins_interaction"]
 size = Vector3(1.95, 1.2, 1.9474609)
@@ -23,6 +26,8 @@ size = Vector3(1.3815429, 1, 1.1209228)
 script = ExtResource("1_ruins_script")
 quest_types = Array[String](["survey", "delve", "secure", "salvage"])
 quest_profiles = Array[ExtResource("3_profile_script")]([ExtResource("4_survey"), ExtResource("5_salvage"), ExtResource("6_delve"), ExtResource("7_secure")])
+occupation_chance = 0.85
+occupation_pool = Array[ExtResource("13_monster_script")]([ExtResource("14_spiders"), ExtResource("15_goblins")])
 journal_quest = ExtResource("2_cg5fk")
 
 [node name="Root Scene" parent="." unique_id=1806470452 instance=ExtResource("2_gytin")]

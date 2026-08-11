@@ -8,6 +8,7 @@
 script = ExtResource("1_profile")
 quest_key = "survey"
 behaviour = "survey"
+required_role = "hunter"
 translation_key_name = "QUEST_TYPE_SURVEY"
 description_key = "QUEST_DESC_RUINS_SURVEY"
 risk_key = "QUEST_RISK_SAFE"

@@ -10,6 +10,10 @@ func _init() -> void:
 	timer.wait_time = 0.1;
 
 func queue(scene_info: SceneInfo) -> Signal:
+	if scene_info == null or scene_info.packed_scene == null:
+		return Signal()
+	if scene_info.is_cached or loading_queue.has(scene_info):
+		return scene_info.cached
 	if not timer.is_inside_tree():
 		SceneManager.add_child(timer);
 	
@@ -21,13 +25,18 @@ func queue(scene_info: SceneInfo) -> Signal:
 	var error: Error = ResourceLoader.load_threaded_request(scene_info.packed_scene.resource_path, type_string(typeof(PackedScene)))
 	if error:
 		loading_queue.erase(scene_info)
+		scene_info.is_queued = false
 		Debug.err(str(error))
 		
 	return scene_info.cached;
 
 func _check_progress() -> void:
 	for loading in loading_queue.duplicate():
-		if ResourceLoader.load_threaded_get_status(loading.packed_scene.resource_path) == ResourceLoader.THREAD_LOAD_LOADED:
+		if loading == null or loading.packed_scene == null:
+			loading_queue.erase(loading)
+			continue
+		var status := ResourceLoader.load_threaded_get_status(loading.packed_scene.resource_path)
+		if status == ResourceLoader.THREAD_LOAD_LOADED:
 			cached_scenes.append(loading)
 			loading_queue.erase(loading)
 			loading.is_cached = true;
@@ -35,6 +44,12 @@ func _check_progress() -> void:
 			loading.cached.emit(loading);
 			if loading_queue.size() == 0:
 				timer.stop();
+		elif status == ResourceLoader.THREAD_LOAD_FAILED or status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+			loading_queue.erase(loading)
+			loading.is_queued = false
+			Debug.err("Failed to load scene: %s" % loading.id)
+			if loading_queue.size() == 0:
+				timer.stop()
 
 func get_from_cache(scene_info: SceneInfo) -> SceneInfo:
 	if cached_scenes.has(scene_info):
@@ -50,6 +65,8 @@ func is_cached(scene_info: SceneInfo) -> int:
 		return -1;
 		
 func remove(scene_info: SceneInfo) -> void:
+	if scene_info == null:
+		return
 	if cached_scenes.has(scene_info):
 		cached_scenes.erase(scene_info);
 	

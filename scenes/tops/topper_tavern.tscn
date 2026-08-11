@@ -5,6 +5,13 @@
 [ext_resource type="Resource" uid="uid://c4slhs80lvehm" path="res://resources/scene_info/adventurer.tres" id="2_56i7v"]
 [ext_resource type="Material" uid="uid://c66vbca7lgh6m" path="res://materials/kay_fantasy_default.tres" id="3_244u3"]
 [ext_resource type="Resource" uid="uid://c02vjxha4podp" path="res://resources/scene_info/ui/tavern_roster_ui.tres" id="4_roster"]
+[ext_resource type="Resource" uid="uid://c8hkdge0pvgtn" path="res://resources/npc_info/basic_adventurer.tres" id="5_basic"]
+[ext_resource type="Script" uid="uid://du4hbbtmblkj0" path="res://tools/quest_system/scripts/npc_info.gd" id="5_npc_info"]
+[ext_resource type="Resource" path="res://resources/npc_info/scout_adventurer.tres" id="6_scout"]
+[ext_resource type="Resource" path="res://resources/npc_info/delver_adventurer.tres" id="7_adventurer"]
+[ext_resource type="Resource" path="res://resources/npc_info/crafter_adventurer.tres" id="8_crafter"]
+[ext_resource type="Script" uid="uid://6t4u66o5q6po" path="res://scripts/scene_manager/scene_info.gd" id="9_gr2xu"]
+[ext_resource type="Resource" path="res://resources/npc_info/warden_adventurer.tres" id="9_tender"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_isasx"]
 size = Vector3(0.7681427, 0.65410614, 0.5323236)
@@ -16,11 +23,12 @@ size = Vector3(1.173315, 1.3972301, 1.2564573)
 script = ExtResource("1_isasx")
 adventurer = ExtResource("2_56i7v")
 adventurer_spawn = NodePath("spawn_location")
-additional_ui = Array[ExtResource("4_roster")]([ExtResource("4_roster")])
+starting_npc_profiles = Array[ExtResource("5_npc_info")]([ExtResource("6_scout"), ExtResource("7_adventurer"), ExtResource("8_crafter"), ExtResource("9_tender"), ExtResource("5_basic")])
+additional_ui = Array[ExtResource("9_gr2xu")]([ExtResource("4_roster")])
 
 [node name="Root Scene" parent="." unique_id=1174146906 instance=ExtResource("1_244u3")]
 
-[node name="building_tavern_blue" parent="Root Scene/RootNode" parent_id_path=PackedInt32Array(1174146906, 1830000281) index="0" unique_id=2005032263]
+[node name="building_tavern_blue" parent="Root Scene/RootNode" parent_id_path=PackedInt32Array(1174146906, 15054036) index="0" unique_id=899500221]
 surface_material_override/0 = ExtResource("3_244u3")
 
 [node name="interaction" type="Area3D" parent="." unique_id=478417135]

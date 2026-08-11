@@ -2,6 +2,7 @@ class_name QuestProfile extends Resource
 
 @export var quest_key: String = ""
 @export var behaviour: String = ""
+@export var required_role: String = ""
 @export var translation_key_name: String = ""
 @export_multiline var description_key: String = ""
 @export var risk_key: String = "QUEST_RISK_SAFE"
@@ -11,10 +12,17 @@ class_name QuestProfile extends Resource
 @export_range(0, 100, 1) var rank_experience_reward: int = 1
 @export var available_states: Array[String] = []
 @export var required_supplies: Dictionary[ItemInfo, int] = {}
+@export var required_supply_effect_keys: Dictionary[ItemInfo, String] = {}
 ## Additional supplies for each mine depth beyond the first. Used by mine-deepening quests.
 @export var required_supplies_per_level: Dictionary[ItemInfo, int] = {}
+@export var optional_supports: Array[QuestSupportDefinition] = []
 @export var outcomes: Array[QuestOutcome] = []
 @export var modifiers: Dictionary = {}
+
+@export_group("Occupation")
+@export var requires_revealed_occupation := false
+@export var blocked_by_active_occupation := false
+@export_range(0.0, 10.0, 0.05, "or_greater") var occupation_danger_weight_multiplier := 1.0
 
 @export_group("Guild Impact")
 @export_range(-10, 10, 1) var guild_reputation_reward: int = 1
@@ -32,6 +40,13 @@ func get_behaviour() -> String:
 
 func is_available_for_state(state_name: String) -> bool:
 	return available_states.is_empty() or available_states.has(state_name)
+
+func is_available_for_occupation(has_active_occupation: bool, occupation_is_revealed: bool) -> bool:
+	if requires_revealed_occupation and not (has_active_occupation and occupation_is_revealed):
+		return false
+	if blocked_by_active_occupation and has_active_occupation and occupation_is_revealed:
+		return false
+	return true
 
 func get_display_name() -> String:
 	if translation_key_name == "":
@@ -77,11 +92,11 @@ func get_reward_preview() -> Array[Dictionary]:
 		if outcome == null:
 			continue
 
+		valid_outcome_count += 1
 		var ranges := outcome.get_preview_ranges()
 		if ranges.is_empty():
 			continue
 
-		valid_outcome_count += 1
 		for item: ItemInfo in ranges.keys():
 			if item == null:
 				continue
@@ -130,6 +145,22 @@ func get_rank_experience_reward(minimum_rank_override: int = -1) -> int:
 
 func get_required_supplies() -> Dictionary[ItemInfo, int]:
 	return required_supplies
+
+func get_required_supply_effect(item: ItemInfo) -> String:
+	if item == null or not required_supply_effect_keys.has(item):
+		return ""
+	var effect_key := str(required_supply_effect_keys[item])
+	if effect_key == "":
+		return ""
+	var translated := tr(effect_key)
+	return "" if translated == effect_key else translated
+
+func get_optional_supports() -> Array[QuestSupportDefinition]:
+	var supports: Array[QuestSupportDefinition] = []
+	for support in optional_supports:
+		if support != null and support.id != &"":
+			supports.append(support)
+	return supports
 
 func get_required_supplies_for_level(level: int) -> Dictionary[ItemInfo, int]:
 	var result: Dictionary[ItemInfo, int] = {}
@@ -184,15 +215,21 @@ func quest_has_supplies(quest: Quest) -> bool:
 		return true
 	return quest.supplies != null and quest.supplies.has_all(required_supplies)
 
-func roll_outcome() -> QuestOutcome:
+func roll_outcome(danger_multiplier: float = 1.0) -> QuestOutcome:
 	var valid_outcomes: Array[QuestOutcome] = []
 	var cumulative: Array[float] = []
 	var total_weight := 0.0
+	var clamped_danger_multiplier := maxf(0.0, danger_multiplier)
 
 	for outcome in outcomes:
-		if outcome == null or outcome.weight <= 0.0:
+		if outcome == null:
 			continue
-		total_weight += outcome.weight
+		var resolved_weight := outcome.weight
+		if outcome.is_dangerous:
+			resolved_weight *= clamped_danger_multiplier
+		if resolved_weight <= 0.0:
+			continue
+		total_weight += resolved_weight
 		valid_outcomes.append(outcome)
 		cumulative.append(total_weight)
 

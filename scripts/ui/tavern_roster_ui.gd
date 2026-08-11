@@ -2,6 +2,7 @@ class_name TavernRosterUI
 extends PanelContainer
 
 const NPC_DETAILS_WINDOW := preload("res://resources/scene_info/ui/npc_details_ui.tres")
+const ROSTER_ROW_SCENE := preload("res://scenes/ui/components/tavern_roster_row.tscn")
 
 @onready var roster_rows: VBoxContainer = $MarginContainer/VBoxContainer/RosterRows
 @onready var empty_label: Label = $MarginContainer/VBoxContainer/EmptyRosterLabel
@@ -37,46 +38,13 @@ func _refresh_roster() -> void:
 	for npc_scene_instance in roster:
 		var npc := npc_scene_instance.node as NPC
 		if npc != null:
-			roster_rows.add_child(_create_roster_row(npc))
+			var row := _create_roster_row(npc) as TavernRosterRowUI
+			roster_rows.add_child(row)
+			row.setup(npc)
 
 func _create_roster_row(npc: NPC) -> Control:
-	var row := HBoxContainer.new()
-	row.custom_minimum_size = Vector2(0, 30)
-	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	row.add_theme_constant_override("separation", 14)
-
-	var name_label := Label.new()
-	name_label.custom_minimum_size = Vector2(190, 0)
-	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	name_label.clip_text = true
-	name_label.text = _get_npc_display_name(npc)
-	row.add_child(name_label)
-
-	var profession_label := Label.new()
-	profession_label.custom_minimum_size = Vector2(120, 0)
-	profession_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	profession_label.text = npc.get_profession_label()
-	profession_label.clip_text = true
-	row.add_child(profession_label)
-
-	var rank_label := Label.new()
-	rank_label.custom_minimum_size = Vector2(150, 0)
-	rank_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	rank_label.text = tr("ADVENTURER_ROSTER_RANK") % npc.get_rank_progress_label()
-	row.add_child(rank_label)
-
-	var status_label := Label.new()
-	status_label.custom_minimum_size = Vector2(90, 0)
-	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	status_label.text = tr("ADVENTURER_STATUS_AVAILABLE") if npc.current_quest == null else tr("ADVENTURER_STATUS_ASSIGNED")
-	row.add_child(status_label)
-
-	var details_button := Button.new()
-	details_button.custom_minimum_size = Vector2(86, 28)
-	details_button.text = tr("NPC_DETAILS_OPEN")
-	details_button.pressed.connect(_open_npc_details.bind(npc))
-	row.add_child(details_button)
-
+	var row := ROSTER_ROW_SCENE.instantiate() as TavernRosterRowUI
+	row.details_requested.connect(_open_npc_details.bind(npc))
 	return row
 
 func _open_npc_details(npc: NPC) -> void:
@@ -103,9 +71,3 @@ func _open_npc_details(npc: NPC) -> void:
 	details_ui.setup_npc(npc)
 	window_instance.on_enter.emit()
 	detail_windows[npc_id] = window_instance
-
-func _get_npc_display_name(npc: NPC) -> String:
-	if npc == null or npc.npc_info == null:
-		return tr("SCENE_ADVENTURER_NAME")
-	var display_name := npc.npc_info.get_display_name()
-	return tr("SCENE_ADVENTURER_NAME") if display_name == npc.npc_info.id.capitalize() else display_name

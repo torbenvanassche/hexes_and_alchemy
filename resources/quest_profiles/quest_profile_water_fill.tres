@@ -10,6 +10,7 @@
 script = ExtResource("1_profile")
 quest_key = "fill"
 behaviour = "fill"
+required_role = "tender"
 translation_key_name = "QUEST_TYPE_FILL"
 description_key = "QUEST_DESC_WATER_FILL"
 expected_reward_key = "QUEST_REWARD_WATER_BUCKET"
@@ -17,5 +18,8 @@ duration_seconds = 4.0
 available_states = Array[String](["FRESH"])
 required_supplies = Dictionary[ExtResource("3_item_script"), int]({
 ExtResource("4_bucket"): 1
+})
+required_supply_effect_keys = Dictionary[ExtResource("3_item_script"), String]({
+ExtResource("4_bucket"): "QUEST_SUPPLY_EFFECT_BUCKET_FILL"
 })
 outcomes = Array[ExtResource("2_outcome_script")]([ExtResource("5_outcome")])

@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="ItemInfo" format=3 uid="uid://xwb4xlsdwwub"]
+
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="1_item"]
+[ext_resource type="Texture2D" uid="uid://bdoeiust46kjd" path="res://sprites/items/trap.png" id="2_texture"]
+[ext_resource type="Resource" uid="uid://o03k1cg30nlw" path="res://resources/item_info/iron_ore.tres" id="3_iron"]
+[ext_resource type="Resource" uid="uid://b46nyvtvipor5" path="res://resources/item_info/wood_raw.tres" id="4_wood"]
+
+[resource]
+script = ExtResource("1_item")
+unique_id = "hunting_traps"
+translation_key_name = "ITEM_HUNTING_TRAPS_NAME"
+translation_key_description = "ITEM_HUNTING_TRAPS_DESCRIPTION"
+texture = ExtResource("2_texture")
+buy_value = 16
+sell_value = 9
+recipe = Dictionary[ExtResource("1_item"), int]({
+ExtResource("3_iron"): 1,
+ExtResource("4_wood"): 2
+})
+show_in_hud = true
+metadata/_custom_type_script = "uid://c8ngjbq8w5gjr"

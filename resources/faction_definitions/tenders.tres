@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="FactionDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/helpers/faction_definition.gd" id="1_definition"]
+
+[resource]
+script = ExtResource("1_definition")
+id = &"tenders"
+display_name = "Tenders"
+roles = Array[String](["tender"])
+responsibilities = Array[String](["Maintain the settlement", "Support farming and water"])
+preferred_quest_types = Array[String](["forage", "harvest", "fell_timber", "replant", "clear", "plant", "water", "rush_harvest", "careful_harvest", "fill", "draw_extra", "purify"])

@@ -1,0 +1,151 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/faction_overview_card_ui.gd" id="1_card"]
+[ext_resource type="Theme" path="res://themes/fantasy_buttons.tres" id="2_buttons"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
+bg_color = Color(0.92, 0.84, 0.67, 0.65)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.42, 0.31, 0.2, 0.35)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_members"]
+bg_color = Color(0.32, 0.24, 0.16, 0.1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.42, 0.31, 0.2, 0.28)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="FactionOverviewCard" type="PanelContainer"]
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+script = ExtResource("1_card")
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 7
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 7
+
+[node name="Content" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="Header" type="HBoxContainer" parent="Margin/Content"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Info" type="Button" parent="Margin/Content/Header"]
+custom_minimum_size = Vector2(18, 18)
+layout_mode = 2
+size_flags_vertical = 1
+theme = ExtResource("2_buttons")
+focus_mode = 0
+mouse_filter = 2
+flat = true
+text = "i"
+theme_override_font_sizes/font_size = 12
+
+[node name="Title" type="Label" parent="Margin/Content/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.28, 0.2, 0.13, 1)
+theme_override_font_sizes/font_size = 16
+mouse_filter = 1
+
+[node name="Availability" type="Label" parent="Margin/Content/Header"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.32, 0.23, 0.14, 1)
+horizontal_alignment = 2
+
+[node name="Progress" type="Label" parent="Margin/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.34, 0.23, 0.9)
+
+[node name="MembersPanel" type="PanelContainer" parent="Margin/Content"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_members")
+
+[node name="Margin" type="MarginContainer" parent="Margin/Content/MembersPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 6
+
+[node name="MembersContent" type="VBoxContainer" parent="Margin/Content/MembersPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="MembersTitleMargin" type="MarginContainer" parent="Margin/Content/MembersPanel/Margin/MembersContent"]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_right = 6
+
+[node name="MembersTitle" type="Label" parent="Margin/Content/MembersPanel/Margin/MembersContent/MembersTitleMargin"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.36, 0.27, 0.18, 0.95)
+theme_override_font_sizes/font_size = 12
+text = "HUB_GUILD_MEMBERS"
+uppercase = true
+
+[node name="ColumnHeaderMargin" type="MarginContainer" parent="Margin/Content/MembersPanel/Margin/MembersContent"]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_right = 6
+
+[node name="ColumnHeader" type="HBoxContainer" parent="Margin/Content/MembersPanel/Margin/MembersContent/ColumnHeaderMargin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Name" type="Label" parent="Margin/Content/MembersPanel/Margin/MembersContent/ColumnHeaderMargin/ColumnHeader"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.48, 0.37, 0.26, 0.85)
+theme_override_font_sizes/font_size = 10
+text = "HUB_ACTIVITY_NAME"
+
+[node name="Role" type="Label" parent="Margin/Content/MembersPanel/Margin/MembersContent/ColumnHeaderMargin/ColumnHeader"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.48, 0.37, 0.26, 0.85)
+theme_override_font_sizes/font_size = 10
+text = "HUB_ACTIVITY_ROLE"
+
+[node name="Activity" type="Label" parent="Margin/Content/MembersPanel/Margin/MembersContent/ColumnHeaderMargin/ColumnHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.48, 0.37, 0.26, 0.85)
+theme_override_font_sizes/font_size = 10
+text = "HUB_ACTIVITY_STATUS"
+
+[node name="MembersScroll" type="ScrollContainer" parent="Margin/Content/MembersPanel/Margin/MembersContent"]
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Rows" type="VBoxContainer" parent="Margin/Content/MembersPanel/Margin/MembersContent/MembersScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 3
+
+[node name="EmptyMembers" type="Label" parent="Margin/Content/MembersPanel/Margin/MembersContent"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.34, 0.23, 0.85)
+text = "HUB_NO_FACTION_MEMBERS"
+horizontal_alignment = 1
+
+[connection signal="minimum_size_changed" from="Margin/Content/MembersPanel/Margin/MembersContent/MembersScroll/Rows" to="." method="_queue_members_scroll_height_update"]

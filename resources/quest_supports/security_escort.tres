@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="QuestSupportDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/quests/quest_support_definition.gd" id="1_support"]
+
+[resource]
+script = ExtResource("1_support")
+id = &"security_escort"
+provider_role = "security"
+name_key = "QUEST_SUPPORT_SECURITY_NAME"
+description_key = "QUEST_SUPPORT_SECURITY_DESCRIPTION"
+selected_by_default = false
+danger_weight_multiplier = 0.25
+risk_key_when_selected = "QUEST_RISK_UNCERTAIN"

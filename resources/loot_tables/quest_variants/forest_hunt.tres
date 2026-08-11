@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="LootTable" format=3 uid="uid://b8oyyq4e8p0rf"]
+
+[ext_resource type="Script" uid="uid://b2wjb40qlkbuf" path="res://scripts/structures/loot_table.gd" id="1_table"]
+[ext_resource type="Script" uid="uid://ctqcmpru1cvqf" path="res://scripts/structures/loot_table_entry.gd" id="2_entry"]
+[ext_resource type="Resource" uid="uid://dm1en2i1m3xky" path="res://resources/item_info/game_meat.tres" id="3_meat"]
+
+[sub_resource type="Resource" id="Resource_meat"]
+script = ExtResource("2_entry")
+item = ExtResource("3_meat")
+min_amount = 2
+max_amount = 4
+
+[resource]
+script = ExtResource("1_table")
+entries = Array[ExtResource("2_entry")]([SubResource("Resource_meat")])

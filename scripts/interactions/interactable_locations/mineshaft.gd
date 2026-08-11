@@ -46,6 +46,7 @@ func get_filtered_quest_types(active_state: int = state_machine.get_current_stat
 	var filtered_types: Array[String] = super.get_filtered_quest_types(active_state)
 	if depth >= max_depth:
 		filtered_types.erase("deepen")
+		filtered_types.erase("reopen")
 	return filtered_types
 
 func get_required_supplies(quest_type_key: String) -> Dictionary[ItemInfo, int]:
@@ -102,6 +103,11 @@ func execute_quest(q: Quest) -> void:
 		depth = mini(max_depth, depth + 1)
 		_notify_reward(tr("QUEST_MINE_DEEPENED") % [depth])
 		Manager.instance.quests.quest_availability_changed.emit()
+	elif behaviour == "reopen":
+		await get_tree().create_timer(get_quest_duration(q.quest_key, extract_time)).timeout
+		depth = mini(max_depth, depth + 1)
+		_set_mine_state(MineState.UNSURVEYED)
+		_notify_reward(tr("QUEST_MINE_REOPENED") % [depth])
 
 	q.return_from_quest()
 	_quest_running = false
@@ -257,7 +263,7 @@ func get_quest_profile_expected_reward(quest_type_key: String) -> String:
 	return super.get_quest_profile_expected_reward(quest_type_key)
 
 func get_quest_context_label(quest_type_key: String) -> String:
-	if quest_type_key != "deepen":
+	if quest_type_key not in ["deepen", "reopen"]:
 		return ""
 	return tr("QUEST_MINE_DEPTH_STATUS") % [depth, max_depth]
 

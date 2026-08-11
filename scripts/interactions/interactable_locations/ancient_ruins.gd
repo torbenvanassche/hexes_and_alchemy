@@ -20,6 +20,9 @@ enum RuinsState {
 
 var _quest_running: bool = false
 var _pending_reward: Dictionary[ItemInfo, int] = {}
+var _pending_behaviour := ""
+var _pending_outcome: QuestOutcome
+var _pending_reveal_occupation := false
 var _loot_claimed: bool = false
 
 func _ready() -> void:
@@ -31,6 +34,7 @@ func _ready() -> void:
 		states.append(state_name)
 	state_machine = StateMachine.new(states)
 	_set_ruins_state(RuinsState.AVAILABLE)
+	_initialize_occupation.call_deferred()
 
 func _on_visibility_changed() -> void:
 	super._on_visibility_changed()
@@ -55,33 +59,37 @@ func execute_quest(q: Quest) -> void:
 	_quest_running = true
 	_pending_reward.clear()
 	var behaviour := get_quest_behaviour(q.quest_key, "salvage")
+	_pending_behaviour = behaviour
+	_pending_outcome = null
+	_pending_reveal_occupation = behaviour == "survey" and not is_occupation_revealed()
 
-	await get_tree().create_timer(get_quest_duration(q.quest_key, investigate_time)).timeout
+	var duration := get_quest_duration(q.quest_key, investigate_time)
+	var occupation := get_occupation()
+	if behaviour == "secure" and occupation != null:
+		duration *= occupation.security_duration_multiplier
+	await get_tree().create_timer(duration).timeout
 
-	var outcome := roll_quest_outcome(q.quest_key)
+	var danger_multiplier := 0.0 if state_machine.get_current_state() == "SECURED" else 1.0
+	var outcome := roll_quest_outcome(q, danger_multiplier)
+	_pending_outcome = outcome
 	if outcome != null:
 		_pending_reward = outcome.roll_loot()
-		if outcome.has_next_state():
-			_set_ruins_state(RuinsState[outcome.next_state] as RuinsState)
-		outcome.complete_journal_task()
+		_append_monster_report(outcome)
 	else:
 		var lootable := hex.structure.structure_info as LootableStructureInfo
 		if lootable != null:
 			_pending_reward = lootable.roll_loot()
-		match behaviour:
-			"survey":
-				_set_ruins_state(RuinsState.SURVEYED)
-			"secure":
-				_set_ruins_state(RuinsState.SECURED)
-			_:
-				_set_ruins_state(RuinsState.LOOTED)
 
 	q.return_from_quest()
 	_quest_running = false
 
 func complete_quest(_q: Quest) -> void:
+	if _pending_reveal_occupation:
+		reveal_occupation()
+	_apply_pending_result()
 	var lootable := hex.structure.structure_info as LootableStructureInfo
 	if lootable == null:
+		_clear_pending_result()
 		return
 
 	grant_player_inventory_rewards(_pending_reward)
@@ -90,6 +98,7 @@ func complete_quest(_q: Quest) -> void:
 	if lootable.loot_once:
 		_loot_claimed = state_machine.get_current_state() == "LOOTED"
 		Manager.instance.quests.quest_availability_changed.emit()
+	_clear_pending_result()
 
 func _set_ruins_state(state: RuinsState) -> void:
 	state_machine.set_state(RuinsState.keys()[state])
@@ -109,3 +118,55 @@ func _update_markers(state: RuinsState) -> void:
 		secured_marker.visible = state == RuinsState.SECURED
 	if looted_marker != null:
 		looted_marker.visible = state == RuinsState.LOOTED
+
+func _initialize_occupation() -> void:
+	if hex == null:
+		return
+	var grid := hex.region_instance.hex_grid if hex.region_instance != null else null
+	var rng := grid.create_rng("ruins_occupation:%s" % hex.cube_id) if grid != null else null
+	ensure_occupation_selected(rng, false)
+
+func _apply_pending_result() -> void:
+	if _pending_outcome != null:
+		_pending_outcome.complete_journal_task()
+		match _pending_behaviour:
+			"survey":
+				_set_ruins_state(RuinsState.DANGEROUS if has_occupation() else RuinsState.SURVEYED)
+			"secure":
+				if not _pending_outcome.is_dangerous:
+					clear_occupation()
+					_set_ruins_state(RuinsState.SECURED)
+			"delve":
+				if _pending_outcome.is_dangerous:
+					_set_ruins_state(RuinsState.DANGEROUS)
+				else:
+					clear_occupation(false)
+					_set_ruins_state(RuinsState.LOOTED)
+			_:
+				if _pending_outcome.has_next_state():
+					_set_ruins_state(RuinsState[_pending_outcome.next_state] as RuinsState)
+		return
+	match _pending_behaviour:
+		"survey":
+			_set_ruins_state(RuinsState.DANGEROUS if has_occupation() else RuinsState.SURVEYED)
+		"secure":
+			clear_occupation()
+			_set_ruins_state(RuinsState.SECURED)
+		_:
+			_set_ruins_state(RuinsState.LOOTED)
+
+func _clear_pending_result() -> void:
+	_pending_behaviour = ""
+	_pending_outcome = null
+	_pending_reveal_occupation = false
+
+func _append_monster_report(outcome: QuestOutcome) -> void:
+	if outcome == null or not _pending_reveal_occupation or not has_occupation():
+		return
+	var occupation := get_occupation()
+	if occupation == null:
+		return
+	outcome.append_summary(tr("QUEST_REPORT_MONSTER_SPOTTED") % [
+		occupation.get_display_name(),
+		AdventurerRank.get_display_name(occupation.get_difficulty()),
+	])

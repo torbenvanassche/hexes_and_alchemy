@@ -19,6 +19,7 @@
 [ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_mine_stabilized_extract.tres" id="15_stabilized"]
 [ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_mine_reinforce.tres" id="16_reinforce"]
 [ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_mine_deepen.tres" id="17_deepen"]
+[ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_mine_reopen.tres" id="17_reopen"]
 [ext_resource type="Resource" path="res://resources/loot_tables/mine_depth_2.tres" id="18_depth_2"]
 [ext_resource type="Resource" path="res://resources/loot_tables/mine_depth_3.tres" id="19_depth_3"]
 [ext_resource type="Script" path="res://scripts/structures/loot_table.gd" id="20_loot_table"]
@@ -46,10 +47,10 @@ size = Vector3(0.94522744, 0.7539673, 0.41274548)
 transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, 0, 0, 0)
 script = ExtResource("1_f4m0s")
 vein_infos = Array[ExtResource("1_wd22k")]([ExtResource("3_icepf"), ExtResource("5_1g1kg"), ExtResource("6_ngjhr")])
-quest_types = Array[String](["prospect", "extract", "reinforce"])
+quest_types = Array[String](["prospect", "extract", "reinforce", "reopen"])
 bitmap = SubResource("BitMap_3h0bv")
 quest_supply_requirements = Array[ExtResource("9_supply")]([SubResource("Resource_reinforce_supplies")])
-quest_profiles = Array[ExtResource("11_profile_script")]([ExtResource("12_prospect"), ExtResource("13_extract"), ExtResource("14_deep"), ExtResource("15_stabilized"), ExtResource("16_reinforce"), ExtResource("17_deepen")])
+quest_profiles = Array[ExtResource("11_profile_script")]([ExtResource("12_prospect"), ExtResource("13_extract"), ExtResource("14_deep"), ExtResource("15_stabilized"), ExtResource("16_reinforce"), ExtResource("17_deepen"), ExtResource("17_reopen")])
 depth_loot_tables = Array[ExtResource("20_loot_table")]([ExtResource("18_depth_2"), ExtResource("19_depth_3")])
 
 [node name="Root Scene" parent="." unique_id=1429542013 instance=ExtResource("1_bbfir")]

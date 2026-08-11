@@ -8,6 +8,7 @@
 script = ExtResource("1_profile")
 quest_key = "harvest"
 behaviour = "harvest"
+required_role = "tender"
 translation_key_name = "QUEST_TYPE_HARVEST"
 description_key = "QUEST_DESC_FARM_HARVEST"
 risk_key = "QUEST_RISK_SAFE"

@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="QuestProfile" format=3]
+
+[ext_resource type="Script" path="res://scripts/quests/quest_profile.gd" id="1_profile"]
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="2_item_script"]
+[ext_resource type="Resource" uid="uid://m72hate3ge7x" path="res://resources/item_info/support_beams.tres" id="3_beams"]
+[ext_resource type="Resource" path="res://resources/item_info/work_supplies.tres" id="4_work"]
+
+[resource]
+script = ExtResource("1_profile")
+quest_key = "reopen"
+behaviour = "reopen"
+required_role = "crafter"
+translation_key_name = "QUEST_TYPE_REOPEN_MINE"
+description_key = "QUEST_DESC_MINE_REOPEN"
+risk_key = "QUEST_RISK_SAFE"
+expected_reward_key = "QUEST_REWARD_NEW_VEIN"
+duration_seconds = 10.0
+rank_experience_reward = 4
+available_states = Array[String](["EXHAUSTED"])
+required_supplies = Dictionary[ExtResource("2_item_script"), int]({
+ExtResource("3_beams"): 2,
+ExtResource("4_work"): 1
+})
+required_supply_effect_keys = Dictionary[ExtResource("2_item_script"), String]({
+ExtResource("3_beams"): "QUEST_SUPPLY_EFFECT_BEAMS_REOPEN_MINE",
+ExtResource("4_work"): "QUEST_SUPPLY_EFFECT_WORK_REOPEN_MINE"
+})
+guild_reputation_reward = 3
+stewardship_change = 2

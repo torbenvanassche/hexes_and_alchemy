@@ -33,6 +33,7 @@ func destroy() -> void:
 
 func _on_node_tree_exiting() -> void:
 	_unregister()
+	queue_free()
 
 func _unregister() -> void:
 	if _is_destroyed:

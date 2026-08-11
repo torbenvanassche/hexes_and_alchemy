@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="ItemInfo" format=3 uid="uid://c1h73wfy4bsm"]
+
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="1_item"]
+[ext_resource type="Texture2D" uid="uid://wvbrfaqtmrae" path="res://sprites/items/ration.png" id="2_texture"]
+[ext_resource type="Resource" uid="uid://dm1en2i1m3xky" path="res://resources/item_info/game_meat.tres" id="3_meat"]
+[ext_resource type="Resource" uid="uid://75dbm8y87mpo" path="res://resources/item_info/grain.tres" id="4_grain"]
+
+[resource]
+script = ExtResource("1_item")
+unique_id = "travel_rations"
+translation_key_name = "ITEM_TRAVEL_RATIONS_NAME"
+translation_key_description = "ITEM_TRAVEL_RATIONS_DESCRIPTION"
+texture = ExtResource("2_texture")
+buy_value = 9
+sell_value = 5
+recipe = Dictionary[ExtResource("1_item"), int]({
+ExtResource("3_meat"): 1,
+ExtResource("4_grain"): 1
+})
+show_in_hud = true
+metadata/_custom_type_script = "uid://c8ngjbq8w5gjr"

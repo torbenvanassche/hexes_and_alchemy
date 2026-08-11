@@ -37,7 +37,7 @@ func execute_quest(q: Quest) -> void:
 	var behaviour := get_quest_behaviour(q.quest_key, "fill")
 	await get_tree().create_timer(get_quest_duration(q.quest_key, fill_time)).timeout
 
-	var outcome := roll_quest_outcome(q.quest_key)
+	var outcome := roll_quest_outcome(q)
 	if outcome != null:
 		_pending_reward = outcome.roll_loot()
 		if outcome.has_next_state():

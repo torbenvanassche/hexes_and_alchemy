@@ -8,3 +8,4 @@ script = ExtResource("1_outcome")
 weight = 0.65
 loot_table = ExtResource("2_loot")
 next_state = "LOOTED"
+message_key = "QUEST_REPORT_RUINS_DELVE_SUCCESS"

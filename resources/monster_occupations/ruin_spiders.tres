@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="MonsterOccupationDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/quests/monster_occupation_definition.gd" id="1_monster"]
+
+[resource]
+script = ExtResource("1_monster")
+id = &"ruin_spiders"
+display_name = "Ruin Spiders"
+translation_key_name = "MONSTER_RUIN_SPIDERS_NAME"
+description = "A colony of oversized spiders has webbed over the site's deepest passages."
+description_key = "MONSTER_RUIN_SPIDERS_DESCRIPTION"
+spawn_weight = 1.0
+difficulty = 1
+danger_level = 2
+danger_weight_multiplier = 1.5
+security_duration_multiplier = 1.15

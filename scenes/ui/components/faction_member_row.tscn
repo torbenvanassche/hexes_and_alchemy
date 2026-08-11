@@ -1,0 +1,53 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/faction_member_row_ui.gd" id="1_row"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_row"]
+bg_color = Color(0.97, 0.9, 0.76, 0.38)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.42, 0.31, 0.2, 0.16)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[node name="FactionMemberRow" type="PanelContainer"]
+custom_minimum_size = Vector2(0, 38)
+theme_override_styles/panel = SubResource("StyleBoxFlat_row")
+script = ExtResource("1_row")
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_right = 6
+
+[node name="Columns" type="HBoxContainer" parent="Margin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Name" type="Label" parent="Margin/Columns"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.28, 0.2, 0.13, 1)
+clip_text = true
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Role" type="Label" parent="Margin/Columns"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.42, 0.31, 0.2, 0.9)
+clip_text = true
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Activity" type="Label" parent="Margin/Columns"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.18, 0.5, 0.34, 1)
+horizontal_alignment = 0
+vertical_alignment = 1
+autowrap_mode = 3

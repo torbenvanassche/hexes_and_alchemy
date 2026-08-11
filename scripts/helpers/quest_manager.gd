@@ -139,6 +139,8 @@ func get_available_quest_types(
 	offered_currency_reward: int = 0,
 	minimum_rank_override: int = -1
 ) -> Array[String]:
+	if has_quests_for_location(location):
+		return []
 	var available_types: Array[String] = [];
 	for quest_type: String in quest_types:
 		if has_quest_for_location_and_type(location, quest_type):
@@ -149,6 +151,8 @@ func get_available_quest_types(
 	return available_types;
 
 func get_postable_quest_types(location: HexBase, quest_types: Array[String]) -> Array[String]:
+	if has_quests_for_location(location):
+		return []
 	var postable_types: Array[String] = []
 	for quest_type: String in quest_types:
 		if has_quest_for_location_and_type(location, quest_type):
@@ -186,6 +190,41 @@ func get_available_npcs_for_quest(
 		if npc != null and npc.wants_quest(quest_offer):
 			eligible_npcs.append(npc_scene_instance);
 	return eligible_npcs;
+
+func get_available_npcs_for_role(role: String, minimum_rank: int = 0) -> Array[SceneInstance]:
+	var tavern := _get_active_tavern()
+	if tavern == null:
+		return []
+	var eligible: Array[SceneInstance] = []
+	var required_rank := AdventurerRank.clamp_rank(minimum_rank)
+	for npc_scene_instance: SceneInstance in tavern.get_available_npcs():
+		var npc := _get_npc_from_instance(npc_scene_instance)
+		if npc != null and npc.can_perform_role(role) and npc.is_rank_at_least(required_rank):
+			eligible.append(npc_scene_instance)
+	return eligible
+
+func get_available_support_provider_count(quest: Quest, definition: QuestSupportDefinition) -> int:
+	var tavern := _get_active_tavern()
+	if tavern == null or quest == null or definition == null:
+		return 0
+	var available: Array[NPC] = []
+	for npc_scene_instance: SceneInstance in tavern.get_available_npcs():
+		var npc := _get_npc_from_instance(npc_scene_instance)
+		if npc != null:
+			available.append(npc)
+
+	var highest_count := 0
+	for primary: NPC in available:
+		if primary == null or not primary.wants_quest(quest):
+			continue
+		var provider_count := 0
+		for support_npc: NPC in available:
+			if support_npc == primary:
+				continue
+			if support_npc.can_consider_quest_for_role(quest, definition.provider_role):
+				provider_count += 1
+		highest_count = maxi(highest_count, provider_count)
+	return highest_count
 
 func get_active_quest_origin_hex(grid: HexGrid) -> HexBase:
 	if grid == null:
@@ -231,6 +270,8 @@ func is_quest_location_reachable(location: HexBase, grid: HexGrid = null) -> boo
 	return not grid.pathfinder.get_hex_path(origin_hex.cube_id, location.cube_id).is_empty()
 
 func add_quest(q: Quest) -> void:
+	if q == null:
+		return
 	if active_quests.size() >= max_active_quest:
 		return;
 	if not active_quests.has(q):
@@ -238,18 +279,31 @@ func add_quest(q: Quest) -> void:
 		if Manager.instance != null and Manager.instance.operations != null:
 			Manager.instance.operations.register_quest(q, str(q.context.get("parent_operation_id", "")))
 		quest_list_changed.emit();
+		quest_availability_changed.emit()
 		try_assign_waiting_quests();
 
 func remove_quest(q: Quest) -> void:
 	active_quests.erase(q);
 	quest_list_changed.emit();
+	quest_availability_changed.emit()
+
+func release_quest_supplies(quest: Quest) -> void:
+	if quest == null or not quest.context.get("supplies_reserved", false):
+		return
+	if Manager.instance != null and Manager.instance.hub != null and quest.supplies != null:
+		Manager.instance.hub.adopt_inventory(quest.supplies)
+	quest.context["supplies_reserved"] = false
 
 func try_assign_waiting_quests() -> void:
 	var tavern := _get_active_tavern();
 	if tavern == null:
 		return;
 
-	var available_npcs := tavern.get_available_npcs();
+	var available_npcs: Array[NPC] = []
+	for npc_scene_instance: SceneInstance in tavern.get_available_npcs():
+		var available_npc := _get_npc_from_instance(npc_scene_instance)
+		if available_npc != null:
+			available_npcs.append(available_npc)
 	if available_npcs.is_empty():
 		return;
 
@@ -258,18 +312,31 @@ func try_assign_waiting_quests() -> void:
 		return
 
 	var assigned_quests := 0
-	for npc_scene_instance: SceneInstance in available_npcs:
-		if waiting_quests.is_empty():
+	while not available_npcs.is_empty() and not waiting_quests.is_empty():
+		var best_assignment: Dictionary = {}
+		for quest: Quest in waiting_quests:
+			var assignment := _build_party_assignment(quest, available_npcs)
+			if assignment.is_empty():
+				continue
+			if best_assignment.is_empty() or float(assignment.get("score", 0.0)) > float(best_assignment.get("score", 0.0)):
+				best_assignment = assignment
+
+		if best_assignment.is_empty():
 			break
-		var npc := _get_npc_from_instance(npc_scene_instance)
-		if npc == null:
-			continue;
-		var selected_quest := _get_best_quest_for_npc(npc, waiting_quests)
+
+		var selected_quest := best_assignment.get("quest") as Quest
 		if selected_quest == null:
-			continue
+			break
 		if not _reserve_quest_supplies(selected_quest):
+			waiting_quests.erase(selected_quest)
 			continue
-		selected_quest.add_to_party(npc)
+		if not _commit_party_assignment(best_assignment):
+			release_quest_supplies(selected_quest)
+			waiting_quests.erase(selected_quest)
+			continue
+
+		for assigned_npc: NPC in best_assignment.get("members", []):
+			available_npcs.erase(assigned_npc)
 		selected_quest.start()
 		waiting_quests.erase(selected_quest)
 		assigned_quests += 1
@@ -298,17 +365,79 @@ func _get_waiting_quests() -> Array[Quest]:
 			waiting_quests.append(quest)
 	return waiting_quests
 
-func _get_best_quest_for_npc(npc: NPC, waiting_quests: Array[Quest]) -> Quest:
-	var best_quest: Quest = null
-	var best_score := 0.0
-	for quest: Quest in waiting_quests:
-		var score := npc.evaluate_quest(quest)
-		if score > best_score:
-			best_score = score
-			best_quest = quest
-	if best_quest == null or not npc.wants_quest(best_quest):
+func _build_party_assignment(quest: Quest, available_npcs: Array[NPC]) -> Dictionary:
+	if quest == null:
+		return {}
+
+	var best_assignment: Dictionary = {}
+	for primary: NPC in available_npcs:
+		if primary == null or not primary.wants_quest(quest):
+			continue
+
+		var remaining := available_npcs.duplicate()
+		remaining.erase(primary)
+		var support_assignments: Dictionary[StringName, NPC] = {}
+		var members: Array[NPC] = [primary]
+		var score := primary.evaluate_quest(quest)
+		var complete := true
+
+		for definition: QuestSupportDefinition in quest.get_selected_support_definitions():
+			var support_npc := _get_best_support_npc(quest, definition, remaining)
+			if support_npc == null:
+				complete = false
+				break
+			support_assignments[definition.id] = support_npc
+			members.append(support_npc)
+			remaining.erase(support_npc)
+			score += support_npc.evaluate_quest_for_role(quest, definition.provider_role) * 0.25
+
+		if not complete:
+			continue
+		if best_assignment.is_empty() or score > float(best_assignment.get("score", 0.0)):
+			best_assignment = {
+				"quest": quest,
+				"primary": primary,
+				"supports": support_assignments,
+				"members": members,
+				"score": score,
+			}
+	return best_assignment
+
+func _get_best_support_npc(
+	quest: Quest,
+	definition: QuestSupportDefinition,
+	available_npcs: Array[NPC]
+) -> NPC:
+	if definition == null or definition.provider_role == "":
 		return null
-	return best_quest
+	var best_npc: NPC = null
+	var best_score := -1.0
+	for npc: NPC in available_npcs:
+		if npc == null or not npc.can_consider_quest_for_role(quest, definition.provider_role):
+			continue
+		var score := npc.evaluate_quest_for_role(quest, definition.provider_role)
+		if best_npc == null or score > best_score:
+			best_npc = npc
+			best_score = score
+	return best_npc
+
+func _commit_party_assignment(assignment: Dictionary) -> bool:
+	var quest := assignment.get("quest") as Quest
+	var primary := assignment.get("primary") as NPC
+	if quest == null or primary == null or not quest.add_to_party(primary):
+		return false
+
+	var supports: Dictionary = assignment.get("supports", {})
+	for support_id: StringName in supports:
+		var support_npc := supports[support_id] as NPC
+		if support_npc != null and quest.add_to_party(support_npc, support_id):
+			continue
+		for assigned_npc: NPC in quest.party.duplicate():
+			if assigned_npc != null:
+				assigned_npc.cancel_assigned_quest(quest)
+		quest.clear_party_assignments()
+		return false
+	return true
 
 func _get_npc_from_instance(npc_scene_instance: SceneInstance) -> NPC:
 	if npc_scene_instance == null:

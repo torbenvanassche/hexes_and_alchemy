@@ -1,123 +1,101 @@
 class_name Toast
 extends Control
 
+const REPORT_ICON := preload("res://sprites/ui/icons/notepad_write.png")
+const REPORT_ICON_COLOR := Color(0.35, 0.24, 0.14, 1)
+
 @export var notification_scene: PackedScene
-@export var display_time: float = 2.5
-@export var slide_time: float = 0.25
-@export var edge_padding: float = 10.0
-@export var stack_spacing: float = 8.0
-@export var content_padding: Vector2 = Vector2(16.0, 10.0)
-@export var item_icon_size: Vector2i = Vector2i(24, 24)
-@export var minimum_notification_width: float = 120.0
-@export var maximum_notification_width: float = 360.0
+@export var display_time: float = 5.0
+@export var transition_time: float = 0.2
+@export_range(1, 8, 1) var max_visible_notifications: int = 4
 
-var target_position: Vector2
-var active_notifications: Array[RichTextLabel] = []
+@onready var notification_stack: VBoxContainer = $SafeMargin/Alignment/NotificationStack
 
-func _ready() -> void:
-	target_position = position
-	visible = false
+var active_notifications: Array[ToastNotificationUI] = []
+var pending_notifications: Array[Dictionary] = []
 
-func notify(txt: String, c: Color = Color.TRANSPARENT) -> void:
-	var toast_label := _create_toast_label(txt, c)
-	if toast_label != null:
-		_show_toast(toast_label)
+func notify(text: String, accent_color: Color = Color.TRANSPARENT) -> void:
+	_enqueue(text, accent_color)
 
-func notify_item_reward(item: ItemInfo, amount: int, c: Color = Color.TRANSPARENT) -> void:
+func notify_report(text: String, accent_color: Color = Color.TRANSPARENT) -> void:
+	_enqueue(text, accent_color, REPORT_ICON, REPORT_ICON_COLOR)
+
+func notify_item_reward(item: ItemInfo, amount: int, accent_color: Color = Color.TRANSPARENT) -> void:
 	if item == null:
 		return
 	var reward_text := tr("QUEST_REWARD_ITEM_GAINED") % [amount, item.get_display_name()]
-	var icon_path := _get_item_icon_path(item)
-	var message := reward_text
-	if icon_path != "":
-		message = "[img=%sx%s]%s[/img] %s" % [
-			item_icon_size.x,
-			item_icon_size.y,
-			icon_path,
-			message,
-		]
-	var toast_label := _create_toast_label(message, c)
-	if toast_label != null:
-		_show_toast(toast_label)
+	_enqueue(reward_text, accent_color, item.texture)
 
-func _show_toast(toast_label: RichTextLabel) -> void:
-	active_notifications.append(toast_label)
+func _enqueue(
+	text: String,
+	accent_color: Color,
+	icon: Texture2D = null,
+	icon_color: Color = Color.WHITE
+) -> void:
+	if text.strip_edges() == "":
+		return
+	pending_notifications.append({
+		"text": text,
+		"accent_color": accent_color,
+		"icon": icon,
+		"icon_color": icon_color,
+	})
+	if is_node_ready():
+		_show_pending_notifications()
+	else:
+		call_deferred("_show_pending_notifications")
 
+func _show_pending_notifications() -> void:
+	if not is_node_ready() or notification_stack == null:
+		return
+	while active_notifications.size() < max_visible_notifications and not pending_notifications.is_empty():
+		var data: Dictionary = pending_notifications.pop_front()
+		if not _show_notification(data):
+			pending_notifications.clear()
+			return
+
+func _show_notification(data: Dictionary) -> bool:
+	if notification_scene == null:
+		push_warning("Toast notification scene is not configured.")
+		return false
+	var notification := notification_scene.instantiate() as ToastNotificationUI
+	if notification == null:
+		push_warning("Toast notification scene root must be a ToastNotificationUI.")
+		return false
+	notification.modulate.a = 0.0
+	notification.scale = Vector2(0.98, 0.98)
+	notification_stack.add_child(notification)
+	var accent_color: Color = data.get("accent_color", Color.TRANSPARENT)
+	var icon := data.get("icon") as Texture2D
+	var icon_color: Color = data.get("icon_color", Color.WHITE)
+	notification.setup(str(data.get("text", "")), accent_color, icon, icon_color)
+	active_notifications.append(notification)
+	_present_notification(notification)
+	return true
+
+func _present_notification(notification: ToastNotificationUI) -> void:
 	await get_tree().process_frame
-	_fit_toast_to_content(toast_label)
-
-	toast_label.position = _get_toast_offscreen_position(toast_label)
-	toast_label.visible = true
-
-	var tween := get_tree().create_tween()
-	tween.tween_property(toast_label, "position", _get_toast_target_position(toast_label), slide_time)\
+	if not is_instance_valid(notification):
+		return
+	notification.pivot_offset = notification.size * 0.5
+	var tween_in := create_tween().set_parallel(true)
+	tween_in.tween_property(notification, "modulate:a", 1.0, transition_time)
+	tween_in.tween_property(notification, "scale", Vector2.ONE, transition_time)\
 		.set_trans(Tween.TRANS_BACK)\
 		.set_ease(Tween.EASE_OUT)
-
+	await tween_in.finished
+	if not is_instance_valid(notification):
+		return
 	await get_tree().create_timer(display_time).timeout
-
-	var tween_out := get_tree().create_tween()
-	tween_out.tween_property(toast_label, "position", _get_toast_offscreen_position(toast_label), slide_time)\
-		.set_trans(Tween.TRANS_BACK)\
+	if not is_instance_valid(notification):
+		return
+	var tween_out := create_tween()
+	tween_out.tween_property(notification, "modulate:a", 0.0, transition_time)\
+		.set_trans(Tween.TRANS_QUAD)\
 		.set_ease(Tween.EASE_IN)
-
-	tween_out.tween_callback(func() -> void:
-		active_notifications.erase(toast_label)
-		toast_label.queue_free()
-		_layout_toasts()
-	)
-
-func _create_toast_label(txt: String, c: Color) -> RichTextLabel:
-	if notification_scene == null:
-		Debug.warn("Toast notification scene is not configured.")
-		return null
-
-	var toast_label := notification_scene.instantiate() as RichTextLabel
-	if toast_label == null:
-		Debug.warn("Toast notification scene root must be a RichTextLabel.")
-		return null
-
-	toast_label.text = txt
-	toast_label.visible = false
-	toast_label.position = target_position
-	if c != Color.TRANSPARENT:
-		toast_label.add_theme_color_override("default_color", c)
-	get_parent().add_child(toast_label)
-	return toast_label
-
-func _fit_toast_to_content(toast_label: RichTextLabel) -> void:
-	var width := clampf(
-		toast_label.get_content_width() + content_padding.x * 2.0,
-		minimum_notification_width,
-		maximum_notification_width
-	)
-	toast_label.size = Vector2(width, toast_label.get_content_height() + content_padding.y * 2.0)
-
-func _layout_toasts() -> void:
-	for toast_label in active_notifications:
-		if not is_instance_valid(toast_label):
-			continue
-		var tween := get_tree().create_tween()
-		tween.tween_property(toast_label, "position", _get_toast_target_position(toast_label), slide_time)\
-			.set_trans(Tween.TRANS_BACK)\
-			.set_ease(Tween.EASE_OUT)
-
-func _get_item_icon_path(item: ItemInfo) -> String:
-	if item.texture == null:
-		return ""
-	return item.texture.resource_path
-
-func _get_toast_target_position(toast_label: Control) -> Vector2:
-	var stack_offset := 0.0
-	for active_toast in active_notifications:
-		if active_toast == toast_label:
-			break
-		stack_offset += active_toast.size.y + stack_spacing
-	return Vector2(_get_viewport_width() - toast_label.size.x - edge_padding, target_position.y + stack_offset)
-
-func _get_toast_offscreen_position(toast_label: Control) -> Vector2:
-	var target := _get_toast_target_position(toast_label)
-	return Vector2(_get_viewport_width() + edge_padding, target.y)
-
-func _get_viewport_width() -> float:
-	return get_viewport_rect().size.x
+	await tween_out.finished
+	if not is_instance_valid(notification):
+		return
+	active_notifications.erase(notification)
+	notification.queue_free()
+	_show_pending_notifications()

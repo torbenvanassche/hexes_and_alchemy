@@ -4,11 +4,14 @@
 [ext_resource type="Script" path="res://scripts/quests/quest_outcome.gd" id="2_outcome_script"]
 [ext_resource type="Resource" path="res://resources/quest_outcomes/quest_outcome_ruins_delve_success.tres" id="3_success"]
 [ext_resource type="Resource" path="res://resources/quest_outcomes/quest_outcome_ruins_delve_danger.tres" id="4_danger"]
+[ext_resource type="Script" path="res://scripts/quests/quest_support_definition.gd" id="5_support_script"]
+[ext_resource type="Resource" path="res://resources/quest_supports/security_escort.tres" id="6_security"]
 
 [resource]
 script = ExtResource("1_profile")
 quest_key = "delve"
 behaviour = "delve"
+required_role = "delver"
 translation_key_name = "QUEST_TYPE_DELVE"
 description_key = "QUEST_DESC_RUINS_DELVE"
 risk_key = "QUEST_RISK_DANGEROUS"
@@ -16,4 +19,5 @@ expected_reward_key = "QUEST_REWARD_DEEP_CACHE"
 duration_seconds = 10.0
 rank_experience_reward = 5
 available_states = Array[String](["SURVEYED", "DANGEROUS", "SECURED"])
+optional_supports = Array[ExtResource("5_support_script")]([ExtResource("6_security")])
 outcomes = Array[ExtResource("2_outcome_script")]([ExtResource("3_success"), ExtResource("4_danger")])

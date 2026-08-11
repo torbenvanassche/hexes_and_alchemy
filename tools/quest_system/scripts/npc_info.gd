@@ -3,6 +3,7 @@ class_name NpcInfo extends SceneInfo
 @export var img: Texture;
 
 @export_group("Identity")
+@export var faction_id: StringName = &""
 @export var profession: String = "Generalist"
 @export var role: String = "Adventurer"
 @export var operation_roles: Array[String] = ["adventurer"]
@@ -27,3 +28,12 @@ class_name NpcInfo extends SceneInfo
 @export var offered_currency_reward_weight: float = 0.1
 @export var rank_surplus_weight: float = 0.5
 @export var distance_penalty_per_tile: float = 0.05
+
+func get_instance() -> SceneInstance:
+	var scene_instance := super.get_instance()
+	if scene_instance == null:
+		return null
+	var npc := scene_instance.node as NPC
+	if npc != null:
+		npc.npc_info = self
+	return scene_instance

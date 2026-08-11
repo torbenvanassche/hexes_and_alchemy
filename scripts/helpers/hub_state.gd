@@ -2,6 +2,8 @@ class_name HubState
 extends Node
 
 signal changed()
+signal faction_activity_changed()
+signal activity_log_changed()
 
 @export var starting_currency := 100
 var currency := 0
@@ -9,6 +11,15 @@ var prestige := 0
 var stockpile: ContentGroup
 var factions: Dictionary[StringName, FactionState] = {}
 var spots: Dictionary[Vector3i, SpotProgress] = {}
+var activity_log: Array[String] = []
+@export_range(4, 64, 1) var max_activity_entries := 24
+
+const FACTION_DEFINITIONS: Array[FactionDefinition] = [
+	preload("res://resources/faction_definitions/hunters.tres"),
+	preload("res://resources/faction_definitions/adventurers.tres"),
+	preload("res://resources/faction_definitions/crafters.tres"),
+	preload("res://resources/faction_definitions/tenders.tres"),
+]
 
 func _ready() -> void:
 	currency = starting_currency
@@ -24,36 +35,70 @@ func _ready() -> void:
 
 func _initialize_factions() -> void:
 	factions.clear()
-	factions[&"hunters"] = FactionState.new(&"hunters", "Hunters", ["hunter", "laborer"], ["Explore and map new locations", "Gather food and timber"])
-	factions[&"adventurers"] = FactionState.new(&"adventurers", "Adventurers", ["adventurer"], ["Handle dangerous locations", "Secure mines and ruins"])
-	factions[&"crafters"] = FactionState.new(&"crafters", "Crafters", ["crafter"], ["Turn materials into equipment", "Maintain guild supplies"])
-	factions[&"tenders"] = FactionState.new(&"tenders", "Tenders", ["tender"], ["Maintain the settlement", "Support farming and water"])
+	for definition: FactionDefinition in FACTION_DEFINITIONS:
+		if definition == null:
+			continue
+		var faction := FactionState.new(definition.id, definition.display_name, definition.roles, definition.responsibilities)
+		faction.apply_definition(definition)
+		factions[definition.id] = faction
 
 func get_required_role_for_quest(quest: Quest) -> String:
 	if quest == null:
 		return ""
-	match quest.quest_key:
-		"scout", "survey", "prospect":
+	var profile := quest.get_profile()
+	if profile != null and profile.required_role != "":
+		return profile.required_role
+	var job_key := profile.get_behaviour() if profile != null else quest.quest_key
+	match job_key:
+		"scout", "survey":
 			return "hunter"
-		"forage", "harvest", "plant", "water", "replant", "purify":
-			return "laborer"
-		"delve", "secure", "salvage", "extract", "deepen", "reinforce":
-			return "adventurer"
+		"prospect", "extract", "deepen":
+			return "delver"
+		"reinforce", "maintain", "reopen":
+			return "crafter"
+		"forage", "harvest", "plant", "water", "replant", "purify", "clear", "fill", "draw":
+			return "tender"
+		"delve", "salvage":
+			return "delver"
+		"secure":
+			return "security"
 		_:
 			return ""
 
 func register_npc(npc: NPC) -> void:
 	if npc == null:
 		return
-	var faction := get_faction_for_roles(npc.get_operation_roles())
+	var faction := get_faction_for_npc(npc)
 	if faction != null:
 		faction.add_member(npc)
+		if not npc.activity_changed.is_connected(_on_npc_activity_changed):
+			npc.activity_changed.connect(_on_npc_activity_changed)
+		if not npc.rest_progress_changed.is_connected(_on_npc_activity_changed):
+			npc.rest_progress_changed.connect(_on_npc_activity_changed)
 		changed.emit()
 
 func unregister_npc(npc: NPC) -> void:
+	if npc != null and npc.activity_changed.is_connected(_on_npc_activity_changed):
+		npc.activity_changed.disconnect(_on_npc_activity_changed)
+	if npc != null and npc.rest_progress_changed.is_connected(_on_npc_activity_changed):
+		npc.rest_progress_changed.disconnect(_on_npc_activity_changed)
 	for faction: FactionState in factions.values():
 		faction.remove_member(npc)
 	changed.emit()
+
+func _on_npc_activity_changed(_npc: NPC) -> void:
+	faction_activity_changed.emit()
+
+func record_activity(message: String) -> void:
+	if message == "":
+		return
+	activity_log.push_front(message)
+	if activity_log.size() > max_activity_entries:
+		activity_log.resize(max_activity_entries)
+	activity_log_changed.emit()
+
+func get_activity_log() -> Array[String]:
+	return activity_log.duplicate()
 
 func get_faction_for_roles(roles: Array[String]) -> FactionState:
 	for faction: FactionState in factions.values():
@@ -62,7 +107,20 @@ func get_faction_for_roles(roles: Array[String]) -> FactionState:
 				return faction
 	return factions.get(&"adventurers") as FactionState
 
+func get_faction_for_npc(npc: NPC) -> FactionState:
+	if npc == null:
+		return factions.get(&"adventurers") as FactionState
+	if npc.npc_info != null and npc.npc_info.faction_id != &"":
+		var configured_faction := factions.get(npc.npc_info.faction_id) as FactionState
+		if configured_faction != null:
+			return configured_faction
+	return get_faction_for_roles(npc.get_operation_roles())
+
 func get_faction_for_quest(quest: Quest) -> FactionState:
+	if quest != null:
+		for faction: FactionState in factions.values():
+			if faction.definition != null and faction.definition.preferred_quest_types.has(quest.quest_key):
+				return faction
 	var required_role := get_required_role_for_quest(quest)
 	for faction: FactionState in factions.values():
 		if faction.roles.has(required_role):
@@ -88,10 +146,7 @@ func mark_mapped(hex: HexBase) -> void:
 	var spot := get_spot(hex)
 	if spot == null:
 		return
-	var was_unknown := spot.stage == SpotProgress.Stage.UNKNOWN
 	spot.mark_mapped()
-	if was_unknown and Manager.instance != null and Manager.instance.operations != null:
-		Manager.instance.operations.ensure_starting_operation(hex)
 	changed.emit()
 
 func mark_operation(hex: HexBase, operation_type: String) -> void:
@@ -160,7 +215,16 @@ func record_operation_completed(quest: Quest) -> void:
 	var faction := get_faction_for_quest(quest)
 	if faction != null:
 		faction.completed_operations += 1
+		faction.last_activity = tr("HUB_ACTIVITY_COMPLETED")
+	record_activity(tr("HUB_ACTIVITY_COMPLETED") % _get_operation_label(quest))
 	changed.emit()
+
+func _get_operation_label(quest: Quest) -> String:
+	if quest == null:
+		return tr("HUB_UNKNOWN_OPERATION")
+	var operation_key := "QUEST_TYPE_%s" % quest.quest_key.to_upper()
+	var operation_name := tr(operation_key)
+	return quest.quest_key.capitalize() if operation_name == operation_key else operation_name
 
 func get_stockpile_summary() -> String:
 	if stockpile == null:

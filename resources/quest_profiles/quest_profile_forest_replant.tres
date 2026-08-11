@@ -10,6 +10,7 @@
 script = ExtResource("1_profile")
 quest_key = "replant"
 behaviour = "replant"
+required_role = "tender"
 translation_key_name = "QUEST_TYPE_REPLANT"
 description_key = "QUEST_DESC_FOREST_REPLANT"
 risk_key = "QUEST_RISK_SAFE"
@@ -17,8 +18,12 @@ expected_reward_key = "QUEST_REWARD_SITE_RECOVERY"
 duration_seconds = 5.0
 rank_experience_reward = 2
 available_states = Array[String](["DEPLETED"])
+blocked_by_active_occupation = true
 required_supplies = Dictionary[ExtResource("3_item_script"), int]({
 ExtResource("4_seed"): 1
+})
+required_supply_effect_keys = Dictionary[ExtResource("3_item_script"), String]({
+ExtResource("4_seed"): "QUEST_SUPPLY_EFFECT_SEEDS_REPLANTING"
 })
 outcomes = Array[ExtResource("2_outcome_script")]([ExtResource("5_outcome")])
 guild_reputation_reward = 2

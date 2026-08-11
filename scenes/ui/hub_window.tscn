@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" path="res://scenes/hud/hub_overview.tscn" id="6_operations"]
 
 [node name="Window" type="Control" node_paths=PackedStringArray("content") instance=ExtResource("1_window")]
-custom_minimum_size = Vector2(620, 500)
+custom_minimum_size = Vector2(620, 700)
 id = "WINDOW_GUILD_HUB"
 store_position = true
 resizable = false

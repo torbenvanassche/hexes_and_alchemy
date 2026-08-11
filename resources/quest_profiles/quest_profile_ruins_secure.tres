@@ -10,6 +10,7 @@
 script = ExtResource("1_profile")
 quest_key = "secure"
 behaviour = "secure"
+required_role = "security"
 translation_key_name = "QUEST_TYPE_SECURE"
 description_key = "QUEST_DESC_RUINS_SECURE"
 risk_key = "QUEST_RISK_SAFE"
@@ -19,6 +20,9 @@ rank_experience_reward = 3
 available_states = Array[String](["SURVEYED", "DANGEROUS"])
 required_supplies = Dictionary[ExtResource("3_item_script"), int]({
 ExtResource("4_support"): 1
+})
+required_supply_effect_keys = Dictionary[ExtResource("3_item_script"), String]({
+ExtResource("4_support"): "QUEST_SUPPLY_EFFECT_BEAMS_SECURE_RUINS"
 })
 outcomes = Array[ExtResource("2_outcome_script")]([ExtResource("5_outcome")])
 guild_reputation_reward = 3

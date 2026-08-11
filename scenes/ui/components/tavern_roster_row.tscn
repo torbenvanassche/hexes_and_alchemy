@@ -1,0 +1,39 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/tavern_roster_row_ui.gd" id="1_row"]
+[ext_resource type="Theme" path="res://themes/light.theme" id="2_theme"]
+
+[node name="TavernRosterRow" type="HBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+theme = ExtResource("2_theme")
+theme_override_constants/separation = 14
+script = ExtResource("1_row")
+
+[node name="Name" type="Label" parent="."]
+custom_minimum_size = Vector2(190, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+clip_text = true
+
+[node name="Profession" type="Label" parent="."]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+horizontal_alignment = 1
+clip_text = true
+
+[node name="Rank" type="Label" parent="."]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+horizontal_alignment = 1
+clip_text = true
+
+[node name="Status" type="Label" parent="."]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+horizontal_alignment = 2
+clip_text = true
+
+[node name="Details" type="Button" parent="."]
+custom_minimum_size = Vector2(86, 28)
+layout_mode = 2
+text = "NPC_DETAILS_OPEN"

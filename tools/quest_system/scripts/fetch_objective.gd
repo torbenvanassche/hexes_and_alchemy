@@ -30,7 +30,12 @@ func _open_window(window_info: SceneInfo) -> void:
 	if dep_ui == null:
 		return
 	dep_ui.inventory = quest.progress_tracker;
-	dep_ui.source_inventory = Manager.instance.hub.stockpile if Manager.instance != null and Manager.instance.hub != null else Manager.instance.player_instance.inventory;
+	dep_ui.source_inventory = null
+	if Manager.instance != null:
+		if Manager.instance.hub != null:
+			dep_ui.source_inventory = Manager.instance.hub.stockpile
+		elif Manager.instance.player_instance != null:
+			dep_ui.source_inventory = Manager.instance.player_instance.inventory
 	if not dep_ui.supplies_deposited.is_connected(completed.emit):
 		dep_ui.supplies_deposited.connect(completed.emit);
 	window_instance.on_enter.emit();

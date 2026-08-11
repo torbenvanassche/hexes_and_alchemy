@@ -23,7 +23,12 @@ func _open_window(window_info: SceneInfo) -> void:
 	window_instance = SceneManager.add(window_info, false);
 	_setup_ui_window(window_instance)
 	var inventory_ui: MarketUI = (window_instance.node as DraggableControl).content as MarketUI;
-	var trade_inventory := Manager.instance.hub.stockpile if Manager.instance != null and Manager.instance.hub != null else Manager.instance.player_instance.inventory
+	var trade_inventory: ContentGroup = null
+	if Manager.instance != null:
+		if Manager.instance.hub != null:
+			trade_inventory = Manager.instance.hub.stockpile
+		elif Manager.instance.player_instance != null:
+			trade_inventory = Manager.instance.player_instance.inventory
 	inventory_ui.setup(buy_inventory, sell_inventory, trade_inventory);
 	window_instance.on_enter.emit();
 	open_additional_ui_windows()

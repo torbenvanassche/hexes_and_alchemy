@@ -39,18 +39,18 @@ theme_override_constants/separation = 8
 layout_mode = 2
 theme_override_colors/font_color = Color(0.28, 0.2, 0.13, 1)
 theme_override_font_sizes/font_size = 18
-text = "HUB OPERATIONS"
+text = "HUB_OPERATIONS_TITLE"
 uppercase = true
 
 [node name="Subtitle" type="Label" parent="Margin/Scroll/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.42, 0.31, 0.2, 0.85)
-text = "Manage the work of your guild from one place."
+text = "HUB_OPERATIONS_SUBTITLE"
 
 [node name="FactionsHeader" type="Label" parent="Margin/Scroll/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.28, 0.2, 0.13, 1)
-text = "FACTIONS"
+text = "HUB_FACTIONS_HEADER"
 uppercase = true
 
 [node name="FactionTabs" type="HBoxContainer" parent="Margin/Scroll/VBox"]
@@ -65,7 +65,7 @@ theme_override_constants/separation = 5
 [node name="OperationsHeader" type="Label" parent="Margin/Scroll/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.28, 0.2, 0.13, 1)
-text = "ACTIVE OPERATIONS"
+text = "HUB_ACTIVE_OPERATIONS"
 uppercase = true
 
 [node name="Operations" type="VBoxContainer" parent="Margin/Scroll/VBox"]

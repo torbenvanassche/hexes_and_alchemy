@@ -4,14 +4,23 @@
 [ext_resource type="Script" uid="uid://cwu8dwm55ox1u" path="res://scripts/quests/quest_outcome.gd" id="2_outcome_script"]
 [ext_resource type="Resource" path="res://resources/quest_outcomes/quest_outcome_water_restore.tres" id="3_outcome"]
 [ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="3_ve3w5"]
+[ext_resource type="Resource" path="res://resources/item_info/work_supplies.tres" id="4_work"]
 
 [resource]
 script = ExtResource("1_profile")
 quest_key = "maintain"
 behaviour = "maintain"
+required_role = "crafter"
 translation_key_name = "QUEST_TYPE_MAINTAIN"
 description_key = "QUEST_DESC_WATER_MAINTAIN"
 expected_reward_key = "QUEST_REWARD_SOURCE_RECOVERY"
+duration_seconds = 4.0
 rank_experience_reward = 2
 available_states = Array[String](["TAINTED"])
+required_supplies = Dictionary[ExtResource("3_ve3w5"), int]({
+ExtResource("4_work"): 1
+})
+required_supply_effect_keys = Dictionary[ExtResource("3_ve3w5"), String]({
+ExtResource("4_work"): "QUEST_SUPPLY_EFFECT_WORK_MAINTAIN_WATER"
+})
 outcomes = Array[ExtResource("2_outcome_script")]([ExtResource("3_outcome")])

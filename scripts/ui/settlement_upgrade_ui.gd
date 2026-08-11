@@ -1,6 +1,8 @@
 class_name SettlementUpgradeUI
 extends PanelContainer
 
+const REQUIREMENT_ROW_SCENE := preload("res://scenes/ui/components/settlement_requirement_row.tscn")
+
 @onready var current_level_value: Label = $MarginContainer/VBoxContainer/CurrentRow/CurrentLevelValue
 @onready var next_section: VBoxContainer = $MarginContainer/VBoxContainer/NextSection
 @onready var next_level_label: Label = $MarginContainer/VBoxContainer/NextSection/NextLevelLabel
@@ -108,32 +110,9 @@ func _refresh() -> void:
 	_request_window_fit()
 
 func _add_requirement_row(text: String, complete: bool) -> void:
-	var row := HBoxContainer.new()
-	row.name = "RequirementRow"
-	row.theme = theme
-	row.add_theme_constant_override("separation", 8)
-
-	var state_label := Label.new()
-	state_label.name = "StateLabel"
-	state_label.custom_minimum_size = Vector2(80, 0)
-	state_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	state_label.theme = theme
-	state_label.theme_type_variation = "Label"
-	state_label.text = tr("SETTLEMENT_UPGRADE_READY") if complete else tr("SETTLEMENT_UPGRADE_MISSING")
-	state_label.modulate = Color(0.26, 0.54, 0.22) if complete else Color(0.72, 0.22, 0.13)
-	row.add_child(state_label)
-
-	var requirement_label := Label.new()
-	requirement_label.name = "RequirementLabel"
-	requirement_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	requirement_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	requirement_label.theme = theme
-	requirement_label.theme_type_variation = "Label"
-	requirement_label.text = text
-	requirement_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	row.add_child(requirement_label)
-
+	var row := REQUIREMENT_ROW_SCENE.instantiate() as SettlementRequirementRowUI
 	requirements_list.add_child(row)
+	row.setup(text, complete)
 
 func _clear_requirements() -> void:
 	for child in requirements_list.get_children():

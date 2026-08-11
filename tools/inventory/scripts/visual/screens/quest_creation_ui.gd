@@ -12,7 +12,7 @@ class_name QuestCreationUI extends Control
 @onready var minimum_rank_option: OptionButton = $MarginContainer/VBoxContainer/MinimumRankRow/MinimumRank
 @onready var reward_offer_row: HBoxContainer = $MarginContainer/VBoxContainer/RewardOfferRow
 @onready var reward_offer_spin_box: SpinBox = $MarginContainer/VBoxContainer/RewardOfferRow/RewardOfferAmount
-@onready var interest_label: Label = $MarginContainer/VBoxContainer/InterestLabel
+@onready var interest_label: RichTextLabel = $MarginContainer/VBoxContainer/InterestLabel
 @onready var active_quests_section: VBoxContainer = $MarginContainer/VBoxContainer/ActiveQuestsSection
 @onready var active_quests_list: VBoxContainer = $MarginContainer/VBoxContainer/ActiveQuestsSection/ActiveQuestsList
 @onready var details_panel: VBoxContainer = $MarginContainer/VBoxContainer/DetailsPanel
@@ -32,12 +32,15 @@ class_name QuestCreationUI extends Control
 @onready var context_label: Label = $MarginContainer/VBoxContainer/DetailsPanel/MetaRow/ContextBox/ContextLabel
 @onready var quest_supplies: Control = $MarginContainer/VBoxContainer/QuestSupplies
 @onready var supplies_grid: GridContainer = $MarginContainer/VBoxContainer/QuestSupplies/SuppliesGrid
+@onready var quest_support: VBoxContainer = $MarginContainer/VBoxContainer/QuestSupport
+@onready var support_options: VBoxContainer = $MarginContainer/VBoxContainer/QuestSupport/SupportOptions
 @onready var status_label: Label = $MarginContainer/VBoxContainer/StatusLabel
 @onready var actions_row: HBoxContainer = $MarginContainer/VBoxContainer/Actions
 @onready var finish_quest_creation: Button = $MarginContainer/VBoxContainer/Actions/FinishQuestCreation
 @onready var window: DraggableControl = $"../../../.."
 
 @export var packed_slot: PackedScene
+@export var support_row_scene: PackedScene
 @export var slot_size: int = 56
 @export var target_dropdown_max_height: int = 220
 
@@ -47,6 +50,8 @@ const SCOUT_QUEST_KEY := "scout"
 
 var forced_interaction: Interaction;
 var scout_only := false
+var _selected_support_ids: Array[String] = []
+var _support_selection_context := ""
 
 func _reset_ui() -> void:
 	_apply_mode_visibility()
@@ -65,6 +70,7 @@ func _reset_ui() -> void:
 	_set_status("")
 	_set_interest_feedback("")
 	_refresh_required_supplies()
+	_clear_optional_supports()
 	if finish_quest_creation.pressed.is_connected(_create_quest):
 		finish_quest_creation.pressed.disconnect(_create_quest)
 
@@ -127,6 +133,7 @@ func _on_location_selected(idx: int) -> void:
 		_set_status("")
 		_set_interest_feedback("")
 		_refresh_required_supplies()
+		_clear_optional_supports()
 		return;
 
 	var location: HexBase = quest_location.get_item_metadata(idx) as HexBase;
@@ -139,6 +146,7 @@ func _on_location_selected(idx: int) -> void:
 		_set_status("")
 		_set_interest_feedback("")
 		_refresh_required_supplies()
+		_clear_optional_supports()
 		return;
 	_refresh_active_quests_for_location(location)
 
@@ -150,6 +158,7 @@ func _on_location_selected(idx: int) -> void:
 		_refresh_minimum_rank_options()
 		_refresh_quest_type_availability()
 		_refresh_required_supplies()
+		_refresh_optional_supports(true)
 		_refresh_quest_details()
 		_refresh_interest_feedback()
 		_update_finish_button()
@@ -165,6 +174,7 @@ func _on_location_selected(idx: int) -> void:
 		_set_status("")
 		_set_interest_feedback("")
 		_refresh_required_supplies()
+		_clear_optional_supports()
 		return;
 
 	quest_type.clear();
@@ -187,6 +197,7 @@ func _on_location_selected(idx: int) -> void:
 		_set_status("")
 		_set_interest_feedback("")
 		_refresh_required_supplies()
+		_clear_optional_supports()
 		return
 
 	quest_type.disabled = not has_types;
@@ -194,6 +205,7 @@ func _on_location_selected(idx: int) -> void:
 	_refresh_minimum_rank_options()
 	_refresh_quest_type_availability()
 	_refresh_required_supplies()
+	_refresh_optional_supports(true)
 	_refresh_quest_details()
 	_refresh_interest_feedback()
 	_update_finish_button()
@@ -202,6 +214,7 @@ func _on_quest_type_selected(_idx: int) -> void:
 	_refresh_minimum_rank_options()
 	_refresh_quest_type_availability()
 	_refresh_required_supplies()
+	_refresh_optional_supports(true)
 	_refresh_quest_details()
 	_refresh_interest_feedback()
 	_update_finish_button()
@@ -217,6 +230,7 @@ func _on_reward_offer_changed(_value: float) -> void:
 	_select_first_creatable_quest_type(_get_selected_objective())
 	_refresh_minimum_rank_options()
 	_refresh_required_supplies()
+	_refresh_optional_supports(false)
 	_refresh_quest_details()
 	_refresh_interest_feedback()
 	_update_finish_button()
@@ -236,8 +250,14 @@ func _on_scout_direction_selected(_idx: int) -> void:
 func _on_player_currency_amount_changed() -> void:
 	_refresh_reward_offer_limit()
 	_refresh_quest_type_availability()
+	_refresh_required_supplies()
+	_refresh_optional_supports(false)
 	_refresh_interest_feedback()
 	_update_finish_button()
+
+func _on_hub_faction_activity_changed() -> void:
+	_refresh_optional_supports(false)
+	_refresh_interest_feedback()
 
 func _add_location_option(hex: HexBase, require_reachable: bool = true, allow_active_location: bool = false) -> bool:
 	if _is_scout_location(hex):
@@ -377,6 +397,7 @@ func _apply_scouting_request() -> void:
 	_refresh_minimum_rank_options()
 	_refresh_quest_type_availability()
 	_refresh_required_supplies()
+	_refresh_optional_supports(true)
 	_refresh_quest_details()
 	_refresh_interest_feedback()
 	_update_finish_button()
@@ -475,6 +496,7 @@ func _create_quest() -> void:
 		minimum_rank_override,
 		quest_rank_experience
 	)
+	quest.set_selected_support_ids(_selected_support_ids)
 	if not _try_reserve_reward(reward_amount):
 		_update_finish_button()
 		return
@@ -632,12 +654,7 @@ func _can_create_quest(location: HexBase, objective: QuestObjective, quest_type_
 		return false
 	if not objective.has_required_supplies(quest_type_key, _get_player_inventory()):
 		return false
-	return Manager.instance.quests.has_eligible_npc_for_quest(
-		location,
-		quest_type_key,
-		_get_reward_offer_amount(),
-		_get_minimum_rank_override()
-	)
+	return true
 
 func _refresh_active_quests_for_location(location: HexBase) -> void:
 	_clear_active_quest_cards()
@@ -718,7 +735,7 @@ func _create_active_quest_row(quest: Quest) -> Control:
 
 	if quest.is_state(Quest.QuestState.COMPLETE):
 		var claim_button := Button.new()
-		claim_button.text = "QUEST_ACTION_CLAIM_REWARD"
+		claim_button.text = tr("QUEST_ACTION_CLAIM_REWARD")
 		claim_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		claim_button.pressed.connect(_claim_active_location_quest.bind(quest, quest.location))
 		content.add_child(claim_button)
@@ -800,11 +817,32 @@ func _refresh_required_supplies() -> void:
 		var amount := int(required_supplies[item])
 		if amount <= 0:
 			continue
-		supplies_grid.add_child(_create_supply_slot(item, amount))
+		var slot := _create_supply_slot(item, amount)
+		supplies_grid.add_child(slot)
+		slot.tooltip_text = _build_supply_tooltip(item, amount)
 		has_visible_supplies = true
 
 	quest_supplies.visible = has_visible_supplies
 	_request_window_refit()
+
+func _build_supply_tooltip(item: ItemInfo, required_amount: int) -> String:
+	if item == null:
+		return ""
+	var lines: Array[String] = [item.get_display_name()]
+	var inventory := _get_player_inventory()
+	var available_amount := inventory.get_count(item) if inventory != null else 0
+	lines.append(tr("QUEST_SUPPLY_COUNTS") % [required_amount, available_amount])
+	var description_text := item.get_description()
+	if description_text != "":
+		lines.append(description_text)
+	var effect_text := _get_selected_required_supply_effect(item)
+	if effect_text != "" and effect_text != description_text:
+		lines.append(tr("QUEST_SUPPLY_EFFECT") % [effect_text])
+	return "\n".join(lines)
+
+func _get_selected_required_supply_effect(item: ItemInfo) -> String:
+	var profile := _get_selected_profile()
+	return profile.get_required_supply_effect(item) if profile != null else ""
 
 func _request_window_refit() -> void:
 	if window == null:
@@ -933,12 +971,43 @@ func _refresh_interest_feedback() -> void:
 	var interested_count := _get_interested_npc_count()
 	if interested_count < 0:
 		_set_interest_feedback("")
-	elif interested_count == 0:
-		_set_interest_feedback(tr("QUEST_CREATION_INTEREST_NONE"))
+		return
+
+	var availability_text := ""
+	if interested_count == 0:
+		availability_text = tr("QUEST_CREATION_INTEREST_NONE")
 	elif interested_count == 1:
-		_set_interest_feedback(tr("QUEST_CREATION_INTEREST_ONE"))
+		availability_text = tr("QUEST_CREATION_INTEREST_ONE")
 	else:
-		_set_interest_feedback(tr("QUEST_CREATION_INTEREST_COUNT") % [interested_count])
+		availability_text = tr("QUEST_CREATION_INTEREST_COUNT") % [interested_count]
+
+	var role_label := _get_role_display_name(_get_selected_required_role())
+	var highlighted_role := "[b][color=#8A451A]%s[/color][/b]" % [role_label]
+	var requirement_text := tr("QUEST_CREATION_REQUIRED_PROFESSION") % [highlighted_role]
+	_set_interest_feedback("[center]%s\n%s[/center]" % [requirement_text, availability_text])
+
+func _get_selected_required_role() -> String:
+	var location_idx := quest_location.selected
+	var quest_type_idx := quest_type.selected
+	if location_idx < 0 or quest_type_idx < 0:
+		return ""
+	var location := quest_location.get_item_metadata(location_idx) as HexBase
+	var quest_type_key := _get_quest_type_key(quest_type_idx)
+	if location == null or quest_type_key == "":
+		return ""
+	if Manager.instance != null and Manager.instance.hub != null:
+		return Manager.instance.hub.get_required_role_for_quest(_create_selected_quest_preview())
+	if quest_type_key == SCOUT_QUEST_KEY:
+		return "hunter"
+	var profile := _get_selected_profile()
+	return profile.required_role if profile != null else ""
+
+func _get_role_display_name(role: String) -> String:
+	if role == "":
+		return tr("QUEST_ROLE_ANY")
+	var translation_key := "QUEST_ROLE_%s" % [role.to_upper()]
+	var translated := tr(translation_key)
+	return role.capitalize().replace("_", " ") if translated == translation_key else translated
 
 func _get_selected_required_supplies() -> Dictionary[ItemInfo, int]:
 	var selected := _get_selected_quest_type_and_objective()
@@ -957,7 +1026,7 @@ func _refresh_quest_details() -> void:
 	var quest_type_key := str(selected.get("quest_type", ""))
 	if quest_type_key == SCOUT_QUEST_KEY:
 		if duration_title != null:
-			duration_title.text = "QUEST_DETAIL_DISTANCE_LABEL"
+			duration_title.text = tr("QUEST_DETAIL_DISTANCE_LABEL")
 		var distance_text := ""
 		var location := quest_location.get_item_metadata(quest_location.selected) as HexBase
 		var active_scene := SceneManager.get_active_scene()
@@ -977,7 +1046,7 @@ func _refresh_quest_details() -> void:
 		_set_details("")
 		return
 	if duration_title != null:
-		duration_title.text = "QUEST_DETAIL_DURATION_LABEL"
+		duration_title.text = tr("QUEST_DETAIL_DURATION_LABEL")
 
 	var description := objective.get_quest_profile_description(quest_type_key)
 
@@ -990,6 +1059,14 @@ func _refresh_quest_details() -> void:
 	var risk := objective.get_quest_profile_risk(quest_type_key)
 	if risk != "":
 		risk_text = risk
+	var preview := _create_selected_quest_preview()
+	if preview != null:
+		var effective_risk_key := preview.get_effective_risk_key()
+		var preview_profile := preview.get_profile()
+		if effective_risk_key != "" and preview_profile != null and effective_risk_key != preview_profile.risk_key:
+			var effective_risk := tr(effective_risk_key)
+			if effective_risk != effective_risk_key:
+				risk_text = effective_risk
 
 	var reward_preview := objective.get_quest_profile_reward_preview(quest_type_key)
 	var context_text := objective.get_quest_context_label(quest_type_key)
@@ -998,6 +1075,124 @@ func _refresh_quest_details() -> void:
 func _get_selected_objective() -> QuestObjective:
 	var selected := _get_selected_quest_type_and_objective()
 	return selected.get("objective") as QuestObjective
+
+func _get_selected_profile() -> QuestProfile:
+	var selected := _get_selected_quest_type_and_objective()
+	var objective := selected.get("objective") as QuestObjective
+	var quest_type_key := str(selected.get("quest_type", ""))
+	if objective == null or quest_type_key == "":
+		return null
+	return objective.get_profile(quest_type_key)
+
+func _create_selected_quest_preview() -> Quest:
+	var location_idx := quest_location.selected
+	var quest_type_idx := quest_type.selected
+	if location_idx < 0 or quest_type_idx < 0:
+		return null
+	var location := quest_location.get_item_metadata(location_idx) as HexBase
+	var quest_type_key := _get_quest_type_key(quest_type_idx)
+	if location == null or quest_type_key == "":
+		return null
+	var preview := Quest.new(
+		location,
+		quest_type_key,
+		_get_reward_offer_amount(),
+		_get_minimum_rank_override(),
+		0
+	)
+	preview.set_selected_support_ids(_selected_support_ids)
+	return preview
+
+func _clear_optional_supports() -> void:
+	_selected_support_ids.clear()
+	_support_selection_context = ""
+	_clear_support_rows()
+	if quest_support != null:
+		quest_support.visible = false
+	_request_window_refit()
+
+func _clear_support_rows() -> void:
+	if support_options == null:
+		return
+	for child in support_options.get_children():
+		support_options.remove_child(child)
+		child.queue_free()
+
+func _refresh_optional_supports(reset_defaults: bool = false) -> void:
+	if quest_support == null or support_options == null:
+		return
+	var profile := _get_selected_profile()
+	var definitions: Array[QuestSupportDefinition] = []
+	if profile != null:
+		definitions = profile.get_optional_supports()
+	var context_key := _get_support_selection_context_key()
+	if definitions.is_empty() or context_key == "" or support_row_scene == null:
+		_clear_optional_supports()
+		return
+
+	var should_reset := reset_defaults or context_key != _support_selection_context
+	if should_reset:
+		_selected_support_ids.clear()
+		_support_selection_context = context_key
+		for definition: QuestSupportDefinition in definitions:
+			var provider_count := _get_available_support_provider_count(definition)
+			if definition.selected_by_default and (definition.provider_role == "" or provider_count > 0):
+				_selected_support_ids.append(str(definition.id))
+	else:
+		var valid_ids: Array[String] = []
+		for definition: QuestSupportDefinition in definitions:
+			valid_ids.append(str(definition.id))
+		var preserved_ids: Array[String] = []
+		for support_id in _selected_support_ids:
+			if valid_ids.has(support_id):
+				preserved_ids.append(support_id)
+		_selected_support_ids = preserved_ids
+
+	_clear_support_rows()
+	for definition: QuestSupportDefinition in definitions:
+		var row := support_row_scene.instantiate() as QuestSupportRowUI
+		if row == null:
+			continue
+		support_options.add_child(row)
+		row.setup(
+			definition,
+			_selected_support_ids.has(str(definition.id)),
+			_get_available_support_provider_count(definition)
+		)
+		row.selection_changed.connect(_on_support_selection_changed)
+
+	quest_support.visible = support_options.get_child_count() > 0
+	_request_window_refit()
+
+func _get_support_selection_context_key() -> String:
+	var location_idx := quest_location.selected
+	var quest_type_idx := quest_type.selected
+	if location_idx < 0 or quest_type_idx < 0:
+		return ""
+	var location := quest_location.get_item_metadata(location_idx) as HexBase
+	var quest_type_key := _get_quest_type_key(quest_type_idx)
+	if location == null or quest_type_key == "":
+		return ""
+	return "%s:%s" % [location.get_instance_id(), quest_type_key]
+
+func _get_available_support_provider_count(definition: QuestSupportDefinition) -> int:
+	if definition == null or definition.provider_role == "":
+		return -1
+	if Manager.instance == null or Manager.instance.quests == null:
+		return 0
+	var preview := _create_selected_quest_preview()
+	return Manager.instance.quests.get_available_support_provider_count(preview, definition)
+
+func _on_support_selection_changed(definition: QuestSupportDefinition, selected: bool) -> void:
+	if definition == null:
+		return
+	var support_id := str(definition.id)
+	if selected and not _selected_support_ids.has(support_id):
+		_selected_support_ids.append(support_id)
+	elif not selected:
+		_selected_support_ids.erase(support_id)
+	_refresh_quest_details()
+	_request_window_refit()
 
 func _get_selected_quest_type_and_objective() -> Dictionary:
 	var location_idx: int = quest_location.selected
@@ -1056,8 +1251,11 @@ func _get_player() -> PlayerController:
 	return Manager.instance.player_instance
 
 func _connect_player_currency_signal() -> void:
-	if Manager.instance != null and Manager.instance.hub != null and not Manager.instance.hub.changed.is_connected(_on_player_currency_amount_changed):
-		Manager.instance.hub.changed.connect(_on_player_currency_amount_changed)
+	if Manager.instance != null and Manager.instance.hub != null:
+		if not Manager.instance.hub.changed.is_connected(_on_player_currency_amount_changed):
+			Manager.instance.hub.changed.connect(_on_player_currency_amount_changed)
+		if not Manager.instance.hub.faction_activity_changed.is_connected(_on_hub_faction_activity_changed):
+			Manager.instance.hub.faction_activity_changed.connect(_on_hub_faction_activity_changed)
 	var player := _get_player()
 	if player == null:
 		return
@@ -1139,7 +1337,7 @@ func _apply_mode_visibility() -> void:
 		scout_direction_row.visible = scout_only
 	_set_creation_controls_visible(true)
 	if finish_quest_creation != null:
-		finish_quest_creation.text = "QUEST_CREATION_SCOUT_FRONTIER" if scout_only else "QUEST_CREATION_CREATE"
+		finish_quest_creation.text = tr("QUEST_CREATION_SCOUT_FRONTIER") if scout_only else tr("QUEST_CREATION_CREATE")
 	if window != null:
 		window.change_title.emit("QUEST_CREATION_SCOUT_FRONTIER" if scout_only else "WINDOW_NEW_QUEST")
 
@@ -1216,12 +1414,6 @@ func _can_create_scout_quest(location: HexBase) -> bool:
 		grid != null
 		and Manager.instance.quests.is_valid_scout_location(location, grid)
 		and Manager.instance.quests.is_quest_location_reachable(location, grid)
-		and Manager.instance.quests.has_eligible_npc_for_quest(
-			location,
-			SCOUT_QUEST_KEY,
-			_get_reward_offer_amount(),
-			_get_minimum_rank_override()
-		)
 	)
 
 func _create_scout_quest(location: HexBase, reward_amount: int) -> void:
@@ -1243,6 +1435,10 @@ func _create_scout_quest(location: HexBase, reward_amount: int) -> void:
 		minimum_rank_override,
 		scout_rank_experience
 	)
+	quest.context["scout_direction_key"] = "QUEST_SCOUT_DIRECTION_%s" % [_get_requested_scout_direction()]
+	var active_scene := SceneManager.get_active_scene()
+	var grid := active_scene.node as HexGrid if active_scene != null else null
+	quest.context["scout_distance"] = _get_scout_distance_from_origin(grid, location)
 	quest_created.emit(quest)
 	if window != null:
 		window.close_requested.emit()

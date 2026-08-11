@@ -8,6 +8,7 @@
 script = ExtResource("1_profile")
 quest_key = "reinforce"
 behaviour = "reinforce"
+required_role = "crafter"
 translation_key_name = "QUEST_TYPE_REINFORCE"
 description_key = "QUEST_DESC_MINE_REINFORCE"
 risk_key = "QUEST_RISK_SAFE"
@@ -17,6 +18,9 @@ rank_experience_reward = 3
 available_states = Array[String](["UNSTABLE"])
 required_supplies = Dictionary[ExtResource("2_item_script"), int]({
 ExtResource("3_support"): 1
+})
+required_supply_effect_keys = Dictionary[ExtResource("2_item_script"), String]({
+ExtResource("3_support"): "QUEST_SUPPLY_EFFECT_BEAMS_REINFORCE_MINE"
 })
 guild_reputation_reward = 2
 stewardship_change = 2

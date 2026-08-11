@@ -283,7 +283,7 @@ func _set_close_locked(locked: bool) -> void:
 	close_locked = can_lock and locked
 	lock_button.button_pressed = close_locked
 	lock_button.icon = LOCKED_ICON if close_locked else UNLOCKED_ICON
-	lock_button.tooltip_text = "WINDOW_KEEP_OPEN" if not close_locked else "WINDOW_ALLOW_CLOSE"
+	lock_button.tooltip_text = tr("WINDOW_KEEP_OPEN") if not close_locked else tr("WINDOW_ALLOW_CLOSE")
 
 func _update_lock_availability() -> void:
 	lock_button.visible = can_lock

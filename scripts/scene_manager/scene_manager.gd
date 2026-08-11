@@ -23,6 +23,8 @@ var _active_scene: SceneInstance:
 			
 		#set the newly provided scene to active
 		_active_scene = new_scene;
+		if _active_scene == null or _active_scene.node == null:
+			return
 			
 		#trigger scene entered logic, again internal and scenemanager
 		scene_entered.emit(_active_scene.node);
@@ -53,6 +55,8 @@ func get_active_scene() -> SceneInstance:
 	return _active_scene;
 			
 func get_or_create_scene(scene_name: String) -> SceneInfo:
+	if DataManager.instance == null:
+		return null
 	var previous_scene_info: SceneInfo = null;
 	if _active_scene != null:
 		previous_scene_info = DataManager.instance.node_to_info(_active_scene.node);
@@ -60,6 +64,8 @@ func get_or_create_scene(scene_name: String) -> SceneInfo:
 			return null; 
 	
 	var scene_info: SceneInfo = DataManager.instance.get_scene_by_name(scene_name);
+	if scene_info == null:
+		return null
 	if scene_info.is_cached:
 		scene_info.cached.emit(scene_info);
 		return scene_info;
@@ -89,7 +95,8 @@ func _remove_from_stack(info: SceneInfo) -> void:
 	
 	if scene_stack[-1] == info:
 		var popped_scene: SceneInfo = scene_stack.pop_back();
-		if popped_scene.get_instance() == _active_scene and not scene_stack.is_empty():
+		var active_info := _active_scene.scene_info if _active_scene != null else null
+		if active_info == popped_scene and not scene_stack.is_empty():
 			set_active_scene(scene_stack[-1])
 			return
 	
@@ -167,6 +174,10 @@ func set_visible(scene_info: SceneInfo, state: bool = true) -> void:
 				promote_scene_instance(instance);
 			
 func is_in_tree(scene_instance: SceneInstance) -> bool:
+	if scene_instance == null or scene_instance.node == null or scene_instance.scene_info == null:
+		return false
+	if _ui_container == null or root == null:
+		return false
 	var node := scene_instance.node;
 	if not node.is_inside_tree():
 		return false;
@@ -176,6 +187,8 @@ func is_in_tree(scene_instance: SceneInstance) -> bool:
 	return root.is_ancestor_of(node);
 
 func is_visible(scene_instance: SceneInstance) -> bool:
+	if scene_instance == null or scene_instance.node == null:
+		return false
 	var node := scene_instance.node;
 	if not node.is_inside_tree():
 		return false;
@@ -202,10 +215,17 @@ func add(n: SceneInfo, vis: bool = true) -> SceneInstance:
 	
 	var stack := ui_stack if n.type == SceneInfo.Type.UI else scene_stack;
 	var instance_count := stack.count(n);
-	if instance_count > 1 && n.is_unique:
-		return null;
+	if instance_count >= 1 and n.is_unique:
+		var existing := n.get_instance()
+		if existing != null and existing.node != null:
+			if "visible" in existing.node:
+				existing.node.visible = vis
+			promote_scene_instance(existing)
+			return existing
 	
 	var instance := n.get_instance();
+	if instance == null or instance.node == null:
+		return null
 	if "visible" in instance.node:
 		instance.node.visible = vis;
 		

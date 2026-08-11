@@ -16,7 +16,10 @@ point_count = 7
 [resource]
 script = ExtResource("1_ba3wx")
 img = ExtResource("1_iiktj")
-operation_roles = Array[String](["adventurer", "hunter", "laborer"])
+faction_id = &"adventurers"
+operation_roles = Array[String](["adventurer", "security"])
+preferred_jobs = Array[String](["secure"])
+disliked_jobs = Array[String](["prospect", "extract", "plant", "water"])
 rank_experience_thresholds = SubResource("Curve_rank_thresholds")
 default_equipment = SubResource("Resource_equipment_slots")
 id = "basic_adventurer"

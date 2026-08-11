@@ -3,6 +3,8 @@ extends Node
 
 signal operations_changed()
 
+@export var auto_resolve_completed_quests := true
+
 var operations: Array[HubOperation] = []
 var _next_id := 1
 
@@ -24,45 +26,56 @@ func register_quest(quest: Quest, parent_id: String = "") -> HubOperation:
 		quest.state_machine.state_entered.connect(_on_quest_state_changed.bind(operation))
 	if not quest.completed.is_connected(_on_quest_completed.bind(operation)):
 		quest.completed.connect(_on_quest_completed.bind(operation))
+	if not quest.outcome_ready.is_connected(_on_quest_outcome_ready.bind(operation)):
+		quest.outcome_ready.connect(_on_quest_outcome_ready.bind(operation))
+	_capture_available_quest_types(quest)
 	if quest.location != null and hub != null:
 		hub.mark_operation(quest.location, quest.quest_key)
 	operations_changed.emit()
 	return operation
 
-func ensure_starting_operation(location: HexBase) -> void:
-	if location == null or location.structure == null or Manager.instance == null:
+func _on_quest_outcome_ready(resolved_outcome: QuestOutcome, _operation: HubOperation) -> void:
+	if resolved_outcome == null:
 		return
-	if Manager.instance.quests.has_quests_for_location(location):
+	var summary := resolved_outcome.get_summary()
+	if summary == "":
 		return
-	var objective := location.structure.instance as QuestObjective
-	var quest_key := ""
-	if objective is AncientRuins:
-		quest_key = "survey"
-	elif objective is Mineshaft:
-		quest_key = "prospect"
-	if quest_key == "":
-		return
-	var quest := Quest.new(location, quest_key, 0, -1)
-	quest.context["generated_by_hub"] = true
-	Manager.instance.quests.add_quest(quest)
+	var hub := _get_hub()
+	if hub != null:
+		hub.record_activity(summary)
+	if Manager.instance != null and Manager.instance.toast != null:
+		Manager.instance.toast.notify_report(summary)
+	operations_changed.emit()
 
 func _on_quest_state_changed(_state: String, operation: HubOperation) -> void:
 	if operation == null:
 		return
+	var previous_state := operation.state
 	operation._refresh()
+	if previous_state != operation.state and operation.state in [HubOperation.State.EN_ROUTE, HubOperation.State.IN_PROGRESS, HubOperation.State.RETURNING]:
+		var hub := _get_hub()
+		if hub != null:
+			hub.record_activity("%s: %s" % [operation.operation_type.capitalize(), operation.get_state_name()])
 	operations_changed.emit()
+	if operation.state == HubOperation.State.COMPLETE and auto_resolve_completed_quests and not operation.reward_resolved:
+		operation.reward_resolved = true
+		if operation.quest != null:
+			operation.quest.context["reward_resolved"] = true
+			operation.quest.parse_reward()
 
 func _on_quest_completed(operation: HubOperation) -> void:
 	if operation == null:
 		return
 	operation.state = HubOperation.State.COMPLETE
+	operation.reward_resolved = true
 	operation.result_text = "Completed"
 	var quest := operation.quest
 	var hub := _get_hub()
-	if hub != null:
+	if hub != null and not operation.completion_recorded:
+		operation.completion_recorded = true
 		hub.record_operation_completed(quest)
 	_update_spot_after_operation(quest)
-	_create_follow_up(quest, operation.id)
+	_announce_newly_available_work(quest)
 	operations_changed.emit()
 
 func on_quest_completed(quest: Quest) -> void:
@@ -84,53 +97,61 @@ func _update_spot_after_operation(quest: Quest) -> void:
 		behaviour = objective.get_quest_behaviour(quest.quest_key, quest.quest_key)
 	match behaviour:
 		"survey", "prospect":
-			spot.stage = SpotProgress.Stage.SURVEYED
+			spot.stage = SpotProgress.Stage.INFESTED if objective != null and objective.has_occupation() and objective.is_occupation_revealed() else SpotProgress.Stage.SURVEYED
 		"secure":
-			spot.stage = SpotProgress.Stage.CLEARED
+			spot.stage = SpotProgress.Stage.INFESTED if objective != null and objective.has_occupation() else SpotProgress.Stage.SECURED
 		"delve":
-			if objective != null and objective.state_machine.get_current_state() == "DANGEROUS":
+			if objective != null and objective.has_occupation():
+				spot.stage = SpotProgress.Stage.INFESTED
+			elif objective != null and objective.state_machine.get_current_state() == "DANGEROUS":
 				spot.stage = SpotProgress.Stage.DANGEROUS
 			else:
 				spot.stage = SpotProgress.Stage.CLEARED
-		"extract", "forage", "harvest", "timber":
+		"extract", "forage", "harvest", "timber", "hunt":
+			spot.stage = SpotProgress.Stage.INFESTED if objective != null and objective.has_occupation() and objective.is_occupation_revealed() else SpotProgress.Stage.AVAILABLE
+		"reopen":
 			spot.stage = SpotProgress.Stage.AVAILABLE
 		"scout":
 			spot.stage = SpotProgress.Stage.MAPPED
 	spot.last_operation_type = quest.quest_key
 
-func _create_follow_up(quest: Quest, parent_id: String) -> void:
-	if quest == null or quest.location == null or quest.context.get("follow_up_created", false):
+func _capture_available_quest_types(quest: Quest) -> void:
+	if quest == null:
 		return
 	var objective := quest.get_objective()
-	var next_key := ""
-	var objective_state := objective.state_machine.get_current_state() if objective != null else ""
-	if objective is AncientRuins:
-		match quest.quest_key:
-			"survey":
-				next_key = "delve"
-			"delve":
-				if objective_state == "DANGEROUS":
-					next_key = "secure"
-			"secure":
-				next_key = "salvage"
-	elif objective is Mineshaft:
-		match quest.quest_key:
-			"prospect":
-				next_key = "extract"
-			"extract":
-				if objective_state == "UNSTABLE":
-					next_key = "reinforce"
-			"reinforce":
-				next_key = "extract"
-	if next_key == "":
+	if objective == null:
 		return
-	if Manager.instance != null and Manager.instance.quests.has_quest_for_location_and_type(quest.location, next_key):
+	quest.context["available_quest_types_when_posted"] = objective.get_filtered_quest_types().duplicate()
+
+func _announce_newly_available_work(quest: Quest) -> void:
+	if quest == null or quest.location == null or Manager.instance == null or Manager.instance.quests == null:
 		return
-	quest.context["follow_up_created"] = true
-	var follow_up := Quest.new(quest.location, next_key, 0, -1)
-	follow_up.context["parent_operation_id"] = parent_id
-	follow_up.context["generated_by_hub"] = true
-	Manager.instance.quests.add_quest(follow_up)
+	var objective := quest.get_objective()
+	if objective == null:
+		return
+	var previously_available: Array = quest.context.get("available_quest_types_when_posted", [])
+	var postable_types := Manager.instance.quests.get_postable_quest_types(
+		quest.location,
+		objective.get_filtered_quest_types()
+	)
+	var labels: Array[String] = []
+	for quest_type: String in postable_types:
+		if previously_available.has(quest_type):
+			continue
+		var profile := objective.get_profile(quest_type)
+		labels.append(profile.get_display_name() if profile != null else quest_type.capitalize())
+	if labels.is_empty():
+		return
+	var location_name := tr("HUB_UNKNOWN_LOCATION")
+	if quest.location.structure != null and quest.location.structure.structure_info != null:
+		location_name = quest.location.structure.structure_info.get_display_name()
+	var message := tr("QUEST_NEW_WORK_AVAILABLE") % [location_name, ", ".join(labels)]
+	var hub := _get_hub()
+	if hub != null:
+		hub.record_activity(message)
+	if Manager.instance.toast != null:
+		Manager.instance.toast.notify_report(message)
+	Manager.instance.quests.quest_availability_changed.emit()
 
 func get_active_operations() -> Array[HubOperation]:
 	var active: Array[HubOperation] = []

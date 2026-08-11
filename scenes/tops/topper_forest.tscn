@@ -8,6 +8,13 @@
 [ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_forest_harvest.tres" id="5_harvest"]
 [ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_forest_fell_timber.tres" id="6_timber"]
 [ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_forest_replant.tres" id="7_replant"]
+[ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_forest_hunt.tres" id="8_hunt"]
+[ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_forest_secure.tres" id="9_secure"]
+[ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_forest_trap_hunt.tres" id="9_trap_hunt"]
+[ext_resource type="Script" path="res://scripts/quests/monster_occupation_definition.gd" id="10_monster_script"]
+[ext_resource type="Resource" path="res://resources/monster_occupations/prowling_wolves.tres" id="11_wolves"]
+[ext_resource type="Resource" path="res://resources/monster_occupations/goblin_raiders.tres" id="12_goblins"]
+[ext_resource type="PackedScene" uid="uid://lm7rokymxyu6" path="res://meshes/kay_custom/exclamation.glb" id="13_danger_icon"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_c5dpi"]
 size = Vector3(2.6546097, 1.6783295, 2.7467527)
@@ -17,11 +24,19 @@ size = Vector3(1.6599602, 0.5864792, 1.6642027)
 
 [node name="Node3D" type="Node3D" unique_id=1405714178]
 script = ExtResource("1_ro7nm")
-quest_profiles = Array[ExtResource("3_profile_script")]([ExtResource("4_forage"), ExtResource("5_harvest"), ExtResource("6_timber"), ExtResource("7_replant")])
+quest_profiles = Array[ExtResource("3_profile_script")]([ExtResource("4_forage"), ExtResource("5_harvest"), ExtResource("6_timber"), ExtResource("7_replant"), ExtResource("8_hunt"), ExtResource("9_trap_hunt"), ExtResource("9_secure")])
+occupation_chance = 0.45
+occupation_pool = Array[ExtResource("10_monster_script")]([ExtResource("11_wolves"), ExtResource("12_goblins")])
 
 [node name="trees" parent="." unique_id=1335934582 instance=ExtResource("1_k4nv7")]
 
 [node name="stumps" parent="." unique_id=398628447 instance=ExtResource("2_c5dpi")]
+
+[node name="danger_marker" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, 0)
+visible = false
+
+[node name="exclamation" parent="danger_marker" instance=ExtResource("13_danger_icon")]
 
 [node name="interaction" type="Area3D" parent="." unique_id=104705730]
 

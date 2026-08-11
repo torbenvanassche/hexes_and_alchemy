@@ -22,6 +22,7 @@ SETTINGS_TAB_GAME,game,game
 SETTINGS_TAB_INPUT,input,input
 SETTINGS_BACK,Back,Back
 WINDOW_TITLE,window title,window title
+WINDOW_GUILD_HUB,Guild hall,Guild hall
 WINDOW_INVENTORY,Guild Warehouse,Guild Warehouse
 WINDOW_JOURNAL,Journal,Journal
 WINDOW_CRAFTING,Blacksmith,Blacksmith
@@ -43,6 +44,11 @@ GAME_SETTINGS_EMPTY,No settings here yet,No settings here yet
 WORLD_SEED_LABEL,Seed: %s,Seed: %s
 WORLD_SEED_PLACEHOLDER,Seed: ...,Seed: ...
 SCENE_ADVENTURER_NAME,Adventurer,Adventurer
+SCENE_BASIC_ADVENTURER_NAME,Adventurer,Adventurer
+SCENE_PATHFINDER_NAME,Pathfinder,Pathfinder
+SCENE_DELVER_NAME,Delver,Delver
+SCENE_CRAFTER_NAME,Crafter,Crafter
+SCENE_WARDEN_NAME,Warden,Warden
 ADVENTURER_RANK_F,F,F
 ADVENTURER_RANK_E,E,E
 ADVENTURER_RANK_D,D,D
@@ -73,6 +79,24 @@ QUEST_CREATION_QUEST,Quest,Quest
 QUEST_CREATION_MINIMUM_RANK,Minimum rank,Minimum rank
 QUEST_CREATION_REWARD_OFFER,Offered payment,Offered payment
 QUEST_CREATION_SUPPLIES,Required supplies,Required supplies
+QUEST_CREATION_OPTIONAL_SUPPORT,Optional support,Optional support
+QUEST_CREATION_REQUIRED_PROFESSION,Required profession: %s,Required profession: %s
+QUEST_ROLE_ANY,Any specialist,Any specialist
+QUEST_ROLE_HUNTER,Hunter,Hunter
+QUEST_ROLE_ADVENTURER,Adventurer,Adventurer
+QUEST_ROLE_DELVER,Delver,Delver
+QUEST_ROLE_CRAFTER,Crafter,Crafter
+QUEST_ROLE_TENDER,Tender,Tender
+QUEST_ROLE_SECURITY,Security,Security
+QUEST_SUPPORT_SECURITY_NAME,Security escort,Security escort
+QUEST_SUPPORT_SECURITY_DESCRIPTION,Assign a security specialist to reduce the chance of a dangerous outcome.,Assign a security specialist to reduce the chance of a dangerous outcome.
+QUEST_SUPPORT_AVAILABLE_COUNT,%s available now,%s available now
+QUEST_SUPPORT_NONE_AVAILABLE,No specialist available now,No specialist available now
+QUEST_SUPPORT_WILL_WAIT,Selected - will wait for a specialist,Selected - will wait for a specialist
+QUEST_SUPPORT_RISK_WHEN_SELECTED,Risk with support: %s,Risk with support: %s
+QUEST_SUPPORT_DANGER_WEIGHT,Danger weight: %s%%,Danger weight: %s%%
+QUEST_SUPPLY_COUNTS,Required: %s | In stock: %s,Required: %s | In stock: %s
+QUEST_SUPPLY_EFFECT,Effect: %s,Effect: %s
 SETTLEMENT_UPGRADE_CURRENT_LEVEL_LABEL,Current level,Current level
 SETTLEMENT_UPGRADE_NEXT_HEADER,Next upgrade,Next upgrade
 SETTLEMENT_UPGRADE_NEXT,Upgrade to level %s,Upgrade to level %s
@@ -114,9 +138,9 @@ QUEST_CREATION_NO_SCOUTING_AVAILABLE,No reachable scouting target is available r
 QUEST_CREATION_SCOUT_FRONTIER,Scout,Scout
 QUEST_CREATION_SCOUT_DISTANCE,Distance,Distance
 QUEST_CREATION_SCOUT_DIRECTION,Direction,Direction
-QUEST_CREATION_INTEREST_NONE,No adventurers are interested in this offer.,No adventurers are interested in this offer.
-QUEST_CREATION_INTEREST_ONE,1 adventurer is interested in this offer.,1 adventurer is interested in this offer.
-QUEST_CREATION_INTEREST_COUNT,%s adventurers are interested in this offer.,%s adventurers are interested in this offer.
+QUEST_CREATION_INTEREST_NONE,No specialist is available for this order right now.,No specialist is available for this order right now.
+QUEST_CREATION_INTEREST_ONE,1 specialist is available for this order now.,1 specialist is available for this order now.
+QUEST_CREATION_INTEREST_COUNT,%s specialists are available for this order now.,%s specialists are available for this order now.
 QUEST_AUTO_RESOLVE,Auto resolve,Auto resolve
 QUEST_REWARD_ITEM_GAINED,+%s %s,+%s %s
 QUEST_REWARD_INVENTORY_FULL,%s %s could not fit in the guild warehouse.,%s %s could not fit in the guild warehouse.
@@ -130,6 +154,8 @@ QUEST_DETAIL_RISK,Risk: %s,Risk: %s
 QUEST_DETAIL_EXPECTED_REWARD,Reward: %s,Reward: %s
 QUEST_LOCATION_DISTANCE,%s (%s tiles),%s (%s tiles)
 QUEST_LOCATION_SCOUT_SELECTED,Scout target: %s (%s tiles),Scout target: %s (%s tiles)
+QUEST_LOCATION_SCOUT_BOARD,%s frontier (%s tiles),%s frontier (%s tiles)
+QUEST_LOCATION_UNCHARTED_FRONTIER,Uncharted frontier,Uncharted frontier
 QUEST_SCOUT_DIRECTION_0,East,East
 QUEST_SCOUT_DIRECTION_1,Northeast,Northeast
 QUEST_SCOUT_DIRECTION_2,Northwest,Northwest
@@ -138,9 +164,10 @@ QUEST_SCOUT_DIRECTION_4,Southwest,Southwest
 QUEST_SCOUT_DIRECTION_5,Southeast,Southeast
 QUEST_TYPE_FETCH,Fetch,Fetch
 QUEST_TYPE_SCOUT,Scout,Scout
-QUEST_SCOUT_REPORT_NOTHING,Scout returned without revealing anything new.,Scout returned without revealing anything new.
-QUEST_SCOUT_REPORT_TILES,Scout revealed %s new tiles.,Scout revealed %s new tiles.
-QUEST_SCOUT_REPORT_DISCOVERIES,Scout revealed %s new tiles and found: %s.,Scout revealed %s new tiles and found: %s.
+QUEST_SCOUT_REPORT_NOTHING,Scouting report: no new territory was found.,Scouting report: no new territory was found.
+QUEST_SCOUT_REPORT_TILES,Scouting report: %s new tiles mapped.,Scouting report: %s new tiles mapped.
+QUEST_SCOUT_REPORT_DISCOVERIES,Scouting report: %s new tiles mapped. Discovered: %s.,Scouting report: %s new tiles mapped. Discovered: %s.
+QUEST_NEW_WORK_AVAILABLE,Report from %s. New work is available on the quest board: %s.,Report from %s. New work is available on the quest board: %s.
 QUEST_TYPE_PLANT,Plant,Plant
 QUEST_TYPE_WATER,Water,Water
 QUEST_TYPE_HARVEST,Harvest,Harvest
@@ -158,6 +185,7 @@ QUEST_TYPE_MAINTAIN,Maintain,Maintain
 QUEST_TYPE_REINFORCE,Reinforce,Reinforce
 QUEST_TYPE_INVESTIGATE,Investigate,Investigate
 QUEST_TYPE_FORAGE,Forage,Forage
+QUEST_TYPE_HUNT,Hunt,Hunt
 QUEST_TYPE_FELL_TIMBER,Fell timber,Fell timber
 QUEST_TYPE_REPLANT,Replant,Replant
 QUEST_TYPE_SURVEY,Survey,Survey
@@ -170,6 +198,7 @@ QUEST_RISK_DANGEROUS,Dangerous,Dangerous
 QUEST_RISK_DEPLETES_SITE,Depletes site,Depletes site
 QUEST_RISK_LOW_YIELD,Low yield,Low yield
 QUEST_REWARD_SEEDS_WOOD,Seeds and light wood,Seeds and light wood
+QUEST_REWARD_GAME_MEAT,Game meat,Game meat
 QUEST_REWARD_WOOD_SEEDS,Wood and possible seeds,Wood and possible seeds
 QUEST_REWARD_LOTS_OF_WOOD,A large wood haul,A large wood haul
 QUEST_REWARD_SITE_RECOVERY,Site recovery,Site recovery
@@ -189,6 +218,7 @@ QUEST_REWARD_REVEALS_VEIN,Reveals a vein,Reveals a vein
 QUEST_REWARD_ORE,Ore,Ore
 QUEST_REWARD_MORE_ORE,More ore,More ore
 QUEST_DESC_FOREST_FORAGE,Gather loose wood and search for usable seeds.,Gather loose wood and search for usable seeds.
+QUEST_DESC_FOREST_HUNT,Track game through the forest and bring back fresh meat.,Track game through the forest and bring back fresh meat.
 QUEST_DESC_FOREST_HARVEST,Cut usable wood and let the grove regrow later.,Cut usable wood and let the grove regrow later.
 QUEST_DESC_FOREST_FELL_TIMBER,Take a larger timber haul and deplete the grove.,Take a larger timber haul and deplete the grove.
 QUEST_DESC_FOREST_REPLANT,Spend seeds to restore a depleted grove immediately.,Spend seeds to restore a depleted grove immediately.
@@ -211,7 +241,7 @@ QUEST_DESC_MINE_EXTRACT,Extract ore with normal risk.,Extract ore with normal ri
 QUEST_DESC_MINE_DEEP_EXTRACT,Push deeper for more ore and more danger.,Push deeper for more ore and more danger.
 QUEST_DESC_MINE_STABILIZED_EXTRACT,Spend beams to reduce extraction risk.,Spend beams to reduce extraction risk.
 QUEST_DESC_MINE_REINFORCE,Repair an unstable mine shaft.,Repair an unstable mine shaft.
-QUEST_DESC_SCOUT,Send an adventurer to scout the wilds and reveal nearby tiles.,Send an adventurer to scout the wilds and reveal nearby tiles.
+QUEST_DESC_SCOUT,Send a hunter into the wilds. The mapped area and anything found there are revealed when the scout returns.,Send a hunter into the wilds. The mapped area and anything found there are revealed when the scout returns.
 QUEST_DETAIL_SCOUT_DISTANCE,%s tiles,%s tiles
 QUEST_STATE_WAITING,Waiting,Waiting
 QUEST_STATE_EN_ROUTE,En route,En route
@@ -221,6 +251,8 @@ QUEST_STATE_COMPLETE,Complete,Complete
 QUEST_PARTY_UNASSIGNED,Unassigned,Unassigned
 QUEST_PARTY_ONE_ADVENTURER,1 adventurer,1 adventurer
 QUEST_PARTY_ADVENTURERS,%s adventurers,%s adventurers
+QUEST_PARTY_ONE_HUNTER,1 hunter,1 hunter
+QUEST_PARTY_HUNTERS,%s hunters,%s hunters
 QUEST_ACTION_CLAIM_REWARD,Claim reward,Claim reward
 QUEST_ACTIVE_AT_LOCATION,Current work,Current work
 JOURNAL_TITLE,Guild Ledger,Guild Ledger
@@ -320,6 +352,8 @@ ITEM_ORE_IRON_NAME,Iron ore,Iron ore
 ITEM_ORE_IRON_DESCRIPTION,Raw iron ore.,Raw iron ore.
 ITEM_GRAIN_NAME,Grain,Grain
 ITEM_GRAIN_DESCRIPTION,A harvested crop used for food or seed.,A harvested crop used for food or seed.
+ITEM_GAME_MEAT_NAME,Game meat,Game meat
+ITEM_GAME_MEAT_DESCRIPTION,Fresh meat brought back by hunters for food or cooking.,Fresh meat brought back by hunters for food or cooking.
 ITEM_SEED_POUCH_NAME,Grain seeds,Grain seeds
 ITEM_SEED_POUCH_DESCRIPTION,Seeds found in forests or crafted from grain; used for planting farmland.,Seeds found in forests or crafted from grain; used for planting farmland.
 ITEM_SETTLEMENT_EXPANSION_PERMIT_NAME,Settlement expansion permit,Settlement expansion permit
@@ -363,3 +397,108 @@ JOURNAL_TASK_DEEPEN_A_MINE,Deepen a mine to level 2,Deepen a mine to level 2
 JOURNAL_TASK_REACH_SETTLEMENT_LEVEL_3,Upgrade the settlement to level 3,Upgrade the settlement to level 3
 JOURNAL_TASK_RAISE_GUILD_REPUTATION,Reach 10 guild reputation,Reach 10 guild reputation
 JOURNAL_TASK_GAIN_GUILD_NOTORIETY,Gain 5 fame,Gain 5 fame
+HUB_OPERATIONS_TITLE,Hub operations,Hub operations
+HUB_OPERATIONS_SUBTITLE,Keep track of the work being done by each faction.,Keep track of the work being done by each faction.
+HUB_FACTIONS_HEADER,Factions,Factions
+HUB_ACTIVE_OPERATIONS,Active operations,Active operations
+HUB_COMPLETED_OPERATIONS,Completed operations: %s,Completed operations: %s
+HUB_MEMBER_ACTIVITY,Member activity,Member activity
+HUB_GUILD_MEMBERS,Guild members,Guild members
+HUB_ACTIVITY_NAME,Name,Name
+HUB_ACTIVITY_ROLE,Role,Role
+HUB_ACTIVITY_STATUS,Activity,Activity
+HUB_NO_FACTION_MEMBERS,No faction members,No faction members
+HUB_NO_ACTIVE_OPERATIONS,No active operations,No active operations
+HUB_NO_ACTIVE_OPERATIONS_FACTION,No active operations for this faction,No active operations for this faction
+HUB_UNKNOWN_LOCATION,Unknown location,Unknown location
+HUB_PARTY_LABEL,Party: %s,Party: %s
+HUB_OPERATION_DETAIL,%s - %s,%s - %s
+HUB_MEMBER_AVAILABILITY,%s available | %s working | %s resting,%s available | %s working | %s resting
+HUB_ACTIVITY_COMPLETED,Completed: %s,Completed: %s
+HUB_UNKNOWN_OPERATION,Unknown operation,Unknown operation
+HUB_RECENT_ACTIVITY,Recent activity,Recent activity
+HUB_NO_ACTIVITY,No recent activity,No recent activity
+FACTION_HUNTERS_NAME,Hunters,Hunters
+FACTION_ADVENTURERS_NAME,Adventurers,Adventurers
+FACTION_CRAFTERS_NAME,Crafters,Crafters
+FACTION_TENDERS_NAME,Tenders,Tenders
+HUB_FACTION_ROLES_LABEL,Roles,Roles
+HUB_FACTION_RESPONSIBILITIES_LABEL,Responsibilities,Responsibilities
+NPC_STATUS_AVAILABLE,Available,Available
+NPC_STATUS_RESTING,Resting (%ss),Resting (%ss)
+NPC_STATUS_READY_TO_MOVE,Preparing,Preparing
+NPC_STATUS_MOVING_TO_QUEST,Travelling to quest,Travelling to quest
+NPC_STATUS_AT_QUEST,At quest site,At quest site
+NPC_STATUS_RETURNING,Returning to tavern,Returning to tavern
+NPC_STATUS_DONE,At tavern,At tavern
+OPERATION_STATE_WAITING,Waiting,Waiting
+OPERATION_STATE_EN_ROUTE,En route,En route
+OPERATION_STATE_IN_PROGRESS,In progress,In progress
+OPERATION_STATE_RETURNING,Returning,Returning
+OPERATION_STATE_COMPLETE,Complete,Complete
+OPERATION_STATE_FAILED,Failed,Failed
+OPERATION_ACTIVITY_IDLE,Idle,Idle
+OPERATION_ACTIVITY_WAITING,Waiting for a member,Waiting for a member
+OPERATION_ACTIVITY_EN_ROUTE,Travelling to site,Travelling to site
+OPERATION_ACTIVITY_IN_PROGRESS,Working at site,Working at site
+OPERATION_ACTIVITY_RETURNING,Returning to tavern,Returning to tavern
+OPERATION_ACTIVITY_FAILED,Operation failed,Operation failed
+OPERATION_ACTIVITY_COMPLETE,Complete,Complete
+OPERATION_UNASSIGNED,Unassigned,Unassigned
+INVENTORY,Inventory,Inventory
+JOURNAL,Journal,Journal
+OPERATIONS,Operations,Operations
+QUEST_DESC_FOREST_SECURE,Drive the reported monsters out of the forest so normal work can resume.,Drive the reported monsters out of the forest so normal work can resume.
+QUEST_REWARD_SAFE_FOREST,Restores safe access to the forest,Restores safe access to the forest
+QUEST_REPORT_HUNT_SUCCESS,The hunters returned with fresh game meat.,The hunters returned with fresh game meat.
+QUEST_REPORT_HUNT_INTERRUPTED,The hunt was interrupted by monsters. The forest now needs security.,The hunt was interrupted by monsters. The forest now needs security.
+QUEST_REPORT_FOREST_SECURED,Security drove the monsters out of the forest.,Security drove the monsters out of the forest.
+QUEST_REPORT_SECURITY_SETBACK,Security could not clear the site and returned to recover.,Security could not clear the site and returned to recover.
+QUEST_REPORT_RUINS_SURVEYED,The survey team returned with its report on the ruins.,The survey team returned with its report on the ruins.
+QUEST_REPORT_RUINS_DELVE_SUCCESS,The expedition cleared the ruins and recovered its finds.,The expedition cleared the ruins and recovered its finds.
+QUEST_REPORT_RUINS_DELVE_SETBACK,The expedition was forced back. The ruins remain dangerous.,The expedition was forced back. The ruins remain dangerous.
+QUEST_REPORT_RUINS_SECURED,Security made the ruins safe for future expeditions.,Security made the ruins safe for future expeditions.
+QUEST_REPORT_MONSTER_SPOTTED,The returning party reports %s at the site (difficulty %s).,The returning party reports %s at the site (difficulty %s).
+QUEST_CONTEXT_THREAT_UNKNOWN,Threats have not been confirmed yet.,Threats have not been confirmed yet.
+QUEST_CONTEXT_NO_MONSTER_OCCUPATION,No monster occupation was found.,No monster occupation was found.
+QUEST_CONTEXT_SITE_SECURED,Security has cleared this site.,Security has cleared this site.
+QUEST_CONTEXT_MONSTER_OCCUPATION,%s | Difficulty %s,%s | Difficulty %s
+MONSTER_PROWLING_WOLVES_NAME,Prowling wolves,Prowling wolves
+MONSTER_PROWLING_WOLVES_DESCRIPTION,A hungry wolf pack has claimed the surrounding hunting grounds.,A hungry wolf pack has claimed the surrounding hunting grounds.
+MONSTER_RUIN_SPIDERS_NAME,Ruin spiders,Ruin spiders
+MONSTER_RUIN_SPIDERS_DESCRIPTION,A colony of oversized spiders has webbed over the site's deepest passages.,A colony of oversized spiders has webbed over the site's deepest passages.
+MONSTER_GOBLIN_RAIDERS_NAME,Goblin raiders,Goblin raiders
+MONSTER_GOBLIN_RAIDERS_DESCRIPTION,An organized raiding band is using the location as a fortified hideout.,An organized raiding band is using the location as a fortified hideout.
+ITEM_TRAVEL_RATIONS_NAME,Travel rations,Travel rations
+ITEM_TRAVEL_RATIONS_DESCRIPTION,A prepared meal made from game meat and grain. Injured adventurers consume one to recover faster.,A prepared meal made from game meat and grain. Injured adventurers consume one to recover faster.
+NPC_STATUS_RECOVERING_INJURY,Recovering from injury (%ss),Recovering from injury (%ss)
+NPC_INJURY_RECOVERY_NOTICE,%s was injured and needs %ss to recover at the tavern.,%s was injured and needs %ss to recover at the tavern.
+NPC_INJURY_RATION_NOTICE,%s was injured. A travel ration reduced recovery to %ss.,%s was injured. A travel ration reduced recovery to %ss.
+ITEM_WORK_SUPPLIES_NAME,Work supplies,Work supplies
+ITEM_WORK_SUPPLIES_DESCRIPTION,Replacement tools and fasteners assembled by Crafters for demanding jobs.,Replacement tools and fasteners assembled by Crafters for demanding jobs.
+ITEM_HUNTING_TRAPS_NAME,Hunting traps,Hunting traps
+ITEM_HUNTING_TRAPS_DESCRIPTION,Reusable parts assembled into traps and consumed when a trap line is established.,Reusable parts assembled into traps and consumed when a trap line is established.
+QUEST_TYPE_TRAP_HUNT,Lay hunting traps,Lay hunting traps
+QUEST_DESC_FOREST_TRAP_HUNT,Establish a prepared trap line to bring back more game meat than a normal hunt.,Establish a prepared trap line to bring back more game meat than a normal hunt.
+QUEST_REWARD_LARGE_GAME_MEAT,A large supply of game meat,A large supply of game meat
+QUEST_REPORT_TRAP_HUNT_SUCCESS,The hunters returned after checking the trap line with a large supply of game meat.,The hunters returned after checking the trap line with a large supply of game meat.
+QUEST_SUPPLY_EFFECT_TRAPS_HUNT,Consumed while establishing the trap line and increases the potential meat yield.,Consumed while establishing the trap line and increases the potential meat yield.
+QUEST_TYPE_REOPEN_MINE,Open a new mine shaft,Open a new mine shaft
+QUEST_DESC_MINE_REOPEN,Use structural materials to open a deeper shaft after the current vein is exhausted.,Use structural materials to open a deeper shaft after the current vein is exhausted.
+QUEST_REWARD_NEW_VEIN,A deeper area that can be prospected,A deeper area that can be prospected
+QUEST_SUPPLY_EFFECT_BEAMS_REOPEN_MINE,Supports the new shaft and prevents it from collapsing during construction.,Supports the new shaft and prevents it from collapsing during construction.
+QUEST_SUPPLY_EFFECT_WORK_REOPEN_MINE,Provides the replacement tools and fasteners needed to open the shaft.,Provides the replacement tools and fasteners needed to open the shaft.
+QUEST_SUPPLY_EFFECT_WORK_FELL_TIMBER,Replaces worn tools after intensive timber work.,Replaces worn tools after intensive timber work.
+QUEST_SUPPLY_EFFECT_WORK_MAINTAIN_WATER,Provides replacement parts for repairing the water source.,Provides replacement parts for repairing the water source.
+QUEST_SUPPLY_EFFECT_WORK_SALVAGE_RUINS,Provides tools and packing material for recovering fragile finds.,Provides tools and packing material for recovering fragile finds.
+QUEST_MINE_REOPENED,The new shaft reached mine depth %s.,The new shaft reached mine depth %s.
+QUEST_SUPPLY_EFFECT_SEEDS_PLANTING,Plants the field and starts its crop cycle.,Plants the field and starts its crop cycle.
+QUEST_SUPPLY_EFFECT_WATER_CROPS,Waters the planted crop so it can become ready to harvest.,Waters the planted crop so it can become ready to harvest.
+QUEST_SUPPLY_EFFECT_SEEDS_REPLANTING,Restores a depleted grove immediately.,Restores a depleted grove immediately.
+QUEST_SUPPLY_EFFECT_BUCKET_FILL,The empty bucket is filled and returned as stored water.,The empty bucket is filled and returned as stored water.
+QUEST_SUPPLY_EFFECT_BUCKET_DRAW_EXTRA,The empty bucket is used to bring back extra water while straining the source.,The empty bucket is used to bring back extra water while straining the source.
+QUEST_SUPPLY_EFFECT_BEAMS_STABILIZED_EXTRACT,Reduces the mine's collapse and exhaustion risk for this extraction.,Reduces the mine's collapse and exhaustion risk for this extraction.
+QUEST_SUPPLY_EFFECT_BEAMS_REINFORCE_MINE,Repairs the unstable mine so extraction can resume.,Repairs the unstable mine so extraction can resume.
+QUEST_SUPPLY_EFFECT_BEAMS_DEEPEN_MINE,Supports the new shaft while the mine is deepened.,Supports the new shaft while the mine is deepened.
+QUEST_SUPPLY_EFFECT_WOOD_DEEPEN_MINE,Provides additional structure for each existing mine depth.,Provides additional structure for each existing mine depth.
+QUEST_SUPPLY_EFFECT_BEAMS_SECURE_RUINS,Stabilizes dangerous passages while security clears the ruins.,Stabilizes dangerous passages while security clears the ruins.

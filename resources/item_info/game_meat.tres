@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemInfo" format=3 uid="uid://dm1en2i1m3xky"]
+
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="1_item"]
+[ext_resource type="Texture2D" uid="uid://12nokr5dwkfn" path="res://sprites/items/meat.png" id="2_texture"]
+
+[resource]
+script = ExtResource("1_item")
+unique_id = "game_meat"
+translation_key_name = "ITEM_GAME_MEAT_NAME"
+translation_key_description = "ITEM_GAME_MEAT_DESCRIPTION"
+texture = ExtResource("2_texture")
+buy_value = 4
+sell_value = 2
+show_in_hud = true
+metadata/_custom_type_script = "uid://c8ngjbq8w5gjr"

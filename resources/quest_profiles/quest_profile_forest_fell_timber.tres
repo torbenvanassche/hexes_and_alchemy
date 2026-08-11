@@ -3,11 +3,14 @@
 [ext_resource type="Script" path="res://scripts/quests/quest_profile.gd" id="1_profile"]
 [ext_resource type="Script" path="res://scripts/quests/quest_outcome.gd" id="2_outcome_script"]
 [ext_resource type="Resource" path="res://resources/quest_outcomes/quest_outcome_forest_timber.tres" id="3_outcome"]
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="4_item_script"]
+[ext_resource type="Resource" path="res://resources/item_info/work_supplies.tres" id="5_work"]
 
 [resource]
 script = ExtResource("1_profile")
 quest_key = "fell_timber"
 behaviour = "harvest"
+required_role = "tender"
 translation_key_name = "QUEST_TYPE_FELL_TIMBER"
 description_key = "QUEST_DESC_FOREST_FELL_TIMBER"
 risk_key = "QUEST_RISK_DEPLETES_SITE"
@@ -15,4 +18,11 @@ expected_reward_key = "QUEST_REWARD_LOTS_OF_WOOD"
 duration_seconds = 8.0
 rank_experience_reward = 3
 available_states = Array[String](["HEALTHY"])
+blocked_by_active_occupation = true
+required_supplies = Dictionary[ExtResource("4_item_script"), int]({
+ExtResource("5_work"): 1
+})
+required_supply_effect_keys = Dictionary[ExtResource("4_item_script"), String]({
+ExtResource("5_work"): "QUEST_SUPPLY_EFFECT_WORK_FELL_TIMBER"
+})
 outcomes = Array[ExtResource("2_outcome_script")]([ExtResource("3_outcome")])

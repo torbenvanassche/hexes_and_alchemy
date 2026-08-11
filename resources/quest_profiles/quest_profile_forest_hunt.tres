@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="QuestProfile" format=3]
+
+[ext_resource type="Script" path="res://scripts/quests/quest_profile.gd" id="1_profile"]
+[ext_resource type="Script" path="res://scripts/quests/quest_outcome.gd" id="2_outcome_script"]
+[ext_resource type="Resource" path="res://resources/quest_outcomes/quest_outcome_forest_hunt.tres" id="3_outcome"]
+[ext_resource type="Resource" path="res://resources/quest_outcomes/quest_outcome_forest_hunt_danger.tres" id="4_danger"]
+[ext_resource type="Script" path="res://scripts/quests/quest_support_definition.gd" id="5_support_script"]
+[ext_resource type="Resource" path="res://resources/quest_supports/security_escort.tres" id="6_security"]
+
+[resource]
+script = ExtResource("1_profile")
+quest_key = "hunt"
+behaviour = "hunt"
+required_role = "hunter"
+translation_key_name = "QUEST_TYPE_HUNT"
+description_key = "QUEST_DESC_FOREST_HUNT"
+risk_key = "QUEST_RISK_UNCERTAIN"
+expected_reward_key = "QUEST_REWARD_GAME_MEAT"
+duration_seconds = 6.0
+rank_experience_reward = 2
+available_states = Array[String](["HEALTHY"])
+blocked_by_active_occupation = true
+optional_supports = Array[ExtResource("5_support_script")]([ExtResource("6_security")])
+outcomes = Array[ExtResource("2_outcome_script")]([ExtResource("3_outcome"), ExtResource("4_danger")])
