@@ -28,6 +28,8 @@ WINDOW_JOURNAL,Journal,Journal
 WINDOW_CRAFTING,Blacksmith,Blacksmith
 WINDOW_MARKET,Market,Market
 WINDOW_TAVERN,Tavern,Tavern
+WINDOW_FACTION_ROSTER,Faction members,Faction members
+SCENE_FACTION_ROSTER_UI_NAME,Faction members,Faction members
 WINDOW_NPC_DETAILS,Adventurer,Adventurer
 WINDOW_SETTLEMENT_UPGRADE,Settlement,Settlement
 WINDOW_DEPOSIT_ITEMS,Deposit items,Deposit items
@@ -121,6 +123,7 @@ ADVENTURER_RANK_PROGRESS_MAX,%s (max),%s (max)
 ADVENTURER_ROSTER_STATUS,Status,Status
 ADVENTURER_ROSTER_DETAILS,Details,Details
 ADVENTURER_ROSTER_EMPTY,No adventurers waiting.,No adventurers waiting.
+FACTION_ROSTER_EMPTY,No faction members available.,No faction members available.
 ADVENTURER_STATUS_AVAILABLE,Available,Available
 ADVENTURER_STATUS_ASSIGNED,Assigned,Assigned
 NPC_DETAILS_OPEN,Details,Details
@@ -331,6 +334,8 @@ TIME_OF_DAY_MORNING,Morning,Morning
 TIME_OF_DAY_AFTERNOON,Afternoon,Afternoon
 TIME_OF_DAY_DUSK,Dusk,Dusk
 TIME_OF_DAY_NIGHT,Night,Night
+HUD_TIME_DAY,Day %s,Day %s
+HUD_TIME_TOOLTIP,Current day and time,Current day and time
 ITEM_CURRENCY_NAME,Coin,Coin
 ITEM_CURRENCY_DESCRIPTION,A coin used for trade.,A coin used for trade.
 ITEM_COUNT_LABEL,x%s,x%s
@@ -413,7 +418,7 @@ HUB_NO_ACTIVE_OPERATIONS_FACTION,No active operations for this faction,No active
 HUB_UNKNOWN_LOCATION,Unknown location,Unknown location
 HUB_PARTY_LABEL,Party: %s,Party: %s
 HUB_OPERATION_DETAIL,%s - %s,%s - %s
-HUB_MEMBER_AVAILABILITY,%s available | %s working | %s resting,%s available | %s working | %s resting
+HUB_MEMBER_AVAILABILITY,%s available | %s working | %s recovering,%s available | %s working | %s recovering
 HUB_ACTIVITY_COMPLETED,Completed: %s,Completed: %s
 HUB_UNKNOWN_OPERATION,Unknown operation,Unknown operation
 HUB_RECENT_ACTIVITY,Recent activity,Recent activity
@@ -422,6 +427,10 @@ FACTION_HUNTERS_NAME,Hunters,Hunters
 FACTION_ADVENTURERS_NAME,Adventurers,Adventurers
 FACTION_CRAFTERS_NAME,Crafters,Crafters
 FACTION_TENDERS_NAME,Tenders,Tenders
+FACTION_HUNTERS_HOME_NAME,Hunters' lodge,Hunters' lodge
+FACTION_ADVENTURERS_HOME_NAME,Adventurers' barracks,Adventurers' barracks
+FACTION_CRAFTERS_HOME_NAME,Crafters' workshop,Crafters' workshop
+FACTION_TENDERS_HOME_NAME,Tenders' mill,Tenders' mill
 HUB_FACTION_ROLES_LABEL,Roles,Roles
 HUB_FACTION_RESPONSIBILITIES_LABEL,Responsibilities,Responsibilities
 NPC_STATUS_AVAILABLE,Available,Available
@@ -431,6 +440,7 @@ NPC_STATUS_MOVING_TO_QUEST,Travelling to quest,Travelling to quest
 NPC_STATUS_AT_QUEST,At quest site,At quest site
 NPC_STATUS_RETURNING,Returning to tavern,Returning to tavern
 NPC_STATUS_DONE,At tavern,At tavern
+NPC_STATUS_RETURNING_HOME,Returning to faction home,Returning to faction home
 OPERATION_STATE_WAITING,Waiting,Waiting
 OPERATION_STATE_EN_ROUTE,En route,En route
 OPERATION_STATE_IN_PROGRESS,In progress,In progress
@@ -502,3 +512,35 @@ QUEST_SUPPLY_EFFECT_BEAMS_REINFORCE_MINE,Repairs the unstable mine so extraction
 QUEST_SUPPLY_EFFECT_BEAMS_DEEPEN_MINE,Supports the new shaft while the mine is deepened.,Supports the new shaft while the mine is deepened.
 QUEST_SUPPLY_EFFECT_WOOD_DEEPEN_MINE,Provides additional structure for each existing mine depth.,Provides additional structure for each existing mine depth.
 QUEST_SUPPLY_EFFECT_BEAMS_SECURE_RUINS,Stabilizes dangerous passages while security clears the ruins.,Stabilizes dangerous passages while security clears the ruins.
+WINDOW_TAVERN_RECRUITMENT,Tavern,Tavern
+RECRUITMENT_VISITORS_HEADER,Visiting recruits,Visiting recruits
+RECRUITMENT_VISITORS_DESCRIPTION,Travellers looking for guild work gather at the tavern. Hire them to send them to the appropriate faction home.,Travellers looking for guild work gather at the tavern. Hire them to send them to the appropriate faction home.
+RECRUITMENT_VISITOR_COUNT,Visitors: %s / %s,Visitors: %s / %s
+RECRUITMENT_NEXT_ARRIVAL,Next visitor in %s operations,Next visitor in %s operations
+RECRUITMENT_FACTION_HEADER,Faction,Faction
+RECRUITMENT_RANK_HEADER,Rank,Rank
+RECRUITMENT_COST_HEADER,Cost,Cost
+RECRUITMENT_NO_VISITORS,No recruits are currently staying at the tavern.,No recruits are currently staying at the tavern.
+RECRUITMENT_REFRESH_HINT,Pay to replace the current visitors. New arrivals otherwise appear as the guild completes operations.,Pay to replace the current visitors. New arrivals otherwise appear as the guild completes operations.
+RECRUITMENT_REFRESH_BUTTON,Find new recruits (%s),Find new recruits (%s)
+RECRUITMENT_ROLE_LINE,%s • %s,%s • %s
+RECRUITMENT_ROLE_TOOLTIP,Role: %s,Role: %s
+RECRUITMENT_TRAITS_LINE,Traits: %s,Traits: %s
+RECRUITMENT_PREFERS_LINE,Prefers: %s,Prefers: %s
+RECRUITMENT_NO_PREFERENCES,General work,General work
+RECRUITMENT_RANK_LINE,Rank %s,Rank %s
+RECRUITMENT_COST_LINE,%s coins,%s coins
+RECRUITMENT_HIRE,Hire,Hire
+RECRUITMENT_HIRE_TOOLTIP,Hire this recruit and send them to their faction home.,Hire this recruit and send them to their faction home.
+RECRUITMENT_REFRESH_TOOLTIP,Replace every current visitor with a new group.,Replace every current visitor with a new group.
+RECRUITMENT_ERROR_CANDIDATE_UNAVAILABLE,This recruit is no longer available.,This recruit is no longer available.
+RECRUITMENT_ERROR_NO_FACTION_HOME,This recruit needs a faction home that is not available.,This recruit needs a faction home that is not available.
+RECRUITMENT_ERROR_FACTION_FULL,That faction home has reached its member capacity.,That faction home has reached its member capacity.
+RECRUITMENT_ERROR_NOT_ENOUGH_CURRENCY,The guild does not have enough coins.,The guild does not have enough coins.
+RECRUITMENT_ERROR_HIRE_FAILED,The recruit could not join the faction.,The recruit could not join the faction.
+RECRUITMENT_ERROR_REFRESH_UNAVAILABLE,The visitor list cannot be refreshed right now.,The visitor list cannot be refreshed right now.
+RECRUITMENT_ERROR_NO_RECRUITS_AVAILABLE,No suitable recruits can reach the settlement yet.,No suitable recruits can reach the settlement yet.
+RECRUITMENT_HIRE_SUCCESS,%s has joined the settlement.,%s has joined the settlement.
+RECRUITMENT_REFRESH_SUCCESS,New visitors have arrived at the tavern.,New visitors have arrived at the tavern.
+RECRUITMENT_HIRED_NOTICE,%s joined the %s.,%s joined the %s.
+RECRUITMENT_NEW_VISITOR_NOTICE,A new recruit is waiting at the tavern.,A new recruit is waiting at the tavern.

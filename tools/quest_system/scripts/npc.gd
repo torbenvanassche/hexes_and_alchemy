@@ -30,15 +30,19 @@ const TRAVEL_RATIONS: ItemInfo = preload("res://resources/item_info/travel_ratio
 
 @onready var interaction_trigger: Area3D = get_node_or_null("InteractionTrigger") as Area3D
 
-enum NPCState { IDLE, READY_TO_MOVE, MOVING_TO_QUEST, AT_QUEST, RETURNING, DONE, RESTING }
+enum NPCState { IDLE, READY_TO_MOVE, MOVING_TO_QUEST, AT_QUEST, RETURNING, DONE, RESTING, RETURNING_HOME }
 
 var current_path: Array[HexBase] = []
 var current_target_index := 0
 var state_machine: StateMachine
 var current_quest: Quest
 var npc_info: NpcInfo
+var recruited_display_name := ""
+var recruited_traits: Array[String] = []
+var has_recruited_traits := false
 var home_position := Vector3.ZERO
 var operation_home_anchor: Node3D
+var recovery_anchor: Node3D
 var earned_currency: int = 0
 var rest_remaining_seconds := 0.0
 var rest_duration_seconds := 0.0
@@ -76,6 +80,7 @@ func _ready() -> void:
 	state_machine.bind_update(get_state_as_string(NPCState.MOVING_TO_QUEST), _update_moving_to_quest)
 	state_machine.bind_update(get_state_as_string(NPCState.RETURNING), _update_returning)
 	state_machine.bind_update(get_state_as_string(NPCState.RESTING), _update_resting)
+	state_machine.bind_update(get_state_as_string(NPCState.RETURNING_HOME), _update_returning_home)
 	state_machine.state_entered.connect(_on_state_entered)
 	set_state(NPCState.IDLE)
 
@@ -84,17 +89,20 @@ func _on_state_entered(state: String) -> void:
 		get_state_as_string(NPCState.MOVING_TO_QUEST),
 		get_state_as_string(NPCState.AT_QUEST),
 		get_state_as_string(NPCState.RETURNING),
+		get_state_as_string(NPCState.RETURNING_HOME),
 	])
 	if state == get_state_as_string(NPCState.MOVING_TO_QUEST):
 		_begin_move_to_quest()
 	elif state == get_state_as_string(NPCState.AT_QUEST):
 		arrived.emit()
 	elif state == get_state_as_string(NPCState.RETURNING):
-		_begin_return_home()
+		_begin_return_to_recovery()
 	elif state == get_state_as_string(NPCState.DONE):
 		_complete_quest()
 	elif state == get_state_as_string(NPCState.RESTING):
 		_begin_resting()
+	elif state == get_state_as_string(NPCState.RETURNING_HOME):
+		_begin_return_to_operation_home()
 	activity_changed.emit(self)
 
 func get_state_as_string(state: NPCState) -> String:
@@ -123,6 +131,21 @@ func get_operation_home_position() -> Vector3:
 	if operation_home_anchor != null and is_instance_valid(operation_home_anchor):
 		return operation_home_anchor.global_position
 	return home_position
+
+func set_recovery_anchor(anchor: Node3D) -> void:
+	recovery_anchor = anchor
+
+func get_recovery_position() -> Vector3:
+	if recovery_anchor != null and is_instance_valid(recovery_anchor):
+		return recovery_anchor.global_position
+	if Manager.instance != null and Manager.instance.active_settlement != null:
+		var tavern_service := Manager.instance.active_settlement.get_service(&"Tavern")
+		if tavern_service != null and tavern_service.has_method("get_recreation_anchor"):
+			var resolved_anchor := tavern_service.call("get_recreation_anchor") as Node3D
+			if resolved_anchor != null and is_instance_valid(resolved_anchor):
+				recovery_anchor = resolved_anchor
+				return recovery_anchor.global_position
+	return get_operation_home_position()
 
 func _on_interaction_trigger_area_entered(other: Area3D) -> void:
 	if current_quest == null or not (is_state(NPCState.MOVING_TO_QUEST) or is_state(NPCState.RETURNING)):
@@ -159,6 +182,24 @@ func cancel_assigned_quest(quest: Quest) -> void:
 
 func get_rank() -> AdventurerRank.Rank:
 	return rank
+
+func configure_recruited_identity(
+	display_name: String,
+	starting_rank: AdventurerRank.Rank,
+	traits: Array[String]
+) -> void:
+	recruited_display_name = display_name
+	recruited_traits = traits.duplicate()
+	has_recruited_traits = true
+	set_rank(starting_rank)
+
+func get_display_name() -> String:
+	if not recruited_display_name.is_empty():
+		return recruited_display_name
+	if npc_info == null:
+		return tr("SCENE_ADVENTURER_NAME")
+	var profile_name := npc_info.get_display_name()
+	return tr("SCENE_ADVENTURER_NAME") if profile_name == npc_info.id.capitalize() else profile_name
 
 func get_rank_label() -> String:
 	return AdventurerRank.get_display_name(rank)
@@ -205,10 +246,11 @@ func can_perform_role(required_role: String) -> bool:
 	return get_operation_roles().has(required_role)
 
 func get_traits_label() -> String:
-	if npc_info == null or npc_info.traits.is_empty():
+	var traits := recruited_traits if has_recruited_traits else (npc_info.traits if npc_info != null else [])
+	if traits.is_empty():
 		return tr("NPC_TRAITS_NONE")
 	var trait_labels: Array[String] = []
-	for trait_name in npc_info.traits:
+	for trait_name in traits:
 		trait_labels.append(trait_name.capitalize())
 	return ", ".join(trait_labels)
 
@@ -280,7 +322,7 @@ func complete_assigned_quest(quest: Quest, rank_experience_reward: int, payment:
 	if rest_remaining_seconds > 0.0:
 		set_state(NPCState.RESTING)
 	else:
-		set_state(NPCState.IDLE)
+		set_state(NPCState.RETURNING_HOME)
 
 func is_available_for_quest() -> bool:
 	return current_quest == null and state_machine != null and is_state(NPCState.IDLE) and rest_remaining_seconds <= 0.0
@@ -295,7 +337,7 @@ func get_activity_status_label() -> String:
 		if recovering_from_injury:
 			return tr("NPC_STATUS_RECOVERING_INJURY") % int(ceil(rest_remaining_seconds))
 		return tr("NPC_STATUS_RESTING") % int(ceil(rest_remaining_seconds))
-	if current_quest != null:
+	if not is_state(NPCState.IDLE):
 		var status_key := "NPC_STATUS_%s" % get_activity_state_key().to_upper()
 		var translated := tr(status_key)
 		return translated if translated != status_key else get_activity_state_key().capitalize().replace("_", " ")
@@ -327,11 +369,22 @@ func _begin_move_to_quest() -> void:
 	if current_path.is_empty():
 		_fail_current_movement()
 
-func _begin_return_home() -> void:
+func _begin_return_to_recovery() -> void:
 	var active_scene := SceneManager.get_active_scene()
 	var grid: HexGrid = null
 	if active_scene != null:
 		grid = active_scene.node as HexGrid
+	var start_hex := grid.get_hex_at_world_position(global_position) if grid != null else null
+	var recovery_position := get_recovery_position()
+	var recovery_hex := grid.get_hex_at_world_position(recovery_position) if grid != null else null
+	current_path = _get_path_to_home(grid, start_hex, recovery_hex)
+	current_target_index = 1
+	_reset_stuck_tracking()
+	if current_path.is_empty():
+		_finish_return_at_recovery()
+
+func _begin_return_to_operation_home() -> void:
+	var grid := _get_active_grid()
 	var start_hex := grid.get_hex_at_world_position(global_position) if grid != null else null
 	home_position = get_operation_home_position()
 	var home_hex := grid.get_hex_at_world_position(home_position) if grid != null else null
@@ -339,7 +392,7 @@ func _begin_return_home() -> void:
 	current_target_index = 1
 	_reset_stuck_tracking()
 	if current_path.is_empty():
-		_finish_return_at_home()
+		_finish_return_at_operation_home()
 
 func _complete_quest() -> void:
 	current_path.clear()
@@ -348,13 +401,12 @@ func _complete_quest() -> void:
 func _begin_resting() -> void:
 	velocity = Vector3.ZERO
 	current_path.clear()
-	home_position = get_operation_home_position()
-	global_position = home_position
+	global_position = get_recovery_position()
 	_last_rest_display_second = int(ceil(rest_remaining_seconds))
 
 func _update_resting() -> void:
 	if rest_remaining_seconds <= 0.0:
-		set_state(NPCState.IDLE)
+		set_state(NPCState.RETURNING_HOME)
 		return
 	rest_remaining_seconds = maxf(0.0, rest_remaining_seconds - get_physics_process_delta_time())
 	var rest_display_second := int(ceil(rest_remaining_seconds))
@@ -363,9 +415,7 @@ func _update_resting() -> void:
 		rest_progress_changed.emit(self)
 	if rest_remaining_seconds <= 0.0:
 		recovering_from_injury = false
-		set_state(NPCState.IDLE)
-		if Manager.instance != null and Manager.instance.quests != null:
-			Manager.instance.quests.call_deferred("try_assign_waiting_quests")
+		set_state(NPCState.RETURNING_HOME)
 
 func _start_recovery_after_quest(quest: Quest) -> void:
 	var rest_time := base_rest_seconds
@@ -395,7 +445,7 @@ func _start_recovery_after_quest(quest: Quest) -> void:
 func _notify_injury_recovery(ration_used: bool) -> void:
 	if Manager.instance == null or Manager.instance.toast == null:
 		return
-	var npc_name := npc_info.get_display_name() if npc_info != null else tr("SCENE_ADVENTURER_NAME")
+	var npc_name := get_display_name()
 	var recovery_seconds := int(ceil(rest_duration_seconds))
 	var message_key := "NPC_INJURY_RATION_NOTICE" if ration_used else "NPC_INJURY_RECOVERY_NOTICE"
 	Manager.instance.toast.notify(tr(message_key) % [npc_name, recovery_seconds], Color(0.72, 0.28, 0.12, 1.0))
@@ -405,6 +455,9 @@ func _update_moving_to_quest() -> void:
 
 func _update_returning() -> void:
 	_follow_path(func(): set_state(NPCState.DONE))
+
+func _update_returning_home() -> void:
+	_follow_path(_finish_return_at_operation_home)
 
 func _follow_path(on_arrived: Callable) -> void:
 	if current_path.is_empty():
@@ -633,7 +686,10 @@ func _get_path_to_home(grid: HexGrid, start_hex: HexBase, home_hex: HexBase) -> 
 
 func _handle_empty_path() -> void:
 	if is_state(NPCState.RETURNING):
-		_finish_return_at_home()
+		_finish_return_at_recovery()
+		return
+	if is_state(NPCState.RETURNING_HOME):
+		_finish_return_at_operation_home()
 		return
 	_fail_current_movement()
 
@@ -642,12 +698,20 @@ func _fail_current_movement() -> void:
 	current_path.clear()
 	movement_failed.emit(self)
 
-func _finish_return_at_home() -> void:
+func _finish_return_at_recovery() -> void:
+	global_position = get_recovery_position()
+	current_path.clear()
+	velocity = Vector3.ZERO
+	set_state(NPCState.DONE)
+
+func _finish_return_at_operation_home() -> void:
 	home_position = get_operation_home_position()
 	global_position = home_position
 	current_path.clear()
 	velocity = Vector3.ZERO
-	set_state(NPCState.DONE)
+	set_state(NPCState.IDLE)
+	if Manager.instance != null and Manager.instance.quests != null:
+		Manager.instance.quests.call_deferred("try_assign_waiting_quests")
 
 func _reset_stuck_tracking() -> void:
 	_last_progress_position = global_position
@@ -679,6 +743,9 @@ func _try_repath_current_movement() -> bool:
 
 	var start_hex := grid.get_hex_at_world_position(global_position)
 	if is_state(NPCState.RETURNING):
+		var recovery_hex := grid.get_hex_at_world_position(get_recovery_position())
+		current_path = _get_path_to_home(grid, start_hex, recovery_hex)
+	elif is_state(NPCState.RETURNING_HOME):
 		home_position = get_operation_home_position()
 		var home_hex := grid.get_hex_at_world_position(home_position)
 		current_path = _get_path_to_home(grid, start_hex, home_hex)

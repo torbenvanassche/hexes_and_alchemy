@@ -73,8 +73,5 @@ func get_assigned_npc_names() -> String:
 	for npc in assigned_npcs:
 		if npc == null or not is_instance_valid(npc):
 			continue
-		if npc.npc_info != null:
-			names.append(npc.npc_info.get_display_name())
-		else:
-			names.append(tr("SCENE_ADVENTURER_NAME"))
+		names.append(npc.get_display_name())
 	return ", ".join(names) if not names.is_empty() else tr("OPERATION_UNASSIGNED")

@@ -1,0 +1,141 @@
+[gd_scene format=3 uid="uid://c3mk0rx6ycynv"]
+
+[ext_resource type="PackedScene" uid="uid://dny1dqcanlco0" path="res://tools/custom_window/base_window.tscn" id="1_window"]
+[ext_resource type="Script" uid="uid://vhcdgiphx7ee" path="res://scripts/ui/tavern_recruitment_ui.gd" id="2_ui"]
+[ext_resource type="Theme" uid="uid://dae2b2hfpj0l2" path="res://themes/light.theme" id="3_light"]
+[ext_resource type="Theme" uid="uid://bemn0spuaev14" path="res://themes/fantasy_buttons.tres" id="4_buttons"]
+
+[node name="Window" unique_id=1422384806 node_paths=PackedStringArray("content") instance=ExtResource("1_window")]
+custom_minimum_size = Vector2(750, 420)
+custom_maximum_size = Vector2(750, 420)
+id = "WINDOW_TAVERN_RECRUITMENT"
+store_position = true
+resizable = false
+content = NodePath("NinePatchRect/VBoxContainer/contentPanel/TavernRecruitment")
+
+[node name="contentPanel" parent="NinePatchRect/VBoxContainer" parent_id_path=PackedInt32Array(554725130) index="1" unique_id=1040542232]
+size_flags_horizontal = 3
+
+[node name="TavernRecruitment" type="MarginContainer" parent="NinePatchRect/VBoxContainer/contentPanel" index="0" unique_id=894080380]
+custom_minimum_size = Vector2(720, 345)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("3_light")
+script = ExtResource("2_ui")
+
+[node name="Margin" type="MarginContainer" parent="NinePatchRect/VBoxContainer/contentPanel/TavernRecruitment" index="0" unique_id=478620497]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 10
+
+[node name="Content" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/TavernRecruitment/Margin" index="0" unique_id=1515018970]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="PoolSummary" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/TavernRecruitment/Margin/Content" index="0" unique_id=1005065912]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Header" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/TavernRecruitment/Margin/Content/PoolSummary" index="0" unique_id=625262410]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "RECRUITMENT_VISITORS_HEADER"
+uppercase = true
+
+[node name="VisitorCount" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/TavernRecruitment/Margin/Content/PoolSummary" index="1" unique_id=1311930555]
+layout_mode = 2
+text = "RECRUITMENT_VISITOR_COUNT"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="NextArrival" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/TavernRecruitment/Margin/Content" index="1" unique_id=778243307]
+layout_mode = 2
+text = "RECRUITMENT_NEXT_ARRIVAL"
+vertical_alignment = 1
+
+[node name="Separator" type="HSeparator" parent="NinePatchRect/VBoxContainer/contentPanel/TavernRecruitment/Margin/Content" index="2" unique_id=1538563609]
+layout_mode = 2
+
+[node name="ColumnHeaders" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/TavernRecruitment/Margin/Content" index="3" unique_id=780929270]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Name" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/TavernRecruitment/Margin/Content/ColumnHeaders" index="0" unique_id=748320683]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "ADVENTURER_ROSTER_NAME"
+uppercase = true
+
+[node name="Faction" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/TavernRecruitment/Margin/Content/ColumnHeaders" index="1" unique_id=2906682]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "RECRUITMENT_FACTION_HEADER"
+uppercase = true
+
+[node name="Role" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/TavernRecruitment/Margin/Content/ColumnHeaders" index="2" unique_id=33191747]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "ADVENTURER_ROSTER_PROFESSION"
+uppercase = true
+
+[node name="Rank" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/TavernRecruitment/Margin/Content/ColumnHeaders" index="3" unique_id=758238155]
+custom_minimum_size = Vector2(55, 0)
+layout_mode = 2
+text = "RECRUITMENT_RANK_HEADER"
+horizontal_alignment = 1
+uppercase = true
+
+[node name="Cost" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/TavernRecruitment/Margin/Content/ColumnHeaders" index="4" unique_id=267689508]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+text = "RECRUITMENT_COST_HEADER"
+horizontal_alignment = 2
+uppercase = true
+
+[node name="Action" type="Control" parent="NinePatchRect/VBoxContainer/contentPanel/TavernRecruitment/Margin/Content/ColumnHeaders" index="5" unique_id=1239428590]
+custom_minimum_size = Vector2(82, 0)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="CandidateScroll" type="ScrollContainer" parent="NinePatchRect/VBoxContainer/contentPanel/TavernRecruitment/Margin/Content" index="4" unique_id=1628841158]
+custom_minimum_size = Vector2(0, 180)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 0
+mouse_force_pass_scroll_events = false
+horizontal_scroll_mode = 0
+
+[node name="CandidateRows" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/TavernRecruitment/Margin/Content/CandidateScroll" index="0" unique_id=1322754820]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="EmptyLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/TavernRecruitment/Margin/Content" index="5" unique_id=1202180045]
+visible = false
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+text = "RECRUITMENT_NO_VISITORS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Footer" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/TavernRecruitment/Margin/Content" index="6" unique_id=485891686]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Feedback" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/TavernRecruitment/Margin/Content/Footer" index="0" unique_id=813770992]
+layout_mode = 2
+size_flags_horizontal = 3
+vertical_alignment = 1
+clip_text = true
+
+[node name="Refresh" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/TavernRecruitment/Margin/Content/Footer" index="1" unique_id=272070911]
+custom_minimum_size = Vector2(176, 30)
+layout_mode = 2
+theme = ExtResource("4_buttons")
+theme_override_font_sizes/font_size = 24
+text = "RECRUITMENT_REFRESH_BUTTON"

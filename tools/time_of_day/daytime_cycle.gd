@@ -16,10 +16,12 @@ enum Phase {
 
 var current_phase: TimeOfDayPhase = null
 signal phase_changed(new_phase: TimeOfDayPhase)
+signal time_changed(day: int, hour: int, minute: int)
 
 @export var duration: float = 120.0
 var days: int = 0
 var _time: float = 0.0
+var _last_display_time_key := -1
 
 signal day_ended()
 
@@ -27,6 +29,7 @@ func _ready() -> void:
 	current_phase = get_current_phase()
 	_update_sun_rotation()
 	_update_lighting()
+	_update_time_signal(true)
 
 func _process(delta: float) -> void:
 	_time += delta
@@ -38,9 +41,31 @@ func _process(delta: float) -> void:
 	_update_phase()
 	_update_sun_rotation()
 	_update_lighting()
+	_update_time_signal()
 
 func get_current_time_percentage() -> float:
 	return _time / duration
+
+func get_day_number() -> int:
+	return days + 1
+
+func get_clock_hour() -> int:
+	return floori(float(get_clock_minutes()) / 60.0)
+
+func get_clock_minute() -> int:
+	return get_clock_minutes() % 60
+
+func get_clock_minutes() -> int:
+	return int(fposmod(360.0 + get_current_time_percentage() * 1440.0, 1440.0))
+
+func _update_time_signal(force: bool = false) -> void:
+	var clock_minutes := get_clock_minutes()
+	var rounded_minutes := floori(float(clock_minutes) / 5.0) * 5
+	var display_time_key := days * 288 + floori(float(rounded_minutes) / 5.0)
+	if not force and display_time_key == _last_display_time_key:
+		return
+	_last_display_time_key = display_time_key
+	time_changed.emit(get_day_number(), floori(float(rounded_minutes) / 60.0), rounded_minutes % 60)
 
 func _update_phase() -> void:
 	var new_phase := get_current_phase()

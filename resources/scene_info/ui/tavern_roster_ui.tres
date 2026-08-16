@@ -5,7 +5,7 @@
 
 [resource]
 script = ExtResource("2_scene_info")
-id = "tavern_roster_ui"
+id = "faction_roster_ui"
 packed_scene = ExtResource("1_roster")
 type = 2
 is_unique = true

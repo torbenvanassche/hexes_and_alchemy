@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://0kodyax1d437"]
+
+[ext_resource type="Script" uid="uid://78wq3ed1w8yq" path="res://scripts/ui/recruit_candidate_row_ui.gd" id="1_row"]
+[ext_resource type="Theme" uid="uid://dae2b2hfpj0l2" path="res://themes/light.theme" id="2_theme"]
+[ext_resource type="Theme" uid="uid://bemn0spuaev14" path="res://themes/fantasy_buttons.tres" id="3_buttons"]
+
+[node name="RecruitCandidateRow" type="VBoxContainer" unique_id=40888205]
+custom_minimum_size = Vector2(0, 34)
+mouse_filter = 0
+mouse_force_pass_scroll_events = false
+theme = ExtResource("2_theme")
+theme_override_constants/separation = 0
+script = ExtResource("1_row")
+
+[node name="Primary" type="HBoxContainer" parent="." unique_id=823028603]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Name" type="Label" parent="Primary" unique_id=1005496521]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 0
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="Faction" type="Label" parent="Primary" unique_id=1673003903]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+mouse_filter = 0
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="Profession" type="Label" parent="Primary" unique_id=1998834842]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+mouse_filter = 0
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="Rank" type="Label" parent="Primary" unique_id=419446606]
+custom_minimum_size = Vector2(55, 0)
+layout_mode = 2
+mouse_filter = 0
+horizontal_alignment = 1
+clip_text = true
+
+[node name="Cost" type="Label" parent="Primary" unique_id=1480950587]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+mouse_filter = 0
+horizontal_alignment = 2
+clip_text = true
+
+[node name="Hire" type="Button" parent="Primary" unique_id=987580036]
+custom_minimum_size = Vector2(82, 26)
+layout_mode = 2
+theme = ExtResource("3_buttons")
+theme_override_font_sizes/font_size = 24
+text = "RECRUITMENT_HIRE"

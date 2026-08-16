@@ -6,6 +6,8 @@ class_name Settlement extends Node3D
 @export var upgrade_requirements: Array[SettlementUpgradeInfo] = []
 @export var boundary_wall_scene: PackedScene = preload("uid://dgx2trjwvt0vn")
 @export var structure_invalid_range: int = 3;
+@export var settlement_tile_anchors: Array[NodePath] = []
+@export_range(0, 8, 1) var initial_footprint_radius: int = 0
 @export_group("Settlement Reveal")
 @export_range(1, 32, 1) var reveal_search_range: int = 8;
 @export var show_reveal_debug_shape: bool = false;
@@ -53,11 +55,11 @@ func _ready_deferred() -> void:
 	if origin_hex == null:
 		return
 
-	var reveal_hexes := _get_settlement_reveal_hexes(grid, origin_hex)
-	for hex in reveal_hexes:
+	var settlement_hexes := get_settlement_hexes(grid)
+	for hex in settlement_hexes:
 		hex.is_explored = true
 
-	_render_reveal_debug_shape(grid, reveal_hexes)
+	_render_reveal_debug_shape(grid, settlement_hexes)
 
 func _get_active_grid() -> HexGrid:
 	var active_scene := SceneManager.get_active_scene()
@@ -136,8 +138,23 @@ func get_settlement_hexes(grid: HexGrid) -> Array[HexBase]:
 		return result
 
 	var origin_hex := _get_settlement_origin_hex(grid)
-	if origin_hex != null:
-		result.append_array(_get_settlement_reveal_hexes(grid, origin_hex))
+	if initial_footprint_radius > 0 and origin_hex != null:
+		for scene_instance: SceneInstance in grid.get_tiles_in_radius(origin_hex.cube_id, initial_footprint_radius):
+			var footprint_hex := scene_instance.node as HexBase
+			if footprint_hex != null and not _has_hex(result, footprint_hex):
+				result.append(footprint_hex)
+
+	for anchor_path: NodePath in settlement_tile_anchors:
+		var anchor := get_node_or_null(anchor_path) as Node3D
+		if anchor == null:
+			continue
+		var anchor_hex := grid.get_hex_at_world_position(anchor.global_position)
+		if anchor_hex != null and not _has_hex(result, anchor_hex):
+			result.append(anchor_hex)
+
+	if result.is_empty():
+		if origin_hex != null:
+			result.append_array(_get_settlement_reveal_hexes(grid, origin_hex))
 
 	for cube_id in expanded_tiles:
 		var hex := grid.get_hex_at_cube_id(cube_id)

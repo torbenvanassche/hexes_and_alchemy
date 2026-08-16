@@ -1,7 +1,7 @@
 class_name ResourceSingleHud extends HBoxContainer
 
 @onready var _icon: TextureRect = $TextureRect
-@onready var _count_label: Label = $Label
+@onready var _count_label: Label = $Count
 
 var item_info: ItemInfo
 

@@ -91,7 +91,7 @@ func _get_party_text() -> String:
 	for npc: NPC in questData.party:
 		if npc == null or not is_instance_valid(npc):
 			continue
-		names.append(npc.npc_info.get_display_name() if npc.npc_info != null else tr("SCENE_ADVENTURER_NAME"))
+		names.append(npc.get_display_name())
 	return ", ".join(names) if not names.is_empty() else tr("QUEST_PARTY_UNASSIGNED")
 
 func _get_quest_type_name(quest_type_key: String) -> String:

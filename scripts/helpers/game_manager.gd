@@ -20,6 +20,7 @@ var input: InputSettings
 @onready var operations: OperationManager = $operation_manager;
 @onready var journal: JournalManager = $journal_manager;
 @onready var reputation: GuildReputation = $guild_reputation;
+@onready var time_of_day: TimeOfDay = $time_of_day;
 @onready var toast: Toast = $"../game_ui/ToastNotifications";
 
 @export var initial_scene: SceneInfo;

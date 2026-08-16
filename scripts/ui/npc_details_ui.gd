@@ -101,10 +101,7 @@ func _clear_slots() -> void:
 	equipment_slots.clear()
 
 func _get_npc_display_name() -> String:
-	if npc == null or npc.npc_info == null:
-		return tr("SCENE_ADVENTURER_NAME")
-	var display_name := npc.npc_info.get_display_name()
-	return tr("SCENE_ADVENTURER_NAME") if display_name == npc.npc_info.id.capitalize() else display_name
+	return npc.get_display_name() if npc != null else tr("SCENE_ADVENTURER_NAME")
 
 func _update_window_title() -> void:
 	var window := _get_window()

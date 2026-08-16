@@ -1,26 +1,25 @@
 [gd_scene format=3 uid="uid://b4e7jgnuao8mp"]
 
-[ext_resource type="Script" uid="uid://ba0e2r0tk3rbm" path="res://scripts/ui/resource_single_hud.gd" id="2_n0x0f"]
+[ext_resource type="Script" uid="uid://ba0e2r0tk3rbm" path="res://scripts/ui/resource_single_hud.gd" id="1_entry"]
 
-[node name="Control" type="HBoxContainer" unique_id=110123588]
-custom_maximum_size = Vector2(-1, 38)
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 4
-mouse_filter = 2
-script = ExtResource("2_n0x0f")
+[node name="ResourceEntry" type="HBoxContainer" unique_id=134139814]
+custom_minimum_size = Vector2(70, 40)
+mouse_filter = 0
+mouse_force_pass_scroll_events = false
+theme_override_constants/separation = 6
+script = ExtResource("1_entry")
 
-[node name="TextureRect" type="TextureRect" parent="." unique_id=1338632013]
-custom_minimum_size = Vector2(38, 38)
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1091075036]
+custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 mouse_filter = 2
 expand_mode = 1
+stretch_mode = 5
 
-[node name="Label" type="Label" parent="." unique_id=519300833]
+[node name="Count" type="Label" parent="."]
 layout_mode = 2
+size_flags_horizontal = 3
 mouse_filter = 2
-theme_override_font_sizes/font_size = 25
+theme_override_font_sizes/font_size = 18
 text = "0"
+vertical_alignment = 1

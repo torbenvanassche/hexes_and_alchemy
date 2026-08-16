@@ -2,16 +2,9 @@
 
 [ext_resource type="PackedScene" uid="uid://rggfeth3x6te" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_tavern_blue.glb" id="1_244u3"]
 [ext_resource type="Script" uid="uid://7q4dr2w3g7sa" path="res://scripts/interactions/interactable_locations/tavern.gd" id="1_isasx"]
-[ext_resource type="Resource" uid="uid://c4slhs80lvehm" path="res://resources/scene_info/adventurer.tres" id="2_56i7v"]
 [ext_resource type="Material" uid="uid://c66vbca7lgh6m" path="res://materials/kay_fantasy_default.tres" id="3_244u3"]
-[ext_resource type="Resource" uid="uid://c02vjxha4podp" path="res://resources/scene_info/ui/tavern_roster_ui.tres" id="4_roster"]
-[ext_resource type="Resource" uid="uid://c8hkdge0pvgtn" path="res://resources/npc_info/basic_adventurer.tres" id="5_basic"]
-[ext_resource type="Script" uid="uid://du4hbbtmblkj0" path="res://tools/quest_system/scripts/npc_info.gd" id="5_npc_info"]
-[ext_resource type="Resource" path="res://resources/npc_info/scout_adventurer.tres" id="6_scout"]
-[ext_resource type="Resource" path="res://resources/npc_info/delver_adventurer.tres" id="7_adventurer"]
-[ext_resource type="Resource" path="res://resources/npc_info/crafter_adventurer.tres" id="8_crafter"]
-[ext_resource type="Script" uid="uid://6t4u66o5q6po" path="res://scripts/scene_manager/scene_info.gd" id="9_gr2xu"]
-[ext_resource type="Resource" path="res://resources/npc_info/warden_adventurer.tres" id="9_tender"]
+[ext_resource type="Resource" path="res://resources/scene_info/ui/tavern_recruitment_ui.tres" id="4_recruitment"]
+[ext_resource type="Script" uid="uid://6t4u66o5q6po" path="res://scripts/scene_manager/scene_info.gd" id="5_scene_info"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_isasx"]
 size = Vector3(0.7681427, 0.65410614, 0.5323236)
@@ -19,12 +12,10 @@ size = Vector3(0.7681427, 0.65410614, 0.5323236)
 [sub_resource type="BoxShape3D" id="BoxShape3D_56i7v"]
 size = Vector3(1.173315, 1.3972301, 1.2564573)
 
-[node name="tavern" type="Node3D" unique_id=1607926184 node_paths=PackedStringArray("adventurer_spawn")]
+[node name="tavern" type="Node3D" unique_id=1607926184 node_paths=PackedStringArray("recreation_anchor")]
 script = ExtResource("1_isasx")
-adventurer = ExtResource("2_56i7v")
-adventurer_spawn = NodePath("spawn_location")
-starting_npc_profiles = Array[ExtResource("5_npc_info")]([ExtResource("6_scout"), ExtResource("7_adventurer"), ExtResource("8_crafter"), ExtResource("9_tender"), ExtResource("5_basic")])
-additional_ui = Array[ExtResource("9_gr2xu")]([ExtResource("4_roster")])
+recreation_anchor = NodePath("recreation_anchor")
+additional_ui = Array[ExtResource("5_scene_info")]([ExtResource("4_recruitment")])
 
 [node name="Root Scene" parent="." unique_id=1174146906 instance=ExtResource("1_244u3")]
 
@@ -43,10 +34,7 @@ shape = SubResource("BoxShape3D_isasx")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.010420799, 0.69372463, -0.067943454)
 shape = SubResource("BoxShape3D_56i7v")
 
-[node name="spawn_location" type="Node3D" parent="." unique_id=1475512664]
+[node name="recreation_anchor" type="Node3D" parent="." unique_id=1475512664]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.13711184, -1.1920929e-07, 0.7027963)
-
-[node name="spawn_interval" type="Timer" parent="." unique_id=1446512628]
-one_shot = true
 
 [editable path="Root Scene"]

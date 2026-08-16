@@ -8,7 +8,6 @@ signal quest_availability_changed();
 
 @export_group("Limits")
 @export var max_active_quest: int = 10;
-@export var max_npc_per_tavern: int = 5;
 
 @export_group("Generation")
 @export var max_quest_distance: int = 50;
@@ -179,36 +178,28 @@ func get_available_npcs_for_quest(
 	offered_currency_reward: int = 0,
 	minimum_rank_override: int = -1
 ) -> Array[SceneInstance]:
-	var tavern := _get_active_tavern();
-	if tavern == null:
-		return [];
-
 	var quest_offer := Quest.new(location, quest_type, offered_currency_reward, minimum_rank_override)
 	var eligible_npcs: Array[SceneInstance] = [];
-	for npc_scene_instance: SceneInstance in tavern.get_available_npcs():
+	for npc_scene_instance: SceneInstance in _get_available_faction_members():
 		var npc := _get_npc_from_instance(npc_scene_instance)
 		if npc != null and npc.wants_quest(quest_offer):
 			eligible_npcs.append(npc_scene_instance);
 	return eligible_npcs;
 
 func get_available_npcs_for_role(role: String, minimum_rank: int = 0) -> Array[SceneInstance]:
-	var tavern := _get_active_tavern()
-	if tavern == null:
-		return []
 	var eligible: Array[SceneInstance] = []
 	var required_rank := AdventurerRank.clamp_rank(minimum_rank)
-	for npc_scene_instance: SceneInstance in tavern.get_available_npcs():
+	for npc_scene_instance: SceneInstance in _get_available_faction_members():
 		var npc := _get_npc_from_instance(npc_scene_instance)
 		if npc != null and npc.can_perform_role(role) and npc.is_rank_at_least(required_rank):
 			eligible.append(npc_scene_instance)
 	return eligible
 
 func get_available_support_provider_count(quest: Quest, definition: QuestSupportDefinition) -> int:
-	var tavern := _get_active_tavern()
-	if tavern == null or quest == null or definition == null:
+	if quest == null or definition == null:
 		return 0
 	var available: Array[NPC] = []
-	for npc_scene_instance: SceneInstance in tavern.get_available_npcs():
+	for npc_scene_instance: SceneInstance in _get_available_faction_members():
 		var npc := _get_npc_from_instance(npc_scene_instance)
 		if npc != null:
 			available.append(npc)
@@ -230,15 +221,14 @@ func get_active_quest_origin_hex(grid: HexGrid) -> HexBase:
 	if grid == null:
 		return null
 
-	var tavern := _get_active_tavern()
-	if tavern != null:
-		var origin := tavern.global_position
-		if tavern.adventurer_spawn != null:
-			origin = tavern.adventurer_spawn.global_position
-
-		var tavern_hex := grid.get_hex_at_world_position(origin)
-		if tavern_hex != null:
-			return tavern_hex
+	if Manager.instance != null and Manager.instance.active_settlement != null:
+		var settlement := Manager.instance.active_settlement
+		var origin := settlement.global_position
+		if settlement.spawn_position != null:
+			origin = settlement.spawn_position.global_position
+		var settlement_hex := grid.get_hex_at_world_position(origin)
+		if settlement_hex != null:
+			return settlement_hex
 
 	if Manager.instance != null and Manager.instance.player_instance != null:
 		return Manager.instance.player_instance.get_hex()
@@ -295,12 +285,8 @@ func release_quest_supplies(quest: Quest) -> void:
 	quest.context["supplies_reserved"] = false
 
 func try_assign_waiting_quests() -> void:
-	var tavern := _get_active_tavern();
-	if tavern == null:
-		return;
-
 	var available_npcs: Array[NPC] = []
-	for npc_scene_instance: SceneInstance in tavern.get_available_npcs():
+	for npc_scene_instance: SceneInstance in _get_available_faction_members():
 		var available_npc := _get_npc_from_instance(npc_scene_instance)
 		if available_npc != null:
 			available_npcs.append(available_npc)
@@ -444,14 +430,22 @@ func _get_npc_from_instance(npc_scene_instance: SceneInstance) -> NPC:
 		return null
 	return npc_scene_instance.node as NPC
 
-func _get_active_tavern() -> Tavern:
+func _get_active_faction_homes() -> Array[FactionHome]:
+	var homes: Array[FactionHome] = []
 	if Manager.instance == null or Manager.instance.active_settlement == null:
-		return null;
+		return homes
 
 	for interaction: Interaction in Manager.instance.active_settlement.interactions:
-		if interaction is Tavern:
-			return interaction as Tavern;
-	return null;
+		var home := interaction as FactionHome
+		if home != null:
+			homes.append(home)
+	return homes
+
+func _get_available_faction_members() -> Array[SceneInstance]:
+	var members: Array[SceneInstance] = []
+	for home: FactionHome in _get_active_faction_homes():
+		members.append_array(home.get_available_npcs())
+	return members
 
 func _active_settlement_allows_boat_travel() -> bool:
 	return (

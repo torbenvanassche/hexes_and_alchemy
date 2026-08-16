@@ -29,16 +29,13 @@ func _on_details_pressed() -> void:
 	details_requested.emit()
 
 func _get_npc_display_name(npc: NPC) -> String:
-	if npc == null or npc.npc_info == null:
-		return tr("SCENE_ADVENTURER_NAME")
-	var display_name := npc.npc_info.get_display_name()
-	return tr("SCENE_ADVENTURER_NAME") if display_name == npc.npc_info.id.capitalize() else display_name
+	return npc.get_display_name() if npc != null else tr("SCENE_ADVENTURER_NAME")
 
 func _get_status_color(npc: NPC) -> Color:
 	if npc == null:
 		return Color(0.42, 0.31, 0.2, 1)
 	if npc.is_state(NPC.NPCState.RESTING):
 		return Color(0.55, 0.38, 0.16, 1)
-	if npc.current_quest != null:
+	if not npc.is_state(NPC.NPCState.IDLE):
 		return Color(0.18, 0.42, 0.62, 1)
 	return Color(0.18, 0.5, 0.34, 1)

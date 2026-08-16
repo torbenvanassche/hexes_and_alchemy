@@ -13,7 +13,7 @@ corner_radius_bottom_left = 4
 
 [node name="Window" unique_id=1301866213 node_paths=PackedStringArray("content") instance=ExtResource("1_window")]
 custom_minimum_size = Vector2(760, 0)
-id = "WINDOW_TAVERN"
+id = "WINDOW_FACTION_ROSTER"
 store_position = true
 content = NodePath("NinePatchRect/VBoxContainer/contentPanel/TavernRoster")
 
@@ -91,5 +91,5 @@ theme_override_constants/separation = 2
 visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(0.45, 0.22, 0.08, 1)
-text = "ADVENTURER_ROSTER_EMPTY"
+text = "FACTION_ROSTER_EMPTY"
 horizontal_alignment = 1

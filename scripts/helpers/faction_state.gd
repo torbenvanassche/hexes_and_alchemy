@@ -62,5 +62,12 @@ func get_working_member_count() -> int:
 
 func get_resting_member_count() -> int:
 	return members.filter(func(member: NPC) -> bool:
-		return member != null and is_instance_valid(member) and member.is_state(NPC.NPCState.RESTING)
+		return (
+			member != null
+			and is_instance_valid(member)
+			and (
+				member.is_state(NPC.NPCState.RESTING)
+				or member.is_state(NPC.NPCState.RETURNING_HOME)
+			)
+		)
 	).size()

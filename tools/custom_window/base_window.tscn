@@ -12,6 +12,7 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 100.0
 offset_bottom = 100.0
+mouse_force_pass_scroll_events = false
 script = ExtResource("1_6jx1r")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="." unique_id=434834391]

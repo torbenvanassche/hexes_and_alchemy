@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://dgkjg8qf25ysd"]
+
+[ext_resource type="PackedScene" uid="uid://dmpp1va2jrck0" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_windmill_blue.glb" id="1_mesh"]
+[ext_resource type="Script" uid="uid://divtx1ti2jrhu" path="res://scripts/interactions/interactable_locations/faction_home.gd" id="2_home"]
+[ext_resource type="Resource" uid="uid://c4slhs80lvehm" path="res://resources/scene_info/adventurer.tres" id="3_member"]
+[ext_resource type="Resource" uid="uid://c02vjxha4podp" path="res://resources/scene_info/ui/tavern_roster_ui.tres" id="5_roster"]
+[ext_resource type="Resource" path="res://resources/npc_info/warden_adventurer.tres" id="6_profile"]
+[ext_resource type="Script" uid="uid://du4hbbtmblkj0" path="res://tools/quest_system/scripts/npc_info.gd" id="7_npc_info"]
+[ext_resource type="Script" uid="uid://6t4u66o5q6po" path="res://scripts/scene_manager/scene_info.gd" id="8_scene_info"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_interaction"]
+size = Vector3(1.35, 0.8, 0.55)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_collision"]
+size = Vector3(1.45, 1.35, 1.15)
+
+[node name="tenders_home" type="Node3D" unique_id=1478029473 node_paths=PackedStringArray("member_spawn")]
+script = ExtResource("2_home")
+faction_id = &"tenders"
+member_scene = ExtResource("3_member")
+member_spawn = NodePath("spawn_location")
+starting_npc_profiles = Array[ExtResource("7_npc_info")]([ExtResource("6_profile")])
+additional_ui = Array[ExtResource("8_scene_info")]([ExtResource("5_roster")])
+
+[node name="Root Scene" parent="." unique_id=511348238 instance=ExtResource("1_mesh")]
+
+[node name="interaction" type="Area3D" parent="." unique_id=1499093675]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="interaction" unique_id=468721074]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0.72)
+shape = SubResource("BoxShape3D_interaction")
+
+[node name="collision" type="StaticBody3D" parent="." unique_id=323269966]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="collision" unique_id=1563237637]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68, -0.05)
+shape = SubResource("BoxShape3D_collision")
+
+[node name="spawn_location" type="Node3D" parent="." unique_id=492842556]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.9)

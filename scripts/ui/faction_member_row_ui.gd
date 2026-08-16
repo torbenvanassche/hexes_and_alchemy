@@ -34,14 +34,11 @@ func _get_quest_label(quest: Quest) -> String:
 	return quest.quest_key.capitalize() if translated == translation_key else translated
 
 func _get_npc_display_name(npc: NPC) -> String:
-	if npc.npc_info == null:
-		return tr("SCENE_ADVENTURER_NAME")
-	var display_name := npc.npc_info.get_display_name()
-	return tr("SCENE_ADVENTURER_NAME") if display_name == npc.npc_info.id.capitalize() else display_name
+	return npc.get_display_name()
 
 func _get_status_color(npc: NPC) -> Color:
 	if npc.is_state(NPC.NPCState.RESTING):
 		return Color(0.55, 0.38, 0.16, 1)
-	if npc.current_quest != null:
+	if not npc.is_state(NPC.NPCState.IDLE):
 		return Color(0.18, 0.42, 0.62, 1)
 	return Color(0.18, 0.5, 0.34, 1)

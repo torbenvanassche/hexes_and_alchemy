@@ -7,16 +7,18 @@ const ROSTER_ROW_SCENE := preload("res://scenes/ui/components/tavern_roster_row.
 @onready var roster_rows: VBoxContainer = $MarginContainer/VBoxContainer/RosterRows
 @onready var empty_label: Label = $MarginContainer/VBoxContainer/EmptyRosterLabel
 
-var tavern: Tavern
+var roster_source: Interaction
 var detail_windows: Dictionary[int, SceneInstance] = {}
 
 func setup_interaction(interaction: Interaction) -> void:
-	var new_tavern := interaction as Tavern
-	if tavern != null and tavern.npc_roster_changed.is_connected(_refresh_roster):
-		tavern.npc_roster_changed.disconnect(_refresh_roster)
-	tavern = new_tavern
-	if tavern != null and not tavern.npc_roster_changed.is_connected(_refresh_roster):
-		tavern.npc_roster_changed.connect(_refresh_roster)
+	var refresh_callable := Callable(self, "_refresh_roster")
+	if roster_source != null and is_instance_valid(roster_source):
+		if roster_source.has_signal("npc_roster_changed") and roster_source.is_connected("npc_roster_changed", refresh_callable):
+			roster_source.disconnect("npc_roster_changed", refresh_callable)
+	roster_source = interaction
+	if roster_source != null and roster_source.has_signal("npc_roster_changed"):
+		if not roster_source.is_connected("npc_roster_changed", refresh_callable):
+			roster_source.connect("npc_roster_changed", refresh_callable)
 
 func _ready() -> void:
 	if Manager.instance != null and Manager.instance.quests != null and not Manager.instance.quests.quest_list_changed.is_connected(_refresh_roster):
@@ -32,7 +34,10 @@ func _refresh_roster() -> void:
 		roster_rows.remove_child(child)
 		child.queue_free()
 
-	var roster: Array[SceneInstance] = tavern.get_roster_npcs() if tavern != null else []
+	var roster: Array[SceneInstance] = []
+	if roster_source != null and is_instance_valid(roster_source) and roster_source.has_method("get_roster_npcs"):
+		for scene_instance: SceneInstance in roster_source.call("get_roster_npcs"):
+			roster.append(scene_instance)
 	empty_label.visible = roster.is_empty()
 
 	for npc_scene_instance in roster:
