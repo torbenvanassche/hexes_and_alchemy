@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://be74ln24enbj4" path="res://tools/quest_system/scripts/npc.gd" id="1_023up"]
 [ext_resource type="PackedScene" uid="uid://d4ymsokn1evq" path="res://meshes/kay_fantasy_hexagon/units/neutral/unit.glb" id="1_i0sav"]
 [ext_resource type="Material" uid="uid://csfmxfxexogrq" path="res://materials/adventurer.tres" id="2_h70i8"]
+[ext_resource type="Resource" path="res://resources/npc_rules/default_adventurer_recovery.tres" id="3_recovery"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_h70i8"]
 radius = 0.095214844
@@ -17,6 +18,7 @@ collision_mask = 0
 script = ExtResource("1_023up")
 material = ExtResource("2_h70i8")
 move_speed = 1.0
+recovery_rules = ExtResource("3_recovery")
 
 [node name="mesh" parent="." unique_id=34736461 instance=ExtResource("1_i0sav")]
 

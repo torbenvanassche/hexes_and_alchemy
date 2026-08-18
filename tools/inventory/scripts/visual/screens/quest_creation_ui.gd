@@ -512,8 +512,7 @@ func _create_quest() -> void:
 
 func _get_quest_type_name(quest_type_key: String) -> String:
 	if quest_type_key == SCOUT_QUEST_KEY:
-		var translated := tr("QUEST_TYPE_SCOUT")
-		return "Scout" if translated == "QUEST_TYPE_SCOUT" else translated
+		return tr("QUEST_TYPE_SCOUT")
 
 	var objective := _get_selected_objective()
 	if objective != null:
@@ -1000,7 +999,7 @@ func _get_selected_required_role() -> String:
 	if quest_type_key == SCOUT_QUEST_KEY:
 		return "hunter"
 	var profile := _get_selected_profile()
-	return profile.required_role if profile != null else ""
+	return profile.get_required_role() if profile != null else ""
 
 func _get_role_display_name(role: String) -> String:
 	if role == "":
@@ -1053,7 +1052,7 @@ func _refresh_quest_details() -> void:
 	var duration_text := ""
 	var duration := objective.get_quest_duration(quest_type_key, 0.0)
 	if duration > 0.0:
-		duration_text = "%ss" % [ceil(duration)]
+		duration_text = tr("QUEST_DETAIL_DURATION") % [ceil(duration)]
 
 	var risk_text := ""
 	var risk := objective.get_quest_profile_risk(quest_type_key)

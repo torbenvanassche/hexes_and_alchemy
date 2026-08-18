@@ -113,7 +113,7 @@ func _refresh_deposit_state() -> void:
 			available += source_inventory.get_count(item)
 		var required_amount := slot.maxcount
 		var has_requirement := available >= required_amount
-		count_label.text = "x%s" % required_amount
+		count_label.text = tr("ITEM_COUNT_LABEL") % required_amount
 		count_label.modulate = Color.WHITE if has_requirement else Color(1.0, 0.65, 0.65)
 	complete_order.disabled = source_inventory == null or inventory == null or required.is_empty() or not source_inventory.has_all(required)
 	minimum_size_changed.emit()

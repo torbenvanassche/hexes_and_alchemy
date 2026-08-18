@@ -6,6 +6,8 @@
 script = ExtResource("1_profile")
 quest_key = "deep_extract"
 behaviour = "extract"
+completion_spot_stage = 6
+occupied_completion_spot_stage = 8
 required_role = "delver"
 translation_key_name = "QUEST_TYPE_DEEP_EXTRACT"
 description_key = "QUEST_DESC_MINE_DEEP_EXTRACT"

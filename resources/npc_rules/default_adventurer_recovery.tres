@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="AdventurerRecoveryRules" format=3]
+
+[ext_resource type="Script" path="res://tools/quest_system/scripts/adventurer_recovery_rules.gd" id="1_rules"]
+[ext_resource type="Resource" path="res://resources/item_info/travel_rations.tres" id="2_rations"]
+
+[resource]
+script = ExtResource("1_rules")
+base_rest_seconds = 3.0
+quest_duration_rest_multiplier = 0.35
+dangerous_quest_rest_multiplier = 2.0
+uncertain_quest_rest_multiplier_min = 1.15
+uncertain_quest_rest_multiplier_max = 1.55
+maximum_rest_seconds = 30.0
+injury_recovery_item = ExtResource("2_rations")
+injury_recovery_item_count = 1
+injury_item_recovery_multiplier = 0.75

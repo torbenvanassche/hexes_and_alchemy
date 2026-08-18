@@ -2,38 +2,22 @@ class_name Tavern extends SettlementService
 
 @export var recreation_anchor: Node3D
 @export_group("Recruitment")
-@export_range(1, 10, 1) var candidate_capacity := 5
-@export_range(1, 10, 1) var initial_candidate_count := 4
-@export_range(1, 20, 1) var operations_per_natural_arrival := 2
-@export_range(0, 1000, 1) var manual_refresh_cost := 15
-@export_range(0, 1000, 1) var base_hire_cost := 15
-@export_range(0, 1000, 1) var rank_hire_cost := 15
-@export_range(0, 1000, 1) var trait_hire_cost := 2
-@export_range(1, 100, 1) var prestige_per_rank_tier := 5
-@export var maximum_candidate_rank: AdventurerRank.Rank = AdventurerRank.Rank.C
+@export var recruitment_rules: RecruitmentRules
 
 var buildable_structure: Buildable
 var candidates: Array[RecruitCandidate] = []
 var _candidate_serial := 0
+var _name_serial := 0
 var _next_natural_arrival_operation := 0
 var _rng := RandomNumberGenerator.new()
 
 signal recruitment_changed()
 signal candidate_hired(candidate: RecruitCandidate, npc: NPC)
 
-const FIRST_NAMES: Array[String] = [
-	"Ada", "Bram", "Cora", "Dain", "Elia", "Finn", "Greta", "Hale",
-	"Iris", "Joren", "Kessa", "Lio", "Mara", "Nils", "Orla", "Perrin",
-	"Rhea", "Soren", "Tamsin", "Ulric", "Vera", "Wren", "Yara", "Zane",
-]
-const LAST_NAMES: Array[String] = [
-	"Ash", "Briar", "Crow", "Dale", "Ember", "Fenn", "Grove", "Holt",
-	"Iron", "Keen", "Lark", "Moor", "North", "Reed", "Stone", "Vale",
-]
-
 func _ready() -> void:
 	super()
 	buildable_structure = get_parent() as Buildable
+	_rng.randomize()
 	_initialize_recruitment.call_deferred()
 
 func interact() -> void:
@@ -49,13 +33,22 @@ func get_candidates() -> Array[RecruitCandidate]:
 	return candidates.duplicate()
 
 func get_candidate_capacity() -> int:
-	return candidate_capacity
+	return _get_recruitment_rules().candidate_capacity
 
 func get_manual_refresh_cost() -> int:
-	return manual_refresh_cost
+	return _get_recruitment_rules().manual_refresh_cost
 
 func get_operations_until_next_arrival() -> int:
 	return maxi(0, _next_natural_arrival_operation - _get_completed_operation_count())
+
+func generate_adventurer_name() -> String:
+	_name_serial += 1
+	var name_pool := _get_recruitment_rules().name_pool
+	if name_pool != null:
+		var generated_name := name_pool.generate_available_name(_rng, _get_used_adventurer_names(), _name_serial)
+		if not generated_name.is_empty():
+			return generated_name
+	return tr("NPC_GENERATED_NAME_FALLBACK") % _name_serial
 
 func get_hire_block_key(candidate: RecruitCandidate) -> String:
 	if candidate == null or not candidates.has(candidate):
@@ -72,7 +65,7 @@ func get_hire_block_key(candidate: RecruitCandidate) -> String:
 func get_refresh_block_key() -> String:
 	if Manager.instance == null or Manager.instance.hub == null:
 		return "RECRUITMENT_ERROR_REFRESH_UNAVAILABLE"
-	if Manager.instance.hub.currency < manual_refresh_cost:
+	if Manager.instance.hub.currency < _get_recruitment_rules().manual_refresh_cost:
 		return "RECRUITMENT_ERROR_NOT_ENOUGH_CURRENCY"
 	if _get_recruitable_profiles().is_empty():
 		return "RECRUITMENT_ERROR_NO_RECRUITS_AVAILABLE"
@@ -105,42 +98,44 @@ func hire_candidate(candidate: RecruitCandidate) -> bool:
 func refresh_candidates() -> bool:
 	if not get_refresh_block_key().is_empty():
 		return false
-	if not Manager.instance.hub.reserve_currency(manual_refresh_cost):
+	var rules := _get_recruitment_rules()
+	if not Manager.instance.hub.reserve_currency(rules.manual_refresh_cost):
 		return false
 	var previous_candidates := candidates.duplicate()
 	candidates.clear()
-	_fill_candidate_pool(candidate_capacity)
+	_fill_candidate_pool(rules.candidate_capacity)
 	if candidates.is_empty():
 		candidates.assign(previous_candidates)
-		Manager.instance.hub.add_currency(manual_refresh_cost)
+		Manager.instance.hub.add_currency(rules.manual_refresh_cost)
 		return false
 	recruitment_changed.emit()
 	return true
 
 func _initialize_recruitment() -> void:
-	_rng.randomize()
+	var rules := _get_recruitment_rules()
 	var completed_operations := _get_completed_operation_count()
-	_next_natural_arrival_operation = completed_operations + operations_per_natural_arrival
-	_fill_candidate_pool(mini(initial_candidate_count, candidate_capacity))
+	_next_natural_arrival_operation = rules.get_next_arrival_operation(completed_operations)
+	_fill_candidate_pool(rules.get_initial_pool_size())
 	if Manager.instance != null and Manager.instance.reputation != null:
 		if not Manager.instance.reputation.changed.is_connected(_on_guild_progress_changed):
 			Manager.instance.reputation.changed.connect(_on_guild_progress_changed)
 	recruitment_changed.emit()
 
 func _on_guild_progress_changed() -> void:
+	var rules := _get_recruitment_rules()
 	var completed_operations := _get_completed_operation_count()
 	var visitor_arrived := false
 	while completed_operations >= _next_natural_arrival_operation:
-		if candidates.size() < candidate_capacity:
+		if candidates.size() < rules.candidate_capacity:
 			visitor_arrived = _add_candidate() or visitor_arrived
-		_next_natural_arrival_operation += operations_per_natural_arrival
+		_next_natural_arrival_operation = rules.advance_arrival_operation(_next_natural_arrival_operation)
 	if visitor_arrived:
 		recruitment_changed.emit()
 		if Manager.instance != null and Manager.instance.toast != null:
 			Manager.instance.toast.notify(tr("RECRUITMENT_NEW_VISITOR_NOTICE"))
 
 func _fill_candidate_pool(target_count: int) -> void:
-	while candidates.size() < mini(target_count, candidate_capacity):
+	while candidates.size() < mini(target_count, _get_recruitment_rules().candidate_capacity):
 		if not _add_candidate():
 			break
 
@@ -153,7 +148,7 @@ func _add_candidate() -> bool:
 	var candidate_traits := profile.traits.duplicate()
 	var candidate := RecruitCandidate.new(
 		StringName("candidate_%s" % _candidate_serial),
-		_generate_candidate_name(),
+		generate_adventurer_name(),
 		profile,
 		candidate_rank,
 		candidate_traits,
@@ -212,33 +207,27 @@ func _get_faction_home(faction_id: StringName) -> FactionHome:
 
 func _roll_candidate_rank() -> AdventurerRank.Rank:
 	var prestige := Manager.instance.hub.prestige if Manager.instance != null and Manager.instance.hub != null else 0
-	var unlocked_tiers := floori(float(prestige) / float(prestige_per_rank_tier))
-	var highest_rank := mini(int(maximum_candidate_rank), unlocked_tiers)
-	if highest_rank <= int(AdventurerRank.Rank.F):
-		return AdventurerRank.Rank.F
-	var rolled_rank := _rng.randi_range(int(AdventurerRank.Rank.F), highest_rank)
-	return AdventurerRank.clamp_rank(rolled_rank)
+	return _get_recruitment_rules().roll_candidate_rank(_rng, prestige)
 
 func _get_hire_cost(candidate_rank: AdventurerRank.Rank, trait_count: int) -> int:
-	return base_hire_cost + int(candidate_rank) * rank_hire_cost + trait_count * trait_hire_cost
+	return _get_recruitment_rules().get_hire_cost(candidate_rank, trait_count)
 
-func _generate_candidate_name() -> String:
-	for _attempt in 12:
-		var candidate_name := "%s %s" % [FIRST_NAMES.pick_random(), LAST_NAMES.pick_random()]
-		if not _is_name_in_use(candidate_name):
-			return candidate_name
-	return "%s %s" % [FIRST_NAMES.pick_random(), _candidate_serial]
+func _get_recruitment_rules() -> RecruitmentRules:
+	if recruitment_rules == null:
+		recruitment_rules = RecruitmentRules.new()
+	return recruitment_rules
 
-func _is_name_in_use(candidate_name: String) -> bool:
+func _get_used_adventurer_names() -> Array[String]:
+	var used_names: Array[String] = []
 	for candidate: RecruitCandidate in candidates:
-		if candidate != null and candidate.display_name == candidate_name:
-			return true
+		if candidate != null and not candidate.display_name.is_empty():
+			used_names.append(candidate.display_name)
 	for home: FactionHome in _get_faction_homes():
 		for member_instance: SceneInstance in home.get_roster_npcs():
 			var npc := member_instance.node as NPC
-			if npc != null and npc.get_display_name() == candidate_name:
-				return true
-	return false
+			if npc != null:
+				used_names.append(npc.get_display_name())
+	return used_names
 
 func _get_completed_operation_count() -> int:
 	return Manager.instance.reputation.completed_quests if Manager.instance != null and Manager.instance.reputation != null else 0

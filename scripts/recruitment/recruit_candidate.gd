@@ -5,7 +5,7 @@ var id: StringName
 var display_name := ""
 var profile: NpcInfo
 var rank: AdventurerRank.Rank = AdventurerRank.Rank.F
-var traits: Array[String] = []
+var traits: Array[AdventurerTraitDefinition] = []
 var hire_cost := 0
 
 func _init(
@@ -13,7 +13,7 @@ func _init(
 	_candidate_name: String = "",
 	_candidate_profile: NpcInfo = null,
 	_candidate_rank: AdventurerRank.Rank = AdventurerRank.Rank.F,
-	_candidate_traits: Array[String] = [],
+	_candidate_traits: Array[AdventurerTraitDefinition] = [],
 	_candidate_hire_cost: int = 0
 ) -> void:
 	id = _candidate_id
@@ -33,10 +33,10 @@ func get_faction_name() -> String:
 	return String(faction_id).capitalize() if translated == translation_key else translated
 
 func get_profession_name() -> String:
-	return profile.profession if profile != null else tr("NPC_PROFESSION_GENERALIST")
+	return profile.get_profession_display_name() if profile != null else tr("NPC_PROFESSION_GENERALIST")
 
 func get_role_name() -> String:
-	return profile.role if profile != null else tr("NPC_ROLE_ADVENTURER")
+	return profile.get_role_display_name() if profile != null else tr("NPC_ROLE_ADVENTURER")
 
 func get_rank_name() -> String:
 	return AdventurerRank.get_display_name(rank)
@@ -45,16 +45,12 @@ func get_traits_label() -> String:
 	if traits.is_empty():
 		return tr("NPC_TRAITS_NONE")
 	var labels: Array[String] = []
-	for trait_name: String in traits:
-		labels.append(trait_name.capitalize())
+	for trait_definition: AdventurerTraitDefinition in traits:
+		if trait_definition != null:
+			labels.append(trait_definition.get_display_name())
 	return ", ".join(labels)
 
 func get_preferred_jobs_label() -> String:
 	if profile == null or profile.preferred_jobs.is_empty():
 		return tr("RECRUITMENT_NO_PREFERENCES")
-	var labels: Array[String] = []
-	for job_key: String in profile.preferred_jobs:
-		var translation_key := "QUEST_TYPE_%s" % job_key.to_upper()
-		var translated := tr(translation_key)
-		labels.append(job_key.capitalize().replace("_", " ") if translated == translation_key else translated)
-	return ", ".join(labels)
+	return ", ".join(profile.get_preferred_jobs_display_names())

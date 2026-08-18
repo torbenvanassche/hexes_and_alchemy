@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="RecruitmentRules" format=3]
+
+[ext_resource type="Script" path="res://scripts/recruitment/recruitment_rules.gd" id="1_rules"]
+[ext_resource type="Resource" path="res://resources/recruitment/default_adventurer_names.tres" id="2_names"]
+
+[resource]
+script = ExtResource("1_rules")
+name_pool = ExtResource("2_names")
+candidate_capacity = 5
+initial_candidate_count = 4
+operations_per_natural_arrival = 2
+manual_refresh_cost = 15
+base_hire_cost = 15
+rank_hire_cost = 15
+trait_hire_cost = 2
+prestige_per_rank_tier = 5
+maximum_candidate_rank = 3

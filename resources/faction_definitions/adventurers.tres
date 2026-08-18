@@ -5,7 +5,6 @@
 [resource]
 script = ExtResource("1_definition")
 id = &"adventurers"
-display_name = "Adventurers"
 roles = Array[String](["adventurer", "delver", "security"])
-responsibilities = Array[String](["Handle dangerous locations", "Explore ruins and work mines"])
+responsibilities = Array[String](["FACTION_ADVENTURERS_RESPONSIBILITY_SECURITY", "FACTION_ADVENTURERS_RESPONSIBILITY_EXPEDITIONS"])
 preferred_quest_types = Array[String](["delve", "secure", "salvage", "prospect", "extract", "deep_extract", "stabilized_extract", "deepen"])

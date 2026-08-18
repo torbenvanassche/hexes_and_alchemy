@@ -3,6 +3,8 @@
 [ext_resource type="PackedScene" uid="uid://xay4s33jokxl" path="res://scenes/adventurer.tscn" id="1_scene"]
 [ext_resource type="Script" uid="uid://du4hbbtmblkj0" path="res://tools/quest_system/scripts/npc_info.gd" id="2_info"]
 [ext_resource type="Texture2D" uid="uid://chvmvna3iw2ov" path="res://sprites/ui/icons/character.png" id="3_icon"]
+[ext_resource type="Resource" path="res://resources/npc_traits/curious.tres" id="4_curious"]
+[ext_resource type="Resource" path="res://resources/npc_traits/brave.tres" id="5_brave"]
 
 [resource]
 script = ExtResource("2_info")
@@ -10,10 +12,10 @@ faction_id = &"hunters"
 img = ExtResource("3_icon")
 id = "pathfinder"
 packed_scene = ExtResource("1_scene")
-profession = "Scout"
-role = "Pathfinder"
+profession = "scout"
+role = "pathfinder"
 operation_roles = Array[String](["hunter"])
-traits = Array[String](["curious", "brave"])
+traits = Array[ExtResource("4_curious")]([ExtResource("4_curious"), ExtResource("5_brave")])
 preferred_jobs = Array[String](["scout", "survey", "hunt"])
 disliked_jobs = Array[String](["prospect", "extract", "reinforce", "deepen"])
 minimum_quest_score = 3.0

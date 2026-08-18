@@ -544,3 +544,50 @@ RECRUITMENT_HIRE_SUCCESS,%s has joined the settlement.,%s has joined the settlem
 RECRUITMENT_REFRESH_SUCCESS,New visitors have arrived at the tavern.,New visitors have arrived at the tavern.
 RECRUITMENT_HIRED_NOTICE,%s joined the %s.,%s joined the %s.
 RECRUITMENT_NEW_VISITOR_NOTICE,A new recruit is waiting at the tavern.,A new recruit is waiting at the tavern.
+UI_LABEL_VALUE,%s: %s,%s: %s
+UI_HEADING,%s:,%s:
+NPC_PROFESSION_SCOUT,Scout,Scout
+NPC_PROFESSION_MINER,Miner,Miner
+NPC_PROFESSION_CRAFTER,Crafter,Crafter
+NPC_PROFESSION_WARDEN,Warden,Warden
+NPC_ROLE_PATHFINDER,Pathfinder,Pathfinder
+NPC_ROLE_DELVER,Delver,Delver
+NPC_ROLE_CRAFTSPERSON,Craftsperson,Craftsperson
+NPC_ROLE_TENDER,Tender,Tender
+NPC_TRAIT_CURIOUS,Curious,Curious
+NPC_TRAIT_BRAVE,Brave,Brave
+NPC_TRAIT_STOUT,Stout,Stout
+NPC_TRAIT_GREEDY,Greedy,Greedy
+NPC_TRAIT_GREEN_THUMB,Green thumb,Green thumb
+NPC_TRAIT_CAUTIOUS,Cautious,Cautious
+FACTION_HUNTERS_RESPONSIBILITY_EXPLORE,Explore and map new locations,Explore and map new locations
+FACTION_HUNTERS_RESPONSIBILITY_SURVEY,Survey unfamiliar sites,Survey unfamiliar sites
+FACTION_HUNTERS_RESPONSIBILITY_HUNT,Hunt game and supply food,Hunt game and supply food
+FACTION_ADVENTURERS_RESPONSIBILITY_SECURITY,Handle dangerous locations,Handle dangerous locations
+FACTION_ADVENTURERS_RESPONSIBILITY_EXPEDITIONS,Explore ruins and work mines,Explore ruins and work mines
+FACTION_CRAFTERS_RESPONSIBILITY_EQUIPMENT,Turn materials into equipment,Turn materials into equipment
+FACTION_CRAFTERS_RESPONSIBILITY_SUPPLIES,Maintain guild supplies,Maintain guild supplies
+FACTION_TENDERS_RESPONSIBILITY_SETTLEMENT,Maintain the settlement,Maintain the settlement
+FACTION_TENDERS_RESPONSIBILITY_STEWARDSHIP,Support farming and water,Support farming and water
+HUB_ACTIVITY_OPERATION_STATE,%s: %s,%s: %s
+HUB_MEMBER_ACTIVITY_QUEST,%s: %s,%s: %s
+HUB_STOCKPILE_EMPTY,Stockpile: empty,Stockpile: empty
+HUB_STOCKPILE_SUMMARY,Stockpile: %s,Stockpile: %s
+OPERATION_RESULT_COMPLETED,Completed,Completed
+SPOT_STAGE_UNKNOWN,Unknown,Unknown
+SPOT_STAGE_MAPPED,Mapped,Mapped
+SPOT_STAGE_SURVEYED,Surveyed,Surveyed
+SPOT_STAGE_DANGEROUS,Dangerous,Dangerous
+SPOT_STAGE_SECURED,Secured,Secured
+SPOT_STAGE_CLEARED,Cleared,Cleared
+SPOT_STAGE_AVAILABLE,Available,Available
+SPOT_STAGE_EXHAUSTED,Exhausted,Exhausted
+SPOT_STAGE_INFESTED,Infested,Infested
+SCENE_HEX_GRASS_SLOPE_HALF_NAME,Grass slope,Grass slope
+SCENE_HUB_WINDOW_NAME,Guild hub,Guild hub
+SCENE_NPC_DETAILS_UI_NAME,Adventurer details,Adventurer details
+SCENE_SETTLEMENT_UPGRADE_UI_NAME,Settlement upgrade,Settlement upgrade
+SCENE_TAVERN_RECRUITMENT_UI_NAME,Tavern,Tavern
+JOURNAL_TASK_OPEN_BLACKSMITH,Open the blacksmith,Open the blacksmith
+NPC_GENERATED_NAME_NUMBERED,%s %s,%s %s
+NPC_GENERATED_NAME_FALLBACK,Adventurer %s,Adventurer %s

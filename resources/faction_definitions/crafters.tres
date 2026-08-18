@@ -5,7 +5,6 @@
 [resource]
 script = ExtResource("1_definition")
 id = &"crafters"
-display_name = "Crafters"
 roles = Array[String](["crafter"])
-responsibilities = Array[String](["Turn materials into equipment", "Maintain guild supplies"])
+responsibilities = Array[String](["FACTION_CRAFTERS_RESPONSIBILITY_EQUIPMENT", "FACTION_CRAFTERS_RESPONSIBILITY_SUPPLIES"])
 preferred_quest_types = Array[String](["maintain", "reinforce", "reopen"])

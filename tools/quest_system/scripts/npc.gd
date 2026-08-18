@@ -1,7 +1,6 @@
 class_name NPC extends CharacterBody3D
 
 const SLOPE_SURFACE_COLLISION_MASK := 1 << 3
-const TRAVEL_RATIONS: ItemInfo = preload("res://resources/item_info/travel_rations.tres")
 
 @export var material: Material
 @export var move_speed := 5.0
@@ -10,13 +9,7 @@ const TRAVEL_RATIONS: ItemInfo = preload("res://resources/item_info/travel_ratio
 @export var stuck_distance_epsilon := 0.05
 
 @export_group("Recovery")
-@export_range(0.0, 60.0, 0.5) var base_rest_seconds := 3.0
-@export_range(0.0, 10.0, 0.05) var quest_duration_rest_multiplier := 0.35
-@export_range(1.0, 4.0, 0.05) var dangerous_quest_rest_multiplier := 2.0
-@export_range(1.0, 3.0, 0.05) var uncertain_quest_rest_multiplier_min := 1.15
-@export_range(1.0, 3.0, 0.05) var uncertain_quest_rest_multiplier_max := 1.55
-@export_range(0.0, 120.0, 1.0) var maximum_rest_seconds := 30.0
-@export_range(0.25, 1.0, 0.05) var injury_ration_recovery_multiplier := 0.75
+@export var recovery_rules: AdventurerRecoveryRules
 
 @export_group("Rank")
 @export var rank: AdventurerRank.Rank = AdventurerRank.Rank.F
@@ -38,7 +31,7 @@ var state_machine: StateMachine
 var current_quest: Quest
 var npc_info: NpcInfo
 var recruited_display_name := ""
-var recruited_traits: Array[String] = []
+var recruited_traits: Array[AdventurerTraitDefinition] = []
 var has_recruited_traits := false
 var home_position := Vector3.ZERO
 var operation_home_anchor: Node3D
@@ -186,7 +179,7 @@ func get_rank() -> AdventurerRank.Rank:
 func configure_recruited_identity(
 	display_name: String,
 	starting_rank: AdventurerRank.Rank,
-	traits: Array[String]
+	traits: Array[AdventurerTraitDefinition]
 ) -> void:
 	recruited_display_name = display_name
 	recruited_traits = traits.duplicate()
@@ -218,7 +211,9 @@ func is_rank_at_least(minimum: AdventurerRank.Rank) -> bool:
 	return AdventurerRank.is_at_least(rank, minimum)
 
 func get_effective_move_speed() -> float:
-	return move_speed * AdventurerRank.get_speed_multiplier(rank, _get_rank_move_speed_bonus_per_tier())
+	if npc_info == null:
+		return move_speed
+	return npc_info.get_move_speed(move_speed, rank)
 
 func get_equipped_items() -> Array[EquipmentInfo]:
 	if equipment == null:
@@ -228,31 +223,37 @@ func get_equipped_items() -> Array[EquipmentInfo]:
 func get_profession_label() -> String:
 	if npc_info == null:
 		return tr("NPC_PROFESSION_GENERALIST")
-	return npc_info.profession
+	return npc_info.get_profession_display_name()
 
 func get_role_label() -> String:
 	if npc_info == null:
 		return tr("NPC_ROLE_ADVENTURER")
-	return npc_info.role
+	return npc_info.get_role_display_name()
 
 func get_operation_roles() -> Array[String]:
-	if npc_info == null or npc_info.operation_roles.is_empty():
+	if npc_info == null:
 		return ["adventurer"]
-	return npc_info.operation_roles
+	return npc_info.get_operation_roles()
 
 func can_perform_role(required_role: String) -> bool:
-	if required_role == "":
-		return true
-	return get_operation_roles().has(required_role)
+	if npc_info != null:
+		return npc_info.can_perform_role(required_role)
+	return required_role.is_empty() or required_role == "adventurer"
 
 func get_traits_label() -> String:
-	var traits := recruited_traits if has_recruited_traits else (npc_info.traits if npc_info != null else [])
+	var traits := _get_traits()
 	if traits.is_empty():
 		return tr("NPC_TRAITS_NONE")
 	var trait_labels: Array[String] = []
-	for trait_name in traits:
-		trait_labels.append(trait_name.capitalize())
+	for trait_definition: AdventurerTraitDefinition in traits:
+		if trait_definition != null:
+			trait_labels.append(trait_definition.get_display_name())
 	return ", ".join(trait_labels)
+
+func _get_traits() -> Array[AdventurerTraitDefinition]:
+	if has_recruited_traits:
+		return recruited_traits
+	return npc_info.traits if npc_info != null else []
 
 func evaluate_quest(quest: Quest) -> float:
 	var required_role := ""
@@ -263,16 +264,8 @@ func evaluate_quest(quest: Quest) -> float:
 func evaluate_quest_for_role(quest: Quest, required_role: String) -> float:
 	if not can_consider_quest_for_role(quest, required_role):
 		return 0.0
-
-	var minimum_rank := quest.get_minimum_rank()
-	var score := _get_base_eligible_quest_score()
-	score += float(quest.get_rank_experience_reward()) * _get_rank_experience_reward_weight()
-	score += float(quest.get_offered_currency_reward()) * _get_offered_currency_reward_weight()
-	score += maxf(0.0, float(int(rank) - int(minimum_rank))) * _get_rank_surplus_weight()
-	score -= _get_distance_to_quest(quest) * _get_distance_penalty_per_tile()
-	score += _get_job_interest_score(quest)
-	score += _get_trait_interest_score(quest)
-	return maxf(0.0, score)
+	var scoring_profile := npc_info if npc_info != null else NpcInfo.new()
+	return scoring_profile.get_quest_score(quest, rank, _get_distance_to_quest(quest), _get_traits())
 
 func can_consider_quest(quest: Quest) -> bool:
 	var required_role := ""
@@ -300,7 +293,8 @@ func can_consider_quest_for_role(quest: Quest, required_role: String) -> bool:
 	return is_rank_at_least(quest.get_minimum_rank())
 
 func wants_quest(quest: Quest) -> bool:
-	return evaluate_quest(quest) >= _get_minimum_quest_score()
+	var scoring_profile := npc_info if npc_info != null else NpcInfo.new()
+	return scoring_profile.accepts_quest_score(evaluate_quest(quest))
 
 func add_rank_experience(amount: int) -> void:
 	if amount <= 0:
@@ -418,26 +412,20 @@ func _update_resting() -> void:
 		set_state(NPCState.RETURNING_HOME)
 
 func _start_recovery_after_quest(quest: Quest) -> void:
-	var rest_time := base_rest_seconds
+	var rules := recovery_rules
+	if rules == null:
+		rules = AdventurerRecoveryRules.new()
 	recovering_from_injury = quest != null and quest.outcome != null and quest.outcome.is_dangerous
-	var profile := quest.get_profile() if quest != null else null
-	if profile != null:
-		rest_time += maxf(0.0, profile.duration_seconds) * quest_duration_rest_multiplier
-		var risk_key := quest.get_effective_risk_key() if quest.has_method("get_effective_risk_key") else profile.risk_key
-		match risk_key:
-			"QUEST_RISK_DANGEROUS":
-				rest_time *= dangerous_quest_rest_multiplier
-			"QUEST_RISK_UNCERTAIN":
-				var lower_multiplier := minf(uncertain_quest_rest_multiplier_min, uncertain_quest_rest_multiplier_max)
-				var upper_multiplier := maxf(uncertain_quest_rest_multiplier_min, uncertain_quest_rest_multiplier_max)
-				rest_time *= randf_range(lower_multiplier, upper_multiplier)
 	var ration_used := false
 	if recovering_from_injury and Manager.instance != null and Manager.instance.hub != null:
-		var ration_cost: Dictionary[ItemInfo, int] = {TRAVEL_RATIONS: 1}
-		ration_used = Manager.instance.hub.withdraw_items(ration_cost)
-		if ration_used:
-			rest_time *= injury_ration_recovery_multiplier
-	rest_duration_seconds = clampf(rest_time, 0.0, maximum_rest_seconds)
+		var recovery_cost := rules.get_injury_recovery_cost()
+		if not recovery_cost.is_empty():
+			ration_used = Manager.instance.hub.withdraw_items(recovery_cost)
+	rest_duration_seconds = rules.calculate_rest_seconds(quest, ration_used)
+	if Manager.instance != null and Manager.instance.hub != null:
+		var faction := Manager.instance.hub.get_faction_for_npc(self)
+		if faction != null:
+			rest_duration_seconds = faction.get_recovery_duration(rest_duration_seconds)
 	rest_remaining_seconds = rest_duration_seconds
 	if recovering_from_injury:
 		_notify_injury_recovery(ration_used)
@@ -552,48 +540,9 @@ func _initialize_equipment() -> void:
 	equipment = NpcEquipmentSlots.new()
 
 func _get_rank_threshold(target_rank: AdventurerRank.Rank) -> int:
-	if npc_info == null or npc_info.rank_experience_thresholds == null or npc_info.rank_experience_thresholds.get_point_count() == 0:
-		return _get_fallback_rank_threshold(target_rank)
-	return maxi(0, roundi(npc_info.rank_experience_thresholds.sample(float(int(target_rank)))))
-
-func _get_rank_move_speed_bonus_per_tier() -> float:
 	if npc_info == null:
-		return 0.0
-	return npc_info.rank_move_speed_bonus_per_tier
-
-func _get_fallback_rank_threshold(target_rank: AdventurerRank.Rank) -> int:
-	var rank_index := int(target_rank)
-	return rank_index * rank_index
-
-func _get_minimum_quest_score() -> float:
-	if npc_info == null:
-		return 3.0
-	return npc_info.minimum_quest_score
-
-func _get_base_eligible_quest_score() -> float:
-	if npc_info == null:
-		return 0.0
-	return npc_info.base_eligible_quest_score
-
-func _get_rank_experience_reward_weight() -> float:
-	if npc_info == null:
-		return 1.0
-	return npc_info.rank_experience_reward_weight
-
-func _get_offered_currency_reward_weight() -> float:
-	if npc_info == null:
-		return 0.1
-	return npc_info.offered_currency_reward_weight
-
-func _get_rank_surplus_weight() -> float:
-	if npc_info == null:
-		return 0.5
-	return npc_info.rank_surplus_weight
-
-func _get_distance_penalty_per_tile() -> float:
-	if npc_info == null:
-		return 0.05
-	return npc_info.distance_penalty_per_tile
+		return NpcInfo.get_fallback_rank_experience_threshold(target_rank)
+	return npc_info.get_rank_experience_threshold(target_rank)
 
 func _get_distance_to_quest(quest: Quest) -> float:
 	if quest == null or quest.location == null:
@@ -608,59 +557,6 @@ func _get_distance_to_quest(quest: Quest) -> float:
 	if start_hex == null:
 		return 0.0
 	return float(GridUtils.cube_distance(start_hex.cube_id, quest.location.cube_id))
-
-func _get_job_interest_score(quest: Quest) -> float:
-	if npc_info == null:
-		return 0.0
-	var job_keys := _get_quest_job_keys(quest)
-	var score := 0.0
-	for job_key in job_keys:
-		if npc_info.preferred_jobs.has(job_key):
-			score += 5.0
-		if npc_info.disliked_jobs.has(job_key):
-			score -= 4.0
-	return score
-
-func _get_trait_interest_score(quest: Quest) -> float:
-	if npc_info == null:
-		return 0.0
-	var profile := quest.get_profile()
-	var risk_key := profile.risk_key if profile != null else ""
-	var job_keys := _get_quest_job_keys(quest)
-	var score := 0.0
-	for trait_name in npc_info.traits:
-		match trait_name.to_lower():
-			"brave":
-				if risk_key == "QUEST_RISK_DANGEROUS":
-					score += 4.0
-			"cautious":
-				if risk_key == "QUEST_RISK_DANGEROUS":
-					score -= 3.0
-			"curious":
-				if _has_any_job(job_keys, ["scout", "survey", "prospect", "delve"]):
-					score += 3.0
-			"greedy":
-				score += float(quest.get_offered_currency_reward()) * 0.25
-			"stout":
-				if _has_any_job(job_keys, ["extract", "reinforce", "deepen"]):
-					score += 2.0
-			"green_thumb":
-				if _has_any_job(job_keys, ["plant", "water", "harvest", "replant", "forage"]):
-					score += 2.0
-	return score
-
-func _has_any_job(job_keys: Array[String], matching_jobs: Array[String]) -> bool:
-	for job_name in job_keys:
-		if matching_jobs.has(job_name):
-			return true
-	return false
-
-func _get_quest_job_keys(quest: Quest) -> Array[String]:
-	var keys: Array[String] = [quest.quest_key]
-	var profile := quest.get_profile()
-	if profile != null and profile.get_behaviour() != quest.quest_key:
-		keys.append(profile.get_behaviour())
-	return keys
 
 func _get_path_to_quest(grid: HexGrid, start_hex: HexBase) -> Array[HexBase]:
 	if grid == null or start_hex == null or current_quest == null or current_quest.location == null:

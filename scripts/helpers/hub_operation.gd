@@ -53,6 +53,15 @@ func get_state_name() -> String:
 	var translated := tr(state_key)
 	return translated if translated != state_key else State.keys()[state].capitalize().replace("_", " ")
 
+func get_display_name() -> String:
+	if quest != null:
+		var profile := quest.get_profile()
+		if profile != null:
+			return profile.get_display_name()
+	var translation_key := "QUEST_TYPE_%s" % operation_type.to_upper()
+	var translated := tr(translation_key)
+	return operation_type.capitalize().replace("_", " ") if translated == translation_key else translated
+
 func get_activity_name() -> String:
 	if quest == null:
 		return tr("OPERATION_ACTIVITY_IDLE")

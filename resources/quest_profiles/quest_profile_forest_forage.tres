@@ -8,6 +8,8 @@
 script = ExtResource("1_profile")
 quest_key = "forage"
 behaviour = "forage"
+completion_spot_stage = 6
+occupied_completion_spot_stage = 8
 required_role = "tender"
 translation_key_name = "QUEST_TYPE_FORAGE"
 description_key = "QUEST_DESC_FOREST_FORAGE"

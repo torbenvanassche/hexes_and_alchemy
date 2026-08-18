@@ -69,4 +69,6 @@ func clear_occupation(mark_secured: bool = true) -> MonsterOccupationDefinition:
 	return cleared
 
 func get_stage_name() -> String:
-	return Stage.keys()[stage].capitalize()
+	var translation_key := "SPOT_STAGE_%s" % Stage.keys()[stage]
+	var translated := tr(translation_key)
+	return Stage.keys()[stage].capitalize() if translated == translation_key else translated

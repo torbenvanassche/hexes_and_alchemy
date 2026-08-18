@@ -42,3 +42,5 @@ func get_description() -> String:
 func get_difficulty() -> AdventurerRank.Rank:
 	return AdventurerRank.clamp_rank(difficulty)
 
+func get_security_duration(base_duration: float) -> float:
+	return maxf(0.0, base_duration) * security_duration_multiplier

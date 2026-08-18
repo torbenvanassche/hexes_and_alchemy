@@ -66,7 +66,7 @@ func execute_quest(q: Quest) -> void:
 	var duration := get_quest_duration(q.quest_key, investigate_time)
 	var occupation := get_occupation()
 	if behaviour == "secure" and occupation != null:
-		duration *= occupation.security_duration_multiplier
+		duration = occupation.get_security_duration(duration)
 	await get_tree().create_timer(duration).timeout
 
 	var danger_multiplier := 0.0 if state_machine.get_current_state() == "SECURED" else 1.0

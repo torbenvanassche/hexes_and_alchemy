@@ -12,11 +12,7 @@ func setup(operation: HubOperation) -> void:
 	if not is_node_ready():
 		call_deferred("setup", operation)
 		return
-	var operation_key := "QUEST_TYPE_%s" % operation.operation_type.to_upper()
-	var operation_name := tr(operation_key)
-	if operation_name == operation_key:
-		operation_name = operation.operation_type.capitalize()
-	title.text = operation_name
+	title.text = operation.get_display_name()
 	detail.text = tr("HUB_OPERATION_DETAIL") % [_get_location_name(operation), operation.get_activity_name()]
 	party.text = tr("HUB_PARTY_LABEL") % operation.get_assigned_npc_names()
 	party.clip_text = true

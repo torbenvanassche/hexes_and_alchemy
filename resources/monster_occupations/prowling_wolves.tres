@@ -5,9 +5,7 @@
 [resource]
 script = ExtResource("1_monster")
 id = &"prowling_wolves"
-display_name = "Prowling Wolves"
 translation_key_name = "MONSTER_PROWLING_WOLVES_NAME"
-description = "A hungry wolf pack has claimed the surrounding hunting grounds."
 description_key = "MONSTER_PROWLING_WOLVES_DESCRIPTION"
 spawn_weight = 1.25
 difficulty = 1

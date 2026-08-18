@@ -72,8 +72,8 @@ func _apply_members_scroll_height() -> void:
 
 func _get_faction_info_tooltip(faction: FactionState) -> String:
 	var lines: Array[String] = []
-	lines.append("%s: %s" % [tr("HUB_FACTION_ROLES_LABEL"), ", ".join(faction.roles)])
-	lines.append(tr("HUB_FACTION_RESPONSIBILITIES_LABEL") + ":")
-	for responsibility: String in faction.responsibilities:
+	lines.append(tr("UI_LABEL_VALUE") % [tr("HUB_FACTION_ROLES_LABEL"), ", ".join(faction.get_role_display_names())])
+	lines.append(tr("UI_HEADING") % tr("HUB_FACTION_RESPONSIBILITIES_LABEL"))
+	for responsibility: String in faction.get_responsibility_display_names():
 		lines.append("- " + responsibility)
 	return "\n".join(lines)

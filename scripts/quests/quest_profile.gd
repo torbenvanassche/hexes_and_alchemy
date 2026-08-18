@@ -19,6 +19,12 @@ class_name QuestProfile extends Resource
 @export var outcomes: Array[QuestOutcome] = []
 @export var modifiers: Dictionary = {}
 
+@export_group("World Progress")
+@export var completion_spot_stage: SpotProgress.Stage = SpotProgress.Stage.UNKNOWN
+@export var occupied_completion_spot_stage: SpotProgress.Stage = SpotProgress.Stage.UNKNOWN
+@export var occupation_must_be_revealed := true
+@export var objective_state_spot_stage_overrides: Dictionary[String, int] = {}
+
 @export_group("Occupation")
 @export var requires_revealed_occupation := false
 @export var blocked_by_active_occupation := false
@@ -37,6 +43,9 @@ func get_behaviour() -> String:
 	if behaviour != "":
 		return behaviour
 	return quest_key
+
+func get_required_role() -> String:
+	return required_role
 
 func is_available_for_state(state_name: String) -> bool:
 	return available_states.is_empty() or available_states.has(state_name)
@@ -248,3 +257,14 @@ func get_float_modifier(key: String, fallback: float) -> float:
 
 func get_int_modifier(key: String, fallback: int) -> int:
 	return int(modifiers.get(key, fallback))
+
+func get_completion_spot_stage(objective: QuestObjective) -> SpotProgress.Stage:
+	if objective != null and objective.has_occupation():
+		if not occupation_must_be_revealed or objective.is_occupation_revealed():
+			if occupied_completion_spot_stage != SpotProgress.Stage.UNKNOWN:
+				return occupied_completion_spot_stage
+	if objective != null and objective.state_machine != null:
+		var state_name := objective.state_machine.get_current_state()
+		if objective_state_spot_stage_overrides.has(state_name):
+			return int(objective_state_spot_stage_overrides[state_name])
+	return completion_spot_stage

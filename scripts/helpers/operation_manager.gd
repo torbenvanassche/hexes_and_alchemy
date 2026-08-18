@@ -55,7 +55,7 @@ func _on_quest_state_changed(_state: String, operation: HubOperation) -> void:
 	if previous_state != operation.state and operation.state in [HubOperation.State.EN_ROUTE, HubOperation.State.IN_PROGRESS, HubOperation.State.RETURNING]:
 		var hub := _get_hub()
 		if hub != null:
-			hub.record_activity("%s: %s" % [operation.operation_type.capitalize(), operation.get_state_name()])
+			hub.record_activity(tr("HUB_ACTIVITY_OPERATION_STATE") % [operation.get_display_name(), operation.get_state_name()])
 	operations_changed.emit()
 	if operation.state == HubOperation.State.COMPLETE and auto_resolve_completed_quests and not operation.reward_resolved:
 		operation.reward_resolved = true
@@ -68,7 +68,7 @@ func _on_quest_completed(operation: HubOperation) -> void:
 		return
 	operation.state = HubOperation.State.COMPLETE
 	operation.reward_resolved = true
-	operation.result_text = "Completed"
+	operation.result_text = tr("OPERATION_RESULT_COMPLETED")
 	var quest := operation.quest
 	var hub := _get_hub()
 	if hub != null and not operation.completion_recorded:
@@ -92,27 +92,13 @@ func _update_spot_after_operation(quest: Quest) -> void:
 	if spot == null:
 		return
 	var objective := quest.get_objective()
-	var behaviour := quest.quest_key
-	if objective != null:
-		behaviour = objective.get_quest_behaviour(quest.quest_key, quest.quest_key)
-	match behaviour:
-		"survey", "prospect":
-			spot.stage = SpotProgress.Stage.INFESTED if objective != null and objective.has_occupation() and objective.is_occupation_revealed() else SpotProgress.Stage.SURVEYED
-		"secure":
-			spot.stage = SpotProgress.Stage.INFESTED if objective != null and objective.has_occupation() else SpotProgress.Stage.SECURED
-		"delve":
-			if objective != null and objective.has_occupation():
-				spot.stage = SpotProgress.Stage.INFESTED
-			elif objective != null and objective.state_machine.get_current_state() == "DANGEROUS":
-				spot.stage = SpotProgress.Stage.DANGEROUS
-			else:
-				spot.stage = SpotProgress.Stage.CLEARED
-		"extract", "forage", "harvest", "timber", "hunt":
-			spot.stage = SpotProgress.Stage.INFESTED if objective != null and objective.has_occupation() and objective.is_occupation_revealed() else SpotProgress.Stage.AVAILABLE
-		"reopen":
-			spot.stage = SpotProgress.Stage.AVAILABLE
-		"scout":
-			spot.stage = SpotProgress.Stage.MAPPED
+	var profile := quest.get_profile()
+	if profile != null:
+		var completion_stage := profile.get_completion_spot_stage(objective)
+		if completion_stage != SpotProgress.Stage.UNKNOWN:
+			spot.stage = completion_stage
+	elif quest.quest_key == "scout":
+		spot.stage = SpotProgress.Stage.MAPPED
 	spot.last_operation_type = quest.quest_key
 
 func _capture_available_quest_types(quest: Quest) -> void:

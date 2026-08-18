@@ -54,10 +54,10 @@ func _refresh() -> void:
 	name_label.text = _get_npc_display_name()
 	rank_label.text = tr("ADVENTURER_ROSTER_RANK") % npc.get_rank_progress_label()
 	status_label.text = npc.get_activity_status_label()
-	identity_label.text = "%s: %s" % [tr("NPC_PROFESSION"), npc.get_profession_label()]
-	role_label.text = "%s: %s" % [tr("NPC_ROLE"), npc.get_role_label()]
-	traits_label.text = "%s: %s" % [tr("NPC_TRAITS"), npc.get_traits_label()]
-	earnings_label.text = "%s: %s" % [tr("NPC_EARNINGS"), npc.earned_currency]
+	identity_label.text = tr("UI_LABEL_VALUE") % [tr("NPC_PROFESSION"), npc.get_profession_label()]
+	role_label.text = tr("UI_LABEL_VALUE") % [tr("NPC_ROLE"), npc.get_role_label()]
+	traits_label.text = tr("UI_LABEL_VALUE") % [tr("NPC_TRAITS"), npc.get_traits_label()]
+	earnings_label.text = tr("UI_LABEL_VALUE") % [tr("NPC_EARNINGS"), npc.earned_currency]
 	_update_window_title()
 
 	_set_equipment_slot(SLOT_WEAPON, tr("NPC_EQUIPMENT_WEAPON"), npc.equipment.weapon)

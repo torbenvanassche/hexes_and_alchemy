@@ -1,18 +1,14 @@
 class_name DataManager extends Node
 
-@export_group("Scene Data")
-@export var hexes: Array[HexInfo] = []
-@export var structures: Array[StructureInfo] = []
-@export var scenes: Array[SceneInfo] = []
+@export var catalog: GameContentCatalog
 
-@export_group("World Data")
-@export var regions: Array[RegionInfo] = []
-
-@export_group("Item Data")
-@export var items: Array[ItemInfo] = []
-
-@export_group("NPC Data")
-@export var npcs: Array[NpcInfo] = []
+var hexes: Array[HexInfo] = []
+var structures: Array[StructureInfo] = []
+var scenes: Array[SceneInfo] = []
+var regions: Array[RegionInfo] = []
+var items: Array[ItemInfo] = []
+var npcs: Array[NpcInfo] = []
+var faction_definitions: Array[FactionDefinition] = []
 
 var scene_data: Array[SceneInfo] = []
 var _scene_lookup: Dictionary[StringName, SceneInfo] = {}
@@ -20,7 +16,7 @@ var _item_lookup: Dictionary[StringName, ItemInfo] = {}
 var _node_lookup: Dictionary[int, SceneInfo] = {}
 var _region_scene_tables: Dictionary[RegionInfo, Dictionary] = {}
 
-var ocean_descriptor: RegionInfo = preload("res://resources/region_info/ocean.tres");
+var ocean_descriptor: RegionInfo
 
 const CUBE_DIRS : Array[Vector3i] = [
 	Vector3i(1,-1,0), Vector3i(1,0,-1), Vector3i(0,1,-1),
@@ -30,10 +26,10 @@ const CUBE_DIRS : Array[Vector3i] = [
 static var instance: DataManager;
 func _ready() -> void:
 	DataManager.instance = self;
+	_load_catalog()
 	
-	scene_data.append_array(hexes)
-	scene_data.append_array(structures);
-	scene_data.append_array(scenes)
+	if catalog != null:
+		scene_data.assign(catalog.get_scene_data())
 	
 	for object in scene_data:
 		object.initialize();
@@ -48,12 +44,30 @@ func _ready() -> void:
 
 	_warm_world_scene_cache()
 
+func _load_catalog() -> void:
+	hexes.clear()
+	structures.clear()
+	scenes.clear()
+	regions.clear()
+	items.clear()
+	npcs.clear()
+	faction_definitions.clear()
+	if catalog == null:
+		push_error("DataManager requires a GameContentCatalog resource.")
+		return
+	hexes.assign(catalog.hexes)
+	structures.assign(catalog.structures)
+	scenes.assign(catalog.scenes)
+	regions.assign(catalog.regions)
+	items.assign(catalog.items)
+	npcs.assign(catalog.npcs)
+	faction_definitions.assign(catalog.faction_definitions)
+	ocean_descriptor = catalog.ocean_region
+
 func _warm_world_scene_cache() -> void:
 	var world_scenes: Array[SceneInfo] = []
-	for hex_info in hexes:
-		world_scenes.append(hex_info)
-	for structure_info in structures:
-		world_scenes.append(structure_info)
+	if catalog != null:
+		world_scenes.assign(catalog.get_world_scene_data())
 	for scene_info in world_scenes:
 		if scene_info == null or scene_info.packed_scene == null:
 			continue

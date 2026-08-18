@@ -11,6 +11,12 @@
 script = ExtResource("1_profile")
 quest_key = "delve"
 behaviour = "delve"
+completion_spot_stage = 5
+occupied_completion_spot_stage = 8
+occupation_must_be_revealed = false
+objective_state_spot_stage_overrides = {
+"DANGEROUS": 3
+}
 required_role = "delver"
 translation_key_name = "QUEST_TYPE_DELVE"
 description_key = "QUEST_DESC_RUINS_DELVE"

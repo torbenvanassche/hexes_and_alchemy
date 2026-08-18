@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://rggfeth3x6te" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_tavern_blue.glb" id="1_244u3"]
 [ext_resource type="Script" uid="uid://7q4dr2w3g7sa" path="res://scripts/interactions/interactable_locations/tavern.gd" id="1_isasx"]
+[ext_resource type="Resource" path="res://resources/recruitment/default_recruitment_rules.tres" id="2_recruitment_rules"]
 [ext_resource type="Material" uid="uid://c66vbca7lgh6m" path="res://materials/kay_fantasy_default.tres" id="3_244u3"]
 [ext_resource type="Resource" path="res://resources/scene_info/ui/tavern_recruitment_ui.tres" id="4_recruitment"]
 [ext_resource type="Script" uid="uid://6t4u66o5q6po" path="res://scripts/scene_manager/scene_info.gd" id="5_scene_info"]
@@ -15,6 +16,7 @@ size = Vector3(1.173315, 1.3972301, 1.2564573)
 [node name="tavern" type="Node3D" unique_id=1607926184 node_paths=PackedStringArray("recreation_anchor")]
 script = ExtResource("1_isasx")
 recreation_anchor = NodePath("recreation_anchor")
+recruitment_rules = ExtResource("2_recruitment_rules")
 additional_ui = Array[ExtResource("5_scene_info")]([ExtResource("4_recruitment")])
 
 [node name="Root Scene" parent="." unique_id=1174146906 instance=ExtResource("1_244u3")]

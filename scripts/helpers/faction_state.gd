@@ -27,9 +27,42 @@ func apply_definition(value: FactionDefinition) -> void:
 	responsibilities = definition.responsibilities.duplicate()
 
 func get_display_name() -> String:
+	if definition != null:
+		return definition.get_display_name()
 	var translation_key := "FACTION_%s_NAME" % id.to_upper()
 	var translated := tr(translation_key)
-	return display_name if translated == translation_key else translated
+	if translated != translation_key:
+		return translated
+	return display_name if not display_name.is_empty() else String(id).capitalize()
+
+func get_role_display_names() -> Array[String]:
+	if definition != null:
+		return definition.get_role_display_names()
+	var labels: Array[String] = []
+	for role: String in roles:
+		var translation_key := "QUEST_ROLE_%s" % role.to_upper()
+		var translated := tr(translation_key)
+		labels.append(role.capitalize().replace("_", " ") if translated == translation_key else translated)
+	return labels
+
+func get_responsibility_display_names() -> Array[String]:
+	if definition != null:
+		return definition.get_responsibility_display_names()
+	var labels: Array[String] = []
+	for responsibility: String in responsibilities:
+		var translated := tr(responsibility)
+		labels.append(responsibility if translated == responsibility else translated)
+	return labels
+
+func supports_role(role_name: String) -> bool:
+	if definition != null:
+		return definition.supports_role(role_name)
+	return roles.has(role_name)
+
+func get_recovery_duration(base_duration: float) -> float:
+	if definition != null:
+		return definition.get_recovery_duration(base_duration)
+	return maxf(0.0, base_duration)
 
 func add_member(member: NPC) -> void:
 	if member != null and not members.has(member):

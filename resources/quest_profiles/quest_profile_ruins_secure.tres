@@ -10,6 +10,9 @@
 script = ExtResource("1_profile")
 quest_key = "secure"
 behaviour = "secure"
+completion_spot_stage = 4
+occupied_completion_spot_stage = 8
+occupation_must_be_revealed = false
 required_role = "security"
 translation_key_name = "QUEST_TYPE_SECURE"
 description_key = "QUEST_DESC_RUINS_SECURE"

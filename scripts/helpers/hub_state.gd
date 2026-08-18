@@ -14,13 +14,6 @@ var spots: Dictionary[Vector3i, SpotProgress] = {}
 var activity_log: Array[String] = []
 @export_range(4, 64, 1) var max_activity_entries := 24
 
-const FACTION_DEFINITIONS: Array[FactionDefinition] = [
-	preload("res://resources/faction_definitions/hunters.tres"),
-	preload("res://resources/faction_definitions/adventurers.tres"),
-	preload("res://resources/faction_definitions/crafters.tres"),
-	preload("res://resources/faction_definitions/tenders.tres"),
-]
-
 func _ready() -> void:
 	currency = starting_currency
 	var hub_inventory := Inventory.new()
@@ -31,11 +24,14 @@ func _ready() -> void:
 	stockpile.name = "HubStockpile"
 	add_child(stockpile)
 	stockpile.changed.connect(changed.emit)
-	_initialize_factions()
+	_initialize_factions.call_deferred()
 
 func _initialize_factions() -> void:
 	factions.clear()
-	for definition: FactionDefinition in FACTION_DEFINITIONS:
+	var definitions: Array[FactionDefinition] = []
+	if DataManager.instance != null:
+		definitions.assign(DataManager.instance.faction_definitions)
+	for definition: FactionDefinition in definitions:
 		if definition == null:
 			continue
 		var faction := FactionState.new(definition.id, definition.display_name, definition.roles, definition.responsibilities)
@@ -46,8 +42,8 @@ func get_required_role_for_quest(quest: Quest) -> String:
 	if quest == null:
 		return ""
 	var profile := quest.get_profile()
-	if profile != null and profile.required_role != "":
-		return profile.required_role
+	if profile != null and profile.get_required_role() != "":
+		return profile.get_required_role()
 	var job_key := profile.get_behaviour() if profile != null else quest.quest_key
 	match job_key:
 		"scout", "survey":
@@ -103,7 +99,7 @@ func get_activity_log() -> Array[String]:
 func get_faction_for_roles(roles: Array[String]) -> FactionState:
 	for faction: FactionState in factions.values():
 		for role in roles:
-			if faction.roles.has(role):
+			if faction.supports_role(role):
 				return faction
 	return factions.get(&"adventurers") as FactionState
 
@@ -119,11 +115,11 @@ func get_faction_for_npc(npc: NPC) -> FactionState:
 func get_faction_for_quest(quest: Quest) -> FactionState:
 	if quest != null:
 		for faction: FactionState in factions.values():
-			if faction.definition != null and faction.definition.preferred_quest_types.has(quest.quest_key):
+			if faction.definition != null and faction.definition.prefers_quest(quest):
 				return faction
 	var required_role := get_required_role_for_quest(quest)
 	for faction: FactionState in factions.values():
-		if faction.roles.has(required_role):
+		if faction.supports_role(required_role):
 			return faction
 	return factions.get(&"adventurers") as FactionState
 
@@ -228,7 +224,7 @@ func _get_operation_label(quest: Quest) -> String:
 
 func get_stockpile_summary() -> String:
 	if stockpile == null:
-		return "Stockpile: empty"
+		return tr("HUB_STOCKPILE_EMPTY")
 	var entries: Array[String] = []
 	for slot: ContentSlotResource in stockpile.data:
 		if slot == null or slot.get_content() == null or slot.count <= 0:
@@ -237,5 +233,5 @@ func get_stockpile_summary() -> String:
 		if content != null:
 			entries.append("%s x%s" % [content.get_display_name(), slot.count])
 	if entries.is_empty():
-		return "Stockpile: empty"
-	return "Stockpile: " + ", ".join(entries)
+		return tr("HUB_STOCKPILE_EMPTY")
+	return tr("HUB_STOCKPILE_SUMMARY") % ", ".join(entries)

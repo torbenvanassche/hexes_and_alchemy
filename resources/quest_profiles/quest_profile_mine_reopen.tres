@@ -9,6 +9,7 @@
 script = ExtResource("1_profile")
 quest_key = "reopen"
 behaviour = "reopen"
+completion_spot_stage = 6
 required_role = "crafter"
 translation_key_name = "QUEST_TYPE_REOPEN_MINE"
 description_key = "QUEST_DESC_MINE_REOPEN"

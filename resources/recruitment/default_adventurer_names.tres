@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="AdventurerNamePool" format=3]
+
+[ext_resource type="Script" path="res://scripts/recruitment/adventurer_name_pool.gd" id="1_name_pool"]
+
+[resource]
+script = ExtResource("1_name_pool")
+first_names = Array[String]([
+	"Ada", "Bram", "Cora", "Dain",
+	"Elia", "Finn", "Greta", "Hale",
+	"Iris", "Joren", "Kessa", "Lio",
+	"Mara", "Nils", "Orla", "Perrin",
+	"Rhea", "Soren", "Tamsin", "Ulric",
+	"Vera", "Wren", "Yara", "Zane"
+])
+last_names = Array[String]([
+	"Ash", "Briar", "Crow", "Dale",
+	"Ember", "Fenn", "Grove", "Holt",
+	"Iron", "Keen", "Lark", "Moor",
+	"North", "Reed", "Stone", "Vale"
+])

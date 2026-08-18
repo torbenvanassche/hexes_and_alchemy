@@ -57,7 +57,7 @@ func execute_quest(q: Quest) -> void:
 	var duration := get_quest_duration(q.quest_key, quest_time)
 	var occupation := get_occupation()
 	if behaviour == "secure" and occupation != null:
-		duration *= occupation.security_duration_multiplier
+		duration = occupation.get_security_duration(duration)
 	await get_tree().create_timer(duration).timeout;
 
 	_pending_behaviour = behaviour

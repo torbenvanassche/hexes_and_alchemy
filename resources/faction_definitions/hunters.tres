@@ -5,7 +5,6 @@
 [resource]
 script = ExtResource("1_definition")
 id = &"hunters"
-display_name = "Hunters"
 roles = Array[String](["hunter"])
-responsibilities = Array[String](["Explore and map new locations", "Survey unfamiliar sites", "Hunt game and supply food"])
+responsibilities = Array[String](["FACTION_HUNTERS_RESPONSIBILITY_EXPLORE", "FACTION_HUNTERS_RESPONSIBILITY_SURVEY", "FACTION_HUNTERS_RESPONSIBILITY_HUNT"])
 preferred_quest_types = Array[String](["scout", "survey", "hunt", "trap_hunt"])

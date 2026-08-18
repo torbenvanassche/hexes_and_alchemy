@@ -22,7 +22,7 @@ func setup(npc: NPC) -> void:
 func _get_activity_label(npc: NPC) -> String:
 	var status := npc.get_activity_status_label()
 	if npc.current_quest != null:
-		return "%s: %s" % [status, _get_quest_label(npc.current_quest)]
+		return tr("HUB_MEMBER_ACTIVITY_QUEST") % [status, _get_quest_label(npc.current_quest)]
 	return status
 
 func _get_quest_label(quest: Quest) -> String:

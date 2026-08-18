@@ -5,7 +5,6 @@
 [resource]
 script = ExtResource("1_definition")
 id = &"tenders"
-display_name = "Tenders"
 roles = Array[String](["tender"])
-responsibilities = Array[String](["Maintain the settlement", "Support farming and water"])
+responsibilities = Array[String](["FACTION_TENDERS_RESPONSIBILITY_SETTLEMENT", "FACTION_TENDERS_RESPONSIBILITY_STEWARDSHIP"])
 preferred_quest_types = Array[String](["forage", "harvest", "fell_timber", "replant", "clear", "plant", "water", "rush_harvest", "careful_harvest", "fill", "draw_extra", "purify"])

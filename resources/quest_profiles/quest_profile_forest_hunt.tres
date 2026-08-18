@@ -11,6 +11,8 @@
 script = ExtResource("1_profile")
 quest_key = "hunt"
 behaviour = "hunt"
+completion_spot_stage = 6
+occupied_completion_spot_stage = 8
 required_role = "hunter"
 translation_key_name = "QUEST_TYPE_HUNT"
 description_key = "QUEST_DESC_FOREST_HUNT"

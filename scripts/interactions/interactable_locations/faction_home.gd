@@ -40,11 +40,14 @@ func create_member(profile: SceneInfo, recruitment_data: Dictionary = {}) -> Sce
 
 	var npc := npc_scene_instance.node as NPC
 	if npc != null:
-		if not recruitment_data.is_empty():
+		var identity_data := recruitment_data
+		if identity_data.is_empty():
+			identity_data = _create_starting_identity(npc.npc_info)
+		if not identity_data.is_empty():
 			npc.configure_recruited_identity(
-				str(recruitment_data.get("display_name", "")),
-				AdventurerRank.clamp_rank(int(recruitment_data.get("rank", int(AdventurerRank.Rank.F)))),
-				_get_recruited_traits(recruitment_data)
+				str(identity_data.get("display_name", "")),
+				AdventurerRank.clamp_rank(int(identity_data.get("rank", int(AdventurerRank.Rank.F)))),
+				_get_recruited_traits(identity_data)
 			)
 		npc.set_operation_home(member_spawn)
 		npc.set_recovery_anchor(_get_recovery_anchor())
@@ -115,10 +118,25 @@ func _get_recovery_anchor() -> Node3D:
 	var tavern := get_settlement_service(&"Tavern") as Tavern
 	return tavern.get_recreation_anchor() if tavern != null else null
 
-func _get_recruited_traits(recruitment_data: Dictionary) -> Array[String]:
-	var result: Array[String] = []
-	for trait_name in recruitment_data.get("traits", []):
-		result.append(str(trait_name))
+func _create_starting_identity(profile: NpcInfo) -> Dictionary:
+	if profile == null:
+		return {}
+	var tavern := get_settlement_service(&"Tavern") as Tavern
+	var display_name := tavern.generate_adventurer_name() if tavern != null else ""
+	if display_name.is_empty():
+		display_name = "%s %s" % [profile.get_display_name(), get_member_count() + 1]
+	return {
+		"display_name": display_name,
+		"rank": int(profile.starting_rank),
+		"traits": profile.traits,
+	}
+
+func _get_recruited_traits(recruitment_data: Dictionary) -> Array[AdventurerTraitDefinition]:
+	var result: Array[AdventurerTraitDefinition] = []
+	for trait_value in recruitment_data.get("traits", []):
+		var definition := trait_value as AdventurerTraitDefinition
+		if definition != null:
+			result.append(definition)
 	return result
 
 func _connect_member_signals(npc: NPC) -> void:
