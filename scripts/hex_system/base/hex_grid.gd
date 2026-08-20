@@ -55,7 +55,7 @@ var initialized: bool = false;
 @export_range(0, 8, 1) var settlement_feature_buffer := 1
 
 static var RADIUS_IN: float = 1.0
-const HALF_SLOPE_INFO := preload("res://resources/scene_info/hex/hex_grass_slope_half.tres")
+const HALF_SLOPE_INFO_PATH := "res://resources/scene_info/hex/hex_grass_slope_half.tres"
 
 var chunks: Dictionary[Vector2i, HexChunk] = {}
 var region_instances: Dictionary[RegionInfo, Array] = {} 
@@ -77,6 +77,7 @@ var _chunk_post_process_queue: Array[Dictionary] = []
 var _pending_structure_hexes: Dictionary[Vector3i, bool] = {}
 var _structure_generation_queue: Array[Dictionary] = []
 var _initial_generation_completed := false
+var _half_slope_info: HexInfo
 var _cached_slope_profile: HexSlope
 @onready var pathfinder: HexAStar = HexAStar.new(self)
 
@@ -709,9 +710,17 @@ func _resolve_slope_entrances(chunk: HexChunk) -> void:
 	_reserve_slope_approaches(chunk)
 
 func _get_cached_slope_profile() -> HexSlope:
+	var half_slope_info := _get_half_slope_info()
+	if half_slope_info == null:
+		return null
 	if not is_instance_valid(_cached_slope_profile):
-		_cached_slope_profile = HALF_SLOPE_INFO.packed_scene.instantiate() as HexSlope
+		_cached_slope_profile = half_slope_info.packed_scene.instantiate() as HexSlope
 	return _cached_slope_profile
+
+func _get_half_slope_info() -> HexInfo:
+	if _half_slope_info == null:
+		_half_slope_info = load(HALF_SLOPE_INFO_PATH) as HexInfo
+	return _half_slope_info
 
 func _try_replace_with_slope_entrance(
 	scene_instance: SceneInstance,
@@ -1026,10 +1035,13 @@ func _replace_with_half_slope(scene_instance: SceneInstance, sampled_elevation: 
 	var previous_hex := scene_instance.node as HexBase
 	if previous_hex == null:
 		return
+	var half_slope_info := _get_half_slope_info()
+	if half_slope_info == null:
+		return
 
 	var region := previous_hex.region
 	var was_explored := previous_hex.is_explored
-	var replacement_instance := HALF_SLOPE_INFO.get_instance()
+	var replacement_instance := half_slope_info.get_instance()
 	replace(scene_instance, replacement_instance, region)
 
 	var slope := replacement_instance.node as HexSlope
