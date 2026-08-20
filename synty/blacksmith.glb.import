@@ -1,0 +1,570 @@
+[remap]
+
+importer="scene"
+importer_version=1
+type="PackedScene"
+uid="uid://cm1injjl6lck2"
+path="res://.godot/imported/blacksmith.glb-15b022c3ba189f3a03e722a0865756b5.scn"
+
+[deps]
+
+source_file="res://synty/blacksmith.glb"
+dest_files=["res://.godot/imported/blacksmith.glb-15b022c3ba189f3a03e722a0865756b5.scn"]
+
+[params]
+
+nodes/root_type=""
+nodes/root_name=""
+nodes/root_script=null
+mesh_library/use_node_names_as_mesh_names=false
+array_mesh/deduplicate_surfaces=true
+nodes/apply_root_scale=true
+nodes/root_scale=1.0
+nodes/import_as_skeleton_bones=false
+nodes/use_name_suffixes=true
+nodes/use_node_type_suffixes=true
+meshes/ensure_tangents=true
+meshes/generate_lods=true
+meshes/create_shadow_meshes=true
+meshes/light_baking=1
+meshes/lightmap_texel_size=0.2
+meshes/force_disable_compression=false
+skins/use_named_skins=true
+animation/import=true
+animation/fps=30
+animation/trimming=false
+animation/remove_immutable_tracks=true
+animation/import_rest_as_RESET=false
+import_script/path=""
+materials/extract=0
+materials/extract_format=0
+materials/extract_path=""
+_subresources={
+"materials": {
+"Castle_Wall_01": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://materials/synty_fantasy_kingdom/Castle_Wall_01.tres",
+"use_external/path": "uid://ypv72rtxeqy6"
+},
+"Glass_01": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://materials/synty_fantasy_kingdom/Glass_01.tres",
+"use_external/path": "uid://181bn6b27nxt"
+},
+"PolygonFantasyKingdom_Mat_01_A": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://materials/synty_fantasy_kingdom/PolygonFantasyKingdom_Mat_01_A.tres",
+"use_external/path": "uid://c4o0nmtpab5vj"
+},
+"PolygonFantasyKingdom_Mat_01_C": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://materials/synty_fantasy_kingdom/PolygonFantasyKingdom_Mat_01_C.tres",
+"use_external/path": "uid://baoh6ei4tjwoc"
+}
+},
+"meshes": {
+"blacksmith_SM_Bld_Castle_Floor_Stone_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_Castle_Floor_Stone_01.res",
+"save_to_file/path": "uid://c66tylm7w3rni"
+},
+"blacksmith_SM_Bld_Castle_Floor_Stone_03": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_Castle_Floor_Stone_03.res",
+"save_to_file/path": "uid://myuqt2puw5t3"
+},
+"blacksmith_SM_Bld_House_Base_Corner_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_House_Base_Corner_01.res",
+"save_to_file/path": "uid://b3723glrwnkji"
+},
+"blacksmith_SM_Bld_House_Base_Corner_02": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_House_Base_Corner_02.res",
+"save_to_file/path": "uid://ydgm0wwwhi47"
+},
+"blacksmith_SM_Bld_House_Base_Wall_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_House_Base_Wall_01.res",
+"save_to_file/path": "uid://bkw8ob8tddgtr"
+},
+"blacksmith_SM_Bld_House_Base_Wall_02": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_House_Base_Wall_02.res",
+"save_to_file/path": "uid://brdshmlqbswro"
+},
+"blacksmith_SM_Bld_House_Chimney_Stone_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_House_Chimney_Stone_01.res",
+"save_to_file/path": "uid://rlgfbc1v8x32"
+},
+"blacksmith_SM_Bld_House_Chimney_Stone_Base_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_House_Chimney_Stone_Base_01.res",
+"save_to_file/path": "uid://dyxmilfhpxa5s"
+},
+"blacksmith_SM_Bld_House_Floor_Wood_02": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_House_Floor_Wood_02.res",
+"save_to_file/path": "uid://cttja1aq24hg8"
+},
+"blacksmith_SM_Bld_House_Roof_Tile_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_House_Roof_Tile_01.res",
+"save_to_file/path": "uid://ojq7l8d7wpv6"
+},
+"blacksmith_SM_Bld_House_Roof_Tile_Edge_End_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_House_Roof_Tile_Edge_End_01.res",
+"save_to_file/path": "uid://bkujtstvhlmlj"
+},
+"blacksmith_SM_Bld_House_Roof_Tile_End_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_House_Roof_Tile_End_01.res",
+"save_to_file/path": "uid://ykltvl7y5yco"
+},
+"blacksmith_SM_Bld_House_Roof_Tile_End_Half_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_House_Roof_Tile_End_Half_01.res",
+"save_to_file/path": "uid://b2sghiq0fqke5"
+},
+"blacksmith_SM_Bld_House_Roof_Tile_Half_02": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_House_Roof_Tile_Half_02.res",
+"save_to_file/path": "uid://bolveh0iyf251"
+},
+"blacksmith_SM_Bld_House_Roof_Tile_Half_03": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_House_Roof_Tile_Half_03.res",
+"save_to_file/path": "uid://dnww2og3u0p5w"
+},
+"blacksmith_SM_Bld_House_Roof_Tile_Intersection_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_House_Roof_Tile_Intersection_01.res",
+"save_to_file/path": "uid://d3adhgqftife8"
+},
+"blacksmith_SM_Bld_House_Roof_Tile_Peak_Cap_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_House_Roof_Tile_Peak_Cap_01.res",
+"save_to_file/path": "uid://cbohhtmtoeaiw"
+},
+"blacksmith_SM_Bld_House_Roof_Tile_Peak_Cap_Edge_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_House_Roof_Tile_Peak_Cap_Edge_01.res",
+"save_to_file/path": "uid://b80urta6y42ue"
+},
+"blacksmith_SM_Bld_House_Roof_Tile_Peak_Cap_Half_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_House_Roof_Tile_Peak_Cap_Half_01.res",
+"save_to_file/path": "uid://dwe21koe8sixo"
+},
+"blacksmith_SM_Bld_House_Roof_Tile_Window_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_House_Roof_Tile_Window_01.res",
+"save_to_file/path": "uid://kaaiuayamwwy"
+},
+"blacksmith_SM_Bld_House_Roof_Tile_Window_01_Glass": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_House_Roof_Tile_Window_01_Glass.res",
+"save_to_file/path": "uid://dhgqbjdk1a1ie"
+},
+"blacksmith_SM_Bld_House_Stairs_Stone_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_House_Stairs_Stone_01.res",
+"save_to_file/path": "uid://etdd77cbew8w"
+},
+"blacksmith_SM_Bld_House_Stairs_Stone_Block_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_House_Stairs_Stone_Block_01.res",
+"save_to_file/path": "uid://cu4yabtkj61py"
+},
+"blacksmith_SM_Bld_House_Supports_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_House_Supports_01.res",
+"save_to_file/path": "uid://c4mayya2giqad"
+},
+"blacksmith_SM_Bld_House_Supports_02": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_House_Supports_02.res",
+"save_to_file/path": "uid://crkwnitaxywsw"
+},
+"blacksmith_SM_Bld_House_Wall_02": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_House_Wall_02.res",
+"save_to_file/path": "uid://q1yfalv0rkrl"
+},
+"blacksmith_SM_Bld_House_Wall_03": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_House_Wall_03.res",
+"save_to_file/path": "uid://civ0tgpgk25pl"
+},
+"blacksmith_SM_Bld_House_Wall_Cut_02": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_House_Wall_Cut_02.res",
+"save_to_file/path": "uid://e3402kilge8x"
+},
+"blacksmith_SM_Bld_House_Wall_Door_02": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_House_Wall_Door_02.res",
+"save_to_file/path": "uid://ckc6h0lon2y8f"
+},
+"blacksmith_SM_Bld_House_Wall_Door_02_Door": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_House_Wall_Door_02_Door.res",
+"save_to_file/path": "uid://btqgo7v315byn"
+},
+"blacksmith_SM_Bld_House_Wall_Window_02": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_House_Wall_Window_02.res",
+"save_to_file/path": "uid://cby0xd0wodgfn"
+},
+"blacksmith_SM_Bld_House_Wall_Window_02_Glass": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_House_Wall_Window_02_Glass.res",
+"save_to_file/path": "uid://bhv670yetl1a5"
+},
+"blacksmith_SM_Bld_House_Wall_Window_02_Shutters_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_House_Wall_Window_02_Shutters_01.res",
+"save_to_file/path": "uid://ddsidq5icnf"
+},
+"blacksmith_SM_Bld_House_Wall_Window_02_Shutters_02": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_House_Wall_Window_02_Shutters_02.res",
+"save_to_file/path": "uid://derov73w8cs6m"
+},
+"blacksmith_SM_Bld_House_Wall_Window_06": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_House_Wall_Window_06.res",
+"save_to_file/path": "uid://eb1yruvy71uv"
+},
+"blacksmith_SM_Bld_House_Wall_Window_06_Glass": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_House_Wall_Window_06_Glass.res",
+"save_to_file/path": "uid://cpqt45l7meir0"
+},
+"blacksmith_SM_Bld_House_WoodBeam_02": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_House_WoodBeam_02.res",
+"save_to_file/path": "uid://d2vcom1t3plf8"
+},
+"blacksmith_SM_Bld_House_WoodBeam_03": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Bld_House_WoodBeam_03.res",
+"save_to_file/path": "uid://cmviwirhqw68d"
+},
+"blacksmith_SM_Prop_Anvil_02": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Prop_Anvil_02.res",
+"save_to_file/path": "uid://bgbda4ukum04c"
+},
+"blacksmith_SM_Prop_Bed_04": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Prop_Bed_04.res",
+"save_to_file/path": "uid://dp3d4seuyk1ad"
+},
+"blacksmith_SM_Prop_Camp_Weapon_Rack_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Prop_Camp_Weapon_Rack_01.res",
+"save_to_file/path": "uid://od72kibiwffo"
+},
+"blacksmith_SM_Prop_Camp_Weapon_Rack_Spears_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Prop_Camp_Weapon_Rack_Spears_01.res",
+"save_to_file/path": "uid://4gb5u5fy7x6m"
+},
+"blacksmith_SM_Prop_Chest_05": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Prop_Chest_05.res",
+"save_to_file/path": "uid://bjpcnli44fx2n"
+},
+"blacksmith_SM_Prop_Chest_05_Latch": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Prop_Chest_05_Latch.res",
+"save_to_file/path": "uid://dg1krwb4wr75h"
+},
+"blacksmith_SM_Prop_Chest_05_Lid": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Prop_Chest_05_Lid.res",
+"save_to_file/path": "uid://bi5k4khb7lvyc"
+},
+"blacksmith_SM_Prop_Crate_Stack_02": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Prop_Crate_Stack_02.res",
+"save_to_file/path": "uid://byyq86roav71i"
+},
+"blacksmith_SM_Prop_Grinding_Wheel_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Prop_Grinding_Wheel_01.res",
+"save_to_file/path": "uid://dv43ympm7oc74"
+},
+"blacksmith_SM_Prop_Grinding_Wheel_01_Stone": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Prop_Grinding_Wheel_01_Stone.res",
+"save_to_file/path": "uid://borswkev11hqb"
+},
+"blacksmith_SM_Prop_Sign_Bracket_05": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Prop_Sign_Bracket_05.res",
+"save_to_file/path": "uid://bm1dyxsvujnlu"
+},
+"blacksmith_SM_Prop_Sign_Wood_02": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Prop_Sign_Wood_02.res",
+"save_to_file/path": "uid://qp2i5h57a0h4"
+},
+"blacksmith_SM_Prop_Tether_Beam_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Prop_Tether_Beam_01.res",
+"save_to_file/path": "uid://d2llhmy6yhw7p"
+},
+"blacksmith_SM_Prop_Wood_Pile_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Prop_Wood_Pile_01.res",
+"save_to_file/path": "uid://c4dv6axwq2jsn"
+},
+"blacksmith_SM_Prop_Workbench_01_Preset": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Prop_Workbench_01_Preset.res",
+"save_to_file/path": "uid://bun1culwl2j8x"
+},
+"blacksmith_SM_Prop_Workbench_Forge_01_Flue": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Prop_Workbench_Forge_01_Flue.res",
+"save_to_file/path": "uid://ia8tuxbjqv7m"
+},
+"blacksmith_SM_Prop_Workbench_Forge_01_Preset": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/blacksmith_SM_Prop_Workbench_Forge_01_Preset.res",
+"save_to_file/path": "uid://bvbgn07muwag5"
+}
+},
+"nodes": {
+"PATH:blacksmith/props/SM_Prop_Grinding_01": {
+"node/node_type": "Node3D"
+}
+}
+}
+gltf/naming_version=2
+gltf/embedded_image_handling=1
+gltf/texture_map_mode=1

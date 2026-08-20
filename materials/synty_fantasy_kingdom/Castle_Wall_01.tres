@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://ypv72rtxeqy6"]
+
+[ext_resource type="Texture2D" uid="uid://vcmi5mp466oc" path="res://textures/synty_fantasy_kingdom/Wall_Brick_01.png" id="1_nj8b4"]
+
+[resource]
+resource_name = "Castle_Wall_01"
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+albedo_texture = ExtResource("1_nj8b4")
+roughness = 0.8

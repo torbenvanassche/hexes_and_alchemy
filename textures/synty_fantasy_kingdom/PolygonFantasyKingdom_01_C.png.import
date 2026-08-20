@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c21ya3fh5a86q"
-path.s3tc="res://.godot/imported/pouch_add.png-c7ae9086fdee9f273d5094430fc36d2b.s3tc.ctex"
+uid="uid://bkb4akjyxj0c6"
+path.s3tc="res://.godot/imported/PolygonFantasyKingdom_01_C.png-b53b2e20a3bf56c631029c17dfcc3d49.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://sprites/ui/icons/pouch_add.png"
-dest_files=["res://.godot/imported/pouch_add.png-c7ae9086fdee9f273d5094430fc36d2b.s3tc.ctex"]
+source_file="res://textures/synty_fantasy_kingdom/PolygonFantasyKingdom_01_C.png"
+dest_files=["res://.godot/imported/PolygonFantasyKingdom_01_C.png-b53b2e20a3bf56c631029c17dfcc3d49.s3tc.ctex"]
 
 [params]
 

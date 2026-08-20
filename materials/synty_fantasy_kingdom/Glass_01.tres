@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://181bn6b27nxt"]
+
+[ext_resource type="Texture2D" uid="uid://bkb4akjyxj0c6" path="res://textures/synty_fantasy_kingdom/PolygonFantasyKingdom_01_C.png" id="1_76qvp"]
+
+[resource]
+resource_name = "Glass_01"
+transparency = 4
+albedo_color = Color(1, 1, 1, 0.497)
+albedo_texture = ExtResource("1_76qvp")
+metallic = 0.27099997
+roughness = 0.25800002
