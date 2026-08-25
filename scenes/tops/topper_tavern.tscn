@@ -1,10 +1,9 @@
 [gd_scene format=3 uid="uid://clf621pbnvsbw"]
 
-[ext_resource type="PackedScene" uid="uid://rggfeth3x6te" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_tavern_blue.glb" id="1_244u3"]
 [ext_resource type="Script" uid="uid://7q4dr2w3g7sa" path="res://scripts/interactions/interactable_locations/tavern.gd" id="1_isasx"]
 [ext_resource type="Resource" path="res://resources/recruitment/default_recruitment_rules.tres" id="2_recruitment_rules"]
-[ext_resource type="Material" uid="uid://c66vbca7lgh6m" path="res://materials/kay_fantasy_default.tres" id="3_244u3"]
 [ext_resource type="Resource" path="res://resources/scene_info/ui/tavern_recruitment_ui.tres" id="4_recruitment"]
+[ext_resource type="PackedScene" uid="uid://dmlut1xkoa343" path="res://synty/tavern.glb" id="5_i05if"]
 [ext_resource type="Script" uid="uid://6t4u66o5q6po" path="res://scripts/scene_manager/scene_info.gd" id="5_scene_info"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_isasx"]
@@ -19,10 +18,8 @@ recreation_anchor = NodePath("recreation_anchor")
 recruitment_rules = ExtResource("2_recruitment_rules")
 additional_ui = Array[ExtResource("5_scene_info")]([ExtResource("4_recruitment")])
 
-[node name="Root Scene" parent="." unique_id=1174146906 instance=ExtResource("1_244u3")]
-
-[node name="building_tavern_blue" parent="Root Scene/RootNode" parent_id_path=PackedInt32Array(1174146906, 15054036) index="0" unique_id=899500221]
-surface_material_override/0 = ExtResource("3_244u3")
+[node name="tavern2" parent="." unique_id=215239739 instance=ExtResource("5_i05if")]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
 
 [node name="interaction" type="Area3D" parent="." unique_id=478417135]
 
@@ -38,5 +35,3 @@ shape = SubResource("BoxShape3D_56i7v")
 
 [node name="recreation_anchor" type="Node3D" parent="." unique_id=1475512664]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.13711184, -1.1920929e-07, 0.7027963)
-
-[editable path="Root Scene"]

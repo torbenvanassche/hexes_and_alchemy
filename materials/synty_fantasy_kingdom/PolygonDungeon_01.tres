@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bxk6x3lkqbdxq"]
+
+[ext_resource type="Texture2D" uid="uid://dke88viroq0vx" path="res://textures/synty_dungeon/PolygonDungeon_01.png" id="1_1wrkk"]
+
+[resource]
+resource_name = "PolygonDungeon_01"
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+albedo_texture = ExtResource("1_1wrkk")
+roughness = 0.8

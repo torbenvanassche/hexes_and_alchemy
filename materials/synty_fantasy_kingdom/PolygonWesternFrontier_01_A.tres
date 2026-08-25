@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://ghxj3j612cg"]
+
+[ext_resource type="Texture2D" uid="uid://buneaniuy2kek" path="res://textures/synty_western_frontier/PolygonWesternFrontier_01_A.png" id="1_pqjde"]
+
+[resource]
+resource_name = "PolygonWesternFrontier_01_A"
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+albedo_texture = ExtResource("1_pqjde")
+roughness = 0.8

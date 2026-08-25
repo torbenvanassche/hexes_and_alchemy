@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://8r46bndpfw35"]
+
+[ext_resource type="Texture2D" uid="uid://bn0jpwwnusrat" path="res://textures/synty_fantasy_kingdom/Mud_01.png" id="1_54cwe"]
+[ext_resource type="Texture2D" uid="uid://bqsue20fxvoq7" path="res://textures/synty_fantasy_kingdom/Ground_Base_01_Normals.png" id="2_ytxjf"]
+
+[resource]
+albedo_texture = ExtResource("1_54cwe")
+normal_enabled = true
+normal_texture = ExtResource("2_ytxjf")

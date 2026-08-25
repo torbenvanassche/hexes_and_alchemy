@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="RegionInfo" format=3 uid="uid://mifjntx1haes"]
 
-[ext_resource type="Material" uid="uid://dy8cfh1tcryhi" path="res://materials/kay_dungeons.tres" id="1_material"]
+[ext_resource type="Material" uid="uid://c5i0vkt13bv01" path="res://materials/generic/ancient_ruins.tres" id="1_3wqle"]
 [ext_resource type="Script" uid="uid://dt4im1k7j4jn" path="res://scripts/hex_system/base/hex_info.gd" id="2_hex_script"]
 [ext_resource type="Resource" uid="uid://betpu2iylw1qy" path="res://resources/scene_info/hex/hex_simple.tres" id="3_hex"]
 [ext_resource type="Script" uid="uid://btydeamnhd6x" path="res://scripts/structures/structure_info.gd" id="4_structure_script"]
@@ -25,7 +25,7 @@ distance_weight_start = 20
 distance_weight_end = 48
 near_distance_weight = 0.1
 far_distance_weight = 0.8
-material = ExtResource("1_material")
+material = ExtResource("1_3wqle")
 structures = Dictionary[ExtResource("4_structure_script"), float]({
 ExtResource("5_ruins_structure"): 1.0
 })

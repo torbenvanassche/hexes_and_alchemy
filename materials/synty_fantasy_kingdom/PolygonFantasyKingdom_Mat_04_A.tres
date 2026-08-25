@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://uaoge3ph2pak"]
+
+[ext_resource type="Texture2D" uid="uid://v7ix7yqpar0q" path="res://textures/synty_fantasy_kingdom/PolygonFantasyKingdom_04_A.png" id="1_jb44m"]
+
+[resource]
+resource_name = "PolygonFantasyKingdom_Mat_04_A"
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+albedo_texture = ExtResource("1_jb44m")
+roughness = 0.8

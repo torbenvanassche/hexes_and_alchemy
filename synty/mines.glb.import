@@ -1,0 +1,359 @@
+[remap]
+
+importer="scene"
+importer_version=1
+type="PackedScene"
+uid="uid://bee08sgqm40d2"
+path="res://.godot/imported/mines.glb-9b9f42fb575db5c51a836b7c20263ee6.scn"
+
+[deps]
+
+source_file="res://synty/mines.glb"
+dest_files=["res://.godot/imported/mines.glb-9b9f42fb575db5c51a836b7c20263ee6.scn"]
+
+[params]
+
+nodes/root_type=""
+nodes/root_name=""
+nodes/root_script=null
+mesh_library/use_node_names_as_mesh_names=false
+array_mesh/deduplicate_surfaces=true
+nodes/apply_root_scale=true
+nodes/root_scale=0.25
+nodes/import_as_skeleton_bones=false
+nodes/use_name_suffixes=true
+nodes/use_node_type_suffixes=true
+meshes/ensure_tangents=true
+meshes/generate_lods=true
+meshes/create_shadow_meshes=true
+meshes/light_baking=1
+meshes/lightmap_texel_size=0.2
+meshes/force_disable_compression=false
+skins/use_named_skins=true
+animation/import=true
+animation/fps=30
+animation/trimming=false
+animation/remove_immutable_tracks=true
+animation/import_rest_as_RESET=false
+import_script/path=""
+materials/extract=0
+materials/extract_format=0
+materials/extract_path=""
+_subresources={
+"materials": {
+"Generic_01_A": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://materials/synty_fantasy_kingdom/Generic_01_A.tres",
+"use_external/path": "uid://b0jyd01t1ncvj"
+},
+"Glass_01": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://materials/synty_fantasy_kingdom/Glass_01.tres",
+"use_external/path": "uid://181bn6b27nxt"
+},
+"PolygonDungeonRealms_01_A": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://materials/synty_fantasy_kingdom/PolygonDungeonRealms_01_A.tres",
+"use_external/path": "uid://dv50tn47arjvt"
+},
+"PolygonDungeon_01": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://materials/synty_fantasy_kingdom/PolygonDungeon_01.tres",
+"use_external/path": "uid://bxk6x3lkqbdxq"
+},
+"PolygonFantasyKingdom_Mat_01_A": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://materials/synty_fantasy_kingdom/PolygonFantasyKingdom_Mat_01_A.tres",
+"use_external/path": "uid://c4o0nmtpab5vj"
+},
+"PolygonWesternFrontier_01_A": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://materials/synty_fantasy_kingdom/PolygonWesternFrontier_01_A.tres",
+"use_external/path": "uid://ghxj3j612cg"
+}
+},
+"meshes": {
+"mines_Plane": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/mines_Plane.res",
+"save_to_file/path": "uid://bsbm6tvll5rpe"
+},
+"mines_SM_Env_Dwarf_Beam_03": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/mines_SM_Env_Dwarf_Beam_03.res",
+"save_to_file/path": "uid://h88db80wpctw"
+},
+"mines_SM_Env_Dwarf_Beam_04": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/mines_SM_Env_Dwarf_Beam_04.res",
+"save_to_file/path": "uid://biph54xrdrmnn"
+},
+"mines_SM_Env_Dwarf_Pillar_03": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/mines_SM_Env_Dwarf_Pillar_03.res",
+"save_to_file/path": "uid://b7pauy25lhefv"
+},
+"mines_SM_Env_Dwarf_Pillar_Cap_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/mines_SM_Env_Dwarf_Pillar_Cap_01.res",
+"save_to_file/path": "uid://dk44tlp6bu7rt"
+},
+"mines_SM_Env_Dwarf_Wall_Trim_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/mines_SM_Env_Dwarf_Wall_Trim_01.res",
+"save_to_file/path": "uid://b7q5eeq63c8d"
+},
+"mines_SM_Env_Mine_Track_Straight_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/mines_SM_Env_Mine_Track_Straight_01.res",
+"save_to_file/path": "uid://cjw87dt51ewrh"
+},
+"mines_SM_Env_Mine_Track_Straight_02": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/mines_SM_Env_Mine_Track_Straight_02.res",
+"save_to_file/path": "uid://c0wc2nc03m538"
+},
+"mines_SM_Env_RockPile_Pillar_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/mines_SM_Env_RockPile_Pillar_01.res",
+"save_to_file/path": "uid://bjpe8q87hdxtu"
+},
+"mines_SM_Env_RockPile_Rounded_02": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/mines_SM_Env_RockPile_Rounded_02.res",
+"save_to_file/path": "uid://bh60l4m24ttsk"
+},
+"mines_SM_Env_RockPile_Square_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/mines_SM_Env_RockPile_Square_01.res",
+"save_to_file/path": "uid://3miy28mpc8gj"
+},
+"mines_SM_Env_RockPile_Square_02": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/mines_SM_Env_RockPile_Square_02.res",
+"save_to_file/path": "uid://bslgfln1vhro5"
+},
+"mines_SM_Env_RockPile_Square_04": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/mines_SM_Env_RockPile_Square_04.res",
+"save_to_file/path": "uid://d2iavepigqf0b"
+},
+"mines_SM_Env_RockPile_Square_06": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/mines_SM_Env_RockPile_Square_06.res",
+"save_to_file/path": "uid://bqrbvdnmm20y3"
+},
+"mines_SM_Env_Rock_Round_02": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/mines_SM_Env_Rock_Round_02.res",
+"save_to_file/path": "uid://byeihh0lo0j4r"
+},
+"mines_SM_Env_Rock_Round_022": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/mines_SM_Env_Rock_Round_022.res",
+"save_to_file/path": "uid://8cfbe6n1qcd7"
+},
+"mines_SM_Env_Rock_Small_05": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/mines_SM_Env_Rock_Small_05.res",
+"save_to_file/path": "uid://baokxhw3842du"
+},
+"mines_SM_Env_Rock_Stairs_02": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/mines_SM_Env_Rock_Stairs_02.res",
+"save_to_file/path": "uid://du2420a2glwfm"
+},
+"mines_SM_Gen_Prop_Barrel_Wood_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/mines_SM_Gen_Prop_Barrel_Wood_01.res",
+"save_to_file/path": "uid://none6eft77qd"
+},
+"mines_SM_Item_Hammer_05": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/mines_SM_Item_Hammer_05.res",
+"save_to_file/path": "uid://cgba0dkqvbagw"
+},
+"mines_SM_Prop_Barrel_Broken_02": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/mines_SM_Prop_Barrel_Broken_02.res",
+"save_to_file/path": "uid://d3s0gffnm4h3b"
+},
+"mines_SM_Prop_Barrel_Dirt_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/mines_SM_Prop_Barrel_Dirt_01.res",
+"save_to_file/path": "uid://xtwaobphg12q"
+},
+"mines_SM_Prop_Camp_Brazier_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/mines_SM_Prop_Camp_Brazier_01.res",
+"save_to_file/path": "uid://bxhijfpvx468x"
+},
+"mines_SM_Prop_Camp_Brazier_Wood_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/mines_SM_Prop_Camp_Brazier_Wood_01.res",
+"save_to_file/path": "uid://c6hgdoj3c1txw"
+},
+"mines_SM_Prop_Dwarf_Cart_03": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/mines_SM_Prop_Dwarf_Cart_03.res",
+"save_to_file/path": "uid://dygqdfxisuh2i"
+},
+"mines_SM_Prop_Dwarf_Cart_03_Ore": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/mines_SM_Prop_Dwarf_Cart_03_Ore.res",
+"save_to_file/path": "uid://dx2s7tfbgn88j"
+},
+"mines_SM_Prop_Dwarf_Cart_03_Wheel_1": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/mines_SM_Prop_Dwarf_Cart_03_Wheel_1.res",
+"save_to_file/path": "uid://crei0gvc4xw7v"
+},
+"mines_SM_Prop_Dwarf_Cart_03_Wheel_2": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/mines_SM_Prop_Dwarf_Cart_03_Wheel_2.res",
+"save_to_file/path": "uid://c0odjlpeerw4b"
+},
+"mines_SM_Prop_Forge_Pickaxe_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/mines_SM_Prop_Forge_Pickaxe_01.res",
+"save_to_file/path": "uid://b1e7kxpp5p0aa"
+},
+"mines_SM_Prop_Table_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/mines_SM_Prop_Table_01.res",
+"save_to_file/path": "uid://tofnurpuqiwu"
+},
+"mines_SM_Prop_Torch_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/mines_SM_Prop_Torch_01.res",
+"save_to_file/path": "uid://cvhxocyi3815k"
+}
+}
+}
+gltf/naming_version=2
+gltf/embedded_image_handling=1
+gltf/texture_map_mode=1

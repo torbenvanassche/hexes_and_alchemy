@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://c5i0vkt13bv01"]
+
+[ext_resource type="Texture2D" uid="uid://bqsue20fxvoq7" path="res://textures/synty_fantasy_kingdom/Ground_Base_01_Normals.png" id="2_kagts"]
+
+[resource]
+albedo_color = Color(0.6862745, 1, 1, 1)
+normal_enabled = true
+normal_texture = ExtResource("2_kagts")

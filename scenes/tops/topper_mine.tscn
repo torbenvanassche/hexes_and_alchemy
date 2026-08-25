@@ -1,6 +1,5 @@
 [gd_scene format=3 uid="uid://cy1s6kym2ib68"]
 
-[ext_resource type="PackedScene" uid="uid://twco3r24bsnx" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_mine_blue.glb" id="1_bbfir"]
 [ext_resource type="Script" uid="uid://dvidxmav7hphs" path="res://scripts/interactions/interactable_locations/mineshaft.gd" id="1_f4m0s"]
 [ext_resource type="Script" uid="uid://bf5xfvqkbl1oy" path="res://scripts/structures/mine_vein_info.gd" id="1_wd22k"]
 [ext_resource type="Resource" uid="uid://d1qieqrwwvb3c" path="res://resources/structure_info/mine_poor_vein.tres" id="3_icepf"]
@@ -12,7 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://mbedk8b2ca54" path="res://meshes/kay_dungeon/rubble_half.glb" id="8_mbedk"]
 [ext_resource type="Script" uid="uid://bju85emrqs252" path="res://tools/quest_system/scripts/quest_supply_requirement.gd" id="9_supply"]
 [ext_resource type="Resource" uid="uid://m72hate3ge7x" path="res://resources/item_info/support_beams.tres" id="10_support"]
-[ext_resource type="Script" path="res://scripts/quests/quest_profile.gd" id="11_profile_script"]
+[ext_resource type="Script" uid="uid://bapqr4qv780fa" path="res://scripts/quests/quest_profile.gd" id="11_profile_script"]
 [ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_mine_prospect.tres" id="12_prospect"]
 [ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_mine_extract.tres" id="13_extract"]
 [ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_mine_deep_extract.tres" id="14_deep"]
@@ -20,9 +19,10 @@
 [ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_mine_reinforce.tres" id="16_reinforce"]
 [ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_mine_deepen.tres" id="17_deepen"]
 [ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_mine_reopen.tres" id="17_reopen"]
-[ext_resource type="Resource" path="res://resources/loot_tables/mine_depth_2.tres" id="18_depth_2"]
-[ext_resource type="Resource" path="res://resources/loot_tables/mine_depth_3.tres" id="19_depth_3"]
-[ext_resource type="Script" path="res://scripts/structures/loot_table.gd" id="20_loot_table"]
+[ext_resource type="Resource" uid="uid://nmwke772fsnp" path="res://resources/loot_tables/mine_depth_2.tres" id="18_depth_2"]
+[ext_resource type="Resource" uid="uid://m7jnxhlhf63g" path="res://resources/loot_tables/mine_depth_3.tres" id="19_depth_3"]
+[ext_resource type="PackedScene" uid="uid://bee08sgqm40d2" path="res://synty/mines.glb" id="20_geuff"]
+[ext_resource type="Script" uid="uid://b2wjb40qlkbuf" path="res://scripts/structures/loot_table.gd" id="20_loot_table"]
 
 [sub_resource type="BitMap" id="BitMap_3h0bv"]
 data = {
@@ -38,7 +38,7 @@ ExtResource("10_support"): 1
 })
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bbfir"]
-size = Vector3(1.1559805, 1.174, 1.513)
+size = Vector3(1.4832637, 1.174, 1.4917754)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_f4m0s"]
 size = Vector3(0.94522744, 0.7539673, 0.41274548)
@@ -47,16 +47,14 @@ size = Vector3(0.94522744, 0.7539673, 0.41274548)
 transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, 0, 0, 0)
 script = ExtResource("1_f4m0s")
 vein_infos = Array[ExtResource("1_wd22k")]([ExtResource("3_icepf"), ExtResource("5_1g1kg"), ExtResource("6_ngjhr")])
+depth_loot_tables = Array[ExtResource("20_loot_table")]([ExtResource("18_depth_2"), ExtResource("19_depth_3")])
 quest_types = Array[String](["prospect", "extract", "reinforce", "reopen"])
 bitmap = SubResource("BitMap_3h0bv")
 quest_supply_requirements = Array[ExtResource("9_supply")]([SubResource("Resource_reinforce_supplies")])
 quest_profiles = Array[ExtResource("11_profile_script")]([ExtResource("12_prospect"), ExtResource("13_extract"), ExtResource("14_deep"), ExtResource("15_stabilized"), ExtResource("16_reinforce"), ExtResource("17_deepen"), ExtResource("17_reopen")])
-depth_loot_tables = Array[ExtResource("20_loot_table")]([ExtResource("18_depth_2"), ExtResource("19_depth_3")])
 
-[node name="Root Scene" parent="." unique_id=1429542013 instance=ExtResource("1_bbfir")]
-
-[node name="walkable_front_anchor" type="Node3D" parent="." unique_id=589110871]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.005826682, 0.055, 0.6626623)
+[node name="mines" parent="." unique_id=1088118613 instance=ExtResource("20_geuff")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.10564101, 0)
 
 [node name="no_entry" parent="." unique_id=1406159595 instance=ExtResource("7_58x1d")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.008031666, 0.27151197, 0.6068869)
@@ -73,7 +71,7 @@ visible = false
 [node name="collision" type="StaticBody3D" parent="." unique_id=1957721428]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="collision" unique_id=1907988473]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.035767704, 0.58037907, -0.14940524)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12787393, 0.58037907, -0.13796872)
 shape = SubResource("BoxShape3D_bbfir")
 
 [node name="interaction" type="Area3D" parent="." unique_id=1246923180]

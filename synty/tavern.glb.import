@@ -1,0 +1,548 @@
+[remap]
+
+importer="scene"
+importer_version=1
+type="PackedScene"
+uid="uid://dmlut1xkoa343"
+path="res://.godot/imported/tavern.glb-86e71aeae4c12168b47369a6272a7b08.scn"
+
+[deps]
+
+source_file="res://synty/tavern.glb"
+dest_files=["res://.godot/imported/tavern.glb-86e71aeae4c12168b47369a6272a7b08.scn"]
+
+[params]
+
+nodes/root_type=""
+nodes/root_name=""
+nodes/root_script=null
+mesh_library/use_node_names_as_mesh_names=false
+array_mesh/deduplicate_surfaces=true
+nodes/apply_root_scale=true
+nodes/root_scale=1.0
+nodes/import_as_skeleton_bones=false
+nodes/use_name_suffixes=true
+nodes/use_node_type_suffixes=true
+meshes/ensure_tangents=true
+meshes/generate_lods=true
+meshes/create_shadow_meshes=true
+meshes/light_baking=1
+meshes/lightmap_texel_size=0.2
+meshes/force_disable_compression=false
+skins/use_named_skins=true
+animation/import=true
+animation/fps=30
+animation/trimming=false
+animation/remove_immutable_tracks=true
+animation/import_rest_as_RESET=false
+import_script/path=""
+materials/extract=0
+materials/extract_format=0
+materials/extract_path=""
+_subresources={
+"materials": {
+"Castle_Wall_01": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://materials/synty_fantasy_kingdom/Castle_Wall_01.tres",
+"use_external/path": "uid://ypv72rtxeqy6"
+},
+"Generic_Concrete": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://materials/synty_fantasy_kingdom/Generic_Concrete.tres",
+"use_external/path": "uid://bl2c6u05paceu"
+},
+"Generic_Wood": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://materials/synty_fantasy_kingdom/Generic_Wood.tres",
+"use_external/path": "uid://bi18ik7hcijb4"
+},
+"Glass_01": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://materials/synty_fantasy_kingdom/Glass_01.tres",
+"use_external/path": "uid://181bn6b27nxt"
+},
+"PolygonFantasyKingdom_Mat_01_A": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://materials/synty_fantasy_kingdom/PolygonFantasyKingdom_Mat_01_A.tres",
+"use_external/path": "uid://c4o0nmtpab5vj"
+},
+"PolygonFantasyKingdom_Mat_04_A": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://materials/synty_fantasy_kingdom/PolygonFantasyKingdom_Mat_04_A.tres",
+"use_external/path": "uid://uaoge3ph2pak"
+}
+},
+"meshes": {
+"tavern_SM_Bld_Base_Floor_Combined_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_Base_Floor_Combined_01.res",
+"save_to_file/path": "uid://qoblmcetfa1b"
+},
+"tavern_SM_Bld_Base_Stair_Half_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_Base_Stair_Half_01.res",
+"save_to_file/path": "uid://c8ewgsby81dku"
+},
+"tavern_SM_Bld_Castle_Floor_Stone_02": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_Castle_Floor_Stone_02.res",
+"save_to_file/path": "uid://ck6ootffui23a"
+},
+"tavern_SM_Bld_Castle_Floor_Stone_04": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_Castle_Floor_Stone_04.res",
+"save_to_file/path": "uid://dkp7x2x5swdcw"
+},
+"tavern_SM_Bld_House_Base_Corner_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Base_Corner_01.res",
+"save_to_file/path": "uid://orxgau7do4tv"
+},
+"tavern_SM_Bld_House_Base_Wall_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Base_Wall_01.res",
+"save_to_file/path": "uid://cdofqtcsearnm"
+},
+"tavern_SM_Bld_House_Floor_Stone_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Floor_Stone_01.res",
+"save_to_file/path": "uid://bjlgf3xh4crnk"
+},
+"tavern_SM_Bld_House_Floor_Stone_03": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Floor_Stone_03.res",
+"save_to_file/path": "uid://ltpkmgd2spio"
+},
+"tavern_SM_Bld_House_Floor_Wood_03": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Floor_Wood_03.res",
+"save_to_file/path": "uid://dywpmy0q70xg5"
+},
+"tavern_SM_Bld_House_Railing_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Railing_01.res",
+"save_to_file/path": "uid://dqhmversubh70"
+},
+"tavern_SM_Bld_House_Railing_Half_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Railing_Half_01.res",
+"save_to_file/path": "uid://d38qbjy40vl33"
+},
+"tavern_SM_Bld_House_Roof_Tile_Cover_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Roof_Tile_Cover_01.res",
+"save_to_file/path": "uid://brugjvk52cev5"
+},
+"tavern_SM_Bld_House_Roof_Tile_Cover_02": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Roof_Tile_Cover_02.res",
+"save_to_file/path": "uid://bbla7uaw43pc6"
+},
+"tavern_SM_Bld_House_Roof_Tile_Cover_Edge_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Roof_Tile_Cover_Edge_01.res",
+"save_to_file/path": "uid://ki2io4hilfw2"
+},
+"tavern_SM_Bld_House_Roof_Tile_Cover_Edge_02": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Roof_Tile_Cover_Edge_02.res",
+"save_to_file/path": "uid://dsho3utw55exi"
+},
+"tavern_SM_Bld_House_Roof_Tile_Edge_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Roof_Tile_Edge_01.res",
+"save_to_file/path": "uid://beorgf1m0vl6v"
+},
+"tavern_SM_Bld_House_Roof_Tile_Edge_End_02": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Roof_Tile_Edge_End_02.res",
+"save_to_file/path": "uid://3x1udtopbofs"
+},
+"tavern_SM_Bld_House_Roof_Tile_End_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Roof_Tile_End_01.res",
+"save_to_file/path": "uid://cm0j84ytci20l"
+},
+"tavern_SM_Bld_House_Roof_Tile_End_Half_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Roof_Tile_End_Half_01.res",
+"save_to_file/path": "uid://csaplgpkrkldc"
+},
+"tavern_SM_Bld_House_Roof_Tile_Half_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Roof_Tile_Half_01.res",
+"save_to_file/path": "uid://bk3jd0f3enhum"
+},
+"tavern_SM_Bld_House_Roof_Tile_Half_02": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Roof_Tile_Half_02.res",
+"save_to_file/path": "uid://c1myyp3x7i3ln"
+},
+"tavern_SM_Bld_House_Roof_Tile_Half_03": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Roof_Tile_Half_03.res",
+"save_to_file/path": "uid://brpkoj0ym7fv1"
+},
+"tavern_SM_Bld_House_Roof_Tile_Intersection_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Roof_Tile_Intersection_01.res",
+"save_to_file/path": "uid://d0hsecijvla0c"
+},
+"tavern_SM_Bld_House_Roof_Tile_Peak_Cap_Half_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Roof_Tile_Peak_Cap_Half_01.res",
+"save_to_file/path": "uid://cnhd6h23ehedj"
+},
+"tavern_SM_Bld_House_Roof_Tile_Window_03": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Roof_Tile_Window_03.res",
+"save_to_file/path": "uid://biey30sxj0x5i"
+},
+"tavern_SM_Bld_House_Roof_Tile_Window_03_Glass": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Roof_Tile_Window_03_Glass.res",
+"save_to_file/path": "uid://f2xfa1livm8a"
+},
+"tavern_SM_Bld_House_Supports_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Supports_01.res",
+"save_to_file/path": "uid://dme3j3cqndill"
+},
+"tavern_SM_Bld_House_Wall_02": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Wall_02.res",
+"save_to_file/path": "uid://duihll4jxy2fl"
+},
+"tavern_SM_Bld_House_Wall_04": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Wall_04.res",
+"save_to_file/path": "uid://b1yivv6dnag5x"
+},
+"tavern_SM_Bld_House_Wall_06": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Wall_06.res",
+"save_to_file/path": "uid://bldqdjgq3rdth"
+},
+"tavern_SM_Bld_House_Wall_Door_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Wall_Door_01.res",
+"save_to_file/path": "uid://ba58en6u4bt77"
+},
+"tavern_SM_Bld_House_Wall_Door_01_Door": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Wall_Door_01_Door.res",
+"save_to_file/path": "uid://d0163yblte1dd"
+},
+"tavern_SM_Bld_House_Wall_Half_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Wall_Half_01.res",
+"save_to_file/path": "uid://c61v64rh4ihi3"
+},
+"tavern_SM_Bld_House_Wall_Half_012": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Wall_Half_012.res",
+"save_to_file/path": "uid://xwfyy171wsrh"
+},
+"tavern_SM_Bld_House_Wall_Half_Height_Window_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Wall_Half_Height_Window_01.res",
+"save_to_file/path": "uid://o6ejoq7md4mi"
+},
+"tavern_SM_Bld_House_Wall_Half_Height_Window_01_Glass": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Wall_Half_Height_Window_01_Glass.res",
+"save_to_file/path": "uid://b5oyymdnkg2mc"
+},
+"tavern_SM_Bld_House_Wall_Half_Window_02": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Wall_Half_Window_02.res",
+"save_to_file/path": "uid://cjkogopvhnhy4"
+},
+"tavern_SM_Bld_House_Wall_Half_Window_02_Glass": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Wall_Half_Window_02_Glass.res",
+"save_to_file/path": "uid://b38qs4ehgfxvl"
+},
+"tavern_SM_Bld_House_Wall_Peak_04": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Wall_Peak_04.res",
+"save_to_file/path": "uid://cgkok5prgbiv1"
+},
+"tavern_SM_Bld_House_Wall_WindowBox_04": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Wall_WindowBox_04.res",
+"save_to_file/path": "uid://ohsyy34yd6hv"
+},
+"tavern_SM_Bld_House_Wall_WindowBox_04_Glass": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Wall_WindowBox_04_Glass.res",
+"save_to_file/path": "uid://cygjnesutx6uc"
+},
+"tavern_SM_Bld_House_Wall_Window_02": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Wall_Window_02.res",
+"save_to_file/path": "uid://cnnon1p1etidc"
+},
+"tavern_SM_Bld_House_Wall_Window_02_Glass": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Wall_Window_02_Glass.res",
+"save_to_file/path": "uid://b00mpap6m5s8a"
+},
+"tavern_SM_Bld_House_Wall_Window_02_Shutters_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Wall_Window_02_Shutters_01.res",
+"save_to_file/path": "uid://bbc6b1dl8okin"
+},
+"tavern_SM_Bld_House_Wall_Window_02_Shutters_02": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Wall_Window_02_Shutters_02.res",
+"save_to_file/path": "uid://ctt65kdpy85hj"
+},
+"tavern_SM_Bld_House_Wall_Window_03": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Wall_Window_03.res",
+"save_to_file/path": "uid://dq6verudexah0"
+},
+"tavern_SM_Bld_House_Wall_Window_03_Glass": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Wall_Window_03_Glass.res",
+"save_to_file/path": "uid://b2hdyixx7l1f6"
+},
+"tavern_SM_Bld_House_Wall_Window_07": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Wall_Window_07.res",
+"save_to_file/path": "uid://dtcbpisqy6fjx"
+},
+"tavern_SM_Bld_House_Wall_Window_07_Glass": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_Wall_Window_07_Glass.res",
+"save_to_file/path": "uid://duqqh05fm2xxw"
+},
+"tavern_SM_Bld_House_WoodBeam_01": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_WoodBeam_01.res",
+"save_to_file/path": "uid://u3pxwd5obp1w"
+},
+"tavern_SM_Bld_House_WoodBeam_02": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_WoodBeam_02.res",
+"save_to_file/path": "uid://el6mioh01q24"
+},
+"tavern_SM_Bld_House_WoodBeam_03": {
+"generate/lightmap_uv": 0,
+"generate/lods": 0,
+"generate/shadow_meshes": 0,
+"lods/normal_merge_angle": 20.0,
+"save_to_file/enabled": true,
+"save_to_file/fallback_path": "res://synty/synty_fantasy_kingdom/tavern_SM_Bld_House_WoodBeam_03.res",
+"save_to_file/path": "uid://dk0nkgy0k3veo"
+}
+}
+}
+gltf/naming_version=2
+gltf/embedded_image_handling=1
+gltf/texture_map_mode=1

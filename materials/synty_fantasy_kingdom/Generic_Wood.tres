@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bi18ik7hcijb4"]
+
+[resource]
+resource_name = "Generic_Wood"
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+roughness = 0.8

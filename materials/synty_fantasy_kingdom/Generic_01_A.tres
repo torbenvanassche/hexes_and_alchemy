@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://b0jyd01t1ncvj"]
+
+[ext_resource type="Texture2D" uid="uid://c1w8p8sr0oors" path="res://textures/synty_generic/Generic_01_A.png" id="1_hm532"]
+
+[resource]
+resource_name = "Generic_01_A"
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+albedo_texture = ExtResource("1_hm532")
+roughness = 0.8

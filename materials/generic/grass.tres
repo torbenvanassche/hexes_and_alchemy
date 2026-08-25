@@ -1,0 +1,12 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://uwalboe2nxs5"]
+
+[ext_resource type="Texture2D" uid="uid://bln80b4ehcrj8" path="res://textures/synty_fantasy_kingdom/Grass_01_warm.png" id="1_5mipk"]
+[ext_resource type="Texture2D" uid="uid://bqsue20fxvoq7" path="res://textures/synty_fantasy_kingdom/Ground_Base_01_Normals.png" id="2_s3wtr"]
+
+[resource]
+albedo_texture = ExtResource("1_5mipk")
+roughness = 0.8
+normal_enabled = true
+normal_texture = ExtResource("2_s3wtr")
+uv1_triplanar = true
+uv1_world_triplanar = true

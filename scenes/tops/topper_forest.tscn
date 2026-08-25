@@ -1,9 +1,8 @@
 [gd_scene format=3 uid="uid://dpyxy65c7yisb"]
 
-[ext_resource type="PackedScene" uid="uid://bagl7tnsobw8w" path="res://meshes/kay_fantasy_hexagon/decoration/nature/trees_A_large.glb" id="1_k4nv7"]
 [ext_resource type="Script" uid="uid://cq000e45vtevx" path="res://scripts/interactions/interactable_locations/forest.gd" id="1_ro7nm"]
 [ext_resource type="PackedScene" uid="uid://brdca467mutqb" path="res://meshes/kay_fantasy_hexagon/decoration/nature/trees_A_cut.glb" id="2_c5dpi"]
-[ext_resource type="Script" path="res://scripts/quests/quest_profile.gd" id="3_profile_script"]
+[ext_resource type="Script" uid="uid://bapqr4qv780fa" path="res://scripts/quests/quest_profile.gd" id="3_profile_script"]
 [ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_forest_forage.tres" id="4_forage"]
 [ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_forest_harvest.tres" id="5_harvest"]
 [ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_forest_fell_timber.tres" id="6_timber"]
@@ -11,10 +10,11 @@
 [ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_forest_hunt.tres" id="8_hunt"]
 [ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_forest_secure.tres" id="9_secure"]
 [ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_forest_trap_hunt.tres" id="9_trap_hunt"]
-[ext_resource type="Script" path="res://scripts/quests/monster_occupation_definition.gd" id="10_monster_script"]
+[ext_resource type="Script" uid="uid://dsjujerkbit85" path="res://scripts/quests/monster_occupation_definition.gd" id="10_monster_script"]
 [ext_resource type="Resource" path="res://resources/monster_occupations/prowling_wolves.tres" id="11_wolves"]
 [ext_resource type="Resource" path="res://resources/monster_occupations/goblin_raiders.tres" id="12_goblins"]
 [ext_resource type="PackedScene" uid="uid://lm7rokymxyu6" path="res://meshes/kay_custom/exclamation.glb" id="13_danger_icon"]
+[ext_resource type="PackedScene" uid="uid://dlc5qwo5fwha6" path="res://synty/forest.glb" id="16_gc1rc"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_c5dpi"]
 size = Vector3(2.6546097, 1.6783295, 2.7467527)
@@ -28,15 +28,17 @@ quest_profiles = Array[ExtResource("3_profile_script")]([ExtResource("4_forage")
 occupation_chance = 0.45
 occupation_pool = Array[ExtResource("10_monster_script")]([ExtResource("11_wolves"), ExtResource("12_goblins")])
 
-[node name="trees" parent="." unique_id=1335934582 instance=ExtResource("1_k4nv7")]
+[node name="trees" parent="." unique_id=843466318 instance=ExtResource("16_gc1rc")]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
 
 [node name="stumps" parent="." unique_id=398628447 instance=ExtResource("2_c5dpi")]
+visible = false
 
-[node name="danger_marker" type="Node3D" parent="."]
+[node name="danger_marker" type="Node3D" parent="." unique_id=787592891]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, 0)
 visible = false
 
-[node name="exclamation" parent="danger_marker" instance=ExtResource("13_danger_icon")]
+[node name="exclamation" parent="danger_marker" unique_id=1953451772 instance=ExtResource("13_danger_icon")]
 
 [node name="interaction" type="Area3D" parent="." unique_id=104705730]
 
