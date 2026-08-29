@@ -69,7 +69,7 @@ func _refresh_faction_details(hub: HubState) -> void:
 		faction_details.add_child(card)
 		(card as FactionOverviewCardUI).setup(faction)
 
-func _create_faction_card(faction: FactionState) -> Control:
+func _create_faction_card(_faction: FactionState) -> Control:
 	return FACTION_CARD_SCENE.instantiate() as FactionOverviewCardUI
 
 func _refresh_operations() -> void:
@@ -98,7 +98,7 @@ func _refresh_operations() -> void:
 		faction_empty_label.add_theme_color_override("font_color", Color(0.45, 0.34, 0.23, 0.85))
 		operations_container.add_child(faction_empty_label)
 
-func _create_operation_card(operation: HubOperation) -> Control:
+func _create_operation_card(_operation: HubOperation) -> Control:
 	return OPERATION_CARD_SCENE.instantiate() as OperationCardUI
 
 func _clear_container(container: Container) -> void:

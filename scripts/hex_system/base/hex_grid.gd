@@ -1153,7 +1153,7 @@ func _process_chunk_generation_step() -> bool:
 		return true
 
 	var local_x := next_cell % chunk_size.x
-	var local_y := next_cell / chunk_size.x
+	var local_y := floori(float(next_cell) / float(chunk_size.x))
 	var gx := chunk.chunk_x * chunk_size.x + local_x
 	var gy := chunk.chunk_y * chunk_size.y + local_y
 	var grid_id := Vector2i(gx, gy)

@@ -7,7 +7,8 @@ enum State {
 	IN_PROGRESS,
 	RETURNING,
 	COMPLETE,
-	FAILED
+	FAILED,
+	CANCELLED
 }
 
 var id := ""
@@ -45,6 +46,10 @@ func _refresh() -> void:
 		state = State.RETURNING
 	elif quest.is_state(Quest.QuestState.COMPLETE):
 		state = State.COMPLETE
+	elif quest.is_state(Quest.QuestState.FAILED):
+		state = State.FAILED
+	elif quest.is_state(Quest.QuestState.CANCELLED):
+		state = State.CANCELLED
 	else:
 		state = State.WAITING
 
@@ -75,6 +80,8 @@ func get_activity_name() -> String:
 		return tr("OPERATION_ACTIVITY_RETURNING")
 	if state == State.FAILED:
 		return tr("OPERATION_ACTIVITY_FAILED")
+	if state == State.CANCELLED:
+		return tr("OPERATION_ACTIVITY_CANCELLED")
 	return tr("OPERATION_ACTIVITY_COMPLETE")
 
 func get_assigned_npc_names() -> String:

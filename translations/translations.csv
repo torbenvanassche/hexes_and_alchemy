@@ -251,6 +251,24 @@ QUEST_STATE_EN_ROUTE,En route,En route
 QUEST_STATE_IN_PROGRESS,In progress,In progress
 QUEST_STATE_RETURNING,Returning,Returning
 QUEST_STATE_COMPLETE,Complete,Complete
+QUEST_STATE_FAILED,Failed,Failed
+QUEST_STATE_CANCELLED,Cancelled,Cancelled
+QUEST_POST_LIMIT_REACHED,The active quest limit has been reached.,The active quest limit has been reached.
+QUEST_POST_LOCATION_UNAVAILABLE,That location is no longer available for a new quest.,That location is no longer available for a new quest.
+QUEST_POST_NOT_ENOUGH_CURRENCY,There is not enough currency to post this quest.,There is not enough currency to post this quest.
+QUEST_POST_MISSING_SUPPLIES,The required supplies are no longer available.,The required supplies are no longer available.
+QUEST_POST_FAILED,The quest could not be posted. No resources were spent.,The quest could not be posted. No resources were spent.
+QUEST_FAILED_MISSING_OBJECTIVE,Quest failed because its objective is no longer available.,Quest failed because its objective is no longer available.
+QUEST_FAILED_MISSING_SUPPLIES,Quest failed because its required supplies were missing.,Quest failed because its required supplies were missing.
+QUEST_CANCELLED,Quest cancelled.,Quest cancelled.
+QUEST_NOTICE_POSTED,%s posted.,%s posted.
+QUEST_NOTICE_EN_ROUTE,%s is en route.,%s is en route.
+QUEST_NOTICE_IN_PROGRESS,%s is now in progress.,%s is now in progress.
+QUEST_NOTICE_RETURNING,%s is returning.,%s is returning.
+QUEST_NOTICE_COMPLETE,%s is complete and ready to claim.,%s is complete and ready to claim.
+QUEST_NOTICE_FAILED,%s failed: %s,%s failed: %s
+QUEST_NOTICE_CANCELLED,%s was cancelled.,%s was cancelled.
+OPERATION_RESULT_FAILED,Failed,Failed
 QUEST_PARTY_UNASSIGNED,Unassigned,Unassigned
 QUEST_PARTY_ONE_ADVENTURER,1 adventurer,1 adventurer
 QUEST_PARTY_ADVENTURERS,%s adventurers,%s adventurers
@@ -447,12 +465,14 @@ OPERATION_STATE_IN_PROGRESS,In progress,In progress
 OPERATION_STATE_RETURNING,Returning,Returning
 OPERATION_STATE_COMPLETE,Complete,Complete
 OPERATION_STATE_FAILED,Failed,Failed
+OPERATION_STATE_CANCELLED,Cancelled,Cancelled
 OPERATION_ACTIVITY_IDLE,Idle,Idle
 OPERATION_ACTIVITY_WAITING,Waiting for a member,Waiting for a member
 OPERATION_ACTIVITY_EN_ROUTE,Travelling to site,Travelling to site
 OPERATION_ACTIVITY_IN_PROGRESS,Working at site,Working at site
 OPERATION_ACTIVITY_RETURNING,Returning to tavern,Returning to tavern
 OPERATION_ACTIVITY_FAILED,Operation failed,Operation failed
+OPERATION_ACTIVITY_CANCELLED,Operation cancelled,Operation cancelled
 OPERATION_ACTIVITY_COMPLETE,Complete,Complete
 OPERATION_UNASSIGNED,Unassigned,Unassigned
 INVENTORY,Inventory,Inventory

@@ -364,7 +364,5 @@ func _notify_item_reward(item: ItemInfo, amount: int, color: Color = Color.WHITE
 func _on_create_quest_window_loaded(window_info: SceneInfo) -> void:
 	window_instance = SceneManager.add(window_info, false);
 	var quest_creation: QuestCreationUI = (window_instance.node as DraggableControl).content as QuestCreationUI;
-	if not quest_creation.quest_created.is_connected(Manager.instance.quests.add_quest):
-		quest_creation.quest_created.connect(Manager.instance.quests.add_quest)
 	quest_creation.force_data(self)
 	window_instance.on_enter.emit();

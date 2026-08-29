@@ -30,13 +30,17 @@ func _get_location_name(operation: HubOperation) -> String:
 	return tr("HUB_UNKNOWN_LOCATION")
 
 func _get_state_color(operation_state: HubOperation.State) -> Color:
+	if operation_state == HubOperation.State.COMPLETE:
+		return QuestStatePresentation.COMPLETE_COLOR
+	if operation_state == HubOperation.State.FAILED:
+		return QuestStatePresentation.FAILED_COLOR
+	if operation_state == HubOperation.State.CANCELLED:
+		return QuestStatePresentation.CANCELLED_COLOR
 	match operation_state:
 		HubOperation.State.WAITING:
-			return Color(0.65, 0.45, 0.16, 1)
+			return QuestStatePresentation.WAITING_COLOR
 		HubOperation.State.EN_ROUTE, HubOperation.State.RETURNING:
-			return Color(0.2, 0.42, 0.62, 1)
+			return QuestStatePresentation.TRAVEL_COLOR
 		HubOperation.State.IN_PROGRESS:
-			return Color(0.18, 0.5, 0.34, 1)
-		HubOperation.State.FAILED:
-			return Color(0.65, 0.18, 0.15, 1)
+			return QuestStatePresentation.ACTIVE_COLOR
 	return Color(0.42, 0.31, 0.2, 1)

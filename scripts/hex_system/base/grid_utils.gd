@@ -29,7 +29,7 @@ static func get_spacing(inner_radius: float, spacing: float, pointy_top: bool) -
 		return Vector2(sqrt(3.0) * inner_radius + spacing, 3.0 * inner_radius / 2.0 + spacing)
 
 static func cube_distance(a: Vector3i, b: Vector3i) -> int:
-	return (abs(a.x - b.x) + abs(a.y - b.y) + abs(a.z - b.z)) / 2
+	return floori(float(abs(a.x - b.x) + abs(a.y - b.y) + abs(a.z - b.z)) / 2.0)
 
 static func get_world_polygon(csgPolygon: CSGPolygon3D) -> PackedVector2Array:
 	var poly := csgPolygon.polygon

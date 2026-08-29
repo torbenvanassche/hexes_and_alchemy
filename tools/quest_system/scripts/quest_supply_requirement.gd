@@ -19,13 +19,7 @@ func assign_to_quest(quest: Quest, inventory: ContentGroup) -> bool:
 	if not has_available_supplies(inventory):
 		return false
 
-	for item: ItemInfo in supplies.keys():
-		var amount := int(supplies[item])
-		if amount <= 0:
-			continue
-		inventory.remove(item, amount)
-		quest.add_supply(item, amount)
-	return true
+	return inventory.transfer_all_to(quest.supplies, supplies, true)
 
 func quest_has_supplies(quest: Quest) -> bool:
 	if quest == null or not matches(quest.quest_key):

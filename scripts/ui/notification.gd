@@ -58,44 +58,44 @@ func _show_notification(data: Dictionary) -> bool:
 	if notification_scene == null:
 		push_warning("Toast notification scene is not configured.")
 		return false
-	var notification := notification_scene.instantiate() as ToastNotificationUI
-	if notification == null:
+	var toast_notification := notification_scene.instantiate() as ToastNotificationUI
+	if toast_notification == null:
 		push_warning("Toast notification scene root must be a ToastNotificationUI.")
 		return false
-	notification.modulate.a = 0.0
-	notification.scale = Vector2(0.98, 0.98)
-	notification_stack.add_child(notification)
+	toast_notification.modulate.a = 0.0
+	toast_notification.scale = Vector2(0.98, 0.98)
+	notification_stack.add_child(toast_notification)
 	var accent_color: Color = data.get("accent_color", Color.TRANSPARENT)
 	var icon := data.get("icon") as Texture2D
 	var icon_color: Color = data.get("icon_color", Color.WHITE)
-	notification.setup(str(data.get("text", "")), accent_color, icon, icon_color)
-	active_notifications.append(notification)
-	_present_notification(notification)
+	toast_notification.setup(str(data.get("text", "")), accent_color, icon, icon_color)
+	active_notifications.append(toast_notification)
+	_present_notification(toast_notification)
 	return true
 
-func _present_notification(notification: ToastNotificationUI) -> void:
+func _present_notification(toast_notification: ToastNotificationUI) -> void:
 	await get_tree().process_frame
-	if not is_instance_valid(notification):
+	if not is_instance_valid(toast_notification):
 		return
-	notification.pivot_offset = notification.size * 0.5
+	toast_notification.pivot_offset = toast_notification.size * 0.5
 	var tween_in := create_tween().set_parallel(true)
-	tween_in.tween_property(notification, "modulate:a", 1.0, transition_time)
-	tween_in.tween_property(notification, "scale", Vector2.ONE, transition_time)\
+	tween_in.tween_property(toast_notification, "modulate:a", 1.0, transition_time)
+	tween_in.tween_property(toast_notification, "scale", Vector2.ONE, transition_time)\
 		.set_trans(Tween.TRANS_BACK)\
 		.set_ease(Tween.EASE_OUT)
 	await tween_in.finished
-	if not is_instance_valid(notification):
+	if not is_instance_valid(toast_notification):
 		return
 	await get_tree().create_timer(display_time).timeout
-	if not is_instance_valid(notification):
+	if not is_instance_valid(toast_notification):
 		return
 	var tween_out := create_tween()
-	tween_out.tween_property(notification, "modulate:a", 0.0, transition_time)\
+	tween_out.tween_property(toast_notification, "modulate:a", 0.0, transition_time)\
 		.set_trans(Tween.TRANS_QUAD)\
 		.set_ease(Tween.EASE_IN)
 	await tween_out.finished
-	if not is_instance_valid(notification):
+	if not is_instance_valid(toast_notification):
 		return
-	active_notifications.erase(notification)
-	notification.queue_free()
+	active_notifications.erase(toast_notification)
+	toast_notification.queue_free()
 	_show_pending_notifications()
