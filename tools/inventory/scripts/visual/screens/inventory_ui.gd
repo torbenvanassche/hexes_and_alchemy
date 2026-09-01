@@ -21,8 +21,10 @@ func _ready() -> void:
 	_rebuild_inventory()
 
 func _rebuild_inventory() -> void:
+	selected_slot = null
 	for element in grid.get_children():
-		element.free()
+		grid.remove_child(element)
+		element.queue_free()
 	elements.clear()
 
 	if not inventory:

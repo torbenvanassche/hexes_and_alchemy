@@ -1,0 +1,11 @@
+[gd_resource type="Theme" load_steps=2 format=3]
+
+[ext_resource type="StyleBox" path="res://themes/tooltip_panel.tres" id="1_tooltip"]
+
+[resource]
+TooltipLabel/colors/font_color = Color(1, 0.94902, 0.8, 1)
+TooltipLabel/colors/font_outline_color = Color(0.0470588, 0.027451, 0.0117647, 1)
+TooltipLabel/constants/outline_size = 2
+TooltipLabel/font_sizes/font_size = 18
+TooltipPanel/styles/panel = ExtResource("1_tooltip")
+
