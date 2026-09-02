@@ -4,7 +4,6 @@
 [ext_resource type="PackedScene" uid="uid://6h1kj7hbn5qq" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_blacksmith_blue.glb" id="2_eemul"]
 [ext_resource type="Resource" path="res://resources/journal_tasks/build_forge.tres" id="2_ranit"]
 [ext_resource type="Material" uid="uid://c66vbca7lgh6m" path="res://materials/kay_fantasy_default.tres" id="3_eemul"]
-[ext_resource type="PackedScene" uid="uid://cm1injjl6lck2" path="res://synty/blacksmith.glb" id="5_vcrca"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_43jb5"]
 size = Vector3(1.602665, 0.30893278, 1.25601)
@@ -17,9 +16,8 @@ script = ExtResource("2_cpkdt")
 journal_quest = ExtResource("2_ranit")
 
 [node name="Root Scene" parent="." unique_id=19869173 instance=ExtResource("2_eemul")]
-visible = false
 
-[node name="building_blacksmith_blue" parent="Root Scene/RootNode" parent_id_path=PackedInt32Array(19869173, 1291471899) index="0" unique_id=570376973]
+[node name="building_blacksmith_blue" parent="Root Scene/RootNode" parent_id_path=PackedInt32Array(19869173, 754087128) index="0" unique_id=1241743657]
 surface_material_override/0 = ExtResource("3_eemul")
 
 [node name="interaction" type="Area3D" parent="." unique_id=1325427929]
@@ -33,8 +31,5 @@ shape = SubResource("BoxShape3D_43jb5")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="collision" unique_id=623158031]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.007247925, 0.31480986, -0.087170124)
 shape = SubResource("BoxShape3D_cpkdt")
-
-[node name="blacksmith2" parent="." unique_id=946506057 instance=ExtResource("5_vcrca")]
-transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
 
 [editable path="Root Scene"]
