@@ -5,6 +5,11 @@ var active_quests: Array[Quest] = [];
 signal quest_list_changed();
 @warning_ignore("unused_signal")
 signal quest_availability_changed();
+signal quest_added(quest: Quest)
+signal quest_removed(quest: Quest)
+signal quest_failed(quest: Quest, reason_key: String)
+signal quest_cancelled(quest: Quest, reason_key: String)
+signal quest_state_changed(quest: Quest, state: String)
 
 @export_group("Limits")
 @export var max_active_quest: int = 10;
@@ -138,6 +143,8 @@ func get_available_quest_types(
 	offered_currency_reward: int = 0,
 	minimum_rank_override: int = -1
 ) -> Array[String]:
+	if active_quests.size() >= max_active_quest:
+		return []
 	if has_quests_for_location(location):
 		return []
 	var available_types: Array[String] = [];
@@ -150,6 +157,8 @@ func get_available_quest_types(
 	return available_types;
 
 func get_postable_quest_types(location: HexBase, quest_types: Array[String]) -> Array[String]:
+	if active_quests.size() >= max_active_quest:
+		return []
 	if has_quests_for_location(location):
 		return []
 	var postable_types: Array[String] = []
@@ -259,30 +268,109 @@ func is_quest_location_reachable(location: HexBase, grid: HexGrid = null) -> boo
 		).is_empty()
 	return not grid.pathfinder.get_hex_path(origin_hex.cube_id, location.cube_id).is_empty()
 
-func add_quest(q: Quest) -> void:
-	if q == null:
-		return
+func get_posting_error(q: Quest) -> String:
+	if q == null or q.location == null or q.quest_key == "":
+		return "QUEST_POST_LOCATION_UNAVAILABLE"
 	if active_quests.size() >= max_active_quest:
-		return;
+		return "QUEST_POST_LIMIT_REACHED"
+	if has_quests_for_location(q.location):
+		return "QUEST_POST_LOCATION_UNAVAILABLE"
+	return ""
+
+func add_quest(q: Quest) -> bool:
+	if get_posting_error(q) != "":
+		return false
 	if not active_quests.has(q):
 		active_quests.append(q);
+		var state_callable := _on_quest_state_changed.bind(q)
+		if not q.state_machine.state_entered.is_connected(state_callable):
+			q.state_machine.state_entered.connect(state_callable)
 		if Manager.instance != null and Manager.instance.operations != null:
 			Manager.instance.operations.register_quest(q, str(q.context.get("parent_operation_id", "")))
+		quest_added.emit(q)
 		quest_list_changed.emit();
 		quest_availability_changed.emit()
 		try_assign_waiting_quests();
+		return true
+	return false
 
 func remove_quest(q: Quest) -> void:
+	if not active_quests.has(q):
+		return
+	var state_callable := _on_quest_state_changed.bind(q)
+	if q != null and q.state_machine.state_entered.is_connected(state_callable):
+		q.state_machine.state_entered.disconnect(state_callable)
 	active_quests.erase(q);
+	quest_removed.emit(q)
 	quest_list_changed.emit();
 	quest_availability_changed.emit()
+
+func _on_quest_state_changed(state: String, quest: Quest) -> void:
+	quest_state_changed.emit(quest, state)
 
 func release_quest_supplies(quest: Quest) -> void:
 	if quest == null or not quest.context.get("supplies_reserved", false):
 		return
-	if Manager.instance != null and Manager.instance.hub != null and quest.supplies != null:
-		Manager.instance.hub.adopt_inventory(quest.supplies)
+	var source := quest.context.get("supply_source") as ContentGroup
+	if source == null and Manager.instance != null and Manager.instance.hub != null:
+		source = Manager.instance.hub.stockpile
+	if source != null and quest.supplies != null:
+		quest.supplies.transfer_all_to(source, _get_inventory_contents(quest.supplies), true)
 	quest.context["supplies_reserved"] = false
+
+func refund_quest_reward(quest: Quest) -> void:
+	if quest == null or not quest.context.get("reward_reserved", false):
+		return
+	var amount := quest.get_offered_currency_reward()
+	var source: Variant = quest.context.get("reward_source")
+	if source is HubState:
+		(source as HubState).add_currency(amount)
+	elif source is PlayerController:
+		(source as PlayerController).currency += amount
+	quest.context["reward_reserved"] = false
+
+func fail_quest(quest: Quest, reason_key: String) -> void:
+	if quest == null or quest.is_state(Quest.QuestState.FAILED) or quest.is_state(Quest.QuestState.CANCELLED):
+		return
+	_cancel_party(quest)
+	release_quest_supplies(quest)
+	refund_quest_reward(quest)
+	quest.mark_failed(reason_key)
+	quest_failed.emit(quest, reason_key)
+	remove_quest(quest)
+
+func cancel_quest(quest: Quest, reason_key: String = "QUEST_CANCELLED") -> void:
+	if quest == null or quest.is_state(Quest.QuestState.COMPLETE) or quest.is_state(Quest.QuestState.CANCELLED):
+		return
+	_cancel_party(quest)
+	release_quest_supplies(quest)
+	refund_quest_reward(quest)
+	quest.mark_cancelled(reason_key)
+	quest_cancelled.emit(quest, reason_key)
+	remove_quest(quest)
+
+func _cancel_party(quest: Quest) -> void:
+	for npc: NPC in quest.party.duplicate():
+		if npc != null:
+			if npc.arrived.is_connected(quest._check_party_arrived_at_quest):
+				npc.arrived.disconnect(quest._check_party_arrived_at_quest)
+			if npc.arrived.is_connected(quest.return_completed):
+				npc.arrived.disconnect(quest.return_completed)
+			if npc.movement_failed.is_connected(quest._on_party_movement_failed):
+				npc.movement_failed.disconnect(quest._on_party_movement_failed)
+			npc.cancel_assigned_quest(quest)
+	quest.clear_party_assignments()
+
+func _get_inventory_contents(inventory: ContentGroup) -> Dictionary:
+	var amounts: Dictionary = {}
+	if inventory == null:
+		return amounts
+	for slot: ContentSlotResource in inventory.data:
+		if slot == null or slot.get_content() == null or slot.count <= 0:
+			continue
+		var content := slot.get_content()
+		amounts[content] = int(amounts.get(content, 0)) + slot.count
+	return amounts
 
 func try_assign_waiting_quests() -> void:
 	var available_npcs: Array[NPC] = []
@@ -335,13 +423,14 @@ func _reserve_quest_supplies(quest: Quest) -> bool:
 		return true
 	var objective := quest.get_objective()
 	if objective == null:
-		quest.context["supplies_reserved"] = true
-		return true
+		fail_quest(quest, "QUEST_FAILED_MISSING_OBJECTIVE")
+		return false
 	if Manager.instance == null or Manager.instance.hub == null:
 		return false
 	if not objective.assign_required_supplies(quest, Manager.instance.hub.stockpile):
 		return false
 	quest.context["supplies_reserved"] = true
+	quest.context["supply_source"] = Manager.instance.hub.stockpile
 	return true
 
 func _get_waiting_quests() -> Array[Quest]:

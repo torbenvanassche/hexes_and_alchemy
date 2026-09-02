@@ -62,6 +62,9 @@ func _on_quest_state_changed(_state: String, operation: HubOperation) -> void:
 		if operation.quest != null:
 			operation.quest.context["reward_resolved"] = true
 			operation.quest.parse_reward()
+	elif operation.state in [HubOperation.State.FAILED, HubOperation.State.CANCELLED] and operation.quest != null:
+		var reason_key := str(operation.quest.context.get("failure_reason_key", "OPERATION_RESULT_FAILED"))
+		operation.result_text = tr(reason_key)
 
 func _on_quest_completed(operation: HubOperation) -> void:
 	if operation == null:
@@ -142,7 +145,7 @@ func _announce_newly_available_work(quest: Quest) -> void:
 func get_active_operations() -> Array[HubOperation]:
 	var active: Array[HubOperation] = []
 	for operation in operations:
-		if operation != null and operation.state != HubOperation.State.COMPLETE:
+		if operation != null and operation.state not in [HubOperation.State.COMPLETE, HubOperation.State.FAILED, HubOperation.State.CANCELLED]:
 			active.append(operation)
 	return active
 

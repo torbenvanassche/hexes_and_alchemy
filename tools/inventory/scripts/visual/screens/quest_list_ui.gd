@@ -73,16 +73,12 @@ func _on_create_quest_window_loaded(window_info: SceneInfo) -> void:
 	window_instance = SceneManager.add(window_info, false);
 	var quest_creation: QuestCreationUI = (window_instance.node as DraggableControl).content as QuestCreationUI;
 	quest_creation.clear_forced_data()
-	if not quest_creation.quest_created.is_connected(Manager.instance.quests.add_quest):
-		quest_creation.quest_created.connect(Manager.instance.quests.add_quest)
 	window_instance.on_enter.emit();
 
 func _on_scout_quest_window_loaded(window_info: SceneInfo) -> void:
 	window_instance = SceneManager.add(window_info, false);
 	var quest_creation: QuestCreationUI = (window_instance.node as DraggableControl).content as QuestCreationUI;
 	quest_creation.setup_scouting_request()
-	if not quest_creation.quest_created.is_connected(Manager.instance.quests.add_quest):
-		quest_creation.quest_created.connect(Manager.instance.quests.add_quest)
 	window_instance.on_enter.emit();
 
 func _get_quest_notes() -> Array[QuestListItemUI]:

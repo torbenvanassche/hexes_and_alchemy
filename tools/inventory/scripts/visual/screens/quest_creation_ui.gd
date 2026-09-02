@@ -52,6 +52,8 @@ var forced_interaction: Interaction;
 var scout_only := false
 var _selected_support_ids: Array[String] = []
 var _support_selection_context := ""
+var _posting_service: QuestPostingService
+var _target_selector: QuestTargetSelector
 
 func _reset_ui() -> void:
 	_apply_mode_visibility()
@@ -150,7 +152,7 @@ func _on_location_selected(idx: int) -> void:
 		return;
 	_refresh_active_quests_for_location(location)
 
-	if _is_scout_location(location):
+	if _get_target_selector().is_scout_location(location):
 		quest_type.clear()
 		quest_type.add_item(_get_quest_type_label(SCOUT_QUEST_KEY))
 		quest_type.set_item_metadata(0, SCOUT_QUEST_KEY)
@@ -180,10 +182,7 @@ func _on_location_selected(idx: int) -> void:
 	quest_type.clear();
 	var objective: QuestObjective = location.structure.instance as QuestObjective;
 	if objective:
-		var postable_types := Manager.instance.quests.get_postable_quest_types(
-			location,
-			objective.get_filtered_quest_types(objective.state_machine.get_current_state_index())
-		)
+		var postable_types := _get_target_selector().get_postable_types(location)
 		for state: String in postable_types:
 			quest_type.add_item(_get_quest_type_label(state));
 			quest_type.set_item_metadata(quest_type.item_count - 1, state)
@@ -260,73 +259,16 @@ func _on_hub_faction_activity_changed() -> void:
 	_refresh_interest_feedback()
 
 func _add_location_option(hex: HexBase, require_reachable: bool = true, allow_active_location: bool = false) -> bool:
-	if _is_scout_location(hex):
+	var selector := _get_target_selector()
+	if selector.is_scout_location(hex):
+		return false
+	if not selector.can_offer_location(hex, require_reachable, allow_active_location):
 		return false
 
-	if not _is_available_location_base(hex):
-		return false
-
-	var active_scene := SceneManager.get_active_scene()
-	if active_scene == null:
-		return false
-
-	var grid := active_scene.node as HexGrid
-	if grid == null:
-		return false
-	if require_reachable and not Manager.instance.quests.is_quest_location_reachable(hex, grid):
-		return false
-
-	var player_hex: HexBase = Manager.instance.player_instance.get_hex()
-	if player_hex == null:
-		return false
-
-	var objective: QuestObjective = hex.structure.instance as QuestObjective
-	var postable_types := Manager.instance.quests.get_postable_quest_types(
-		hex,
-		objective.get_filtered_quest_types(objective.state_machine.get_current_state_index())
-	)
-	if postable_types.is_empty() and not (allow_active_location and Manager.instance.quests.has_quests_for_location(hex)):
-		return false
-
-	var distance: int = GridUtils.cube_distance(hex.cube_id, player_hex.cube_id);
+	var distance := selector.get_distance(hex)
 	quest_location.add_item(tr("QUEST_LOCATION_DISTANCE") % [hex.structure.structure_info.get_display_name(), distance])
 	quest_location.set_item_metadata(quest_location.item_count - 1, hex)
 	return true
-
-func _is_available_location_base(hex: HexBase) -> bool:
-	if hex == null or hex.structure == null:
-		return false
-	if not hex.is_explored or not hex.is_visible_in_tree():
-		return false
-	if not hex.structure.structure_info.is_quest_target:
-		return false
-
-	var objective := hex.structure.instance as QuestObjective
-	return objective != null and objective.is_visible_in_tree() and objective.can_interact()
-
-func _sort_locations_by_distance(locations: Array[HexBase]) -> Array[HexBase]:
-	var player_hex: HexBase = Manager.instance.player_instance.get_hex()
-	if player_hex == null:
-		return locations
-
-	var sorted_locations := locations.duplicate()
-	sorted_locations.sort_custom(func(a: HexBase, b: HexBase) -> bool:
-		var distance_a := GridUtils.cube_distance(a.cube_id, player_hex.cube_id)
-		var distance_b := GridUtils.cube_distance(b.cube_id, player_hex.cube_id)
-		if distance_a == distance_b:
-			return _get_location_sort_label(a).nocasecmp_to(_get_location_sort_label(b)) < 0
-		return distance_a < distance_b
-	)
-	return sorted_locations
-
-func _get_location_sort_label(hex: HexBase) -> String:
-	if hex == null:
-		return ""
-	if _is_scout_location(hex):
-		return tr("QUEST_TYPE_SCOUT")
-	if hex.structure == null or hex.structure.structure_info == null:
-		return ""
-	return hex.structure.structure_info.get_display_name()
 
 func _apply_forced_interaction() -> void:
 	quest_location.disabled = true;
@@ -338,10 +280,7 @@ func _apply_forced_interaction() -> void:
 		_set_status(tr("QUEST_CREATION_NO_AVAILABLE_QUESTS"))
 		return
 
-	var active_scene := SceneManager.get_active_scene()
-	var grid: HexGrid = null
-	if active_scene != null:
-		grid = active_scene.node as HexGrid
+	var grid := _get_target_selector().get_grid()
 	if grid != null and not Manager.instance.quests.is_quest_location_reachable(forced_interaction.hex, grid):
 		_set_details("")
 		_set_status(tr("QUEST_CREATION_UNREACHABLE"))
@@ -361,21 +300,15 @@ func _apply_scouting_request() -> void:
 	quest_type.disabled = true
 	quest_location.clear()
 	quest_type.clear()
-	var active_scene := SceneManager.get_active_scene()
-	if active_scene == null:
-		_set_details("")
-		_set_status(tr("QUEST_CREATION_NO_SCOUTING_AVAILABLE"))
-		return
-
-	var grid := active_scene.node as HexGrid
+	var selector := _get_target_selector()
+	var grid := selector.get_grid()
 	if grid == null:
 		_set_details("")
 		_set_status(tr("QUEST_CREATION_NO_SCOUTING_AVAILABLE"))
 		return
 
 	_configure_scout_distance_limit()
-	var scout_location := Manager.instance.quests.get_scout_location_for_direction_and_distance(
-		grid,
+	var scout_location := selector.resolve_scout_target(
 		_get_requested_scout_direction(),
 		_get_requested_scout_distance()
 	)
@@ -387,7 +320,7 @@ func _apply_scouting_request() -> void:
 	_set_status("")
 	quest_location.add_item(tr("QUEST_LOCATION_SCOUT_SELECTED") % [
 		_get_scout_direction_label(_get_requested_scout_direction()),
-		_get_scout_distance_from_origin(grid, scout_location),
+		selector.get_scout_distance(scout_location),
 	])
 	quest_location.set_item_metadata(0, scout_location)
 	quest_location.select(0)
@@ -419,41 +352,12 @@ func on_enter() -> void:
 		return
 
 	quest_location.disabled = false;
-	var active_scene := SceneManager.get_active_scene()
-	if active_scene == null:
+	var selector := _get_target_selector()
+	if selector.get_grid() == null:
 		_on_location_selected(-1)
 		return
 
-	var grid := active_scene.node as HexGrid
-	if grid == null:
-		_on_location_selected(-1)
-		return
-
-	var structure_hexes: Array[HexBase] = grid.get_structured_hexes();
-	var available_locations: Array[HexBase] = []
-
-	for hex in structure_hexes:
-		if not _is_available_location_base(hex):
-			continue
-
-		var quest_objective: QuestObjective = hex.structure.instance as QuestObjective
-
-		var player_hex: HexBase = Manager.instance.player_instance.get_hex()
-		if player_hex == null:
-			continue
-
-		var distance: int = GridUtils.cube_distance(hex.cube_id, player_hex.cube_id);
-		var in_range: bool = distance <= Manager.instance.quests.max_quest_distance;
-		var is_reachable := Manager.instance.quests.is_quest_location_reachable(hex, grid)
-		var has_postable_quest: bool = Manager.instance.quests.get_postable_quest_types(
-			hex,
-			quest_objective.get_filtered_quest_types()
-		).size() != 0;
-
-		if in_range and is_reachable and has_postable_quest:
-			available_locations.append(hex)
-
-	for hex in _sort_locations_by_distance(available_locations):
+	for hex in selector.get_available_quest_locations():
 		_add_location_option(hex)
 
 	if quest_location.item_count > 0:
@@ -489,24 +393,21 @@ func _create_quest() -> void:
 		return
 	var minimum_rank_override := _get_minimum_rank_override()
 	var quest_rank_experience := objective.get_quest_rank_experience_reward(quest_type_key, minimum_rank_override)
-	var quest := Quest.new(
+	var result := _get_posting_service().post_quest(
 		location,
 		quest_type_key,
 		reward_amount,
 		minimum_rank_override,
-		quest_rank_experience
+		quest_rank_experience,
+		_selected_support_ids,
+		_get_player_inventory()
 	)
-	quest.set_selected_support_ids(_selected_support_ids)
-	if not _try_reserve_reward(reward_amount):
-		_update_finish_button()
-		return
-	if not objective.assign_required_supplies(quest, _get_player_inventory()):
-		_refund_reward(reward_amount)
+	if not result.success:
+		_set_status(tr(result.message_key))
 		_update_finish_button()
 		return
 
-	quest.context["supplies_reserved"] = true
-	quest_created.emit(quest);
+	quest_created.emit(result.quest);
 	if window != null:
 		window.close_requested.emit();
 
@@ -593,7 +494,7 @@ func _refresh_quest_type_availability() -> void:
 		return
 
 	var location := quest_location.get_item_metadata(location_idx) as HexBase
-	if _is_scout_location(location):
+	if _get_target_selector().is_scout_location(location):
 		for i in quest_type.item_count:
 			quest_type.set_item_disabled(i, not _can_create_scout_quest(location))
 		return
@@ -680,66 +581,10 @@ func _refresh_active_quests_for_location(location: HexBase) -> void:
 	_request_window_refit()
 
 func _create_active_quest_row(quest: Quest) -> Control:
-	var panel := PanelContainer.new()
-	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.74, 0.62, 0.42, 0.22)
-	style.border_color = Color(0.38, 0.26, 0.14, 0.55)
-	style.set_border_width_all(1)
-	style.set_corner_radius_all(4)
-	style.set_content_margin(SIDE_LEFT, 10)
-	style.set_content_margin(SIDE_TOP, 8)
-	style.set_content_margin(SIDE_RIGHT, 10)
-	style.set_content_margin(SIDE_BOTTOM, 8)
-	panel.add_theme_stylebox_override("panel", style)
-
-	var content := VBoxContainer.new()
-	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	content.add_theme_constant_override("separation", 5)
-	panel.add_child(content)
-
-	var header := HBoxContainer.new()
-	header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	content.add_child(header)
-
-	var title := Label.new()
-	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title.add_theme_font_size_override("font_size", 18)
-	title.add_theme_color_override("font_color", Color(0.17, 0.1, 0.04, 1.0))
-	title.text = _get_quest_type_name(quest.quest_key)
-	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	header.add_child(title)
-
-	var state_label := Label.new()
-	state_label.add_theme_font_size_override("font_size", 14)
-	state_label.add_theme_color_override("font_color", Color(0.32, 0.22, 0.12, 1.0))
-	state_label.text = _get_quest_state_name(quest.state_machine.get_current_state())
-	state_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	header.add_child(state_label)
-
-	var party_label := Label.new()
-	party_label.text = _get_quest_party_text(quest)
-	party_label.modulate = Color(0.32, 0.22, 0.12, 1.0)
-	party_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	content.add_child(party_label)
-
-	var progress := ProgressBar.new()
-	progress.custom_minimum_size = Vector2(0, 12)
-	progress.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	progress.max_value = 1.0
-	progress.show_percentage = false
-	progress.value = _get_quest_state_progress(quest.state_machine.get_current_state())
-	progress.visible = not quest.is_state(Quest.QuestState.COMPLETE)
-	content.add_child(progress)
-
-	if quest.is_state(Quest.QuestState.COMPLETE):
-		var claim_button := Button.new()
-		claim_button.text = tr("QUEST_ACTION_CLAIM_REWARD")
-		claim_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		claim_button.pressed.connect(_claim_active_location_quest.bind(quest, quest.location))
-		content.add_child(claim_button)
-
-	return panel
+	var card := QuestActiveCardUI.new()
+	card.setup(quest)
+	card.claim_requested.connect(_claim_active_location_quest.bind(quest.location))
+	return card
 
 func _claim_active_location_quest(quest: Quest, location: HexBase) -> void:
 	if quest == null:
@@ -781,27 +626,6 @@ func _on_active_location_quest_completed(location: HexBase) -> void:
 		selected_location = quest_location.get_item_metadata(quest_location.selected) as HexBase
 	if selected_location == location:
 		_refresh_active_quests_for_location.call_deferred(location)
-
-func _get_quest_state_name(state: String) -> String:
-	var translation_key := "QUEST_STATE_%s" % [state.to_upper()]
-	var translated := tr(translation_key)
-	if translated == translation_key:
-		return state.capitalize()
-	return translated
-
-func _get_quest_party_text(quest: Quest) -> String:
-	if quest == null or quest.party.is_empty():
-		return tr("QUEST_PARTY_UNASSIGNED")
-	if quest.party.size() == 1:
-		return tr("QUEST_PARTY_ONE_ADVENTURER")
-	return tr("QUEST_PARTY_ADVENTURERS") % [quest.party.size()]
-
-func _get_quest_state_progress(state: String) -> float:
-	var states := Quest.QuestState.keys()
-	var state_index := states.find(state.to_upper())
-	if state_index == -1:
-		return 0.0
-	return float(state_index) / float(max(1, states.size() - 1))
 
 func _refresh_required_supplies() -> void:
 	for child in supplies_grid.get_children():
@@ -1028,12 +852,8 @@ func _refresh_quest_details() -> void:
 			duration_title.text = tr("QUEST_DETAIL_DISTANCE_LABEL")
 		var distance_text := ""
 		var location := quest_location.get_item_metadata(quest_location.selected) as HexBase
-		var active_scene := SceneManager.get_active_scene()
-		var grid: HexGrid = null
-		if active_scene != null:
-			grid = active_scene.node as HexGrid
-		if grid != null and location != null:
-			distance_text = tr("QUEST_DETAIL_SCOUT_DISTANCE") % [_get_scout_distance_from_origin(grid, location)]
+		if location != null:
+			distance_text = tr("QUEST_DETAIL_SCOUT_DISTANCE") % [_get_target_selector().get_scout_distance(location)]
 		_set_details(
 			tr("QUEST_DESC_SCOUT"),
 			distance_text,
@@ -1305,27 +1125,34 @@ func _get_interested_npc_count() -> int:
 		_get_minimum_rank_override()
 	).size()
 
-func _try_reserve_reward(amount: int) -> bool:
-	if amount <= 0:
-		return true
-	if Manager.instance != null and Manager.instance.hub != null:
-		return Manager.instance.hub.reserve_currency(amount)
+func _get_posting_service() -> QuestPostingService:
+	var quest_manager := Manager.instance.quests if Manager.instance != null else null
+	var hub := Manager.instance.hub if Manager.instance != null else null
 	var player := _get_player()
-	if player == null or player.currency < amount:
-		return false
-	player.currency -= amount
-	return true
+	if (
+		_posting_service == null
+		or _posting_service.quest_manager != quest_manager
+		or _posting_service.hub != hub
+		or _posting_service.player != player
+	):
+		_posting_service = QuestPostingService.new(quest_manager, hub, player)
+	return _posting_service
 
-func _refund_reward(amount: int) -> void:
-	if amount <= 0:
-		return
-	if Manager.instance != null and Manager.instance.hub != null:
-		Manager.instance.hub.add_currency(amount)
-		return
+func _get_target_selector() -> QuestTargetSelector:
+	var quest_manager := Manager.instance.quests if Manager.instance != null else null
 	var player := _get_player()
-	if player == null:
-		return
-	player.currency += amount
+	if (
+		_target_selector == null
+		or _target_selector.quest_manager != quest_manager
+		or _target_selector.player != player
+	):
+		_target_selector = QuestTargetSelector.new(quest_manager, player)
+		_target_selector.target_unavailable.connect(_on_target_unavailable)
+	return _target_selector
+
+func _on_target_unavailable(message_key: String) -> void:
+	_set_details("")
+	_set_status(tr(message_key))
 
 func _apply_mode_visibility() -> void:
 	if location_row != null:
@@ -1389,37 +1216,11 @@ func _get_scout_direction_label(direction_index: int) -> String:
 	var translated := tr(translation_key)
 	return translated if translated != translation_key else str(direction_index + 1)
 
-func _get_scout_distance_from_origin(grid: HexGrid, location: HexBase) -> int:
-	if Manager.instance == null or Manager.instance.quests == null or grid == null or location == null:
-		return 0
-	var origin_hex := Manager.instance.quests.get_active_quest_origin_hex(grid)
-	if origin_hex == null:
-		return 0
-	return GridUtils.cube_distance(origin_hex.cube_id, location.cube_id)
-
-func _is_scout_location(hex: HexBase) -> bool:
-	return hex != null and hex.structure == null and not hex.is_explored
-
 func _can_create_scout_quest(location: HexBase) -> bool:
-	if Manager.instance == null or Manager.instance.quests == null:
-		return false
-	if location == null or not _has_reward_budget():
-		return false
-	var active_scene := SceneManager.get_active_scene()
-	var grid: HexGrid = null
-	if active_scene != null:
-		grid = active_scene.node as HexGrid
-	return (
-		grid != null
-		and Manager.instance.quests.is_valid_scout_location(location, grid)
-		and Manager.instance.quests.is_quest_location_reachable(location, grid)
-	)
+	return _has_reward_budget() and _get_target_selector().can_post_scout(location)
 
 func _create_scout_quest(location: HexBase, reward_amount: int) -> void:
 	if not _can_create_scout_quest(location):
-		_update_finish_button()
-		return
-	if not _try_reserve_reward(reward_amount):
 		_update_finish_button()
 		return
 
@@ -1427,17 +1228,25 @@ func _create_scout_quest(location: HexBase, reward_amount: int) -> void:
 	var scout_rank_experience := 1
 	if minimum_rank_override >= 0:
 		scout_rank_experience = int(AdventurerRank.clamp_rank(minimum_rank_override)) + 1
-	var quest := Quest.new(
+	var scout_context := {
+		"scout_direction_key": "QUEST_SCOUT_DIRECTION_%s" % [_get_requested_scout_direction()],
+		"scout_distance": _get_target_selector().get_scout_distance(location),
+	}
+	var no_supports: Array[String] = []
+	var result := _get_posting_service().post_quest(
 		location,
 		SCOUT_QUEST_KEY,
 		reward_amount,
 		minimum_rank_override,
-		scout_rank_experience
+		scout_rank_experience,
+		no_supports,
+		_get_player_inventory(),
+		scout_context
 	)
-	quest.context["scout_direction_key"] = "QUEST_SCOUT_DIRECTION_%s" % [_get_requested_scout_direction()]
-	var active_scene := SceneManager.get_active_scene()
-	var grid := active_scene.node as HexGrid if active_scene != null else null
-	quest.context["scout_distance"] = _get_scout_distance_from_origin(grid, location)
-	quest_created.emit(quest)
+	if not result.success:
+		_set_status(tr(result.message_key))
+		_update_finish_button()
+		return
+	quest_created.emit(result.quest)
 	if window != null:
 		window.close_requested.emit()

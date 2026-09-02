@@ -5,7 +5,9 @@ enum QuestState {
 	EN_ROUTE,
 	IN_PROGRESS,
 	RETURNING,
-	COMPLETE
+	COMPLETE,
+	FAILED,
+	CANCELLED
 }
 
 var quest_key: String;
@@ -27,6 +29,8 @@ var support_members: Dictionary[StringName, NPC] = {}
 
 signal completed();
 signal outcome_ready(resolved_outcome: QuestOutcome)
+signal failed(reason_key: String)
+signal cancelled(reason_key: String)
 
 func _init(
 	_location: HexBase = null,
@@ -53,8 +57,8 @@ func _init(
 func is_state(state: QuestState) -> bool:
 	return get_state_as_string(state) == state_machine.get_current_state();
 	
-func add_supply(item: Resource, amount: int = 1) -> void:
-	supplies.add(item, amount, true);
+func add_supply(item: Resource, amount: int = 1) -> int:
+	return supplies.add(item, amount, true);
 	
 func add_to_party(npc: NPC, support_id: StringName = &"") -> bool:
 	if npc == null or party.has(npc) or not is_state(QuestState.WAITING) or not npc.is_available_for_quest():
@@ -195,11 +199,11 @@ func _check_party_arrived_at_quest() -> void:
 		var objective := get_objective()
 		if objective == null:
 			Debug.warn("Quest '%s' no longer has a valid objective." % [quest_key])
-			return_from_quest()
+			_fail("QUEST_FAILED_MISSING_OBJECTIVE")
 			return
 		if not objective.quest_has_required_supplies(self):
 			Debug.warn("Quest '%s' is missing its required supplies." % [quest_key])
-			return_from_quest()
+			_fail("QUEST_FAILED_MISSING_SUPPLIES")
 			return
 		objective.execute_quest(self);
 		set_state(QuestState.IN_PROGRESS);
@@ -230,6 +234,26 @@ func return_from_quest() -> void:
 		if not npc.arrived.is_connected(return_completed):
 			npc.arrived.connect(return_completed, CONNECT_ONE_SHOT);
 		npc.set_state(NPC.NPCState.RETURNING);
+
+func mark_failed(reason_key: String) -> void:
+	if is_state(QuestState.COMPLETE) or is_state(QuestState.FAILED) or is_state(QuestState.CANCELLED):
+		return
+	context["failure_reason_key"] = reason_key
+	set_state(QuestState.FAILED)
+	failed.emit(reason_key)
+
+func mark_cancelled(reason_key: String = "QUEST_CANCELLED") -> void:
+	if is_state(QuestState.COMPLETE) or is_state(QuestState.FAILED) or is_state(QuestState.CANCELLED):
+		return
+	context["failure_reason_key"] = reason_key
+	set_state(QuestState.CANCELLED)
+	cancelled.emit(reason_key)
+
+func _fail(reason_key: String) -> void:
+	if Manager.instance != null and Manager.instance.quests != null:
+		Manager.instance.quests.fail_quest(self, reason_key)
+	else:
+		mark_failed(reason_key)
 	
 func parse_reward() -> void:
 	if context.get("reward_claimed", false) or not is_state(QuestState.COMPLETE):
@@ -256,7 +280,10 @@ func parse_reward() -> void:
 		Manager.instance.reputation.record_quest(self)
 	context["reward_resolved"] = true
 	context["reward_claimed"] = true
-	Manager.instance.quests.remove_quest(self);
+	context["reward_reserved"] = false
+	context["supplies_reserved"] = false
+	if Manager.instance != null and Manager.instance.quests != null:
+		Manager.instance.quests.remove_quest(self);
 	completed.emit();
 
 func _resolve_return_outcome() -> void:

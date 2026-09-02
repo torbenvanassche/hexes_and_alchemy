@@ -4,28 +4,11 @@
 [ext_resource type="PackedScene" uid="uid://d4ymsokn1evq" path="res://meshes/kay_fantasy_hexagon/units/neutral/unit.glb" id="2_qhqgy"]
 [ext_resource type="Script" uid="uid://b6rgx41co3bur" path="res://tools/inventory/scripts/inventory/inventory.gd" id="3_qhqgy"]
 [ext_resource type="Script" uid="uid://bx2r732rmx6xs" path="res://scripts/player/player_movement.gd" id="4_movement"]
-[ext_resource type="Script" uid="uid://bqabkvm20ept7" path="res://tools/inventory/scripts/data/content_slot.gd" id="4_tuyoq"]
-[ext_resource type="Resource" path="res://resources/item_info/settlement_expansion_permit.tres" id="5_fjrip"]
-[ext_resource type="Resource" path="res://resources/item_info/bridge_blueprint.tres" id="6_smehm"]
 [ext_resource type="Script" uid="uid://dxdnvhygg0f32" path="res://scripts/player/player_interactor.gd" id="7_interactor"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_g2els"]
 radius = 0.095214844
 height = 0.36999512
-
-[sub_resource type="Resource" id="Resource_hu2ny"]
-script = ExtResource("4_tuyoq")
-content = ExtResource("5_fjrip")
-count = 5
-maxcount = 6
-metadata/_custom_type_script = "uid://bqabkvm20ept7"
-
-[sub_resource type="Resource" id="Resource_4rixj"]
-script = ExtResource("4_tuyoq")
-content = ExtResource("6_smehm")
-count = 1
-maxcount = 1
-metadata/_custom_type_script = "uid://bqabkvm20ept7"
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_qhqgy"]
 size = Vector3(0.7191162, 0.5185547, 0.6298218)
@@ -43,7 +26,6 @@ shape = SubResource("CapsuleShape3D_g2els")
 script = ExtResource("3_qhqgy")
 unlocked_slots = 10
 max_slots = 10
-data = Array[ExtResource("4_tuyoq")]([SubResource("Resource_hu2ny"), SubResource("Resource_4rixj")])
 stack_size = 10
 
 [node name="Movement" type="Node" parent="." unique_id=147313217]

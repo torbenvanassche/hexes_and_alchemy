@@ -2,7 +2,7 @@ class_name HexAStar
 extends AStar2D
 
 var grid: HexGrid
-var method: HexInfo.TraversalTag
+var method: HexInfo.TraversalTag = HexInfo.TraversalTag.WALK
 
 var cube_to_id: Dictionary[Vector3i, int] = {}
 var id_to_cube: Dictionary[int, Vector3i] = {}

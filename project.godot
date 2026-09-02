@@ -140,6 +140,10 @@ camera_zoom_out={
 
 locale/translations=PackedStringArray("res://translations/translations.en.translation", "res://translations/translations.nl.translation")
 
+[gui]
+
+theme/custom="res://themes/game_theme.tres"
+
 [navigation]
 
 3d/default_cell_size=0.05

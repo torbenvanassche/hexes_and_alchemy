@@ -8,6 +8,8 @@ class_name QuestListItemUI extends Control
 @onready var progress_bar: ProgressBar = $Paper/MarginContainer/VBoxContainer/ProgressBar
 @onready var label: Label = $Paper/MarginContainer/VBoxContainer/ProgressBar/Label
 @onready var claim_reward_button: Button = $Paper/MarginContainer/VBoxContainer/ClaimRewardButton
+@onready var paper: NinePatchRect = $Paper
+@onready var pin: ColorRect = $Paper/Pin
 
 @export var supply_slot: PackedScene;
 
@@ -43,11 +45,16 @@ func _on_quest_complete() -> void:
 	
 func _update_progress(state: String) -> void:
 	label.text = _get_state_name(state);
+	var state_color := QuestStatePresentation.get_color(state)
+	label.add_theme_color_override("font_color", Color.WHITE)
+	progress_bar.self_modulate = state_color
+	pin.color = state_color
+	paper.self_modulate = Color(0.93, 0.84, 0.64, 1.0).lerp(state_color, 0.1)
 	party.text = _get_party_text()
 	var payment := questData.get_offered_currency_reward() if questData != null else 0
 	payment_label.text = tr("QUEST_PAYMENT_OFFERED") % [payment]
 	payment_label.visible = payment > 0
-	progress_bar.value = _get_state_progress(state)
+	progress_bar.value = QuestStatePresentation.get_progress(state)
 	var is_complete := questData != null and questData.is_state(Quest.QuestState.COMPLETE)
 	progress_bar.visible = not is_complete
 	claim_reward_button.visible = is_complete
@@ -107,13 +114,6 @@ func _get_state_name(state: String) -> String:
 	if translated == translation_key:
 		return state.capitalize()
 	return translated
-
-func _get_state_progress(state: String) -> float:
-	var states := Quest.QuestState.keys()
-	var state_index := states.find(state.to_upper())
-	if state_index == -1:
-		return 0.0
-	return float(state_index) / float(max(1, states.size() - 1))
 
 func _on_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:

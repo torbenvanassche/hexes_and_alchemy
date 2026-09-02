@@ -187,13 +187,7 @@ func assign_required_supplies_for_level(quest: Quest, inventory: ContentGroup, l
 	var requirements := get_required_supplies_for_level(level)
 	if quest == null or inventory == null or not inventory.has_all(requirements):
 		return false
-	for item: ItemInfo in requirements.keys():
-		var amount := int(requirements[item])
-		if amount <= 0:
-			continue
-		inventory.remove(item, amount)
-		quest.add_supply(item, amount)
-	return true
+	return inventory.transfer_all_to(quest.supplies, requirements, true)
 
 func quest_has_supplies_for_level(quest: Quest, level: int) -> bool:
 	return quest != null and quest.supplies != null and quest.supplies.has_all(get_required_supplies_for_level(level))
@@ -209,13 +203,7 @@ func assign_required_supplies(quest: Quest, inventory: ContentGroup) -> bool:
 	if not has_available_supplies(inventory):
 		return false
 
-	for item: ItemInfo in required_supplies.keys():
-		var amount := int(required_supplies[item])
-		if amount <= 0:
-			continue
-		inventory.remove(item, amount)
-		quest.add_supply(item, amount)
-	return true
+	return inventory.transfer_all_to(quest.supplies, required_supplies, true)
 
 func quest_has_supplies(quest: Quest) -> bool:
 	if quest == null:
@@ -266,5 +254,5 @@ func get_completion_spot_stage(objective: QuestObjective) -> SpotProgress.Stage:
 	if objective != null and objective.state_machine != null:
 		var state_name := objective.state_machine.get_current_state()
 		if objective_state_spot_stage_overrides.has(state_name):
-			return int(objective_state_spot_stage_overrides[state_name])
+			return int(objective_state_spot_stage_overrides[state_name]) as SpotProgress.Stage
 	return completion_spot_stage

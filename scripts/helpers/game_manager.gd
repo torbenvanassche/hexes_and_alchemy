@@ -33,6 +33,7 @@ func _ready() -> void:
 	instance = self;
 	if hub != null and not hub.changed.is_connected(quests.try_assign_waiting_quests):
 		hub.changed.connect(quests.try_assign_waiting_quests)
+	_connect_quest_notifications()
 	_load_or_create()
 	input = InputSettings.new(config)
 	
@@ -41,6 +42,66 @@ func _ready() -> void:
 		return
 		
 	initial_scene.queue(_initialized);
+
+func _connect_quest_notifications() -> void:
+	if quests == null:
+		return
+	if not quests.quest_added.is_connected(_on_quest_added):
+		quests.quest_added.connect(_on_quest_added)
+	if not quests.quest_state_changed.is_connected(_on_quest_state_changed):
+		quests.quest_state_changed.connect(_on_quest_state_changed)
+	if not quests.quest_failed.is_connected(_on_quest_failed):
+		quests.quest_failed.connect(_on_quest_failed)
+	if not quests.quest_cancelled.is_connected(_on_quest_cancelled):
+		quests.quest_cancelled.connect(_on_quest_cancelled)
+
+func _on_quest_added(quest: Quest) -> void:
+	_notify_quest("QUEST_NOTICE_POSTED", quest, Color(0.65, 0.45, 0.16, 1.0))
+
+func _on_quest_state_changed(quest: Quest, state: String) -> void:
+	var notice_key := ""
+	var accent := Color.TRANSPARENT
+	match state:
+		"en_route":
+			notice_key = "QUEST_NOTICE_EN_ROUTE"
+			accent = Color(0.2, 0.42, 0.62, 1.0)
+		"in_progress":
+			notice_key = "QUEST_NOTICE_IN_PROGRESS"
+			accent = Color(0.18, 0.5, 0.34, 1.0)
+		"returning":
+			notice_key = "QUEST_NOTICE_RETURNING"
+			accent = Color(0.2, 0.42, 0.62, 1.0)
+		"complete":
+			notice_key = "QUEST_NOTICE_COMPLETE"
+			accent = Color(0.25, 0.55, 0.28, 1.0)
+	if notice_key != "":
+		_notify_quest(notice_key, quest, accent)
+
+func _on_quest_failed(quest: Quest, reason_key: String) -> void:
+	if toast == null or quest == null:
+		return
+	toast.notify(
+		tr("QUEST_NOTICE_FAILED") % [_get_quest_notice_name(quest), tr(reason_key)],
+		Color(0.65, 0.18, 0.15, 1.0)
+	)
+
+func _on_quest_cancelled(quest: Quest, _reason_key: String) -> void:
+	_notify_quest("QUEST_NOTICE_CANCELLED", quest, Color(0.5, 0.38, 0.22, 1.0))
+
+func _notify_quest(message_key: String, quest: Quest, accent: Color) -> void:
+	if toast == null or quest == null:
+		return
+	toast.notify(tr(message_key) % [_get_quest_notice_name(quest)], accent)
+
+func _get_quest_notice_name(quest: Quest) -> String:
+	if quest == null:
+		return tr("UNKNOWN")
+	var profile := quest.get_profile()
+	if profile != null:
+		return profile.get_display_name()
+	var key := "QUEST_TYPE_%s" % quest.quest_key.to_upper()
+	var translated := tr(key)
+	return quest.quest_key.capitalize() if translated == key else translated
 	
 func _initialized(_scene_info: SceneInfo) -> void:
 	SceneManager.add(_scene_info);

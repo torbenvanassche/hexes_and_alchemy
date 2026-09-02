@@ -166,7 +166,7 @@ func deposit_items(items: Dictionary[ItemInfo, int]) -> void:
 func adopt_inventory(source: ContentGroup) -> void:
 	if source == null or stockpile == null or source == stockpile:
 		return
-	var items: Dictionary[ItemInfo, int] = {}
+	var items: Dictionary = {}
 	for slot: ContentSlotResource in source.data:
 		if slot == null or slot.get_content() == null or slot.count <= 0:
 			continue
@@ -175,14 +175,8 @@ func adopt_inventory(source: ContentGroup) -> void:
 			items[item] = items.get(item, 0) + slot.count
 	if items.is_empty():
 		return
-	deposit_items(items)
-	for slot: ContentSlotResource in source.data:
-		if slot == null:
-			continue
-		slot.count = 0
-		slot.reset()
-		slot.changed.emit()
-	source.changed.emit()
+	if source.transfer_all_to(stockpile, items, true):
+		changed.emit()
 
 func withdraw_items(items: Dictionary[ItemInfo, int]) -> bool:
 	if stockpile == null or not stockpile.has_all(items):
