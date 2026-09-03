@@ -1,26 +1,14 @@
-[gd_resource type="Resource" script_class="AdventurerRecoveryRules" format=3]
+[gd_resource type="Resource" script_class="AdventurerRecoveryRules" format=3 uid="uid://ckk7s1r7xi70e"]
 
-[ext_resource type="Script" path="res://tools/quest_system/scripts/adventurer_recovery_rules.gd" id="1_rules"]
-[ext_resource type="Resource" path="res://resources/item_info/travel_rations.tres" id="2_rations"]
-[ext_resource type="Resource" path="res://resources/injuries/sprain.tres" id="3_sprain"]
-[ext_resource type="Resource" path="res://resources/injuries/deep_wound.tres" id="4_wound"]
-[ext_resource type="Resource" path="res://resources/injuries/concussion.tres" id="5_concussion"]
-[ext_resource type="Resource" path="res://resources/injuries/trauma.tres" id="6_trauma"]
+[ext_resource type="Script" uid="uid://bomxejyq5y4lq" path="res://tools/quest_system/scripts/adventurer_injury.gd" id="1_6cl6o"]
+[ext_resource type="Script" uid="uid://b8rvqs2mb710n" path="res://tools/quest_system/scripts/adventurer_recovery_rules.gd" id="1_rules"]
+[ext_resource type="Resource" uid="uid://c1h73wfy4bsm" path="res://resources/item_info/travel_rations.tres" id="2_rations"]
+[ext_resource type="Resource" uid="uid://cyoa4rdh4ke6l" path="res://resources/injuries/sprain.tres" id="3_sprain"]
+[ext_resource type="Resource" uid="uid://dsv8ngeoxjaws" path="res://resources/injuries/deep_wound.tres" id="4_wound"]
+[ext_resource type="Resource" uid="uid://lotl1u31kv46" path="res://resources/injuries/concussion.tres" id="5_concussion"]
+[ext_resource type="Resource" uid="uid://ckvbxv44l3bdu" path="res://resources/injuries/trauma.tres" id="6_trauma"]
 
 [resource]
 script = ExtResource("1_rules")
-base_rest_seconds = 3.0
-quest_duration_rest_multiplier = 0.35
-dangerous_quest_rest_multiplier = 2.0
-uncertain_quest_rest_multiplier_min = 1.15
-uncertain_quest_rest_multiplier_max = 1.55
-maximum_rest_seconds = 30.0
 injury_recovery_item = ExtResource("2_rations")
-injury_recovery_item_count = 1
-injury_item_recovery_multiplier = 0.75
-dangerous_outcome_injury_chance = 0.7
-dangerous_outcome_death_chance = 0.12
-injury_pool = Array[ExtResource("3_sprain")]([ExtResource("3_sprain"), ExtResource("4_wound"), ExtResource("5_concussion"), ExtResource("6_trauma")])
-maximum_persistent_injuries = 3
-forced_retirement_severity = 5
-automatic_retirement_seconds = 900.0
+injury_pool = Array[ExtResource("1_6cl6o")]([ExtResource("3_sprain"), ExtResource("4_wound"), ExtResource("5_concussion"), ExtResource("6_trauma")])

@@ -10,15 +10,8 @@
 [ext_resource type="Resource" uid="uid://dc8q5v2n8adef" path="res://resources/settlement_upgrades/settlement_level_2.tres" id="16_upgrade_2"]
 [ext_resource type="Resource" path="res://resources/settlement_upgrades/settlement_level_3.tres" id="17_upgrade_3"]
 [ext_resource type="Script" uid="uid://df1yhyfp6xqgs" path="res://scripts/hex_system/settlement_upgrade_info.gd" id="18_upgrade_info"]
-<<<<<<< Updated upstream
-[ext_resource type="PackedScene" path="res://scenes/tops/faction_home_hunters.tscn" id="19_hunters"]
-[ext_resource type="PackedScene" path="res://scenes/tops/faction_home_adventurers.tscn" id="20_adventurers"]
-[ext_resource type="PackedScene" path="res://scenes/tops/faction_home_crafters.tscn" id="21_crafters"]
-[ext_resource type="PackedScene" path="res://scenes/tops/faction_home_tenders.tscn" id="22_tenders"]
-=======
 [ext_resource type="PackedScene" uid="uid://dc7h62gs1f7ew" path="res://scenes/tops/faction_home_adventurers.tscn" id="20_adventurers"]
 [ext_resource type="PackedScene" uid="uid://bxjey72ceoy8l" path="res://scenes/tops/topper_alchemist.tscn" id="23_alchemist"]
->>>>>>> Stashed changes
 
 [node name="starting_settlement" type="Node3D" unique_id=1143800928 node_paths=PackedStringArray("spawn_position")]
 script = ExtResource("1_l415u")
