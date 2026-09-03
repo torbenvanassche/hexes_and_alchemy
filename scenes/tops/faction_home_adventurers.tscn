@@ -8,6 +8,9 @@
 [ext_resource type="Resource" uid="uid://c8hkdge0pvgtn" path="res://resources/npc_info/basic_adventurer.tres" id="7_adventurer"]
 [ext_resource type="Script" uid="uid://du4hbbtmblkj0" path="res://tools/quest_system/scripts/npc_info.gd" id="8_npc_info"]
 [ext_resource type="Script" uid="uid://6t4u66o5q6po" path="res://scripts/scene_manager/scene_info.gd" id="9_scene_info"]
+[ext_resource type="Resource" path="res://resources/npc_info/scout_adventurer.tres" id="10_scout"]
+[ext_resource type="Resource" path="res://resources/npc_info/crafter_adventurer.tres" id="11_crafter"]
+[ext_resource type="Resource" path="res://resources/npc_info/warden_adventurer.tres" id="12_warden"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_interaction"]
 size = Vector3(1.55, 0.75, 0.55)
@@ -15,12 +18,12 @@ size = Vector3(1.55, 0.75, 0.55)
 [sub_resource type="BoxShape3D" id="BoxShape3D_collision"]
 size = Vector3(1.65, 1.05, 1.3)
 
-[node name="adventurers_home" type="Node3D" unique_id=1384986670 node_paths=PackedStringArray("member_spawn")]
+[node name="guild_hall" type="Node3D" unique_id=1384986670 node_paths=PackedStringArray("member_spawn")]
 script = ExtResource("2_home")
-faction_id = &"adventurers"
 member_scene = ExtResource("3_member")
 member_spawn = NodePath("spawn_location")
-starting_npc_profiles = Array[ExtResource("8_npc_info")]([ExtResource("6_delver"), ExtResource("7_adventurer")])
+roster_capacity = 20
+starting_npc_profiles = Array[ExtResource("8_npc_info")]([ExtResource("6_delver"), ExtResource("7_adventurer"), ExtResource("10_scout"), ExtResource("11_crafter"), ExtResource("12_warden")])
 additional_ui = Array[ExtResource("9_scene_info")]([ExtResource("5_roster")])
 
 [node name="Root Scene" parent="." unique_id=559513159 instance=ExtResource("1_mesh")]

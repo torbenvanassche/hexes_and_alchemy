@@ -28,8 +28,8 @@ WINDOW_JOURNAL,Journal,Journal
 WINDOW_CRAFTING,Blacksmith,Blacksmith
 WINDOW_MARKET,Market,Market
 WINDOW_TAVERN,Tavern,Tavern
-WINDOW_FACTION_ROSTER,Faction members,Faction members
-SCENE_FACTION_ROSTER_UI_NAME,Faction members,Faction members
+WINDOW_FACTION_ROSTER,Guild roster,Guild roster
+SCENE_FACTION_ROSTER_UI_NAME,Guild roster,Guild roster
 WINDOW_NPC_DETAILS,Adventurer,Adventurer
 WINDOW_SETTLEMENT_UPGRADE,Settlement,Settlement
 WINDOW_DEPOSIT_ITEMS,Deposit items,Deposit items
@@ -123,7 +123,7 @@ ADVENTURER_RANK_PROGRESS_MAX,%s (max),%s (max)
 ADVENTURER_ROSTER_STATUS,Status,Status
 ADVENTURER_ROSTER_DETAILS,Details,Details
 ADVENTURER_ROSTER_EMPTY,No adventurers waiting.,No adventurers waiting.
-FACTION_ROSTER_EMPTY,No faction members available.,No faction members available.
+FACTION_ROSTER_EMPTY,No adventurers have been recruited.,No adventurers have been recruited.
 ADVENTURER_STATUS_AVAILABLE,Available,Available
 ADVENTURER_STATUS_ASSIGNED,Assigned,Assigned
 NPC_DETAILS_OPEN,Details,Details
@@ -449,6 +449,7 @@ FACTION_HUNTERS_HOME_NAME,Hunters' lodge,Hunters' lodge
 FACTION_ADVENTURERS_HOME_NAME,Adventurers' barracks,Adventurers' barracks
 FACTION_CRAFTERS_HOME_NAME,Crafters' workshop,Crafters' workshop
 FACTION_TENDERS_HOME_NAME,Tenders' mill,Tenders' mill
+GUILD_HALL_NAME,Guild Hall,Guild Hall
 HUB_FACTION_ROLES_LABEL,Roles,Roles
 HUB_FACTION_RESPONSIBILITIES_LABEL,Responsibilities,Responsibilities
 NPC_STATUS_AVAILABLE,Available,Available
@@ -551,13 +552,13 @@ RECRUITMENT_NO_PREFERENCES,General work,General work
 RECRUITMENT_RANK_LINE,Rank %s,Rank %s
 RECRUITMENT_COST_LINE,%s coins,%s coins
 RECRUITMENT_HIRE,Hire,Hire
-RECRUITMENT_HIRE_TOOLTIP,Hire this recruit and send them to their faction home.,Hire this recruit and send them to their faction home.
+RECRUITMENT_HIRE_TOOLTIP,Hire this recruit and add them to the Guild Hall roster.,Hire this recruit and add them to the Guild Hall roster.
 RECRUITMENT_REFRESH_TOOLTIP,Replace every current visitor with a new group.,Replace every current visitor with a new group.
 RECRUITMENT_ERROR_CANDIDATE_UNAVAILABLE,This recruit is no longer available.,This recruit is no longer available.
-RECRUITMENT_ERROR_NO_FACTION_HOME,This recruit needs a faction home that is not available.,This recruit needs a faction home that is not available.
-RECRUITMENT_ERROR_FACTION_FULL,That faction home has reached its member capacity.,That faction home has reached its member capacity.
+RECRUITMENT_ERROR_NO_FACTION_HOME,The Guild Hall is not available.,The Guild Hall is not available.
+RECRUITMENT_ERROR_FACTION_FULL,The Guild Hall has reached its roster capacity.,The Guild Hall has reached its roster capacity.
 RECRUITMENT_ERROR_NOT_ENOUGH_CURRENCY,The guild does not have enough coins.,The guild does not have enough coins.
-RECRUITMENT_ERROR_HIRE_FAILED,The recruit could not join the faction.,The recruit could not join the faction.
+RECRUITMENT_ERROR_HIRE_FAILED,The recruit could not join the guild.,The recruit could not join the guild.
 RECRUITMENT_ERROR_REFRESH_UNAVAILABLE,The visitor list cannot be refreshed right now.,The visitor list cannot be refreshed right now.
 RECRUITMENT_ERROR_NO_RECRUITS_AVAILABLE,No suitable recruits can reach the settlement yet.,No suitable recruits can reach the settlement yet.
 RECRUITMENT_HIRE_SUCCESS,%s has joined the settlement.,%s has joined the settlement.
@@ -611,3 +612,88 @@ SCENE_TAVERN_RECRUITMENT_UI_NAME,Tavern,Tavern
 JOURNAL_TASK_OPEN_BLACKSMITH,Open the blacksmith,Open the blacksmith
 NPC_GENERATED_NAME_NUMBERED,%s %s,%s %s
 NPC_GENERATED_NAME_FALLBACK,Adventurer %s,Adventurer %s
+ITEM_IRON_BLADE_NAME,Iron blade,Iron blade
+ITEM_IRON_BLADE_DESCRIPTION,A dependable weapon that improves combat operations and reduces their danger.,A dependable weapon that improves combat operations and reduces their danger.
+ITEM_REINFORCED_ARMOR_NAME,Reinforced armor,Reinforced armor
+ITEM_REINFORCED_ARMOR_DESCRIPTION,Heavy protection that greatly reduces injury and death on dangerous operations.,Heavy protection that greatly reduces injury and death on dangerous operations.
+ITEM_FIELD_KIT_NAME,Field kit,Field kit
+ITEM_FIELD_KIT_DESCRIPTION,Specialist tools that improve gathering construction and maintenance operations.,Specialist tools that improve gathering construction and maintenance operations.
+EQUIPMENT_SLOT_LINE,Slot: %s,Slot: %s
+EQUIPMENT_TIER_LINE,Tier: %s,Tier: %s
+EQUIPMENT_TIER_STANDARD,Standard,Standard
+EQUIPMENT_TIER_FINE,Fine,Fine
+EQUIPMENT_TIER_RELIC,Relic,Relic
+EQUIPMENT_SUCCESS_LINE,Successful outcomes: +%s%% weight,Successful outcomes: +%s%% weight
+EQUIPMENT_DANGER_LINE,Dangerous outcomes: -%s%% weight,Dangerous outcomes: -%s%% weight
+EQUIPMENT_INJURY_LINE,Injury chance after danger: -%s%%,Injury chance after danger: -%s%%
+EQUIPMENT_DEATH_LINE,Death chance after danger: -%s%%,Death chance after danger: -%s%%
+EQUIPMENT_SCOUTING_LINE,Scouting reveal radius: +%s,Scouting reveal radius: +%s
+EQUIPMENT_EFFECTIVE_FOR_LINE,Operation bonus: %s,Operation bonus: %s
+QUEST_MEMBER_INJURED,%s was injured.,%s was injured.
+QUEST_MEMBER_DIED,%s died from injuries sustained during the operation.,%s died from injuries sustained during the operation.
+EQUIPMENT_LOCKED_WHILE_ASSIGNED,Equipment cannot be changed while this adventurer is assigned.,Equipment cannot be changed while this adventurer is assigned.
+ITEM_HUNTSMAN_SABER_NAME,Huntsman's saber,Huntsman's saber
+ITEM_HUNTSMAN_SABER_DESCRIPTION,A balanced fine blade recovered from successful hunts and suited to dangerous combat.,A balanced fine blade recovered from successful hunts and suited to dangerous combat.
+ITEM_SUNSTEEL_BLADE_NAME,Sunsteel blade,Sunsteel blade
+ITEM_SUNSTEEL_BLADE_DESCRIPTION,A relic weapon whose edge turns the most dangerous expeditions in its wielder's favor.,A relic weapon whose edge turns the most dangerous expeditions in its wielder's favor.
+ITEM_DELVERS_HARNESS_NAME,Delver's harness,Delver's harness
+ITEM_DELVERS_HARNESS_DESCRIPTION,Fine reinforced protection designed to keep explorers alive underground.,Fine reinforced protection designed to keep explorers alive underground.
+ITEM_AEGIS_PLATE_NAME,Aegis plate,Aegis plate
+ITEM_AEGIS_PLATE_DESCRIPTION,Relic armor offering exceptional protection against injury and death.,Relic armor offering exceptional protection against injury and death.
+ITEM_SURVEYORS_TOOLS_NAME,Surveyor's tools,Surveyor's tools
+ITEM_SURVEYORS_TOOLS_DESCRIPTION,Fine instruments for mines surveys ruins and extraction work.,Fine instruments for mines surveys ruins and extraction work.
+ITEM_MASTERWORK_KIT_NAME,Masterwork kit,Masterwork kit
+ITEM_MASTERWORK_KIT_DESCRIPTION,A relic-grade collection of adaptable tools for demanding operations.,A relic-grade collection of adaptable tools for demanding operations.
+ITEM_WAYFINDER_CHARM_NAME,Wayfinder charm,Wayfinder charm
+ITEM_WAYFINDER_CHARM_DESCRIPTION,A fine charm that guides explorers through ruins and unfamiliar ground.,A fine charm that guides explorers through ruins and unfamiliar ground.
+ITEM_ANCIENT_COMPASS_NAME,Ancient compass,Ancient compass
+ITEM_ANCIENT_COMPASS_DESCRIPTION,A relic compass that reveals distant terrain and guides expeditions away from danger.,A relic compass that reveals distant terrain and guides expeditions away from danger.
+EQUIPMENT_DURATION_LINE,Operation duration: -%s%%,Operation duration: -%s%%
+EQUIPMENT_LOOT_LINE,Resource yield: +%s%%,Resource yield: +%s%%
+QUEST_TYPE_RECOVER_EQUIPMENT,Recover lost equipment,Recover lost equipment
+QUEST_DESC_RECOVER_EQUIPMENT,Return to the site and retrieve equipment left behind by fallen adventurers.,Return to the site and retrieve equipment left behind by fallen adventurers.
+QUEST_REWARD_LOST_EQUIPMENT,All equipment currently left at this location,All equipment currently left at this location
+QUEST_OUTCOME_RECOVER_EQUIPMENT_SAFE,The recovery party retrieved the abandoned equipment.,The recovery party retrieved the abandoned equipment.
+QUEST_OUTCOME_RECOVER_EQUIPMENT_DANGER,The equipment was recovered but the party encountered danger at the site.,The equipment was recovered but the party encountered danger at the site.
+QUEST_EQUIPMENT_LEFT_BEHIND,%s's equipment was left behind and can be recovered at the objective.,%s's equipment was left behind and can be recovered at the objective.
+QUEST_RECOVERY_CONTEXT,Equipment left by: %s,Equipment left by: %s
+NPC_INJURIES,Injuries,Injuries
+NPC_INJURIES_NONE,None,None
+NPC_STATUS_TOO_INJURED,Too injured for duty,Too injured for duty
+NPC_CAREER_REMAINING,Retirement in approximately %s seconds,Retirement in approximately %s seconds
+NPC_CAREER_UNLIMITED,Automatic retirement disabled,Automatic retirement disabled
+NPC_RETIRE_BUTTON,Retire adventurer,Retire adventurer
+NPC_RETIRE_INJURED_BUTTON,Retire severely injured adventurer,Retire severely injured adventurer
+NPC_RETIRED_NOTICE,%s retired from the guild.,%s retired from the guild.
+NPC_RETIRED_AGE_NOTICE,%s retired after a long career.,%s retired after a long career.
+INJURY_SPRAIN_NAME,Sprain,Sprain
+INJURY_SPRAIN_DESCRIPTION,Slows operations and slightly reduces effectiveness until treated.,Slows operations and slightly reduces effectiveness until treated.
+INJURY_DEEP_WOUND_NAME,Deep wound,Deep wound
+INJURY_DEEP_WOUND_DESCRIPTION,A severe wound that substantially increases danger and mortality.,A severe wound that substantially increases danger and mortality.
+INJURY_CONCUSSION_NAME,Concussion,Concussion
+INJURY_CONCUSSION_DESCRIPTION,Reduces effectiveness speed and gathered resources.,Reduces effectiveness speed and gathered resources.
+INJURY_TRAUMA_NAME,Trauma,Trauma
+INJURY_TRAUMA_DESCRIPTION,Makes future dangerous operations harder to endure.,Makes future dangerous operations harder to endure.
+SCENE_ALCHEMIST_UI_NAME,Alchemist,Alchemist
+ALCHEMIST_CURRENCY,Guild funds: %s,Guild funds: %s
+ALCHEMIST_PATIENTS_HEADER,Treatment,Treatment
+ALCHEMIST_RELICS_HEADER,Relic enchantment,Relic enchantment
+ALCHEMIST_NO_PATIENTS,No adventurers currently require treatment.,No adventurers currently require treatment.
+ALCHEMIST_NO_RELICS,No unequipped relics are available to enchant.,No unequipped relics are available to enchant.
+ALCHEMIST_TREAT_BUTTON,Treat (%s),Treat (%s)
+ALCHEMIST_ENCHANT_BUTTON,Re-enchant (%s),Re-enchant (%s)
+ALCHEMIST_TREATMENT_SUCCESS,Treatment completed.,Treatment completed.
+ALCHEMIST_ENCHANT_SUCCESS,The relic received new properties.,The relic received new properties.
+ALCHEMIST_ACTION_FAILED,The service could not be completed. Check guild funds and availability.,The service could not be completed. Check guild funds and availability.
+ALCHEMIST_TREATMENT_NOTICE,%s was treated for %s.,%s was treated for %s.
+ALCHEMIST_ENCHANT_NOTICE,%s received new enchantments.,%s received new enchantments.
+EQUIPMENT_ENCHANTMENTS_LINE,Properties: %s,Properties: %s
+EQUIPMENT_ENCHANTMENT_PRECISE,Precise,Precise
+EQUIPMENT_ENCHANTMENT_WARDING,Warding,Warding
+EQUIPMENT_ENCHANTMENT_PROTECTIVE,Protective,Protective
+EQUIPMENT_ENCHANTMENT_LIFE_BOUND,Life-bound,Life-bound
+EQUIPMENT_ENCHANTMENT_SWIFT,Swift,Swift
+EQUIPMENT_ENCHANTMENT_PROSPEROUS,Prosperous,Prosperous
+EQUIPMENT_ENCHANTMENT_FAR_SEEING,Far-seeing,Far-seeing
+EQUIPMENT_SLOT_LOCK_OVERLAY,LOCKED\nRank %s,LOCKED\nRank %s
+EQUIPMENT_SLOT_LOCKED_TOOLTIP,%s slot\nUnlocks at Rank %s,%s slot\nUnlocks at Rank %s

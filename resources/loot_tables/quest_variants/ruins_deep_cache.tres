@@ -5,6 +5,15 @@
 [ext_resource type="Resource" path="res://resources/item_info/ancient_coin.tres" id="3_coin"]
 [ext_resource type="Resource" path="res://resources/item_info/relic_fragment.tres" id="4_fragment"]
 [ext_resource type="Resource" path="res://resources/item_info/old_guild_seal.tres" id="5_seal"]
+[ext_resource type="Resource" path="res://resources/item_info/huntsman_saber.tres" id="6_saber"]
+[ext_resource type="Resource" path="res://resources/item_info/delvers_harness.tres" id="7_harness"]
+[ext_resource type="Resource" path="res://resources/item_info/surveyors_tools.tres" id="8_tools"]
+[ext_resource type="Resource" path="res://resources/item_info/wayfinder_charm.tres" id="9_charm"]
+[ext_resource type="Resource" path="res://resources/item_info/sunsteel_blade.tres" id="10_sunsteel"]
+[ext_resource type="Resource" path="res://resources/item_info/aegis_plate.tres" id="11_aegis"]
+[ext_resource type="Resource" path="res://resources/item_info/masterwork_kit.tres" id="12_masterwork"]
+[ext_resource type="Resource" path="res://resources/item_info/ancient_compass.tres" id="13_compass"]
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="20_item"]
 
 [sub_resource type="Resource" id="Resource_coin"]
 script = ExtResource("2_entry")
@@ -26,3 +35,5 @@ chance = 0.35
 [resource]
 script = ExtResource("1_table")
 entries = Array[ExtResource("2_entry")]([SubResource("Resource_coin"), SubResource("Resource_fragment"), SubResource("Resource_seal")])
+choice_pool = Array[ExtResource("20_item")]([ExtResource("6_saber"), ExtResource("7_harness"), ExtResource("8_tools"), ExtResource("9_charm"), ExtResource("10_sunsteel"), ExtResource("11_aegis"), ExtResource("12_masterwork"), ExtResource("13_compass")])
+choice_chance = 0.35

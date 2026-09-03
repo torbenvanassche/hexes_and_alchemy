@@ -54,7 +54,7 @@ func execute_quest(q: Quest) -> void:
 	_pending_reveal_occupation = false
 
 	var behaviour := get_quest_behaviour(q.quest_key, "harvest")
-	var duration := get_quest_duration(q.quest_key, quest_time)
+	var duration := get_effective_quest_duration(q, quest_time)
 	var occupation := get_occupation()
 	if behaviour == "secure" and occupation != null:
 		duration = occupation.get_security_duration(duration)
@@ -105,7 +105,7 @@ func complete_quest(_q: Quest) -> void:
 	if state_machine.get_current_state() == "DEPLETED":
 		_start_regrow()
 	_update_danger_marker()
-	grant_player_inventory_rewards(_pending_reward)
+	grant_player_inventory_rewards(_pending_reward, _q)
 	_pending_reward.clear()
 	_pending_behaviour = ""
 	_pending_outcome = null

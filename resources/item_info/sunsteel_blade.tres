@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="EquipmentInfo" format=3]
+
+[ext_resource type="Script" path="res://tools/inventory/scripts/data/equipment_info.gd" id="1"]
+[ext_resource type="Texture2D" path="res://sprites/items/bar_gold.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+unique_id = "sunsteel_blade"
+translation_key_name = "ITEM_SUNSTEEL_BLADE_NAME"
+translation_key_description = "ITEM_SUNSTEEL_BLADE_DESCRIPTION"
+texture = ExtResource("2")
+buy_value = 90
+sell_value = 55
+slot = 0
+tier = 2
+reward_weight = 1.0
+success_weight_multiplier = 1.6
+danger_weight_multiplier = 0.48
+injury_chance_multiplier = 0.68
+death_chance_multiplier = 0.5
+quest_duration_multiplier = 0.65
+loot_quantity_multiplier = 1.4
+effective_quest_types = Array[String](["hunt", "trap_hunt", "secure", "delve", "salvage"])

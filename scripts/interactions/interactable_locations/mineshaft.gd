@@ -87,24 +87,24 @@ func execute_quest(q: Quest) -> void:
 	var profile := get_profile(q.quest_key)
 
 	if behaviour == "prospect":
-		await get_tree().create_timer(get_quest_duration(q.quest_key, prospect_time)).timeout
+		await get_tree().create_timer(get_effective_quest_duration(q, prospect_time)).timeout
 		var discovered_state := _roll_discovered_state()
 		_set_mine_state(discovered_state)
 	elif behaviour == "extract":
 		var origin_state := _current_mine_state()
-		await get_tree().create_timer(get_quest_duration(q.quest_key, extract_time)).timeout
+		await get_tree().create_timer(get_effective_quest_duration(q, extract_time)).timeout
 		_pending_reward = _roll_extract_reward(origin_state, _get_profile_int(profile, "reward_rolls", 1))
 		_set_mine_state(_roll_post_extract_state(origin_state, profile))
 	elif behaviour == "reinforce":
-		await get_tree().create_timer(get_quest_duration(q.quest_key, reinforce_time)).timeout
+		await get_tree().create_timer(get_effective_quest_duration(q, reinforce_time)).timeout
 		_set_mine_state(_last_stable_state)
 	elif behaviour == "deepen":
-		await get_tree().create_timer(get_quest_duration(q.quest_key, extract_time)).timeout
+		await get_tree().create_timer(get_effective_quest_duration(q, extract_time)).timeout
 		depth = mini(max_depth, depth + 1)
 		_notify_reward(tr("QUEST_MINE_DEEPENED") % [depth])
 		Manager.instance.quests.quest_availability_changed.emit()
 	elif behaviour == "reopen":
-		await get_tree().create_timer(get_quest_duration(q.quest_key, extract_time)).timeout
+		await get_tree().create_timer(get_effective_quest_duration(q, extract_time)).timeout
 		depth = mini(max_depth, depth + 1)
 		_set_mine_state(MineState.UNSURVEYED)
 		_notify_reward(tr("QUEST_MINE_REOPENED") % [depth])
@@ -120,7 +120,7 @@ func complete_quest(q: Quest) -> void:
 		Debug.message("The miners came back empty-handed.")
 		return
 
-	grant_player_inventory_rewards(_pending_reward)
+	grant_player_inventory_rewards(_pending_reward, q)
 	_pending_reward.clear()
 
 func _current_mine_state() -> MineState:
@@ -264,7 +264,7 @@ func get_quest_profile_expected_reward(quest_type_key: String) -> String:
 
 func get_quest_context_label(quest_type_key: String) -> String:
 	if quest_type_key not in ["deepen", "reopen"]:
-		return ""
+		return super.get_quest_context_label(quest_type_key)
 	return tr("QUEST_MINE_DEPTH_STATUS") % [depth, max_depth]
 
 func _get_profile_float(profile: QuestProfile, key: String, fallback: float) -> float:

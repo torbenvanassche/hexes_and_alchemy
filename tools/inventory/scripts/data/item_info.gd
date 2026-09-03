@@ -18,6 +18,10 @@ func get_display_name() -> String:
 func get_description() -> String:
 	return _translate_with_fallback(translation_key_description, "")
 
+func get_tooltip_text() -> String:
+	var description := get_description()
+	return get_display_name() if description.is_empty() else "%s\n%s" % [get_display_name(), description]
+
 func get_buy_value() -> int:
 	return maxi(2, buy_value)
 

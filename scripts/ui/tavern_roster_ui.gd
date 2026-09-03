@@ -76,3 +76,11 @@ func _open_npc_details(npc: NPC) -> void:
 	details_ui.setup_npc(npc)
 	window_instance.on_enter.emit()
 	detail_windows[npc_id] = window_instance
+	if not npc.tree_exiting.is_connected(_close_npc_details.bind(npc_id)):
+		npc.tree_exiting.connect(_close_npc_details.bind(npc_id), CONNECT_ONE_SHOT)
+
+func _close_npc_details(npc_id: int) -> void:
+	var window_instance := detail_windows.get(npc_id) as SceneInstance
+	detail_windows.erase(npc_id)
+	if window_instance != null and is_instance_valid(window_instance):
+		window_instance.destroy()

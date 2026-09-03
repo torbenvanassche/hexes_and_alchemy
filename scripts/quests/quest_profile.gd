@@ -212,11 +212,12 @@ func quest_has_supplies(quest: Quest) -> bool:
 		return true
 	return quest.supplies != null and quest.supplies.has_all(required_supplies)
 
-func roll_outcome(danger_multiplier: float = 1.0) -> QuestOutcome:
+func roll_outcome(danger_multiplier: float = 1.0, success_multiplier: float = 1.0) -> QuestOutcome:
 	var valid_outcomes: Array[QuestOutcome] = []
 	var cumulative: Array[float] = []
 	var total_weight := 0.0
 	var clamped_danger_multiplier := maxf(0.0, danger_multiplier)
+	var clamped_success_multiplier := maxf(0.0, success_multiplier)
 
 	for outcome in outcomes:
 		if outcome == null:
@@ -224,6 +225,8 @@ func roll_outcome(danger_multiplier: float = 1.0) -> QuestOutcome:
 		var resolved_weight := outcome.weight
 		if outcome.is_dangerous:
 			resolved_weight *= clamped_danger_multiplier
+		else:
+			resolved_weight *= clamped_success_multiplier
 		if resolved_weight <= 0.0:
 			continue
 		total_weight += resolved_weight

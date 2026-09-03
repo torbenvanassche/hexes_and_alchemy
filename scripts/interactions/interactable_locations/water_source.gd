@@ -35,7 +35,7 @@ func execute_quest(q: Quest) -> void:
 	_quest_running = true
 	_pending_reward.clear()
 	var behaviour := get_quest_behaviour(q.quest_key, "fill")
-	await get_tree().create_timer(get_quest_duration(q.quest_key, fill_time)).timeout
+	await get_tree().create_timer(get_effective_quest_duration(q, fill_time)).timeout
 
 	var outcome := roll_quest_outcome(q)
 	if outcome != null:
@@ -52,11 +52,11 @@ func execute_quest(q: Quest) -> void:
 	q.return_from_quest()
 	_quest_running = false
 
-func complete_quest(_q: Quest) -> void:
+func complete_quest(q: Quest) -> void:
 	if Manager.instance.player_instance == null:
 		return
 
-	grant_player_inventory_rewards(_pending_reward)
+	grant_player_inventory_rewards(_pending_reward, q)
 	_pending_reward.clear()
 
 func _set_water_state(state: WaterState) -> void:

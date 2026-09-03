@@ -189,7 +189,7 @@ func get_available_npcs_for_quest(
 ) -> Array[SceneInstance]:
 	var quest_offer := Quest.new(location, quest_type, offered_currency_reward, minimum_rank_override)
 	var eligible_npcs: Array[SceneInstance] = [];
-	for npc_scene_instance: SceneInstance in _get_available_faction_members():
+	for npc_scene_instance: SceneInstance in _get_available_roster_members():
 		var npc := _get_npc_from_instance(npc_scene_instance)
 		if npc != null and npc.wants_quest(quest_offer):
 			eligible_npcs.append(npc_scene_instance);
@@ -198,7 +198,7 @@ func get_available_npcs_for_quest(
 func get_available_npcs_for_role(role: String, minimum_rank: int = 0) -> Array[SceneInstance]:
 	var eligible: Array[SceneInstance] = []
 	var required_rank := AdventurerRank.clamp_rank(minimum_rank)
-	for npc_scene_instance: SceneInstance in _get_available_faction_members():
+	for npc_scene_instance: SceneInstance in _get_available_roster_members():
 		var npc := _get_npc_from_instance(npc_scene_instance)
 		if npc != null and npc.can_perform_role(role) and npc.is_rank_at_least(required_rank):
 			eligible.append(npc_scene_instance)
@@ -208,7 +208,7 @@ func get_available_support_provider_count(quest: Quest, definition: QuestSupport
 	if quest == null or definition == null:
 		return 0
 	var available: Array[NPC] = []
-	for npc_scene_instance: SceneInstance in _get_available_faction_members():
+	for npc_scene_instance: SceneInstance in _get_available_roster_members():
 		var npc := _get_npc_from_instance(npc_scene_instance)
 		if npc != null:
 			available.append(npc)
@@ -374,7 +374,7 @@ func _get_inventory_contents(inventory: ContentGroup) -> Dictionary:
 
 func try_assign_waiting_quests() -> void:
 	var available_npcs: Array[NPC] = []
-	for npc_scene_instance: SceneInstance in _get_available_faction_members():
+	for npc_scene_instance: SceneInstance in _get_available_roster_members():
 		var available_npc := _get_npc_from_instance(npc_scene_instance)
 		if available_npc != null:
 			available_npcs.append(available_npc)
@@ -519,7 +519,7 @@ func _get_npc_from_instance(npc_scene_instance: SceneInstance) -> NPC:
 		return null
 	return npc_scene_instance.node as NPC
 
-func _get_active_faction_homes() -> Array[FactionHome]:
+func _get_active_roster_homes() -> Array[FactionHome]:
 	var homes: Array[FactionHome] = []
 	if Manager.instance == null or Manager.instance.active_settlement == null:
 		return homes
@@ -530,9 +530,9 @@ func _get_active_faction_homes() -> Array[FactionHome]:
 			homes.append(home)
 	return homes
 
-func _get_available_faction_members() -> Array[SceneInstance]:
+func _get_available_roster_members() -> Array[SceneInstance]:
 	var members: Array[SceneInstance] = []
-	for home: FactionHome in _get_active_faction_homes():
+	for home: FactionHome in _get_active_roster_homes():
 		members.append_array(home.get_available_npcs())
 	return members
 

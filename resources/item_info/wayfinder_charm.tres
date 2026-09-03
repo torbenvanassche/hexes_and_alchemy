@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="EquipmentInfo" format=3]
+
+[ext_resource type="Script" path="res://tools/inventory/scripts/data/equipment_info.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://ckm7ko4v1d4w2" path="res://sprites/items/blueprint.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+unique_id = "wayfinder_charm"
+translation_key_name = "ITEM_WAYFINDER_CHARM_NAME"
+translation_key_description = "ITEM_WAYFINDER_CHARM_DESCRIPTION"
+texture = ExtResource("2")
+buy_value = 46
+sell_value = 27
+slot = 3
+tier = 1
+reward_weight = 5.0
+success_weight_multiplier = 1.38
+danger_weight_multiplier = 0.64
+injury_chance_multiplier = 0.8
+death_chance_multiplier = 0.72
+quest_duration_multiplier = 0.75
+loot_quantity_multiplier = 1.2
+scouting_radius_bonus = 1
+effective_quest_types = Array[String](["survey", "salvage", "delve"])

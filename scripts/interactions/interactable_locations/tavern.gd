@@ -30,6 +30,7 @@ func get_recreation_anchor() -> Node3D:
 	return recreation_anchor
 
 func get_candidates() -> Array[RecruitCandidate]:
+	_ensure_emergency_recruit()
 	return candidates.duplicate()
 
 func get_candidate_capacity() -> int:
@@ -116,10 +117,17 @@ func _initialize_recruitment() -> void:
 	var completed_operations := _get_completed_operation_count()
 	_next_natural_arrival_operation = rules.get_next_arrival_operation(completed_operations)
 	_fill_candidate_pool(rules.get_initial_pool_size())
+	for home in _get_faction_homes():
+		if not home.npc_roster_changed.is_connected(_on_roster_changed):
+			home.npc_roster_changed.connect(_on_roster_changed)
 	if Manager.instance != null and Manager.instance.reputation != null:
 		if not Manager.instance.reputation.changed.is_connected(_on_guild_progress_changed):
 			Manager.instance.reputation.changed.connect(_on_guild_progress_changed)
 	recruitment_changed.emit()
+
+func _on_roster_changed() -> void:
+	if _ensure_emergency_recruit():
+		recruitment_changed.emit()
 
 func _on_guild_progress_changed() -> void:
 	var rules := _get_recruitment_rules()
@@ -143,6 +151,11 @@ func _add_candidate() -> bool:
 	var profile := _select_candidate_profile()
 	if profile == null:
 		return false
+	return _add_candidate_for_profile(profile)
+
+func _add_candidate_for_profile(profile: NpcInfo) -> bool:
+	if profile == null:
+		return false
 	_candidate_serial += 1
 	var candidate_rank := _roll_candidate_rank()
 	var candidate_traits := profile.traits.duplicate()
@@ -157,11 +170,22 @@ func _add_candidate() -> bool:
 	candidates.append(candidate)
 	return true
 
+func _ensure_emergency_recruit() -> bool:
+	var total_members := 0
+	for home in _get_faction_homes():
+		total_members += home.get_member_count()
+	if total_members > 0:
+		return false
+	if candidates.is_empty() and not _add_candidate():
+		return false
+	var emergency := candidates[0]
+	if emergency == null or emergency.hire_cost == 0:
+		return false
+	emergency.hire_cost = 0
+	return true
+
 func _select_candidate_profile() -> NpcInfo:
-	var priority_faction := _get_unrepresented_empty_faction()
-	var profiles := _get_recruitable_profiles(priority_faction)
-	if profiles.is_empty() and priority_faction != &"":
-		profiles = _get_recruitable_profiles()
+	var profiles := _get_recruitable_profiles()
 	return profiles[_rng.randi_range(0, profiles.size() - 1)] if not profiles.is_empty() else null
 
 func _get_recruitable_profiles(faction_filter: StringName = &"") -> Array[NpcInfo]:
@@ -177,17 +201,6 @@ func _get_recruitable_profiles(faction_filter: StringName = &"") -> Array[NpcInf
 			profiles.append(profile)
 	return profiles
 
-func _get_unrepresented_empty_faction() -> StringName:
-	for home: FactionHome in _get_faction_homes():
-		if home.get_member_count() > 0:
-			continue
-		var already_offered := candidates.any(func(candidate: RecruitCandidate) -> bool:
-			return candidate != null and candidate.get_faction_id() == home.faction_id
-		)
-		if not already_offered:
-			return home.faction_id
-	return &""
-
 func _get_faction_homes() -> Array[FactionHome]:
 	var homes: Array[FactionHome] = []
 	var owner_settlement := get_settlement()
@@ -200,10 +213,13 @@ func _get_faction_homes() -> Array[FactionHome]:
 	return homes
 
 func _get_faction_home(faction_id: StringName) -> FactionHome:
+	var shared_home: FactionHome = null
 	for home: FactionHome in _get_faction_homes():
 		if home.faction_id == faction_id:
 			return home
-	return null
+		if home.faction_id == &"":
+			shared_home = home
+	return shared_home
 
 func _roll_candidate_rank() -> AdventurerRank.Rank:
 	var prestige := Manager.instance.hub.prestige if Manager.instance != null and Manager.instance.hub != null else 0

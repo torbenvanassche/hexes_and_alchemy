@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://b2wjb40qlkbuf" path="res://scripts/structures/loot_table.gd" id="1_table"]
 [ext_resource type="Script" uid="uid://ctqcmpru1cvqf" path="res://scripts/structures/loot_table_entry.gd" id="2_entry"]
 [ext_resource type="Resource" uid="uid://dm1en2i1m3xky" path="res://resources/item_info/game_meat.tres" id="3_meat"]
+[ext_resource type="Resource" path="res://resources/item_info/huntsman_saber.tres" id="4_saber"]
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="20_item"]
 
 [sub_resource type="Resource" id="Resource_meat"]
 script = ExtResource("2_entry")
@@ -13,3 +15,5 @@ max_amount = 4
 [resource]
 script = ExtResource("1_table")
 entries = Array[ExtResource("2_entry")]([SubResource("Resource_meat")])
+choice_pool = Array[ExtResource("20_item")]([ExtResource("4_saber")])
+choice_chance = 0.1

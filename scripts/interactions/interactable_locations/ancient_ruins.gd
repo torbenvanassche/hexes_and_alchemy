@@ -42,10 +42,10 @@ func _on_visibility_changed() -> void:
 		Manager.instance.journal.complete_task(journal_quest.id)
 
 func can_interact() -> bool:
-	if state_machine.get_current_state() == "LOOTED":
+	if state_machine.get_current_state() == "LOOTED" and lost_equipment.is_empty():
 		return false
 	var lootable := hex.structure.structure_info as LootableStructureInfo
-	if lootable != null and lootable.loot_once and _loot_claimed:
+	if lootable != null and lootable.loot_once and _loot_claimed and lost_equipment.is_empty():
 		return false
 	return has_visible_quest_activity() or (not _quest_running and not get_filtered_quest_types().is_empty())
 
@@ -63,7 +63,7 @@ func execute_quest(q: Quest) -> void:
 	_pending_outcome = null
 	_pending_reveal_occupation = behaviour == "survey" and not is_occupation_revealed()
 
-	var duration := get_quest_duration(q.quest_key, investigate_time)
+	var duration := get_effective_quest_duration(q, investigate_time)
 	var occupation := get_occupation()
 	if behaviour == "secure" and occupation != null:
 		duration = occupation.get_security_duration(duration)
@@ -92,7 +92,7 @@ func complete_quest(_q: Quest) -> void:
 		_clear_pending_result()
 		return
 
-	grant_player_inventory_rewards(_pending_reward)
+	grant_player_inventory_rewards(_pending_reward, _q)
 	_pending_reward.clear()
 
 	if lootable.loot_once:
@@ -107,7 +107,7 @@ func _set_ruins_state(state: RuinsState) -> void:
 
 func _update_markers(state: RuinsState) -> void:
 	var is_looted := state == RuinsState.LOOTED
-	show_interaction_prompt = not is_looted
+	show_interaction_prompt = not is_looted or not lost_equipment.is_empty()
 	if main_ruins_model != null:
 		main_ruins_model.visible = not is_looted
 	if surveyed_marker != null:
@@ -118,6 +118,9 @@ func _update_markers(state: RuinsState) -> void:
 		secured_marker.visible = state == RuinsState.SECURED
 	if looted_marker != null:
 		looted_marker.visible = state == RuinsState.LOOTED
+
+func _on_lost_equipment_changed() -> void:
+	_update_markers(RuinsState[state_machine.get_current_state()] as RuinsState)
 
 func _initialize_occupation() -> void:
 	if hex == null:

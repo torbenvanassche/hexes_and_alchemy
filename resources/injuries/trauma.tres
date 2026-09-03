@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="AdventurerInjury" format=3]
+
+[ext_resource type="Script" path="res://tools/quest_system/scripts/adventurer_injury.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"trauma"
+translation_key_name = "INJURY_TRAUMA_NAME"
+translation_key_description = "INJURY_TRAUMA_DESCRIPTION"
+severity = 2
+treatment_cost = 18
+success_weight_multiplier = 0.85
+danger_weight_multiplier = 1.3
+injury_chance_multiplier = 1.2

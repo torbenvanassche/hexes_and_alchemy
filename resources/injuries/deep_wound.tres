@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="AdventurerInjury" format=3]
+
+[ext_resource type="Script" path="res://tools/quest_system/scripts/adventurer_injury.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"deep_wound"
+translation_key_name = "INJURY_DEEP_WOUND_NAME"
+translation_key_description = "INJURY_DEEP_WOUND_DESCRIPTION"
+severity = 3
+treatment_cost = 22
+success_weight_multiplier = 0.78
+danger_weight_multiplier = 1.2
+injury_chance_multiplier = 1.25
+death_chance_multiplier = 1.35
+quest_duration_multiplier = 1.25

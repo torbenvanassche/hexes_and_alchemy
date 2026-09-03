@@ -85,13 +85,13 @@ func execute_quest(q: Quest) -> void:
 
 	match behaviour:
 		"plant":
-			await get_tree().create_timer(get_quest_duration(q.quest_key, plant_quest_time)).timeout
+			await get_tree().create_timer(get_effective_quest_duration(q, plant_quest_time)).timeout
 			_set_crop_state(CropState.PLANTED)
 		"water":
-			await get_tree().create_timer(get_quest_duration(q.quest_key, water_quest_time)).timeout
+			await get_tree().create_timer(get_effective_quest_duration(q, water_quest_time)).timeout
 			_set_crop_state(CropState.WATERED)
 		"harvest":
-			await get_tree().create_timer(get_quest_duration(q.quest_key, harvest_quest_time)).timeout
+			await get_tree().create_timer(get_effective_quest_duration(q, harvest_quest_time)).timeout
 			_set_crop_state(CropState.READY)
 			var watered_outcome := roll_quest_outcome(q)
 			if watered_outcome != null:
@@ -102,7 +102,7 @@ func execute_quest(q: Quest) -> void:
 				if watered_lootable != null:
 					_pending_reward = watered_lootable.roll_loot()
 		"collect":
-			await get_tree().create_timer(get_quest_duration(q.quest_key, harvest_quest_time)).timeout
+			await get_tree().create_timer(get_effective_quest_duration(q, harvest_quest_time)).timeout
 			var outcome := roll_quest_outcome(q)
 			if outcome != null:
 				_pending_reward = outcome.roll_loot()
@@ -112,16 +112,16 @@ func execute_quest(q: Quest) -> void:
 				if lootable != null:
 					_pending_reward = lootable.roll_loot()
 		"clear":
-			await get_tree().create_timer(get_quest_duration(q.quest_key, plant_quest_time)).timeout
+			await get_tree().create_timer(get_effective_quest_duration(q, plant_quest_time)).timeout
 			_set_crop_state(CropState.FALLOW)
 
 	q.return_from_quest()
 	_quest_running = false
 
-func complete_quest(_q: Quest) -> void:
+func complete_quest(q: Quest) -> void:
 	if _pending_reward.is_empty():
 		return
 		
-	grant_player_inventory_rewards(_pending_reward)
+	grant_player_inventory_rewards(_pending_reward, q)
 	_pending_reward.clear()
 	_set_crop_state(CropState.FALLOW)

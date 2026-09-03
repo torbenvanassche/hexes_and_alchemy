@@ -48,7 +48,7 @@ func redraw() -> void:
 		if "texture" in resource:
 			textureRect.texture = resource.texture;
 			textureRect.modulate = default_color;
-		tooltip_text = resource.get_display_name();
+		tooltip_text = resource.get_tooltip_text();
 		counter.visible = show_amount;
 		counter.text = tr("ITEM_COUNT_LABEL") % contentSlot.count;
 	elif resource is PlaceableStructureInfo:

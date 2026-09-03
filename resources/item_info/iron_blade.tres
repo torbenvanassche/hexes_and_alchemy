@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="EquipmentInfo" format=3]
+
+[ext_resource type="Script" path="res://tools/inventory/scripts/data/equipment_info.gd" id="1_equipment"]
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="2_item"]
+[ext_resource type="Texture2D" path="res://sprites/items/bar_iron.png" id="3_icon"]
+[ext_resource type="Resource" uid="uid://o03k1cg30nlw" path="res://resources/item_info/iron_ore.tres" id="4_iron"]
+[ext_resource type="Resource" uid="uid://oowfm1lpkvm" path="res://resources/item_info/wood_log.tres" id="5_wood"]
+
+[resource]
+script = ExtResource("1_equipment")
+unique_id = "iron_blade"
+translation_key_name = "ITEM_IRON_BLADE_NAME"
+translation_key_description = "ITEM_IRON_BLADE_DESCRIPTION"
+texture = ExtResource("3_icon")
+buy_value = 28
+sell_value = 16
+recipe = Dictionary[ExtResource("2_item"), int]({
+ExtResource("4_iron"): 3,
+ExtResource("5_wood"): 1
+})
+slot = 0
+success_weight_multiplier = 1.25
+danger_weight_multiplier = 0.78
+injury_chance_multiplier = 0.9
+death_chance_multiplier = 0.85
+quest_duration_multiplier = 0.9
+loot_quantity_multiplier = 1.1
+effective_quest_types = Array[String](["secure", "hunt", "delve", "salvage"])

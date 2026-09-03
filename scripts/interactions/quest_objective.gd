@@ -1,5 +1,8 @@
 @abstract class_name QuestObjective extends Interaction
 
+const RECOVER_EQUIPMENT_QUEST_KEY := "recover_equipment"
+const RECOVERY_PROFILE := preload("res://resources/quest_profiles/quest_profile_recover_equipment.tres")
+
 @abstract func execute_quest(q: Quest) -> void;
 var state_machine: StateMachine = StateMachine.new();
 
@@ -8,6 +11,9 @@ var state_machine: StateMachine = StateMachine.new();
 @export var bitmap: BitMap;
 @export var quest_supply_requirements: Array[QuestSupplyRequirement] = []
 @export var quest_profiles: Array[QuestProfile] = []
+
+var lost_equipment: Dictionary[ItemInfo, int] = {}
+var lost_adventurer_names: Array[String] = []
 
 @export_group("Occupation")
 @export_range(0.0, 1.0, 0.01) var occupation_chance := 0.0
@@ -44,6 +50,8 @@ func get_filtered_quest_types(active_state: int = state_machine.get_current_stat
 	return _filter_profile_states(valid_types, active_state_name);
 
 func get_profile(quest_type_key: String) -> QuestProfile:
+	if quest_type_key == RECOVER_EQUIPMENT_QUEST_KEY and not lost_equipment.is_empty():
+		return RECOVERY_PROFILE
 	for profile in quest_profiles:
 		if profile != null and profile.matches(quest_type_key):
 			return profile
@@ -96,6 +104,11 @@ func get_quest_duration(quest_type_key: String, fallback: float) -> float:
 		return fallback
 	return maxf(0.0, profile.duration_seconds)
 
+func get_effective_quest_duration(quest: Quest, fallback: float) -> float:
+	if quest == null:
+		return fallback
+	return get_quest_duration(quest.quest_key, fallback) * quest.get_duration_multiplier()
+
 func get_quest_behaviour(quest_type_key: String, fallback: String = "") -> String:
 	var profile := get_profile(quest_type_key)
 	if profile == null:
@@ -112,18 +125,21 @@ func roll_quest_outcome(quest_or_type: Variant, danger_multiplier: float = 1.0) 
 		return null
 
 	var resolved_danger_multiplier := maxf(0.0, danger_multiplier)
+	var resolved_success_multiplier := 1.0
 	if quest != null:
 		if quest.has_method("get_danger_weight_multiplier"):
 			resolved_danger_multiplier *= maxf(0.0, float(quest.call("get_danger_weight_multiplier")))
 		else:
 			resolved_danger_multiplier *= maxf(0.0, float(quest.context.get("danger_weight_multiplier", 1.0)))
+		if quest.has_method("get_success_weight_multiplier"):
+			resolved_success_multiplier *= maxf(0.0, float(quest.call("get_success_weight_multiplier")))
 	if has_occupation():
 		resolved_danger_multiplier *= maxf(0.0, profile.occupation_danger_weight_multiplier)
 		var occupation := get_occupation()
 		if occupation != null:
 			resolved_danger_multiplier *= maxf(0.0, occupation.danger_weight_multiplier)
 
-	var outcome_definition := profile.roll_outcome(resolved_danger_multiplier)
+	var outcome_definition := profile.roll_outcome(resolved_danger_multiplier, resolved_success_multiplier)
 	if outcome_definition == null:
 		return null
 	var resolved_outcome := outcome_definition.create_runtime_copy()
@@ -152,6 +168,8 @@ func get_quest_profile_expected_reward(quest_type_key: String) -> String:
 	return profile.get_expected_reward_label()
 
 func get_quest_context_label(_quest_type_key: String) -> String:
+	if _quest_type_key == RECOVER_EQUIPMENT_QUEST_KEY and not lost_adventurer_names.is_empty():
+		return tr("QUEST_RECOVERY_CONTEXT") % " / ".join(lost_adventurer_names)
 	var spot := get_spot_progress()
 	if occupation_pool.is_empty() and occupation_chance <= 0.0 and (spot == null or not spot.occupation_selection_resolved):
 		return ""
@@ -168,6 +186,11 @@ func get_quest_context_label(_quest_type_key: String) -> String:
 	]
 
 func get_quest_profile_reward_preview(quest_type_key: String) -> Array[Dictionary]:
+	if quest_type_key == RECOVER_EQUIPMENT_QUEST_KEY:
+		var recovery_preview: Array[Dictionary] = []
+		for item: ItemInfo in lost_equipment.keys():
+			recovery_preview.append({"item": item, "min": lost_equipment[item], "max": lost_equipment[item]})
+		return recovery_preview
 	var profile := get_profile(quest_type_key)
 	if profile == null:
 		return []
@@ -288,15 +311,16 @@ func get_occupation_difficulty(include_hidden: bool = false) -> AdventurerRank.R
 	var occupation := get_occupation()
 	return occupation.get_difficulty() if occupation != null else AdventurerRank.Rank.F
 
-func grant_player_inventory_rewards(rewards: Dictionary[ItemInfo, int]) -> void:
+func grant_player_inventory_rewards(rewards: Dictionary[ItemInfo, int], quest: Quest = null) -> void:
 	if rewards.is_empty() or Manager.instance == null:
 		return
+	var granted_rewards := quest.apply_loot_quantity_multiplier(rewards) if quest != null else rewards
 
 	if Manager.instance.hub != null:
-		Manager.instance.hub.deposit_items(rewards)
-		for item: ItemInfo in rewards.keys():
-			if item != null and int(rewards[item]) > 0:
-				_notify_item_reward(item, int(rewards[item]))
+		Manager.instance.hub.deposit_items(granted_rewards)
+		for item: ItemInfo in granted_rewards.keys():
+			if item != null and int(granted_rewards[item]) > 0:
+				_notify_item_reward(item, int(granted_rewards[item]))
 		return
 
 	if Manager.instance.player_instance == null:
@@ -305,10 +329,10 @@ func grant_player_inventory_rewards(rewards: Dictionary[ItemInfo, int]) -> void:
 	if inventory == null:
 		return
 
-	for item: ItemInfo in rewards.keys():
+	for item: ItemInfo in granted_rewards.keys():
 		if item == null:
 			continue
-		var amount := maxi(0, rewards[item])
+		var amount := maxi(0, granted_rewards[item])
 		if amount <= 0:
 			continue
 
@@ -321,13 +345,51 @@ func grant_player_inventory_rewards(rewards: Dictionary[ItemInfo, int]) -> void:
 
 func _get_configured_quest_types() -> Array[String]:
 	if quest_profiles.is_empty():
-		return quest_types
+		var legacy_types := quest_types.duplicate()
+		if not lost_equipment.is_empty():
+			legacy_types.append(RECOVER_EQUIPMENT_QUEST_KEY)
+		return legacy_types
 
 	var configured_types: Array[String] = []
 	for profile in quest_profiles:
 		if profile != null and profile.quest_key != "":
 			configured_types.append(profile.quest_key)
+	if not lost_equipment.is_empty():
+		configured_types.append(RECOVER_EQUIPMENT_QUEST_KEY)
 	return configured_types
+
+func leave_lost_equipment(items: Array[EquipmentInfo], adventurer_name: String) -> void:
+	for item in items:
+		if item != null:
+			lost_equipment[item] = int(lost_equipment.get(item, 0)) + 1
+	if not adventurer_name.is_empty() and not lost_adventurer_names.has(adventurer_name):
+		lost_adventurer_names.append(adventurer_name)
+	if Manager.instance != null and Manager.instance.quests != null:
+		Manager.instance.quests.quest_availability_changed.emit()
+	_on_lost_equipment_changed()
+	_notify_reward(tr("QUEST_EQUIPMENT_LEFT_BEHIND") % adventurer_name, Color.ORANGE)
+
+func execute_recovery_quest(q: Quest) -> void:
+	await get_tree().create_timer(get_effective_quest_duration(q, 6.0)).timeout
+	var resolved_outcome := roll_quest_outcome(q)
+	if resolved_outcome == null:
+		resolved_outcome = QuestOutcome.new()
+		resolved_outcome.message_key = "QUEST_OUTCOME_RECOVER_EQUIPMENT_SAFE"
+		q.outcome = resolved_outcome
+	q.return_from_quest()
+
+func complete_recovery_quest(q: Quest) -> void:
+	if lost_equipment.is_empty():
+		return
+	grant_player_inventory_rewards(lost_equipment, q)
+	lost_equipment.clear()
+	lost_adventurer_names.clear()
+	_on_lost_equipment_changed()
+	if Manager.instance != null and Manager.instance.quests != null:
+		Manager.instance.quests.quest_availability_changed.emit()
+
+func _on_lost_equipment_changed() -> void:
+	pass
 
 func _filter_profile_states(types: Array[String], active_state_name: String) -> Array[String]:
 	if quest_profiles.is_empty():

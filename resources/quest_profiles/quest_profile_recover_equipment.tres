@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="QuestProfile" format=3]
+
+[ext_resource type="Script" path="res://scripts/quests/quest_profile.gd" id="1_profile"]
+[ext_resource type="Script" path="res://scripts/quests/quest_outcome.gd" id="2_outcome_script"]
+[ext_resource type="Resource" path="res://resources/quest_outcomes/quest_outcome_recover_equipment_safe.tres" id="3_safe"]
+[ext_resource type="Resource" path="res://resources/quest_outcomes/quest_outcome_recover_equipment_danger.tres" id="4_danger"]
+
+[resource]
+script = ExtResource("1_profile")
+quest_key = "recover_equipment"
+behaviour = "recover_equipment"
+translation_key_name = "QUEST_TYPE_RECOVER_EQUIPMENT"
+description_key = "QUEST_DESC_RECOVER_EQUIPMENT"
+risk_key = "QUEST_RISK_UNCERTAIN"
+expected_reward_key = "QUEST_REWARD_LOST_EQUIPMENT"
+duration_seconds = 6.0
+rank_experience_reward = 3
+outcomes = Array[ExtResource("2_outcome_script")]([ExtResource("3_safe"), ExtResource("4_danger")])

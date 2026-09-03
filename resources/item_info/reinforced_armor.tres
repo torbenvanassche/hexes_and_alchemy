@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="EquipmentInfo" format=3]
+
+[ext_resource type="Script" path="res://tools/inventory/scripts/data/equipment_info.gd" id="1_equipment"]
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="2_item"]
+[ext_resource type="Texture2D" path="res://sprites/items/parts_metal.png" id="3_icon"]
+[ext_resource type="Resource" uid="uid://o03k1cg30nlw" path="res://resources/item_info/iron_ore.tres" id="4_iron"]
+
+[resource]
+script = ExtResource("1_equipment")
+unique_id = "reinforced_armor"
+translation_key_name = "ITEM_REINFORCED_ARMOR_NAME"
+translation_key_description = "ITEM_REINFORCED_ARMOR_DESCRIPTION"
+texture = ExtResource("3_icon")
+buy_value = 35
+sell_value = 20
+recipe = Dictionary[ExtResource("2_item"), int]({
+ExtResource("4_iron"): 4
+})
+slot = 1
+success_weight_multiplier = 1.05
+danger_weight_multiplier = 0.9
+injury_chance_multiplier = 0.6
+death_chance_multiplier = 0.45
+

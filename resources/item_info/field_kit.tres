@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="EquipmentInfo" format=3]
+
+[ext_resource type="Script" path="res://tools/inventory/scripts/data/equipment_info.gd" id="1_equipment"]
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="2_item"]
+[ext_resource type="Texture2D" path="res://sprites/items/work supplies.png" id="3_icon"]
+[ext_resource type="Resource" uid="uid://duoiqc12vrtx2" path="res://resources/item_info/work_supplies.tres" id="4_supplies"]
+
+[resource]
+script = ExtResource("1_equipment")
+unique_id = "field_kit"
+translation_key_name = "ITEM_FIELD_KIT_NAME"
+translation_key_description = "ITEM_FIELD_KIT_DESCRIPTION"
+texture = ExtResource("3_icon")
+buy_value = 30
+sell_value = 18
+recipe = Dictionary[ExtResource("2_item"), int]({
+ExtResource("4_supplies"): 2
+})
+slot = 2
+success_weight_multiplier = 1.3
+danger_weight_multiplier = 0.8
+injury_chance_multiplier = 0.85
+quest_duration_multiplier = 0.8
+loot_quantity_multiplier = 1.2
+effective_quest_types = Array[String](["prospect", "extract", "deepen", "reinforce", "reopen", "maintain", "harvest", "plant", "water", "replant", "clear", "fill", "draw", "purify"])

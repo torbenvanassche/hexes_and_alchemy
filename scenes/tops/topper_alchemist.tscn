@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://bxjey72ceoy8l"]
+
+[ext_resource type="Script" uid="uid://dnivmtm6tpuqb" path="res://scripts/interactions/interactable_locations/alchemist.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://cre3k873qdc7u" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_shrine_blue.glb" id="2_model"]
+[ext_resource type="Resource" path="res://resources/scene_info/ui/alchemist_ui.tres" id="3_ui"]
+[ext_resource type="Script" uid="uid://6t4u66o5q6po" path="res://scripts/scene_manager/scene_info.gd" id="4_info"]
+[ext_resource type="PackedScene" uid="uid://bvbcia2sapjye" path="res://meshes/kay_dungeon/bottle_A_labeled_green.glb" id="5_bottle_labeled"]
+
+[sub_resource type="BoxShape3D" id="BoxShape_interaction"]
+size = Vector3(0.8245056, 1.05, 0.8196777)
+
+[sub_resource type="BoxShape3D" id="BoxShape_collision"]
+size = Vector3(1.1329467, 1.15, 1.1190857)
+
+[node name="alchemist" type="Node3D" unique_id=901829019]
+script = ExtResource("1_script")
+additional_ui = Array[ExtResource("4_info")]([ExtResource("3_ui")])
+
+[node name="Root Scene" parent="." unique_id=435973315 instance=ExtResource("2_model")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0020039082, 0, 0)
+
+[node name="PotionEmblem" parent="." unique_id=1835271894 instance=ExtResource("5_bottle_labeled")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.0161663, 0.9114465, -0.62558985)
+visible = false
+
+[node name="interaction" type="Area3D" parent="." unique_id=967174778]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="interaction" unique_id=2122047811]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.013003498, 0.53, 0.0050732195)
+shape = SubResource("BoxShape_interaction")
+
+[node name="collision" type="StaticBody3D" parent="." unique_id=220498006]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="collision" unique_id=681660891]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00078737736, 0.56, -0.48759827)
+shape = SubResource("BoxShape_collision")

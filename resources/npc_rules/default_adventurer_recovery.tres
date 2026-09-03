@@ -2,6 +2,10 @@
 
 [ext_resource type="Script" path="res://tools/quest_system/scripts/adventurer_recovery_rules.gd" id="1_rules"]
 [ext_resource type="Resource" path="res://resources/item_info/travel_rations.tres" id="2_rations"]
+[ext_resource type="Resource" path="res://resources/injuries/sprain.tres" id="3_sprain"]
+[ext_resource type="Resource" path="res://resources/injuries/deep_wound.tres" id="4_wound"]
+[ext_resource type="Resource" path="res://resources/injuries/concussion.tres" id="5_concussion"]
+[ext_resource type="Resource" path="res://resources/injuries/trauma.tres" id="6_trauma"]
 
 [resource]
 script = ExtResource("1_rules")
@@ -14,3 +18,9 @@ maximum_rest_seconds = 30.0
 injury_recovery_item = ExtResource("2_rations")
 injury_recovery_item_count = 1
 injury_item_recovery_multiplier = 0.75
+dangerous_outcome_injury_chance = 0.7
+dangerous_outcome_death_chance = 0.12
+injury_pool = Array[ExtResource("3_sprain")]([ExtResource("3_sprain"), ExtResource("4_wound"), ExtResource("5_concussion"), ExtResource("6_trauma")])
+maximum_persistent_injuries = 3
+forced_retirement_severity = 5
+automatic_retirement_seconds = 900.0

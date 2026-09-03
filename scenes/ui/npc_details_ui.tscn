@@ -83,18 +83,33 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.34, 0.23, 0.12, 1)
 text = "NPC_EARNINGS"
 
-[node name="Divider" type="ColorRect" parent="NinePatchRect/VBoxContainer/contentPanel/NpcDetails/MarginContainer/VBoxContainer" index="6"]
+[node name="InjuriesLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/NpcDetails/MarginContainer/VBoxContainer" index="6"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.2, 0.14, 1)
+text = "NPC_INJURIES"
+autowrap_mode = 2
+
+[node name="CareerLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/NpcDetails/MarginContainer/VBoxContainer" index="7"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.34, 0.23, 0.12, 1)
+text = "NPC_CAREER_REMAINING"
+
+[node name="RetireButton" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/NpcDetails/MarginContainer/VBoxContainer" index="8"]
+layout_mode = 2
+text = "NPC_RETIRE_BUTTON"
+
+[node name="Divider" type="ColorRect" parent="NinePatchRect/VBoxContainer/contentPanel/NpcDetails/MarginContainer/VBoxContainer" index="9"]
 custom_minimum_size = Vector2(0, 2)
 layout_mode = 2
 color = Color(0.38, 0.26, 0.14, 0.35)
 
-[node name="EquipmentHeader" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/NpcDetails/MarginContainer/VBoxContainer" index="7"]
+[node name="EquipmentHeader" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/NpcDetails/MarginContainer/VBoxContainer" index="10"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.42, 0.31, 0.2, 1)
 text = "NPC_EQUIPMENT_HEADER"
 uppercase = true
 
-[node name="SlotsGrid" type="GridContainer" parent="NinePatchRect/VBoxContainer/contentPanel/NpcDetails/MarginContainer/VBoxContainer" index="8"]
+[node name="SlotsGrid" type="GridContainer" parent="NinePatchRect/VBoxContainer/contentPanel/NpcDetails/MarginContainer/VBoxContainer" index="11"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/h_separation = 8
@@ -130,6 +145,7 @@ uppercase = true
 
 [node name="Slot" parent="NinePatchRect/VBoxContainer/contentPanel/NpcDetails/MarginContainer/VBoxContainer/SlotsGrid/Armor" instance=ExtResource("4_slot")]
 layout_mode = 2
+accepted_slot = 1
 
 [node name="Tool" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/NpcDetails/MarginContainer/VBoxContainer/SlotsGrid"]
 layout_mode = 2
@@ -145,6 +161,7 @@ uppercase = true
 
 [node name="Slot" parent="NinePatchRect/VBoxContainer/contentPanel/NpcDetails/MarginContainer/VBoxContainer/SlotsGrid/Tool" instance=ExtResource("4_slot")]
 layout_mode = 2
+accepted_slot = 2
 
 [node name="Accessory" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/NpcDetails/MarginContainer/VBoxContainer/SlotsGrid"]
 layout_mode = 2
@@ -160,3 +177,4 @@ uppercase = true
 
 [node name="Slot" parent="NinePatchRect/VBoxContainer/contentPanel/NpcDetails/MarginContainer/VBoxContainer/SlotsGrid/Accessory" instance=ExtResource("4_slot")]
 layout_mode = 2
+accepted_slot = 3

@@ -1,0 +1,48 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://tools/custom_window/base_window.tscn" id="1_window"]
+[ext_resource type="Script" path="res://scripts/ui/alchemist_ui.gd" id="2_ui"]
+[ext_resource type="Theme" path="res://themes/light.theme" id="3_theme"]
+
+[node name="Window" node_paths=PackedStringArray("content") instance=ExtResource("1_window")]
+custom_minimum_size = Vector2(540, 0)
+id = "WINDOW_ALCHEMIST"
+store_position = true
+content = NodePath("NinePatchRect/VBoxContainer/contentPanel/AlchemistUI")
+
+[node name="AlchemistUI" type="MarginContainer" parent="NinePatchRect/VBoxContainer/contentPanel" index="0"]
+layout_mode = 2
+theme = ExtResource("3_theme")
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 18
+script = ExtResource("2_ui")
+
+[node name="Content" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Currency" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Content"]
+layout_mode = 2
+text = "ALCHEMIST_CURRENCY"
+
+[node name="PatientsHeader" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Content"]
+layout_mode = 2
+text = "ALCHEMIST_PATIENTS_HEADER"
+uppercase = true
+
+[node name="Patients" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Content"]
+layout_mode = 2
+
+[node name="RelicsHeader" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Content"]
+layout_mode = 2
+text = "ALCHEMIST_RELICS_HEADER"
+uppercase = true
+
+[node name="Relics" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Content"]
+layout_mode = 2
+
+[node name="Feedback" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Content"]
+layout_mode = 2
+autowrap_mode = 2

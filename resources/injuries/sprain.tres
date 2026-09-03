@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="AdventurerInjury" format=3]
+
+[ext_resource type="Script" path="res://tools/quest_system/scripts/adventurer_injury.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"sprain"
+translation_key_name = "INJURY_SPRAIN_NAME"
+translation_key_description = "INJURY_SPRAIN_DESCRIPTION"
+treatment_cost = 8
+success_weight_multiplier = 0.92
+quest_duration_multiplier = 1.15

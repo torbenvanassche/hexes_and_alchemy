@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="EquipmentInfo" format=3]
+
+[ext_resource type="Script" path="res://tools/inventory/scripts/data/equipment_info.gd" id="1"]
+[ext_resource type="Texture2D" path="res://sprites/items/trap.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+unique_id = "masterwork_kit"
+translation_key_name = "ITEM_MASTERWORK_KIT_NAME"
+translation_key_description = "ITEM_MASTERWORK_KIT_DESCRIPTION"
+texture = ExtResource("2")
+buy_value = 92
+sell_value = 56
+slot = 2
+tier = 2
+reward_weight = 1.0
+success_weight_multiplier = 1.68
+danger_weight_multiplier = 0.46
+injury_chance_multiplier = 0.58
+death_chance_multiplier = 0.62
+quest_duration_multiplier = 0.55
+loot_quantity_multiplier = 1.75
+effective_quest_types = Array[String](["prospect", "extract", "deep_extract", "deepen", "delve", "salvage", "survey", "reinforce", "reopen", "maintain"])

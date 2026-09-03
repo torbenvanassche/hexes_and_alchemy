@@ -24,6 +24,7 @@ const SLOPE_SURFACE_COLLISION_MASK := 1 << 3
 @onready var interaction_trigger: Area3D = get_node_or_null("InteractionTrigger") as Area3D
 
 enum NPCState { IDLE, READY_TO_MOVE, MOVING_TO_QUEST, AT_QUEST, RETURNING, DONE, RESTING, RETURNING_HOME }
+enum QuestFate { UNHARMED, INJURED, DEAD }
 
 var current_path: Array[HexBase] = []
 var current_target_index := 0
@@ -41,6 +42,9 @@ var rest_remaining_seconds := 0.0
 var rest_duration_seconds := 0.0
 var last_completed_quest_key := ""
 var recovering_from_injury := false
+var active_injuries: Array[AdventurerInjury] = []
+var career_age_seconds := 0.0
+var retirement_pending := false
 var _last_rest_display_second := -1
 var _last_progress_position := Vector3.ZERO
 var _stuck_time := 0.0
@@ -50,6 +54,9 @@ signal movement_failed(npc: NPC)
 signal rank_progress_changed()
 signal activity_changed(npc: NPC)
 signal rest_progress_changed(npc: NPC)
+signal died(npc: NPC)
+signal injuries_changed(npc: NPC)
+signal retired(npc: NPC)
 
 func _ready() -> void:
 	$mesh/RootNode/unit.material_override = material
@@ -220,6 +227,106 @@ func get_equipped_items() -> Array[EquipmentInfo]:
 		return []
 	return equipment.get_equipped_items()
 
+func get_equipment_unlock_rank(slot: EquipmentInfo.Slot) -> AdventurerRank.Rank:
+	if slot == EquipmentInfo.Slot.ARMOR or slot == _get_signature_equipment_slot():
+		return AdventurerRank.Rank.F
+	if slot == EquipmentInfo.Slot.ACCESSORY:
+		return AdventurerRank.Rank.D
+	return AdventurerRank.Rank.B
+
+func is_equipment_slot_unlocked(slot: EquipmentInfo.Slot) -> bool:
+	return AdventurerRank.is_at_least(rank, get_equipment_unlock_rank(slot))
+
+func _get_signature_equipment_slot() -> EquipmentInfo.Slot:
+	var roles := get_operation_roles()
+	if roles.has("hunter") or (roles.has("security") and not roles.has("delver")):
+		return EquipmentInfo.Slot.WEAPON
+	return EquipmentInfo.Slot.TOOL
+
+func get_equipment_success_multiplier(quest: Quest) -> float:
+	var multiplier := equipment.get_success_weight_multiplier(quest) if equipment != null else 1.0
+	for injury in active_injuries:
+		multiplier *= injury.success_weight_multiplier
+	return multiplier
+
+func get_equipment_danger_multiplier(quest: Quest) -> float:
+	var multiplier := equipment.get_danger_weight_multiplier(quest) if equipment != null else 1.0
+	for injury in active_injuries:
+		multiplier *= injury.danger_weight_multiplier
+	return multiplier
+
+func get_equipment_duration_multiplier(quest: Quest) -> float:
+	var multiplier := equipment.get_quest_duration_multiplier(quest) if equipment != null else 1.0
+	for injury in active_injuries:
+		multiplier *= injury.quest_duration_multiplier
+	return multiplier
+
+func get_equipment_loot_multiplier(quest: Quest) -> float:
+	var multiplier := equipment.get_loot_quantity_multiplier(quest) if equipment != null else 1.0
+	for injury in active_injuries:
+		multiplier *= injury.loot_quantity_multiplier
+	return multiplier
+
+func roll_quest_fate(quest: Quest) -> QuestFate:
+	if quest == null or quest.outcome == null or not quest.outcome.is_dangerous:
+		return QuestFate.UNHARMED
+	var rules := recovery_rules if recovery_rules != null else AdventurerRecoveryRules.new()
+	var rank_surplus := maxi(0, int(rank) - int(quest.get_minimum_rank()))
+	var experience_safety_multiplier := pow(0.9, rank_surplus)
+	var equipment_death_multiplier := equipment.get_death_chance_multiplier() if equipment != null else 1.0
+	for injury in active_injuries:
+		equipment_death_multiplier *= injury.death_chance_multiplier
+	var death_chance := clampf(rules.get_death_chance() * equipment_death_multiplier * experience_safety_multiplier, 0.0, 1.0)
+	if randf() < death_chance:
+		return QuestFate.DEAD
+	var equipment_injury_multiplier := equipment.get_injury_chance_multiplier() if equipment != null else 1.0
+	for injury in active_injuries:
+		equipment_injury_multiplier *= injury.injury_chance_multiplier
+	var injury_chance := clampf(rules.get_injury_chance() * equipment_injury_multiplier * experience_safety_multiplier, 0.0, 1.0)
+	if randf() < injury_chance:
+		add_injury(rules.roll_injury(active_injuries))
+		return QuestFate.INJURED
+	return QuestFate.UNHARMED
+
+func add_injury(injury: AdventurerInjury) -> bool:
+	if injury == null or has_injury(injury.id):
+		return false
+	active_injuries.append(injury)
+	injuries_changed.emit(self)
+	activity_changed.emit(self)
+	return true
+
+func has_injury(injury_id: StringName) -> bool:
+	return active_injuries.any(func(injury: AdventurerInjury) -> bool: return injury != null and injury.id == injury_id)
+
+func treat_injury(injury: AdventurerInjury) -> bool:
+	if injury == null or not active_injuries.has(injury):
+		return false
+	active_injuries.erase(injury)
+	injuries_changed.emit(self)
+	activity_changed.emit(self)
+	return true
+
+func get_injuries_label() -> String:
+	if active_injuries.is_empty():
+		return tr("NPC_INJURIES_NONE")
+	var names: Array[String] = []
+	for injury in active_injuries:
+		if injury != null:
+			names.append(injury.get_display_name())
+	return ", ".join(names)
+
+func get_injury_severity() -> int:
+	var total := 0
+	for injury in active_injuries:
+		if injury != null:
+			total += injury.severity
+	return total
+
+func is_severely_injured() -> bool:
+	var rules := recovery_rules if recovery_rules != null else AdventurerRecoveryRules.new()
+	return active_injuries.size() >= rules.maximum_persistent_injuries or get_injury_severity() >= rules.forced_retirement_severity
+
 func get_profession_label() -> String:
 	if npc_info == null:
 		return tr("NPC_PROFESSION_GENERALIST")
@@ -304,13 +411,13 @@ func add_rank_experience(amount: int) -> void:
 		return
 	rank_progress_changed.emit()
 
-func complete_assigned_quest(quest: Quest, rank_experience_reward: int, payment: int = 0) -> void:
+func complete_assigned_quest(quest: Quest, rank_experience_reward: int, payment: int = 0, injured: bool = false) -> void:
 	if current_quest != quest:
 		return
 	add_rank_experience(rank_experience_reward)
 	earned_currency += maxi(0, payment)
 	last_completed_quest_key = quest.quest_key if quest != null else ""
-	_start_recovery_after_quest(quest)
+	_start_recovery_after_quest(quest, injured)
 	current_quest = null
 	current_path.clear()
 	if rest_remaining_seconds > 0.0:
@@ -319,7 +426,7 @@ func complete_assigned_quest(quest: Quest, rank_experience_reward: int, payment:
 		set_state(NPCState.RETURNING_HOME)
 
 func is_available_for_quest() -> bool:
-	return current_quest == null and state_machine != null and is_state(NPCState.IDLE) and rest_remaining_seconds <= 0.0
+	return current_quest == null and state_machine != null and is_state(NPCState.IDLE) and rest_remaining_seconds <= 0.0 and not is_severely_injured()
 
 func get_activity_state_key() -> String:
 	if state_machine == null:
@@ -335,6 +442,8 @@ func get_activity_status_label() -> String:
 		var status_key := "NPC_STATUS_%s" % get_activity_state_key().to_upper()
 		var translated := tr(status_key)
 		return translated if translated != status_key else get_activity_state_key().capitalize().replace("_", " ")
+	if is_severely_injured():
+		return tr("NPC_STATUS_TOO_INJURED")
 	return tr("NPC_STATUS_AVAILABLE")
 
 func get_rest_progress_ratio() -> float:
@@ -411,11 +520,11 @@ func _update_resting() -> void:
 		recovering_from_injury = false
 		set_state(NPCState.RETURNING_HOME)
 
-func _start_recovery_after_quest(quest: Quest) -> void:
+func _start_recovery_after_quest(quest: Quest, injured: bool = false) -> void:
 	var rules := recovery_rules
 	if rules == null:
 		rules = AdventurerRecoveryRules.new()
-	recovering_from_injury = quest != null and quest.outcome != null and quest.outcome.is_dangerous
+	recovering_from_injury = injured
 	var ration_used := false
 	if recovering_from_injury and Manager.instance != null and Manager.instance.hub != null:
 		var recovery_cost := rules.get_injury_recovery_cost()
@@ -429,6 +538,50 @@ func _start_recovery_after_quest(quest: Quest) -> void:
 	rest_remaining_seconds = rest_duration_seconds
 	if recovering_from_injury:
 		_notify_injury_recovery(ration_used)
+
+func die_after_quest(quest: Quest) -> void:
+	if current_quest != quest:
+		return
+	current_quest = null
+	current_path.clear()
+	velocity = Vector3.ZERO
+	_leave_equipment_at_objective(quest)
+	died.emit(self)
+	queue_free()
+
+func can_retire() -> bool:
+	return current_quest == null and state_machine != null and (is_state(NPCState.IDLE) or is_state(NPCState.RESTING))
+
+func retire(automatic: bool = false) -> bool:
+	if not can_retire():
+		retirement_pending = automatic
+		return false
+	_return_equipment_to_stockpile()
+	retired.emit(self)
+	if Manager.instance != null and Manager.instance.toast != null:
+		var key := "NPC_RETIRED_AGE_NOTICE" if automatic else "NPC_RETIRED_NOTICE"
+		Manager.instance.toast.notify(tr(key) % get_display_name(), Color(0.46, 0.34, 0.2, 1.0))
+	queue_free()
+	return true
+
+func _return_equipment_to_stockpile() -> void:
+	if equipment == null:
+		return
+	if Manager.instance != null and Manager.instance.hub != null:
+		for item in equipment.get_equipped_items():
+			Manager.instance.hub.stockpile.add(item, 1, true)
+	equipment.clear()
+
+func _leave_equipment_at_objective(quest: Quest) -> void:
+	if equipment == null:
+		return
+	var items := equipment.get_equipped_items()
+	if items.is_empty():
+		return
+	var objective := quest.get_objective() if quest != null else null
+	if objective != null:
+		objective.leave_lost_equipment(items, get_display_name())
+	equipment.clear()
 
 func _notify_injury_recovery(ration_used: bool) -> void:
 	if Manager.instance == null or Manager.instance.toast == null:
@@ -515,6 +668,13 @@ func _get_active_grid() -> HexGrid:
 	return active_scene.node as HexGrid if active_scene != null else null
 
 func _physics_process(_delta: float) -> void:
+	career_age_seconds += maxf(0.0, _delta)
+	var rules := recovery_rules if recovery_rules != null else AdventurerRecoveryRules.new()
+	if rules.automatic_retirement_seconds > 0.0 and career_age_seconds >= rules.automatic_retirement_seconds:
+		retirement_pending = true
+	if retirement_pending and can_retire():
+		retire(true)
+		return
 	state_machine.update()
 
 func _rank_up_from_experience() -> bool:
@@ -670,7 +830,8 @@ func _explore_for_scouting_quest() -> void:
 	if current_hex == null:
 		return
 	grid.generate_chunks_around_grid_id(current_hex.grid_id)
-	for nearby_tile: SceneInstance in grid.get_tiles_in_radius(current_hex.cube_id, scouting_exploration_radius):
+	var equipment_radius_bonus := equipment.get_scouting_radius_bonus() if equipment != null else 0
+	for nearby_tile: SceneInstance in grid.get_tiles_in_radius(current_hex.cube_id, scouting_exploration_radius + equipment_radius_bonus):
 		var tile := nearby_tile.node as HexBase
 		if tile != null and not tile.is_explored:
 			current_quest.record_scouted_hex(tile)

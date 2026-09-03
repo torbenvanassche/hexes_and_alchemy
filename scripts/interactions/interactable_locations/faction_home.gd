@@ -3,7 +3,7 @@ class_name FactionHome extends SettlementService
 @export var faction_id: StringName = &""
 @export var member_scene: SceneInfo
 @export var member_spawn: Node3D
-@export_range(1, 10, 1) var roster_capacity := 5
+@export_range(1, 30, 1) var roster_capacity := 5
 @export_group("Starting Roster")
 @export var starting_npc_profiles: Array[NpcInfo] = []
 @export_range(0, 10, 1) var starting_random_npc_count := 0
@@ -82,6 +82,8 @@ func get_roster_npcs() -> Array[SceneInstance]:
 	)
 
 func get_display_name() -> String:
+	if faction_id == &"":
+		return tr("GUILD_HALL_NAME")
 	var translation_key := "FACTION_%s_HOME_NAME" % String(faction_id).to_upper()
 	var translated := tr(translation_key)
 	return String(faction_id).capitalize() if translated == translation_key else translated

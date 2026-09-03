@@ -26,6 +26,7 @@ var state_machine: StateMachine;
 var party: Array[NPC] = []
 var primary_member: NPC
 var support_members: Dictionary[StringName, NPC] = {}
+var party_fates: Dictionary[int, int] = {}
 
 signal completed();
 signal outcome_ready(resolved_outcome: QuestOutcome)
@@ -110,7 +111,49 @@ func get_danger_weight_multiplier() -> float:
 	var multiplier := 1.0
 	for definition: QuestSupportDefinition in get_selected_support_definitions():
 		multiplier *= maxf(0.0, definition.danger_weight_multiplier)
+	for npc in party:
+		if npc != null and is_instance_valid(npc):
+			multiplier *= npc.get_equipment_danger_multiplier(self)
 	return multiplier
+
+func get_success_weight_multiplier() -> float:
+	var multiplier := 1.0
+	for npc in party:
+		if npc != null and is_instance_valid(npc):
+			multiplier *= npc.get_equipment_success_multiplier(self)
+	return multiplier
+
+func get_duration_multiplier() -> float:
+	var multiplier := INF
+	for npc in party:
+		if npc != null and is_instance_valid(npc):
+			multiplier = minf(multiplier, npc.get_equipment_duration_multiplier(self))
+	return 1.0 if is_inf(multiplier) else multiplier
+
+func get_loot_quantity_multiplier() -> float:
+	var multiplier := 0.0
+	for npc in party:
+		if npc != null and is_instance_valid(npc):
+			multiplier = maxf(multiplier, npc.get_equipment_loot_multiplier(self))
+	return 1.0 if multiplier <= 0.0 else multiplier
+
+func apply_loot_quantity_multiplier(rewards: Dictionary[ItemInfo, int]) -> Dictionary[ItemInfo, int]:
+	if quest_key == QuestObjective.RECOVER_EQUIPMENT_QUEST_KEY:
+		return rewards.duplicate()
+	var adjusted: Dictionary[ItemInfo, int] = {}
+	var multiplier := get_loot_quantity_multiplier()
+	for item: ItemInfo in rewards.keys():
+		var base_amount := maxi(0, int(rewards[item]))
+		if item is EquipmentInfo:
+			adjusted[item] = base_amount
+			continue
+		var scaled_amount := float(base_amount) * multiplier
+		var amount := floori(scaled_amount)
+		if randf() < scaled_amount - float(amount):
+			amount += 1
+		if amount > 0:
+			adjusted[item] = amount
+	return adjusted
 
 func get_effective_risk_key() -> String:
 	var profile := get_profile()
@@ -205,7 +248,10 @@ func _check_party_arrived_at_quest() -> void:
 			Debug.warn("Quest '%s' is missing its required supplies." % [quest_key])
 			_fail("QUEST_FAILED_MISSING_SUPPLIES")
 			return
-		objective.execute_quest(self);
+		if quest_key == QuestObjective.RECOVER_EQUIPMENT_QUEST_KEY:
+			objective.execute_recovery_quest(self)
+		else:
+			objective.execute_quest(self);
 		set_state(QuestState.IN_PROGRESS);
 		
 func return_completed() -> void:
@@ -264,18 +310,27 @@ func parse_reward() -> void:
 	var objective := get_objective()
 	var earned_rank_experience := get_rank_experience_reward()
 	if objective != null:
-		objective.complete_quest(self);
+		if quest_key == QuestObjective.RECOVER_EQUIPMENT_QUEST_KEY:
+			objective.complete_recovery_quest(self)
+		else:
+			objective.complete_quest(self);
 	var valid_party: Array[NPC] = []
 	for npc: NPC in party:
-		if npc != null:
+		if npc != null and is_instance_valid(npc):
 			valid_party.append(npc)
-	var payment_per_member := floori(float(offered_currency_reward) / float(valid_party.size())) if not valid_party.is_empty() else 0
-	var payment_remainder := offered_currency_reward % valid_party.size() if not valid_party.is_empty() else 0
-	for index in valid_party.size():
-		var npc := valid_party[index]
-		if npc != null:
-			var payment := payment_per_member + (1 if index < payment_remainder else 0)
-			npc.complete_assigned_quest(self, earned_rank_experience, payment)
+	_resolve_party_fates()
+	var survivors: Array[NPC] = []
+	for npc in valid_party:
+		if _get_party_fate(npc) == NPC.QuestFate.DEAD:
+			npc.die_after_quest(self)
+		else:
+			survivors.append(npc)
+	var payment_per_member := floori(float(offered_currency_reward) / float(survivors.size())) if not survivors.is_empty() else 0
+	var payment_remainder := offered_currency_reward % survivors.size() if not survivors.is_empty() else 0
+	for index in survivors.size():
+		var npc := survivors[index]
+		var payment := payment_per_member + (1 if index < payment_remainder else 0)
+		npc.complete_assigned_quest(self, earned_rank_experience, payment, _get_party_fate(npc) == NPC.QuestFate.INJURED)
 	if Manager.instance != null and Manager.instance.reputation != null:
 		Manager.instance.reputation.record_quest(self)
 	context["reward_resolved"] = true
@@ -292,8 +347,27 @@ func _resolve_return_outcome() -> void:
 	outcome.apply(self)
 	if not outcome.is_applied():
 		return
+	_resolve_party_fates()
 	if outcome is ScoutingQuestOutcome:
 		var scouting_outcome := outcome as ScoutingQuestOutcome
 		scout_revealed_tiles = scouting_outcome.get_revealed_tile_count()
 		scout_discovered_structures = scouting_outcome.get_discovered_structure_counts()
 	outcome_ready.emit(outcome)
+
+func _resolve_party_fates() -> void:
+	if outcome == null or not outcome.is_applied() or not party_fates.is_empty():
+		return
+	for npc in party:
+		if npc == null or not is_instance_valid(npc):
+			continue
+		var fate := npc.roll_quest_fate(self)
+		party_fates[npc.get_instance_id()] = int(fate)
+		if fate == NPC.QuestFate.DEAD:
+			outcome.append_summary(tr("QUEST_MEMBER_DIED") % npc.get_display_name())
+		elif fate == NPC.QuestFate.INJURED:
+			outcome.append_summary(tr("QUEST_MEMBER_INJURED") % npc.get_display_name())
+
+func _get_party_fate(npc: NPC) -> NPC.QuestFate:
+	if npc == null:
+		return NPC.QuestFate.UNHARMED
+	return int(party_fates.get(npc.get_instance_id(), int(NPC.QuestFate.UNHARMED))) as NPC.QuestFate

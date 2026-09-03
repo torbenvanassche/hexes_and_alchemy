@@ -10,17 +10,22 @@
 [ext_resource type="Resource" uid="uid://dc8q5v2n8adef" path="res://resources/settlement_upgrades/settlement_level_2.tres" id="16_upgrade_2"]
 [ext_resource type="Resource" path="res://resources/settlement_upgrades/settlement_level_3.tres" id="17_upgrade_3"]
 [ext_resource type="Script" uid="uid://df1yhyfp6xqgs" path="res://scripts/hex_system/settlement_upgrade_info.gd" id="18_upgrade_info"]
+<<<<<<< Updated upstream
 [ext_resource type="PackedScene" path="res://scenes/tops/faction_home_hunters.tscn" id="19_hunters"]
 [ext_resource type="PackedScene" path="res://scenes/tops/faction_home_adventurers.tscn" id="20_adventurers"]
 [ext_resource type="PackedScene" path="res://scenes/tops/faction_home_crafters.tscn" id="21_crafters"]
 [ext_resource type="PackedScene" path="res://scenes/tops/faction_home_tenders.tscn" id="22_tenders"]
+=======
+[ext_resource type="PackedScene" uid="uid://dc7h62gs1f7ew" path="res://scenes/tops/faction_home_adventurers.tscn" id="20_adventurers"]
+[ext_resource type="PackedScene" uid="uid://bxjey72ceoy8l" path="res://scenes/tops/topper_alchemist.tscn" id="23_alchemist"]
+>>>>>>> Stashed changes
 
 [node name="starting_settlement" type="Node3D" unique_id=1143800928 node_paths=PackedStringArray("spawn_position")]
 script = ExtResource("1_l415u")
 spawn_position = NodePath("player_spawn")
 is_active_settlement = true
 upgrade_requirements = Array[ExtResource("18_upgrade_info")]([ExtResource("16_upgrade_2"), ExtResource("17_upgrade_3")])
-settlement_tile_anchors = Array[NodePath]([NodePath("structures/market"), NodePath("structures/tavern"), NodePath("structures/home"), NodePath("structures/hunters_home"), NodePath("structures/adventurers_home"), NodePath("structures/crafters_home"), NodePath("structures/tenders_home")])
+settlement_tile_anchors = Array[NodePath]([NodePath("structures/market"), NodePath("structures/tavern"), NodePath("structures/home"), NodePath("structures/guild_hall"), NodePath("structures/alchemist")])
 initial_footprint_radius = 2
 
 [node name="structures" type="Node3D" parent="." unique_id=516994821]
@@ -30,7 +35,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9910254, 0, -1.75)
 transform = Transform3D(0.9999999, 0, 0, 0, 1, 0, 0, 0, 0.9999999, 0.9910254, 0, 5.25)
 
 [node name="tavern" parent="structures" unique_id=1607926184 instance=ExtResource("7_l415u")]
-transform = Transform3D(-0.4999999, 0, -0.86602545, 0, 1, 0, 0.86602545, 0, -0.4999999, 4.955127, 0, 1.75)
+transform = Transform3D(-0.4999999, 0, -0.86602545, 0, 1, 0, 0.86602545, 0, -0.4999999, 2.9551268, 0, 1.75)
 
 [node name="questboard" parent="structures" unique_id=1065241070 instance=ExtResource("11_mt1kp")]
 transform = Transform3D(0.028422564, 0, 0.99959606, 0, 1, 0, -0.99959606, 0, 0.028422564, -2.732742, 0, -0.051187754)
@@ -38,34 +43,25 @@ transform = Transform3D(0.028422564, 0, 0.99959606, 0, 1, 0, -0.99959606, 0, 0.0
 [node name="home" parent="structures" unique_id=2074058054 instance=ExtResource("11_47cix")]
 transform = Transform3D(1.0392303, 0, -0.60000014, 0, 1.1999997, 0, 0.60000014, 0, 1.0392303, -0.008974612, 0, -0.25)
 
-[node name="hunters_home" parent="structures" unique_id=1493272079 instance=ExtResource("19_hunters")]
-transform = Transform3D(-0.86602545, 0, -0.5, 0, 1, 0, 0.5, 0, -0.86602545, 0.017949283, 0, 3.5)
+[node name="guild_hall" parent="structures" unique_id=1884246225 instance=ExtResource("20_adventurers")]
+transform = Transform3D(-0.7794228, 0, 0.45000005, 0, 0.9, 0, -0.45000005, 0, -0.7794228, -0.09900433, 0, 3.608148)
 
-[node name="adventurers_home" parent="structures" unique_id=1884246225 instance=ExtResource("20_adventurers")]
-transform = Transform3D(-0.49999997, 0, -0.86602545, 0, 1, 0, 0.86602545, 0, -0.49999997, 3.9641016, 0, 3.5)
-
-[node name="crafters_home" parent="structures" unique_id=83107353 instance=ExtResource("21_crafters")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9820508, 0, 0)
-
-[node name="tenders_home" parent="structures" unique_id=412866330 instance=ExtResource("22_tenders")]
-transform = Transform3D(-0.49999997, 0, 0.86602545, 0, 1, 0, -0.86602545, 0, -0.49999997, -2.973076, 0, 1.75)
+[node name="alchemist" parent="structures" unique_id=1191402777 instance=ExtResource("23_alchemist")]
+transform = Transform3D(-5.9604645e-08, 0, 1, 0, 1, 0, -1, 0, -5.9604645e-08, -2.7996116, 0, 1.7609607)
 
 [node name="walls" type="Node3D" parent="." unique_id=854268926]
 
 [node name="Wall_00_02_NE" parent="walls" unique_id=976373889 instance=ExtResource("11_04njl")]
-transform = Transform3D(-0.5, 0, -0.8660254, 0, 1, 0, 0.8660254, 0, -0.5, 1.9820508, 0, 3.5)
-
-[node name="Wall_00_02_NW" parent="walls" unique_id=1018971911 instance=ExtResource("11_04njl")]
-transform = Transform3D(0.5, 0, -0.8660254, 0, 1, 0, 0.8660254, 0, 0.5, 1.9820508, 0, 3.5)
+transform = Transform3D(-0.5, 0, -0.8660254, 0, 1, 0, 0.8660254, 0, -0.5, -0.017949224, 0, 3.5)
 
 [node name="Wall_00_M02_SE" parent="walls" unique_id=1873435811 instance=ExtResource("11_04njl")]
 transform = Transform3D(-0.5, 0, 0.8660254, 0, 1, 0, -0.8660254, 0, -0.5, -1.9820508, 0, -3.5)
 
 [node name="Wall_01_01_E" parent="walls" unique_id=459627673 instance=ExtResource("11_04njl")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 2.973076, 0, 1.75)
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0.9730761, 0, 1.75)
 
 [node name="Wall_01_01_E2" parent="walls" unique_id=1934283632 instance=ExtResource("11_04njl")]
-transform = Transform3D(-0.49999997, 0, 0.86602545, 0, 1, 0, -0.86602545, 0, -0.49999997, 2.973076, 0, 1.75)
+transform = Transform3D(-0.49999997, 0, 0.86602545, 0, 1, 0, -0.86602545, 0, -0.49999997, 0.9730761, 0, 1.75)
 
 [node name="Wall_M01_M01_W" parent="walls" unique_id=1172385928 instance=ExtResource("11_04njl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.973076, 0, -1.75)
@@ -76,20 +72,14 @@ transform = Transform3D(0.49999997, 0, -0.86602545, 0, 1, 0, 0.86602545, 0, 0.49
 [node name="Wall_01_M02_SW" parent="walls" unique_id=661315845 instance=ExtResource("11_04njl")]
 transform = Transform3D(0.5, 0, 0.8660254, 0, 1, 0, -0.8660254, 0, 0.5, 0, 0, -3.5)
 
-[node name="Wall_01_M02_SE" parent="walls" unique_id=1344691898 instance=ExtResource("11_04njl")]
-transform = Transform3D(-0.5, 0, 0.8660254, 0, 1, 0, -0.8660254, 0, -0.5, 0, 0, -3.5)
-
-[node name="Wall_M01_02_NE" parent="walls" unique_id=1976513943 instance=ExtResource("11_04njl")]
-transform = Transform3D(-0.5, 0, -0.8660254, 0, 1, 0, 0.8660254, 0, -0.5, 0, 0, 3.5)
-
 [node name="Wall_M01_02_NW" parent="walls" unique_id=442295644 instance=ExtResource("11_04njl")]
 transform = Transform3D(0.5, 0, -0.8660254, 0, 1, 0, 0.8660254, 0, 0.5, 0, 0, 3.5)
 
 [node name="Wall_02_00_NE" parent="walls" unique_id=468257502 instance=ExtResource("11_04njl")]
-transform = Transform3D(-0.5, 0, -0.8660254, 0, 1, 0, 0.8660254, 0, -0.5, 3.9641016, 0, 0)
+transform = Transform3D(-0.5, 0, -0.8660254, 0, 1, 0, 0.8660254, 0, -0.5, 1.9641016, 0, 0)
 
 [node name="Wall_02_00_SE" parent="walls" unique_id=1353903052 instance=ExtResource("11_04njl")]
-transform = Transform3D(-0.5, 0, 0.8660254, 0, 1, 0, -0.8660254, 0, -0.5, 3.9641016, 0, 0)
+transform = Transform3D(-0.5, 0, 0.8660254, 0, 1, 0, -0.8660254, 0, -0.5, 1.9641016, 0, 0)
 
 [node name="Wall_M02_00_NW" parent="walls" unique_id=990816300 instance=ExtResource("11_04njl")]
 transform = Transform3D(0.5, 0, -0.8660254, 0, 1, 0, 0.8660254, 0, 0.5, -3.9641016, 0, 0)
@@ -101,10 +91,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.9641016, 0, 0)
 transform = Transform3D(0.5, 0, 0.8660254, 0, 1, 0, -0.8660254, 0, 0.5, -3.9641016, 0, 0)
 
 [node name="Wall_02_M01_E" parent="walls" unique_id=2056619799 instance=ExtResource("11_04njl")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 2.973076, 0, -1.75)
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0.9730761, 0, -1.75)
 
 [node name="Wall_02_M01_SE" parent="walls" unique_id=816375754 instance=ExtResource("11_04njl")]
-transform = Transform3D(-0.49999997, 0, -0.86602545, 0, 1, 0, 0.86602545, 0, -0.49999997, 2.973076, 0, -1.75)
+transform = Transform3D(-0.49999997, 0, -0.86602545, 0, 1, 0, 0.86602545, 0, -0.49999997, 0.9730761, 0, -1.75)
 
 [node name="Wall_M02_01_W" parent="walls" unique_id=954061323 instance=ExtResource("11_04njl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.973076, 0, 1.75)
@@ -112,11 +102,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.973076, 0, 1.75)
 [node name="Wall_M02_01_W2" parent="walls" unique_id=614852666 instance=ExtResource("11_04njl")]
 transform = Transform3D(0.49999997, 0, 0.86602545, 0, 1, 0, -0.86602545, 0, 0.49999997, -2.973076, 0, 1.75)
 
-[node name="Wall_02_M02_SW" parent="walls" unique_id=411532194 instance=ExtResource("11_04njl")]
-transform = Transform3D(0.5, 0, 0.8660254, 0, 1, 0, -0.8660254, 0, 0.5, 1.9820508, 0, -3.5)
-
 [node name="Wall_02_M02_SE" parent="walls" unique_id=89705031 instance=ExtResource("11_04njl")]
-transform = Transform3D(-0.5, 0, 0.8660254, 0, 1, 0, -0.8660254, 0, -0.5, 1.9820508, 0, -3.5)
+transform = Transform3D(-0.5, 0, 0.8660254, 0, 1, 0, -0.8660254, 0, -0.5, -0.017949224, 0, -3.5)
 
 [node name="Wall_M02_02_NE" parent="walls" unique_id=96857582 instance=ExtResource("11_04njl")]
 transform = Transform3D(-0.5, 0, -0.8660254, 0, 1, 0, 0.8660254, 0, -0.5, -1.9820508, 0, 3.5)
@@ -127,7 +114,7 @@ transform = Transform3D(-0.5, 0, -0.8660254, 0, 1, 0, 0.8660254, 0, -0.5, -1.982
 transform = Transform3D(0.5, 0, 0.8660254, 0, 1, 0, -0.8660254, 0, 0.5, -1.9820508, 0, -3.5)
 
 [node name="Gate_02_00_E" parent="entrances" unique_id=1696252388 instance=ExtResource("7_616a5")]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 3.9641016, 0, 0)
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 1.9641016, 0, 0)
 
 [node name="Gate_M02_02_NW" parent="entrances" unique_id=483096395 instance=ExtResource("7_616a5")]
 transform = Transform3D(0.5, 0, -0.8660254, 0, 1, 0, 0.8660254, 0, 0.5, -1.9820508, 0, 3.5)

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="AdventurerInjury" format=3]
+
+[ext_resource type="Script" path="res://tools/quest_system/scripts/adventurer_injury.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"concussion"
+translation_key_name = "INJURY_CONCUSSION_NAME"
+translation_key_description = "INJURY_CONCUSSION_DESCRIPTION"
+severity = 2
+treatment_cost = 16
+success_weight_multiplier = 0.82
+danger_weight_multiplier = 1.15
+quest_duration_multiplier = 1.2
+loot_quantity_multiplier = 0.8

@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="EquipmentInfo" format=3]
+
+[ext_resource type="Script" path="res://tools/inventory/scripts/data/equipment_info.gd" id="1"]
+[ext_resource type="Texture2D" path="res://sprites/items/bar_iron.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+unique_id = "huntsman_saber"
+translation_key_name = "ITEM_HUNTSMAN_SABER_NAME"
+translation_key_description = "ITEM_HUNTSMAN_SABER_DESCRIPTION"
+texture = ExtResource("2")
+buy_value = 48
+sell_value = 28
+slot = 0
+tier = 1
+reward_weight = 5.0
+success_weight_multiplier = 1.35
+danger_weight_multiplier = 0.68
+injury_chance_multiplier = 0.82
+death_chance_multiplier = 0.72
+quest_duration_multiplier = 0.8
+loot_quantity_multiplier = 1.2
+effective_quest_types = Array[String](["hunt", "trap_hunt", "secure", "delve"])
