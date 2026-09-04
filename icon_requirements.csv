@@ -1,0 +1,36 @@
+Icon,Category,Brief,Filename
+Coin,Currency,Small stack of clean current-guild coins with a simple modern crest; clearly distinct from the ancient coin.,currency_item.png
+Game meat,Material,Fresh venison haunch or wrapped raw cuts with a clear hunting-game silhouette; not a prepared meal.,game_meat.png
+Gold ore,Material,Cluster of rough dark rocks shot through with bright metallic gold veins and a few loose nuggets.,gold_ore.png
+Grain,Material,Tied golden wheat sheaf with visible seed heads and a small scatter of grain.,grain.png
+Iron ore,Material,"Cluster of rough dark rocks with rusty red-brown iron seams, visually distinct from gold ore.",iron_ore.png
+Processed wood,Material,"Neat bundle of debarked, processed timber or squared planks tied for construction.",wood_log.png
+Raw wood,Material,"Fresh branchy logs with rough bark, cut ends, and a few remaining green leaves.",wood_raw.png
+Bucket,Supply,Empty wooden bucket with iron bands and a clearly visible dry interior.,bucket.png
+Grain seeds,Supply,"Small cloth pouch spilling distinct seeds, tied with twine and marked by a simple leaf tag.",seed_pouch.png
+Hunting traps,Supply,"Compact steel jaw trap with chain, rope stakes, and a rugged outdoor construction.",hunting_traps.png
+Travel rations,Supply,"Wrapped travel bundle of bread, dried meat, cheese, and herbs; clearly prepared and distinct from raw game meat.",travel_rations.png
+Water bucket,Supply,"Wooden bucket brimming with clear blue water, with droplets and a visible reflective surface.",water_bucket.png
+Work supplies,Supply,"Sturdy crate filled with hammer, nails, rope, fasteners, and replacement hand tools.",work_supplies.png
+Support beams,Construction supply,Bundle of squared timber support beams bound together with heavy metal brackets and bolts.,support_beams.png
+Alchemist blueprint,Blueprint,"Rolled blue plan sheet with a clear alembic, flask, and small furnace schematic; visually distinct from every other building plan.",alchemist_blueprint.png
+Bridge blueprint,Blueprint,Blue plan sheet showing a stone-and-timber arched bridge spanning two banks.,bridge_blueprint.png
+Dock blueprint,Blueprint,Blue plan sheet showing a narrow pier extending into water with mooring posts and small boats.,dock_blueprint.png
+Forge blueprint,Blueprint,"Blue plan sheet showing an anvil, forge hearth, chimney, and bellows.",forge_blueprint.png
+Wharf blueprint,Blueprint,"Blue plan sheet showing a long cargo quay, warehouse platform, crane, and waterline; distinct from the narrow dock plan.",wharf_blueprint.png
+Settlement expansion permit,Permit,"Official parchment deed with a wax seal, boundary stakes, and a stamped hex-map symbol.",settlement_expansion_permit.png
+Ancient coin,Quest loot,Single tarnished oversized coin with a chipped edge and an extinct guild crest; visibly older than normal currency.,ancient_coin.png
+Old guild seal,Quest loot,Cracked wax-and-metal guild seal medallion with a weathered crest and broken ribbon; no blueprint imagery.,old_guild_seal.png
+Relic fragment,Quest loot,Jagged rune-inscribed metal shard with a fractured edge and faint blue-gold energy leaking from within.,relic_fragment.png
+Aegis plate,Equipment,"Monumental ancient plate cuirass with a broad shield-like chest, pale steel, gold trim, and a faint protective rune glow.",aegis_plate.png
+Ancient compass,Equipment,"Ornate weathered brass compass with layered rings, glowing runes, and a subtle relic aura.",ancient_compass.png
+Compass,Equipment,Practical brass field compass with a simple needle and worn leather casing; non-magical and utilitarian.,compass.png
+Delver's harness,Equipment,"Leather-and-steel underground harness with buckles, rope loops, and a protected lantern attachment.",delvers_harness.png
+Field kit,Equipment,"Compact open field satchel containing bandages, rope, hammer, and practical repair tools.",field_kit.png
+Huntsman's saber,Equipment,Elegant curved steel saber with a green-brown wrapped grip and subtle hunting motifs; fine but not magical.,huntsman_saber.png
+Iron blade,Equipment,"Straight utilitarian iron sword with a plain guard, sturdy leather grip, and workmanlike finish.",iron_blade.png
+Masterwork kit,Equipment,"Ornate hard case opened to reveal precision tools, brass gauges, and gold fittings with a subtle relic glow.",masterwork_kit.png
+Reinforced armor,Equipment,Sturdy riveted steel breastplate with layered shoulder protection and brown leather straps.,reinforced_armor.png
+Sunsteel blade,Equipment,"Luminous golden-orange sword with a sun-shaped guard, bright heated edge, and unmistakable relic presence.",sunsteel_blade.png
+Surveyor's tools,Equipment,"Brass survey tripod, measuring rod, calipers, and rolled terrain map arranged as one readable kit.",surveyors_tools.png
+Wayfinder charm,Equipment,"Pendant talisman bearing a compass-star rune and trail arrow, with a faint guiding glow.",wayfinder_charm.png

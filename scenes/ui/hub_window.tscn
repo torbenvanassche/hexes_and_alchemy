@@ -4,7 +4,6 @@
 [ext_resource type="Script" path="res://scripts/ui/hub_window_ui.gd" id="2_hub"]
 [ext_resource type="Theme" path="res://themes/fantasy_buttons.tres" id="3_buttons"]
 [ext_resource type="PackedScene" path="res://tools/inventory/scenes/content_group.tscn" id="4_inventory"]
-[ext_resource type="PackedScene" path="res://scenes/ui/journal_panel.tscn" id="5_journal"]
 [ext_resource type="PackedScene" path="res://scenes/hud/hub_overview.tscn" id="6_operations"]
 
 [node name="Window" type="Control" node_paths=PackedStringArray("content") instance=ExtResource("1_window")]
@@ -56,13 +55,6 @@ size_flags_horizontal = 3
 toggle_mode = true
 text = "INVENTORY"
 
-[node name="Journal" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/HubWindow/VBox/TabButtons"]
-custom_minimum_size = Vector2(0, 38)
-layout_mode = 2
-size_flags_horizontal = 3
-toggle_mode = true
-text = "JOURNAL"
-
 [node name="Operations" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/HubWindow/VBox/TabButtons"]
 custom_minimum_size = Vector2(0, 38)
 layout_mode = 2
@@ -109,15 +101,6 @@ size_flags_vertical = 3
 theme_override_constants/h_separation = 4
 theme_override_constants/v_separation = 4
 columns = 5
-
-[node name="JournalPage" parent="NinePatchRect/VBoxContainer/contentPanel/HubWindow/VBox/PageHost" instance=ExtResource("5_journal")]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
 
 [node name="OperationsPage" parent="NinePatchRect/VBoxContainer/contentPanel/HubWindow/VBox/PageHost" instance=ExtResource("6_operations")]
 layout_mode = 1

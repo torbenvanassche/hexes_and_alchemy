@@ -174,9 +174,14 @@ func get_state_as_string(state: QuestState) -> String:
 	return QuestState.keys()[state].to_lower();
 
 func get_objective() -> QuestObjective:
+	if not requires_objective():
+		return null
 	if location == null or location.structure == null:
 		return null
 	return location.structure.instance as QuestObjective
+
+func requires_objective() -> bool:
+	return quest_key != "scout"
 
 func get_minimum_rank() -> AdventurerRank.Rank:
 	if minimum_rank_override >= 0:

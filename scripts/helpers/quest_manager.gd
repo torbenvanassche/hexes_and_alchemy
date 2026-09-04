@@ -421,6 +421,8 @@ func try_assign_waiting_quests() -> void:
 func _reserve_quest_supplies(quest: Quest) -> bool:
 	if quest == null or quest.context.get("supplies_reserved", false):
 		return true
+	if not quest.requires_objective():
+		return true
 	var objective := quest.get_objective()
 	if objective == null:
 		fail_quest(quest, "QUEST_FAILED_MISSING_OBJECTIVE")

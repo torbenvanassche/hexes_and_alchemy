@@ -17,7 +17,7 @@ KEYBIND_CANCEL,cancel,cancel
 KEYBIND_JOURNAL,journal,journal
 KEYBIND_HUB,guild hub,guild hub
 GUILD_HUB_TITLE,guild hall,guild hall
-GUILD_PRESTIGE_LABEL,prestige,prestige
+GUILD_PRESTIGE_LABEL,Prestige,Prestige
 SETTINGS_TAB_GAME,game,game
 SETTINGS_TAB_INPUT,input,input
 SETTINGS_BACK,Back,Back
@@ -31,7 +31,7 @@ WINDOW_TAVERN,Tavern,Tavern
 WINDOW_FACTION_ROSTER,Guild roster,Guild roster
 SCENE_FACTION_ROSTER_UI_NAME,Guild roster,Guild roster
 WINDOW_NPC_DETAILS,Adventurer,Adventurer
-WINDOW_SETTLEMENT_UPGRADE,Settlement,Settlement
+WINDOW_SETTLEMENT_UPGRADE,Settlement Upgrade,Settlement Upgrade
 WINDOW_DEPOSIT_ITEMS,Deposit items,Deposit items
 WINDOW_QUEST_BOARD,Quest board,Quest board
 WINDOW_NEW_QUEST,New quest,New quest
@@ -111,7 +111,7 @@ SETTLEMENT_UPGRADE_REQUIREMENTS_HEADER,Requirements,Requirements
 SETTLEMENT_UPGRADE_NO_SETTLEMENT,No settlement found.,No settlement found.
 SETTLEMENT_UPGRADE_READY,Ready,Ready
 SETTLEMENT_UPGRADE_MISSING,Missing,Missing
-SETTLEMENT_UPGRADE_UNLOCK_LEVEL_2,Allows advanced construction projects such as the shipyard foundation.,Allows advanced construction projects such as the shipyard foundation.
+SETTLEMENT_UPGRADE_UNLOCK_LEVEL_2,Unlocks Alchemist and shipyard construction projects.,Unlocks Alchemist and shipyard construction projects.
 SETTLEMENT_UPGRADE_UNLOCK_LEVEL_3,Allows advanced services such as the shipyard to operate.,Allows advanced services such as the shipyard to operate.
 SETTLEMENT_SERVICE_BLACKSMITH,Blacksmith,Blacksmith
 ADVENTURER_ROSTER_NAME,Name,Name
@@ -283,7 +283,6 @@ JOURNAL_CHAPTER_THREE,Chapter III: Earn the Grand Charter,Chapter III: Earn the 
 JOURNAL_CHAPTER_SELECTOR,Choose a journal chapter,Choose a journal chapter
 JOURNAL_PREVIOUS_CHAPTER,Previous chapter,Previous chapter
 JOURNAL_NEXT_CHAPTER,Next chapter,Next chapter
-JOURNAL_TASK_BUILD_FORGE,Place the Forge inside the settlement,Place the Forge inside the settlement
 JOURNAL_TASK_CRAFT_DOCK_BLUEPRINT,Craft a Dock Blueprint,Craft a Dock Blueprint
 JOURNAL_TASK_BUILD_DOCKS,Build docks on the shore,Build docks on the shore
 JOURNAL_TASK_DISCOVER_DISTANT_RESOURCE,Discover a distant resource,Discover a distant resource
@@ -329,6 +328,7 @@ STRUCTURE_FARMLAND_NAME,Farmland,Farmland
 STRUCTURE_ANCIENT_RUINS_NAME,Ancient Ruins,Ancient Ruins
 STRUCTURE_DOCKS_NAME,Docks,Docks
 STRUCTURE_FORGE_NAME,Forge,Forge
+STRUCTURE_ALCHEMIST_NAME,Alchemist,Alchemist
 STRUCTURE_WHARF_NAME,Wharf,Wharf
 STRUCTURE_FOREST_NAME,Forest,Forest
 STRUCTURE_LADDER_NAME,Ladder,Ladder
@@ -365,6 +365,8 @@ ITEM_DOCK_BLUEPRINT_NAME,Dock blueprint,Dock blueprint
 ITEM_DOCK_BLUEPRINT_DESCRIPTION,A plan for building docks.,A plan for building docks.
 ITEM_FORGE_BLUEPRINT_NAME,Forge blueprint,Forge blueprint
 ITEM_FORGE_BLUEPRINT_DESCRIPTION,A plan for placing the settlement forge.,A plan for placing the settlement forge.
+ITEM_ALCHEMIST_BLUEPRINT_NAME,Alchemist blueprint,Alchemist blueprint
+ITEM_ALCHEMIST_BLUEPRINT_DESCRIPTION,A plan for constructing an Alchemist inside a level 2 settlement.,A plan for constructing an Alchemist inside a level 2 settlement.
 ITEM_WHARF_BLUEPRINT_NAME,Wharf blueprint,Wharf blueprint
 ITEM_WHARF_BLUEPRINT_DESCRIPTION,A plan for placing the settlement wharf.,A plan for placing the settlement wharf.
 ITEM_BRIDGE_BLUEPRINT_NAME,Bridge blueprint,Bridge blueprint
@@ -687,6 +689,21 @@ ALCHEMIST_ENCHANT_SUCCESS,The relic received new properties.,The relic received 
 ALCHEMIST_ACTION_FAILED,The service could not be completed. Check guild funds and availability.,The service could not be completed. Check guild funds and availability.
 ALCHEMIST_TREATMENT_NOTICE,%s was treated for %s.,%s was treated for %s.
 ALCHEMIST_ENCHANT_NOTICE,%s received new enchantments.,%s received new enchantments.
+WINDOW_ALCHEMIST,Alchemist,Alchemist
+ALCHEMIST_SERVICES_TITLE,Apothecary services,Apothecary services
+ALCHEMIST_SERVICES_DESCRIPTION,Treat persistent injuries or re-attune recovered relics. Hover a service for its full effects.,Treat persistent injuries or re-attune recovered relics. Hover a service for its full effects.
+ALCHEMIST_TREATMENT_DESCRIPTION,Injured adventurers can be treated while they are not assigned to an operation.,Injured adventurers can be treated while they are not assigned to an operation.
+ALCHEMIST_ENCHANTMENT_DESCRIPTION,Re-attuning replaces a relic's current random properties with a new pair.,Re-attuning replaces a relic's current random properties with a new pair.
+ALCHEMIST_AVAILABLE_COUNT,%s available,%s available
+ALCHEMIST_COST,%s coins,%s coins
+ALCHEMIST_TREAT_ACTION,Treat,Treat
+ALCHEMIST_ENCHANT_ACTION,Re-attune,Re-attune
+ALCHEMIST_INJURY_BADGE,S%s,S%s
+ALCHEMIST_INJURY_DETAIL,%s · Severity %s,%s · Severity %s
+ALCHEMIST_RELIC_DETAIL,%s · %s,%s · %s
+ALCHEMIST_RELIC_UNATTUNED,Unattuned,Unattuned
+ALCHEMIST_PATIENT_ASSIGNED,This adventurer must return before treatment.,This adventurer must return before treatment.
+ALCHEMIST_NOT_ENOUGH_FUNDS,The guild does not have enough coins.,The guild does not have enough coins.
 EQUIPMENT_ENCHANTMENTS_LINE,Properties: %s,Properties: %s
 EQUIPMENT_ENCHANTMENT_PRECISE,Precise,Precise
 EQUIPMENT_ENCHANTMENT_WARDING,Warding,Warding

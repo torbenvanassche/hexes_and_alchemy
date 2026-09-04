@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://q2ybps7s1ugu"
+
+[deps]
+
+files=["res://icon_requirements.Category.translation", "res://icon_requirements.Brief.translation", "res://icon_requirements.Filename.translation"]
+
+source_file="res://icon_requirements.csv"
+dest_files=["res://icon_requirements.Category.translation", "res://icon_requirements.Brief.translation", "res://icon_requirements.Filename.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

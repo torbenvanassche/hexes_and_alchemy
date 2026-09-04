@@ -52,7 +52,7 @@ func post_quest(
 	if not _reserve_reward(quest):
 		return _fail(result, "QUEST_POST_NOT_ENOUGH_CURRENCY")
 
-	if quest_type_key != "scout":
+	if quest.requires_objective():
 		var objective := quest.get_objective()
 		if objective == null or not objective.assign_required_supplies(quest, supply_inventory):
 			quest_manager.refund_quest_reward(quest)

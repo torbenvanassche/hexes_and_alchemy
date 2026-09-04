@@ -255,10 +255,6 @@ func try_upgrade(source_inventory: ContentGroup) -> bool:
 		source_inventory.remove(item, int(upgrade.item_cost[item]))
 	level = upgrade.target_level
 	refresh_service_states()
-	if level >= 3 and Manager.instance != null and Manager.instance.journal != null:
-		Manager.instance.journal.complete_task("reach_settlement_level_3")
-		if Manager.instance.reputation != null and Manager.instance.reputation.reputation >= 10:
-			Manager.instance.journal.complete_task("become_guild_authority")
 	level_changed.emit(level)
 	return true
 

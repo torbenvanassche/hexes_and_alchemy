@@ -7,6 +7,12 @@ const OPERATION_CARD_SCENE := preload("res://scenes/ui/components/operation_card
 @onready var faction_tabs: HBoxContainer = $Margin/Scroll/VBox/FactionTabs
 @onready var faction_details: VBoxContainer = $Margin/Scroll/VBox/FactionDetails
 @onready var operations_container: VBoxContainer = $Margin/Scroll/VBox/Operations
+@onready var standing_panel: Control = $Margin/Scroll/VBox/StandingPanel
+@onready var reputation_progress: ProgressBar = $Margin/Scroll/VBox/StandingPanel/Margin/Content/Metrics/Reputation/Progress
+@onready var reputation_value: Label = $Margin/Scroll/VBox/StandingPanel/Margin/Content/Metrics/Reputation/Value
+@onready var notoriety_progress: ProgressBar = $Margin/Scroll/VBox/StandingPanel/Margin/Content/Metrics/Notoriety/Progress
+@onready var notoriety_value: Label = $Margin/Scroll/VBox/StandingPanel/Margin/Content/Metrics/Notoriety/Value
+@onready var prestige_value: Label = $Margin/Scroll/VBox/StandingPanel/Margin/Content/Metrics/Prestige/Margin/Content/Value
 
 var active_faction_id: StringName = &"hunters"
 var _refresh_pending := false
@@ -19,6 +25,8 @@ func _ready() -> void:
 			Manager.instance.hub.faction_activity_changed.connect(_queue_refresh)
 		if Manager.instance.operations != null and not Manager.instance.operations.operations_changed.is_connected(_queue_refresh):
 			Manager.instance.operations.operations_changed.connect(_queue_refresh)
+		if Manager.instance.reputation != null and not Manager.instance.reputation.changed.is_connected(_queue_refresh):
+			Manager.instance.reputation.changed.connect(_queue_refresh)
 	_refresh()
 
 func _queue_refresh() -> void:
@@ -37,8 +45,20 @@ func _refresh() -> void:
 	if not is_node_ready() or Manager.instance == null or Manager.instance.hub == null:
 		return
 	var hub := Manager.instance.hub
+	_refresh_standing(hub)
 	_refresh_factions(hub)
 	_refresh_operations()
+
+func _refresh_standing(hub: HubState) -> void:
+	var standing: GuildReputation = Manager.instance.reputation
+	var reputation: int = standing.reputation if standing != null else 0
+	var notoriety: int = standing.notoriety if standing != null else 0
+	reputation_progress.value = clampi(reputation, 0, int(reputation_progress.max_value))
+	notoriety_progress.value = clampi(notoriety, 0, int(notoriety_progress.max_value))
+	reputation_value.text = "%d / %d" % [reputation, int(reputation_progress.max_value)]
+	notoriety_value.text = "%d / %d" % [notoriety, int(notoriety_progress.max_value)]
+	prestige_value.text = str(hub.prestige)
+	standing_panel.tooltip_text = standing.get_detailed_summary() if standing != null else ""
 
 func _refresh_factions(hub: HubState) -> void:
 	_clear_container(faction_tabs)

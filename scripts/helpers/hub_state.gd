@@ -6,6 +6,9 @@ signal faction_activity_changed()
 signal activity_log_changed()
 
 @export var starting_currency := 100
+@export_group("Testing")
+@export var seed_test_inventory := false
+@export_range(1, 99, 1) var test_item_stack_size := 10
 var currency := 0
 var prestige := 0
 var stockpile: ContentGroup
@@ -24,7 +27,19 @@ func _ready() -> void:
 	stockpile.name = "HubStockpile"
 	add_child(stockpile)
 	stockpile.changed.connect(changed.emit)
+	if seed_test_inventory:
+		_seed_test_inventory.call_deferred()
 	_initialize_factions.call_deferred()
+
+func _seed_test_inventory() -> void:
+	if stockpile == null or DataManager.instance == null:
+		return
+	for item: ItemInfo in DataManager.instance.items:
+		if item == null:
+			continue
+		var amount := 1 if item is EquipmentInfo else test_item_stack_size
+		stockpile.add(item, amount, true)
+	changed.emit()
 
 func _initialize_factions() -> void:
 	factions.clear()

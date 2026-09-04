@@ -1,48 +1,224 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://b76nd0w1bjub3"]
 
-[ext_resource type="PackedScene" path="res://tools/custom_window/base_window.tscn" id="1_window"]
-[ext_resource type="Script" path="res://scripts/ui/alchemist_ui.gd" id="2_ui"]
-[ext_resource type="Theme" path="res://themes/light.theme" id="3_theme"]
+[ext_resource type="PackedScene" uid="uid://dny1dqcanlco0" path="res://tools/custom_window/base_window.tscn" id="1_window"]
+[ext_resource type="Script" uid="uid://sfjrjqlojftc" path="res://scripts/ui/alchemist_ui.gd" id="2_ui"]
+[ext_resource type="Theme" uid="uid://dae2b2hfpj0l2" path="res://themes/light.theme" id="3_light"]
 
-[node name="Window" node_paths=PackedStringArray("content") instance=ExtResource("1_window")]
-custom_minimum_size = Vector2(540, 0)
+[sub_resource type="StyleBoxFlat" id="StyleBox_background"]
+bg_color = Color(0.97, 0.9, 0.76, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_service"]
+bg_color = Color(0.92, 0.84, 0.67, 0.48)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.42, 0.31, 0.2, 0.28)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="Window" unique_id=595456531 node_paths=PackedStringArray("content") instance=ExtResource("1_window")]
+custom_minimum_size = Vector2(860, 460)
 id = "WINDOW_ALCHEMIST"
 store_position = true
+resizable = false
 content = NodePath("NinePatchRect/VBoxContainer/contentPanel/AlchemistUI")
 
-[node name="AlchemistUI" type="MarginContainer" parent="NinePatchRect/VBoxContainer/contentPanel" index="0"]
+[node name="contentPanel" parent="NinePatchRect/VBoxContainer" parent_id_path=PackedInt32Array(554725130) index="1" unique_id=1040542232]
+size_flags_horizontal = 3
+
+[node name="AlchemistUI" type="PanelContainer" parent="NinePatchRect/VBoxContainer/contentPanel" index="0" unique_id=1457847262]
+custom_minimum_size = Vector2(830, 385)
 layout_mode = 2
-theme = ExtResource("3_theme")
-theme_override_constants/margin_left = 18
-theme_override_constants/margin_top = 18
-theme_override_constants/margin_right = 18
-theme_override_constants/margin_bottom = 18
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("3_light")
+theme_override_styles/panel = SubResource("StyleBox_background")
 script = ExtResource("2_ui")
 
-[node name="Content" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI"]
+[node name="Margin" type="MarginContainer" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI" index="0" unique_id=299021111]
 layout_mode = 2
-theme_override_constants/separation = 8
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 10
 
-[node name="Currency" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Content"]
+[node name="Content" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Margin" index="0" unique_id=1651959797]
 layout_mode = 2
+theme_override_constants/separation = 7
+
+[node name="Header" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Margin/Content" index="0" unique_id=351044844]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Margin/Content/Header" index="0" unique_id=61707050]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.28, 0.18, 0.09, 1)
+theme_override_font_sizes/font_size = 18
+text = "ALCHEMIST_SERVICES_TITLE"
+uppercase = true
+
+[node name="Currency" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Margin/Content/Header" index="1" unique_id=1063358341]
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.42, 0.31, 0.2, 1)
 text = "ALCHEMIST_CURRENCY"
+horizontal_alignment = 2
+vertical_alignment = 1
 
-[node name="PatientsHeader" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Content"]
+[node name="Introduction" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Margin/Content" index="1" unique_id=1930306775]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.34, 0.23, 0.95)
+text = "ALCHEMIST_SERVICES_DESCRIPTION"
+autowrap_mode = 2
+
+[node name="TopSeparator" type="HSeparator" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Margin/Content" index="2" unique_id=495775391]
+layout_mode = 2
+
+[node name="Services" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Margin/Content" index="3" unique_id=1785831329]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="TreatmentPanel" type="PanelContainer" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Margin/Content/Services" index="0" unique_id=1125573724]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBox_service")
+
+[node name="Margin" type="MarginContainer" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Margin/Content/Services/TreatmentPanel" index="0" unique_id=1992328707]
+layout_mode = 2
+theme_override_constants/margin_left = 9
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 9
+theme_override_constants/margin_bottom = 8
+
+[node name="Content" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Margin/Content/Services/TreatmentPanel/Margin" index="0" unique_id=1301858175]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Header" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Margin/Content/Services/TreatmentPanel/Margin/Content" index="0" unique_id=1125482545]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Margin/Content/Services/TreatmentPanel/Margin/Content/Header" index="0" unique_id=700585076]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.36, 0.27, 0.18, 1)
+theme_override_font_sizes/font_size = 15
 text = "ALCHEMIST_PATIENTS_HEADER"
 uppercase = true
 
-[node name="Patients" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Content"]
+[node name="Count" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Margin/Content/Services/TreatmentPanel/Margin/Content/Header" index="1" unique_id=1051586306]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.48, 0.37, 0.26, 0.85)
+horizontal_alignment = 2
+
+[node name="Description" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Margin/Content/Services/TreatmentPanel/Margin/Content" index="1" unique_id=1646708884]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.48, 0.37, 0.26, 0.9)
+theme_override_font_sizes/font_size = 11
+text = "ALCHEMIST_TREATMENT_DESCRIPTION"
+autowrap_mode = 2
+
+[node name="Separator" type="HSeparator" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Margin/Content/Services/TreatmentPanel/Margin/Content" index="2" unique_id=1786853139]
 layout_mode = 2
 
-[node name="RelicsHeader" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Content"]
+[node name="Scroll" type="ScrollContainer" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Margin/Content/Services/TreatmentPanel/Margin/Content" index="3" unique_id=227693195]
+custom_minimum_size = Vector2(0, 185)
 layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Rows" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Margin/Content/Services/TreatmentPanel/Margin/Content/Scroll" index="0" unique_id=348115879]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="Empty" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Margin/Content/Services/TreatmentPanel/Margin/Content" index="4" unique_id=1120645854]
+visible = false
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.34, 0.23, 0.85)
+text = "ALCHEMIST_NO_PATIENTS"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="EnchantmentPanel" type="PanelContainer" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Margin/Content/Services" index="1" unique_id=2130474682]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBox_service")
+
+[node name="Margin" type="MarginContainer" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Margin/Content/Services/EnchantmentPanel" index="0" unique_id=357414253]
+layout_mode = 2
+theme_override_constants/margin_left = 9
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 9
+theme_override_constants/margin_bottom = 8
+
+[node name="Content" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Margin/Content/Services/EnchantmentPanel/Margin" index="0" unique_id=1438164671]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Header" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Margin/Content/Services/EnchantmentPanel/Margin/Content" index="0" unique_id=633372196]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Margin/Content/Services/EnchantmentPanel/Margin/Content/Header" index="0" unique_id=753660759]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.36, 0.27, 0.18, 1)
+theme_override_font_sizes/font_size = 15
 text = "ALCHEMIST_RELICS_HEADER"
 uppercase = true
 
-[node name="Relics" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Content"]
+[node name="Count" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Margin/Content/Services/EnchantmentPanel/Margin/Content/Header" index="1" unique_id=1741195474]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.48, 0.37, 0.26, 0.85)
+horizontal_alignment = 2
+
+[node name="Description" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Margin/Content/Services/EnchantmentPanel/Margin/Content" index="1" unique_id=449594885]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.48, 0.37, 0.26, 0.9)
+theme_override_font_sizes/font_size = 11
+text = "ALCHEMIST_ENCHANTMENT_DESCRIPTION"
+autowrap_mode = 2
+
+[node name="Separator" type="HSeparator" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Margin/Content/Services/EnchantmentPanel/Margin/Content" index="2" unique_id=433902150]
 layout_mode = 2
 
-[node name="Feedback" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Content"]
+[node name="Scroll" type="ScrollContainer" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Margin/Content/Services/EnchantmentPanel/Margin/Content" index="3" unique_id=2117307555]
+custom_minimum_size = Vector2(0, 185)
 layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Rows" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Margin/Content/Services/EnchantmentPanel/Margin/Content/Scroll" index="0" unique_id=1428452844]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="Empty" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Margin/Content/Services/EnchantmentPanel/Margin/Content" index="4" unique_id=971919792]
+visible = false
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.34, 0.23, 0.85)
+text = "ALCHEMIST_NO_RELICS"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="BottomSeparator" type="HSeparator" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Margin/Content" index="4" unique_id=1656816866]
+layout_mode = 2
+
+[node name="Feedback" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Margin/Content" index="5" unique_id=1444142276]
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.34, 0.23, 0.12, 1)
+vertical_alignment = 1
 autowrap_mode = 2

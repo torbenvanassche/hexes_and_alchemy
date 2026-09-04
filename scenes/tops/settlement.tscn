@@ -11,14 +11,13 @@
 [ext_resource type="Resource" path="res://resources/settlement_upgrades/settlement_level_3.tres" id="17_upgrade_3"]
 [ext_resource type="Script" uid="uid://df1yhyfp6xqgs" path="res://scripts/hex_system/settlement_upgrade_info.gd" id="18_upgrade_info"]
 [ext_resource type="PackedScene" uid="uid://dc7h62gs1f7ew" path="res://scenes/tops/faction_home_adventurers.tscn" id="20_adventurers"]
-[ext_resource type="PackedScene" uid="uid://bxjey72ceoy8l" path="res://scenes/tops/topper_alchemist.tscn" id="23_alchemist"]
 
 [node name="starting_settlement" type="Node3D" unique_id=1143800928 node_paths=PackedStringArray("spawn_position")]
 script = ExtResource("1_l415u")
 spawn_position = NodePath("player_spawn")
 is_active_settlement = true
 upgrade_requirements = Array[ExtResource("18_upgrade_info")]([ExtResource("16_upgrade_2"), ExtResource("17_upgrade_3")])
-settlement_tile_anchors = Array[NodePath]([NodePath("structures/market"), NodePath("structures/tavern"), NodePath("structures/home"), NodePath("structures/guild_hall"), NodePath("structures/alchemist")])
+settlement_tile_anchors = Array[NodePath]([NodePath("structures/market"), NodePath("structures/tavern"), NodePath("structures/home"), NodePath("structures/guild_hall")])
 initial_footprint_radius = 2
 
 [node name="structures" type="Node3D" parent="." unique_id=516994821]
@@ -38,9 +37,6 @@ transform = Transform3D(1.0392303, 0, -0.60000014, 0, 1.1999997, 0, 0.60000014, 
 
 [node name="guild_hall" parent="structures" unique_id=1884246225 instance=ExtResource("20_adventurers")]
 transform = Transform3D(-0.7794228, 0, 0.45000005, 0, 0.9, 0, -0.45000005, 0, -0.7794228, -0.09900433, 0, 3.608148)
-
-[node name="alchemist" parent="structures" unique_id=1191402777 instance=ExtResource("23_alchemist")]
-transform = Transform3D(-5.9604645e-08, 0, 1, 0, 1, 0, -1, 0, -5.9604645e-08, -2.7996116, 0, 1.7609607)
 
 [node name="walls" type="Node3D" parent="." unique_id=854268926]
 

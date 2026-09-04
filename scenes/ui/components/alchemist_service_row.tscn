@@ -1,0 +1,92 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/alchemist_service_row_ui.gd" id="1_row"]
+[ext_resource type="Theme" path="res://themes/light.theme" id="2_light"]
+[ext_resource type="Theme" path="res://themes/fantasy_buttons.tres" id="3_buttons"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_row"]
+bg_color = Color(0.92, 0.84, 0.67, 0.58)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.42, 0.31, 0.2, 0.3)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_badge"]
+bg_color = Color(0.28, 0.2, 0.13, 0.88)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="AlchemistServiceRow" type="PanelContainer"]
+custom_minimum_size = Vector2(0, 68)
+theme = ExtResource("2_light")
+theme_override_styles/panel = SubResource("StyleBox_row")
+script = ExtResource("1_row")
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 6
+
+[node name="Row" type="HBoxContainer" parent="Margin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Badge" type="PanelContainer" parent="Margin/Row"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBox_badge")
+
+[node name="Label" type="Label" parent="Margin/Row/Badge"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.81, 0.48, 1)
+theme_override_font_sizes/font_size = 12
+text = "I"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Details" type="VBoxContainer" parent="Margin/Row"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="Title" type="Label" parent="Margin/Row/Details"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.28, 0.18, 0.09, 1)
+theme_override_font_sizes/font_size = 15
+mouse_filter = 1
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="Detail" type="Label" parent="Margin/Row/Details"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.34, 0.23, 0.92)
+theme_override_font_sizes/font_size = 11
+mouse_filter = 1
+autowrap_mode = 2
+max_lines_visible = 2
+text_overrun_behavior = 3
+
+[node name="Cost" type="Label" parent="Margin/Row"]
+custom_minimum_size = Vector2(66, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.42, 0.31, 0.2, 1)
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Action" type="Button" parent="Margin/Row"]
+custom_minimum_size = Vector2(106, 30)
+layout_mode = 2
+size_flags_vertical = 4
+theme = ExtResource("3_buttons")
+theme_override_font_sizes/font_size = 18
+text = "ALCHEMIST_ACTION"
