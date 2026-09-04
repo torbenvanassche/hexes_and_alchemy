@@ -1,5 +1,7 @@
 class_name Settlement extends Node3D
 
+const BOUNDARY_EDGE_META := &"settlement_boundary_edge"
+
 @export var spawn_position: Node3D;
 @export var is_active_settlement: bool = false;
 @export var level: int = 1;
@@ -50,6 +52,7 @@ func _ready_deferred() -> void:
 	var grid := _get_active_grid()
 	if grid == null:
 		return
+	_index_boundary_edges(grid)
 
 	var origin_hex := _get_settlement_origin_hex(grid)
 	if origin_hex == null:
@@ -196,8 +199,10 @@ func expand_to_hex(grid: HexGrid, hex: HexBase) -> bool:
 	grid.invalidate_settlement_structure_exclusion_cache()
 	hex.is_explored = true
 	var settlement_hexes := get_settlement_hexes(grid)
-	_regenerate_boundary_walls(grid, settlement_hexes)
+	_update_boundary_for_expansion(grid, hex, previous_settlement_hexes)
 	_replace_generated_wall_with_entrance_for_expansion(grid, hex, previous_settlement_hexes, settlement_hexes)
+	if grid.pathfinder != null:
+		grid.pathfinder.rebuild()
 	_render_reveal_debug_shape(grid, settlement_hexes)
 	return true
 
@@ -326,14 +331,42 @@ func _replace_generated_wall_with_entrance_for_expansion(
 		return
 
 	entrance.global_transform = replacement_wall.global_transform
-	var replacement_obstacle := replacement_wall as Obstacle
-	var wall_parent := replacement_wall.get_parent()
-	if wall_parent != null:
-		wall_parent.remove_child(replacement_wall)
-	if grid.pathfinder != null and replacement_obstacle != null:
-		grid.pathfinder.remove_obstacle(replacement_obstacle, false)
-		grid.pathfinder.rebuild()
-	replacement_wall.queue_free()
+	var replacement_edge_key := _get_boundary_edge_key_for_node(grid, replacement_wall)
+	if not replacement_edge_key.is_empty():
+		entrance.set_meta(BOUNDARY_EDGE_META, replacement_edge_key)
+	_remove_boundary_node(grid, replacement_wall)
+
+func _update_boundary_for_expansion(
+	grid: HexGrid,
+	claimed_hex: HexBase,
+	previous_settlement_hexes: Array[HexBase]
+) -> void:
+	if grid == null or claimed_hex == null:
+		return
+	var walls_root := _get_or_create_boundary_root()
+	var previous_coords := _get_hex_coord_lookup(previous_settlement_hexes)
+
+	for direction: Vector3i in DataManager.instance.CUBE_DIRS:
+		var neighbor_coord := claimed_hex.cube_id + direction
+		if previous_coords.has(neighbor_coord):
+			var internal_wall := _get_wall_between(grid, claimed_hex.cube_id, neighbor_coord)
+			if internal_wall != null:
+				_remove_boundary_node(grid, internal_wall)
+			continue
+		if _get_entrance_between(grid, claimed_hex.cube_id, neighbor_coord) != null:
+			continue
+		_add_boundary_wall(walls_root, claimed_hex, neighbor_coord, grid)
+
+func _remove_boundary_node(grid: HexGrid, boundary_node: Node3D) -> void:
+	if boundary_node == null:
+		return
+	var obstacle := boundary_node as Obstacle
+	if grid != null and grid.pathfinder != null and obstacle != null:
+		grid.pathfinder.remove_obstacle(obstacle, false)
+	var parent := boundary_node.get_parent()
+	if parent != null:
+		parent.remove_child(boundary_node)
+	boundary_node.queue_free()
 
 func _get_replacement_wall_for_entrance(
 	grid: HexGrid,
@@ -372,33 +405,6 @@ func _get_walkable_boundary_neighbor(
 		return null
 	return neighbor
 
-func _regenerate_boundary_walls(grid: HexGrid, settlement_hexes: Array[HexBase]) -> void:
-	if grid == null or boundary_wall_scene == null:
-		return
-	var walls_root := _get_or_create_boundary_root()
-	for child in walls_root.get_children():
-		walls_root.remove_child(child)
-		child.queue_free()
-
-	var settlement_coords: Dictionary[Vector3i, bool] = {}
-	for hex in settlement_hexes:
-		if hex != null:
-			settlement_coords[hex.cube_id] = true
-
-	for hex in settlement_hexes:
-		if hex == null:
-			continue
-		for direction: Vector3i in DataManager.instance.CUBE_DIRS:
-			var neighbor_coord := hex.cube_id + direction
-			if settlement_coords.has(neighbor_coord):
-				continue
-			if _has_entrance_boundary_between(grid, hex.cube_id, neighbor_coord):
-				continue
-			_add_boundary_wall(walls_root, hex, neighbor_coord, grid)
-
-	if grid.pathfinder != null:
-		grid.pathfinder.rebuild()
-
 func _get_or_create_boundary_root() -> Node3D:
 	var walls_root := get_node_or_null("walls") as Node3D
 	if walls_root != null:
@@ -409,6 +415,8 @@ func _get_or_create_boundary_root() -> Node3D:
 	return walls_root
 
 func _add_boundary_wall(walls_root: Node3D, hex: HexBase, neighbor_coord: Vector3i, grid: HexGrid) -> void:
+	if _get_generated_wall_between(hex.cube_id, neighbor_coord) != null:
+		return
 	var neighbor := grid.get_hex_at_cube_id(neighbor_coord)
 	if neighbor == null:
 		return
@@ -423,6 +431,7 @@ func _add_boundary_wall(walls_root: Node3D, hex: HexBase, neighbor_coord: Vector
 	wall.global_position = hex.global_position
 	var direction := neighbor.global_position - hex.global_position
 	wall.rotation.y = _get_wall_rotation_y(direction)
+	wall.set_meta(BOUNDARY_EDGE_META, _get_boundary_edge_key(hex.cube_id, neighbor_coord))
 
 func _get_wall_rotation_y(direction: Vector3) -> float:
 	var direction_2d := Vector2(direction.x, direction.z).normalized()
@@ -439,6 +448,19 @@ func _get_wall_between(grid: HexGrid, a: Vector3i, b: Vector3i) -> Node3D:
 		return null
 	return _get_boundary_node_between(walls, grid, a, b)
 
+func _get_generated_wall_between(a: Vector3i, b: Vector3i) -> Node3D:
+	var walls := get_node_or_null("walls")
+	if walls == null:
+		return null
+	var target_key := _get_boundary_edge_key(a, b)
+	for child in walls.get_children():
+		var wall := child as Node3D
+		if wall == null or not wall.name.begins_with("generated_wall_"):
+			continue
+		if wall.has_meta(BOUNDARY_EDGE_META) and str(wall.get_meta(BOUNDARY_EDGE_META)) == target_key:
+			return wall
+	return null
+
 func _get_entrance_between(grid: HexGrid, a: Vector3i, b: Vector3i) -> Node3D:
 	var entrances := get_node_or_null("entrances")
 	if entrances == null:
@@ -451,14 +473,31 @@ func _get_boundary_node_between(root: Node, grid: HexGrid, a: Vector3i, b: Vecto
 		var node_3d := child as Node3D
 		if node_3d == null:
 			continue
-		var current_hex := grid.get_hex_at_world_position(node_3d.global_position)
-		var adjacent_world := node_3d.global_transform * (Vector3.LEFT * 2.0)
-		var adjacent_hex := grid.get_hex_at_world_position(adjacent_world)
-		if current_hex == null or adjacent_hex == null:
-			continue
-		if _get_boundary_edge_key(current_hex.cube_id, adjacent_hex.cube_id) == target_key:
+		if _get_boundary_edge_key_for_node(grid, node_3d) == target_key:
 			return node_3d
 	return null
+
+func _index_boundary_edges(grid: HexGrid) -> void:
+	if grid == null:
+		return
+	for boundary_node in _get_boundary_nodes():
+		var node_3d := boundary_node as Node3D
+		if node_3d != null:
+			_get_boundary_edge_key_for_node(grid, node_3d)
+
+func _get_boundary_edge_key_for_node(grid: HexGrid, node_3d: Node3D) -> String:
+	if grid == null or node_3d == null:
+		return ""
+	if node_3d.has_meta(BOUNDARY_EDGE_META):
+		return str(node_3d.get_meta(BOUNDARY_EDGE_META))
+	var current_hex := grid.get_hex_at_world_position(node_3d.global_position)
+	var adjacent_world := node_3d.global_transform * (Vector3.LEFT * 2.0)
+	var adjacent_hex := grid.get_hex_at_world_position(adjacent_world)
+	if current_hex == null or adjacent_hex == null:
+		return ""
+	var edge_key := _get_boundary_edge_key(current_hex.cube_id, adjacent_hex.cube_id)
+	node_3d.set_meta(BOUNDARY_EDGE_META, edge_key)
+	return edge_key
 
 func refresh_service_states() -> void:
 	for interaction: Interaction in interactions:
@@ -524,14 +563,9 @@ func _get_settlement_boundary_edges(grid: HexGrid) -> Dictionary[String, bool]:
 		var node_3d := boundary_node as Node3D
 		if node_3d == null:
 			continue
-
-		var current_hex := grid.get_hex_at_world_position(node_3d.global_position)
-		var adjacent_world := node_3d.global_transform * (Vector3.LEFT * 2.0)
-		var adjacent_hex := grid.get_hex_at_world_position(adjacent_world)
-		if current_hex == null or adjacent_hex == null:
-			continue
-
-		result[_get_boundary_edge_key(current_hex.cube_id, adjacent_hex.cube_id)] = true
+		var edge_key := _get_boundary_edge_key_for_node(grid, node_3d)
+		if not edge_key.is_empty():
+			result[edge_key] = true
 	return result
 
 func _get_boundary_nodes() -> Array[Node]:
