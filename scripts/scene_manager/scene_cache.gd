@@ -22,11 +22,15 @@ func queue(scene_info: SceneInfo) -> Signal:
 	
 	loading_queue.append(scene_info);
 	scene_info.is_queued = true;
-	var error: Error = ResourceLoader.load_threaded_request(scene_info.packed_scene.resource_path, type_string(typeof(PackedScene)))
+	var error := ResourceLoader.load_threaded_request(
+		scene_info.packed_scene.resource_path,
+		"PackedScene"
+	)
 	if error:
 		loading_queue.erase(scene_info)
 		scene_info.is_queued = false
 		Debug.err(str(error))
+		_stop_timer_if_idle()
 		
 	return scene_info.cached;
 
@@ -42,14 +46,15 @@ func _check_progress() -> void:
 			loading.is_cached = true;
 			loading.is_queued = false;
 			loading.cached.emit(loading);
-			if loading_queue.size() == 0:
-				timer.stop();
 		elif status == ResourceLoader.THREAD_LOAD_FAILED or status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
 			loading_queue.erase(loading)
 			loading.is_queued = false
 			Debug.err("Failed to load scene: %s" % loading.id)
-			if loading_queue.size() == 0:
-				timer.stop()
+	_stop_timer_if_idle()
+
+func _stop_timer_if_idle() -> void:
+	if loading_queue.is_empty() and not timer.is_stopped():
+		timer.stop()
 
 func get_from_cache(scene_info: SceneInfo) -> SceneInfo:
 	if cached_scenes.has(scene_info):
@@ -76,8 +81,7 @@ func remove(scene_info: SceneInfo) -> void:
 	scene_info.is_cached = false
 	scene_info.is_queued = false
 	
-	if loading_queue.is_empty() and not timer.is_stopped():
-		timer.stop()
+	_stop_timer_if_idle()
 			
 func get_with_type(type: SceneInfo.Type) -> Array[SceneInfo]:
 	return cached_scenes.filter(func(x: SceneInfo) -> bool: return x.type == type)

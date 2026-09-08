@@ -34,7 +34,7 @@ func uses_content(content: Resource) -> bool:
 	return content == self or build_cost.has(content);
 
 func get_placement_rotation_y(hex: HexBase, placement_rotation_y: float = NAN) -> Dictionary:
-	if placement_rotation_y == placement_rotation_y:
+	if not is_nan(placement_rotation_y):
 		return {
 			"has_rotation": true,
 			"rotation_y": float(placement_rotation_y)
@@ -138,7 +138,7 @@ func _passes_handler_checks(hex: HexBase, inventory: ContentGroup, placement_rot
 	if not bool(handler.can_place(self, hex, inventory)):
 		return false;
 
-	if placement_rotation_y == placement_rotation_y and handler.has_method("can_place_rotation"):
+	if not is_nan(placement_rotation_y) and handler.has_method("can_place_rotation"):
 		return bool(handler.can_place_rotation(self, hex, inventory, float(placement_rotation_y)));
 
 	return true;

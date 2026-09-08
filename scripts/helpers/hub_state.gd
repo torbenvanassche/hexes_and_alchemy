@@ -217,11 +217,12 @@ func add_prestige(amount: int) -> void:
 	changed.emit()
 
 func record_operation_completed(quest: Quest) -> void:
+	var completed_activity := tr("HUB_ACTIVITY_COMPLETED") % _get_operation_label(quest)
 	var faction := get_faction_for_quest(quest)
 	if faction != null:
 		faction.completed_operations += 1
-		faction.last_activity = tr("HUB_ACTIVITY_COMPLETED")
-	record_activity(tr("HUB_ACTIVITY_COMPLETED") % _get_operation_label(quest))
+		faction.last_activity = completed_activity
+	record_activity(completed_activity)
 	changed.emit()
 
 func _get_operation_label(quest: Quest) -> String:

@@ -119,7 +119,7 @@ func _step_placement_rotation(placeable: PlaceableStructureInfo, direction: floa
 
 	if absf(direction) < 0.001:
 		return
-	if placement_rotation_y != placement_rotation_y:
+	if is_nan(placement_rotation_y):
 		return
 
 	var step_direction := signf(direction)
@@ -163,7 +163,7 @@ func _update_placement_preview(placeable: PlaceableStructureInfo) -> void:
 		hovered_hex.global_position
 		+ placeable.get_placement_offset(hovered_hex, placement_rotation_y)
 	);
-	_preview_node.rotation.y = 0.0 if placement_rotation_y != placement_rotation_y else placement_rotation_y;
+	_preview_node.rotation.y = 0.0 if is_nan(placement_rotation_y) else placement_rotation_y;
 
 func _clear_placement_preview() -> void:
 	_preview_placeable = null;

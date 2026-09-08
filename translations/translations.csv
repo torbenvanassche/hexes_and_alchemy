@@ -687,6 +687,7 @@ ALCHEMIST_ENCHANT_BUTTON,Re-enchant (%s),Re-enchant (%s)
 ALCHEMIST_TREATMENT_SUCCESS,Treatment completed.,Treatment completed.
 ALCHEMIST_ENCHANT_SUCCESS,The relic received new properties.,The relic received new properties.
 ALCHEMIST_ACTION_FAILED,The service could not be completed. Check guild funds and availability.,The service could not be completed. Check guild funds and availability.
+ALCHEMIST_ACTION,Action,Actie
 ALCHEMIST_TREATMENT_NOTICE,%s was treated for %s.,%s was treated for %s.
 ALCHEMIST_ENCHANT_NOTICE,%s received new enchantments.,%s received new enchantments.
 WINDOW_ALCHEMIST,Alchemist,Alchemist
@@ -714,3 +715,4 @@ EQUIPMENT_ENCHANTMENT_PROSPEROUS,Prosperous,Prosperous
 EQUIPMENT_ENCHANTMENT_FAR_SEEING,Far-seeing,Far-seeing
 EQUIPMENT_SLOT_LOCK_OVERLAY,LOCKED\nRank %s,LOCKED\nRank %s
 EQUIPMENT_SLOT_LOCKED_TOOLTIP,%s slot\nUnlocks at Rank %s,%s slot\nUnlocks at Rank %s
+LOCKED,Locked,Vergrendeld

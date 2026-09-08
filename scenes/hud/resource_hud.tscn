@@ -4,7 +4,7 @@
 [ext_resource type="Theme" uid="uid://3rlxm8752xjm" path="res://themes/dark.theme" id="2_theme"]
 
 [node name="ResourceHud" type="PanelContainer"]
-custom_minimum_size = Vector2(400, 140)
+custom_minimum_size = Vector2(400, 40)
 layout_mode = 3
 anchors_preset = 1
 anchor_left = 1.0
@@ -12,7 +12,7 @@ anchor_right = 1.0
 offset_left = -412.0
 offset_top = 12.0
 offset_right = -12.0
-offset_bottom = 152.0
+offset_bottom = 52.0
 grow_horizontal = 0
 mouse_filter = 0
 mouse_force_pass_scroll_events = false
@@ -55,15 +55,3 @@ layout_mode = 2
 mouse_filter = 2
 text = "--:--"
 horizontal_alignment = 2
-
-[node name="Separator" type="HSeparator" parent="Margin/Content"]
-layout_mode = 2
-mouse_filter = 2
-
-[node name="ResourceGrid" type="GridContainer" parent="Margin/Content"]
-layout_mode = 2
-size_flags_horizontal = 3
-mouse_filter = 2
-theme_override_constants/h_separation = 8
-theme_override_constants/v_separation = 4
-columns = 5

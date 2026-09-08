@@ -161,10 +161,10 @@ func _resolve_spawn_position(spawn_hex: HexBase = null) -> Vector3:
 	return Vector3.ZERO;
 	
 func spawn_in_settlement() -> void:
-	if active_settlement:
-		DataManager.instance.get_scene_by_name("player").queue(_on_player_loaded.bind(active_settlement.spawn_position.global_position));
-	else:
-		Debug.err("Can't create player in settlement, no settlement is active.");
+	if active_settlement == null:
+		Debug.err("Can't create player in settlement, no settlement is active.")
+		return
+	spawn_player()
 
 func _on_player_loaded(player_scene: SceneInfo, spawn_position: Vector3) -> void:
 	if not player_instance:

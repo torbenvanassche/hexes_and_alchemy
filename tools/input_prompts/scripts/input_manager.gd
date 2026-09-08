@@ -71,11 +71,15 @@ func get_key(key: String) -> Array:
 	return [];
 	
 func _input(event: InputEvent) -> void:
+	var next_input_device := current_input_device
 	if event is InputEventJoypadMotion or event is InputEventJoypadButton:
-		current_input_device = InputDevice.CONTROLLER;
+		next_input_device = InputDevice.CONTROLLER
 	elif event is InputEventKey or event is InputEventMouseButton or event is InputEventMouseMotion:
-		current_input_device = InputDevice.KEYBOARD_MOUSE;
-	input_mode_changed.emit();
+		next_input_device = InputDevice.KEYBOARD_MOUSE
+	if next_input_device == current_input_device:
+		return
+	current_input_device = next_input_device
+	input_mode_changed.emit()
 
 func set_action(action: StringName, event: InputEvent) -> void:
 	InputMap.action_erase_events(action);
@@ -151,6 +155,6 @@ func event_to_key(event: InputEvent) -> String:
 
 func get_input_icon(action: String) -> Array[int]:
 	var dict_key: String = event_to_key(get_keybind(action));
-	var rV: Array[int] = []
-	rV.assign(get_key(dict_key));
-	return rV;
+	var rect_values: Array[int] = []
+	rect_values.assign(get_key(dict_key));
+	return rect_values;

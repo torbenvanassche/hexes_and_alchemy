@@ -25,6 +25,10 @@ SceneManager="*uid://bbh3tqcpujraq"
 
 enabled=PackedStringArray("res://addons/bitmap_editor/plugin.cfg", "res://addons/terrain_tile_setup/plugin.cfg")
 
+[gui]
+
+theme/custom="res://themes/game_theme.tres"
+
 [input]
 
 toggle_input={
@@ -139,10 +143,6 @@ camera_zoom_out={
 [internationalization]
 
 locale/translations=PackedStringArray("res://translations/translations.en.translation", "res://translations/translations.nl.translation")
-
-[gui]
-
-theme/custom="res://themes/game_theme.tres"
 
 [navigation]
 

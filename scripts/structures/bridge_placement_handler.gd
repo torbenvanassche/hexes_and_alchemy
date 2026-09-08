@@ -31,7 +31,7 @@ func get_placement_offset(_structure_info: PlaceableStructureInfo, hex: HexBase,
 	if not _is_valid_center(hex):
 		return Vector3.ZERO
 	var resolved_rotation := rotation_y
-	if resolved_rotation != resolved_rotation:
+	if is_nan(resolved_rotation):
 		resolved_rotation = get_rotation_y(_structure_info, hex)
 	var direction_index := _get_direction_index(hex, resolved_rotation)
 	var pair := _get_bridge_pair(hex, direction_index)
