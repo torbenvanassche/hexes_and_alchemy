@@ -21,7 +21,7 @@ additional_ui = Array[ExtResource("5_scene_info")]([ExtResource("4_recruitment")
 
 [node name="Root Scene" parent="." unique_id=1174146906 instance=ExtResource("1_244u3")]
 
-[node name="building_tavern_blue" parent="Root Scene/RootNode" parent_id_path=PackedInt32Array(1174146906, 15054036) index="0" unique_id=899500221]
+[node name="building_tavern_blue" parent="Root Scene/RootNode" parent_id_path=PackedInt32Array(1174146906, 100826160) index="0" unique_id=930784817]
 surface_material_override/0 = ExtResource("3_244u3")
 
 [node name="interaction" type="Area3D" parent="." unique_id=478417135]

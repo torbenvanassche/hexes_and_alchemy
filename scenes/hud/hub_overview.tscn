@@ -1,7 +1,7 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://hrjbqb32idme"]
 
-[ext_resource type="Script" path="res://scripts/ui/hub_overview_ui.gd" id="1_hub"]
-[ext_resource type="Theme" path="res://themes/fantasy_buttons.tres" id="2_buttons"]
+[ext_resource type="Script" uid="uid://5dop4k2cveqm" path="res://scripts/ui/hub_overview_ui.gd" id="1_hub"]
+[ext_resource type="Theme" uid="uid://bemn0spuaev14" path="res://themes/fantasy_buttons.tres" id="2_buttons"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hub"]
 bg_color = Color(0.97, 0.9, 0.76, 1)
@@ -34,120 +34,120 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
-[node name="HubOverview" type="PanelContainer"]
+[node name="HubOverview" type="PanelContainer" unique_id=1230540831]
 theme_override_styles/panel = SubResource("StyleBoxFlat_hub")
 script = ExtResource("1_hub")
 
-[node name="Margin" type="MarginContainer" parent="."]
+[node name="Margin" type="MarginContainer" parent="." unique_id=2006955978]
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 14
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 14
 
-[node name="Scroll" type="ScrollContainer" parent="Margin"]
+[node name="Scroll" type="ScrollContainer" parent="Margin" unique_id=571259940]
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="VBox" type="VBoxContainer" parent="Margin/Scroll"]
+[node name="VBox" type="VBoxContainer" parent="Margin/Scroll" unique_id=566192988]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 8
 
-[node name="Header" type="Label" parent="Margin/Scroll/VBox"]
+[node name="Header" type="Label" parent="Margin/Scroll/VBox" unique_id=2062633385]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.28, 0.2, 0.13, 1)
 theme_override_font_sizes/font_size = 18
 text = "HUB_OPERATIONS_TITLE"
 uppercase = true
 
-[node name="Subtitle" type="Label" parent="Margin/Scroll/VBox"]
+[node name="Subtitle" type="Label" parent="Margin/Scroll/VBox" unique_id=1454357545]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.42, 0.31, 0.2, 0.85)
 text = "HUB_OPERATIONS_SUBTITLE"
 
-[node name="StandingPanel" type="PanelContainer" parent="Margin/Scroll/VBox"]
+[node name="StandingPanel" type="PanelContainer" parent="Margin/Scroll/VBox" unique_id=1751219437]
 layout_mode = 2
 tooltip_text = "GUILD_STANDING_HEADER"
 theme_override_styles/panel = SubResource("StyleBoxFlat_standing")
 
-[node name="Margin" type="MarginContainer" parent="Margin/Scroll/VBox/StandingPanel"]
+[node name="Margin" type="MarginContainer" parent="Margin/Scroll/VBox/StandingPanel" unique_id=787981922]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 7
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 7
 
-[node name="Content" type="VBoxContainer" parent="Margin/Scroll/VBox/StandingPanel/Margin"]
+[node name="Content" type="VBoxContainer" parent="Margin/Scroll/VBox/StandingPanel/Margin" unique_id=871691223]
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="Header" type="Label" parent="Margin/Scroll/VBox/StandingPanel/Margin/Content"]
+[node name="Header" type="Label" parent="Margin/Scroll/VBox/StandingPanel/Margin/Content" unique_id=1135662384]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.36, 0.27, 0.18, 1)
 theme_override_font_sizes/font_size = 12
 text = "GUILD_STANDING_HEADER"
 uppercase = true
 
-[node name="Metrics" type="HBoxContainer" parent="Margin/Scroll/VBox/StandingPanel/Margin/Content"]
+[node name="Metrics" type="HBoxContainer" parent="Margin/Scroll/VBox/StandingPanel/Margin/Content" unique_id=1082219746]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Reputation" type="VBoxContainer" parent="Margin/Scroll/VBox/StandingPanel/Margin/Content/Metrics"]
+[node name="Reputation" type="VBoxContainer" parent="Margin/Scroll/VBox/StandingPanel/Margin/Content/Metrics" unique_id=298527841]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 2
 
-[node name="Title" type="Label" parent="Margin/Scroll/VBox/StandingPanel/Margin/Content/Metrics/Reputation"]
+[node name="Title" type="Label" parent="Margin/Scroll/VBox/StandingPanel/Margin/Content/Metrics/Reputation" unique_id=1364257642]
 layout_mode = 2
 text = "GUILD_REPUTATION_LABEL"
 
-[node name="Progress" type="ProgressBar" parent="Margin/Scroll/VBox/StandingPanel/Margin/Content/Metrics/Reputation"]
+[node name="Progress" type="ProgressBar" parent="Margin/Scroll/VBox/StandingPanel/Margin/Content/Metrics/Reputation" unique_id=824273384]
 custom_minimum_size = Vector2(0, 12)
 layout_mode = 2
 max_value = 10.0
 show_percentage = false
 
-[node name="Value" type="Label" parent="Margin/Scroll/VBox/StandingPanel/Margin/Content/Metrics/Reputation"]
+[node name="Value" type="Label" parent="Margin/Scroll/VBox/StandingPanel/Margin/Content/Metrics/Reputation" unique_id=895100544]
 layout_mode = 2
 text = "0 / 10"
 
-[node name="Notoriety" type="VBoxContainer" parent="Margin/Scroll/VBox/StandingPanel/Margin/Content/Metrics"]
+[node name="Notoriety" type="VBoxContainer" parent="Margin/Scroll/VBox/StandingPanel/Margin/Content/Metrics" unique_id=1385976213]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 2
 
-[node name="Title" type="Label" parent="Margin/Scroll/VBox/StandingPanel/Margin/Content/Metrics/Notoriety"]
+[node name="Title" type="Label" parent="Margin/Scroll/VBox/StandingPanel/Margin/Content/Metrics/Notoriety" unique_id=714608286]
 layout_mode = 2
 text = "GUILD_NOTORIETY_LABEL"
 
-[node name="Progress" type="ProgressBar" parent="Margin/Scroll/VBox/StandingPanel/Margin/Content/Metrics/Notoriety"]
+[node name="Progress" type="ProgressBar" parent="Margin/Scroll/VBox/StandingPanel/Margin/Content/Metrics/Notoriety" unique_id=239365362]
 custom_minimum_size = Vector2(0, 12)
 layout_mode = 2
 max_value = 5.0
 show_percentage = false
 
-[node name="Value" type="Label" parent="Margin/Scroll/VBox/StandingPanel/Margin/Content/Metrics/Notoriety"]
+[node name="Value" type="Label" parent="Margin/Scroll/VBox/StandingPanel/Margin/Content/Metrics/Notoriety" unique_id=921065402]
 layout_mode = 2
 text = "0 / 5"
 
-[node name="Prestige" type="PanelContainer" parent="Margin/Scroll/VBox/StandingPanel/Margin/Content/Metrics"]
+[node name="Prestige" type="PanelContainer" parent="Margin/Scroll/VBox/StandingPanel/Margin/Content/Metrics" unique_id=1282762425]
 custom_minimum_size = Vector2(105, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_prestige")
 
-[node name="Margin" type="MarginContainer" parent="Margin/Scroll/VBox/StandingPanel/Margin/Content/Metrics/Prestige"]
+[node name="Margin" type="MarginContainer" parent="Margin/Scroll/VBox/StandingPanel/Margin/Content/Metrics/Prestige" unique_id=477521623]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 4
 
-[node name="Content" type="VBoxContainer" parent="Margin/Scroll/VBox/StandingPanel/Margin/Content/Metrics/Prestige/Margin"]
+[node name="Content" type="VBoxContainer" parent="Margin/Scroll/VBox/StandingPanel/Margin/Content/Metrics/Prestige/Margin" unique_id=1282385735]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Title" type="Label" parent="Margin/Scroll/VBox/StandingPanel/Margin/Content/Metrics/Prestige/Margin/Content"]
+[node name="Title" type="Label" parent="Margin/Scroll/VBox/StandingPanel/Margin/Content/Metrics/Prestige/Margin/Content" unique_id=1305069163]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.96, 0.86, 0.67, 1)
 theme_override_font_sizes/font_size = 11
@@ -155,7 +155,7 @@ text = "GUILD_PRESTIGE_LABEL"
 horizontal_alignment = 1
 uppercase = true
 
-[node name="Value" type="Label" parent="Margin/Scroll/VBox/StandingPanel/Margin/Content/Metrics/Prestige/Margin/Content"]
+[node name="Value" type="Label" parent="Margin/Scroll/VBox/StandingPanel/Margin/Content/Metrics/Prestige/Margin/Content" unique_id=686262975]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_color = Color(1, 0.94, 0.78, 1)
@@ -164,28 +164,28 @@ text = "0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="FactionsHeader" type="Label" parent="Margin/Scroll/VBox"]
+[node name="FactionsHeader" type="Label" parent="Margin/Scroll/VBox" unique_id=2031756551]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.28, 0.2, 0.13, 1)
 text = "HUB_FACTIONS_HEADER"
 uppercase = true
 
-[node name="FactionTabs" type="HBoxContainer" parent="Margin/Scroll/VBox"]
+[node name="FactionTabs" type="HBoxContainer" parent="Margin/Scroll/VBox" unique_id=2119930985]
 layout_mode = 2
 theme = ExtResource("2_buttons")
 theme_override_constants/separation = 5
 
-[node name="FactionDetails" type="VBoxContainer" parent="Margin/Scroll/VBox"]
+[node name="FactionDetails" type="VBoxContainer" parent="Margin/Scroll/VBox" unique_id=1796575721]
 layout_mode = 2
 theme_override_constants/separation = 5
 
-[node name="OperationsHeader" type="Label" parent="Margin/Scroll/VBox"]
+[node name="OperationsHeader" type="Label" parent="Margin/Scroll/VBox" unique_id=851288972]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.28, 0.2, 0.13, 1)
 text = "HUB_ACTIVE_OPERATIONS"
 uppercase = true
 
-[node name="Operations" type="VBoxContainer" parent="Margin/Scroll/VBox"]
+[node name="Operations" type="VBoxContainer" parent="Margin/Scroll/VBox" unique_id=1720857000]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 5

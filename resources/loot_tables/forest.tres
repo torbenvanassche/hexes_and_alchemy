@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="LootTable" format=3 uid="uid://b6arph44hlmyi"]
 
 [ext_resource type="Script" uid="uid://b2wjb40qlkbuf" path="res://scripts/structures/loot_table.gd" id="1_8fb4a"]
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="1_i711c"]
 [ext_resource type="Script" uid="uid://ctqcmpru1cvqf" path="res://scripts/structures/loot_table_entry.gd" id="2_oh1h0"]
 [ext_resource type="Resource" uid="uid://b46nyvtvipor5" path="res://resources/item_info/wood_raw.tres" id="3_0mp2q"]
 [ext_resource type="Resource" uid="uid://cedqercu5lay2" path="res://resources/item_info/seed_pouch.tres" id="4_seed"]

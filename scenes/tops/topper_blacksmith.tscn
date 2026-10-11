@@ -15,7 +15,7 @@ script = ExtResource("2_cpkdt")
 
 [node name="Root Scene" parent="." unique_id=19869173 instance=ExtResource("2_eemul")]
 
-[node name="building_blacksmith_blue" parent="Root Scene/RootNode" parent_id_path=PackedInt32Array(19869173, 754087128) index="0" unique_id=1241743657]
+[node name="building_blacksmith_blue" parent="Root Scene/RootNode" parent_id_path=PackedInt32Array(19869173, 1705065929) index="0" unique_id=1891951586]
 surface_material_override/0 = ExtResource("3_eemul")
 
 [node name="interaction" type="Area3D" parent="." unique_id=1325427929]

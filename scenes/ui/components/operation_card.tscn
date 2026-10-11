@@ -1,6 +1,6 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://dwwajx0x35eyl"]
 
-[ext_resource type="Script" path="res://scripts/ui/operation_card_ui.gd" id="1_operation"]
+[ext_resource type="Script" uid="uid://c3lppfjljqi6k" path="res://scripts/ui/operation_card_ui.gd" id="1_operation"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_operation"]
 bg_color = Color(0.12, 0.1, 0.08, 0.12)
@@ -14,42 +14,42 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
-[node name="OperationCard" type="PanelContainer"]
+[node name="OperationCard" type="PanelContainer" unique_id=1805163612]
 custom_minimum_size = Vector2(0, 68)
 theme_override_styles/panel = SubResource("StyleBoxFlat_operation")
 script = ExtResource("1_operation")
 
-[node name="Margin" type="MarginContainer" parent="."]
+[node name="Margin" type="MarginContainer" parent="." unique_id=1635500530]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 6
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 6
 
-[node name="Columns" type="HBoxContainer" parent="Margin"]
+[node name="Columns" type="HBoxContainer" parent="Margin" unique_id=1313670875]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Details" type="VBoxContainer" parent="Margin/Columns"]
+[node name="Details" type="VBoxContainer" parent="Margin/Columns" unique_id=498422163]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 2
 
-[node name="Title" type="Label" parent="Margin/Columns/Details"]
+[node name="Title" type="Label" parent="Margin/Columns/Details" unique_id=1393326462]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.27, 0.2, 0.14, 1)
 
-[node name="Detail" type="Label" parent="Margin/Columns/Details"]
+[node name="Detail" type="Label" parent="Margin/Columns/Details" unique_id=1400296004]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.42, 0.32, 0.22, 0.9)
 clip_text = true
 
-[node name="Party" type="Label" parent="Margin/Columns/Details"]
+[node name="Party" type="Label" parent="Margin/Columns/Details" unique_id=745150872]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.45, 0.34, 0.23, 0.85)
 clip_text = true
 
-[node name="State" type="Label" parent="Margin/Columns"]
+[node name="State" type="Label" parent="Margin/Columns" unique_id=62290307]
 custom_minimum_size = Vector2(112, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.42, 0.31, 0.2, 1)

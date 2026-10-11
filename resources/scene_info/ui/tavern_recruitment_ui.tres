@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="SceneInfo" format=3]
+[gd_resource type="Resource" script_class="SceneInfo" format=3 uid="uid://b5x2nfr86isnq"]
 
-[ext_resource type="PackedScene" path="res://scenes/ui/tavern_recruitment_ui.tscn" id="1_ui"]
+[ext_resource type="PackedScene" uid="uid://c3mk0rx6ycynv" path="res://scenes/ui/tavern_recruitment_ui.tscn" id="1_ui"]
 [ext_resource type="Script" uid="uid://6t4u66o5q6po" path="res://scripts/scene_manager/scene_info.gd" id="2_scene_info"]
 
 [resource]

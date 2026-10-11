@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="FetchQuest" format=3]
+[gd_resource type="Resource" script_class="FetchQuest" format=3 uid="uid://dcl5yd3octfex"]
 
 [ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="1_item_script"]
 [ext_resource type="Resource" uid="uid://d0lienvyvqxlh" path="res://resources/item_info/dock_blueprint.tres" id="2_blueprint"]

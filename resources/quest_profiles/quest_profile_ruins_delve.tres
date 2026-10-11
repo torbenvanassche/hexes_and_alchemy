@@ -1,22 +1,17 @@
-[gd_resource type="Resource" script_class="QuestProfile" format=3]
+[gd_resource type="Resource" script_class="QuestProfile" format=3 uid="uid://ds73ibbkstng"]
 
-[ext_resource type="Script" path="res://scripts/quests/quest_profile.gd" id="1_profile"]
-[ext_resource type="Script" path="res://scripts/quests/quest_outcome.gd" id="2_outcome_script"]
-[ext_resource type="Resource" path="res://resources/quest_outcomes/quest_outcome_ruins_delve_success.tres" id="3_success"]
-[ext_resource type="Resource" path="res://resources/quest_outcomes/quest_outcome_ruins_delve_danger.tres" id="4_danger"]
-[ext_resource type="Script" path="res://scripts/quests/quest_support_definition.gd" id="5_support_script"]
+[ext_resource type="Script" uid="uid://bapqr4qv780fa" path="res://scripts/quests/quest_profile.gd" id="1_profile"]
+[ext_resource type="Script" uid="uid://cwu8dwm55ox1u" path="res://scripts/quests/quest_outcome.gd" id="2_outcome_script"]
+[ext_resource type="Resource" uid="uid://d2ahyy7a7m4hl" path="res://resources/quest_outcomes/quest_outcome_ruins_delve_success.tres" id="3_success"]
+[ext_resource type="Resource" uid="uid://do2pnb2arpg6x" path="res://resources/quest_outcomes/quest_outcome_ruins_delve_danger.tres" id="4_danger"]
+[ext_resource type="Script" uid="uid://dctayqehoj6y7" path="res://scripts/quests/quest_support_definition.gd" id="5_support_script"]
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="6_ar7dy"]
 [ext_resource type="Resource" path="res://resources/quest_supports/security_escort.tres" id="6_security"]
 
 [resource]
 script = ExtResource("1_profile")
 quest_key = "delve"
 behaviour = "delve"
-completion_spot_stage = 5
-occupied_completion_spot_stage = 8
-occupation_must_be_revealed = false
-objective_state_spot_stage_overrides = {
-"DANGEROUS": 3
-}
 required_role = "delver"
 translation_key_name = "QUEST_TYPE_DELVE"
 description_key = "QUEST_DESC_RUINS_DELVE"
@@ -27,3 +22,9 @@ rank_experience_reward = 5
 available_states = Array[String](["SURVEYED", "DANGEROUS", "SECURED"])
 optional_supports = Array[ExtResource("5_support_script")]([ExtResource("6_security")])
 outcomes = Array[ExtResource("2_outcome_script")]([ExtResource("3_success"), ExtResource("4_danger")])
+completion_spot_stage = 5
+occupied_completion_spot_stage = 8
+occupation_must_be_revealed = false
+objective_state_spot_stage_overrides = Dictionary[String, int]({
+"DANGEROUS": 3
+})

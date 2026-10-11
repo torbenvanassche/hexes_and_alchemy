@@ -1,21 +1,21 @@
-[gd_resource type="Resource" script_class="QuestProfile" format=3]
+[gd_resource type="Resource" script_class="QuestProfile" format=3 uid="uid://m8o0633mrgec"]
 
-[ext_resource type="Script" path="res://scripts/quests/quest_profile.gd" id="1_profile"]
-[ext_resource type="Script" path="res://scripts/quests/quest_outcome.gd" id="2_outcome_script"]
-[ext_resource type="Resource" path="res://resources/quest_outcomes/quest_outcome_ruins_survey.tres" id="3_outcome"]
+[ext_resource type="Script" uid="uid://dctayqehoj6y7" path="res://scripts/quests/quest_support_definition.gd" id="1_nvjgp"]
+[ext_resource type="Script" uid="uid://bapqr4qv780fa" path="res://scripts/quests/quest_profile.gd" id="1_profile"]
+[ext_resource type="Script" uid="uid://cwu8dwm55ox1u" path="res://scripts/quests/quest_outcome.gd" id="2_outcome_script"]
+[ext_resource type="Resource" uid="uid://bugjm5hooeda" path="res://resources/quest_outcomes/quest_outcome_ruins_survey.tres" id="3_outcome"]
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="4_ds5uo"]
 
 [resource]
 script = ExtResource("1_profile")
 quest_key = "survey"
 behaviour = "survey"
-completion_spot_stage = 2
-occupied_completion_spot_stage = 8
 required_role = "hunter"
 translation_key_name = "QUEST_TYPE_SURVEY"
 description_key = "QUEST_DESC_RUINS_SURVEY"
-risk_key = "QUEST_RISK_SAFE"
 expected_reward_key = "QUEST_REWARD_REVEALS_OPTIONS"
-duration_seconds = 5.0
 rank_experience_reward = 2
 available_states = Array[String](["AVAILABLE"])
 outcomes = Array[ExtResource("2_outcome_script")]([ExtResource("3_outcome")])
+completion_spot_stage = 2
+occupied_completion_spot_stage = 8

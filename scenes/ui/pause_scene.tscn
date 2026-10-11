@@ -11,7 +11,7 @@ content_margin_left = 44.0
 content_margin_top = 38.0
 content_margin_right = 44.0
 content_margin_bottom = 44.0
-bg_color = Color(0.120000004, 0.086, 0.055, 0.96)
+bg_color = Color(0.120000005, 0.086, 0.055, 0.96)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
@@ -47,25 +47,25 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MenuPanel" type="PanelContainer" parent="CenterContainer"]
+[node name="MenuPanel" type="PanelContainer" parent="CenterContainer" unique_id=1617234068]
 custom_minimum_size = Vector2(620, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_menu_panel")
 
-[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/MenuPanel"]
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/MenuPanel" unique_id=2144853512]
 layout_mode = 2
 
-[node name="MenuLayout" type="VBoxContainer" parent="CenterContainer/MenuPanel/MarginContainer"]
+[node name="MenuLayout" type="VBoxContainer" parent="CenterContainer/MenuPanel/MarginContainer" unique_id=1513400093]
 layout_mode = 2
 theme_override_constants/separation = 28
 
-[node name="Title" type="Label" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout"]
+[node name="Title" type="Label" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout" unique_id=1348970555]
 layout_mode = 2
 theme_override_font_sizes/font_size = 52
 text = "SCENE_PAUSE_MENU_NAME"
 horizontal_alignment = 1
 
-[node name="HeaderLine" type="Panel" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout"]
+[node name="HeaderLine" type="Panel" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout" unique_id=15896976]
 custom_minimum_size = Vector2(0, 2)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_header_line")

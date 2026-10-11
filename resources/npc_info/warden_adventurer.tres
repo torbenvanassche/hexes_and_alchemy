@@ -1,22 +1,22 @@
-[gd_resource type="Resource" script_class="NpcInfo" format=3]
+[gd_resource type="Resource" script_class="NpcInfo" format=3 uid="uid://chluuk4cr7i4o"]
 
 [ext_resource type="PackedScene" uid="uid://xay4s33jokxl" path="res://scenes/adventurer.tscn" id="1_scene"]
 [ext_resource type="Script" uid="uid://du4hbbtmblkj0" path="res://tools/quest_system/scripts/npc_info.gd" id="2_info"]
 [ext_resource type="Texture2D" uid="uid://chvmvna3iw2ov" path="res://sprites/ui/icons/character.png" id="3_icon"]
 [ext_resource type="Resource" path="res://resources/npc_traits/green_thumb.tres" id="4_green_thumb"]
+[ext_resource type="Script" uid="uid://c3bwpdi3wkawx" path="res://tools/quest_system/scripts/adventurer_trait_definition.gd" id="4_lj6oj"]
 [ext_resource type="Resource" path="res://resources/npc_traits/cautious.tres" id="5_cautious"]
 
 [resource]
 script = ExtResource("2_info")
-faction_id = &"tenders"
 img = ExtResource("3_icon")
-id = "warden"
-packed_scene = ExtResource("1_scene")
+faction_id = &"tenders"
 profession = "warden"
 role = "tender"
 operation_roles = Array[String](["tender"])
-traits = Array[ExtResource("4_green_thumb")]([ExtResource("4_green_thumb"), ExtResource("5_cautious")])
+traits = Array[ExtResource("4_lj6oj")]([ExtResource("4_green_thumb"), ExtResource("5_cautious")])
 preferred_jobs = Array[String](["forage", "harvest", "clear", "plant", "water", "replant", "fill", "draw", "purify"])
 disliked_jobs = Array[String](["delve", "deepen"])
-minimum_quest_score = 3.0
+id = "warden"
+packed_scene = ExtResource("1_scene")
 metadata/_custom_type_script = "uid://du4hbbtmblkj0"

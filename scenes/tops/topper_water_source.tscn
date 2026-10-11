@@ -10,7 +10,7 @@
 [ext_resource type="Resource" uid="uid://drj2d2u30c12n" path="res://resources/quest_profiles/quest_profile_water_fill.tres" id="8_fill"]
 [ext_resource type="Resource" uid="uid://b6rwhexa1w83i" path="res://resources/quest_profiles/quest_profile_water_draw_extra.tres" id="9_draw_extra"]
 [ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_water_purify.tres" id="10_purify"]
-[ext_resource type="Resource" path="res://resources/quest_profiles/quest_profile_water_maintain.tres" id="11_maintain"]
+[ext_resource type="Resource" uid="uid://dj8sb67n5ecrn" path="res://resources/quest_profiles/quest_profile_water_maintain.tres" id="11_maintain"]
 [ext_resource type="PackedScene" uid="uid://cxd2512nu7lgc" path="res://meshes/kay_fantasy_hexagon/decoration/nature/waterplant_A.glb" id="13_waterplant_a"]
 [ext_resource type="PackedScene" uid="uid://w4qap4smpi74" path="res://meshes/kay_fantasy_hexagon/decoration/nature/waterplant_C.glb" id="14_waterplant_c"]
 [ext_resource type="PackedScene" uid="uid://bvbcia2sapjye" path="res://meshes/kay_dungeon/bottle_A_labeled_green.glb" id="15_green_bottle"]

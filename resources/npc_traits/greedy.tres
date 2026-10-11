@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="AdventurerTraitDefinition" format=3]
+[gd_resource type="Resource" script_class="AdventurerTraitDefinition" format=3 uid="uid://bia8mg7mmy7gp"]
 
-[ext_resource type="Script" path="res://tools/quest_system/scripts/adventurer_trait_definition.gd" id="1_trait"]
+[ext_resource type="Script" uid="uid://c3bwpdi3wkawx" path="res://tools/quest_system/scripts/adventurer_trait_definition.gd" id="1_trait"]
 
 [resource]
 script = ExtResource("1_trait")

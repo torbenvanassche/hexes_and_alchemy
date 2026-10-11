@@ -9,7 +9,7 @@ script = ExtResource("1_6y0wo")
 
 [node name="Root Scene" parent="." unique_id=1634023335 instance=ExtResource("2_4l0ab")]
 
-[node name="fence_stone_straight" parent="Root Scene/RootNode" index="0"]
+[node name="fence_stone_straight" parent="Root Scene/RootNode" parent_id_path=PackedInt32Array(1634023335, 1769301235) index="0" unique_id=1670964015]
 surface_material_override/0 = ExtResource("3_4l0ab")
 
 [editable path="Root Scene"]

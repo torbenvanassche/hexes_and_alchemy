@@ -3,15 +3,15 @@
 [ext_resource type="Script" uid="uid://cdjrbv2tvjlvw" path="res://scripts/helpers/game_manager.gd" id="1_l5cgh"]
 [ext_resource type="Script" uid="uid://beb2p3obw00h8" path="res://scripts/hex_system/settlement.gd" id="1_x28sa"]
 [ext_resource type="Script" uid="uid://df1yhyfp6xqgs" path="res://scripts/hex_system/settlement_upgrade_info.gd" id="2_kgph3"]
-[ext_resource type="Resource" path="res://resources/settlement_upgrades/settlement_level_2.tres" id="2_pkchf"]
+[ext_resource type="Resource" uid="uid://dc8q5v2n8adef" path="res://resources/settlement_upgrades/settlement_level_2.tres" id="2_pkchf"]
 [ext_resource type="Script" uid="uid://dpjtl8txjms6k" path="res://scripts/helpers/resource_manager.gd" id="2_sqa0i"]
 [ext_resource type="Resource" path="res://resources/settlement_upgrades/settlement_level_3.tres" id="3_kgph3"]
 [ext_resource type="Script" uid="uid://cf50g0p4jcitj" path="res://scripts/helpers/market_manager.gd" id="3_x7ldt"]
+[ext_resource type="Script" uid="uid://dyv4ph4gxgthb" path="res://scripts/helpers/guild_reputation.gd" id="4_guild_reputation"]
+[ext_resource type="Script" uid="uid://bde0s0q73awim" path="res://scripts/helpers/hub_state.gd" id="4_hub_state"]
 [ext_resource type="Script" uid="uid://dvd4ld7oo6add" path="res://scripts/helpers/journal_manager.gd" id="4_journal_manager"]
-[ext_resource type="Script" path="res://scripts/helpers/guild_reputation.gd" id="4_guild_reputation"]
-[ext_resource type="Script" path="res://scripts/helpers/hub_state.gd" id="4_hub_state"]
-[ext_resource type="Script" path="res://scripts/helpers/operation_manager.gd" id="4_operation_manager"]
 [ext_resource type="Script" uid="uid://g8s30q5nqcd8" path="res://tools/time_of_day/daytime_cycle.gd" id="4_moyyc"]
+[ext_resource type="Script" uid="uid://cbnuhv3sjjn2l" path="res://scripts/helpers/operation_manager.gd" id="4_operation_manager"]
 [ext_resource type="Script" uid="uid://cbfn48smap6p8" path="res://scripts/helpers/quest_manager.gd" id="4_quests"]
 [ext_resource type="Script" uid="uid://c5wapecp6hocm" path="res://tools/time_of_day/time_of_day_phase.gd" id="5_ltgni"]
 [ext_resource type="Resource" uid="uid://cwuoci2a2rly8" path="res://tools/time_of_day/resources/dawn.tres" id="6_8e7ao"]
@@ -24,7 +24,7 @@
 [ext_resource type="Script" uid="uid://p57cg8ml65u0" path="res://scripts/helpers/world_space_ui.gd" id="23_f3p2p"]
 [ext_resource type="Script" uid="uid://c8bmw05frta6c" path="res://scripts/ui/notification.gd" id="49_c6i2r"]
 [ext_resource type="PackedScene" uid="uid://dsicy12n7flej" path="res://scenes/hud/resource_hud.tscn" id="57_resource_hud"]
-[ext_resource type="PackedScene" path="res://scenes/ui/components/toast_notification.tscn" id="64_toast_notification"]
+[ext_resource type="PackedScene" uid="uid://rw8d36yv38k" path="res://scenes/ui/components/toast_notification.tscn" id="64_toast_notification"]
 [ext_resource type="Resource" path="res://resources/catalogs/default_game_content.tres" id="70_game_catalog"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_j5px3"]
@@ -54,18 +54,18 @@ metadata/_custom_type_script = "uid://cf50g0p4jcitj"
 [node name="quest_manager" type="Node" parent="game_manager" unique_id=638771837]
 script = ExtResource("4_quests")
 
-[node name="hub_state" type="Node" parent="game_manager"]
+[node name="hub_state" type="Node" parent="game_manager" unique_id=753584499]
 script = ExtResource("4_hub_state")
 starting_currency = 500
 seed_test_inventory = true
 
-[node name="operation_manager" type="Node" parent="game_manager"]
+[node name="operation_manager" type="Node" parent="game_manager" unique_id=1954499007]
 script = ExtResource("4_operation_manager")
 
 [node name="journal_manager" type="Node" parent="game_manager" unique_id=1453624016]
 script = ExtResource("4_journal_manager")
 
-[node name="guild_reputation" type="Node" parent="game_manager"]
+[node name="guild_reputation" type="Node" parent="game_manager" unique_id=977987457]
 script = ExtResource("4_guild_reputation")
 
 [node name="time_of_day" type="Node" parent="game_manager" unique_id=1430942160 node_paths=PackedStringArray("sun", "environment")]
@@ -127,9 +127,8 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("49_c6i2r")
 notification_scene = ExtResource("64_toast_notification")
-display_time = 5.0
 
-[node name="SafeMargin" type="MarginContainer" parent="game_ui/ToastNotifications"]
+[node name="SafeMargin" type="MarginContainer" parent="game_ui/ToastNotifications" unique_id=1914507918]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -142,16 +141,16 @@ theme_override_constants/margin_top = 164
 theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 12
 
-[node name="Alignment" type="HBoxContainer" parent="game_ui/ToastNotifications/SafeMargin"]
+[node name="Alignment" type="HBoxContainer" parent="game_ui/ToastNotifications/SafeMargin" unique_id=466689881]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Spacer" type="Control" parent="game_ui/ToastNotifications/SafeMargin/Alignment"]
+[node name="Spacer" type="Control" parent="game_ui/ToastNotifications/SafeMargin/Alignment" unique_id=235976807]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
 
-[node name="NotificationStack" type="VBoxContainer" parent="game_ui/ToastNotifications/SafeMargin/Alignment"]
+[node name="NotificationStack" type="VBoxContainer" parent="game_ui/ToastNotifications/SafeMargin/Alignment" unique_id=1618565852]
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 mouse_filter = 2

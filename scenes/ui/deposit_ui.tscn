@@ -22,10 +22,9 @@ color = Color(0, 0, 0, 0.8117647)
 size_flags_horizontal = 3
 size_flags_vertical = 1
 
-[node name="DepositPanel" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel" parent_id_path=PackedInt32Array(1040542232) index="0" unique_id=1544552581]
+[node name="DepositPanel" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel" index="0" unique_id=1544552581]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 1
 theme = ExtResource("4_theme")
 theme_override_constants/separation = 8
 

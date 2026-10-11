@@ -1,8 +1,8 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://cjwdyla60egpy"]
 
 [ext_resource type="StyleBox" uid="uid://dyequs13mhyp3" path="res://tools/inventory/styles/content_slot_stylebox.tres" id="1_style"]
 [ext_resource type="StyleBox" uid="uid://b3yojughln6fb" path="res://tools/inventory/styles/content_slot_stylebox_disabled.tres" id="2_disabled_style"]
-[ext_resource type="Script" path="res://tools/inventory/scripts/visual/parts/equipment_slot_ui.gd" id="3_slot_script"]
+[ext_resource type="Script" uid="uid://3njrj4u8xvoa" path="res://tools/inventory/scripts/visual/parts/equipment_slot_ui.gd" id="3_slot_script"]
 [ext_resource type="Texture2D" uid="uid://bsqv6eysfvkrb" path="res://sprites/ui/panels/panel-border-015.png" id="4_panel"]
 [ext_resource type="Texture2D" uid="uid://c7m3weld6fl26" path="res://sprites/items/container_pile_small.png" id="5_placeholder"]
 
@@ -13,7 +13,7 @@ Button/styles/hover = ExtResource("1_style")
 Button/styles/normal = ExtResource("1_style")
 Button/styles/pressed = ExtResource("1_style")
 
-[node name="equipment_slot" type="TextureButton"]
+[node name="equipment_slot" type="TextureButton" unique_id=1091330847]
 custom_minimum_size = Vector2(72, 72)
 size_flags_horizontal = 4
 focus_mode = 0
@@ -25,7 +25,7 @@ stretch_mode = 4
 script = ExtResource("3_slot_script")
 show_amount = false
 
-[node name="margin_container" type="MarginContainer" parent="."]
+[node name="margin_container" type="MarginContainer" parent="." unique_id=662866002]
 show_behind_parent = true
 layout_mode = 1
 anchors_preset = 15
@@ -34,17 +34,17 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ColorRect" type="ColorRect" parent="margin_container"]
+[node name="ColorRect" type="ColorRect" parent="margin_container" unique_id=1050002203]
 layout_mode = 2
 color = Color(0, 0, 0, 0.4862745)
 
-[node name="background" type="TextureRect" parent="margin_container"]
+[node name="background" type="TextureRect" parent="margin_container" unique_id=1926070342]
 self_modulate = Color(0.5078125, 0.5078125, 0.5078125, 1)
 layout_mode = 2
 texture = ExtResource("4_panel")
 expand_mode = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="margin_container/background"]
+[node name="MarginContainer" type="MarginContainer" parent="margin_container/background" unique_id=140001779]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -56,37 +56,36 @@ theme_override_constants/margin_top = 7
 theme_override_constants/margin_right = 7
 theme_override_constants/margin_bottom = 7
 
-[node name="item_sprite" type="TextureRect" parent="margin_container/background/MarginContainer"]
+[node name="item_sprite" type="TextureRect" parent="margin_container/background/MarginContainer" unique_id=117359594]
 z_index = 1
 layout_mode = 2
 texture = ExtResource("5_placeholder")
 expand_mode = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="margin_container"]
+[node name="MarginContainer" type="MarginContainer" parent="margin_container" unique_id=1366282545]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_constants/margin_left = 7
 
-[node name="count" type="Label" parent="margin_container/MarginContainer"]
+[node name="count" type="Label" parent="margin_container/MarginContainer" unique_id=1412773962]
 z_index = 2
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 
-[node name="RankLock" type="ColorRect" parent="."]
+[node name="RankLock" type="ColorRect" parent="." unique_id=394934051]
+visible = false
 z_index = 5
-mouse_filter = 2
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.12, 0.09, 0.07, 0.78)
-visible = false
-
-[node name="Label" type="Label" parent="RankLock"]
 mouse_filter = 2
+color = Color(0.12, 0.09, 0.07, 0.78)
+
+[node name="Label" type="Label" parent="RankLock" unique_id=931883602]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

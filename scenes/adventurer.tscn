@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://be74ln24enbj4" path="res://tools/quest_system/scripts/npc.gd" id="1_023up"]
 [ext_resource type="PackedScene" uid="uid://d4ymsokn1evq" path="res://meshes/kay_fantasy_hexagon/units/neutral/unit.glb" id="1_i0sav"]
 [ext_resource type="Material" uid="uid://csfmxfxexogrq" path="res://materials/adventurer.tres" id="2_h70i8"]
-[ext_resource type="Resource" path="res://resources/npc_rules/default_adventurer_recovery.tres" id="3_recovery"]
+[ext_resource type="Resource" uid="uid://ckk7s1r7xi70e" path="res://resources/npc_rules/default_adventurer_recovery.tres" id="3_recovery"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_h70i8"]
 radius = 0.095214844
@@ -26,9 +26,9 @@ recovery_rules = ExtResource("3_recovery")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15617341, 0)
 shape = SubResource("CapsuleShape3D_h70i8")
 
-[node name="InteractionTrigger" type="Area3D" parent="."]
+[node name="InteractionTrigger" type="Area3D" parent="." unique_id=1009359440]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractionTrigger"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractionTrigger" unique_id=964094875]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.008117676, 0.26100588, -0.002960205)
 shape = SubResource("BoxShape3D_interaction_trigger")
 

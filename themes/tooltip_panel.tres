@@ -1,4 +1,4 @@
-[gd_resource type="StyleBoxFlat" format=3]
+[gd_resource type="StyleBoxFlat" format=3 uid="uid://bjxbdup1v2o5i"]
 
 [resource]
 content_margin_left = 12.0
@@ -17,4 +17,3 @@ corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 shadow_color = Color(0, 0, 0, 0.55)
 shadow_size = 5
-

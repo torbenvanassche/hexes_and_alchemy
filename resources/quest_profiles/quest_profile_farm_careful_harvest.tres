@@ -1,20 +1,21 @@
-[gd_resource type="Resource" script_class="QuestProfile" format=3]
+[gd_resource type="Resource" script_class="QuestProfile" format=3 uid="uid://wlsofougqvd3"]
 
-[ext_resource type="Script" path="res://scripts/quests/quest_profile.gd" id="1_profile"]
-[ext_resource type="Script" path="res://scripts/quests/quest_outcome.gd" id="2_outcome_script"]
-[ext_resource type="Resource" path="res://resources/quest_outcomes/quest_outcome_farm_careful_harvest.tres" id="3_outcome"]
+[ext_resource type="Script" uid="uid://dctayqehoj6y7" path="res://scripts/quests/quest_support_definition.gd" id="1_6mme1"]
+[ext_resource type="Script" uid="uid://bapqr4qv780fa" path="res://scripts/quests/quest_profile.gd" id="1_profile"]
+[ext_resource type="Script" uid="uid://cwu8dwm55ox1u" path="res://scripts/quests/quest_outcome.gd" id="2_outcome_script"]
+[ext_resource type="Resource" uid="uid://dcgdmmcyd42pn" path="res://resources/quest_outcomes/quest_outcome_farm_careful_harvest.tres" id="3_outcome"]
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="4_3p8ov"]
 
 [resource]
 script = ExtResource("1_profile")
 quest_key = "careful_harvest"
 behaviour = "harvest"
-completion_spot_stage = 6
 required_role = "tender"
 translation_key_name = "QUEST_TYPE_CAREFUL_HARVEST"
 description_key = "QUEST_DESC_FARM_CAREFUL_HARVEST"
-risk_key = "QUEST_RISK_SAFE"
 expected_reward_key = "QUEST_REWARD_MORE_GRAIN_SEEDS"
 duration_seconds = 11.0
 rank_experience_reward = 3
 available_states = Array[String](["WATERED"])
 outcomes = Array[ExtResource("2_outcome_script")]([ExtResource("3_outcome")])
+completion_spot_stage = 6

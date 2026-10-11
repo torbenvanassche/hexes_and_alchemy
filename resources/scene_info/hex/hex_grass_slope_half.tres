@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="HexInfo" format=3]
+[gd_resource type="Resource" script_class="HexInfo" format=3 uid="uid://7b64r34cpc1o"]
 
-[ext_resource type="Script" path="res://scripts/hex_system/base/hex_info.gd" id="1_info"]
-[ext_resource type="PackedScene" path="res://scenes/hexes/hex_grass_slope_half.tscn" id="2_scene"]
+[ext_resource type="Script" uid="uid://dt4im1k7j4jn" path="res://scripts/hex_system/base/hex_info.gd" id="1_info"]
+[ext_resource type="PackedScene" uid="uid://bh76ewutrp3m2" path="res://scenes/hexes/hex_grass_slope_half.tscn" id="2_scene"]
 
 [resource]
 script = ExtResource("1_info")

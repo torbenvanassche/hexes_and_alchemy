@@ -1,14 +1,14 @@
-[gd_resource type="Resource" script_class="AdventurerTraitDefinition" format=3]
+[gd_resource type="Resource" script_class="AdventurerTraitDefinition" format=3 uid="uid://c5utpiy8c2r3t"]
 
-[ext_resource type="Script" path="res://tools/quest_system/scripts/adventurer_trait_definition.gd" id="1_trait"]
+[ext_resource type="Script" uid="uid://c3bwpdi3wkawx" path="res://tools/quest_system/scripts/adventurer_trait_definition.gd" id="1_trait"]
 
 [resource]
 script = ExtResource("1_trait")
 id = &"curious"
 translation_key_name = "NPC_TRAIT_CURIOUS"
-job_score_modifiers = {
+job_score_modifiers = Dictionary[String, float]({
 "delve": 3.0,
 "prospect": 3.0,
 "scout": 3.0,
 "survey": 3.0
-}
+})

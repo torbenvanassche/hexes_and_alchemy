@@ -23,19 +23,19 @@ theme_override_constants/margin_top = 6
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1867016859]
 layout_mode = 2
 theme_override_constants/separation = 18
 
-[node name="Title" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer" unique_id=768945560]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "SCENE_GAME_SETTINGS_NAME"
 
-[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer" unique_id=891891179]
 layout_mode = 2
 
-[node name="EmptyState" type="CenterContainer" parent="MarginContainer/VBoxContainer"]
+[node name="EmptyState" type="CenterContainer" parent="MarginContainer/VBoxContainer" unique_id=633242006]
 layout_mode = 2
 size_flags_vertical = 3
 

@@ -1,4 +1,4 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://cvurwb5u2l17m"]
 
 [ext_resource type="PackedScene" uid="uid://8hv1i8bxhtup" path="res://scenes/tops/buildable_structure.tscn" id="1_buildable"]
 [ext_resource type="PackedScene" uid="uid://gb2g45tjja61" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/building_stage_A.glb" id="2_foundation"]
@@ -13,29 +13,29 @@ size = Vector3(1.602665, 0.30893278, 1.25601)
 [sub_resource type="BoxShape3D" id="BoxShape3D_collision"]
 size = Vector3(1.0518265, 0.28567123, 0.880126)
 
-[node name="buildable_forge" node_paths=PackedStringArray("build_steps") instance=ExtResource("1_buildable")]
+[node name="buildable_forge" unique_id=310120889 node_paths=PackedStringArray("build_steps") instance=ExtResource("1_buildable")]
 build_steps = [NodePath("foundation"), NodePath("forge")]
 
-[node name="foundation" parent="." instance=ExtResource("2_foundation")]
+[node name="foundation" parent="." index="0" unique_id=1532156182 instance=ExtResource("2_foundation")]
 script = ExtResource("3_build_request")
 quest = ExtResource("4_build_quest")
 
-[node name="building_stage_A" parent="foundation/RootNode" index="0"]
+[node name="building_stage_A" parent="foundation/RootNode" parent_id_path=PackedInt32Array(1532156182, 625309416) index="0" unique_id=1638629539]
 surface_material_override/0 = ExtResource("5_material")
 
-[node name="interaction" type="Area3D" parent="foundation"]
+[node name="interaction" type="Area3D" parent="foundation" index="1" unique_id=2088595888]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="foundation/interaction"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="foundation/interaction" index="0" unique_id=679245300]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.016907275, 0.14401507, 0.122535765)
 shape = SubResource("BoxShape3D_interaction")
 
-[node name="collision" type="StaticBody3D" parent="foundation"]
+[node name="collision" type="StaticBody3D" parent="foundation" index="2" unique_id=1879280157]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="foundation/collision"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="foundation/collision" index="0" unique_id=1609272047]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.043712616, 0.14244652, 0.09556866)
 shape = SubResource("BoxShape3D_collision")
 
-[node name="forge" parent="." instance=ExtResource("6_forge")]
+[node name="forge" parent="." index="1" unique_id=1123791489 instance=ExtResource("6_forge")]
 visible = false
 
 [editable path="foundation"]

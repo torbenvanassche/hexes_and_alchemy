@@ -12,16 +12,15 @@ size = Vector3(0.0021044922, 0.0038134765, 0.0027441406)
 
 [node name="Root Scene" unique_id=588626811 instance=ExtResource("1_dtyi4")]
 
-[node name="fence_stone_straight_gate" parent="RootNode" index="0"]
+[node name="fence_stone_straight_gate" parent="RootNode" parent_id_path=PackedInt32Array(2141938933) index="0" unique_id=396718616]
 surface_material_override/0 = ExtResource("3_dtyi4")
 
-[node name="fence_stone_straight_door" parent="RootNode/fence_stone_straight_gate" parent_id_path=PackedInt32Array(1297509043) index="0" unique_id=1342248616]
-script = ExtResource("2_18drs")
+[node name="fence_stone_straight_door" parent="RootNode/fence_stone_straight_gate" index="0" unique_id=1271730850]
 surface_material_override/0 = ExtResource("3_dtyi4")
-can_be_triggered_by_npc = true
+script = ExtResource("2_18drs")
 max_angle = -80.0
 duration = 0.5
-is_quest = false
+can_be_triggered_by_npc = true
 
 [node name="Area3D" type="Area3D" parent="RootNode/fence_stone_straight_gate/fence_stone_straight_door" index="1" unique_id=921640344]
 
@@ -29,7 +28,7 @@ is_quest = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9296614e-05, -0.0018603517, 0.002210693)
 shape = SubResource("BoxShape3D_h1pun")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="RootNode/fence_stone_straight_gate" parent_id_path=PackedInt32Array(1297509043) index="1" unique_id=1035457252]
+[node name="StaticBody3D" type="StaticBody3D" parent="RootNode/fence_stone_straight_gate" index="1" unique_id=1035457252]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="RootNode/fence_stone_straight_gate/StaticBody3D" index="0" unique_id=1502578281]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.010015783, 0.0038141303, 0.00088378845)

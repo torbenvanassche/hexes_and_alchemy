@@ -6,7 +6,6 @@
 [node name="hex_grass_slope_full" type="Node3D" unique_id=925190292]
 script = ExtResource("1_slope")
 slope_rise_units = 2
-connector_mask = 9
 navigation_only_mask = 34
 edge_height_offsets = PackedInt32Array(2, 2, 0, 0, 0, 2)
 metadata/asset_uphill_edge = "EDGE_0 is the high end of this unrotated mesh; confirm visually in the editor before terrain replacement is enabled."

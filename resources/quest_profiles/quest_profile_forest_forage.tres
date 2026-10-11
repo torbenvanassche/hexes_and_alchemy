@@ -1,21 +1,22 @@
-[gd_resource type="Resource" script_class="QuestProfile" format=3]
+[gd_resource type="Resource" script_class="QuestProfile" format=3 uid="uid://cohxlhun0mnja"]
 
-[ext_resource type="Script" path="res://scripts/quests/quest_profile.gd" id="1_profile"]
-[ext_resource type="Script" path="res://scripts/quests/quest_outcome.gd" id="2_outcome_script"]
-[ext_resource type="Resource" path="res://resources/quest_outcomes/quest_outcome_forest_forage.tres" id="3_outcome"]
+[ext_resource type="Script" uid="uid://dctayqehoj6y7" path="res://scripts/quests/quest_support_definition.gd" id="1_lm52u"]
+[ext_resource type="Script" uid="uid://bapqr4qv780fa" path="res://scripts/quests/quest_profile.gd" id="1_profile"]
+[ext_resource type="Script" uid="uid://cwu8dwm55ox1u" path="res://scripts/quests/quest_outcome.gd" id="2_outcome_script"]
+[ext_resource type="Resource" uid="uid://mxfye61e7fdg" path="res://resources/quest_outcomes/quest_outcome_forest_forage.tres" id="3_outcome"]
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="4_a1rhg"]
 
 [resource]
 script = ExtResource("1_profile")
 quest_key = "forage"
 behaviour = "forage"
-completion_spot_stage = 6
-occupied_completion_spot_stage = 8
 required_role = "tender"
 translation_key_name = "QUEST_TYPE_FORAGE"
 description_key = "QUEST_DESC_FOREST_FORAGE"
-risk_key = "QUEST_RISK_SAFE"
 expected_reward_key = "QUEST_REWARD_SEEDS_WOOD"
 duration_seconds = 4.0
 available_states = Array[String](["HEALTHY"])
-blocked_by_active_occupation = true
 outcomes = Array[ExtResource("2_outcome_script")]([ExtResource("3_outcome")])
+completion_spot_stage = 6
+occupied_completion_spot_stage = 8
+blocked_by_active_occupation = true

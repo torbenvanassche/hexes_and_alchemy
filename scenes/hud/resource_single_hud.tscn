@@ -16,10 +16,9 @@ mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Count" type="Label" parent="."]
+[node name="Count" type="Label" parent="." unique_id=2054207709]
 layout_mode = 2
 size_flags_horizontal = 3
-mouse_filter = 2
 theme_override_font_sizes/font_size = 18
 text = "0"
 vertical_alignment = 1

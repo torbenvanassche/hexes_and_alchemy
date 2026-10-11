@@ -1,6 +1,6 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://bja0idvf4spil"]
 
-[ext_resource type="Script" path="res://scripts/ui/quest_support_row_ui.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://d1khd8rl1w2fd" path="res://scripts/ui/quest_support_row_ui.gd" id="1_script"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_support"]
 bg_color = Color(0.74, 0.62, 0.42, 0.16)
@@ -14,65 +14,60 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
-[node name="QuestSupportRow" type="PanelContainer"]
+[node name="QuestSupportRow" type="PanelContainer" unique_id=1565688841]
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_support")
 script = ExtResource("1_script")
 
-[node name="Margin" type="MarginContainer" parent="."]
+[node name="Margin" type="MarginContainer" parent="." unique_id=20630891]
 layout_mode = 2
 theme_override_constants/margin_left = 9
 theme_override_constants/margin_top = 7
 theme_override_constants/margin_right = 9
 theme_override_constants/margin_bottom = 7
 
-[node name="Content" type="HBoxContainer" parent="Margin"]
+[node name="Content" type="HBoxContainer" parent="Margin" unique_id=2017622273]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 8
 
-[node name="SelectionToggle" type="CheckBox" parent="Margin/Content"]
+[node name="SelectionToggle" type="CheckBox" parent="Margin/Content" unique_id=636265364]
 custom_minimum_size = Vector2(28, 0)
 layout_mode = 2
-size_flags_vertical = 1
 focus_mode = 1
 
-[node name="Copy" type="VBoxContainer" parent="Margin/Content"]
+[node name="Copy" type="VBoxContainer" parent="Margin/Content" unique_id=1125138049]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 2
 
-[node name="Header" type="HBoxContainer" parent="Margin/Content/Copy"]
+[node name="Header" type="HBoxContainer" parent="Margin/Content/Copy" unique_id=1801537435]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 8
 
-[node name="SupportName" type="Label" parent="Margin/Content/Copy/Header"]
+[node name="SupportName" type="Label" parent="Margin/Content/Copy/Header" unique_id=1443008575]
 layout_mode = 2
 size_flags_horizontal = 3
-mouse_filter = 2
 theme_override_colors/font_color = Color(0.28, 0.18, 0.09, 1)
 theme_override_font_sizes/font_size = 15
 
-[node name="Availability" type="Label" parent="Margin/Content/Copy/Header"]
+[node name="Availability" type="Label" parent="Margin/Content/Copy/Header" unique_id=930049446]
 layout_mode = 2
-mouse_filter = 2
 theme_override_colors/font_color = Color(0.45, 0.27, 0.12, 1)
 theme_override_font_sizes/font_size = 12
 horizontal_alignment = 2
 
-[node name="Description" type="Label" parent="Margin/Content/Copy"]
+[node name="Description" type="Label" parent="Margin/Content/Copy" unique_id=1176893217]
 layout_mode = 2
 size_flags_horizontal = 3
-mouse_filter = 2
 theme_override_colors/font_color = Color(0.34, 0.24, 0.14, 1)
 theme_override_font_sizes/font_size = 12
 autowrap_mode = 3
 
-[node name="Impact" type="Label" parent="Margin/Content/Copy"]
+[node name="Impact" type="Label" parent="Margin/Content/Copy" unique_id=178083570]
 layout_mode = 2
 size_flags_horizontal = 3
-mouse_filter = 2
 theme_override_colors/font_color = Color(0.48, 0.28, 0.1, 1)
 theme_override_font_sizes/font_size = 11
 autowrap_mode = 3

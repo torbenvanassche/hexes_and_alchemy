@@ -1,16 +1,11 @@
-[gd_resource type="Resource" script_class="EquipmentInfo" format=3]
+[gd_resource type="Resource" script_class="EquipmentInfo" format=3 uid="uid://dogmxr4pp3238"]
 
-[ext_resource type="Script" path="res://tools/inventory/scripts/data/equipment_info.gd" id="1"]
+[ext_resource type="Script" uid="uid://joxea3d6sary" path="res://tools/inventory/scripts/data/equipment_info.gd" id="1"]
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="1_kvc5o"]
 [ext_resource type="Texture2D" uid="uid://ckm7ko4v1d4w2" path="res://sprites/items/blueprint.png" id="2"]
 
 [resource]
 script = ExtResource("1")
-unique_id = "wayfinder_charm"
-translation_key_name = "ITEM_WAYFINDER_CHARM_NAME"
-translation_key_description = "ITEM_WAYFINDER_CHARM_DESCRIPTION"
-texture = ExtResource("2")
-buy_value = 46
-sell_value = 27
 slot = 3
 tier = 1
 reward_weight = 5.0
@@ -22,3 +17,9 @@ quest_duration_multiplier = 0.75
 loot_quantity_multiplier = 1.2
 scouting_radius_bonus = 1
 effective_quest_types = Array[String](["survey", "salvage", "delve"])
+unique_id = "wayfinder_charm"
+translation_key_name = "ITEM_WAYFINDER_CHARM_NAME"
+translation_key_description = "ITEM_WAYFINDER_CHARM_DESCRIPTION"
+texture = ExtResource("2")
+buy_value = 46
+sell_value = 27

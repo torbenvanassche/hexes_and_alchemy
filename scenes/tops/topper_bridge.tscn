@@ -24,10 +24,10 @@ shape = SubResource("ConvexPolygonShape3D_upper")
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
 shape = SubResource("ConvexPolygonShape3D_upper")
 
-[node name="UpperGuardExtension" type="CollisionShape3D" parent="StaticBody3D"]
-position = Vector3(0, 0.99, 0.19)
+[node name="UpperGuardExtension" type="CollisionShape3D" parent="StaticBody3D" unique_id=74254602]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.99, 0.19)
 shape = SubResource("BoxShape3D_guard_extension")
 
-[node name="LowerGuardExtension" type="CollisionShape3D" parent="StaticBody3D"]
-position = Vector3(0, 0.99, -0.19)
+[node name="LowerGuardExtension" type="CollisionShape3D" parent="StaticBody3D" unique_id=720877001]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.99, -0.19)
 shape = SubResource("BoxShape3D_guard_extension")

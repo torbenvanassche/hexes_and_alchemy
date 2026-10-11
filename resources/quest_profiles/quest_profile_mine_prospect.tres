@@ -1,17 +1,19 @@
-[gd_resource type="Resource" script_class="QuestProfile" format=3]
+[gd_resource type="Resource" script_class="QuestProfile" format=3 uid="uid://bm7rkk6cuhycc"]
 
-[ext_resource type="Script" path="res://scripts/quests/quest_profile.gd" id="1_profile"]
+[ext_resource type="Script" uid="uid://dctayqehoj6y7" path="res://scripts/quests/quest_support_definition.gd" id="1_l4egt"]
+[ext_resource type="Script" uid="uid://bapqr4qv780fa" path="res://scripts/quests/quest_profile.gd" id="1_profile"]
+[ext_resource type="Script" uid="uid://cwu8dwm55ox1u" path="res://scripts/quests/quest_outcome.gd" id="2_ur33d"]
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="3_6nir6"]
 
 [resource]
 script = ExtResource("1_profile")
 quest_key = "prospect"
 behaviour = "prospect"
-completion_spot_stage = 2
-occupied_completion_spot_stage = 8
 required_role = "delver"
 translation_key_name = "QUEST_TYPE_PROSPECT"
 description_key = "QUEST_DESC_MINE_PROSPECT"
-risk_key = "QUEST_RISK_SAFE"
 expected_reward_key = "QUEST_REWARD_REVEALS_VEIN"
 duration_seconds = 6.0
 available_states = Array[String](["UNSURVEYED"])
+completion_spot_stage = 2
+occupied_completion_spot_stage = 8

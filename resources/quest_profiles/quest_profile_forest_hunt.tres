@@ -1,18 +1,17 @@
-[gd_resource type="Resource" script_class="QuestProfile" format=3]
+[gd_resource type="Resource" script_class="QuestProfile" format=3 uid="uid://byr2uxjyuvijl"]
 
-[ext_resource type="Script" path="res://scripts/quests/quest_profile.gd" id="1_profile"]
-[ext_resource type="Script" path="res://scripts/quests/quest_outcome.gd" id="2_outcome_script"]
-[ext_resource type="Resource" path="res://resources/quest_outcomes/quest_outcome_forest_hunt.tres" id="3_outcome"]
-[ext_resource type="Resource" path="res://resources/quest_outcomes/quest_outcome_forest_hunt_danger.tres" id="4_danger"]
-[ext_resource type="Script" path="res://scripts/quests/quest_support_definition.gd" id="5_support_script"]
+[ext_resource type="Script" uid="uid://bapqr4qv780fa" path="res://scripts/quests/quest_profile.gd" id="1_profile"]
+[ext_resource type="Script" uid="uid://cwu8dwm55ox1u" path="res://scripts/quests/quest_outcome.gd" id="2_outcome_script"]
+[ext_resource type="Resource" uid="uid://dvvpvcnkdq41f" path="res://resources/quest_outcomes/quest_outcome_forest_hunt.tres" id="3_outcome"]
+[ext_resource type="Resource" uid="uid://icmddqsro2yf" path="res://resources/quest_outcomes/quest_outcome_forest_hunt_danger.tres" id="4_danger"]
+[ext_resource type="Script" uid="uid://dctayqehoj6y7" path="res://scripts/quests/quest_support_definition.gd" id="5_support_script"]
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="6_eeco5"]
 [ext_resource type="Resource" path="res://resources/quest_supports/security_escort.tres" id="6_security"]
 
 [resource]
 script = ExtResource("1_profile")
 quest_key = "hunt"
 behaviour = "hunt"
-completion_spot_stage = 6
-occupied_completion_spot_stage = 8
 required_role = "hunter"
 translation_key_name = "QUEST_TYPE_HUNT"
 description_key = "QUEST_DESC_FOREST_HUNT"
@@ -21,6 +20,8 @@ expected_reward_key = "QUEST_REWARD_GAME_MEAT"
 duration_seconds = 6.0
 rank_experience_reward = 2
 available_states = Array[String](["HEALTHY"])
-blocked_by_active_occupation = true
 optional_supports = Array[ExtResource("5_support_script")]([ExtResource("6_security")])
 outcomes = Array[ExtResource("2_outcome_script")]([ExtResource("3_outcome"), ExtResource("4_danger")])
+completion_spot_stage = 6
+occupied_completion_spot_stage = 8
+blocked_by_active_occupation = true

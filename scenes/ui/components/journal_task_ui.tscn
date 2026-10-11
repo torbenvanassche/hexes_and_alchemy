@@ -1,19 +1,18 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://tf5kfwlx7unb"]
 
-[ext_resource type="Script" path="res://scripts/ui/journal_task_ui.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://c3m33kwisqgt4" path="res://scripts/ui/journal_task_ui.gd" id="1_script"]
 
-[node name="JournalTask" type="HBoxContainer"]
-layout_mode = 2
+[node name="JournalTask" type="HBoxContainer" unique_id=1869256331]
 size_flags_horizontal = 3
 theme_override_constants/separation = 6
 script = ExtResource("1_script")
 
-[node name="Completed" type="CheckBox" parent="."]
+[node name="Completed" type="CheckBox" parent="." unique_id=491904644]
 layout_mode = 2
-disabled = true
 focus_mode = 0
+disabled = true
 
-[node name="Text" type="Label" parent="."]
+[node name="Text" type="Label" parent="." unique_id=1238311318]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 18

@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="SceneInfo" format=3]
+[gd_resource type="Resource" script_class="SceneInfo" format=3 uid="uid://de4t8kdmotis3"]
 
-[ext_resource type="PackedScene" path="res://scenes/ui/hub_window.tscn" id="1_hub"]
-[ext_resource type="Script" path="res://scripts/scene_manager/scene_info.gd" id="2_script"]
+[ext_resource type="PackedScene" uid="uid://d3m8w8ja0vjxa" path="res://scenes/ui/hub_window.tscn" id="1_hub"]
+[ext_resource type="Script" uid="uid://6t4u66o5q6po" path="res://scripts/scene_manager/scene_info.gd" id="2_script"]
 
 [resource]
 script = ExtResource("2_script")

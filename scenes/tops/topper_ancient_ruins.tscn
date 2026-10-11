@@ -12,7 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://lm7rokymxyu6" path="res://meshes/kay_custom/exclamation.glb" id="10_cuer0"]
 [ext_resource type="PackedScene" uid="uid://qsfp5ua0nt7t" path="res://meshes/kay_fantasy_hexagon/decoration/props/flag_green.glb" id="10_secure_flag"]
 [ext_resource type="PackedScene" uid="uid://bofdcif23goin" path="res://meshes/kay_resources/Stone_Chunks_Large.glb" id="12_h83um"]
-[ext_resource type="Script" path="res://scripts/quests/monster_occupation_definition.gd" id="13_monster_script"]
+[ext_resource type="Script" uid="uid://dsjujerkbit85" path="res://scripts/quests/monster_occupation_definition.gd" id="13_monster_script"]
 [ext_resource type="Resource" path="res://resources/monster_occupations/ruin_spiders.tres" id="14_spiders"]
 [ext_resource type="Resource" path="res://resources/monster_occupations/goblin_raiders.tres" id="15_goblins"]
 

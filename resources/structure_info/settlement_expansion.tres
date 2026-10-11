@@ -1,8 +1,8 @@
-[gd_resource type="Resource" script_class="SettlementExpansionInfo" format=3]
+[gd_resource type="Resource" script_class="SettlementExpansionInfo" format=3 uid="uid://doi8leenkeyr1"]
 
-[ext_resource type="Script" path="res://scripts/structures/settlement_expansion_info.gd" id="1_expansion"]
+[ext_resource type="Script" uid="uid://dg2vjsp81sokb" path="res://scripts/structures/settlement_expansion_info.gd" id="1_expansion"]
 [ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="2_item_script"]
-[ext_resource type="Resource" path="res://resources/item_info/settlement_expansion_permit.tres" id="3_permit"]
+[ext_resource type="Resource" uid="uid://buucpqrewojqx" path="res://resources/item_info/settlement_expansion_permit.tres" id="3_permit"]
 
 [resource]
 script = ExtResource("1_expansion")

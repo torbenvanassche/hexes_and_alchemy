@@ -1,11 +1,11 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://cpaka7pj72i7g"]
 
-[ext_resource type="Theme" path="res://themes/light.theme" id="1_theme"]
-[ext_resource type="Script" path="res://scripts/ui/journal_ui.gd" id="2_journal"]
+[ext_resource type="Theme" uid="uid://dae2b2hfpj0l2" path="res://themes/light.theme" id="1_theme"]
+[ext_resource type="Script" uid="uid://bkoojt24df6m0" path="res://scripts/ui/journal_ui.gd" id="2_journal"]
 [ext_resource type="PackedScene" path="res://scenes/ui/components/journal_page.tscn" id="3_page"]
-[ext_resource type="Theme" path="res://themes/fantasy_buttons.tres" id="4_buttons"]
+[ext_resource type="Theme" uid="uid://bemn0spuaev14" path="res://themes/fantasy_buttons.tres" id="4_buttons"]
 
-[node name="JournalPage" type="Control"]
+[node name="JournalPage" type="Control" unique_id=1381502266]
 custom_minimum_size = Vector2(430, 330)
 layout_mode = 3
 anchors_preset = 15
@@ -17,7 +17,7 @@ theme = ExtResource("1_theme")
 script = ExtResource("2_journal")
 page_scene = ExtResource("3_page")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1829540397]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -29,103 +29,103 @@ theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=2024341110]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="GuildStanding" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="GuildStanding" type="VBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1474556606]
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="StandingHeader" type="Label" parent="MarginContainer/VBoxContainer/GuildStanding"]
+[node name="StandingHeader" type="Label" parent="MarginContainer/VBoxContainer/GuildStanding" unique_id=941943546]
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
 text = "GUILD_STANDING_HEADER"
 uppercase = true
 
-[node name="ReputationRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/GuildStanding"]
+[node name="ReputationRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/GuildStanding" unique_id=831851192]
 layout_mode = 2
 
-[node name="ReputationTitle" type="Label" parent="MarginContainer/VBoxContainer/GuildStanding/ReputationRow"]
+[node name="ReputationTitle" type="Label" parent="MarginContainer/VBoxContainer/GuildStanding/ReputationRow" unique_id=1406598769]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "GUILD_REPUTATION_LABEL"
 
-[node name="ReputationValue" type="Label" parent="MarginContainer/VBoxContainer/GuildStanding/ReputationRow"]
+[node name="ReputationValue" type="Label" parent="MarginContainer/VBoxContainer/GuildStanding/ReputationRow" unique_id=488903267]
 custom_minimum_size = Vector2(48, 0)
 layout_mode = 2
 horizontal_alignment = 2
 
-[node name="ReputationProgress" type="ProgressBar" parent="MarginContainer/VBoxContainer/GuildStanding"]
+[node name="ReputationProgress" type="ProgressBar" parent="MarginContainer/VBoxContainer/GuildStanding" unique_id=1282129905]
 custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 max_value = 10.0
 show_percentage = false
 
-[node name="NotorietyRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/GuildStanding"]
+[node name="NotorietyRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/GuildStanding" unique_id=739285390]
 layout_mode = 2
 
-[node name="NotorietyTitle" type="Label" parent="MarginContainer/VBoxContainer/GuildStanding/NotorietyRow"]
+[node name="NotorietyTitle" type="Label" parent="MarginContainer/VBoxContainer/GuildStanding/NotorietyRow" unique_id=829185878]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "GUILD_NOTORIETY_LABEL"
 
-[node name="NotorietyValue" type="Label" parent="MarginContainer/VBoxContainer/GuildStanding/NotorietyRow"]
+[node name="NotorietyValue" type="Label" parent="MarginContainer/VBoxContainer/GuildStanding/NotorietyRow" unique_id=887003760]
 custom_minimum_size = Vector2(48, 0)
 layout_mode = 2
 horizontal_alignment = 2
 
-[node name="NotorietyProgress" type="ProgressBar" parent="MarginContainer/VBoxContainer/GuildStanding"]
+[node name="NotorietyProgress" type="ProgressBar" parent="MarginContainer/VBoxContainer/GuildStanding" unique_id=1806093713]
 custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 max_value = 5.0
 show_percentage = false
 
-[node name="PrestigeRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/GuildStanding"]
+[node name="PrestigeRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/GuildStanding" unique_id=929750151]
 layout_mode = 2
 
-[node name="PrestigeTitle" type="Label" parent="MarginContainer/VBoxContainer/GuildStanding/PrestigeRow"]
+[node name="PrestigeTitle" type="Label" parent="MarginContainer/VBoxContainer/GuildStanding/PrestigeRow" unique_id=1899473805]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "GUILD_PRESTIGE_LABEL"
 
-[node name="PrestigeValue" type="Label" parent="MarginContainer/VBoxContainer/GuildStanding/PrestigeRow"]
+[node name="PrestigeValue" type="Label" parent="MarginContainer/VBoxContainer/GuildStanding/PrestigeRow" unique_id=136443691]
 custom_minimum_size = Vector2(48, 0)
 layout_mode = 2
 horizontal_alignment = 2
 
-[node name="ChapterNavigation" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="ChapterNavigation" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1032812432]
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 theme = ExtResource("4_buttons")
 theme_override_constants/separation = 8
 
-[node name="PreviousPageButton" type="Button" parent="MarginContainer/VBoxContainer/ChapterNavigation"]
+[node name="PreviousPageButton" type="Button" parent="MarginContainer/VBoxContainer/ChapterNavigation" unique_id=918425928]
 custom_minimum_size = Vector2(42, 0)
 layout_mode = 2
 tooltip_text = "JOURNAL_PREVIOUS_CHAPTER"
 theme_override_font_sizes/font_size = 18
 text = "<"
 
-[node name="ChapterSelector" type="OptionButton" parent="MarginContainer/VBoxContainer/ChapterNavigation"]
+[node name="ChapterSelector" type="OptionButton" parent="MarginContainer/VBoxContainer/ChapterNavigation" unique_id=1256036495]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "JOURNAL_CHAPTER_SELECTOR"
 theme_override_font_sizes/font_size = 18
 alignment = 1
 
-[node name="NextPageButton" type="Button" parent="MarginContainer/VBoxContainer/ChapterNavigation"]
+[node name="NextPageButton" type="Button" parent="MarginContainer/VBoxContainer/ChapterNavigation" unique_id=1225384084]
 custom_minimum_size = Vector2(42, 0)
 layout_mode = 2
 tooltip_text = "JOURNAL_NEXT_CHAPTER"
 theme_override_font_sizes/font_size = 18
 text = ">"
 
-[node name="PageDivider" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+[node name="PageDivider" type="HSeparator" parent="MarginContainer/VBoxContainer" unique_id=874146196]
 layout_mode = 2
 
-[node name="PageHost" type="Control" parent="MarginContainer/VBoxContainer"]
+[node name="PageHost" type="Control" parent="MarginContainer/VBoxContainer" unique_id=250355990]
+clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-clip_contents = true

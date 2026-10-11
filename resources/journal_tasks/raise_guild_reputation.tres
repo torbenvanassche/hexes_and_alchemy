@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="JournalTask" format=3]
+[gd_resource type="Resource" script_class="JournalTask" format=3 uid="uid://ch1u1gacovp42"]
 
-[ext_resource type="Script" path="res://scripts/ui/journal_task.gd" id="1_task"]
+[ext_resource type="Script" uid="uid://dteapw377mybo" path="res://scripts/ui/journal_task.gd" id="1_task"]
 
 [resource]
 script = ExtResource("1_task")

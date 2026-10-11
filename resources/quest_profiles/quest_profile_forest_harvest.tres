@@ -1,22 +1,22 @@
-[gd_resource type="Resource" script_class="QuestProfile" format=3]
+[gd_resource type="Resource" script_class="QuestProfile" format=3 uid="uid://b8n64g4oxwumo"]
 
-[ext_resource type="Script" path="res://scripts/quests/quest_profile.gd" id="1_profile"]
-[ext_resource type="Script" path="res://scripts/quests/quest_outcome.gd" id="2_outcome_script"]
-[ext_resource type="Resource" path="res://resources/quest_outcomes/quest_outcome_forest_harvest.tres" id="3_outcome"]
+[ext_resource type="Script" uid="uid://dctayqehoj6y7" path="res://scripts/quests/quest_support_definition.gd" id="1_mkufv"]
+[ext_resource type="Script" uid="uid://bapqr4qv780fa" path="res://scripts/quests/quest_profile.gd" id="1_profile"]
+[ext_resource type="Script" uid="uid://cwu8dwm55ox1u" path="res://scripts/quests/quest_outcome.gd" id="2_outcome_script"]
+[ext_resource type="Resource" uid="uid://brpcf2a7uiq6h" path="res://resources/quest_outcomes/quest_outcome_forest_harvest.tres" id="3_outcome"]
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="4_rpyt4"]
 
 [resource]
 script = ExtResource("1_profile")
 quest_key = "harvest"
 behaviour = "harvest"
-completion_spot_stage = 6
-occupied_completion_spot_stage = 8
 required_role = "tender"
 translation_key_name = "QUEST_TYPE_HARVEST"
 description_key = "QUEST_DESC_FOREST_HARVEST"
-risk_key = "QUEST_RISK_SAFE"
 expected_reward_key = "QUEST_REWARD_WOOD_SEEDS"
-duration_seconds = 5.0
 rank_experience_reward = 2
 available_states = Array[String](["HEALTHY"])
-blocked_by_active_occupation = true
 outcomes = Array[ExtResource("2_outcome_script")]([ExtResource("3_outcome")])
+completion_spot_stage = 6
+occupied_completion_spot_stage = 8
+blocked_by_active_occupation = true

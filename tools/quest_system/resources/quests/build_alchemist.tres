@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="FetchQuest" format=3]
+[gd_resource type="Resource" script_class="FetchQuest" format=3 uid="uid://cbtuvoq55whqu"]
 
 [ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="1_item_script"]
 [ext_resource type="Resource" uid="uid://b46nyvtvipor5" path="res://resources/item_info/wood_raw.tres" id="2_wood_raw"]

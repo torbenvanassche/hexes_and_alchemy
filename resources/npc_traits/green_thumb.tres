@@ -1,15 +1,15 @@
-[gd_resource type="Resource" script_class="AdventurerTraitDefinition" format=3]
+[gd_resource type="Resource" script_class="AdventurerTraitDefinition" format=3 uid="uid://4ckkgi21oke1"]
 
-[ext_resource type="Script" path="res://tools/quest_system/scripts/adventurer_trait_definition.gd" id="1_trait"]
+[ext_resource type="Script" uid="uid://c3bwpdi3wkawx" path="res://tools/quest_system/scripts/adventurer_trait_definition.gd" id="1_trait"]
 
 [resource]
 script = ExtResource("1_trait")
 id = &"green_thumb"
 translation_key_name = "NPC_TRAIT_GREEN_THUMB"
-job_score_modifiers = {
+job_score_modifiers = Dictionary[String, float]({
 "forage": 2.0,
 "harvest": 2.0,
 "plant": 2.0,
 "replant": 2.0,
 "water": 2.0
-}
+})

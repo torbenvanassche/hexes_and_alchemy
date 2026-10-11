@@ -1,7 +1,7 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://cqtc0mnks1xvo"]
 
-[ext_resource type="PackedScene" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_archeryrange_blue.glb" id="1_mesh"]
-[ext_resource type="Script" path="res://scripts/interactions/interactable_locations/faction_home.gd" id="2_home"]
+[ext_resource type="PackedScene" uid="uid://dbr8jkc5fj2he" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_archeryrange_blue.glb" id="1_mesh"]
+[ext_resource type="Script" uid="uid://divtx1ti2jrhu" path="res://scripts/interactions/interactable_locations/faction_home.gd" id="2_home"]
 [ext_resource type="Resource" uid="uid://c4slhs80lvehm" path="res://resources/scene_info/adventurer.tres" id="3_member"]
 [ext_resource type="Material" uid="uid://c66vbca7lgh6m" path="res://materials/kay_fantasy_default.tres" id="4_material"]
 [ext_resource type="Resource" uid="uid://c02vjxha4podp" path="res://resources/scene_info/ui/tavern_roster_ui.tres" id="5_roster"]
@@ -15,7 +15,7 @@ size = Vector3(1.7, 0.7, 0.55)
 [sub_resource type="BoxShape3D" id="BoxShape3D_collision"]
 size = Vector3(1.85, 0.85, 1.25)
 
-[node name="hunters_home" type="Node3D" node_paths=PackedStringArray("member_spawn")]
+[node name="hunters_home" type="Node3D" unique_id=268914027 node_paths=PackedStringArray("member_spawn")]
 script = ExtResource("2_home")
 faction_id = &"hunters"
 member_scene = ExtResource("3_member")
@@ -23,24 +23,24 @@ member_spawn = NodePath("spawn_location")
 starting_npc_profiles = Array[ExtResource("7_npc_info")]([ExtResource("6_profile")])
 additional_ui = Array[ExtResource("8_scene_info")]([ExtResource("5_roster")])
 
-[node name="Root Scene" parent="." instance=ExtResource("1_mesh")]
+[node name="Root Scene" parent="." unique_id=1386287271 instance=ExtResource("1_mesh")]
 
-[node name="building_archeryrange_blue" parent="Root Scene/RootNode" index="0"]
+[node name="building_archeryrange_blue" parent="Root Scene/RootNode" parent_id_path=PackedInt32Array(1386287271, 1598626954) index="0" unique_id=1863417366]
 surface_material_override/0 = ExtResource("4_material")
 
-[node name="interaction" type="Area3D" parent="."]
+[node name="interaction" type="Area3D" parent="." unique_id=166018307]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="interaction"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="interaction" unique_id=212270533]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35, 0.72)
 shape = SubResource("BoxShape3D_interaction")
 
-[node name="collision" type="StaticBody3D" parent="."]
+[node name="collision" type="StaticBody3D" parent="." unique_id=581422615]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="collision"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="collision" unique_id=2007981976]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.42, -0.05)
 shape = SubResource("BoxShape3D_collision")
 
-[node name="spawn_location" type="Node3D" parent="."]
+[node name="spawn_location" type="Node3D" parent="." unique_id=1188633149]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.9)
 
 [editable path="Root Scene"]
