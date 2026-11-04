@@ -1,0 +1,19 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/guild_people_ui.gd" id="1_people"]
+
+[node name="GuildPeople" type="VBoxContainer"]
+theme_override_constants/separation = 12
+script = ExtResource("1_people")
+
+[node name="FactionTabs" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Rule" type="HSeparator" parent="."]
+layout_mode = 2
+
+[node name="FactionDetails" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3

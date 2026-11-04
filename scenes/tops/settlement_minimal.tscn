@@ -1,0 +1,89 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/hex_system/village_settlement.gd" id="1_settlement"]
+[ext_resource type="PackedScene" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_home_A_blue.glb" id="2_home_a"]
+[ext_resource type="PackedScene" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_home_B_blue.glb" id="3_home_b"]
+[ext_resource type="PackedScene" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_well_blue.glb" id="4_well"]
+[ext_resource type="Material" path="res://materials/kay_fantasy_default.tres" id="5_material"]
+[ext_resource type="PackedScene" path="res://scenes/tops/village_trade_post.tscn" id="6_trade"]
+[ext_resource type="PackedScene" path="res://scenes/tops/fence_wood_straight.tscn" id="7_wood"]
+
+[sub_resource type="BoxShape3D" id="CottageCollision"]
+size = Vector3(0.75, 0.65, 0.8)
+
+[sub_resource type="CylinderShape3D" id="WellCollision"]
+radius = 0.25
+height = 0.6
+
+[sub_resource type="BoxShape3D" id="LargeCottageCollision"]
+size = Vector3(1.05, 0.9, 1.1)
+
+[node name="Village" type="Node3D" node_paths=PackedStringArray("spawn_position")]
+script = ExtResource("1_settlement")
+spawn_position = NodePath("Buildings/Market/Approach")
+reveal_on_spawn = false
+allows_player_construction = false
+initial_footprint_radius = 1
+boundary_wall_scene = ExtResource("7_wood")
+structure_invalid_range = 1
+building_hex_offsets = Dictionary[NodePath, Vector3i]({
+NodePath("Buildings/CottageA"): Vector3i(0, 1, -1),
+NodePath("Buildings/CottageB"): Vector3i(1, 0, -1),
+NodePath("Buildings/Well"): Vector3i(1, -1, 0),
+NodePath("Buildings/Market"): Vector3i(0, 0, 0),
+NodePath("Arrival"): Vector3i(0, -1, 1)
+})
+
+[node name="Arrival" type="Marker3D" parent="."]
+position = Vector3(0.9910254, 0, 1.75)
+
+[node name="Buildings" type="Node3D" parent="."]
+
+[node name="Market" parent="Buildings" instance=ExtResource("6_trade")]
+
+[node name="CottageA" type="Node3D" parent="Buildings"]
+position = Vector3(-0.9910254, 0, -1.75)
+rotation = Vector3(0, 0.5235988, 0)
+
+[node name="Model" parent="Buildings/CottageA" instance=ExtResource("2_home_a")]
+scale = Vector3(0.85, 0.85, 0.85)
+
+[node name="building_home_A_blue" parent="Buildings/CottageA/Model/RootNode" index="0"]
+surface_material_override/0 = ExtResource("5_material")
+
+[node name="Collision" type="StaticBody3D" parent="Buildings/CottageA"]
+
+[node name="Shape" type="CollisionShape3D" parent="Buildings/CottageA/Collision"]
+position = Vector3(0, 0.325, 0)
+shape = SubResource("CottageCollision")
+
+[node name="CottageB" type="Node3D" parent="Buildings"]
+position = Vector3(0.9910254, 0, -1.75)
+rotation = Vector3(0, -0.5235988, 0)
+
+[node name="Model" parent="Buildings/CottageB" instance=ExtResource("3_home_b")]
+scale = Vector3(0.85, 0.85, 0.85)
+
+[node name="building_home_B_blue" parent="Buildings/CottageB/Model/RootNode" index="0"]
+surface_material_override/0 = ExtResource("5_material")
+
+[node name="Collision" type="StaticBody3D" parent="Buildings/CottageB"]
+
+[node name="Shape" type="CollisionShape3D" parent="Buildings/CottageB/Collision"]
+position = Vector3(0, 0.45, 0)
+shape = SubResource("LargeCottageCollision")
+
+[node name="Well" type="Node3D" parent="Buildings"]
+position = Vector3(1.9820508, 0, 0)
+
+[node name="Model" parent="Buildings/Well" instance=ExtResource("4_well")]
+scale = Vector3(0.7, 0.7, 0.7)
+
+[node name="Collision" type="StaticBody3D" parent="Buildings/Well"]
+
+[node name="Shape" type="CollisionShape3D" parent="Buildings/Well/Collision"]
+position = Vector3(0, 0.3, 0)
+shape = SubResource("WellCollision")
+
+[editable path="Buildings/CottageA/Model"]
+[editable path="Buildings/CottageB/Model"]

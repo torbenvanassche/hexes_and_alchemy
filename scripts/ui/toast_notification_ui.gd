@@ -5,7 +5,7 @@ extends PanelContainer
 @onready var icon: TextureRect = $Margin/Content/Icon
 @onready var message: RichTextLabel = $Margin/Content/Message
 
-var default_accent_color := Color(0.42, 0.31, 0.2, 1)
+var default_accent_color := GameUI.MUTED
 
 func setup(
 	text: String,

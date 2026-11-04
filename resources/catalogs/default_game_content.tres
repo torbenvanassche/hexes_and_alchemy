@@ -12,6 +12,7 @@
 [ext_resource type="Resource" uid="uid://btnk3qkcvaya0" path="res://resources/structure_info/ladder.tres" id="8_ladder"]
 [ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="9_6vut2"]
 [ext_resource type="Resource" uid="uid://c1ypx4o3q73t0" path="res://resources/structure_info/settlement.tres" id="9_settlement"]
+[ext_resource type="Resource" path="res://resources/structure_info/village.tres" id="9_village"]
 [ext_resource type="Resource" uid="uid://dijohak4mpf7n" path="res://resources/structure_info/forest.tres" id="10_forest"]
 [ext_resource type="Resource" uid="uid://des3sdhs2l6yq" path="res://resources/structure_info/docks.tres" id="11_docks"]
 [ext_resource type="Resource" path="res://resources/structure_info/forge.tres" id="12_forge"]
@@ -32,7 +33,6 @@
 [ext_resource type="Resource" uid="uid://ce3u2bjgmkfe7" path="res://resources/scene_info/ui/quest_creation_ui.tres" id="27_quest_creation"]
 [ext_resource type="Resource" uid="uid://c4slhs80lvehm" path="res://resources/scene_info/adventurer.tres" id="28_adventurer"]
 [ext_resource type="Resource" uid="uid://ck0i8jm3a1eqw" path="res://resources/scene_info/ui/crafting_ui.tres" id="29_crafting"]
-[ext_resource type="Resource" uid="uid://c02vjxha4podp" path="res://resources/scene_info/ui/tavern_roster_ui.tres" id="30_roster"]
 [ext_resource type="Resource" path="res://resources/scene_info/ui/tavern_recruitment_ui.tres" id="31_recruitment"]
 [ext_resource type="Resource" uid="uid://cqs6mgr0ms55u" path="res://resources/region_info/plains.tres" id="32_plains"]
 [ext_resource type="Resource" uid="uid://bflckgydmmunp" path="res://resources/region_info/desert.tres" id="33_desert"]
@@ -88,12 +88,13 @@
 [ext_resource type="Resource" path="res://resources/scene_info/ui/alchemist_ui.tres" id="79_alchemist_ui"]
 [ext_resource type="Resource" path="res://resources/structure_info/alchemist.tres" id="80_alchemist_structure"]
 [ext_resource type="Resource" path="res://resources/item_info/alchemist_blueprint.tres" id="81_alchemist_blueprint"]
+[ext_resource type="Resource" path="res://resources/scene_info/ui/journal_ui.tres" id="82_journal"]
 
 [resource]
 script = ExtResource("1_catalog")
 hexes = Array[ExtResource("6_m6fuk")]([ExtResource("2_hex_simple"), ExtResource("3_hex_water")])
-structures = Array[ExtResource("74_086kn")]([ExtResource("4_farmland"), ExtResource("5_mine"), ExtResource("6_ruins"), ExtResource("7_lumbermill"), ExtResource("8_ladder"), ExtResource("9_settlement"), ExtResource("10_forest"), ExtResource("11_docks"), ExtResource("12_forge"), ExtResource("13_wharf"), ExtResource("14_expansion"), ExtResource("15_bridge"), ExtResource("16_water_source"), ExtResource("80_alchemist_structure")])
-scenes = Array[ExtResource("56_cr4sq")]([ExtResource("17_player"), ExtResource("18_pause"), ExtResource("19_input"), ExtResource("20_settings"), ExtResource("21_game_settings"), ExtResource("22_gameplay"), ExtResource("23_hub"), ExtResource("24_market"), ExtResource("25_deposit"), ExtResource("26_quest_list"), ExtResource("27_quest_creation"), ExtResource("28_adventurer"), ExtResource("29_crafting"), ExtResource("30_roster"), ExtResource("31_recruitment"), ExtResource("79_alchemist_ui")])
+structures = Array[ExtResource("74_086kn")]([ExtResource("4_farmland"), ExtResource("5_mine"), ExtResource("6_ruins"), ExtResource("7_lumbermill"), ExtResource("8_ladder"), ExtResource("9_settlement"), ExtResource("9_village"), ExtResource("10_forest"), ExtResource("11_docks"), ExtResource("12_forge"), ExtResource("13_wharf"), ExtResource("14_expansion"), ExtResource("15_bridge"), ExtResource("16_water_source"), ExtResource("80_alchemist_structure")])
+scenes = Array[ExtResource("56_cr4sq")]([ExtResource("17_player"), ExtResource("18_pause"), ExtResource("19_input"), ExtResource("20_settings"), ExtResource("21_game_settings"), ExtResource("22_gameplay"), ExtResource("23_hub"), ExtResource("24_market"), ExtResource("25_deposit"), ExtResource("26_quest_list"), ExtResource("27_quest_creation"), ExtResource("28_adventurer"), ExtResource("29_crafting"), ExtResource("31_recruitment"), ExtResource("79_alchemist_ui"), ExtResource("82_journal")])
 regions = Array[ExtResource("52_53j8r")]([ExtResource("32_plains"), ExtResource("33_desert"), ExtResource("34_ruins_region")])
 ocean_region = ExtResource("35_ocean")
 items = Array[ExtResource("9_6vut2")]([ExtResource("36_currency"), ExtResource("37_iron"), ExtResource("38_gold"), ExtResource("39_log"), ExtResource("40_wood"), ExtResource("41_dock_blueprint"), ExtResource("42_forge_blueprint"), ExtResource("43_wharf_blueprint"), ExtResource("44_expansion_permit"), ExtResource("45_bridge_blueprint"), ExtResource("46_seed"), ExtResource("47_water"), ExtResource("48_grain"), ExtResource("49_meat"), ExtResource("50_rations"), ExtResource("51_supplies"), ExtResource("52_traps"), ExtResource("53_beams"), ExtResource("54_bucket"), ExtResource("55_coin"), ExtResource("56_relic"), ExtResource("57_seal"), ExtResource("58_compass"), ExtResource("68_blade"), ExtResource("69_armor"), ExtResource("70_kit"), ExtResource("71_saber"), ExtResource("72_sunsteel"), ExtResource("73_harness"), ExtResource("74_aegis"), ExtResource("75_tools"), ExtResource("76_masterwork"), ExtResource("77_charm"), ExtResource("78_ancient_compass"), ExtResource("81_alchemist_blueprint")])

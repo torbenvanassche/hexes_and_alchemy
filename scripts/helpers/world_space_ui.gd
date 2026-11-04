@@ -5,8 +5,9 @@ var _target: Node3D;
 
 func _process(_delta: float):
 	if _target:
-		element.global_position = Manager.instance.spring_arm_camera.camera.unproject_position(_target.global_position) - element.size / 2;
-		element.visible = !Manager.instance.spring_arm_camera.camera.is_position_behind(_target.global_position)
+		var point := (_target as Interaction).get_prompt_position() if _target is Interaction else _target.global_position
+		element.global_position = Manager.instance.spring_arm_camera.camera.unproject_position(point) - element.size / 2;
+		element.visible = !Manager.instance.spring_arm_camera.camera.is_position_behind(point)
 	else:
 		element.visible = false;
 

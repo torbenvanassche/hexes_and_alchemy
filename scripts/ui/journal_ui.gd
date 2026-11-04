@@ -1,10 +1,10 @@
 class_name JournalUI extends Control
 
-@onready var reputation_progress: ProgressBar = $MarginContainer/VBoxContainer/GuildStanding/ReputationProgress
-@onready var notoriety_progress: ProgressBar = $MarginContainer/VBoxContainer/GuildStanding/NotorietyProgress
-@onready var reputation_value: Label = $MarginContainer/VBoxContainer/GuildStanding/ReputationRow/ReputationValue
-@onready var notoriety_value: Label = $MarginContainer/VBoxContainer/GuildStanding/NotorietyRow/NotorietyValue
-@onready var prestige_value: Label = $MarginContainer/VBoxContainer/GuildStanding/PrestigeRow/PrestigeValue
+@onready var reputation_progress: ProgressBar = $MarginContainer/VBoxContainer/GuildStanding/Metrics/Reputation/ReputationProgress
+@onready var notoriety_progress: ProgressBar = $MarginContainer/VBoxContainer/GuildStanding/Metrics/Notoriety/NotorietyProgress
+@onready var reputation_value: Label = $MarginContainer/VBoxContainer/GuildStanding/Metrics/Reputation/ReputationRow/ReputationValue
+@onready var notoriety_value: Label = $MarginContainer/VBoxContainer/GuildStanding/Metrics/Notoriety/NotorietyRow/NotorietyValue
+@onready var prestige_value: Label = $MarginContainer/VBoxContainer/GuildStanding/HeadingRow/Prestige/PrestigeValue
 @onready var page_host: Control = $MarginContainer/VBoxContainer/PageHost
 @onready var previous_page_button: Button = $MarginContainer/VBoxContainer/ChapterNavigation/PreviousPageButton
 @onready var chapter_selector: OptionButton = $MarginContainer/VBoxContainer/ChapterNavigation/ChapterSelector
@@ -108,6 +108,8 @@ func _show_current_page() -> void:
 	chapter_selector.disabled = not has_pages
 	previous_page_button.disabled = not has_pages or _current_page == 0
 	next_page_button.disabled = not has_pages or _current_page == _visible_entries.size() - 1
+	previous_page_button.visible = _visible_entries.size() > 1
+	next_page_button.visible = _visible_entries.size() > 1
 	if not has_pages:
 		return
 

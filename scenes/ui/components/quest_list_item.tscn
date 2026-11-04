@@ -4,8 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://dg75flawm2vb0" path="res://sprites/ui/panels/panelInset_beigeLight.png" id="3_ic3jt"]
 [ext_resource type="Texture2D" uid="uid://dwqf3fg4acslg" path="res://sprites/ui/icons/structure_farm.png" id="4_tm2j7"]
 [ext_resource type="Texture2D" uid="uid://drasftash875f" path="res://sprites/ui/icons/pawns.png" id="5_so8rn"]
-[ext_resource type="Theme" uid="uid://bemn0spuaev14" path="res://themes/fantasy_buttons.tres" id="6_ic3jt"]
-[ext_resource type="Theme" uid="uid://dae2b2hfpj0l2" path="res://themes/light.theme" id="6_theme"]
+[ext_resource type="Theme" path="res://themes/game_theme.tres" id="6_ic3jt"]
+[ext_resource type="Theme" path="res://themes/game_theme.tres" id="6_theme"]
 
 [node name="QuestNote" type="Control" unique_id=84988057]
 layout_mode = 3
@@ -15,8 +15,7 @@ offset_bottom = 176.0
 theme = ExtResource("6_theme")
 script = ExtResource("1_qmdcg")
 
-[node name="Paper" type="NinePatchRect" parent="." unique_id=128610021]
-self_modulate = Color(0.93, 0.84, 0.64, 1)
+[node name="Paper" type="Panel" parent="." unique_id=128610021]
 show_behind_parent = true
 layout_mode = 1
 anchors_preset = 15
@@ -25,11 +24,6 @@ anchor_bottom = 1.0
 offset_right = 17.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("3_ic3jt")
-patch_margin_left = 7
-patch_margin_top = 8
-patch_margin_right = 6
-patch_margin_bottom = 6
 
 [node name="Pin" type="ColorRect" parent="Paper" unique_id=54231665]
 z_index = 1
@@ -63,7 +57,7 @@ theme_override_constants/separation = 5
 [node name="TopDivider" type="ColorRect" parent="Paper/MarginContainer/VBoxContainer" unique_id=183152230]
 custom_minimum_size = Vector2(0, 2)
 layout_mode = 2
-color = Color(0.28, 0.18, 0.09, 1)
+color = Color(0.298, 0.353, 0.38, 1)
 
 [node name="Header" type="HBoxContainer" parent="Paper/MarginContainer/VBoxContainer" unique_id=1583251630]
 layout_mode = 2
@@ -72,28 +66,26 @@ theme_override_constants/separation = 6
 [node name="QuestType" type="Label" parent="Paper/MarginContainer/VBoxContainer/Header" unique_id=236912205]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.07, 0.045, 0.025, 1)
 theme_override_font_sizes/font_size = 24
 text = "QUEST_TYPE_FETCH"
 text_overrun_behavior = 3
 
 [node name="QuestNumber" type="Label" parent="Paper/MarginContainer/VBoxContainer/Header" unique_id=725982639]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.18, 0.11, 0.055, 1)
 text = "#1"
 horizontal_alignment = 2
 
 [node name="BottomDivider" type="ColorRect" parent="Paper/MarginContainer/VBoxContainer" unique_id=183152231]
 custom_minimum_size = Vector2(0, 2)
 layout_mode = 2
-color = Color(0.28, 0.18, 0.09, 1)
+color = Color(0.298, 0.353, 0.38, 1)
 
 [node name="LocationRow" type="HBoxContainer" parent="Paper/MarginContainer/VBoxContainer" unique_id=246549520]
 layout_mode = 2
 theme_override_constants/separation = 8
 
 [node name="LocationIcon" type="TextureRect" parent="Paper/MarginContainer/VBoxContainer/LocationRow" unique_id=246549522]
-self_modulate = Color(0.11, 0.07, 0.035, 1)
+self_modulate = Color(0.68, 0.71, 0.71, 1)
 custom_minimum_size = Vector2(18, 18)
 layout_mode = 2
 texture = ExtResource("4_tm2j7")
@@ -103,7 +95,6 @@ stretch_mode = 5
 [node name="QuestLocation" type="Label" parent="Paper/MarginContainer/VBoxContainer/LocationRow" unique_id=246549521]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.11, 0.07, 0.035, 1)
 text = "STRUCTURE_FARMLAND_NAME"
 vertical_alignment = 1
 text_overrun_behavior = 3
@@ -114,7 +105,7 @@ size_flags_vertical = 3
 theme_override_constants/separation = 8
 
 [node name="PartyIcon" type="TextureRect" parent="Paper/MarginContainer/VBoxContainer/PartyRow" unique_id=1583251633]
-self_modulate = Color(0.11, 0.07, 0.035, 1)
+self_modulate = Color(0.68, 0.71, 0.71, 1)
 custom_minimum_size = Vector2(18, 18)
 layout_mode = 2
 texture = ExtResource("5_so8rn")
@@ -124,7 +115,6 @@ stretch_mode = 5
 [node name="Party" type="Label" parent="Paper/MarginContainer/VBoxContainer/PartyRow" unique_id=1583251631]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.11, 0.07, 0.035, 1)
 text = "QUEST_PARTY_UNASSIGNED"
 vertical_alignment = 1
 text_overrun_behavior = 3
@@ -132,7 +122,6 @@ text_overrun_behavior = 3
 [node name="PaymentLabel" type="Label" parent="Paper/MarginContainer/VBoxContainer" unique_id=849440719]
 visible = false
 layout_mode = 2
-theme_override_colors/font_color = Color(0.28, 0.18, 0.09, 1)
 text = "QUEST_PAYMENT_OFFERED"
 horizontal_alignment = 1
 
@@ -151,8 +140,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(0.980392, 0.933333, 0.823529, 1)
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 14
 text = "QUEST_STATE_WAITING"
 horizontal_alignment = 1
 vertical_alignment = 1

@@ -1,0 +1,24 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/location_marker.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://meshes/kenney_watercraft/arrow-standing.glb" id="2_arrow"]
+
+[sub_resource type="StandardMaterial3D" id="Red"]
+albedo_color = Color(0.95, 0.07, 0.04, 1)
+roughness = 0.9
+emission_enabled = true
+emission = Color(0.8, 0.025, 0.01, 1)
+emission_energy_multiplier = 0.35
+
+[node name="LocationMarker" type="Node3D"]
+visible = false
+script = ExtResource("1_script")
+
+[node name="Arrow" parent="." instance=ExtResource("2_arrow")]
+transform = Transform3D(0, 0.13, 0, 0, 0, -0.13, -0.13, 0, 0, -0.13, 0.195, 0)
+
+[node name="arrow-standing" parent="Arrow" index="0"]
+cast_shadow = 0
+material_override = SubResource("Red")
+
+[editable path="Arrow"]

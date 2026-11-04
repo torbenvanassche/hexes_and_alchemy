@@ -1,0 +1,127 @@
+[gd_scene format=3]
+[ext_resource type="PackedScene" path="res://tools/custom_window/base_window.tscn" id="1"]
+[ext_resource type="Script" path="res://scripts/ui/transport_ui.gd" id="2"]
+
+[node name="Window" node_paths=PackedStringArray("content") instance=ExtResource("1")]
+custom_minimum_size = Vector2(620, 520)
+custom_maximum_size = Vector2(620, 680)
+id = "WINDOW_TRANSPORT"
+resizable = false
+content = NodePath("NinePatchRect/VBoxContainer/contentPanel/Transport")
+
+[node name="contentPanel" parent="NinePatchRect/VBoxContainer"]
+size_flags_horizontal = 3
+
+[node name="Transport" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel"]
+layout_mode = 2
+script = ExtResource("2")
+theme_override_constants/separation = 12
+
+[node name="Destinations" type="OptionButton" parent="NinePatchRect/VBoxContainer/contentPanel/Transport"]
+layout_mode = 2
+unique_name_in_owner = true
+fit_to_longest_item = false
+
+[node name="Empty" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/Transport"]
+layout_mode = 2
+unique_name_in_owner = true
+text = "SHIPMENT_NO_VILLAGES"
+autowrap_mode = 2
+
+[node name="RequestBody" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/Transport"]
+layout_mode = 2
+unique_name_in_owner = true
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/Transport/RequestBody"]
+layout_mode = 2
+unique_name_in_owner = true
+theme_type_variation = &"Heading"
+
+[node name="Description" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/Transport/RequestBody"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 2
+theme_type_variation = &"MutedLabel"
+
+[node name="Carrier" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/Transport/RequestBody"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+
+[node name="DemandDivider" type="HSeparator" parent="NinePatchRect/VBoxContainer/contentPanel/Transport/RequestBody"]
+layout_mode = 2
+unique_name_in_owner = true
+
+
+[node name="CargoHint" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/Transport/RequestBody"]
+layout_mode = 2
+unique_name_in_owner = true
+text = "SHIPMENT_CARGO_HINT"
+theme_type_variation = &"MutedLabel"
+
+[node name="Materials" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/Transport/RequestBody"]
+layout_mode = 2
+unique_name_in_owner = true
+theme_override_constants/separation = 8
+
+[node name="RewardDivider" type="HSeparator" parent="NinePatchRect/VBoxContainer/contentPanel/Transport/RequestBody"]
+layout_mode = 2
+unique_name_in_owner = true
+
+
+[node name="Reward" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/Transport/RequestBody"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 2
+
+
+[node name="Standing" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/Transport/RequestBody"]
+layout_mode = 2
+unique_name_in_owner = true
+theme_type_variation = &"MutedLabel"
+
+[node name="Status" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/Transport/RequestBody"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 2
+
+[node name="Feedback" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/Transport/RequestBody"]
+layout_mode = 2
+unique_name_in_owner = true
+theme_type_variation = &"MutedLabel"
+autowrap_mode = 2
+
+[node name="Actions" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/Transport/RequestBody"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Dispatch" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/Transport/RequestBody/Actions"]
+layout_mode = 2
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+text = "SHIPMENT_DISPATCH"
+
+[node name="Recall" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/Transport/RequestBody/Actions"]
+layout_mode = 2
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+text = "SHIPMENT_RECALL"
+
+[node name="Resume" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/Transport/RequestBody/Actions"]
+layout_mode = 2
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+text = "SHIPMENT_RESUME"
+
+[node name="NextRequest" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/Transport/RequestBody/Actions"]
+layout_mode = 2
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+text = "SHIPMENT_NEXT_REQUEST"
+
+[node name="Locate" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/Transport/RequestBody/Actions"]
+layout_mode = 2
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+text = "SHIPMENT_LOCATE"

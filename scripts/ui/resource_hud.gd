@@ -4,6 +4,7 @@ class_name ResourceHud extends Control
 @onready var _phase_label: Label = $Margin/Content/TimeRow/Phase
 @onready var _clock_label: Label = $Margin/Content/TimeRow/Clock
 
+
 func _ready() -> void:
 	_connect_time_signals()
 	_refresh_time()

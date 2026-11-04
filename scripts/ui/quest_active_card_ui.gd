@@ -23,7 +23,7 @@ func setup(value: Quest) -> void:
 	var title := Label.new()
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title.add_theme_font_size_override("font_size", 18)
-	title.add_theme_color_override("font_color", Color(0.17, 0.1, 0.04, 1.0))
+	title.add_theme_color_override("font_color", GameUI.TEXT)
 	title.text = _get_quest_type_name()
 	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	header.add_child(title)
@@ -37,7 +37,7 @@ func setup(value: Quest) -> void:
 
 	var party_label := Label.new()
 	party_label.text = _get_party_text()
-	party_label.modulate = Color(0.32, 0.22, 0.12, 1.0)
+	party_label.modulate = GameUI.MUTED
 	party_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	content.add_child(party_label)
 
@@ -68,7 +68,7 @@ func setup(value: Quest) -> void:
 
 func _apply_style(state_color: Color) -> void:
 	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.74, 0.62, 0.42, 0.16).lerp(Color(state_color, 0.22), 0.35)
+	style.bg_color = GameUI.RAISED
 	style.border_color = state_color
 	style.set_border_width_all(1)
 	style.set_corner_radius_all(4)

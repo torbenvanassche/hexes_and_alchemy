@@ -54,13 +54,13 @@ func _on_crop_state_entered(state: String) -> void:
 	_cancel_timers()
 	match state:
 		"PLANTED":
-			_wither_timer = get_tree().create_timer(water_window)
+			_wither_timer = get_tree().create_timer(water_window, false)
 			_wither_timer.timeout.connect(func() -> void:
 				if _current_crop_state() == CropState.PLANTED:
 					_set_crop_state(CropState.DEAD)
 			)
 		"READY":
-			_overgrow_timer = get_tree().create_timer(overgrow_time)
+			_overgrow_timer = get_tree().create_timer(overgrow_time, false)
 			_overgrow_timer.timeout.connect(func() -> void:
 				if _current_crop_state() == CropState.READY:
 					_set_crop_state(CropState.DEAD)

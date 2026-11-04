@@ -18,7 +18,7 @@ extends Resource
 @export_range(1, 30, 1) var forced_retirement_severity := 5
 @export_group("Career")
 ## Real-time seconds from recruitment until automatic retirement. Zero disables aging.
-@export_range(0.0, 7200.0, 10.0) var automatic_retirement_seconds := 900.0
+@export_range(0.0, 7200.0, 10.0) var automatic_retirement_seconds := 0.0
 
 func get_injury_recovery_cost() -> Dictionary[ItemInfo, int]:
 	var cost: Dictionary[ItemInfo, int] = {}

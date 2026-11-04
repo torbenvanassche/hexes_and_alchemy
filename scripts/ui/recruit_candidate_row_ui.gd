@@ -3,12 +3,11 @@ extends VBoxContainer
 
 signal hire_requested(candidate: RecruitCandidate)
 
-@onready var name_label: Label = $Primary/Name
-@onready var faction_label: Label = $Primary/Faction
-@onready var profession_label: Label = $Primary/Profession
-@onready var rank_label: Label = $Primary/Rank
-@onready var cost_label: Label = $Primary/Cost
-@onready var hire_button: Button = $Primary/Hire
+@onready var name_label: Label = $Primary/Identity/Name
+@onready var profession_label: Label = $Primary/Identity/Profession
+@onready var traits_label: Label = $Primary/Identity/Traits
+@onready var rank_label: Label = $Primary/Action/Rank
+@onready var hire_button: Button = $Primary/Action/Hire
 
 var candidate: RecruitCandidate
 var tavern: Tavern
@@ -26,16 +25,16 @@ func setup(value: RecruitCandidate, source_tavern: Tavern) -> void:
 	if candidate == null:
 		return
 	name_label.text = candidate.display_name
-	faction_label.text = candidate.get_faction_name()
-	profession_label.text = candidate.get_profession_name()
-	rank_label.text = candidate.get_rank_name()
-	cost_label.text = str(candidate.hire_cost)
+	profession_label.text = "%s · %s" % [candidate.get_profession_name(), candidate.get_faction_name()]
+	rank_label.text = tr("RECRUITMENT_RANK_LINE") % candidate.get_rank_name()
+	hire_button.text = tr("RECRUITMENT_HIRE_COST_BUTTON") % candidate.hire_cost
+	traits_label.text = candidate.get_traits_label()
+	traits_label.visible = not candidate.traits.is_empty()
+	traits_label.tooltip_text = "%s\n%s" % [candidate.get_traits_label(), candidate.get_preferred_jobs_label()]
 	tooltip_text = ""
 	name_label.tooltip_text = name_label.text
-	faction_label.tooltip_text = faction_label.text
 	profession_label.tooltip_text = profession_label.text
 	rank_label.tooltip_text = tr("RECRUITMENT_RANK_LINE") % candidate.get_rank_name()
-	cost_label.tooltip_text = tr("RECRUITMENT_COST_LINE") % candidate.hire_cost
 	refresh_availability()
 
 func refresh_availability() -> void:

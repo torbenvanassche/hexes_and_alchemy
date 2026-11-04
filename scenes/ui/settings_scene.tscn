@@ -4,42 +4,42 @@
 [ext_resource type="Resource" uid="uid://cs0kfyy871ovd" path="res://resources/scene_info/ui/game_settings.tres" id="2_6hi4t"]
 [ext_resource type="Resource" uid="uid://uov1jt8s2qia" path="res://resources/scene_info/ui/input_settings.tres" id="2_j3boo"]
 [ext_resource type="Texture2D" uid="uid://bfjflheeann5w" path="res://tools/input_prompts/left.png" id="3_xi83m"]
-[ext_resource type="Theme" uid="uid://dae2b2hfpj0l2" path="res://themes/light.theme" id="4_theme"]
+[ext_resource type="Theme" path="res://themes/game_theme.tres" id="4_theme"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_overlay"]
-bg_color = Color(0, 0, 0, 0.62)
+bg_color = Color(0.125, 0.184, 0.227, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dialog"]
 content_margin_left = 36.0
 content_margin_top = 30.0
 content_margin_right = 36.0
 content_margin_bottom = 30.0
-bg_color = Color(0.105, 0.076, 0.049, 0.97)
+bg_color = Color(0.125, 0.184, 0.227, 1)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.44, 0.31, 0.16, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+border_color = Color(0.298, 0.353, 0.38, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_content"]
 content_margin_left = 22.0
 content_margin_top = 20.0
 content_margin_right = 22.0
 content_margin_bottom = 20.0
-bg_color = Color(0.055, 0.04, 0.028, 0.72)
+bg_color = Color(0.125, 0.184, 0.227, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.28, 0.2, 0.12, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+border_color = Color(0.298, 0.353, 0.38, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
 
 [node name="Control" type="Control" unique_id=1653328238 node_paths=PackedStringArray("button_group_parent", "tab_instance_parent", "group_buttons", "back_button")]
 process_mode = 3

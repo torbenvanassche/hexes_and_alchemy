@@ -98,6 +98,8 @@ func set_explored(b: bool) -> void:
 	(ground_hex_mesh as MeshInstance3D).material_override = null if b else UNEXPLORED_MATERIAL;
 	(ground_hex_mesh as MeshInstance3D).layers = 1 if b else 2;
 	if structure:
+		if structure.instance is Settlement:
+			(structure.instance as Settlement).visible = b
 		var quest_objective := structure.instance as QuestObjective;
 		if quest_objective:
 			quest_objective.visibility_changed.emit();
@@ -217,6 +219,25 @@ func _register_structure_with_settlement(structure_node: Node) -> void:
 		if settlement.contains_hex(grid, self):
 			settlement.register_structure_node(structure_node)
 			return
+
+## Reapply current footprint rules to an existing structure after loading an
+## older save. Uses the same reservation, terrain and passage rules as placement.
+func refresh_structure_footprint(level_terrain: bool = false) -> void:
+	if structure == null: return
+	var info := structure.structure_info
+	var grid := SceneManager.get_active_scene().node as HexGrid
+	if grid == null: return
+	for coord: Vector3i in _get_structure_footprint_coords(info):
+		var tile := grid.get_hex_at_cube_id(coord)
+		tile.can_generate = false
+		if tile != self and tile.structure != null: continue
+		if info.replace_non_traversable_hex and tile != self and (not tile.is_traversable() or (level_terrain and tile is HexSlope)):
+			var explored := tile.is_explored
+			grid.replace(tile.scene_instance, scene_instance.scene_info.get_instance(), region)
+			tile = grid.get_hex_at_cube_id(coord)
+			tile.is_explored = explored
+		if level_terrain: tile.set_elevation(elevation_units, grid.elevation_unit_height)
+	_repair_passage_around_structure(info)
 
 func _repair_passage_around_structure(s: StructureInfo) -> bool:
 	if s.passage_repair_radius <= 0:

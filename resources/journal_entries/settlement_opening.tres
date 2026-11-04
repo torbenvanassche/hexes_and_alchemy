@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="JournalEntry" format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/journal_entry.gd" id="1_entry"]
+[ext_resource type="Resource" path="res://resources/journal_tasks/open_blacksmith.tres" id="2_task"]
+[ext_resource type="Resource" path="res://resources/journal_tasks/complete_timber_commission.tres" id="3_timber"]
+
+[resource]
+script = ExtResource("1_entry")
+id = "settlement_opening"
+title_key = "CAMPAIGN_FORGE_TITLE"
+body_key = "CAMPAIGN_JOURNAL_BODY"
+tasks = Array[Resource]([ExtResource("2_task"), ExtResource("3_timber")])

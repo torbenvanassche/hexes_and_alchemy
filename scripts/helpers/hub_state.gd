@@ -6,6 +6,7 @@ signal faction_activity_changed()
 signal activity_log_changed()
 
 @export var starting_currency := 100
+@export var starting_items: Dictionary[ItemInfo, int] = {}
 @export_group("Testing")
 @export var seed_test_inventory := false
 @export_range(1, 99, 1) var test_item_stack_size := 10
@@ -21,14 +22,16 @@ func _ready() -> void:
 	currency = starting_currency
 	var hub_inventory := Inventory.new()
 	hub_inventory.stack_size = 99
-	hub_inventory.unlocked_slots = 30
-	hub_inventory.max_slots = 30
+	hub_inventory.unlocked_slots = 28
+	hub_inventory.max_slots = 28
 	stockpile = hub_inventory
 	stockpile.name = "HubStockpile"
 	add_child(stockpile)
 	stockpile.changed.connect(changed.emit)
 	if seed_test_inventory:
 		_seed_test_inventory.call_deferred()
+	else:
+		deposit_items.call_deferred(starting_items)
 	_initialize_factions.call_deferred()
 
 func _seed_test_inventory() -> void:
@@ -86,6 +89,10 @@ func register_npc(npc: NPC) -> void:
 			npc.activity_changed.connect(_on_npc_activity_changed)
 		if not npc.rest_progress_changed.is_connected(_on_npc_activity_changed):
 			npc.rest_progress_changed.connect(_on_npc_activity_changed)
+		if not npc.injuries_changed.is_connected(_on_npc_activity_changed):
+			npc.injuries_changed.connect(_on_npc_activity_changed)
+		if not npc.rank_progress_changed.is_connected(faction_activity_changed.emit):
+			npc.rank_progress_changed.connect(faction_activity_changed.emit)
 		changed.emit()
 
 func unregister_npc(npc: NPC) -> void:
@@ -93,6 +100,10 @@ func unregister_npc(npc: NPC) -> void:
 		npc.activity_changed.disconnect(_on_npc_activity_changed)
 	if npc != null and npc.rest_progress_changed.is_connected(_on_npc_activity_changed):
 		npc.rest_progress_changed.disconnect(_on_npc_activity_changed)
+	if npc != null and npc.injuries_changed.is_connected(_on_npc_activity_changed):
+		npc.injuries_changed.disconnect(_on_npc_activity_changed)
+	if npc != null and npc.rank_progress_changed.is_connected(faction_activity_changed.emit):
+		npc.rank_progress_changed.disconnect(faction_activity_changed.emit)
 	for faction: FactionState in factions.values():
 		faction.remove_member(npc)
 	changed.emit()

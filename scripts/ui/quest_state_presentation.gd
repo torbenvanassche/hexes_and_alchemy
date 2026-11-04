@@ -1,11 +1,11 @@
 class_name QuestStatePresentation extends RefCounted
 
-const WAITING_COLOR := Color(0.65, 0.45, 0.16, 1.0)
-const TRAVEL_COLOR := Color(0.2, 0.42, 0.62, 1.0)
-const ACTIVE_COLOR := Color(0.18, 0.5, 0.34, 1.0)
-const COMPLETE_COLOR := Color(0.25, 0.55, 0.28, 1.0)
-const FAILED_COLOR := Color(0.65, 0.18, 0.15, 1.0)
-const CANCELLED_COLOR := Color(0.5, 0.38, 0.22, 1.0)
+const WAITING_COLOR := GameUI.WARNING
+const TRAVEL_COLOR := GameUI.TRAVEL
+const ACTIVE_COLOR := GameUI.SUCCESS
+const COMPLETE_COLOR := GameUI.SUCCESS
+const FAILED_COLOR := GameUI.DANGER
+const CANCELLED_COLOR := GameUI.MUTED
 
 static func get_color(state: String) -> Color:
 	match state:
@@ -21,7 +21,7 @@ static func get_color(state: String) -> Color:
 			return FAILED_COLOR
 		"cancelled":
 			return CANCELLED_COLOR
-	return Color(0.42, 0.31, 0.2, 1.0)
+	return GameUI.MUTED
 
 static func get_progress(state: String) -> float:
 	match state:

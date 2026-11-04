@@ -9,5 +9,5 @@ func setup(text: String, complete: bool) -> void:
 		call_deferred("setup", text, complete)
 		return
 	state_label.text = tr("SETTLEMENT_UPGRADE_READY") if complete else tr("SETTLEMENT_UPGRADE_MISSING")
-	state_label.modulate = Color(0.26, 0.54, 0.22) if complete else Color(0.72, 0.22, 0.13)
+	state_label.modulate = GameUI.SUCCESS if complete else GameUI.WARNING
 	requirement_label.text = text

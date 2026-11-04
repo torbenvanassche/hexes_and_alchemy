@@ -1,9 +1,18 @@
 class_name BuildRequest extends Interaction
 
 @export var quest: FetchQuest;
+var recipe_path := ""
 @export_range(1, 10, 1) var required_settlement_level: int = 1
 
 signal completed();
+
+func _ready() -> void:
+	super()
+	# Delivery belongs to this foundation, even when several use the same recipe.
+	if quest != null:
+		recipe_path = quest.resource_path
+		quest = quest.duplicate(true)
+		quest.progress_tracker = null
 
 func interact() -> void:
 	DataManager.instance.get_scene_by_name("deposit_ui").queue(_open_window)

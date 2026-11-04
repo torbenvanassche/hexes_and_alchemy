@@ -1,29 +1,29 @@
 [gd_scene format=3 uid="uid://bd0i5jrt7650t"]
 
 [ext_resource type="Script" uid="uid://bem2f43dlfne5" path="res://scripts/scene_controllers/pause_screen.gd" id="1_53068"]
-[ext_resource type="Theme" uid="uid://dae2b2hfpj0l2" path="res://themes/light.theme" id="2_theme"]
+[ext_resource type="Theme" path="res://themes/game_theme.tres" id="2_theme"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_overlay"]
-bg_color = Color(0, 0, 0, 0.58)
+bg_color = Color(0.04, 0.06, 0.08, 0.7)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_menu_panel"]
 content_margin_left = 44.0
-content_margin_top = 38.0
+content_margin_top = 28.0
 content_margin_right = 44.0
-content_margin_bottom = 44.0
-bg_color = Color(0.120000005, 0.086, 0.055, 0.96)
+content_margin_bottom = 28.0
+bg_color = Color(0.125, 0.184, 0.227, 1)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.44, 0.31, 0.16, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+border_color = Color(0.64, 0.51, 0.29, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header_line"]
-bg_color = Color(0.62, 0.44, 0.22, 0.75)
+bg_color = Color(0.125, 0.184, 0.227, 1)
 
 [node name="Panel" type="Panel" unique_id=1103910319 node_paths=PackedStringArray("resume_button", "settings_button", "quit_button")]
 process_mode = 2
@@ -57,11 +57,12 @@ layout_mode = 2
 
 [node name="MenuLayout" type="VBoxContainer" parent="CenterContainer/MenuPanel/MarginContainer" unique_id=1513400093]
 layout_mode = 2
-theme_override_constants/separation = 28
+theme_override_constants/separation = 16
 
 [node name="Title" type="Label" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout" unique_id=1348970555]
+unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 52
+theme_override_font_sizes/font_size = 32
 text = "SCENE_PAUSE_MENU_NAME"
 horizontal_alignment = 1
 
@@ -71,23 +72,112 @@ layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_header_line")
 
 [node name="Actions" type="VBoxContainer" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout" unique_id=790131330]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 14
 
 [node name="resume" type="Button" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout/Actions" unique_id=522419469]
-custom_minimum_size = Vector2(500, 76)
+custom_minimum_size = Vector2(500, 40)
 layout_mode = 2
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 16
 text = "PAUSE_RESUME"
 
 [node name="settings" type="Button" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout/Actions" unique_id=2066547482]
-custom_minimum_size = Vector2(500, 76)
+custom_minimum_size = Vector2(500, 40)
 layout_mode = 2
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 16
 text = "PAUSE_SETTINGS"
 
-[node name="quit" type="Button" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout/Actions" unique_id=746646866]
-custom_minimum_size = Vector2(500, 76)
+[node name="OpenCheckpoints" type="Button" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout/Actions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
-theme_override_font_sizes/font_size = 26
+text = "Checkpoints"
+
+[node name="quit" type="Button" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout/Actions" unique_id=746646866]
+custom_minimum_size = Vector2(500, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
 text = "PAUSE_QUIT"
+
+[node name="CheckpointsPage" type="VBoxContainer" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="SavedTitle" type="Label" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout/CheckpointsPage"]
+layout_mode = 2
+text = "Saved checkpoints"
+
+[node name="Checkpoints" type="OptionButton" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout/CheckpointsPage"]
+unique_name_in_owner = true
+layout_mode = 2
+fit_to_longest_item = false
+
+[node name="SaveRow" type="HBoxContainer" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout/CheckpointsPage"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="CheckpointName" type="LineEdit" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout/CheckpointsPage/SaveRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Quick save"
+placeholder_text = "Checkpoint name"
+max_length = 64
+
+[node name="SaveCheckpoint" type="Button" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout/CheckpointsPage/SaveRow"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(0, 36)
+text = "Save checkpoint"
+
+[node name="LoadCheckpoint" type="Button" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout/CheckpointsPage"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(0, 36)
+text = "Load selected"
+
+[node name="DevelopmentSection" type="VBoxContainer" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout/CheckpointsPage"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Separator" type="HSeparator" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout/CheckpointsPage/DevelopmentSection"]
+layout_mode = 2
+
+[node name="DevelopmentTitle" type="Label" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout/CheckpointsPage/DevelopmentSection"]
+layout_mode = 2
+text = "Development checkpoints"
+
+[node name="DevelopmentCheckpoints" type="OptionButton" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout/CheckpointsPage/DevelopmentSection"]
+unique_name_in_owner = true
+layout_mode = 2
+fit_to_longest_item = false
+
+[node name="DevelopmentDescription" type="Label" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout/CheckpointsPage/DevelopmentSection"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(0, 44)
+theme_type_variation = &"MutedLabel"
+autowrap_mode = 2
+
+[node name="LoadDevelopment" type="Button" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout/CheckpointsPage/DevelopmentSection"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(0, 36)
+text = "Load development checkpoint"
+
+[node name="SaveFeedback" type="Label" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout/CheckpointsPage"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(0, 44)
+theme_type_variation = &"MutedLabel"
+autowrap_mode = 2
+
+[node name="BackFromCheckpoints" type="Button" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout/CheckpointsPage"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(0, 36)
+text = "Back"

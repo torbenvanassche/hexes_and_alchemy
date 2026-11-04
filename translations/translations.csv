@@ -1,4 +1,36 @@
 keys,en,nl
+HUD_NAV_GUILD,Guild,Gilde
+CAMPAIGN_PROJECTS_TAB,Settlement,Nederzetting
+CAMPAIGN_FORGE_TITLE,A village blacksmith,Een dorpssmid
+CAMPAIGN_FORGE_PURPOSE,A workshop for guild equipment. Unlocks settlement level 2.,Een werkplaats voor gilde-uitrusting. Ontgrendelt nederzettingsniveau 2.
+CAMPAIGN_FORGE_STEP_BLUEPRINT,1. Buy a forge blueprint,1. Koop een bouwplan
+CAMPAIGN_FORGE_STEP_PLACE_FOUNDATION,2. Choose a site,2. Kies een bouwplek
+CAMPAIGN_FORGE_STEP_MATERIALS,3. Gather materials,3. Verzamel materialen
+CAMPAIGN_FORGE_STEP_CONSTRUCTION,4. Deliver materials,4. Lever materialen
+CAMPAIGN_FORGE_STEP_COMPLETE,The blacksmith is open!,De smid is geopend!
+CAMPAIGN_FORGE_GUIDANCE_BLUEPRINT,Find the blueprint at the market. Gather materials at your own pace.,Koop het bouwplan op de markt. Verzamel materialen op je eigen tempo.
+CAMPAIGN_FORGE_GUIDANCE_PLACE_FOUNDATION,Drag the blueprint from Stores onto a green site. Rotate with the camera controls.,Sleep het bouwplan uit Voorraden naar een groene bouwplek. Draai met de camerabediening.
+CAMPAIGN_FORGE_GUIDANCE_MATERIALS,Commission woodcutting and iron prospecting at the quest board or buy supplies. Mines may need reinforcement.,Plaats opdrachten voor hout en ijzer op het prikbord of koop voorraden. Mijnen kunnen versterking nodig hebben.
+CAMPAIGN_FORGE_GUIDANCE_CONSTRUCTION,Your supplies are ready. Deliver them to the marked foundation.,Je voorraden liggen klaar. Lever ze bij de gemarkeerde fundering.
+CAMPAIGN_FORGE_GUIDANCE_COMPLETE,Craft equipment at the blacksmith. Visit the settlement house to unlock level 2.,Maak uitrusting bij de smid. Ontgrendel niveau 2 bij het nederzettingshuis.
+CAMPAIGN_FORGE_CHOICES,Choose your approach: buying materials preserves adventurer time; posting work preserves coins and develops your guild. You can combine both.,Kies je aanpak: materialen kopen bespaart tijd voor avonturiers; opdrachten plaatsen bespaart munten en ontwikkelt je gilde. Je kunt beide combineren.
+CAMPAIGN_FORGE_COMPLETE_NOTICE,The blacksmith is open. Equipment crafting and the next settlement upgrade are now within reach.,De smid is geopend. Je kunt nu uitrusting maken en de volgende nederzettingsverbetering uitvoeren.
+CAMPAIGN_VIEW_PROJECT,View settlement project,Bekijk nederzettingsproject
+CAMPAIGN_CLEAR_DESTINATION,Clear marker,Verwijder markering
+CAMPAIGN_ACTION_MARKET,Find market,Vind de markt
+CAMPAIGN_ACTION_BOARD,Find quest board,Vind het prikbord
+CAMPAIGN_ACTION_FOUNDATION,Find building site,Vind de bouwplek
+CAMPAIGN_ACTION_HOME,Find settlement house,Vind het nederzettingshuis
+CAMPAIGN_ACTION_STOCKPILE,Open Stores,Open Voorraden
+CAMPAIGN_DESTINATION_MARKET,Market,Markt
+CAMPAIGN_DESTINATION_BOARD,Quest board,Prikbord
+CAMPAIGN_DESTINATION_FOUNDATION,Forge foundation,Fundering van de smidse
+CAMPAIGN_DESTINATION_HOME,Settlement house,Nederzettingshuis
+CAMPAIGN_DESTINATION_DISTANCE,%s - %d m away,%s - op %d m afstand
+CAMPAIGN_TREASURY,Treasury · %d coins,Kas · %d munten
+CAMPAIGN_MATERIAL_COUNT,%s: %d in stock / %d still needed,%s: %d op voorraad / %d nog nodig
+CAMPAIGN_CONTROLS,Finding a location marks it in the world. Walk there and interact to use its services. This project follows your progress automatically.,Een locatie zoeken markeert deze in de wereld. Loop erheen en gebruik de interactieknop. Dit project houdt je voortgang automatisch bij.
+CAMPAIGN_JOURNAL_BODY,Give the guild a foothold: build a blacksmith and put the local guilds to work. Follow building requirements on the Village page.,Geef het gilde een basis: bouw een smederij en zet de lokale gilden aan het werk. Volg de bouwvereisten op de Dorpspagina.
 KEYBIND_CAMERA_PAN_LEFT,camera pan left,camera pan left
 KEYBIND_CAMERA_PAN_RIGHT,camera pan right,camera pan right
 KEYBIND_CAMERA_PAN_FORWARD,camera pan forward,camera pan forward
@@ -91,7 +123,7 @@ QUEST_ROLE_CRAFTER,Crafter,Crafter
 QUEST_ROLE_TENDER,Tender,Tender
 QUEST_ROLE_SECURITY,Security,Security
 QUEST_SUPPORT_SECURITY_NAME,Security escort,Security escort
-QUEST_SUPPORT_SECURITY_DESCRIPTION,Assign a security specialist to reduce the chance of a dangerous outcome.,Assign a security specialist to reduce the chance of a dangerous outcome.
+QUEST_SUPPORT_SECURITY_DESCRIPTION,Assign a specialist to reduce danger.,Wijs een specialist toe om het gevaar te verminderen.
 QUEST_SUPPORT_AVAILABLE_COUNT,%s available now,%s available now
 QUEST_SUPPORT_NONE_AVAILABLE,No specialist available now,No specialist available now
 QUEST_SUPPORT_WILL_WAIT,Selected - will wait for a specialist,Selected - will wait for a specialist
@@ -244,7 +276,7 @@ QUEST_DESC_MINE_EXTRACT,Extract ore with normal risk.,Extract ore with normal ri
 QUEST_DESC_MINE_DEEP_EXTRACT,Push deeper for more ore and more danger.,Push deeper for more ore and more danger.
 QUEST_DESC_MINE_STABILIZED_EXTRACT,Spend beams to reduce extraction risk.,Spend beams to reduce extraction risk.
 QUEST_DESC_MINE_REINFORCE,Repair an unstable mine shaft.,Repair an unstable mine shaft.
-QUEST_DESC_SCOUT,Send a hunter into the wilds. The mapped area and anything found there are revealed when the scout returns.,Send a hunter into the wilds. The mapped area and anything found there are revealed when the scout returns.
+QUEST_DESC_SCOUT,A hunter reveals terrain and resources when they return.,Een jager onthult terrein en grondstoffen bij terugkomst.
 QUEST_DETAIL_SCOUT_DISTANCE,%s tiles,%s tiles
 QUEST_STATE_WAITING,Waiting,Waiting
 QUEST_STATE_EN_ROUTE,En route,En route
@@ -716,3 +748,94 @@ EQUIPMENT_ENCHANTMENT_FAR_SEEING,Far-seeing,Far-seeing
 EQUIPMENT_SLOT_LOCK_OVERLAY,LOCKED\nRank %s,LOCKED\nRank %s
 EQUIPMENT_SLOT_LOCKED_TOOLTIP,%s slot\nUnlocks at Rank %s,%s slot\nUnlocks at Rank %s
 LOCKED,Locked,Vergrendeld
+GUILD_JOURNAL_TITLE,Guild journal,Gildedagboek
+GUILD_JOURNAL_VILLAGE,Village,Dorp
+GUILD_JOURNAL_COMMISSIONS,Commissions,Opdrachten
+GUILD_JOURNAL_STORES,Stores,Voorraden
+GUILD_JOURNAL_PEOPLE,People,Mensen
+GUILD_JOURNAL_NOTES,Notes,Notities
+GUILD_JOURNAL_SHORTCUT,J  Journal,J  Dagboek
+GUILD_JOURNAL_NO_MEMBERS,No members have joined yet.,Er zijn nog geen leden aangesloten.
+MARKET_BUY_SUPPLIES,Buy supplies,Koop voorraden
+MARKET_SELL_GOODS,Sell goods,Verkoop goederen
+MARKET_STOCK_COUNT,Stock: %d,Op voorraad: %d
+MARKET_OWNED_COUNT,Owned: %d,In bezit: %d
+MARKET_BUY_ONE,Buy 1 %s for %d coins.,Koop 1 %s voor %d munten.
+MARKET_SELL_ONE,Sell 1 %s for %d coins.,Verkoop 1 %s voor %d munten.
+MARKET_TITLE_BUY,Market · Buying,Markt · Kopen
+MARKET_TITLE_SELL,Market · Selling,Markt · Verkopen
+JOURNAL_OBJECTIVES,Objectives,Doelen
+JOURNAL_TASK_BLACKSMITH_HINT,Buy a forge blueprint at the market. Place it in the village and deliver the materials.,Koop een bouwplan op de markt. Plaats het in het dorp en lever de materialen.
+JOURNAL_TASK_TIMBER_COMMISSION,Complete a timber commission,Voltooi een houtopdracht
+JOURNAL_TASK_TIMBER_HINT,Explore a forest and commission a harvest at the quest board. Wait for the timber to return.,Verken een bos en plaats een oogstopdracht op het opdrachtenbord. Wacht tot het hout terugkomt.
+FACTION_HUNTERS_SUMMARY,Explore the wilderness and secure resources.,Verken de wildernis en stel grondstoffen veilig.
+FACTION_ADVENTURERS_SUMMARY,Face dangerous expeditions and protect the settlement.,Onderneem gevaarlijke expedities en bescherm de nederzetting.
+FACTION_CRAFTERS_SUMMARY,Build and maintain the village workshops.,Bouw en onderhoud de werkplaatsen van het dorp.
+FACTION_TENDERS_SUMMARY,Care for the land and keep the village supplied.,Verzorg het land en houd het dorp bevoorraad.
+PEOPLE_AVAILABLE,%d available,%d beschikbaar
+PEOPLE_AWAY,%d away,%d onderweg
+PEOPLE_RECOVERING,%d recovering,%d herstellend
+PEOPLE_COMMISSIONS_COMPLETED,%d commissions completed,%d opdrachten voltooid
+PEOPLE_INJURED,Injured,Gewond
+PEOPLE_VIEW,View,Bekijk
+PEOPLE_VIEW_PROFILE,View %s’s profile,Bekijk het profiel van %s
+QUEST_BOARD_POSTED,Posted quests,Geplaatste opdrachten
+QUEST_BOARD_POST,Post quest,Plaats opdracht
+QUEST_BOARD_SEND_SCOUT,Send scout,Stuur verkenner
+QUEST_BOARD_AUTO_COLLECT,Auto-collect rewards,Automatisch innen
+QUEST_BOARD_EMPTY_HINT,Send a scout to find new opportunities.\nPost quests for resources and village work.,Stuur een verkenner om mogelijkheden te ontdekken.\nPlaats opdrachten voor grondstoffen en dorpswerk.
+QUEST_BOARD_FIND_TARGET,Explore a resource location to unlock quests.,Verken een grondstoflocatie om opdrachten vrij te spelen.
+QUEST_SUPPORT_DANGER,Danger,Gevaar
+QUEST_SUPPORT_DANGER_HINT,Dangerous outcomes have %s%% of their normal weight with this support.,Gevaarlijke uitkomsten hebben %s%% van hun normale gewicht met deze ondersteuning.
+STRUCTURE_VILLAGE_NAME,Village,Dorp
+NPC_CAREER_ACTIVE,In service,In service
+NPC_CONDITION_HEALTHY,No injuries,No injuries
+NPC_ACTIVITY,Activity,Activity
+RECRUITMENT_HIRE_COST_BUTTON,Hire · %s coins,Hire · %s coins
+WINDOW_TRANSPORT,Trade & shipments,Trade & shipments
+SHIPMENT_OPEN,Trade & shipments,Trade & shipments
+SHIPMENT_WORKSHOP_TITLE,Tools for the village,Tools for the village
+SHIPMENT_WORKSHOP_DESCRIPTION,The village needs timber and iron to repair its tools. Send supplies from the guild stores.,The village needs timber and iron to repair its tools. Send supplies from the guild stores.
+SHIPMENT_TRAVEL_TITLE,Supplies for the road,Supplies for the road
+SHIPMENT_TRAVEL_DESCRIPTION,The village is stocking its travellers with rations and timber for repairs.,The village is stocking its travellers with rations and timber for repairs.
+SHIPMENT_VILLAGE_NAME,Neighbouring village,Neighbouring village
+SHIPMENT_VISIT_FIRST,Visit the village market to establish contact.,Visit the village market to establish contact.
+SHIPMENT_CARRIER_BUSY,The guild packhorse is already on a journey.,The guild packhorse is already on a journey.
+SHIPMENT_ALREADY_DELIVERED,This request has already been delivered.,This request has already been delivered.
+SHIPMENT_NO_ROUTE,No mapped walking route. Explore a connected route to the village market.,No mapped walking route. Explore a connected route to the village market.
+SHIPMENT_MISSING_CARGO,Gather the requested goods in your stores first.,Gather the requested goods in your stores first.
+SHIPMENT_CONTACT_NOTICE,Made contact with the neighbouring village.,Made contact with the neighbouring village.
+SHIPMENT_DISPATCHED_NOTICE,Packhorse dispatched. Goods loaded from guild stores.,Packhorse dispatched. Goods loaded from guild stores.
+SHIPMENT_BLOCKED_NOTICE,The packhorse has stopped. Its route is blocked.,The packhorse has stopped. Its route is blocked.
+SHIPMENT_DELIVERED_NOTICE,Shipment delivered. Payment and reputation received.,Shipment delivered. Payment and reputation received.
+SHIPMENT_RETURNED_NOTICE,The guild packhorse has returned home.,The guild packhorse has returned home.
+SHIPMENT_REWARD,%d coins · +%d reputation · +1 local influence · +1 prestige,%d coins · +%d reputation · +1 local influence · +1 prestige
+SHIPMENT_STANDING,Deliveries: %d · Local influence: %d,Deliveries: %d · Local influence: %d
+SHIPMENT_ROUTE_BLOCKED,Route blocked. Reopen a mapped path to resume the journey.,Route blocked. Reopen a mapped path to resume the journey.
+SHIPMENT_PHASE_OUTBOUND,Packhorse delivering · about %ds to arrival,Packhorse delivering · about %ds to arrival
+SHIPMENT_PHASE_RETURNING,Goods delivered · packhorse returning in about %ds,Goods delivered · packhorse returning in about %ds
+SHIPMENT_PHASE_RECALLED,Packhorse recalled · cargo returns in about %ds,Packhorse recalled · cargo returns in about %ds
+SHIPMENT_FULFILLED,Trade established. The guild packhorse is ready for another request.,Trade established. The guild packhorse is ready for another request.
+SHIPMENT_ROUTE_PREVIEW,Mapped route: %d tiles · one guild packhorse,Mapped route: %d tiles · one guild packhorse
+SHIPMENT_CARGO_HINT,In stores / requested · loaded on dispatch,In stores / requested · loaded on dispatch
+SHIPMENT_NO_VILLAGES,Explore the region to find a neighbouring village. Visit its market to arrange your first shipment.,Explore the region to find a neighbouring village. Visit its market to arrange your first shipment.
+SHIPMENT_DISPATCH,Dispatch packhorse,Dispatch packhorse
+SHIPMENT_RECALL,Recall packhorse,Recall packhorse
+SHIPMENT_RESUME,Resume journey,Resume journey
+SHIPMENT_NEXT_REQUEST,Next request,Next request
+SHIPMENT_LOCATE,Locate village,Locate village
+SHIPMENT_PACKHORSE,Packhorse,Packhorse
+SHIPMENT_CAPACITY_HINT,Load units / capacity. Larger carriers can carry bigger shipments.,Load units / capacity. Larger carriers can carry bigger shipments.
+SHIPMENT_OVER_CAPACITY,This request needs a larger carrier.,This request needs a larger carrier.
+SHIPMENT_LOADING,Wait for the checkpoint to finish loading.,Wait for the checkpoint to finish loading.
+SHIPMENT_CARGO_LOADED,Loaded / requested,Loaded / requested
+SHIPMENT_CARRIER_LOAD,%s · Load %d / %d,%s · Load %d / %d
+SHIPMENT_JOURNAL_TITLE,A neighbour in need,A neighbour in need
+SHIPMENT_JOURNAL_BODY,Reach beyond the settlement. Find the nearby village and deliver a small shipment to begin a trading relationship.,Reach beyond the settlement. Find the nearby village and deliver a small shipment to begin a trading relationship.
+SHIPMENT_JOURNAL_CONTACT,Meet the neighbouring village,Meet the neighbouring village
+SHIPMENT_JOURNAL_CONTACT_HINT,Explore the region and speak at the village market.,Explore the region and speak at the village market.
+SHIPMENT_JOURNAL_DELIVERY,Deliver your first shipment,Deliver your first shipment
+SHIPMENT_JOURNAL_DELIVERY_HINT,Gather the requested goods and dispatch the packhorse from Trade & shipments on the Village page.,Gather the requested goods and dispatch the packhorse from Trade & shipments on the Village page.
+SHIPMENT_TRADE_POST,Trade post,Trade post
+SHIPMENT_VILLAGE_MARKET,Village market,Village market
+SHIPMENT_MARKET_REQUESTS,Shipments,Shipments

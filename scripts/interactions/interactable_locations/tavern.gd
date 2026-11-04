@@ -126,10 +126,12 @@ func _initialize_recruitment() -> void:
 	recruitment_changed.emit()
 
 func _on_roster_changed() -> void:
+	if SaveGames.is_loading: return
 	if _ensure_emergency_recruit():
 		recruitment_changed.emit()
 
 func _on_guild_progress_changed() -> void:
+	if SaveGames.is_loading: return
 	var rules := _get_recruitment_rules()
 	var completed_operations := _get_completed_operation_count()
 	var visitor_arrived := false

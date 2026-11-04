@@ -1,8 +1,8 @@
 class_name AlchemistUI extends PanelContainer
 
 const SERVICE_ROW := preload("res://scenes/ui/components/alchemist_service_row.tscn")
-const COLOR_SUCCESS := Color(0.18, 0.46, 0.25, 1.0)
-const COLOR_FAILURE := Color(0.62, 0.2, 0.14, 1.0)
+const COLOR_SUCCESS := GameUI.SUCCESS
+const COLOR_FAILURE := GameUI.DANGER
 
 @onready var currency_label: Label = $Margin/Content/Header/Currency
 @onready var patients: VBoxContainer = $Margin/Content/Services/TreatmentPanel/Margin/Content/Scroll/Rows

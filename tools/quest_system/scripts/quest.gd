@@ -57,6 +57,11 @@ func _init(
 	
 func is_state(state: QuestState) -> bool:
 	return get_state_as_string(state) == state_machine.get_current_state();
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_PREDELETE:
+		if is_instance_valid(supplies): supplies.free()
+		if is_instance_valid(state_machine): state_machine.free()
 	
 func add_supply(item: Resource, amount: int = 1) -> int:
 	return supplies.add(item, amount, true);

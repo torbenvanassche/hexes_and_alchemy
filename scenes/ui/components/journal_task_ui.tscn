@@ -1,19 +1,50 @@
 [gd_scene format=3 uid="uid://tf5kfwlx7unb"]
 
-[ext_resource type="Script" uid="uid://c3m33kwisqgt4" path="res://scripts/ui/journal_task_ui.gd" id="1_script"]
+[ext_resource type="Script" path="res://scripts/ui/journal_task_ui.gd" id="1_script"]
 
-[node name="JournalTask" type="HBoxContainer" unique_id=1869256331]
+[sub_resource type="StyleBoxFlat" id="Status"]
+bg_color = Color(0.067, 0.102, 0.129, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.714, 0.604, 0.388, 1)
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+
+[node name="JournalTask" type="HBoxContainer"]
 size_flags_horizontal = 3
-theme_override_constants/separation = 6
+theme_override_constants/separation = 12
 script = ExtResource("1_script")
 
-[node name="Completed" type="CheckBox" parent="." unique_id=491904644]
+[node name="Completed" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
-focus_mode = 0
-disabled = true
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Status")
 
-[node name="Text" type="Label" parent="." unique_id=1238311318]
+[node name="Mark" type="Label" parent="Completed"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Content" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="Text" type="Label" parent="Content"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 18
+autowrap_mode = 2
+
+[node name="Description" type="Label" parent="Content"]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
 autowrap_mode = 2

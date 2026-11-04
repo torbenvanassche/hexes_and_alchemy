@@ -1,0 +1,18 @@
+[gd_scene format=3]
+[ext_resource type="Script" path="res://scripts/hex_system/wood_boundary_piece.gd" id="1"]
+[ext_resource type="PackedScene" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/fence_wood_straight_gate.glb" id="2"]
+[ext_resource type="Material" path="res://materials/kay_fantasy_default.tres" id="3"]
+[ext_resource type="Script" path="res://scripts/gameplay/wood_gate.gd" id="4"]
+[node name="WoodGate" type="Node3D"]
+script = ExtResource("1")
+is_gate = true
+[node name="Model" parent="." instance=ExtResource("2")]
+[node name="fence_wood_straight_gate" parent="Model/RootNode" index="0"]
+surface_material_override/0 = ExtResource("3")
+[node name="fence_wood_straight_door" parent="Model/RootNode/fence_wood_straight_gate" index="0"]
+surface_material_override/0 = ExtResource("3")
+script = ExtResource("4")
+max_angle = -85.0
+duration = 0.5
+can_be_triggered_by_npc = true
+[editable path="Model"]

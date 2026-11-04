@@ -12,13 +12,20 @@ const REQUIREMENT_ROW_SCENE := preload("res://scenes/ui/components/settlement_re
 @onready var requirements_list: VBoxContainer = $MarginContainer/VBoxContainer/RequirementsList
 @onready var status_label: Label = $MarginContainer/VBoxContainer/StatusLabel
 @onready var upgrade_button: Button = $MarginContainer/VBoxContainer/UpgradeButton
+@onready var project_button: Button = $MarginContainer/VBoxContainer/ProjectButton
 
 var settlement: Settlement
 var player_inventory: ContentGroup
 
 func _ready() -> void:
+	project_button.pressed.connect(_open_blacksmith_project)
 	if not upgrade_button.pressed.is_connected(_on_upgrade_pressed):
 		upgrade_button.pressed.connect(_on_upgrade_pressed)
+
+func _open_blacksmith_project() -> void:
+	SceneManager.remove_current_ui_scene()
+	if Manager.instance.player_instance != null:
+		Manager.instance.player_instance.toggle_hub_tab("projects")
 
 func setup_interaction(interaction: Interaction) -> void:
 	var service := interaction as SettlementService
@@ -46,6 +53,7 @@ func _refresh() -> void:
 	if not is_node_ready():
 		return
 	_clear_requirements()
+	project_button.visible = settlement != null and not settlement.has_service(&"Blacksmith")
 	if settlement == null:
 		current_level_value.text = "-"
 		next_section.visible = false

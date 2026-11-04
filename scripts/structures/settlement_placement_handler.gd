@@ -45,6 +45,8 @@ func _get_settlement_for_hex(hex: HexBase) -> Settlement:
 	for settlement: Settlement in Manager.instance.settlements:
 		if settlement == null or not is_instance_valid(settlement):
 			continue
+		if not settlement.allows_player_construction:
+			continue
 		if not grid.is_ancestor_of(settlement):
 			continue
 		if settlement.contains_hex(grid, hex):

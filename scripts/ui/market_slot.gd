@@ -6,7 +6,8 @@ enum TileMode { BUY, SELL }
 signal action_completed()
 
 @onready var item_icon: TextureRect = $MarginContainer/Content/Icon
-@onready var item_name_label: Label = $MarginContainer/Content/Name
+@onready var item_name_label: Label = $MarginContainer/Content/Details/Name
+@onready var quantity_label: Label = $MarginContainer/Content/Details/Quantity
 @onready var price_label: RichTextLabel = $MarginContainer/Content/Price
 
 var mode: TileMode = TileMode.BUY
@@ -26,14 +27,16 @@ func configure_buy(slot: ContentSlotResource, target_inventory: ContentGroup) ->
 	content = source_slot.get_content() if source_slot else null
 	unit_price = Manager.instance.market.get_buy_value(content)
 	_set_item(content)
+	quantity_label.text = tr("MARKET_STOCK_COUNT") % (source_slot.count if source_slot else 0)
 	disabled = content == null
 
-func configure_sell(_content: Resource, _owned_count: int, inventory: ContentGroup) -> void:
+func configure_sell(_content: Resource, owned_count: int, inventory: ContentGroup) -> void:
 	mode = TileMode.SELL
 	content = _content
 	player_inventory = inventory
 	unit_price = Manager.instance.market.get_sell_now_value(content)
 	_set_item(content)
+	quantity_label.text = tr("MARKET_OWNED_COUNT") % owned_count
 	disabled = content == null
 
 func _set_item(item: Resource) -> void:
@@ -43,8 +46,10 @@ func _set_item(item: Resource) -> void:
 	item_icon.tooltip_text = display_name
 	item_name_label.text = display_name
 	item_name_label.tooltip_text = display_name
-	tooltip_text = display_name
-	price_label.text = "%s [img=18x18]res://sprites/items/coin_single.png[/img]" % unit_price
+	var buying := mode == TileMode.BUY
+	tooltip_text = tr("MARKET_BUY_ONE" if buying else "MARKET_SELL_ONE") % [display_name, unit_price]
+	price_label.text = "%d [img=18x18]res://sprites/items/coin_single.png[/img]" % unit_price
+	price_label.add_theme_color_override("default_color", GameUI.ACCENT if buying else GameUI.SUCCESS)
 
 func _on_pressed() -> void:
 	match mode:

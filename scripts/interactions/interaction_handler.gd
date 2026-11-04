@@ -11,10 +11,15 @@ var window_instance: SceneInstance;
 @export var show_interaction_prompt: bool = true;
 @export var close_window_on_area_exit: bool = true
 @export var can_be_triggered_by_npc: bool = false
+## Optional visible focus for prompts on compound structures such as trade posts.
+@export var prompt_anchor: Node3D
 @export var journal_quest: JournalTask;
 
 @abstract func interact() -> void;
 @abstract func can_interact() -> bool;
+
+func get_prompt_position() -> Vector3:
+	return prompt_anchor.global_position if is_instance_valid(prompt_anchor) else global_position
 
 func _ready() -> void:
 	enterable_triggers.assign(find_children("*", "Area3D", true, false))
@@ -35,6 +40,8 @@ func toggle_collision(b: bool) -> void:
 	
 func on_interact() -> void:
 	if can_interact():
+		if Manager.instance != null and Manager.instance.campaign != null and Manager.instance.campaign.destination == self:
+			Manager.instance.campaign.clear_destination()
 		interact();
 
 func on_npc_triggered(_npc: NPC) -> void:

@@ -4,11 +4,13 @@ extends MarginContainer
 const CANDIDATE_ROW_SCENE := preload("res://scenes/ui/components/recruit_candidate_row.tscn")
 
 @onready var visitor_count: Label = $Margin/Content/PoolSummary/VisitorCount
-@onready var next_arrival: Label = $Margin/Content/NextArrival
-@onready var candidate_rows: VBoxContainer = $Margin/Content/CandidateScroll/CandidateRows
+@onready var next_arrival: Label = $Margin/Content/PoolSummary/NextArrival
+@onready var candidate_rows: VBoxContainer = $Margin/Content/CandidateList/CandidateRows
 @onready var empty_label: Label = $Margin/Content/EmptyLabel
 @onready var refresh_button: Button = $Margin/Content/Footer/Refresh
 @onready var feedback_label: Label = $Margin/Content/Footer/Feedback
+
+@onready var candidate_list: MarginContainer = $Margin/Content/CandidateList
 
 var tavern: Tavern
 var _refresh_queued := false
@@ -65,6 +67,9 @@ func _apply_refresh() -> void:
 		candidate_rows.add_child(row)
 		row.hire_requested.connect(_on_hire_requested)
 		row.setup(candidate, tavern)
+	var ancestor := get_parent()
+	while ancestor != null and not ancestor is DraggableControl: ancestor = ancestor.get_parent()
+	if ancestor is DraggableControl: ancestor.request_fit_to_content()
 
 func _on_hire_requested(candidate: RecruitCandidate) -> void:
 	if tavern == null or candidate == null:

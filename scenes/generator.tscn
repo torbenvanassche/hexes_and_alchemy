@@ -5,12 +5,16 @@
 [ext_resource type="Resource" uid="uid://ckpmn3cutb7an" path="res://resources/structure_info/spawnable_mine.tres" id="3_mine"]
 [ext_resource type="Resource" uid="uid://dijohak4mpf7n" path="res://resources/structure_info/forest.tres" id="4_forest"]
 [ext_resource type="Script" uid="uid://btydeamnhd6x" path="res://scripts/structures/structure_info.gd" id="5_structure_info"]
+[ext_resource type="Resource" path="res://resources/structure_info/village.tres" id="6_village"]
 
 [node name="generator" type="Node3D" unique_id=1069964981 node_paths=PackedStringArray("target_position")]
 script = ExtResource("1_5yxne")
 player_settlement = ExtResource("2_w5vnv")
 target_position = NodePath("Node3D")
 required_starting_structures = Array[ExtResource("5_structure_info")]([ExtResource("3_mine"), ExtResource("4_forest")])
+nearby_settlement = ExtResource("6_village")
+settlement_min_walk_distance = 8
+settlement_max_walk_distance = 16
 chunk_radius = 4
 grid_name = "main_world"
 protected_chunks = Array[Vector2i]([Vector2i(0, 0)])

@@ -16,9 +16,9 @@ class_name QuestCreationUI extends Control
 @onready var active_quests_section: VBoxContainer = $MarginContainer/VBoxContainer/ActiveQuestsSection
 @onready var active_quests_list: VBoxContainer = $MarginContainer/VBoxContainer/ActiveQuestsSection/ActiveQuestsList
 @onready var details_panel: VBoxContainer = $MarginContainer/VBoxContainer/DetailsPanel
-@onready var description_top_divider: ColorRect = $MarginContainer/VBoxContainer/DetailsPanel/DescriptionTopDivider
+@onready var description_top_divider: HSeparator = $MarginContainer/VBoxContainer/DetailsPanel/DescriptionTopDivider
 @onready var description_label: Label = $MarginContainer/VBoxContainer/DetailsPanel/DescriptionLabel
-@onready var details_divider: ColorRect = $MarginContainer/VBoxContainer/DetailsPanel/DetailsDivider
+@onready var details_divider: HSeparator = $MarginContainer/VBoxContainer/DetailsPanel/DetailsDivider
 @onready var meta_row: HBoxContainer = $MarginContainer/VBoxContainer/DetailsPanel/MetaRow
 @onready var duration_box: VBoxContainer = $MarginContainer/VBoxContainer/DetailsPanel/MetaRow/DurationBox
 @onready var duration_title: Label = $MarginContainer/VBoxContainer/DetailsPanel/MetaRow/DurationBox/DurationTitle
@@ -26,10 +26,10 @@ class_name QuestCreationUI extends Control
 @onready var risk_box: VBoxContainer = $MarginContainer/VBoxContainer/DetailsPanel/MetaRow/RiskBox
 @onready var risk_label: Label = $MarginContainer/VBoxContainer/DetailsPanel/MetaRow/RiskBox/RiskLabel
 @onready var reward_box: VBoxContainer = $MarginContainer/VBoxContainer/DetailsPanel/MetaRow/RewardBox
-@onready var reward_items: FlowContainer = $MarginContainer/VBoxContainer/DetailsPanel/MetaRow/RewardBox/RewardItems
+@onready var reward_items: HBoxContainer = $MarginContainer/VBoxContainer/DetailsPanel/MetaRow/RewardBox/RewardItems
 @onready var reward_text_label: Label = $MarginContainer/VBoxContainer/DetailsPanel/MetaRow/RewardBox/RewardText
-@onready var context_box: VBoxContainer = $MarginContainer/VBoxContainer/DetailsPanel/MetaRow/ContextBox
-@onready var context_label: Label = $MarginContainer/VBoxContainer/DetailsPanel/MetaRow/ContextBox/ContextLabel
+@onready var context_box: VBoxContainer = $MarginContainer/VBoxContainer/DetailsPanel/ContextBox
+@onready var context_label: Label = $MarginContainer/VBoxContainer/DetailsPanel/ContextBox/ContextLabel
 @onready var quest_supplies: Control = $MarginContainer/VBoxContainer/QuestSupplies
 @onready var supplies_grid: GridContainer = $MarginContainer/VBoxContainer/QuestSupplies/SuppliesGrid
 @onready var quest_support: VBoxContainer = $MarginContainer/VBoxContainer/QuestSupport
@@ -668,7 +668,7 @@ func _get_selected_required_supply_effect(item: ItemInfo) -> String:
 	return profile.get_required_supply_effect(item) if profile != null else ""
 
 func _request_window_refit() -> void:
-	if window == null:
+	if not is_inside_tree() or window == null or not window.is_inside_tree():
 		return
 
 	if window.visible:
@@ -762,7 +762,7 @@ func _set_details(
 	var has_risk := _set_detail_value(risk_label, risk_box, risk)
 	var has_reward := _set_reward_preview(reward_preview)
 	var has_context := _set_detail_value(context_label, context_box, context)
-	var has_detail_meta := has_duration or has_risk or has_reward or has_context
+	var has_detail_meta := has_duration or has_risk or has_reward
 
 	if description_top_divider != null:
 		description_top_divider.visible = has_description
@@ -771,7 +771,7 @@ func _set_details(
 	if meta_row != null:
 		meta_row.visible = has_detail_meta
 
-	var has_details := has_description or has_detail_meta
+	var has_details := has_description or has_detail_meta or has_context
 	if details_panel != null:
 		details_panel.visible = has_details
 	_request_window_refit()
@@ -805,9 +805,9 @@ func _refresh_interest_feedback() -> void:
 		availability_text = tr("QUEST_CREATION_INTEREST_COUNT") % [interested_count]
 
 	var role_label := _get_role_display_name(_get_selected_required_role())
-	var highlighted_role := "[b][color=#8A451A]%s[/color][/b]" % [role_label]
+	var highlighted_role := "[b][color=#dbb775]%s[/color][/b]" % [role_label]
 	var requirement_text := tr("QUEST_CREATION_REQUIRED_PROFESSION") % [highlighted_role]
-	_set_interest_feedback("[center]%s\n%s[/center]" % [requirement_text, availability_text])
+	_set_interest_feedback("%s\n%s" % [requirement_text, availability_text])
 
 func _get_selected_required_role() -> String:
 	var location_idx := quest_location.selected
@@ -1163,7 +1163,7 @@ func _apply_mode_visibility() -> void:
 		scout_direction_row.visible = scout_only
 	_set_creation_controls_visible(true)
 	if finish_quest_creation != null:
-		finish_quest_creation.text = tr("QUEST_CREATION_SCOUT_FRONTIER") if scout_only else tr("QUEST_CREATION_CREATE")
+		finish_quest_creation.text = tr("QUEST_BOARD_SEND_SCOUT") if scout_only else tr("QUEST_BOARD_POST")
 	if window != null:
 		window.change_title.emit("QUEST_CREATION_SCOUT_FRONTIER" if scout_only else "WINDOW_NEW_QUEST")
 

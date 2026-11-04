@@ -1,10 +1,10 @@
 class_name QuestListUI extends Control
 
-@onready var create_quest_button: Button = $Actions/CreateQuestButton
-@onready var scout_quest_button: Button = $Actions/ScoutQuestButton
-@onready var auto_resolve_button: TextureButton = $"../../topbar/MarginContainer2/HBoxContainer/AutoResolveButton"
-@onready var board_surface: Control = $BoardSurface
-@onready var empty_label: Label = $EmptyLabel
+@onready var create_quest_button: Button = $Layout/Actions/CreateQuestButton
+@onready var scout_quest_button: Button = $Layout/Actions/ScoutQuestButton
+@onready var auto_resolve_button: Button = $Layout/Actions/AutoResolveButton
+@onready var board_surface: Control = $Layout/BoardSurface
+@onready var empty_label: Control = $Layout/BoardSurface/EmptyState
 
 @export var quest_item_ui: PackedScene
 @export var board_margin: float = 20.0
@@ -36,6 +36,7 @@ func on_enter() -> void:
 	
 func _allow_quest_creation_allowed() -> void:
 	create_quest_button.disabled = not _has_available_quests_to_create()
+	create_quest_button.tooltip_text = tr("QUEST_BOARD_FIND_TARGET") if create_quest_button.disabled else ""
 	scout_quest_button.disabled = not _has_available_scouting_to_create()
 	_layout_board()
 	

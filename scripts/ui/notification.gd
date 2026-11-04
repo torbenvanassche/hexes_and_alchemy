@@ -2,7 +2,7 @@ class_name Toast
 extends Control
 
 const REPORT_ICON := preload("res://sprites/ui/icons/notepad_write.png")
-const REPORT_ICON_COLOR := Color(0.35, 0.24, 0.14, 1)
+const REPORT_ICON_COLOR := GameUI.MUTED
 
 @export var notification_scene: PackedScene
 @export var display_time: float = 5.0

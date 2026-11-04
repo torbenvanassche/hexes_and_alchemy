@@ -33,9 +33,9 @@ func _get_npc_display_name(npc: NPC) -> String:
 
 func _get_status_color(npc: NPC) -> Color:
 	if npc == null:
-		return Color(0.42, 0.31, 0.2, 1)
+		return GameUI.MUTED
 	if npc.is_state(NPC.NPCState.RESTING):
-		return Color(0.55, 0.38, 0.16, 1)
+		return GameUI.WARNING
 	if not npc.is_state(NPC.NPCState.IDLE):
-		return Color(0.18, 0.42, 0.62, 1)
-	return Color(0.18, 0.5, 0.34, 1)
+		return GameUI.TRAVEL
+	return GameUI.SUCCESS

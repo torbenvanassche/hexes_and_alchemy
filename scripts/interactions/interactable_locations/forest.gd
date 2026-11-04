@@ -18,6 +18,7 @@ var _pending_behaviour := ""
 var _pending_outcome: QuestOutcome
 var _pending_reveal_occupation := false
 var _regrow_version: int = 0
+var _regrow_timer: SceneTreeTimer
 
 func _ready() -> void:
 	super();
@@ -75,11 +76,11 @@ func execute_quest(q: Quest) -> void:
 	q.return_from_quest();
 	_quest_running = false;
 
-func _start_regrow() -> void:
+func _start_regrow(remaining: float = -1.0) -> void:
 	_regrow_version += 1
 	var current_regrow_version := _regrow_version
-	var timer := get_tree().create_timer(regrow_time);
-	timer.timeout.connect(func() -> void:
+	_regrow_timer = get_tree().create_timer(regrow_time if remaining < 0.0 else remaining, false)
+	_regrow_timer.timeout.connect(func() -> void:
 		if current_regrow_version == _regrow_version and state_machine.get_current_state() == "DEPLETED":
 			_set_forest_state(ForestState.HEALTHY)
 	)

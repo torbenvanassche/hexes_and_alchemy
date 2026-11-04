@@ -373,6 +373,7 @@ func _get_inventory_contents(inventory: ContentGroup) -> Dictionary:
 	return amounts
 
 func try_assign_waiting_quests() -> void:
+	if SaveGames.is_loading: return
 	var available_npcs: Array[NPC] = []
 	for npc_scene_instance: SceneInstance in _get_available_roster_members():
 		var available_npc := _get_npc_from_instance(npc_scene_instance)

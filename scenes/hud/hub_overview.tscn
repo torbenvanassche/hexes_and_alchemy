@@ -1,38 +1,37 @@
 [gd_scene format=3 uid="uid://hrjbqb32idme"]
 
 [ext_resource type="Script" uid="uid://5dop4k2cveqm" path="res://scripts/ui/hub_overview_ui.gd" id="1_hub"]
-[ext_resource type="Theme" uid="uid://bemn0spuaev14" path="res://themes/fantasy_buttons.tres" id="2_buttons"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hub"]
-bg_color = Color(0.97, 0.9, 0.76, 1)
+bg_color = Color(0.125, 0.184, 0.227, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.42, 0.31, 0.2, 0.45)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+border_color = Color(0.298, 0.353, 0.38, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_standing"]
-bg_color = Color(0.92, 0.84, 0.67, 0.55)
+bg_color = Color(0.125, 0.184, 0.227, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.42, 0.31, 0.2, 0.3)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+border_color = Color(0.298, 0.353, 0.38, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_prestige"]
-bg_color = Color(0.32, 0.22, 0.13, 0.9)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+bg_color = Color(0.125, 0.184, 0.227, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
 
 [node name="HubOverview" type="PanelContainer" unique_id=1230540831]
 theme_override_styles/panel = SubResource("StyleBoxFlat_hub")
@@ -48,23 +47,12 @@ theme_override_constants/margin_bottom = 14
 [node name="Scroll" type="ScrollContainer" parent="Margin" unique_id=571259940]
 layout_mode = 2
 horizontal_scroll_mode = 0
+vertical_scroll_mode = 4
 
 [node name="VBox" type="VBoxContainer" parent="Margin/Scroll" unique_id=566192988]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 8
-
-[node name="Header" type="Label" parent="Margin/Scroll/VBox" unique_id=2062633385]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.28, 0.2, 0.13, 1)
-theme_override_font_sizes/font_size = 18
-text = "HUB_OPERATIONS_TITLE"
-uppercase = true
-
-[node name="Subtitle" type="Label" parent="Margin/Scroll/VBox" unique_id=1454357545]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.42, 0.31, 0.2, 0.85)
-text = "HUB_OPERATIONS_SUBTITLE"
 
 [node name="StandingPanel" type="PanelContainer" parent="Margin/Scroll/VBox" unique_id=1751219437]
 layout_mode = 2
@@ -84,8 +72,7 @@ theme_override_constants/separation = 4
 
 [node name="Header" type="Label" parent="Margin/Scroll/VBox/StandingPanel/Margin/Content" unique_id=1135662384]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.36, 0.27, 0.18, 1)
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 14
 text = "GUILD_STANDING_HEADER"
 uppercase = true
 
@@ -149,8 +136,7 @@ theme_override_constants/separation = 0
 
 [node name="Title" type="Label" parent="Margin/Scroll/VBox/StandingPanel/Margin/Content/Metrics/Prestige/Margin/Content" unique_id=1305069163]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.96, 0.86, 0.67, 1)
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 14
 text = "GUILD_PRESTIGE_LABEL"
 horizontal_alignment = 1
 uppercase = true
@@ -158,30 +144,16 @@ uppercase = true
 [node name="Value" type="Label" parent="Margin/Scroll/VBox/StandingPanel/Margin/Content/Metrics/Prestige/Margin/Content" unique_id=686262975]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_colors/font_color = Color(1, 0.94, 0.78, 1)
 theme_override_font_sizes/font_size = 22
 text = "0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="FactionsHeader" type="Label" parent="Margin/Scroll/VBox" unique_id=2031756551]
+[node name="Rule" type="HSeparator" parent="Margin/Scroll/VBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.28, 0.2, 0.13, 1)
-text = "HUB_FACTIONS_HEADER"
-uppercase = true
-
-[node name="FactionTabs" type="HBoxContainer" parent="Margin/Scroll/VBox" unique_id=2119930985]
-layout_mode = 2
-theme = ExtResource("2_buttons")
-theme_override_constants/separation = 5
-
-[node name="FactionDetails" type="VBoxContainer" parent="Margin/Scroll/VBox" unique_id=1796575721]
-layout_mode = 2
-theme_override_constants/separation = 5
 
 [node name="OperationsHeader" type="Label" parent="Margin/Scroll/VBox" unique_id=851288972]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.28, 0.2, 0.13, 1)
 text = "HUB_ACTIVE_OPERATIONS"
 uppercase = true
 

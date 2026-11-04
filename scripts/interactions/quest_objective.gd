@@ -4,7 +4,14 @@ const RECOVER_EQUIPMENT_QUEST_KEY := "recover_equipment"
 const RECOVERY_PROFILE := preload("res://resources/quest_profiles/quest_profile_recover_equipment.tres")
 
 @abstract func execute_quest(q: Quest) -> void;
-var state_machine: StateMachine = StateMachine.new();
+var state_machine: StateMachine = StateMachine.new():
+	set(value):
+		if is_instance_valid(state_machine) and state_machine != value:
+			state_machine.free()
+		state_machine = value
+
+func _exit_tree() -> void:
+	if is_instance_valid(state_machine): state_machine.free()
 
 ## Bitmap Columns
 @export var quest_types: Array[String] = []

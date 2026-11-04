@@ -1,0 +1,75 @@
+[gd_scene format=3]
+[ext_resource type="Script" path="res://scripts/transport/village_trade.gd" id="1"]
+[ext_resource type="PackedScene" path="res://meshes/kay_fantasy_hexagon/units/neutral/unit.glb" id="2"]
+[ext_resource type="PackedScene" path="res://meshes/kay_fantasy_hexagon/decoration/props/crate_A_small.glb" id="3"]
+[ext_resource type="Material" path="res://materials/kay_fantasy_default.tres" id="4"]
+[ext_resource type="PackedScene" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_market_blue.glb" id="5"]
+[ext_resource type="Script" path="res://tools/inventory/scripts/inventory/inventory.gd" id="6"]
+[ext_resource type="Script" path="res://tools/inventory/scripts/data/content_slot.gd" id="7"]
+[ext_resource type="Resource" path="res://resources/item_info/wood_raw.tres" id="8"]
+[ext_resource type="Resource" path="res://resources/item_info/iron_ore.tres" id="9"]
+[ext_resource type="Resource" path="res://resources/item_info/travel_rations.tres" id="10"]
+[sub_resource type="Resource" id="WoodStock"]
+script = ExtResource("7")
+content = ExtResource("8")
+count = 6
+maxcount = 6
+is_unlocked = true
+[sub_resource type="Resource" id="IronStock"]
+script = ExtResource("7")
+content = ExtResource("9")
+count = 3
+maxcount = 3
+is_unlocked = true
+[sub_resource type="Resource" id="RationStock"]
+script = ExtResource("7")
+content = ExtResource("10")
+count = 4
+maxcount = 4
+is_unlocked = true
+[sub_resource type="BoxShape3D" id="MarketCollision"]
+size = Vector3(0.9, 0.5, 0.6)
+[sub_resource type="SphereShape3D" id="TradeTrigger"]
+radius = 1.0
+[node name="Market" type="Node3D" node_paths=PackedStringArray("prompt_anchor")]
+script = ExtResource("1")
+close_window_on_area_exit = true
+buy_menu = Array[ExtResource("7")]([SubResource("WoodStock"), SubResource("IronStock"), SubResource("RationStock")])
+prompt_anchor = NodePath("PromptAnchor")
+[node name="BuyInventory" type="Node" parent="."]
+script = ExtResource("6")
+unlocked_slots = 3
+max_slots = 3
+[node name="SellInventory" type="Node" parent="."]
+script = ExtResource("6")
+unlocked_slots = 3
+max_slots = 3
+stack_size = 99
+[node name="Approach" type="Marker3D" parent="."]
+position = Vector3(0, 0, 0.75)
+[node name="PromptAnchor" type="Marker3D" parent="."]
+position = Vector3(0, 0.65, 0.5)
+[node name="Stall" parent="." instance=ExtResource("5")]
+position = Vector3(0, 0, -0.35)
+[node name="building_market_blue" parent="Stall/RootNode" index="0"]
+surface_material_override/0 = ExtResource("4")
+[node name="Body" type="StaticBody3D" parent="."]
+position = Vector3(0, 0.25, -0.65)
+[node name="Shape" type="CollisionShape3D" parent="Body"]
+shape = SubResource("MarketCollision")
+[node name="Steward" parent="." instance=ExtResource("2")]
+position = Vector3(0.28, 0, 0.32)
+rotation = Vector3(0, 3.141593, 0)
+[node name="unit" parent="Steward/RootNode" index="0"]
+surface_material_override/0 = ExtResource("4")
+[node name="Crate" parent="." instance=ExtResource("3")]
+position = Vector3(-0.42, 0, 0.35)
+[node name="crate_A_small" parent="Crate/RootNode" index="0"]
+surface_material_override/0 = ExtResource("4")
+[node name="Trigger" type="Area3D" parent="."]
+[node name="Shape" type="CollisionShape3D" parent="Trigger"]
+position = Vector3(0, 0.35, 0.65)
+shape = SubResource("TradeTrigger")
+[editable path="Stall"]
+[editable path="Steward"]
+[editable path="Crate"]

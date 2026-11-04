@@ -1,0 +1,10 @@
+[gd_scene format=3]
+[ext_resource type="Script" path="res://scripts/hex_system/wood_boundary_piece.gd" id="1"]
+[ext_resource type="PackedScene" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/fence_wood_straight.glb" id="2"]
+[ext_resource type="Material" path="res://materials/kay_fantasy_default.tres" id="3"]
+[node name="WoodFence" type="Node3D"]
+script = ExtResource("1")
+[node name="Model" parent="." instance=ExtResource("2")]
+[node name="fence_wood_straight" parent="Model/RootNode" index="0"]
+surface_material_override/0 = ExtResource("3")
+[editable path="Model"]

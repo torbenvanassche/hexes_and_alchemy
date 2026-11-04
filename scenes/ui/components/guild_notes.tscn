@@ -1,0 +1,152 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://themes/game_theme.tres" id="1_theme"]
+[ext_resource type="Script" uid="uid://bkoojt24df6m0" path="res://scripts/ui/journal_ui.gd" id="2_journal"]
+[ext_resource type="PackedScene" path="res://scenes/ui/components/journal_page.tscn" id="3_page"]
+[ext_resource type="Theme" path="res://themes/game_theme.tres" id="4_buttons"]
+
+[node name="JournalPage" type="Control" unique_id=308080393]
+custom_minimum_size = Vector2(430, 330)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_theme")
+script = ExtResource("2_journal")
+page_scene = ExtResource("3_page")
+
+[node name="MarginContainer" type="MarginContainer" parent="." index="0" unique_id=1003171570]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" index="0" unique_id=674746973]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="GuildStanding" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="HeadingRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/GuildStanding"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="StandingHeader" type="Label" parent="MarginContainer/VBoxContainer/GuildStanding/HeadingRow"]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+theme_override_font_sizes/font_size = 13
+text = "GUILD_STANDING_HEADER"
+size_flags_horizontal = 3
+uppercase = true
+
+[node name="Prestige" type="HBoxContainer" parent="MarginContainer/VBoxContainer/GuildStanding/HeadingRow"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PrestigeTitle" type="Label" parent="MarginContainer/VBoxContainer/GuildStanding/HeadingRow/Prestige"]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+theme_override_font_sizes/font_size = 13
+text = "GUILD_PRESTIGE_LABEL"
+
+[node name="PrestigeValue" type="Label" parent="MarginContainer/VBoxContainer/GuildStanding/HeadingRow/Prestige"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.714, 0.604, 0.388, 1)
+horizontal_alignment = 2
+
+[node name="Metrics" type="HBoxContainer" parent="MarginContainer/VBoxContainer/GuildStanding"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Reputation" type="VBoxContainer" parent="MarginContainer/VBoxContainer/GuildStanding/Metrics"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="ReputationRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/GuildStanding/Metrics/Reputation"]
+layout_mode = 2
+
+[node name="ReputationTitle" type="Label" parent="MarginContainer/VBoxContainer/GuildStanding/Metrics/Reputation/ReputationRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "GUILD_REPUTATION_LABEL"
+
+[node name="ReputationValue" type="Label" parent="MarginContainer/VBoxContainer/GuildStanding/Metrics/Reputation/ReputationRow"]
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="ReputationProgress" type="ProgressBar" parent="MarginContainer/VBoxContainer/GuildStanding/Metrics/Reputation"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 6)
+max_value = 10.0
+show_percentage = false
+
+[node name="Notoriety" type="VBoxContainer" parent="MarginContainer/VBoxContainer/GuildStanding/Metrics"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="NotorietyRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/GuildStanding/Metrics/Notoriety"]
+layout_mode = 2
+
+[node name="NotorietyTitle" type="Label" parent="MarginContainer/VBoxContainer/GuildStanding/Metrics/Notoriety/NotorietyRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "GUILD_NOTORIETY_LABEL"
+
+[node name="NotorietyValue" type="Label" parent="MarginContainer/VBoxContainer/GuildStanding/Metrics/Notoriety/NotorietyRow"]
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="NotorietyProgress" type="ProgressBar" parent="MarginContainer/VBoxContainer/GuildStanding/Metrics/Notoriety"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 6)
+max_value = 5.0
+show_percentage = false
+
+[node name="StandingDivider" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ChapterNavigation" type="HBoxContainer" parent="MarginContainer/VBoxContainer" index="1" unique_id=595332131]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme = ExtResource("4_buttons")
+theme_override_constants/separation = 8
+
+[node name="PreviousPageButton" type="Button" parent="MarginContainer/VBoxContainer/ChapterNavigation" index="0" unique_id=1187942327]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+tooltip_text = "JOURNAL_PREVIOUS_CHAPTER"
+theme_override_font_sizes/font_size = 18
+text = "<"
+
+[node name="ChapterSelector" type="OptionButton" parent="MarginContainer/VBoxContainer/ChapterNavigation" index="1" unique_id=390815465]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "JOURNAL_CHAPTER_SELECTOR"
+theme_override_font_sizes/font_size = 18
+alignment = 1
+
+[node name="NextPageButton" type="Button" parent="MarginContainer/VBoxContainer/ChapterNavigation" index="2" unique_id=991862031]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+tooltip_text = "JOURNAL_NEXT_CHAPTER"
+theme_override_font_sizes/font_size = 18
+text = ">"
+
+[node name="PageDivider" type="HSeparator" parent="MarginContainer/VBoxContainer" index="2" unique_id=116948246]
+layout_mode = 2
+
+[node name="PageHost" type="Control" parent="MarginContainer/VBoxContainer" index="3" unique_id=2031710193]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3

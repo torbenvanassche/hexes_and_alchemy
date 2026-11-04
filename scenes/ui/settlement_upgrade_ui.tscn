@@ -2,14 +2,14 @@
 
 [ext_resource type="PackedScene" uid="uid://dny1dqcanlco0" path="res://tools/custom_window/base_window.tscn" id="1_window"]
 [ext_resource type="Script" uid="uid://bp5uvuxxqwt4" path="res://scripts/ui/settlement_upgrade_ui.gd" id="2_upgrade"]
-[ext_resource type="Theme" uid="uid://dae2b2hfpj0l2" path="res://themes/light.theme" id="3_theme"]
+[ext_resource type="Theme" path="res://themes/game_theme.tres" id="3_theme"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_upgrade"]
-bg_color = Color(0.97, 0.9, 0.76, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+bg_color = Color(0.125, 0.184, 0.227, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
 
 [node name="Window" unique_id=2033956504 node_paths=PackedStringArray("content") instance=ExtResource("1_window")]
 custom_minimum_size = Vector2(460, 0)
@@ -46,21 +46,19 @@ theme_override_constants/separation = 8
 [node name="CurrentLevelLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer/VBoxContainer/CurrentRow" index="0" unique_id=1579134063]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.42, 0.31, 0.2, 1)
 text = "SETTLEMENT_UPGRADE_CURRENT_LEVEL_LABEL"
 uppercase = true
 
 [node name="CurrentLevelValue" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer/VBoxContainer/CurrentRow" index="1" unique_id=2095072131]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.23, 0.14, 0.07, 1)
 text = "1"
 horizontal_alignment = 2
 
 [node name="TopDivider" type="ColorRect" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer/VBoxContainer" index="1" unique_id=430153256]
 custom_minimum_size = Vector2(0, 2)
 layout_mode = 2
-color = Color(0.38, 0.26, 0.14, 0.35)
+color = Color(0.298, 0.353, 0.38, 1)
 
 [node name="NextSection" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer/VBoxContainer" index="2" unique_id=1813422221]
 layout_mode = 2
@@ -68,29 +66,25 @@ theme_override_constants/separation = 3
 
 [node name="NextHeader" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer/VBoxContainer/NextSection" index="0" unique_id=305376917]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.42, 0.31, 0.2, 1)
 text = "SETTLEMENT_UPGRADE_NEXT_HEADER"
 uppercase = true
 
 [node name="NextLevelLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer/VBoxContainer/NextSection" index="1" unique_id=1759005664]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.23, 0.14, 0.07, 1)
 text = "SETTLEMENT_UPGRADE_NEXT"
 
 [node name="UnlockLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer/VBoxContainer/NextSection" index="2" unique_id=1244865855]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.34, 0.23, 0.12, 1)
 text = "SETTLEMENT_UPGRADE_UNLOCK_LEVEL_2"
 autowrap_mode = 3
 
 [node name="RequirementsDivider" type="ColorRect" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer/VBoxContainer" index="3" unique_id=1865374137]
 custom_minimum_size = Vector2(0, 2)
 layout_mode = 2
-color = Color(0.38, 0.26, 0.14, 0.35)
+color = Color(0.298, 0.353, 0.38, 1)
 
 [node name="RequirementsHeader" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer/VBoxContainer" index="4" unique_id=73536892]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.42, 0.31, 0.2, 1)
 text = "SETTLEMENT_UPGRADE_REQUIREMENTS_HEADER"
 uppercase = true
 
@@ -100,13 +94,18 @@ theme_override_constants/separation = 4
 
 [node name="StatusLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer/VBoxContainer" index="6" unique_id=1189407911]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.45, 0.22, 0.08, 1)
 text = "SETTLEMENT_UPGRADE_REQUIREMENTS_MISSING"
 horizontal_alignment = 1
 autowrap_mode = 3
 
 [node name="UpgradeButton" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer/VBoxContainer" index="7" unique_id=1918881094]
+theme_type_variation = &"PrimaryButton"
 custom_minimum_size = Vector2(0, 38)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "SETTLEMENT_UPGRADE_BUTTON"
+
+[node name="ProjectButton" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer/VBoxContainer" index="8"]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+text = "CAMPAIGN_VIEW_PROJECT"

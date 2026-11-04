@@ -19,6 +19,8 @@ var input: InputSettings
 @onready var hub: HubState = $hub_state;
 @onready var operations: OperationManager = $operation_manager;
 @onready var journal: JournalManager = $journal_manager;
+@onready var campaign: SettlementCampaign = $settlement_campaign;
+@onready var transport: TransportManager = $transport_manager
 @onready var reputation: GuildReputation = $guild_reputation;
 @onready var time_of_day: TimeOfDay = $time_of_day;
 @onready var toast: Toast = $"../game_ui/ToastNotifications";
@@ -30,6 +32,7 @@ var settlements: Array[Settlement] = []
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS;
+	SceneManager.bind_game_root(get_parent())
 	instance = self;
 	if hub != null and not hub.changed.is_connected(quests.try_assign_waiting_quests):
 		hub.changed.connect(quests.try_assign_waiting_quests)
@@ -188,6 +191,8 @@ func pause_game(force: bool = !is_paused) -> void:
 		
 func set_active_settlement(settle: Settlement) -> void:
 	active_settlement = settle;
+	if campaign != null:
+		campaign.watch_settlement(settle)
 	
 func get_settlement(interaction: Interaction) -> Settlement:
 	if interaction != null and interaction.settlement != null:

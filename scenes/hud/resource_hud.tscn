@@ -1,52 +1,45 @@
 [gd_scene format=3 uid="uid://dsicy12n7flej"]
 
-[ext_resource type="Script" uid="uid://38wwclgbt8xd" path="res://scripts/ui/resource_hud.gd" id="1_hud"]
-[ext_resource type="Theme" uid="uid://3rlxm8752xjm" path="res://themes/dark.theme" id="2_theme"]
+[ext_resource type="Script" path="res://scripts/ui/resource_hud.gd" id="1_hud"]
+[ext_resource type="Theme" path="res://themes/game_theme.tres" id="2_theme"]
 
-[node name="ResourceHud" type="PanelContainer" unique_id=1641513341]
-custom_minimum_size = Vector2(400, 40)
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -412.0
-offset_top = 12.0
-offset_right = -12.0
-offset_bottom = 52.0
-grow_horizontal = 0
-mouse_force_pass_scroll_events = false
+[node name="ResourceHud" type="PanelContainer"]
+theme_type_variation = &"HudPanel"
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 310.0
+offset_bottom = 64.0
+grow_horizontal = 2
 theme = ExtResource("2_theme")
 script = ExtResource("1_hud")
 
-[node name="Margin" type="MarginContainer" parent="." unique_id=566057598]
+[node name="Margin" type="MarginContainer" parent="."]
 layout_mode = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 6
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 6
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_right = 20
 
-[node name="Content" type="VBoxContainer" parent="Margin" unique_id=1961505266]
+[node name="Content" type="HBoxContainer" parent="Margin"]
 layout_mode = 2
-theme_override_constants/separation = 4
+theme_override_constants/separation = 20
 
-[node name="TimeRow" type="HBoxContainer" parent="Margin/Content" unique_id=1786320768]
-custom_minimum_size = Vector2(0, 22)
+[node name="TimeRow" type="HBoxContainer" parent="Margin/Content"]
 layout_mode = 2
-tooltip_text = "HUD_TIME_TOOLTIP"
-mouse_filter = 0
-mouse_force_pass_scroll_events = false
-theme_override_constants/separation = 8
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
 
-[node name="Day" type="Label" parent="Margin/Content/TimeRow" unique_id=1542952956]
+[node name="Day" type="Label" parent="Margin/Content/TimeRow"]
 layout_mode = 2
-text = "HUD_TIME_DAY"
+size_flags_horizontal = 3
+theme_type_variation = &"MutedLabel"
 
-[node name="Phase" type="Label" parent="Margin/Content/TimeRow" unique_id=1182658623]
+[node name="Phase" type="Label" parent="Margin/Content/TimeRow"]
 layout_mode = 2
 size_flags_horizontal = 3
 horizontal_alignment = 1
+theme_type_variation = &"MutedLabel"
 
-[node name="Clock" type="Label" parent="Margin/Content/TimeRow" unique_id=485898536]
-custom_minimum_size = Vector2(58, 0)
+[node name="Clock" type="Label" parent="Margin/Content/TimeRow"]
 layout_mode = 2
-text = "--:--"
+size_flags_horizontal = 3
 horizontal_alignment = 2
+theme_type_variation = &"MutedLabel"

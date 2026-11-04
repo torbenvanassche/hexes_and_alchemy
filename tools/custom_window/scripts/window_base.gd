@@ -4,8 +4,8 @@ extends Control
 @export_group("Identity")
 @export var id: String = "";
 
-const LOCKED_ICON := preload("res://sprites/ui/icons/locked.png")
-const UNLOCKED_ICON := preload("res://sprites/ui/icons/unlocked.png")
+@export_group("Appearance")
+@export var appearance: WindowAppearance = preload("res://tools/custom_window/default_appearance.tres")
 
 @onready var vp := get_viewport()
 @onready var top_bar: ColorRect = $NinePatchRect/VBoxContainer/topbar;
@@ -26,8 +26,10 @@ var initial_position: Vector2;
 
 @export_group("Layout")
 @export var store_position: bool = false;
+@export_enum("center", "right") var initial_dock := "center"
 @export var override_position: Vector2;
-@export var topbar_height: int = 50;
+## Zero uses the appearance resource's header height.
+@export var topbar_height: int = 0;
 @export var topbar_transparent: bool = false;
 @export var show_title: bool = true;
 
@@ -42,11 +44,15 @@ var scene_instance: SceneInstance
 @export_group("Content")
 @export var content: Control;
 
+## Extension slots for inherited scenes; existing content paths remain compatible.
+@onready var header_actions: HBoxContainer = $NinePatchRect/VBoxContainer/topbar/MarginContainer2/HBoxContainer
+@onready var footer: MarginContainer = $NinePatchRect/VBoxContainer/Footer
+
 signal close_requested();
 signal change_title(name: String);
 
 var dragging := false
-var stored_position:Vector2;
+var stored_position := Vector2.INF
 var resizing := false
 var resize_start_mouse := Vector2.ZERO
 var resize_start_size := Vector2.ZERO
@@ -58,6 +64,7 @@ var _is_fitting := false
 func _ready() -> void:
 	visible = false
 	_prepare_floating_layout()
+	apply_appearance()
 	lock_button.toggled.connect(_set_close_locked)
 	close_button.pressed.connect(close_window.bind(true));
 	close_requested.connect(close_window)
@@ -73,7 +80,7 @@ func _ready() -> void:
 	_update_lock_availability()
 	_set_close_locked(close_locked)
 	
-	top_bar.custom_minimum_size.y = topbar_height
+	top_bar.custom_minimum_size.y = topbar_height if topbar_height > 0 else appearance.header_height
 	_update_resize_handles()
 	
 func _prepare_floating_layout() -> void:
@@ -83,6 +90,48 @@ func _prepare_floating_layout() -> void:
 	anchor_bottom = 0.0
 	grow_horizontal = Control.GROW_DIRECTION_END
 	grow_vertical = Control.GROW_DIRECTION_END
+
+func apply_appearance() -> void:
+	if appearance == null:
+		appearance = preload("res://tools/custom_window/default_appearance.tres")
+	theme = appearance.theme
+	top_bar.color = appearance.header_color
+	top_bar.custom_minimum_size.y = topbar_height if topbar_height > 0 else appearance.header_height
+	title.horizontal_alignment = appearance.title_alignment
+	title.add_theme_font_size_override("font_size", appearance.title_size)
+	for button: Button in [lock_button, close_button]:
+		button.custom_minimum_size = Vector2.ONE * appearance.action_size
+		button.theme_type_variation = &"WindowAction"
+		button.add_theme_constant_override("icon_max_width", appearance.icon_size)
+	var margins := appearance.content_margins
+	for entry in [["margin_left", margins.x], ["margin_top", margins.y], ["margin_right", margins.z], ["margin_bottom", margins.w]]:
+		content_panel.add_theme_constant_override(entry[0], entry[1])
+	if appearance.frame_style != null:
+		$NinePatchRect/Surface.add_theme_stylebox_override("panel", appearance.frame_style)
+	else:
+		$NinePatchRect/Surface.remove_theme_stylebox_override("panel")
+	_update_lock_availability()
+
+## Mount a page from code, or assign Content in an inherited scene.
+func set_content(page: Control) -> void:
+	if content == page:
+		return
+	if is_instance_valid(content):
+		content_panel.remove_child(content)
+	content = page
+	if content != null:
+		content_panel.add_child(content)
+		content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		content.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	request_fit_to_content()
+
+func set_footer(page: Control) -> void:
+	for child in footer.get_children():
+		footer.remove_child(child)
+	footer.visible = page != null
+	if page != null:
+		footer.add_child(page)
+	request_fit_to_content()
 
 func _fit_to_content() -> void:
 	if _is_fitting:
@@ -98,6 +147,11 @@ func _get_content_fit_size() -> Vector2:
 		content_size = content.get_combined_minimum_size() + _get_content_panel_margins()
 		if top_bar.visible:
 			content_size.y += top_bar.get_combined_minimum_size().y
+		if footer.visible:
+			content_size.y += footer.get_combined_minimum_size().y
+	# The content VBox sits one pixel inside each edge of the outer frame.
+	content_size += Vector2(v_box_container.offset_left - v_box_container.offset_right,
+		v_box_container.offset_top - v_box_container.offset_bottom)
 	fit_size = fit_size.max(content_size)
 	return fit_size
 
@@ -125,16 +179,19 @@ func fit_to_content_after_draw() -> void:
 
 func _fit_to_content_deferred(request_id: int, wait_frames: int) -> void:
 	for _i in range(wait_frames + 1):
+		if not is_inside_tree(): return
 		await get_tree().process_frame
-		if request_id != _fit_request_id:
+		if not is_inside_tree() or request_id != _fit_request_id:
 			return
 		_fit_to_content()
 	
 func on_enter() -> void:
+	if not is_inside_tree(): return
 	if scene_instance != null:
 		SceneManager.promote_scene_instance(scene_instance)
 	visible = false
 	_prepare_floating_layout()
+	$NinePatchRect/Surface.visible = display_mode != "none"
 	match display_mode:
 		"fullscreen":
 			top_bar.visible = false;
@@ -147,7 +204,7 @@ func on_enter() -> void:
 			size = custom_minimum_size
 		"none":
 			top_bar.visible = false;
-			npr.self_modulate = Color.TRANSPARENT;
+			$NinePatchRect/Surface.hide()
 			size = custom_minimum_size
 	
 	match position_options:
@@ -170,16 +227,18 @@ func on_enter() -> void:
 			control.on_enter();
 
 	await get_tree().process_frame;
+	if not is_inside_tree(): return
 
 	if resizable and store_position and stored_size != Vector2.ZERO:
 		size = _clamp_window_size(stored_size)
 	else:
 		await fit_to_content_settled(2)
+	if not is_inside_tree(): return
 
-	if store_position:
+	if store_position and stored_position.is_finite():
 		position = stored_position;
 	else:
-		position = initial_position - size / 2;
+		position = _get_initial_position()
 
 	var previous_modulate := modulate
 	var hidden_layout_modulate := modulate
@@ -187,14 +246,20 @@ func on_enter() -> void:
 	modulate = hidden_layout_modulate
 	visible = true;
 	await get_tree().process_frame;
+	if not is_inside_tree(): return
 	_fit_to_content()
-	if store_position:
+	if store_position and stored_position.is_finite():
 		position = stored_position;
 	else:
-		position = initial_position - size / 2;
+		position = _get_initial_position()
 	modulate = previous_modulate
 	if scene_instance != null:
 		SceneManager.promote_scene_instance(scene_instance)
+
+func _get_initial_position() -> Vector2:
+	if initial_dock == "right":
+		return Vector2(maxf(0.0, get_viewport_rect().size.x - size.x - 20.0), 66.0)
+	return initial_position - size / 2
 
 func _change_title(s: String) -> void:
 	title.text = tr(s);
@@ -202,7 +267,7 @@ func _change_title(s: String) -> void:
 func handle_input(event: InputEvent) -> void:
 	if resizing:
 		return
-	if event is InputEventMouseButton:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed and scene_instance != null:
 			SceneManager.promote_scene_instance(scene_instance)
 		dragging = event.pressed
@@ -282,9 +347,10 @@ func _update_resize_handles() -> void:
 func _set_close_locked(locked: bool) -> void:
 	close_locked = can_lock and locked
 	lock_button.button_pressed = close_locked
-	lock_button.icon = LOCKED_ICON if close_locked else UNLOCKED_ICON
+	lock_button.icon = appearance.locked_icon if close_locked else appearance.unlocked_icon
 	lock_button.tooltip_text = tr("WINDOW_KEEP_OPEN") if not close_locked else tr("WINDOW_ALLOW_CLOSE")
 
 func _update_lock_availability() -> void:
 	lock_button.visible = can_lock
-	title_margin.add_theme_constant_override("margin_left", 80 if can_lock else 40)
+	title_margin.add_theme_constant_override("margin_left", 20)
+	title_margin.add_theme_constant_override("margin_right", (appearance.action_size + 8) * (2 if can_lock else 1) + 12)

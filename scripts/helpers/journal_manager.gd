@@ -4,6 +4,20 @@ class_name JournalManager extends Node
 
 signal journal_changed()
 
+func _ready() -> void:
+	for index in entries.size():
+		entries[index] = entries[index].duplicate(true)
+
+func unlock_entry(entry_id: String) -> bool:
+	for resource in entries:
+		var entry := resource as JournalEntry
+		if entry == null or entry.id != entry_id: continue
+		if not entry.unlocked:
+			entry.unlocked = true
+			journal_changed.emit()
+		return true
+	return false
+
 func complete_task(task_id: String) -> bool:
 	return set_task_completed(task_id, true)
 

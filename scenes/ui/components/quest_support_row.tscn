@@ -3,16 +3,16 @@
 [ext_resource type="Script" uid="uid://d1khd8rl1w2fd" path="res://scripts/ui/quest_support_row_ui.gd" id="1_script"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_support"]
-bg_color = Color(0.74, 0.62, 0.42, 0.16)
+bg_color = Color(0.125, 0.184, 0.227, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.38, 0.26, 0.14, 0.35)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+border_color = Color(0.298, 0.353, 0.38, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
 
 [node name="QuestSupportRow" type="PanelContainer" unique_id=1565688841]
 size_flags_horizontal = 3
@@ -32,9 +32,12 @@ size_flags_horizontal = 3
 theme_override_constants/separation = 8
 
 [node name="SelectionToggle" type="CheckBox" parent="Margin/Content" unique_id=636265364]
-custom_minimum_size = Vector2(28, 0)
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
-focus_mode = 1
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_type_variation = &"SquareCheck"
+focus_mode = 2
 
 [node name="Copy" type="VBoxContainer" parent="Margin/Content" unique_id=1125138049]
 layout_mode = 2
@@ -49,25 +52,58 @@ theme_override_constants/separation = 8
 [node name="SupportName" type="Label" parent="Margin/Content/Copy/Header" unique_id=1443008575]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.28, 0.18, 0.09, 1)
 theme_override_font_sizes/font_size = 15
 
 [node name="Availability" type="Label" parent="Margin/Content/Copy/Header" unique_id=930049446]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.45, 0.27, 0.12, 1)
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 14
 horizontal_alignment = 2
 
 [node name="Description" type="Label" parent="Margin/Content/Copy" unique_id=1176893217]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.34, 0.24, 0.14, 1)
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 14
 autowrap_mode = 3
 
-[node name="Impact" type="Label" parent="Margin/Content/Copy" unique_id=178083570]
+[node name="Impact" type="HBoxContainer" parent="Margin/Content/Copy"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.48, 0.28, 0.1, 1)
-theme_override_font_sizes/font_size = 11
-autowrap_mode = 3
+theme_override_constants/separation = 8
+
+[node name="RiskIcon" type="TextureRect" parent="Margin/Content/Copy/Impact"]
+layout_mode = 2
+custom_minimum_size = Vector2(24, 24)
+size_flags_vertical = 4
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 0
+
+[node name="RiskLabel" type="Label" parent="Margin/Content/Copy/Impact"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "QUEST_DETAIL_RISK_LABEL"
+
+[node name="Spacer" type="Control" parent="Margin/Content/Copy/Impact"]
+layout_mode = 2
+custom_minimum_size = Vector2(8, 0)
+
+[node name="DangerLabel" type="Label" parent="Margin/Content/Copy/Impact"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "QUEST_SUPPORT_DANGER"
+
+[node name="Danger" type="HSlider" parent="Margin/Content/Copy/Impact"]
+layout_mode = 2
+custom_minimum_size = Vector2(80, 24)
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_type_variation = &"DangerMeter"
+editable = false
+focus_mode = 0
+mouse_filter = 0
+
+[node name="DangerValue" type="Label" parent="Margin/Content/Copy/Impact"]
+layout_mode = 2
+custom_minimum_size = Vector2(36, 0)
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 2

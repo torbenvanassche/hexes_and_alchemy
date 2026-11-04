@@ -4,12 +4,19 @@ const BOUNDARY_EDGE_META := &"settlement_boundary_edge"
 
 @export var spawn_position: Node3D;
 @export var is_active_settlement: bool = false;
+## Passive world settlements stay hidden until the player explores their tiles.
+@export var reveal_on_spawn := true
+## Disable for neighbouring settlements that the player does not own.
+@export var allows_player_construction := true
 @export var level: int = 1;
 @export var upgrade_requirements: Array[SettlementUpgradeInfo] = []
 @export var boundary_wall_scene: PackedScene = preload("uid://dgx2trjwvt0vn")
 @export var structure_invalid_range: int = 3;
 @export var settlement_tile_anchors: Array[NodePath] = []
 @export_range(0, 8, 1) var initial_footprint_radius: int = 0
+## Child paths mapped to cube offsets from the settlement's origin hex.
+## Moves the complete building, including collisions, onto the actual grid surface.
+@export var building_hex_offsets: Dictionary[NodePath, Vector3i] = {}
 @export_group("Settlement Reveal")
 @export_range(1, 32, 1) var reveal_search_range: int = 8;
 @export var show_reveal_debug_shape: bool = false;
@@ -57,12 +64,28 @@ func _ready_deferred() -> void:
 	var origin_hex := _get_settlement_origin_hex(grid)
 	if origin_hex == null:
 		return
+	_align_buildings_to_grid(grid, origin_hex)
 
 	var settlement_hexes := get_settlement_hexes(grid)
-	for hex in settlement_hexes:
-		hex.is_explored = true
+	if reveal_on_spawn:
+		for hex in settlement_hexes:
+			hex.is_explored = true
 
 	_render_reveal_debug_shape(grid, settlement_hexes)
+
+func _align_buildings_to_grid(grid: HexGrid, origin: HexBase) -> void:
+	for path: NodePath in building_hex_offsets:
+		var building := get_node_or_null(path) as Node3D
+		var tile := grid.get_hex_at_cube_id(origin.cube_id + building_hex_offsets[path])
+		if building != null and tile != null:
+			building.global_position = tile.global_position
+
+func _exit_tree() -> void:
+	if is_instance_valid(Manager.instance):
+		Manager.instance.settlements.erase(self)
+	var grid := _get_active_grid()
+	if is_instance_valid(grid):
+		grid.invalidate_settlement_structure_exclusion_cache()
 
 func _get_active_grid() -> HexGrid:
 	var active_scene := SceneManager.get_active_scene()

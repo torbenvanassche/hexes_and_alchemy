@@ -18,11 +18,13 @@ enum TradeMode { BUY, SELL }
 var buy_inventory: ContentGroup
 var sell_inventory: ContentGroup
 var player_inventory: ContentGroup
-var trade_mode: TradeMode = TradeMode.SELL
+var trade_mode: TradeMode = TradeMode.BUY
 var is_setup := false
 var pending_setup := false
+var shipment_destination := Vector3i.MAX
 
 func _ready() -> void:
+	$TopRow/Shipments.pressed.connect(_open_shipments)
 	_connect_tabs()
 	_connect_market_signals()
 	if scroll_container != null and not scroll_container.resized.is_connected(_on_market_layout_resized):
@@ -33,6 +35,7 @@ func _ready() -> void:
 		_finish_setup()
 
 func setup(_buy_inventory: ContentGroup, _sell_inventory: ContentGroup, _player_inventory: ContentGroup) -> void:
+	set_shipment_destination(Vector3i.MAX)
 	buy_inventory = _buy_inventory
 	sell_inventory = _sell_inventory
 	player_inventory = _player_inventory
@@ -41,15 +44,27 @@ func setup(_buy_inventory: ContentGroup, _sell_inventory: ContentGroup, _player_
 		return
 	_finish_setup()
 
+func set_shipment_destination(coord: Vector3i) -> void:
+	shipment_destination = coord
+	if is_node_ready(): $TopRow/Shipments.visible = coord != Vector3i.MAX
+
+func _open_shipments() -> void:
+	if shipment_destination == Vector3i.MAX: return
+	var ancestor := get_parent()
+	while ancestor != null and not ancestor is DraggableControl: ancestor = ancestor.get_parent()
+	if ancestor is DraggableControl: ancestor.hide()
+	Manager.instance.transport.open_window(shipment_destination)
+
 func _finish_setup() -> void:
 	pending_setup = false
 	is_setup = true
 	_connect_inventory_signals()
-	_set_trade_mode(TradeMode.SELL)
+	_set_trade_mode(TradeMode.BUY)
 	call_deferred("_rebuild_market")
 
 func on_enter() -> void:
 	_apply_window_limits()
+	_update_title()
 	call_deferred("_rebuild_market")
 
 func _connect_tabs() -> void:
@@ -98,6 +113,14 @@ func _update_tabs() -> void:
 		buy_tab_button.button_pressed = trade_mode == TradeMode.BUY
 	if sell_tab_button:
 		sell_tab_button.button_pressed = trade_mode == TradeMode.SELL
+	_update_title()
+
+func _update_title() -> void:
+	var frame := get_parent()
+	while frame != null and not frame is DraggableControl:
+		frame = frame.get_parent()
+	if frame is DraggableControl:
+		frame.change_title.emit("MARKET_TITLE_BUY" if trade_mode == TradeMode.BUY else "MARKET_TITLE_SELL")
 
 func _update_currency() -> void:
 	if currency_label and Manager.instance:
@@ -107,7 +130,7 @@ func _on_market_layout_resized() -> void:
 	call_deferred("_apply_tile_widths")
 
 func _rebuild_market() -> void:
-	if not is_node_ready() or item_grid == null:
+	if not is_node_ready() or not is_inside_tree() or item_grid == null:
 		return
 	_update_currency()
 	_set_empty_message("")
@@ -181,6 +204,9 @@ func _get_tile_width() -> float:
 	var available_width := scroll_container.size.x
 	if available_width <= 0.0:
 		available_width = scroll_container.custom_minimum_size.x
+	var scrollbar := scroll_container.get_v_scroll_bar()
+	if scrollbar.visible or scroll_container.vertical_scroll_mode == ScrollContainer.SCROLL_MODE_RESERVE:
+		available_width -= scrollbar.get_combined_minimum_size().x + scroll_container.get_theme_constant("scrollbar_h_separation")
 	var total_gap := item_grid.get_theme_constant("h_separation") * (column_count - 1)
 	return floor(maxf(0.0, available_width - total_gap) / column_count)
 

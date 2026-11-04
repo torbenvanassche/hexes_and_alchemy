@@ -6,28 +6,31 @@ const SLOT_ARMOR := &"armor"
 const SLOT_TOOL := &"tool"
 const SLOT_ACCESSORY := &"accessory"
 
-@onready var name_label: Label = $MarginContainer/VBoxContainer/Header/NameLabel
-@onready var rank_label: Label = $MarginContainer/VBoxContainer/Header/RankLabel
-@onready var status_label: Label = $MarginContainer/VBoxContainer/StatusLabel
-@onready var identity_label: Label = $MarginContainer/VBoxContainer/IdentityLabel
-@onready var role_label: Label = $MarginContainer/VBoxContainer/RoleLabel
-@onready var traits_label: Label = $MarginContainer/VBoxContainer/TraitsLabel
-@onready var earnings_label: Label = $MarginContainer/VBoxContainer/EarningsLabel
-@onready var injuries_label: Label = $MarginContainer/VBoxContainer/InjuriesLabel
-@onready var career_label: Label = $MarginContainer/VBoxContainer/CareerLabel
-@onready var retire_button: Button = $MarginContainer/VBoxContainer/RetireButton
-@onready var slots_grid: GridContainer = $MarginContainer/VBoxContainer/SlotsGrid
+@onready var name_label: Label = %NameLabel
+@onready var rank_label: Label = %RankLabel
+@onready var status_label: Label = %StatusLabel
+@onready var identity_label: Label = %IdentityLabel
+@onready var role_label: Label = %RoleLabel
+@onready var traits_label: Label = %TraitsLabel
+@onready var earnings_label: Label = %EarningsLabel
+@onready var injuries_label: Label = %InjuriesLabel
+@onready var career_label: Label = %CareerLabel
+@onready var retire_button: Button = %RetireButton
+@onready var slots_grid: GridContainer = $MarginContainer/Scroll/Body/SlotsGrid
 @onready var equipment_slot_uis: Dictionary[StringName, EquipmentSlotUI] = {
-	SLOT_WEAPON: $MarginContainer/VBoxContainer/SlotsGrid/Weapon/Slot,
-	SLOT_ARMOR: $MarginContainer/VBoxContainer/SlotsGrid/Armor/Slot,
-	SLOT_TOOL: $MarginContainer/VBoxContainer/SlotsGrid/Tool/Slot,
-	SLOT_ACCESSORY: $MarginContainer/VBoxContainer/SlotsGrid/Accessory/Slot,
+	SLOT_WEAPON: %WeaponSlot,
+	SLOT_ARMOR: %ArmorSlot,
+	SLOT_TOOL: %ToolSlot,
+	SLOT_ACCESSORY: %AccessorySlot,
 }
 
 var npc: NPC
 var equipment_slots: Dictionary[StringName, ContentSlotResource] = {}
 
 func setup_npc(selected_npc: NPC) -> void:
+	if is_instance_valid(npc):
+		if npc.rest_progress_changed.is_connected(_refresh_condition): npc.rest_progress_changed.disconnect(_refresh_condition)
+		if npc.tree_exiting.is_connected(_on_npc_exiting): npc.tree_exiting.disconnect(_on_npc_exiting)
 	if npc != null and npc.activity_changed.is_connected(_refresh_npc_activity):
 		npc.activity_changed.disconnect(_refresh_npc_activity)
 	if npc != null and npc.injuries_changed.is_connected(_refresh_npc_activity):
@@ -35,6 +38,9 @@ func setup_npc(selected_npc: NPC) -> void:
 	if npc != null and npc.rank_progress_changed.is_connected(_refresh):
 		npc.rank_progress_changed.disconnect(_refresh)
 	npc = selected_npc
+	if is_instance_valid(npc):
+		npc.rest_progress_changed.connect(_refresh_condition)
+		npc.tree_exiting.connect(_on_npc_exiting)
 	if npc != null and npc.equipment == null:
 		npc.equipment = NpcEquipmentSlots.new()
 	if npc != null and not npc.activity_changed.is_connected(_refresh_npc_activity):
@@ -70,16 +76,15 @@ func _refresh() -> void:
 		return
 
 	name_label.text = _get_npc_display_name()
-	rank_label.text = tr("ADVENTURER_ROSTER_RANK") % npc.get_rank_progress_label()
-	status_label.text = npc.get_activity_status_label()
-	identity_label.text = tr("UI_LABEL_VALUE") % [tr("NPC_PROFESSION"), npc.get_profession_label()]
+	rank_label.text = npc.get_rank_progress_label()
+	identity_label.text = "%s · %s" % [npc.get_profession_label(), npc.get_role_label()]
 	role_label.text = tr("UI_LABEL_VALUE") % [tr("NPC_ROLE"), npc.get_role_label()]
-	traits_label.text = tr("UI_LABEL_VALUE") % [tr("NPC_TRAITS"), npc.get_traits_label()]
+	traits_label.text = npc.get_traits_label()
 	earnings_label.text = tr("UI_LABEL_VALUE") % [tr("NPC_EARNINGS"), npc.earned_currency]
-	injuries_label.text = tr("UI_LABEL_VALUE") % [tr("NPC_INJURIES"), npc.get_injuries_label()]
+	_refresh_condition()
 	var rules := npc.recovery_rules if npc.recovery_rules != null else AdventurerRecoveryRules.new()
 	var remaining := maxi(0, ceili(rules.automatic_retirement_seconds - npc.career_age_seconds))
-	career_label.text = tr("NPC_CAREER_REMAINING") % remaining if rules.automatic_retirement_seconds > 0.0 else tr("NPC_CAREER_UNLIMITED")
+	career_label.text = tr("NPC_CAREER_REMAINING") % remaining if rules.automatic_retirement_seconds > 0.0 else tr("NPC_CAREER_ACTIVE")
 	retire_button.disabled = not npc.can_retire()
 	retire_button.text = tr("NPC_RETIRE_INJURED_BUTTON") if npc.is_severely_injured() else tr("NPC_RETIRE_BUTTON")
 	_update_window_title()
@@ -89,6 +94,20 @@ func _refresh() -> void:
 	_set_equipment_slot(SLOT_TOOL, tr("NPC_EQUIPMENT_TOOL"), npc.equipment.tool)
 	_set_equipment_slot(SLOT_ACCESSORY, tr("NPC_EQUIPMENT_ACCESSORY"), npc.equipment.accessory)
 	_request_window_fit()
+
+func _refresh_condition(_person: NPC = null) -> void:
+	if not is_instance_valid(npc) or not is_node_ready(): return
+	status_label.text = npc.get_activity_status_label()
+	status_label.modulate = Color("a8bb92") if npc.is_available_for_quest() else Color("c5aa76")
+	injuries_label.text = tr("UI_LABEL_VALUE") % [tr("NPC_INJURIES"), npc.get_injuries_label()] if not npc.active_injuries.is_empty() else tr("NPC_CONDITION_HEALTHY")
+	%RecoveryBar.visible = npc.rest_remaining_seconds > 0.0
+	%RecoveryBar.value = npc.get_rest_progress_ratio() * 100.0
+	%RecoveryBar.tooltip_text = npc.get_activity_status_label()
+
+func _on_npc_exiting() -> void:
+	npc = null
+	%RecoveryBar.hide()
+	_refresh()
 
 func _refresh_npc_activity(_npc: NPC) -> void:
 	if npc != null and is_instance_valid(npc):
@@ -182,7 +201,7 @@ func _get_npc_display_name() -> String:
 func _update_window_title() -> void:
 	var window := _get_window()
 	if window != null:
-		window.change_title.emit(_get_npc_display_name())
+		window.change_title.emit(tr("SCENE_NPC_DETAILS_UI_NAME"))
 
 func _request_window_fit() -> void:
 	var window := _get_window()

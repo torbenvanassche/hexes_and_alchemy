@@ -1,0 +1,102 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/settlement_project_ui.gd" id="1_script"]
+[ext_resource type="Theme" path="res://themes/game_theme.tres" id="2_theme"]
+
+[node name="ProjectsPage" type="MarginContainer"]
+theme = ExtResource("2_theme")
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 8
+script = ExtResource("1_script")
+
+[node name="Body" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Scroll" type="ScrollContainer" parent="Body"]
+size_flags_vertical = 3
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Content" type="VBoxContainer" parent="Body/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="Body/Scroll/Content"]
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_font_sizes/font_size = 24
+text = "CAMPAIGN_FORGE_TITLE"
+autowrap_mode = 3
+
+[node name="Purpose" type="Label" parent="Body/Scroll/Content"]
+layout_mode = 2
+text = "CAMPAIGN_FORGE_PURPOSE"
+autowrap_mode = 3
+
+[node name="ProjectRule" type="HSeparator" parent="Body/Scroll/Content"]
+layout_mode = 2
+
+[node name="Step" type="Label" parent="Body/Scroll/Content"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+autowrap_mode = 3
+
+[node name="Guidance" type="Label" parent="Body/Scroll/Content"]
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="Materials" type="VBoxContainer" parent="Body/Scroll/Content"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Treasury" type="Label" parent="Body/Scroll/Content"]
+visible = false
+layout_mode = 2
+
+[node name="ActionRule" type="HSeparator" parent="Body/Scroll/Content"]
+layout_mode = 2
+
+[node name="Primary" type="Button" parent="Body/Scroll/Content"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_type_variation = &"PrimaryButton"
+
+[node name="Choices" type="Label" parent="Body/Scroll/Content"]
+visible = false
+layout_mode = 2
+text = "CAMPAIGN_FORGE_CHOICES"
+autowrap_mode = 3
+
+[node name="Alternatives" type="HBoxContainer" parent="Body/Scroll/Content"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Market" type="Button" parent="Body/Scroll/Content/Alternatives"]
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+text = "CAMPAIGN_ACTION_MARKET"
+
+[node name="Board" type="Button" parent="Body/Scroll/Content/Alternatives"]
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+text = "CAMPAIGN_ACTION_BOARD"
+
+[node name="Controls" type="Label" parent="Body/Scroll/Content"]
+visible = false
+layout_mode = 2
+text = "CAMPAIGN_CONTROLS"
+autowrap_mode = 3
+
+[node name="TradeDivider" type="HSeparator" parent="Body/Scroll/Content"]
+layout_mode = 2
+
+[node name="Trade" type="Button" parent="Body/Scroll/Content"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 36)
+text = "SHIPMENT_OPEN"

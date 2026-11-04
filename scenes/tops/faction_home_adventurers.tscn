@@ -3,7 +3,6 @@
 [ext_resource type="PackedScene" uid="uid://p081ooi4rb0h" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_barracks_blue.glb" id="1_mesh"]
 [ext_resource type="Script" uid="uid://divtx1ti2jrhu" path="res://scripts/interactions/interactable_locations/faction_home.gd" id="2_home"]
 [ext_resource type="Resource" uid="uid://c4slhs80lvehm" path="res://resources/scene_info/adventurer.tres" id="3_member"]
-[ext_resource type="Resource" uid="uid://c02vjxha4podp" path="res://resources/scene_info/ui/tavern_roster_ui.tres" id="5_roster"]
 [ext_resource type="Resource" path="res://resources/npc_info/delver_adventurer.tres" id="6_delver"]
 [ext_resource type="Resource" uid="uid://c8hkdge0pvgtn" path="res://resources/npc_info/basic_adventurer.tres" id="7_adventurer"]
 [ext_resource type="Script" uid="uid://du4hbbtmblkj0" path="res://tools/quest_system/scripts/npc_info.gd" id="8_npc_info"]
@@ -24,7 +23,6 @@ member_scene = ExtResource("3_member")
 member_spawn = NodePath("spawn_location")
 roster_capacity = 20
 starting_npc_profiles = Array[ExtResource("8_npc_info")]([ExtResource("6_delver"), ExtResource("7_adventurer"), ExtResource("10_scout"), ExtResource("11_crafter"), ExtResource("12_warden")])
-additional_ui = Array[ExtResource("9_scene_info")]([ExtResource("5_roster")])
 
 [node name="Root Scene" parent="." unique_id=559513159 instance=ExtResource("1_mesh")]
 

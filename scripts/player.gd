@@ -45,12 +45,12 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 
 	if event.is_action_pressed("journal"):
-		toggle_hub_tab("journal")
+		toggle_journal()
 		get_viewport().set_input_as_handled()
 		return
 
 	if event.is_action_pressed("hub"):
-		toggle_hub_tab("operations")
+		toggle_journal()
 		get_viewport().set_input_as_handled()
 		return
 	
@@ -74,7 +74,14 @@ func toggle_inventory() -> void:
 	toggle_hub_tab("inventory")
 
 func toggle_journal() -> void:
-	toggle_hub_tab("journal")
+	var journal_scene := DataManager.instance.get_scene_by_name("hub_window")
+	if journal_scene == null:
+		return
+	for instance in journal_scene.get_live_instances():
+		if SceneManager.is_visible(instance):
+			(instance.node as DraggableControl).close_requested.emit()
+			return
+	journal_scene.queue(_open_hub_window.bind("projects"))
 
 func toggle_hub_tab(tab_id: String) -> void:
 	if DataManager.instance == null:
@@ -96,14 +103,33 @@ func toggle_hub_tab(tab_id: String) -> void:
 		return
 	hub_window.queue(_open_hub_window.bind(tab_id))
 
-func _open_hub_window(window_info: SceneInfo, tab_id: String) -> void:
+## Location interactions open a page without toggling an already-open journal shut.
+func open_hub_tab(tab_id: String, faction_id: StringName = &"") -> void:
+	var hub_window := DataManager.instance.get_scene_by_name("hub_window")
+	if hub_window == null:
+		return
+	for instance: SceneInstance in hub_window.get_live_instances():
+		if SceneManager.is_visible(instance):
+			var journal := (instance.node as DraggableControl).content as HubWindowUI
+			if tab_id == "people":
+				journal.show_people(faction_id)
+			else:
+				journal.show_tab(tab_id)
+			SceneManager.promote_scene_instance(instance)
+			return
+	hub_window.queue(_open_hub_window.bind(tab_id, faction_id))
+
+func _open_hub_window(window_info: SceneInfo, tab_id: String, faction_id: StringName = &"") -> void:
 	var window_instance := SceneManager.add(window_info, false)
 	if window_instance == null:
 		return
 	var window := window_instance.node as DraggableControl
 	var hub_ui := window.content as HubWindowUI if window != null else null
 	if hub_ui != null:
-		hub_ui.show_tab(tab_id)
+		if tab_id == "people":
+			hub_ui.show_people(faction_id)
+		else:
+			hub_ui.show_tab(tab_id)
 	window_instance.on_enter.emit()
 
 func set_return_position() -> void:

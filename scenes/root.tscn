@@ -26,6 +26,16 @@
 [ext_resource type="PackedScene" uid="uid://dsicy12n7flej" path="res://scenes/hud/resource_hud.tscn" id="57_resource_hud"]
 [ext_resource type="PackedScene" uid="uid://rw8d36yv38k" path="res://scenes/ui/components/toast_notification.tscn" id="64_toast_notification"]
 [ext_resource type="Resource" path="res://resources/catalogs/default_game_content.tres" id="70_game_catalog"]
+[ext_resource type="Script" path="res://scripts/helpers/settlement_campaign.gd" id="71_campaign"]
+[ext_resource type="Script" path="res://scripts/transport/transport_manager.gd" id="79_transport"]
+[ext_resource type="PackedScene" path="res://scenes/hud/settlement_project_hud.tscn" id="72_project_hud"]
+[ext_resource type="Script" path="res://tools/inventory/scripts/data/item_info.gd" id="73_item"]
+[ext_resource type="Resource" path="res://resources/item_info/seed_pouch.tres" id="74_seeds"]
+[ext_resource type="Resource" path="res://resources/item_info/bucket.tres" id="75_bucket"]
+[ext_resource type="Resource" path="res://resources/item_info/travel_rations.tres" id="76_rations"]
+[ext_resource type="Resource" path="res://resources/journal_entries/settlement_opening.tres" id="77_opening"]
+[ext_resource type="Resource" path="res://resources/journal_entries/regional_trade.tres" id="80_trade"]
+[ext_resource type="PackedScene" path="res://scenes/hud/guild_navigation.tscn" id="78_navigation"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_j5px3"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -56,14 +66,25 @@ script = ExtResource("4_quests")
 
 [node name="hub_state" type="Node" parent="game_manager" unique_id=753584499]
 script = ExtResource("4_hub_state")
-starting_currency = 500
-seed_test_inventory = true
+starting_currency = 100
+starting_items = Dictionary[ExtResource("73_item"), int]({
+ExtResource("74_seeds"): 2,
+ExtResource("75_bucket"): 1,
+ExtResource("76_rations"): 2
+})
 
 [node name="operation_manager" type="Node" parent="game_manager" unique_id=1954499007]
 script = ExtResource("4_operation_manager")
 
 [node name="journal_manager" type="Node" parent="game_manager" unique_id=1453624016]
 script = ExtResource("4_journal_manager")
+entries = Array[Resource]([ExtResource("77_opening"), ExtResource("80_trade")])
+
+[node name="settlement_campaign" type="Node" parent="game_manager"]
+script = ExtResource("71_campaign")
+
+[node name="transport_manager" type="Node" parent="game_manager"]
+script = ExtResource("79_transport")
 
 [node name="guild_reputation" type="Node" parent="game_manager" unique_id=977987457]
 script = ExtResource("4_guild_reputation")
@@ -105,6 +126,7 @@ max_pan_distance = 8.0
 [node name="game_ui" type="CanvasLayer" parent="." unique_id=2127553330]
 
 [node name="WorldSeedLabel" type="Label" parent="game_ui" unique_id=1260050116]
+visible = false
 offset_left = 10.0
 offset_top = 10.0
 offset_right = 260.0
@@ -157,3 +179,7 @@ mouse_filter = 2
 theme_override_constants/separation = 8
 
 [node name="resource_hud" parent="game_ui" unique_id=1817972187 instance=ExtResource("57_resource_hud")]
+
+[node name="settlement_project" parent="game_ui" instance=ExtResource("72_project_hud")]
+
+[node name="guild_navigation" parent="game_ui" instance=ExtResource("78_navigation")]

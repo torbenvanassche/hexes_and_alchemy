@@ -9,6 +9,14 @@
 [ext_resource type="Resource" uid="uid://oowfm1lpkvm" path="res://resources/item_info/wood_log.tres" id="4_wood"]
 [ext_resource type="Resource" uid="uid://o03k1cg30nlw" path="res://resources/item_info/iron_ore.tres" id="5_iron"]
 [ext_resource type="Resource" uid="uid://s7exnodoxb8d" path="res://resources/item_info/forge_blueprint.tres" id="6_forge_blueprint"]
+[ext_resource type="Resource" path="res://resources/item_info/wood_raw.tres" id="7_raw_wood"]
+
+[sub_resource type="Resource" id="Resource_raw_wood"]
+script = ExtResource("2_7hx24")
+content = ExtResource("7_raw_wood")
+count = 6
+maxcount = 6
+is_unlocked = true
 
 [sub_resource type="Resource" id="Resource_dc7o2"]
 script = ExtResource("2_7hx24")
@@ -50,12 +58,12 @@ size = Vector3(1.8043289, 1.0020065, 1.2592618)
 
 [node name="market" type="Node3D" unique_id=2075765343]
 script = ExtResource("2_dxohp")
-buy_menu = Array[ExtResource("2_7hx24")]([SubResource("Resource_dc7o2"), SubResource("Resource_wood"), SubResource("Resource_iron"), SubResource("Resource_forge_blueprint")])
+buy_menu = Array[ExtResource("2_7hx24")]([SubResource("Resource_dc7o2"), SubResource("Resource_raw_wood"), SubResource("Resource_wood"), SubResource("Resource_iron"), SubResource("Resource_forge_blueprint")])
 
 [node name="BuyInventory" type="Node" parent="." unique_id=309232762]
 script = ExtResource("1_xlvr5")
-unlocked_slots = 4
-max_slots = 4
+unlocked_slots = 5
+max_slots = 5
 metadata/_custom_type_script = "uid://b6rgx41co3bur"
 
 [node name="SellInventory" type="Node" parent="." unique_id=709316836]

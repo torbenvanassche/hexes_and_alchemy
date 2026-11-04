@@ -43,4 +43,4 @@ func _get_state_color(operation_state: HubOperation.State) -> Color:
 			return QuestStatePresentation.TRAVEL_COLOR
 		HubOperation.State.IN_PROGRESS:
 			return QuestStatePresentation.ACTIVE_COLOR
-	return Color(0.42, 0.31, 0.2, 1)
+	return GameUI.MUTED

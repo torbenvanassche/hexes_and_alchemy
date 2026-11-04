@@ -5,11 +5,29 @@ class_name MainGrid extends HexGrid
 @export_group("Starter Progression")
 @export var required_starting_structures: Array[StructureInfo] = []
 @export_range(1, 64, 1) var required_structure_max_walk_distance := 24
+@export_group("Nearby Settlement")
+## One passive settlement is placed before resource scattering. Empty disables it.
+@export var nearby_settlement: StructureInfo
+## Walking distance in hex steps from the main settlement's centre.
+@export_range(1, 128, 1) var settlement_min_walk_distance := 8
+@export_range(1, 128, 1) var settlement_max_walk_distance := 16
 const REQUIRED_PLACEMENT_STANDARD := 0
 const REQUIRED_PLACEMENT_ALLOW_EXCLUDED := 1
 const REQUIRED_PLACEMENT_ALLOW_SETTLEMENT_SPACING := 2
 const REQUIRED_PLACEMENT_ALLOW_RESERVED := 3
 var _required_starting_structure_coords: Dictionary[StructureInfo, Array] = {}
+
+func _get_required_structures() -> Array[StructureInfo]:
+	var structures: Array[StructureInfo] = required_starting_structures.duplicate()
+	if nearby_settlement != null and not structures.has(nearby_settlement):
+		structures.append(nearby_settlement)
+	return structures
+
+func _within_required_walk_range(structure: StructureInfo, distance: int) -> bool:
+	if structure == nearby_settlement:
+		var minimum := maxi(1, settlement_min_walk_distance)
+		return distance >= minimum and distance <= maxi(minimum, settlement_max_walk_distance)
+	return distance <= required_structure_max_walk_distance
 
 func _ready() -> void:
 	super();
@@ -69,7 +87,7 @@ func _register_navigation_obstacles() -> void:
 
 func _place_required_starting_structures() -> bool:
 	_required_starting_structure_coords.clear()
-	if required_starting_structures.is_empty():
+	if _get_required_structures().is_empty():
 		return true
 	var origin_hex := _get_starter_origin_hex()
 	if origin_hex == null:
@@ -105,7 +123,10 @@ func _place_required_starting_structures() -> bool:
 		missing_structures = failed_structures
 
 	for required_structure in missing_structures:
-		Debug.err("Could not place required starting structure: %s" % required_structure.id)
+		if required_structure == nearby_settlement:
+			Debug.err("Could not place nearby settlement '%s' within %d–%d walking steps. Adjust Nearby Settlement distance limits or generate a larger world." % [required_structure.id, settlement_min_walk_distance, maxi(settlement_min_walk_distance, settlement_max_walk_distance)])
+		else:
+			Debug.err("Could not place required starting structure: %s" % required_structure.id)
 	return false
 
 func _get_starter_origin_hex() -> HexBase:
@@ -114,15 +135,18 @@ func _get_starter_origin_hex() -> HexBase:
 	return Manager.instance.active_settlement.get_parent() as HexBase
 
 func _get_walk_reachable_distances(origin: HexBase) -> Dictionary:
+	var max_distance := required_structure_max_walk_distance
+	if nearby_settlement != null:
+		max_distance = maxi(max_distance, maxi(settlement_min_walk_distance, settlement_max_walk_distance))
 	return pathfinder.get_reachable_distances(
 		origin.cube_id,
-		required_structure_max_walk_distance
+		max_distance
 	)
 
 func _collect_missing_required_structures(reachable_distances: Dictionary) -> Array[StructureInfo]:
 	var missing: Array[StructureInfo] = []
 	var claimed_existing: Dictionary[Vector3i, bool] = {}
-	for required_structure in required_starting_structures:
+	for required_structure in _get_required_structures():
 		if required_structure == null:
 			continue
 		var existing_coord := _find_existing_required_structure(
@@ -149,6 +173,8 @@ func _find_existing_required_structure(
 				if region_instance.structures[cube_id] != required_structure:
 					continue
 				if not reachable_distances.has(cube_id) or claimed_existing.has(cube_id):
+					continue
+				if not _within_required_walk_range(required_structure, int(reachable_distances[cube_id])):
 					continue
 				coords.append(cube_id)
 	coords.sort_custom(_sort_cube_ids)
@@ -194,6 +220,8 @@ func _get_required_structure_candidates(
 ) -> Array[HexBase]:
 	var candidates: Array[HexBase] = []
 	for cube_id: Vector3i in reachable_distances.keys():
+		if not _within_required_walk_range(required_structure, int(reachable_distances[cube_id])):
+			continue
 		var hex := get_hex_at_cube_id(cube_id)
 		if hex == null or hex.region_instance == null:
 			continue
@@ -216,6 +244,11 @@ func _get_required_structure_candidates(
 		func(a: HexBase, b: HexBase) -> bool:
 			var a_distance := int(reachable_distances[a.cube_id])
 			var b_distance := int(reachable_distances[b.cube_id])
+			if required_structure == nearby_settlement:
+				var a_seed := get_seeded_int("village_candidate:%s" % a.cube_id)
+				var b_seed := get_seeded_int("village_candidate:%s" % b.cube_id)
+				if a_seed != b_seed:
+					return a_seed < b_seed
 			if a_distance != b_distance:
 				if placement_mode >= REQUIRED_PLACEMENT_ALLOW_SETTLEMENT_SPACING:
 					return a_distance > b_distance
@@ -330,14 +363,14 @@ func _record_required_structure(required_structure: StructureInfo, cube_id: Vect
 	coords.append(cube_id)
 
 func _validate_required_starting_structures() -> bool:
-	if required_starting_structures.is_empty():
+	if _get_required_structures().is_empty():
 		return true
 	var origin_hex := _get_starter_origin_hex()
 	if origin_hex == null:
 		return false
 	var reachable_distances := _get_walk_reachable_distances(origin_hex)
 	var consumed: Dictionary[StructureInfo, int] = {}
-	for required_structure in required_starting_structures:
+	for required_structure in _get_required_structures():
 		if required_structure == null:
 			continue
 		var index := int(consumed.get(required_structure, 0))
@@ -352,6 +385,8 @@ func _validate_required_starting_structures() -> bool:
 		if hex.structure.structure_info != required_structure:
 			return false
 		if not reachable_distances.has(cube_id):
+			return false
+		if not _within_required_walk_range(required_structure, int(reachable_distances[cube_id])):
 			return false
 	return true
 

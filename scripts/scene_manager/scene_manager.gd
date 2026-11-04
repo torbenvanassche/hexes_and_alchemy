@@ -17,7 +17,7 @@ var _active_scene: SceneInstance:
 			return;
 		
 		#tell the scene (internal) and the SceneManager that the scene is being left
-		if _active_scene && _active_scene.node != null:
+		if is_instance_valid(_active_scene) and is_instance_valid(_active_scene.node):
 			scene_exited.emit(_active_scene.node);
 			_active_scene.on_leave.emit();
 			
@@ -50,6 +50,15 @@ func _emit_on_enter_when_grid_ready(scene_instance: SceneInstance) -> void:
 func _init() -> void:
 	scene_cache = SceneCache.new();
 	process_mode = Node.PROCESS_MODE_ALWAYS;
+
+## Scene containers belong to the current game root, not the persistent autoload.
+func bind_game_root(game: Node) -> void:
+	root = game.get_node("scene_controller")
+	_ui_container = game.get_node("game_ui")
+	_active_scene = null
+	scene_stack.clear()
+	ui_stack.clear()
+	_ui_z_counter = 0
 	
 func get_active_scene() -> SceneInstance:
 	return _active_scene;

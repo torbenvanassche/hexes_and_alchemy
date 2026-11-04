@@ -6,3 +6,4 @@
 script = ExtResource("1_script")
 id = "open_blacksmith"
 text_key = "JOURNAL_TASK_OPEN_BLACKSMITH"
+description_key = "JOURNAL_TASK_BLACKSMITH_HINT"

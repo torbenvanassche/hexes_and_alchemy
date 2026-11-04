@@ -6,19 +6,26 @@
 [node name="JournalEntry" type="VBoxContainer" unique_id=631015967]
 custom_minimum_size = Vector2(390, 0)
 size_flags_horizontal = 3
-theme_override_constants/separation = 8
+theme_override_constants/separation = 16
 script = ExtResource("1_script")
 task_scene = ExtResource("2_task")
 
 [node name="Body" type="RichTextLabel" parent="." unique_id=1692212755]
-custom_minimum_size = Vector2(390, 98)
+custom_minimum_size = Vector2(390, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 bbcode_enabled = true
 fit_content = true
 scroll_active = false
 
+[node name="ObjectivesHeader" type="Label" parent="."]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+theme_override_font_sizes/font_size = 13
+text = "JOURNAL_OBJECTIVES"
+uppercase = true
+
 [node name="Tasks" type="VBoxContainer" parent="." unique_id=791388383]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 6
+theme_override_constants/separation = 20

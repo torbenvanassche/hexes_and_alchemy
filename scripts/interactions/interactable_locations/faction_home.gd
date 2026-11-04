@@ -19,7 +19,8 @@ func _ready() -> void:
 	_spawn_starting_members.call_deferred()
 
 func interact() -> void:
-	open_additional_ui_windows()
+	if Manager.instance != null and Manager.instance.player_instance != null:
+		Manager.instance.player_instance.open_hub_tab("people", faction_id)
 
 func can_interact() -> bool:
 	return buildable_structure == null or buildable_structure.current_step == self

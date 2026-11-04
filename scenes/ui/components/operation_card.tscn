@@ -3,16 +3,16 @@
 [ext_resource type="Script" uid="uid://c3lppfjljqi6k" path="res://scripts/ui/operation_card_ui.gd" id="1_operation"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_operation"]
-bg_color = Color(0.12, 0.1, 0.08, 0.12)
+bg_color = Color(0.125, 0.184, 0.227, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.42, 0.31, 0.2, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+border_color = Color(0.298, 0.353, 0.38, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
 
 [node name="OperationCard" type="PanelContainer" unique_id=1805163612]
 custom_minimum_size = Vector2(0, 68)
@@ -37,21 +37,17 @@ theme_override_constants/separation = 2
 
 [node name="Title" type="Label" parent="Margin/Columns/Details" unique_id=1393326462]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.27, 0.2, 0.14, 1)
 
 [node name="Detail" type="Label" parent="Margin/Columns/Details" unique_id=1400296004]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.42, 0.32, 0.22, 0.9)
 clip_text = true
 
 [node name="Party" type="Label" parent="Margin/Columns/Details" unique_id=745150872]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.45, 0.34, 0.23, 0.85)
 clip_text = true
 
 [node name="State" type="Label" parent="Margin/Columns" unique_id=62290307]
 custom_minimum_size = Vector2(112, 0)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.42, 0.31, 0.2, 1)
 horizontal_alignment = 2
 vertical_alignment = 1

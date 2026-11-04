@@ -77,6 +77,8 @@ var _chunk_post_process_queue: Array[Dictionary] = []
 var _pending_structure_hexes: Dictionary[Vector3i, bool] = {}
 var _structure_generation_queue: Array[Dictionary] = []
 var _initial_generation_completed := false
+## Used by save loading to regenerate exactly the chunks in a checkpoint.
+var initial_chunk_override: Array[Vector2i] = []
 var _half_slope_info: HexInfo
 var _cached_slope_profile: HexSlope
 @onready var pathfinder: HexAStar = HexAStar.new(self)
@@ -148,7 +150,14 @@ func _process_streaming_work() -> void:
 		if Time.get_ticks_usec() >= deadline_usec:
 			break
 
+func is_streaming_busy() -> bool:
+	return _pathfinder_rebuild_queued or not _chunk_generation_queue.is_empty() or not _tile_instantiation_queue.is_empty() or not _chunk_post_process_queue.is_empty() or not _pending_structure_hexes.is_empty() or not _structure_generation_queue.is_empty()
+
 func _get_initial_chunk_coords() -> Array[Vector2i]:
+	if not initial_chunk_override.is_empty():
+		var saved := initial_chunk_override.duplicate()
+		saved.sort_custom(_sort_chunks_center_first)
+		return saved
 	var coords: Array[Vector2i] = []
 	for cy in range(-chunk_radius, chunk_radius + 1):
 		for cx in range(-chunk_radius, chunk_radius + 1):

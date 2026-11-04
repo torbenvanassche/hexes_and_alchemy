@@ -41,7 +41,9 @@ func _get_closest_trigger(prompt_only: bool) -> Interaction:
 			continue
 
 		var target_position := trigger.global_position
-		if is_instance_valid(trigger.hex):
+		if is_instance_valid(trigger.prompt_anchor):
+			target_position = trigger.get_prompt_position()
+		elif is_instance_valid(trigger.hex):
 			target_position = trigger.hex.global_position
 
 		var distance := origin.distance_squared_to(target_position)
