@@ -14,8 +14,10 @@ required_role = "tender"
 translation_key_name = "QUEST_TYPE_HARVEST"
 description_key = "QUEST_DESC_FARM_HARVEST"
 expected_reward_key = "QUEST_REWARD_GRAIN_SEEDS"
-duration_seconds = 8.0
+duration_seconds = 6.0
 rank_experience_reward = 2
 available_states = Array[String](["WATERED"])
 outcomes = Array[ExtResource("2_outcome_script")]([ExtResource("3_outcome")])
 completion_spot_stage = 6
+
+guild_currency_reward = 6

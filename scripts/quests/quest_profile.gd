@@ -5,6 +5,8 @@ class_name QuestProfile extends Resource
 @export var required_role: String = ""
 @export var translation_key_name: String = ""
 @export_multiline var description_key: String = ""
+@export_multiline var result_description_key := ""
+@export_range(0, 1000, 1) var guild_currency_reward := 0
 @export var risk_key: String = "QUEST_RISK_SAFE"
 @export var expected_reward_key: String = ""
 @export var duration_seconds: float = 5.0
@@ -17,7 +19,7 @@ class_name QuestProfile extends Resource
 @export var required_supplies_per_level: Dictionary[ItemInfo, int] = {}
 @export var optional_supports: Array[QuestSupportDefinition] = []
 @export var outcomes: Array[QuestOutcome] = []
-@export var modifiers: Dictionary = {}
+@export var modifiers: Dictionary[String, float] = {}
 
 @export_group("World Progress")
 @export var completion_spot_stage: SpotProgress.Stage = SpotProgress.Stage.UNKNOWN
@@ -89,7 +91,7 @@ func get_expected_reward_label() -> String:
 		return ""
 	return translated
 
-func get_reward_preview() -> Array[Dictionary]:
+func get_reward_preview() -> Array[RewardPreview]:
 	if outcomes.is_empty():
 		return []
 
@@ -119,7 +121,7 @@ func get_reward_preview() -> Array[Dictionary]:
 	if valid_outcome_count == 0:
 		return []
 
-	var preview: Array[Dictionary] = []
+	var preview: Array[RewardPreview] = []
 	for item: ItemInfo in item_ranges.keys():
 		if item == null:
 			continue
@@ -128,15 +130,11 @@ func get_reward_preview() -> Array[Dictionary]:
 		if int(item_seen_counts.get(item, 0)) < valid_outcome_count:
 			amount_range.x = 0
 
-		preview.append({
-			"item": item,
-			"min": amount_range.x,
-			"max": amount_range.y,
-		})
+		preview.append(RewardPreview.new(item, amount_range.x, amount_range.y))
 
-	preview.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
-		var item_a := a.get("item") as ItemInfo
-		var item_b := b.get("item") as ItemInfo
+	preview.sort_custom(func(a: RewardPreview, b: RewardPreview) -> bool:
+		var item_a := a.item
+		var item_b := b.item
 		if item_a == null or item_b == null:
 			return item_a != null
 		return item_a.get_display_name().nocasecmp_to(item_b.get_display_name()) < 0

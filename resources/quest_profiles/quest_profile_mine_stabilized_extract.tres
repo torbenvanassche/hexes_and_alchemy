@@ -14,7 +14,7 @@ required_role = "delver"
 translation_key_name = "QUEST_TYPE_STABILIZED_EXTRACT"
 description_key = "QUEST_DESC_MINE_STABILIZED_EXTRACT"
 expected_reward_key = "QUEST_REWARD_ORE"
-duration_seconds = 10.0
+duration_seconds = 8.0
 rank_experience_reward = 3
 available_states = Array[String](["POOR_VEIN", "RICH_VEIN"])
 required_supplies = Dictionary[ExtResource("2_item_script"), int]({
@@ -29,3 +29,7 @@ modifiers = {
 }
 completion_spot_stage = 6
 occupied_completion_spot_stage = 8
+guild_currency_reward = 0
+stewardship_change = 1
+notoriety_reward = 0
+result_description_key = "REGIONAL_EXISTING_STABLE_RESULT"

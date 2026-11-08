@@ -21,6 +21,27 @@ func _exit_tree() -> void:
 
 var lost_equipment: Dictionary[ItemInfo, int] = {}
 var lost_adventurer_names: Array[String] = []
+var discovery_id := ""
+var discovery_resolved := false
+
+func _ready() -> void:
+	super()
+	_register_discovery.call_deferred()
+
+func _register_discovery() -> void:
+	if Manager.instance != null and Manager.instance.regional != null:
+		Manager.instance.regional.register_site(self)
+
+## State changes use the same visual/collision paths as ordinary commissions.
+func apply_site_state(state: String) -> bool:
+	if state_machine == null or not state_machine.states.has(state): return false
+	var index := state_machine.states.find(state)
+	for method: String in ["_set_forest_state", "_set_crop_state", "_set_mine_state", "_set_ruins_state", "_set_water_state"]:
+		if has_method(method):
+			call(method, index)
+			if method == "_set_forest_state" and state == "DEPLETED": call("_start_regrow")
+			return true
+	return false
 
 @export_group("Occupation")
 @export_range(0.0, 1.0, 0.01) var occupation_chance := 0.0
@@ -114,7 +135,7 @@ func get_quest_duration(quest_type_key: String, fallback: float) -> float:
 func get_effective_quest_duration(quest: Quest, fallback: float) -> float:
 	if quest == null:
 		return fallback
-	return get_quest_duration(quest.quest_key, fallback) * quest.get_duration_multiplier()
+	return get_quest_duration(quest.quest_key, fallback) * quest.get_duration_multiplier() * Manager.instance.regional.duration_multiplier(DiscoveryRandomizer.get_kind(self), get_quest_behaviour(quest.quest_key))
 
 func get_quest_behaviour(quest_type_key: String, fallback: String = "") -> String:
 	var profile := get_profile(quest_type_key)
@@ -175,6 +196,18 @@ func get_quest_profile_expected_reward(quest_type_key: String) -> String:
 	return profile.get_expected_reward_label()
 
 func get_quest_context_label(_quest_type_key: String) -> String:
+	var lines: Array[String] = []
+	if Manager.instance.regional != null:
+		var definition := Manager.instance.regional.discoveries.get_definition(discovery_id)
+		if definition != null and definition.initial_state == state_machine.get_current_state(): lines.append(definition.get_text())
+	var threat := _get_threat_context(_quest_type_key)
+	if not threat.is_empty(): lines.append(threat)
+	var profile := get_profile(_quest_type_key)
+	if profile != null and not profile.result_description_key.is_empty(): lines.append(tr(profile.result_description_key))
+	if profile != null and profile.guild_currency_reward > 0: lines.append(tr("COMMUNITY_COMMISSION_FEE") % profile.guild_currency_reward)
+	return "\n".join(lines)
+
+func _get_threat_context(_quest_type_key: String) -> String:
 	if _quest_type_key == RECOVER_EQUIPMENT_QUEST_KEY and not lost_adventurer_names.is_empty():
 		return tr("QUEST_RECOVERY_CONTEXT") % " / ".join(lost_adventurer_names)
 	var spot := get_spot_progress()
@@ -192,16 +225,23 @@ func get_quest_context_label(_quest_type_key: String) -> String:
 		AdventurerRank.get_display_name(occupation.get_difficulty()),
 	]
 
-func get_quest_profile_reward_preview(quest_type_key: String) -> Array[Dictionary]:
+func get_quest_profile_reward_preview(quest_type_key: String) -> Array[RewardPreview]:
 	if quest_type_key == RECOVER_EQUIPMENT_QUEST_KEY:
-		var recovery_preview: Array[Dictionary] = []
+		var recovery_preview: Array[RewardPreview] = []
 		for item: ItemInfo in lost_equipment.keys():
-			recovery_preview.append({"item": item, "min": lost_equipment[item], "max": lost_equipment[item]})
+			recovery_preview.append(RewardPreview.new(item, lost_equipment[item], lost_equipment[item]))
 		return recovery_preview
 	var profile := get_profile(quest_type_key)
 	if profile == null:
 		return []
-	return profile.get_reward_preview()
+	var preview := profile.get_reward_preview()
+	var bonus := Manager.instance.regional.reward_bonus(DiscoveryRandomizer.get_kind(self), quest_type_key)
+	for item: ItemInfo in bonus:
+		for entry: RewardPreview in preview:
+			if entry.item == item:
+				entry.minimum += bonus[item]
+				entry.maximum += bonus[item]
+	return preview
 
 func get_quest_minimum_rank(quest_type_key: String) -> AdventurerRank.Rank:
 	var profile := get_profile(quest_type_key)
@@ -321,13 +361,17 @@ func get_occupation_difficulty(include_hidden: bool = false) -> AdventurerRank.R
 func grant_player_inventory_rewards(rewards: Dictionary[ItemInfo, int], quest: Quest = null) -> void:
 	if rewards.is_empty() or Manager.instance == null:
 		return
-	var granted_rewards := quest.apply_loot_quantity_multiplier(rewards) if quest != null else rewards
+	var combined := rewards.duplicate()
+	if quest != null:
+		var bonus := Manager.instance.regional.reward_bonus(DiscoveryRandomizer.get_kind(self), quest.quest_key)
+		for item: ItemInfo in bonus: combined[item] = combined.get(item, 0) + bonus[item]
+	var granted_rewards := quest.apply_loot_quantity_multiplier(combined) if quest != null else combined
 
 	if Manager.instance.hub != null:
 		Manager.instance.hub.deposit_items(granted_rewards)
-		for item: ItemInfo in granted_rewards.keys():
-			if item != null and int(granted_rewards[item]) > 0:
-				_notify_item_reward(item, int(granted_rewards[item]))
+		if Manager.instance.toast != null:
+			var profile := quest.get_profile() if quest != null else null
+			Manager.instance.toast.notify_rewards(profile.get_display_name() if profile != null else tr("QUEST_REQUEST_REWARDS"), granted_rewards)
 		return
 
 	if Manager.instance.player_instance == null:
@@ -377,7 +421,8 @@ func leave_lost_equipment(items: Array[EquipmentInfo], adventurer_name: String) 
 	_notify_reward(tr("QUEST_EQUIPMENT_LEFT_BEHIND") % adventurer_name, Color.ORANGE)
 
 func execute_recovery_quest(q: Quest) -> void:
-	await get_tree().create_timer(get_effective_quest_duration(q, 6.0)).timeout
+	if not await q.wait_for_work(get_effective_quest_duration(q, 6.0), get_tree()):
+		return
 	var resolved_outcome := roll_quest_outcome(q)
 	if resolved_outcome == null:
 		resolved_outcome = QuestOutcome.new()

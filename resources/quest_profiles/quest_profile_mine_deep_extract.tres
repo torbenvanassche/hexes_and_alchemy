@@ -5,6 +5,10 @@
 [ext_resource type="Script" uid="uid://cwu8dwm55ox1u" path="res://scripts/quests/quest_outcome.gd" id="2_oyv6v"]
 [ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="3_f1xbk"]
 
+[ext_resource type="Resource" path="res://resources/item_info/work_supplies.tres" id="regional_work"]
+
+[ext_resource type="Resource" path="res://resources/item_info/travel_rations.tres" id="regional_rations"]
+
 [resource]
 script = ExtResource("1_profile")
 quest_key = "deep_extract"
@@ -14,7 +18,7 @@ translation_key_name = "QUEST_TYPE_DEEP_EXTRACT"
 description_key = "QUEST_DESC_MINE_DEEP_EXTRACT"
 risk_key = "QUEST_RISK_DANGEROUS"
 expected_reward_key = "QUEST_REWARD_MORE_ORE"
-duration_seconds = 11.0
+duration_seconds = 7.0
 rank_experience_reward = 4
 available_states = Array[String](["POOR_VEIN", "RICH_VEIN"])
 modifiers = {
@@ -27,3 +31,8 @@ occupied_completion_spot_stage = 8
 guild_reputation_reward = 2
 notoriety_reward = 1
 regional_hazard_change = 1
+guild_currency_reward = 0
+stewardship_change = 0
+result_description_key = "REGIONAL_EXISTING_DEEP_RESULT"
+
+required_supplies = Dictionary[ExtResource("3_f1xbk"), int]({ExtResource("regional_work"): 1, ExtResource("regional_rations"): 1})

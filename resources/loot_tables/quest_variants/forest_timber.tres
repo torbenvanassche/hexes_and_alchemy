@@ -8,8 +8,8 @@
 [sub_resource type="Resource" id="Resource_wood"]
 script = ExtResource("2_entry")
 item = ExtResource("3_wood")
-min_amount = 4
-max_amount = 7
+min_amount = 7
+max_amount = 10
 
 [resource]
 script = ExtResource("1_table")

@@ -24,3 +24,5 @@ required_supply_effect_keys = Dictionary[ExtResource("3_item_script"), String]({
 ExtResource("4_bucket"): "QUEST_SUPPLY_EFFECT_BUCKET_FILL"
 })
 outcomes = Array[ExtResource("2_outcome_script")]([ExtResource("5_outcome")])
+
+guild_currency_reward = 3

@@ -6,6 +6,8 @@
 [ext_resource type="Script" uid="uid://cwu8dwm55ox1u" path="res://scripts/quests/quest_outcome.gd" id="2_t6ots"]
 [ext_resource type="Resource" uid="uid://m72hate3ge7x" path="res://resources/item_info/support_beams.tres" id="3_support"]
 
+[ext_resource type="Resource" path="res://resources/item_info/work_supplies.tres" id="regional_work"]
+
 [resource]
 script = ExtResource("1_profile")
 quest_key = "reinforce"
@@ -17,10 +19,15 @@ expected_reward_key = "QUEST_REWARD_SITE_RECOVERY"
 rank_experience_reward = 3
 available_states = Array[String](["UNSTABLE"])
 required_supplies = Dictionary[ExtResource("2_item_script"), int]({
-ExtResource("3_support"): 1
+ExtResource("3_support"): 1,
+ExtResource("regional_work"): 1
 })
 required_supply_effect_keys = Dictionary[ExtResource("2_item_script"), String]({
 ExtResource("3_support"): "QUEST_SUPPLY_EFFECT_BEAMS_REINFORCE_MINE"
 })
 guild_reputation_reward = 2
 stewardship_change = 2
+duration_seconds = 6.0
+guild_currency_reward = 8
+notoriety_reward = 0
+result_description_key = "REGIONAL_EXISTING_REINFORCE_RESULT"

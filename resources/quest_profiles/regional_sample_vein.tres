@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="QuestProfile" format=3]
+[ext_resource type="Script" path="res://scripts/quests/quest_profile.gd" id="profile"]
+[ext_resource type="Script" path="res://scripts/quests/quest_outcome.gd" id="outcome"]
+[ext_resource type="Script" path="res://scripts/structures/loot_table.gd" id="table"]
+[ext_resource type="Script" path="res://scripts/structures/loot_table_entry.gd" id="entry"]
+[ext_resource type="Script" path="res://tools/inventory/scripts/data/item_info.gd" id="item"]
+[ext_resource type="Resource" path="res://resources/item_info/iron_ore.tres" id="iron_ore"]
+[ext_resource type="Resource" path="res://resources/item_info/travel_rations.tres" id="travel_rations"]
+[ext_resource type="Resource" path="res://resources/item_info/work_supplies.tres" id="work_supplies"]
+[sub_resource type="Resource" id="loot_iron_ore"]
+script = ExtResource("entry")
+item = ExtResource("iron_ore")
+min_amount = 1
+max_amount = 2
+[sub_resource type="Resource" id="loot"]
+script = ExtResource("table")
+entries = Array[ExtResource("entry")]([SubResource("loot_iron_ore")])
+[sub_resource type="Resource" id="result"]
+script = ExtResource("outcome")
+loot_table = SubResource("loot")
+next_state = ""
+message_key = "REGIONAL_QUEST_SAMPLE_VEIN_REPORT"
+[resource]
+script = ExtResource("profile")
+quest_key = "sample_vein"
+behaviour = "prospect"
+required_role = "hunter"
+translation_key_name = "REGIONAL_QUEST_SAMPLE_VEIN_TITLE"
+description_key = "REGIONAL_QUEST_SAMPLE_VEIN_DESC"
+result_description_key = "REGIONAL_QUEST_SAMPLE_VEIN_RESULT"
+duration_seconds = 9.0
+rank_experience_reward = 3
+available_states = Array[String](["UNSURVEYED"])
+required_supplies = Dictionary[ExtResource("item"), int]({ExtResource("travel_rations"):1, ExtResource("work_supplies"):1})
+outcomes = Array[ExtResource("outcome")]([SubResource("result")])
+guild_reputation_reward = 2
+guild_currency_reward = 4
+stewardship_change = 0
+blocked_by_active_occupation = true

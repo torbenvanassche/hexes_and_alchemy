@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="QuestProfile" format=3]
+[ext_resource type="Script" path="res://scripts/quests/quest_profile.gd" id="profile"]
+[ext_resource type="Script" path="res://scripts/quests/quest_outcome.gd" id="outcome"]
+[ext_resource type="Script" path="res://scripts/structures/loot_table.gd" id="table"]
+[ext_resource type="Script" path="res://scripts/structures/loot_table_entry.gd" id="entry"]
+[ext_resource type="Script" path="res://tools/inventory/scripts/data/item_info.gd" id="item"]
+[ext_resource type="Resource" path="res://resources/item_info/support_beams.tres" id="support_beams"]
+[sub_resource type="Resource" id="loot"]
+script = ExtResource("table")
+entries = Array[ExtResource("entry")]([])
+[sub_resource type="Resource" id="result"]
+script = ExtResource("outcome")
+loot_table = SubResource("loot")
+next_state = ""
+message_key = "REGIONAL_QUEST_BRACE_REPORT"
+[resource]
+script = ExtResource("profile")
+quest_key = "brace"
+behaviour = "brace"
+required_role = "crafter"
+translation_key_name = "REGIONAL_QUEST_BRACE_TITLE"
+description_key = "REGIONAL_QUEST_BRACE_DESC"
+result_description_key = "REGIONAL_QUEST_BRACE_RESULT"
+duration_seconds = 12.0
+rank_experience_reward = 3
+available_states = Array[String](["POOR_VEIN", "RICH_VEIN"])
+required_supplies = Dictionary[ExtResource("item"), int]({ExtResource("support_beams"):2})
+outcomes = Array[ExtResource("outcome")]([SubResource("result")])
+guild_reputation_reward = 2
+guild_currency_reward = 6
+stewardship_change = 1
+blocked_by_active_occupation = true

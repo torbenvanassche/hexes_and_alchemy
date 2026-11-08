@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="QuestProfile" format=3]
+[ext_resource type="Script" path="res://scripts/quests/quest_profile.gd" id="profile"]
+[ext_resource type="Script" path="res://scripts/quests/quest_outcome.gd" id="outcome"]
+[ext_resource type="Script" path="res://scripts/structures/loot_table.gd" id="table"]
+[ext_resource type="Script" path="res://scripts/structures/loot_table_entry.gd" id="entry"]
+[ext_resource type="Script" path="res://tools/inventory/scripts/data/item_info.gd" id="item"]
+[ext_resource type="Resource" path="res://resources/item_info/gold_ore.tres" id="gold_ore"]
+[ext_resource type="Resource" path="res://resources/item_info/travel_rations.tres" id="travel_rations"]
+[ext_resource type="Resource" path="res://resources/item_info/work_supplies.tres" id="work_supplies"]
+[sub_resource type="Resource" id="loot_gold_ore"]
+script = ExtResource("entry")
+item = ExtResource("gold_ore")
+min_amount = 1
+max_amount = 2
+[sub_resource type="Resource" id="loot"]
+script = ExtResource("table")
+entries = Array[ExtResource("entry")]([SubResource("loot_gold_ore")])
+[sub_resource type="Resource" id="result"]
+script = ExtResource("outcome")
+loot_table = SubResource("loot")
+next_state = "SECURED"
+message_key = "REGIONAL_QUEST_CATALOGUE_REPORT"
+[resource]
+script = ExtResource("profile")
+quest_key = "catalogue"
+behaviour = "catalogue"
+required_role = "delver"
+translation_key_name = "REGIONAL_QUEST_CATALOGUE_TITLE"
+description_key = "REGIONAL_QUEST_CATALOGUE_DESC"
+result_description_key = "REGIONAL_QUEST_CATALOGUE_RESULT"
+duration_seconds = 14.0
+rank_experience_reward = 3
+available_states = Array[String](["SURVEYED", "SECURED"])
+required_supplies = Dictionary[ExtResource("item"), int]({ExtResource("travel_rations"):1, ExtResource("work_supplies"):2})
+outcomes = Array[ExtResource("outcome")]([SubResource("result")])
+guild_reputation_reward = 4
+guild_currency_reward = 12
+stewardship_change = 1
+blocked_by_active_occupation = true

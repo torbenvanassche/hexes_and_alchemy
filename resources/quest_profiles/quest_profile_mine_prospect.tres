@@ -13,7 +13,9 @@ required_role = "delver"
 translation_key_name = "QUEST_TYPE_PROSPECT"
 description_key = "QUEST_DESC_MINE_PROSPECT"
 expected_reward_key = "QUEST_REWARD_REVEALS_VEIN"
-duration_seconds = 6.0
+duration_seconds = 4.0
 available_states = Array[String](["UNSURVEYED"])
 completion_spot_stage = 2
 occupied_completion_spot_stage = 8
+
+guild_currency_reward = 3

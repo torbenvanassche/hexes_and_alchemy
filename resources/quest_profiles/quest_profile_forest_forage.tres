@@ -20,3 +20,5 @@ outcomes = Array[ExtResource("2_outcome_script")]([ExtResource("3_outcome")])
 completion_spot_stage = 6
 occupied_completion_spot_stage = 8
 blocked_by_active_occupation = true
+
+guild_currency_reward = 2

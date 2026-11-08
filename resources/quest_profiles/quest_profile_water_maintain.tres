@@ -25,3 +25,7 @@ required_supply_effect_keys = Dictionary[ExtResource("3_ve3w5"), String]({
 ExtResource("4_work"): "QUEST_SUPPLY_EFFECT_WORK_MAINTAIN_WATER"
 })
 outcomes = Array[ExtResource("2_outcome_script")]([ExtResource("3_outcome")])
+guild_currency_reward = 6
+stewardship_change = 1
+notoriety_reward = 0
+result_description_key = "REGIONAL_EXISTING_MAINTAIN_RESULT"

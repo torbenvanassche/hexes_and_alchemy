@@ -6,6 +6,8 @@
 [ext_resource type="Resource" uid="uid://dcgdmmcyd42pn" path="res://resources/quest_outcomes/quest_outcome_farm_careful_harvest.tres" id="3_outcome"]
 [ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="4_3p8ov"]
 
+[ext_resource type="Resource" path="res://resources/item_info/work_supplies.tres" id="regional_work"]
+
 [resource]
 script = ExtResource("1_profile")
 quest_key = "careful_harvest"
@@ -14,8 +16,14 @@ required_role = "tender"
 translation_key_name = "QUEST_TYPE_CAREFUL_HARVEST"
 description_key = "QUEST_DESC_FARM_CAREFUL_HARVEST"
 expected_reward_key = "QUEST_REWARD_MORE_GRAIN_SEEDS"
-duration_seconds = 11.0
+duration_seconds = 9.0
 rank_experience_reward = 3
 available_states = Array[String](["WATERED"])
 outcomes = Array[ExtResource("2_outcome_script")]([ExtResource("3_outcome")])
 completion_spot_stage = 6
+guild_currency_reward = 0
+stewardship_change = 2
+notoriety_reward = 0
+result_description_key = "REGIONAL_EXISTING_CAREFUL_RESULT"
+
+required_supplies = Dictionary[ExtResource("4_3p8ov"), int]({ExtResource("regional_work"): 1})

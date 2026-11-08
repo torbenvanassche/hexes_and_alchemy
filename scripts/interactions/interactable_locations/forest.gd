@@ -13,6 +13,7 @@ enum ForestState {
 @export var quest_time: float = 5.0
 
 var _quest_running: bool = false;
+var salvaged_remnants := false
 var _pending_reward: Dictionary[ItemInfo, int] = {}
 var _pending_behaviour := ""
 var _pending_outcome: QuestOutcome
@@ -35,12 +36,18 @@ func interact() -> void:
 func can_interact() -> bool:
 	return has_visible_quest_activity() or (not _quest_running and not get_filtered_quest_types().is_empty());
 
+func get_filtered_quest_types(active_state: int = state_machine.get_current_state_index()) -> Array[String]:
+	var options := super.get_filtered_quest_types(active_state)
+	if salvaged_remnants: options.erase("recover_timber")
+	return options
+
 func _set_tree_state(tree_enabled: bool) -> void:
 	trees.visible = tree_enabled;
 	stumps.visible = not tree_enabled;
 	toggle_collision(not tree_enabled);
 
 func _set_forest_state(state: ForestState) -> void:
+	if state == ForestState.HEALTHY: salvaged_remnants = false
 	state_machine.set_state(ForestState.keys()[state])
 	_set_tree_state(state == ForestState.HEALTHY)
 	Manager.instance.quests.quest_availability_changed.emit()
@@ -59,7 +66,9 @@ func execute_quest(q: Quest) -> void:
 	var occupation := get_occupation()
 	if behaviour == "secure" and occupation != null:
 		duration = occupation.get_security_duration(duration)
-	await get_tree().create_timer(duration).timeout;
+	if not await q.wait_for_work(duration, get_tree()):
+		_quest_running = false
+		return
 
 	_pending_behaviour = behaviour
 	_pending_reveal_occupation = not is_occupation_revealed()
@@ -86,6 +95,7 @@ func _start_regrow(remaining: float = -1.0) -> void:
 	)
 	
 func complete_quest(_q: Quest) -> void:
+	if _q.quest_key == "recover_timber": salvaged_remnants = true
 	if _pending_reveal_occupation:
 		reveal_occupation()
 	if _pending_outcome != null:

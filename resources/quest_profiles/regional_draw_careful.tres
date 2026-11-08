@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="QuestProfile" format=3]
+[ext_resource type="Script" path="res://scripts/quests/quest_profile.gd" id="profile"]
+[ext_resource type="Script" path="res://scripts/quests/quest_outcome.gd" id="outcome"]
+[ext_resource type="Script" path="res://scripts/structures/loot_table.gd" id="table"]
+[ext_resource type="Script" path="res://scripts/structures/loot_table_entry.gd" id="entry"]
+[ext_resource type="Script" path="res://tools/inventory/scripts/data/item_info.gd" id="item"]
+[ext_resource type="Resource" path="res://resources/item_info/bucket.tres" id="bucket"]
+[ext_resource type="Resource" path="res://resources/item_info/water_bucket.tres" id="water_bucket"]
+[ext_resource type="Resource" path="res://resources/item_info/work_supplies.tres" id="work_supplies"]
+[sub_resource type="Resource" id="loot_water_bucket"]
+script = ExtResource("entry")
+item = ExtResource("water_bucket")
+min_amount = 3
+max_amount = 4
+[sub_resource type="Resource" id="loot"]
+script = ExtResource("table")
+entries = Array[ExtResource("entry")]([SubResource("loot_water_bucket")])
+[sub_resource type="Resource" id="result"]
+script = ExtResource("outcome")
+loot_table = SubResource("loot")
+next_state = "FRESH"
+message_key = "REGIONAL_QUEST_DRAW_CAREFUL_REPORT"
+[resource]
+script = ExtResource("profile")
+quest_key = "draw_careful"
+behaviour = "fill"
+required_role = "tender"
+translation_key_name = "REGIONAL_QUEST_DRAW_CAREFUL_TITLE"
+description_key = "REGIONAL_QUEST_DRAW_CAREFUL_DESC"
+result_description_key = "REGIONAL_QUEST_DRAW_CAREFUL_RESULT"
+duration_seconds = 8.0
+rank_experience_reward = 3
+available_states = Array[String](["FRESH"])
+required_supplies = Dictionary[ExtResource("item"), int]({ExtResource("bucket"):1, ExtResource("work_supplies"):1})
+outcomes = Array[ExtResource("outcome")]([SubResource("result")])
+guild_reputation_reward = 1
+guild_currency_reward = 0
+stewardship_change = 1
+blocked_by_active_occupation = true

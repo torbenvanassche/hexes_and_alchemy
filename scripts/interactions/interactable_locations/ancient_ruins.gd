@@ -24,6 +24,7 @@ var _pending_behaviour := ""
 var _pending_outcome: QuestOutcome
 var _pending_reveal_occupation := false
 var _loot_claimed: bool = false
+var archive_recorded := false
 
 func _ready() -> void:
 	super()
@@ -52,6 +53,11 @@ func can_interact() -> bool:
 func interact() -> void:
 	pass
 
+func get_filtered_quest_types(active_state: int = state_machine.get_current_state_index()) -> Array[String]:
+	var options := super.get_filtered_quest_types(active_state)
+	if archive_recorded: options.erase("catalogue")
+	return options
+
 func execute_quest(q: Quest) -> void:
 	if _quest_running:
 		return
@@ -67,7 +73,9 @@ func execute_quest(q: Quest) -> void:
 	var occupation := get_occupation()
 	if behaviour == "secure" and occupation != null:
 		duration = occupation.get_security_duration(duration)
-	await get_tree().create_timer(duration).timeout
+	if not await q.wait_for_work(duration, get_tree()):
+		_quest_running = false
+		return
 
 	var danger_multiplier := 0.0 if state_machine.get_current_state() == "SECURED" else 1.0
 	var outcome := roll_quest_outcome(q, danger_multiplier)
@@ -84,6 +92,7 @@ func execute_quest(q: Quest) -> void:
 	_quest_running = false
 
 func complete_quest(_q: Quest) -> void:
+	if _q.quest_key == "catalogue" and (_pending_outcome == null or not _pending_outcome.is_dangerous): archive_recorded = true
 	if _pending_reveal_occupation:
 		reveal_occupation()
 	_apply_pending_result()

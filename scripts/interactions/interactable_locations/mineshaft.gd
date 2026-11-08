@@ -25,6 +25,8 @@ enum MineState {
 var _quest_running: bool = false
 var _pending_reward: Dictionary[ItemInfo, int] = {}
 var _last_stable_state: MineState = MineState.POOR_VEIN
+var reinforced_uses := 0
+var temporary_supports := false
 
 func _ready() -> void:
 	super()
@@ -47,6 +49,7 @@ func get_filtered_quest_types(active_state: int = state_machine.get_current_stat
 	if depth >= max_depth:
 		filtered_types.erase("deepen")
 		filtered_types.erase("reopen")
+	if reinforced_uses > 0: filtered_types.erase("brace")
 	return filtered_types
 
 func get_required_supplies(quest_type_key: String) -> Dictionary[ItemInfo, int]:
@@ -87,24 +90,49 @@ func execute_quest(q: Quest) -> void:
 	var profile := get_profile(q.quest_key)
 
 	if behaviour == "prospect":
-		await get_tree().create_timer(get_effective_quest_duration(q, prospect_time)).timeout
+		if not await q.wait_for_work(get_effective_quest_duration(q, prospect_time), get_tree()):
+			_quest_running = false
+			return
 		var discovered_state := _roll_discovered_state()
 		_set_mine_state(discovered_state)
+		var outcome := roll_quest_outcome(q)
+		if outcome != null: _pending_reward = outcome.roll_loot()
 	elif behaviour == "extract":
 		var origin_state := _current_mine_state()
-		await get_tree().create_timer(get_effective_quest_duration(q, extract_time)).timeout
+		if not await q.wait_for_work(get_effective_quest_duration(q, extract_time), get_tree()):
+			_quest_running = false
+			return
 		_pending_reward = _roll_extract_reward(origin_state, _get_profile_int(profile, "reward_rolls", 1))
-		_set_mine_state(_roll_post_extract_state(origin_state, profile))
+		_set_mine_state(_roll_post_extract_state(origin_state, profile, q.get_danger_weight_multiplier()))
+		reinforced_uses = maxi(0, reinforced_uses - 1)
+		temporary_supports = false
 	elif behaviour == "reinforce":
-		await get_tree().create_timer(get_effective_quest_duration(q, reinforce_time)).timeout
+		if not await q.wait_for_work(get_effective_quest_duration(q, reinforce_time), get_tree()):
+			_quest_running = false
+			return
 		_set_mine_state(_last_stable_state)
+		reinforced_uses = 3
+		temporary_supports = false
+	elif behaviour in ["brace", "shore_reopen"]:
+		if not await q.wait_for_work(get_effective_quest_duration(q, reinforce_time), get_tree()):
+			_quest_running = false
+			return
+		if behaviour == "brace": reinforced_uses = 3
+		else:
+			temporary_supports = true
+			reinforced_uses = 0
+			_set_mine_state(_last_stable_state)
 	elif behaviour == "deepen":
-		await get_tree().create_timer(get_effective_quest_duration(q, extract_time)).timeout
+		if not await q.wait_for_work(get_effective_quest_duration(q, extract_time), get_tree()):
+			_quest_running = false
+			return
 		depth = mini(max_depth, depth + 1)
 		_notify_reward(tr("QUEST_MINE_DEEPENED") % [depth])
 		Manager.instance.quests.quest_availability_changed.emit()
 	elif behaviour == "reopen":
-		await get_tree().create_timer(get_effective_quest_duration(q, extract_time)).timeout
+		if not await q.wait_for_work(get_effective_quest_duration(q, extract_time), get_tree()):
+			_quest_running = false
+			return
 		depth = mini(max_depth, depth + 1)
 		_set_mine_state(MineState.UNSURVEYED)
 		_notify_reward(tr("QUEST_MINE_REOPENED") % [depth])
@@ -113,7 +141,7 @@ func execute_quest(q: Quest) -> void:
 	_quest_running = false
 
 func complete_quest(q: Quest) -> void:
-	if get_quest_behaviour(q.quest_key) != "extract":
+	if get_quest_behaviour(q.quest_key) not in ["extract", "prospect"]:
 		return
 
 	if _pending_reward.is_empty():
@@ -186,7 +214,7 @@ func _roll_extract_reward(origin_state: MineState, reward_rolls: int = 1) -> Dic
 			reward[item] = reward.get(item, 0) + depth_loot[item]
 	return reward
 
-func _roll_post_extract_state(origin_state: MineState, profile: QuestProfile = null) -> MineState:
+func _roll_post_extract_state(origin_state: MineState, profile: QuestProfile = null, danger_multiplier := 1.0) -> MineState:
 	var info := _get_vein_info_for_state(origin_state)
 	if info == null:
 		return origin_state
@@ -198,6 +226,9 @@ func _roll_post_extract_state(origin_state: MineState, profile: QuestProfile = n
 		1.0
 	)
 	collapse_chance = clampf(collapse_chance + 0.04 * float(maxi(0, depth - 1)), 0.0, 1.0)
+	if reinforced_uses > 0: collapse_chance *= 0.25
+	if temporary_supports: collapse_chance = minf(1.0, collapse_chance + 0.08)
+	collapse_chance = clampf(collapse_chance * danger_multiplier, 0.0, 1.0)
 	var exhaust_chance := clampf(
 		info.exhaust_chance * _get_profile_float(profile, "exhaust_multiplier", 1.0)
 			+ _get_profile_float(profile, "exhaust_bonus", 0.0),
@@ -218,7 +249,7 @@ func _get_vein_info_for_state(state: MineState) -> MineVeinInfo:
 			return vein_info
 	return null
 
-func get_quest_profile_reward_preview(quest_type_key: String) -> Array[Dictionary]:
+func get_quest_profile_reward_preview(quest_type_key: String) -> Array[RewardPreview]:
 	var behaviour := get_quest_behaviour(quest_type_key)
 	if behaviour != "extract":
 		return super.get_quest_profile_reward_preview(quest_type_key)
@@ -229,8 +260,9 @@ func get_quest_profile_reward_preview(quest_type_key: String) -> Array[Dictionar
 
 	var profile := get_profile(quest_type_key)
 	var reward_rolls := maxi(1, _get_profile_int(profile, "reward_rolls", 1))
-	var preview: Array[Dictionary] = []
+	var preview: Array[RewardPreview] = []
 	var ranges := info.loot_table.get_preview_ranges()
+	for item: ItemInfo in ranges: ranges[item] *= reward_rolls
 	for table_index in mini(depth - 1, depth_loot_tables.size()):
 		var depth_table := depth_loot_tables[table_index]
 		if depth_table == null:
@@ -244,15 +276,11 @@ func get_quest_profile_reward_preview(quest_type_key: String) -> Array[Dictionar
 		if item == null:
 			continue
 		var amount_range: Vector2i = ranges[item]
-		preview.append({
-			"item": item,
-			"min": amount_range.x * reward_rolls,
-			"max": amount_range.y * reward_rolls,
-		})
+		preview.append(RewardPreview.new(item, amount_range.x, amount_range.y))
 
-	preview.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
-		var item_a := a.get("item") as ItemInfo
-		var item_b := b.get("item") as ItemInfo
+	preview.sort_custom(func(a: RewardPreview, b: RewardPreview) -> bool:
+		var item_a := a.item
+		var item_b := b.item
 		if item_a == null or item_b == null:
 			return item_a != null
 		return item_a.get_display_name().nocasecmp_to(item_b.get_display_name()) < 0
@@ -263,9 +291,10 @@ func get_quest_profile_expected_reward(quest_type_key: String) -> String:
 	return super.get_quest_profile_expected_reward(quest_type_key)
 
 func get_quest_context_label(quest_type_key: String) -> String:
-	if quest_type_key not in ["deepen", "reopen"]:
-		return super.get_quest_context_label(quest_type_key)
-	return tr("QUEST_MINE_DEPTH_STATUS") % [depth, max_depth]
+	var lines: Array[String] = [super.get_quest_context_label(quest_type_key), tr("QUEST_MINE_DEPTH_STATUS") % [depth, max_depth]]
+	if reinforced_uses > 0: lines.append(tr("COMMUNITY_MINE_SUPPORTED") % reinforced_uses)
+	if temporary_supports: lines.append(tr("COMMUNITY_MINE_TEMPORARY"))
+	return "\n".join(lines)
 
 func _get_profile_float(profile: QuestProfile, key: String, fallback: float) -> float:
 	if profile == null:

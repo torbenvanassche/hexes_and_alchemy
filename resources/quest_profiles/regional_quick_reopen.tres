@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="QuestProfile" format=3]
+[ext_resource type="Script" path="res://scripts/quests/quest_profile.gd" id="profile"]
+[ext_resource type="Script" path="res://scripts/quests/quest_outcome.gd" id="outcome"]
+[ext_resource type="Script" path="res://scripts/structures/loot_table.gd" id="table"]
+[ext_resource type="Script" path="res://scripts/structures/loot_table_entry.gd" id="entry"]
+[ext_resource type="Script" path="res://tools/inventory/scripts/data/item_info.gd" id="item"]
+[ext_resource type="Resource" path="res://resources/item_info/travel_rations.tres" id="travel_rations"]
+[ext_resource type="Resource" path="res://resources/item_info/wood_raw.tres" id="wood_raw"]
+[sub_resource type="Resource" id="loot"]
+script = ExtResource("table")
+entries = Array[ExtResource("entry")]([])
+[sub_resource type="Resource" id="result"]
+script = ExtResource("outcome")
+loot_table = SubResource("loot")
+next_state = ""
+message_key = "REGIONAL_QUEST_QUICK_REOPEN_REPORT"
+[resource]
+script = ExtResource("profile")
+quest_key = "quick_reopen"
+behaviour = "shore_reopen"
+required_role = "delver"
+translation_key_name = "REGIONAL_QUEST_QUICK_REOPEN_TITLE"
+description_key = "REGIONAL_QUEST_QUICK_REOPEN_DESC"
+result_description_key = "REGIONAL_QUEST_QUICK_REOPEN_RESULT"
+duration_seconds = 5.0
+rank_experience_reward = 3
+available_states = Array[String](["UNSTABLE"])
+required_supplies = Dictionary[ExtResource("item"), int]({ExtResource("wood_raw"):3, ExtResource("travel_rations"):1})
+outcomes = Array[ExtResource("outcome")]([SubResource("result")])
+guild_reputation_reward = 1
+guild_currency_reward = 0
+stewardship_change = 0
+blocked_by_active_occupation = true

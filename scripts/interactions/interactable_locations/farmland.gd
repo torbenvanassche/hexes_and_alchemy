@@ -17,8 +17,8 @@ enum CropState {
 @export var plant_quest_time: float = 5.0
 @export var water_quest_time: float = 5.0
 @export var harvest_quest_time: float = 8.0
-@export var overgrow_time: float = 120.0
-@export var water_window: float = 60.0
+@export var overgrow_time: float = 300.0
+@export var water_window: float = 180.0
 
 var _quest_running: bool = false
 var _overgrow_timer: SceneTreeTimer = null
@@ -85,13 +85,19 @@ func execute_quest(q: Quest) -> void:
 
 	match behaviour:
 		"plant":
-			await get_tree().create_timer(get_effective_quest_duration(q, plant_quest_time)).timeout
+			if not await q.wait_for_work(get_effective_quest_duration(q, plant_quest_time), get_tree()):
+				_quest_running = false
+				return
 			_set_crop_state(CropState.PLANTED)
 		"water":
-			await get_tree().create_timer(get_effective_quest_duration(q, water_quest_time)).timeout
+			if not await q.wait_for_work(get_effective_quest_duration(q, water_quest_time), get_tree()):
+				_quest_running = false
+				return
 			_set_crop_state(CropState.WATERED)
 		"harvest":
-			await get_tree().create_timer(get_effective_quest_duration(q, harvest_quest_time)).timeout
+			if not await q.wait_for_work(get_effective_quest_duration(q, harvest_quest_time), get_tree()):
+				_quest_running = false
+				return
 			_set_crop_state(CropState.READY)
 			var watered_outcome := roll_quest_outcome(q)
 			if watered_outcome != null:
@@ -102,7 +108,9 @@ func execute_quest(q: Quest) -> void:
 				if watered_lootable != null:
 					_pending_reward = watered_lootable.roll_loot()
 		"collect":
-			await get_tree().create_timer(get_effective_quest_duration(q, harvest_quest_time)).timeout
+			if not await q.wait_for_work(get_effective_quest_duration(q, harvest_quest_time), get_tree()):
+				_quest_running = false
+				return
 			var outcome := roll_quest_outcome(q)
 			if outcome != null:
 				_pending_reward = outcome.roll_loot()
@@ -112,7 +120,9 @@ func execute_quest(q: Quest) -> void:
 				if lootable != null:
 					_pending_reward = lootable.roll_loot()
 		"clear":
-			await get_tree().create_timer(get_effective_quest_duration(q, plant_quest_time)).timeout
+			if not await q.wait_for_work(get_effective_quest_duration(q, plant_quest_time), get_tree()):
+				_quest_running = false
+				return
 			_set_crop_state(CropState.FALLOW)
 
 	q.return_from_quest()
