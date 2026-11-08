@@ -36,9 +36,17 @@ func _ready() -> void:
 	interactor_component.hex_picked.connect(_on_hex_picked)
 
 func _physics_process(delta: float) -> void:
+	if not _world_accepts_input():
+		velocity = Vector3.ZERO
+		return
 	movement.physics_process(delta)
 
+func _world_accepts_input() -> bool:
+	var active := SceneManager.get_active_scene()
+	return not WorldLoading.blocks_input and not SaveGames.is_loading and active != null and active.node is HexGrid and active.node.initialized
+
 func _unhandled_input(event: InputEvent) -> void:
+	if not _world_accepts_input(): return
 	if event.is_action_pressed("inventory"):
 		toggle_hub_tab("inventory")
 		get_viewport().set_input_as_handled()
