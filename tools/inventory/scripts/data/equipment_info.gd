@@ -33,6 +33,7 @@ func get_slot_name() -> String:
 
 func get_tooltip_text() -> String:
 	var lines: Array[String] = [get_display_name()]
+	if not usage_key.is_empty(): lines.append(tr("ITEM_USED_FOR") + ": " + tr(usage_key))
 	var description := get_description()
 	if not description.is_empty():
 		lines.append(description)
@@ -91,7 +92,7 @@ func randomize_relic_effects() -> void:
 			"loot": loot_quantity_multiplier,
 			"scouting": scouting_radius_bonus,
 		})
-	var base: Dictionary = get_meta("relic_base_stats")
+	var base: Dictionary[String, Variant] = TypedData.string_map(get_meta("relic_base_stats"))
 	success_weight_multiplier = float(base.success)
 	danger_weight_multiplier = float(base.danger)
 	injury_chance_multiplier = float(base.injury)

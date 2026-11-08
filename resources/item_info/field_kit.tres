@@ -7,6 +7,7 @@
 
 [resource]
 script = ExtResource("1_equipment")
+usage_key = "ITEM_USE_FIELD_KIT"
 slot = 2
 success_weight_multiplier = 1.3
 danger_weight_multiplier = 0.8

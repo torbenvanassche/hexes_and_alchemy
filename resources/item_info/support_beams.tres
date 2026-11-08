@@ -6,6 +6,7 @@
 
 [resource]
 script = ExtResource("1_support")
+usage_key = "ITEM_USE_BEAMS"
 unique_id = "support_beams"
 translation_key_name = "ITEM_SUPPORT_BEAMS_NAME"
 translation_key_description = "ITEM_SUPPORT_BEAMS_DESCRIPTION"

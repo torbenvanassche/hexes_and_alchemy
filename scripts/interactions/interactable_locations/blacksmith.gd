@@ -18,11 +18,7 @@ func _open_window(window_info: SceneInfo) -> void:
 	var crafting_ui: CraftingUI = draggable_window.content as CraftingUI
 	if crafting_ui == null:
 		return
+	crafting_ui.preview_only = false
 	crafting_ui.inventory = Manager.instance.hub.stockpile if Manager.instance != null and Manager.instance.hub != null else null
-	if not crafting_ui.item_crafted.is_connected(_on_item_crafted):
-		crafting_ui.item_crafted.connect(_on_item_crafted)
 	window_instance.on_enter.emit()
 	open_additional_ui_windows()
-
-func _on_item_crafted(_item: ItemInfo) -> void:
-	Manager.instance.journal.complete_task("craft_" + _item.unique_id)

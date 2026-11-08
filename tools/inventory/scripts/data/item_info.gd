@@ -7,6 +7,9 @@ class_name ItemInfo extends Resource
 @export var buy_value: int = 2;
 @export var sell_value: int = 1;
 @export var recipe: Dictionary[ItemInfo, int];
+@export_range(0.1, 60.0, 0.1, "or_greater") var crafting_duration := 1.0
+@export var recipe_unlock_key := ""
+@export var usage_key := ""
 @export var show_in_hud: bool = false;
 
 func has_recipe() -> bool:
@@ -20,7 +23,9 @@ func get_description() -> String:
 
 func get_tooltip_text() -> String:
 	var description := get_description()
-	return get_display_name() if description.is_empty() else "%s\n%s" % [get_display_name(), description]
+	var text := get_display_name() if description.is_empty() else "%s\n%s" % [get_display_name(), description]
+	if not usage_key.is_empty(): text += "\n" + tr("ITEM_USED_FOR") + ": " + tr(usage_key)
+	return text
 
 func get_buy_value() -> int:
 	return maxi(2, buy_value)

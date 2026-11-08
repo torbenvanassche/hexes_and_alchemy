@@ -7,6 +7,7 @@
 
 [resource]
 script = ExtResource("1_item")
+usage_key = "ITEM_USE_WORK_SUPPLIES"
 unique_id = "work_supplies"
 translation_key_name = "ITEM_WORK_SUPPLIES_NAME"
 translation_key_description = "ITEM_WORK_SUPPLIES_DESCRIPTION"

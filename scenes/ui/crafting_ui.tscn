@@ -5,6 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://c5ocjw6joaemy" path="res://tools/inventory/scenes/content_slot.tscn" id="3_slot"]
 [ext_resource type="Theme" path="res://themes/game_theme.tres" id="4_theme"]
 
+[sub_resource type="StyleBoxEmpty" id="CraftProgressBackground"]
+
 [node name="Window" unique_id=98463561 node_paths=PackedStringArray("content") instance=ExtResource("1_base")]
 custom_minimum_size = Vector2(480, 440)
 id = "WINDOW_CRAFTING"
@@ -65,7 +67,34 @@ layout_mode = 2
 text = "CRAFTING_CRAFT"
 
 [node name="StatusLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/CraftingPanel" index="3" unique_id=840211456]
+visible = false
 custom_minimum_size = Vector2(430, 28)
 layout_mode = 2
 horizontal_alignment = 1
 autowrap_mode = 2
+
+[node name="CraftProgress" type="ProgressBar" parent="NinePatchRect/VBoxContainer/contentPanel/CraftingPanel/CraftButton"]
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = -1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_styles/background = SubResource("CraftProgressBackground")
+max_value = 1.0
+step = 0.001
+show_percentage = false
+
+[node name="Caption" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/CraftingPanel/CraftButton/CraftProgress"]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+horizontal_alignment = 1
+vertical_alignment = 1

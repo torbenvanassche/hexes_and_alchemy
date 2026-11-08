@@ -6,6 +6,7 @@
 
 [resource]
 script = ExtResource("1_8ykgy")
+usage_key = "ITEM_USE_PLANKS"
 unique_id = "wood_log"
 translation_key_name = "ITEM_WOOD_LOG_NAME"
 translation_key_description = "ITEM_WOOD_LOG_DESCRIPTION"
