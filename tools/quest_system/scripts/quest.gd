@@ -19,7 +19,24 @@ var rank_experience_reward: int = 1;
 var scout_revealed_tiles: int = 0
 var scout_discovered_structures: Dictionary[String, int] = {}
 var outcome: QuestOutcome
-var context: Dictionary = {}
+var context: Dictionary[String, Variant] = {}
+var _saved_work_remaining := -1.0
+var _work_timer: SceneTreeTimer
+var work_remaining: float:
+	get:
+		return _work_timer.time_left if is_instance_valid(_work_timer) else _saved_work_remaining
+	set(value):
+		_saved_work_remaining = value
+
+## All site work uses this clock so a checkpoint can resume its remaining time.
+## Supplies stay reserved throughout travel/work and are not charged again.
+func wait_for_work(duration: float, tree: SceneTree) -> bool:
+	var remaining := _saved_work_remaining if _saved_work_remaining >= 0.0 else duration
+	_saved_work_remaining = -1.0
+	_work_timer = tree.create_timer(maxf(0.01, remaining), false)
+	await _work_timer.timeout
+	_work_timer = null
+	return not is_state(QuestState.CANCELLED) and not is_state(QuestState.FAILED)
 
 var state_machine: StateMachine;
 
@@ -188,6 +205,10 @@ func get_objective() -> QuestObjective:
 func requires_objective() -> bool:
 	return quest_key != "scout"
 
+## Externally driven quests can share lifecycle/outcomes without recruiting a party.
+func uses_guild_roster() -> bool:
+	return true
+
 func get_minimum_rank() -> AdventurerRank.Rank:
 	if minimum_rank_override >= 0:
 		return AdventurerRank.clamp_rank(minimum_rank_override)
@@ -198,6 +219,10 @@ func get_minimum_rank() -> AdventurerRank.Rank:
 
 func get_rank_experience_reward() -> int:
 	return rank_experience_reward
+
+func get_prestige_reward() -> int:
+	var profile := get_profile()
+	return maxi(1, profile.guild_reputation_reward) if profile != null else 1
 
 func _resolve_rank_experience_reward(explicit_reward: int) -> int:
 	if explicit_reward >= 0:
@@ -345,6 +370,9 @@ func parse_reward() -> void:
 		Manager.instance.reputation.record_quest(self)
 	context["reward_resolved"] = true
 	context["reward_claimed"] = true
+	var profile := get_profile()
+	if profile != null and profile.guild_currency_reward > 0 and (outcome == null or not outcome.is_dangerous):
+		Manager.instance.hub.add_currency(profile.guild_currency_reward)
 	context["reward_reserved"] = false
 	context["supplies_reserved"] = false
 	if Manager.instance != null and Manager.instance.quests != null:

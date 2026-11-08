@@ -3,9 +3,12 @@ extends RefCounted
 
 ## JSON values only. Runtime references are resolved after world/NPC/quest creation.
 var grid: HexGrid
-var npcs: Dictionary = {}
-var quests: Dictionary = {}
+var npcs: Dictionary[String, NPC] = {}
+var quests: Dictionary[String, Quest] = {}
 var errors: Array[String] = []
+## Structure references follow a migrated building; ordinary terrain coordinates
+## and player positions keep their original meaning.
+var relocated_sites: Dictionary[Vector3i, Vector3i] = {}
 
 func encode(value: Variant) -> Variant:
 	if value == null:
@@ -30,6 +33,8 @@ func encode(value: Variant) -> Variant:
 			for key in value: pairs.append([encode(key), encode(value[key])])
 			return {"$dict": pairs}
 	if not is_instance_valid(value): return null
+	if value == Manager.instance.hub: return {"$service": "hub"}
+	if value == Manager.instance.player_instance: return {"$service": "player"}
 	if value is NPC: return {"$npc": str(value.get_instance_id())}
 	if value is Quest: return {"$quest": str(value.get_instance_id())}
 	if value is HexBase: return {"$hex": encode(value.cube_id)}
@@ -68,16 +73,26 @@ func decode(value: Variant) -> Variant:
 	if value.has("$path"): return NodePath(value["$path"])
 	if value.has("$float"): return INF if value["$float"] == "inf" else NAN
 	if value.has("$dict"):
-		var dictionary := {}
+		# Resource, coordinate and string keys all pass through this generic codec.
+		# Concrete receiving properties apply their declared types with assign().
+		var dictionary: Dictionary[Variant, Variant] = {}
 		for pair in value["$dict"]: dictionary[decode(pair[0])] = decode(pair[1])
 		return dictionary
 	if value.has("$npc"): return npcs.get(value["$npc"])
+	if value.has("$service"):
+		return Manager.instance.hub if value["$service"] == "hub" else Manager.instance.player_instance
 	if value.has("$quest"): return quests.get(value["$quest"])
-	if value.has("$hex"): return grid.get_hex_at_cube_id(decode(value["$hex"]))
+	if value.has("$hex"):
+		var coord: Vector3i = decode(value["$hex"])
+		return grid.get_hex_at_cube_id(relocated_sites.get(coord, coord))
 	if value.has("$node"):
-		var hex := grid.get_hex_at_cube_id(decode(value["$node"]))
+		var coord: Vector3i = decode(value["$node"])
+		var hex := grid.get_hex_at_cube_id(relocated_sites.get(coord, coord))
 		# The first village prototype kept trade at its arrival marker.
 		var path := str(value["path"]).replace("Arrival/Trade", "Buildings/Market")
+		# Removed stationary request authors now direct players to the board.
+		if path.get_file().begins_with("Resident_"):
+			path = path.get_base_dir() + "/structures/questboard"
 		return hex.get_node_or_null(NodePath(path)) if hex != null else null
 	if value.has("$hub"): return Manager.instance.hub.stockpile
 	if value.has("$resource"): return load(value["$resource"])
@@ -102,8 +117,8 @@ func decode(value: Variant) -> Variant:
 		return object
 	return null
 
-func fields(object: Object, names: Array = []) -> Dictionary:
-	var result := {}
+func fields(object: Object, names: Array = []) -> Dictionary[String, Variant]:
+	var result: Dictionary[String, Variant] = {}
 	for property in object.get_property_list():
 		var key: String = property.name
 		if not names.is_empty():
@@ -114,7 +129,7 @@ func fields(object: Object, names: Array = []) -> Dictionary:
 		result[key] = encode(object.get(key))
 	return result
 
-func apply_fields(object: Object, data: Dictionary) -> void:
+func apply_fields(object: Object, data: Dictionary[String, Variant]) -> void:
 	for key in data:
 		if not key in object: continue
 		var current: Variant = object.get(key)
@@ -136,13 +151,13 @@ func apply_fields(object: Object, data: Dictionary) -> void:
 		else:
 			object.set(key, decoded)
 
-func inventory(group: ContentGroup) -> Dictionary:
+func inventory(group: ContentGroup) -> Dictionary[String, Variant]:
 	var slots: Array = []
 	for slot: ContentSlotResource in group.data:
-		slots.append({"item": encode(slot.get_content()), "count": slot.count, "max": slot.maxcount, "unlocked": slot.is_unlocked, "clear_on_empty": slot.clear_on_empty})
+		slots.append(TypedData.string_map({"item": encode(slot.get_content()), "count": slot.count, "max": slot.maxcount, "unlocked": slot.is_unlocked, "clear_on_empty": slot.clear_on_empty}))
 	return {"stack": group.stack_size, "slots": slots}
 
-func restore_inventory(group: ContentGroup, data: Dictionary) -> void:
+func restore_inventory(group: ContentGroup, data: Dictionary[String, Variant]) -> void:
 	group.data.clear()
 	group.stack_size = int(data["stack"])
 	for slot in data["slots"]:

@@ -1,6 +1,28 @@
 class_name QuestManager extends Node
 
+class PartyAssignment extends RefCounted:
+	var quest: Quest
+	var primary: NPC
+	var supports: Dictionary[StringName, NPC] = {}
+	var members: Array[NPC] = []
+	var score := 0.0
+
 var active_quests: Array[Quest] = [];
+var _restored_commissions: Array[Quest] = []
+
+func restore_active_quest(quest: Quest) -> void:
+	if active_quests.has(quest): return
+	active_quests.append(quest)
+	quest.state_machine.state_entered.connect(_on_quest_state_changed.bind(quest))
+	if quest.uses_guild_roster(): _restored_commissions.append(quest)
+
+func resume_restored_commissions() -> void:
+	var restored := _restored_commissions.duplicate()
+	_restored_commissions.clear()
+	for quest: Quest in restored: CommissionSaveState.resume(quest)
+	quest_list_changed.emit()
+	quest_availability_changed.emit()
+	try_assign_waiting_quests()
 
 signal quest_list_changed();
 @warning_ignore("unused_signal")
@@ -19,6 +41,12 @@ signal quest_state_changed(quest: Quest, state: String)
 @export var max_scout_targets: int = 12;
 @export_range(0.0, 1.0, 0.01) var scout_direction_weight: float = 0.65;
 
+func get_commissions() -> Array[Quest]:
+	var commissions: Array[Quest] = []
+	for quest: Quest in active_quests:
+		if quest != null and quest.uses_guild_roster(): commissions.append(quest)
+	return commissions
+
 func has_quest_for_location_and_type(location: HexBase, quest_type: String) -> bool:
 	return active_quests.any(func(q: Quest) -> bool:
 		return q != null and q.location == location and q.quest_key == quest_type
@@ -26,6 +54,12 @@ func has_quest_for_location_and_type(location: HexBase, quest_type: String) -> b
 
 func has_quests_for_location(location: HexBase) -> bool:
 	return not get_quests_for_location(location).is_empty()
+
+func get_commissions_for_location(location: HexBase) -> Array[Quest]:
+	var commissions: Array[Quest] = []
+	for quest: Quest in get_quests_for_location(location):
+		if quest.uses_guild_roster(): commissions.append(quest)
+	return commissions
 
 func get_quests_for_location(location: HexBase) -> Array[Quest]:
 	var quests: Array[Quest] = []
@@ -143,9 +177,9 @@ func get_available_quest_types(
 	offered_currency_reward: int = 0,
 	minimum_rank_override: int = -1
 ) -> Array[String]:
-	if active_quests.size() >= max_active_quest:
+	if get_commissions().size() >= max_active_quest:
 		return []
-	if has_quests_for_location(location):
+	if not get_commissions_for_location(location).is_empty():
 		return []
 	var available_types: Array[String] = [];
 	for quest_type: String in quest_types:
@@ -157,9 +191,9 @@ func get_available_quest_types(
 	return available_types;
 
 func get_postable_quest_types(location: HexBase, quest_types: Array[String]) -> Array[String]:
-	if active_quests.size() >= max_active_quest:
+	if get_commissions().size() >= max_active_quest:
 		return []
-	if has_quests_for_location(location):
+	if not get_commissions_for_location(location).is_empty():
 		return []
 	var postable_types: Array[String] = []
 	for quest_type: String in quest_types:
@@ -271,9 +305,14 @@ func is_quest_location_reachable(location: HexBase, grid: HexGrid = null) -> boo
 func get_posting_error(q: Quest) -> String:
 	if q == null or q.location == null or q.quest_key == "":
 		return "QUEST_POST_LOCATION_UNAVAILABLE"
-	if active_quests.size() >= max_active_quest:
+	if not q.uses_guild_roster(): return ""
+	if q.requires_objective():
+		var objective := q.get_objective()
+		if objective == null or not objective.get_filtered_quest_types().has(q.quest_key):
+			return "QUEST_POST_LOCATION_UNAVAILABLE"
+	if get_commissions().size() >= max_active_quest:
 		return "QUEST_POST_LIMIT_REACHED"
-	if has_quests_for_location(q.location):
+	if not get_commissions_for_location(q.location).is_empty():
 		return "QUEST_POST_LOCATION_UNAVAILABLE"
 	return ""
 
@@ -361,8 +400,8 @@ func _cancel_party(quest: Quest) -> void:
 			npc.cancel_assigned_quest(quest)
 	quest.clear_party_assignments()
 
-func _get_inventory_contents(inventory: ContentGroup) -> Dictionary:
-	var amounts: Dictionary = {}
+func _get_inventory_contents(inventory: ContentGroup) -> Dictionary[Resource, int]:
+	var amounts: Dictionary[Resource, int] = {}
 	if inventory == null:
 		return amounts
 	for slot: ContentSlotResource in inventory.data:
@@ -388,18 +427,18 @@ func try_assign_waiting_quests() -> void:
 
 	var assigned_quests := 0
 	while not available_npcs.is_empty() and not waiting_quests.is_empty():
-		var best_assignment: Dictionary = {}
+		var best_assignment: PartyAssignment
 		for quest: Quest in waiting_quests:
 			var assignment := _build_party_assignment(quest, available_npcs)
-			if assignment.is_empty():
+			if assignment == null:
 				continue
-			if best_assignment.is_empty() or float(assignment.get("score", 0.0)) > float(best_assignment.get("score", 0.0)):
+			if best_assignment == null or assignment.score > best_assignment.score:
 				best_assignment = assignment
 
-		if best_assignment.is_empty():
+		if best_assignment == null:
 			break
 
-		var selected_quest := best_assignment.get("quest") as Quest
+		var selected_quest := best_assignment.quest
 		if selected_quest == null:
 			break
 		if not _reserve_quest_supplies(selected_quest):
@@ -410,7 +449,7 @@ func try_assign_waiting_quests() -> void:
 			waiting_quests.erase(selected_quest)
 			continue
 
-		for assigned_npc: NPC in best_assignment.get("members", []):
+		for assigned_npc: NPC in best_assignment.members:
 			available_npcs.erase(assigned_npc)
 		selected_quest.start()
 		waiting_quests.erase(selected_quest)
@@ -439,15 +478,15 @@ func _reserve_quest_supplies(quest: Quest) -> bool:
 func _get_waiting_quests() -> Array[Quest]:
 	var waiting_quests: Array[Quest] = []
 	for quest: Quest in active_quests:
-		if quest != null and quest.is_state(Quest.QuestState.WAITING) and quest.party.is_empty():
+		if quest != null and quest.uses_guild_roster() and quest.is_state(Quest.QuestState.WAITING) and quest.party.is_empty():
 			waiting_quests.append(quest)
 	return waiting_quests
 
-func _build_party_assignment(quest: Quest, available_npcs: Array[NPC]) -> Dictionary:
+func _build_party_assignment(quest: Quest, available_npcs: Array[NPC]) -> PartyAssignment:
 	if quest == null:
-		return {}
+		return null
 
-	var best_assignment: Dictionary = {}
+	var best_assignment: PartyAssignment
 	for primary: NPC in available_npcs:
 		if primary == null or not primary.wants_quest(quest):
 			continue
@@ -471,14 +510,13 @@ func _build_party_assignment(quest: Quest, available_npcs: Array[NPC]) -> Dictio
 
 		if not complete:
 			continue
-		if best_assignment.is_empty() or score > float(best_assignment.get("score", 0.0)):
-			best_assignment = {
-				"quest": quest,
-				"primary": primary,
-				"supports": support_assignments,
-				"members": members,
-				"score": score,
-			}
+		if best_assignment == null or score > best_assignment.score:
+			best_assignment = PartyAssignment.new()
+			best_assignment.quest = quest
+			best_assignment.primary = primary
+			best_assignment.supports = support_assignments
+			best_assignment.members = members
+			best_assignment.score = score
 	return best_assignment
 
 func _get_best_support_npc(
@@ -499,13 +537,13 @@ func _get_best_support_npc(
 			best_score = score
 	return best_npc
 
-func _commit_party_assignment(assignment: Dictionary) -> bool:
-	var quest := assignment.get("quest") as Quest
-	var primary := assignment.get("primary") as NPC
+func _commit_party_assignment(assignment: PartyAssignment) -> bool:
+	var quest := assignment.quest
+	var primary := assignment.primary
 	if quest == null or primary == null or not quest.add_to_party(primary):
 		return false
 
-	var supports: Dictionary = assignment.get("supports", {})
+	var supports: Dictionary[StringName, NPC] = assignment.supports
 	for support_id: StringName in supports:
 		var support_npc := supports[support_id] as NPC
 		if support_npc != null and quest.add_to_party(support_npc, support_id):
