@@ -2,10 +2,12 @@
 [ext_resource type="Script" path="res://scripts/ui/journal_entry.gd" id="1"]
 [ext_resource type="Resource" path="res://resources/journal_tasks/meet_neighbouring_village.tres" id="2"]
 [ext_resource type="Resource" path="res://resources/journal_tasks/deliver_first_shipment.tres" id="3"]
+[ext_resource type="Resource" path="res://resources/journal_tasks/supply_village_equipment.tres" id="4"]
+[ext_resource type="Resource" path="res://resources/journal_tasks/establish_trade_partnership.tres" id="5"]
 [resource]
 script = ExtResource("1")
 id = "regional_trade"
 title_key = "SHIPMENT_JOURNAL_TITLE"
 body_key = "SHIPMENT_JOURNAL_BODY"
 unlocked = false
-tasks = Array[Resource]([ExtResource("2"), ExtResource("3")])
+tasks = Array[Resource]([ExtResource("2"), ExtResource("3"), ExtResource("4"), ExtResource("5")])

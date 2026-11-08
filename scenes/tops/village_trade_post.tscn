@@ -9,6 +9,14 @@
 [ext_resource type="Resource" path="res://resources/item_info/wood_raw.tres" id="8"]
 [ext_resource type="Resource" path="res://resources/item_info/iron_ore.tres" id="9"]
 [ext_resource type="Resource" path="res://resources/item_info/travel_rations.tres" id="10"]
+[ext_resource type="Resource" path="res://resources/item_info/grain.tres" id="11"]
+[sub_resource type="Resource" id="PartnerGrain"]
+script = ExtResource("7")
+content = ExtResource("11")
+count = 6
+maxcount = 6
+is_unlocked = true
+clear_on_empty = false
 [sub_resource type="Resource" id="WoodStock"]
 script = ExtResource("7")
 content = ExtResource("8")
@@ -33,6 +41,7 @@ size = Vector3(0.9, 0.5, 0.6)
 radius = 1.0
 [node name="Market" type="Node3D" node_paths=PackedStringArray("prompt_anchor")]
 script = ExtResource("1")
+partnership_stock = Array[ExtResource("7")]([SubResource("PartnerGrain")])
 close_window_on_area_exit = true
 buy_menu = Array[ExtResource("7")]([SubResource("WoodStock"), SubResource("IronStock"), SubResource("RationStock")])
 prompt_anchor = NodePath("PromptAnchor")
@@ -70,6 +79,25 @@ surface_material_override/0 = ExtResource("4")
 [node name="Shape" type="CollisionShape3D" parent="Trigger"]
 position = Vector3(0, 0.35, 0.65)
 shape = SubResource("TradeTrigger")
+[node name="PartnershipGoods" type="Node3D" parent="."]
+visible = false
+position = Vector3(0.55, 0, 0.15)
+
+[node name="Crate" parent="PartnershipGoods" instance=ExtResource("3")]
+rotation = Vector3(0, 0.4, 0)
+
+[node name="crate_A_small" parent="PartnershipGoods/Crate/RootNode" index="0"]
+surface_material_override/0 = ExtResource("4")
+
+[node name="CrateTop" parent="PartnershipGoods" instance=ExtResource("3")]
+position = Vector3(0, 0.15, 0)
+rotation = Vector3(0, -0.2, 0)
+
+[node name="crate_A_small" parent="PartnershipGoods/CrateTop/RootNode" index="0"]
+surface_material_override/0 = ExtResource("4")
+
+[editable path="PartnershipGoods/Crate"]
+[editable path="PartnershipGoods/CrateTop"]
 [editable path="Stall"]
 [editable path="Steward"]
 [editable path="Crate"]

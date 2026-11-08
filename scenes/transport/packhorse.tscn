@@ -1,21 +1,36 @@
 [gd_scene format=3]
 [ext_resource type="PackedScene" path="res://meshes/kay_fantasy_hexagon/units/neutral/horse_A.glb" id="1"]
 [ext_resource type="Material" path="res://materials/kay_fantasy_default.tres" id="2"]
-[sub_resource type="StandardMaterial3D" id="Leather"]
-albedo_color = Color(0.29, 0.19, 0.11, 1)
-roughness = 0.95
-[sub_resource type="BoxMesh" id="Pack"]
-size = Vector3(0.16, 0.2, 0.24)
-material = SubResource("Leather")
+[ext_resource type="PackedScene" path="res://meshes/kay_fantasy_hexagon/units/neutral/horse_saddle.glb" id="3"]
+[ext_resource type="PackedScene" path="res://meshes/kay_fantasy_hexagon/decoration/props/sack.glb" id="4"]
+[ext_resource type="Script" path="res://scripts/transport/carrier_motion.gd" id="5_motion"]
 [node name="Packhorse" type="Node3D"]
+scale = Vector3(0.8, 0.8, 0.8)
+script = ExtResource("5_motion")
+bob_height = 0.022
+roll_degrees = 1.6
+pitch_degrees = 1.0
 [node name="Model" parent="." instance=ExtResource("1")]
 [node name="horse_A" parent="Model/RootNode" index="0"]
 surface_material_override/0 = ExtResource("2")
-[node name="LeftPack" type="MeshInstance3D" parent="."]
-position = Vector3(-0.17, 0.36, -0.06)
-mesh = SubResource("Pack")
-[node name="RightPack" type="MeshInstance3D" parent="."]
-position = Vector3(0.17, 0.36, -0.06)
-mesh = SubResource("Pack")
+[node name="Saddle" parent="." instance=ExtResource("3")]
+[node name="horse_saddle" parent="Saddle/RootNode" index="0"]
+surface_material_override/0 = ExtResource("2")
+[node name="Cargo" type="Node3D" parent="."]
+[node name="LeftSack" parent="Cargo" instance=ExtResource("4")]
+position = Vector3(-0.18, 0.28, -0.07)
+rotation = Vector3(1.5707963, 0, 0)
+scale = Vector3(1.7, 1.7, 1.7)
+[node name="sack" parent="Cargo/LeftSack/RootNode" index="0"]
+surface_material_override/0 = ExtResource("2")
+[node name="RightSack" parent="Cargo" instance=ExtResource("4")]
+position = Vector3(0.18, 0.28, -0.07)
+rotation = Vector3(1.5707963, 0, 0)
+scale = Vector3(1.7, 1.7, 1.7)
+[node name="sack" parent="Cargo/RightSack/RootNode" index="0"]
+surface_material_override/0 = ExtResource("2")
 
 [editable path="Model"]
+[editable path="Saddle"]
+[editable path="Cargo/LeftSack"]
+[editable path="Cargo/RightSack"]

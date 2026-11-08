@@ -1,0 +1,219 @@
+[gd_scene format=3]
+[ext_resource type="Script" path="res://scripts/ui/transport_ui.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/ui/components/reward_stat.tscn" id="2_stat"]
+[ext_resource type="Texture2D" path="res://sprites/items/coin_single.png" id="3_coin"]
+[ext_resource type="Texture2D" path="res://sprites/ui/line/lucide/reputation.svg" id="4_reputation"]
+[ext_resource type="Texture2D" path="res://sprites/ui/line/lucide/influence.svg" id="5_influence"]
+[ext_resource type="Texture2D" path="res://sprites/ui/line/lucide/prestige.svg" id="6_prestige"]
+
+[node name="TradePage" type="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("1")
+theme_override_constants/separation = 14
+
+[node name="Destinations" type="OptionButton" parent="."]
+layout_mode = 2
+unique_name_in_owner = true
+fit_to_longest_item = false
+
+[node name="Empty" type="Label" parent="."]
+layout_mode = 2
+unique_name_in_owner = true
+size_flags_vertical = 3
+text = "SHIPMENT_NO_VILLAGES"
+autowrap_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Scroll" type="ScrollContainer" parent="."]
+layout_mode = 2
+unique_name_in_owner = true
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 4
+
+[node name="RequestBody" type="VBoxContainer" parent="Scroll"]
+layout_mode = 2
+unique_name_in_owner = true
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="Summary" type="HBoxContainer" parent="Scroll/RequestBody"]
+layout_mode = 2
+
+[node name="Standing" type="Label" parent="Scroll/RequestBody/Summary"]
+layout_mode = 2
+unique_name_in_owner = true
+size_flags_horizontal = 3
+theme_type_variation = &"MutedLabel"
+
+[node name="State" type="Label" parent="Scroll/RequestBody/Summary"]
+layout_mode = 2
+unique_name_in_owner = true
+size_flags_horizontal = 3
+horizontal_alignment = 2
+
+[node name="Title" type="Label" parent="Scroll/RequestBody"]
+layout_mode = 2
+unique_name_in_owner = true
+theme_type_variation = &"Heading"
+autowrap_mode = 2
+
+[node name="Description" type="Label" parent="Scroll/RequestBody"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 2
+theme_type_variation = &"MutedLabel"
+
+[node name="DemandDivider" type="HSeparator" parent="Scroll/RequestBody"]
+layout_mode = 2
+unique_name_in_owner = true
+
+[node name="CargoHint" type="HBoxContainer" parent="Scroll/RequestBody"]
+layout_mode = 2
+unique_name_in_owner = true
+theme_override_constants/separation = 12
+
+[node name="Cargo" type="Label" parent="Scroll/RequestBody/CargoHint"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SHIPMENT_COLUMN_CARGO"
+theme_type_variation = &"MutedLabel"
+
+[node name="Have" type="Label" parent="Scroll/RequestBody/CargoHint"]
+layout_mode = 2
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 0)
+horizontal_alignment = 2
+text = "SHIPMENT_COLUMN_HAVE"
+theme_type_variation = &"MutedLabel"
+
+[node name="Send" type="Label" parent="Scroll/RequestBody/CargoHint"]
+layout_mode = 2
+custom_minimum_size = Vector2(64, 0)
+horizontal_alignment = 2
+text = "SHIPMENT_COLUMN_SEND"
+theme_type_variation = &"MutedLabel"
+
+[node name="Materials" type="VBoxContainer" parent="Scroll/RequestBody"]
+layout_mode = 2
+unique_name_in_owner = true
+theme_override_constants/separation = 6
+
+[node name="Carrier" type="Label" parent="Scroll/RequestBody"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+
+[node name="RewardDivider" type="HSeparator" parent="Scroll/RequestBody"]
+layout_mode = 2
+
+[node name="RewardHeading" type="Label" parent="Scroll/RequestBody"]
+layout_mode = 2
+unique_name_in_owner = true
+theme_type_variation = &"MutedLabel"
+
+[node name="Rewards" type="HBoxContainer" parent="Scroll/RequestBody"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="CoinReward" parent="Scroll/RequestBody/Rewards" instance=ExtResource("2_stat")]
+layout_mode = 2
+unique_name_in_owner = true
+icon = ExtResource("3_coin")
+label_key = "GUILD_COINS_LABEL"
+value_color = Color(0.859, 0.718, 0.459, 1)
+tooltip_text = "SHIPMENT_PAYMENT_HINT"
+
+[node name="CoinRule" type="VSeparator" parent="Scroll/RequestBody/Rewards"]
+layout_mode = 2
+
+[node name="ReputationReward" parent="Scroll/RequestBody/Rewards" instance=ExtResource("2_stat")]
+layout_mode = 2
+unique_name_in_owner = true
+icon = ExtResource("4_reputation")
+label_key = "GUILD_REPUTATION_LABEL"
+tooltip_text = "SHIPMENT_REPUTATION_HINT"
+
+[node name="ReputationRule" type="VSeparator" parent="Scroll/RequestBody/Rewards"]
+layout_mode = 2
+
+[node name="InfluenceReward" parent="Scroll/RequestBody/Rewards" instance=ExtResource("2_stat")]
+layout_mode = 2
+unique_name_in_owner = true
+icon = ExtResource("5_influence")
+label_key = "SHIPMENT_INFLUENCE_LABEL"
+tooltip_text = "SHIPMENT_INFLUENCE_HINT"
+
+[node name="InfluenceRule" type="VSeparator" parent="Scroll/RequestBody/Rewards"]
+layout_mode = 2
+
+[node name="PrestigeReward" parent="Scroll/RequestBody/Rewards" instance=ExtResource("2_stat")]
+layout_mode = 2
+unique_name_in_owner = true
+icon = ExtResource("6_prestige")
+label_key = "GUILD_PRESTIGE_LABEL"
+tooltip_text = "SHIPMENT_PRESTIGE_HINT"
+
+[node name="Partnership" type="Label" parent="Scroll/RequestBody"]
+layout_mode = 2
+unique_name_in_owner = true
+text = "SHIPMENT_UNLOCK_SHORT"
+autowrap_mode = 2
+
+[node name="Journey" type="ProgressBar" parent="Scroll/RequestBody"]
+layout_mode = 2
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 4)
+show_percentage = false
+
+[node name="Status" type="Label" parent="Scroll/RequestBody"]
+layout_mode = 2
+unique_name_in_owner = true
+autowrap_mode = 2
+
+[node name="Feedback" type="Label" parent="."]
+layout_mode = 2
+unique_name_in_owner = true
+theme_type_variation = &"MutedLabel"
+autowrap_mode = 2
+
+[node name="FooterDivider" type="HSeparator" parent="."]
+layout_mode = 2
+unique_name_in_owner = true
+
+[node name="Actions" type="HBoxContainer" parent="."]
+layout_mode = 2
+unique_name_in_owner = true
+theme_override_constants/separation = 8
+
+[node name="Dispatch" type="Button" parent="Actions"]
+layout_mode = 2
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+text = "SHIPMENT_DISPATCH"
+
+[node name="Recall" type="Button" parent="Actions"]
+layout_mode = 2
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+text = "SHIPMENT_RECALL"
+
+[node name="Resume" type="Button" parent="Actions"]
+layout_mode = 2
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+text = "SHIPMENT_RESUME"
+
+[node name="NextRequest" type="Button" parent="Actions"]
+layout_mode = 2
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+text = "SHIPMENT_NEXT_REQUEST"
+
+[node name="Locate" type="Button" parent="Actions"]
+layout_mode = 2
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+text = "SHIPMENT_LOCATE"

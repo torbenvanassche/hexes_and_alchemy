@@ -5,6 +5,7 @@
 [ext_resource type="Resource" path="res://resources/item_info/iron_ore.tres" id="4"]
 [resource]
 script = ExtResource("1")
+id = "workshop_supplies"
 title_key = "SHIPMENT_WORKSHOP_TITLE"
 description_key = "SHIPMENT_WORKSHOP_DESCRIPTION"
 cargo = Dictionary[ExtResource("2"), int]({ExtResource("3"): 3, ExtResource("4"): 1})

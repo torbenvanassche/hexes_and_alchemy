@@ -6,3 +6,4 @@ extends Resource
 @export_range(1, 100, 1) var capacity := 8
 @export_range(0.5, 10.0, 0.1) var travel_speed := 2.2
 @export var scene: PackedScene
+@export_range(0.5, 15.0, 0.5) var unloading_seconds := 3.0

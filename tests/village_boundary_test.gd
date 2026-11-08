@@ -4,6 +4,9 @@ var failures: Array[String] = []
 var deadline := 0
 
 func _ready() -> void:
+	get_tree().node_added.connect(func(node: Node) -> void:
+		if node is MainGrid: node.world_seed = 20261102
+	)
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	get_window().size = Vector2i(1280, 720)
 	deadline = Time.get_ticks_msec() + 60000
@@ -31,6 +34,8 @@ func _run() -> void:
 	check(fresh_village != null, "New world did not generate its village")
 	if fresh_village != null:
 		_check_clearance(fresh_village, fresh_grid)
+		check(Manager.instance.transport.stops.get_stable(fresh_grid, fresh_village) != null, "New village has no exterior stable")
+		check(fresh_village.transport_stable_approach == fresh_village.get("gate_outside"), "New stable approach does not meet the village entrance")
 		var fresh_origin := fresh_grid.get_hex_at_world_position(Manager.instance.active_settlement.spawn_position.global_position)
 		var fresh_arrival := fresh_grid.get_hex_at_world_position(fresh_village.spawn_position.global_position)
 		check(not fresh_grid.pathfinder.get_hex_path(fresh_origin.cube_id, fresh_arrival.cube_id).is_empty(), "New village clearance cuts off its approach route")
@@ -73,8 +78,13 @@ func _run() -> void:
 	check(trade.prompt_anchor != null and trade.get_prompt_position().y > trade.global_position.y + 0.4, "Interaction prompt still targets bare ground")
 	manager.player_instance.global_position = grid.get_hex_at_cube_id(outside).global_position
 	for frame in 6: await get_tree().physics_frame
-	check(trade.get("_marker").visible, "First-visit trade marker missing")
-	var marker: LocationMarker = trade.get("_marker")
+	# Discovery unlocks remote trade; only explicitly locating the market adds an
+	# arrow. The ordinary tracked destination still clears when interacted with.
+	manager.campaign.destination = trade
+	manager.campaign.destination_changed.emit()
+	for frame in 3: await get_tree().process_frame
+	var marker := manager.find_child("LocationMarker", true, false) as LocationMarker
+	check(marker != null and marker.visible, "Located market marker missing")
 	var bounds := LocationMarker.get_visible_bounds(trade)
 	check(marker.global_position.y >= bounds.end.y, "Trade marker below geometry")
 	marker.track(null)
@@ -125,30 +135,30 @@ func _run() -> void:
 	manager.campaign.destination = trade
 	manager.campaign.destination_changed.emit()
 	for frame in 3: await get_tree().process_frame
-	check(not marker.visible, "Tracked destination shows two markers")
+	check(marker.visible, "Located market marker vanished")
 	manager.player_instance.global_position = village.spawn_position.global_position
 	for frame in 6: await get_tree().physics_frame
 	for frame in 3: await get_tree().physics_frame
-	# Keep the discovery arrow visible when close enough for the input prompt.
-	manager.campaign.destination = null
+	# Keep the tracking arrow visible when close enough for the input prompt.
+	manager.campaign.destination = trade
 	manager.campaign.destination_changed.emit()
 	for frame in 3: await get_tree().process_frame
 	check(manager.player_instance.interactor_component.current_triggers.has(trade), "Player did not enter the market prompt area")
-	check(marker.visible, "Interaction prompt incorrectly hides the discovery arrow")
+	check(marker.visible, "Interaction prompt incorrectly hides the tracking arrow")
 	manager.campaign.destination = trade
 	manager.campaign.destination_changed.emit()
 	check(manager.player_instance.interactor_component.interact(), "Steward cannot be interacted with")
 	for frame in 3: await get_tree().process_frame
-	check(manager.transport.villages.has(village.get_parent().cube_id), "Trade counter did not establish contact")
+	check(manager.transport.villages.has(village.get_parent().cube_id), "Discovered village is missing from trade destinations")
 	check(manager.campaign.destination == null, "Interacting at counter did not clear tracked destination")
-	check(not marker.visible, "First-visit marker did not clear after contact")
+	check(not marker.visible, "Tracked market marker did not clear after interaction")
 	var market_info := DataManager.instance.get_scene_by_name("market_ui")
 	while market_info.get_live_instances().is_empty(): await get_tree().process_frame
 	for frame in 12: await get_tree().process_frame
 	var market_window := market_info.get_live_instances()[0].node as DraggableControl
 	var market_ui := market_window.content as MarketUI
 	check(market_ui.buy_inventory == trade.buy_inventory, "Village market opened the wrong stock")
-	check(market_ui.get_node("TopRow/Shipments").visible, "Shipments not available from village market")
+	check(not market_ui.has_node("TopRow/Shipments"), "Village market still manages outbound guild shipments")
 	var stock: ContentSlotResource = trade.buy_inventory.data[0]
 	var previous_stock := stock.count
 	check(manager.market.buy_from_slot(stock, manager.hub.stockpile, 1), "Village market buy action failed")
@@ -157,7 +167,7 @@ func _run() -> void:
 	var home_market := manager.active_settlement.get_service(&"Market") as Market
 	home_market._open_window(market_info)
 	for frame in 12: await get_tree().process_frame
-	check(not market_ui.get_node("TopRow/Shipments").visible, "Village-specific actions leaked into starting market")
+	check(market_ui.buy_inventory == home_market.buy_inventory, "Starting market opened the wrong stock")
 	market_window.hide()
 	var coord: Vector3i = village.get_parent().cube_id
 	check(SaveGames.save_slot("Village boundary"), "Cannot save village geometry")

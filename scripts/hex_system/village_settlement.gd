@@ -50,17 +50,18 @@ func rebuild_boundary() -> void:
 			get_node("entrances" if is_gate else "walls").add_child(piece)
 	collision_shapes.assign(find_children("*", "CollisionShape3D", true, false))
 	_toggle_collision()
-	grid.pathfinder.rebuild()
+	if not SaveGames.is_loading and (not grid is MainGrid or not grid._finishing_generation): grid.pathfinder.rebuild()
 
 func _choose_gate(grid: HexGrid, coords: Array[Vector3i]) -> void:
 	var home := Manager.instance.active_settlement
 	if home == null: return
-	var origin := grid.get_hex_at_world_position(home.spawn_position.global_position)
+	var origin := home.get_parent() as HexBase
 	var arrival := grid.get_hex_at_world_position($Arrival.global_position)
 	# Exclude the village interior when choosing the approach: a candidate must
 	# really be reachable from outside, rather than through another fence edge.
-	var nav := HexAStar.new(grid)
-	nav.rebuild()
+	var reuse_navigation: bool = grid is MainGrid and grid.generation_version >= 2 and grid._finishing_generation
+	var nav: HexAStar = grid.pathfinder if reuse_navigation else HexAStar.new(grid)
+	if not reuse_navigation: nav.rebuild()
 	for coord: Vector3i in coords:
 		if nav.cube_to_id.has(coord): nav.set_point_disabled(nav.cube_to_id[coord])
 	var best_score := INF
@@ -71,8 +72,13 @@ func _choose_gate(grid: HexGrid, coords: Array[Vector3i]) -> void:
 			if outside == null or coords.has(outside.cube_id) or not grid.can_traverse_between(inside, outside, HexInfo.TraversalTag.WALK): continue
 			var path := nav.get_hex_path(origin.cube_id, outside.cube_id)
 			if path.is_empty(): continue
-			var score := float(path.size()) + GridUtils.cube_distance(arrival.cube_id, coord) * 100.0
+			# Face the reachable approach from home. Arrival proximity breaks ties;
+			# prioritizing it over the route could put the gate on the far side.
+			var score := float(path.size()) + GridUtils.cube_distance(arrival.cube_id, coord) * 0.001
 			if score < best_score:
 				best_score = score
 				gate_inside = coord
 				gate_outside = outside.cube_id
+	if reuse_navigation:
+		for coord: Vector3i in coords:
+			if nav.cube_to_id.has(coord): nav.set_point_disabled(nav.cube_to_id[coord], false)

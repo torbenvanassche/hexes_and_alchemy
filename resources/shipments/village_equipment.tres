@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ShipmentRequest" format=3]
+[ext_resource type="Script" path="res://scripts/transport/shipment_request.gd" id="1"]
+[ext_resource type="Script" path="res://tools/inventory/scripts/data/item_info.gd" id="2"]
+[ext_resource type="Resource" path="res://resources/item_info/field_kit.tres" id="3"]
+[ext_resource type="Resource" path="res://resources/item_info/wood_log.tres" id="4"]
+[resource]
+script = ExtResource("1")
+id = "village_equipment"
+title_key = "SHIPMENT_EQUIPMENT_TITLE"
+description_key = "SHIPMENT_EQUIPMENT_DESCRIPTION"
+cargo = Dictionary[ExtResource("2"), int]({ExtResource("3"): 1, ExtResource("4"): 2})
+payment = 48
+reputation_reward = 3
