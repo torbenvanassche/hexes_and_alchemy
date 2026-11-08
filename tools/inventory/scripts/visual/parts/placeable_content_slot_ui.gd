@@ -7,8 +7,8 @@ const ROTATION_STEP_COUNT := 6;
 var hovered_hex: HexBase;
 var hovered_hex_can_drop: bool = false;
 var placement_rotation_y: float = NAN;
-var _preview_node: Node3D;
-var _preview_placeable: PlaceableStructureInfo;
+var preview := StructurePlacementPreview.new();
+
 var _preview_hex: HexBase;
 var _placement_rotation_axis_ready: bool = true;
 var _inventory_drop_completed: bool = false;
@@ -93,11 +93,7 @@ func _clear_placeable_cursor() -> void:
 func _update_placement_rotation(placeable: PlaceableStructureInfo) -> void:
 	if hovered_hex != _preview_hex:
 		_preview_hex = hovered_hex;
-		var placement_rotation := placeable.get_placement_rotation_y(hovered_hex);
-		if bool(placement_rotation.get("has_rotation", false)):
-			placement_rotation_y = float(placement_rotation["rotation_y"]);
-		else:
-			placement_rotation_y = NAN;
+		placement_rotation_y = placeable.get_placement_rotation_y(hovered_hex);
 
 	if Input.is_action_just_pressed("camera_rotate_left"):
 		_step_placement_rotation(placeable, 1.0);
@@ -136,54 +132,18 @@ func _step_placement_rotation(placeable: PlaceableStructureInfo, direction: floa
 			return
 
 func _update_placement_preview(placeable: PlaceableStructureInfo) -> void:
-	if hovered_hex == null or not hovered_hex_can_drop:
-		_clear_placement_preview();
-		return;
-
-	if _preview_node == null or _preview_placeable != placeable:
-		_clear_placement_preview();
-		if placeable.packed_scene == null:
-			return;
-
-		_preview_node = placeable.packed_scene.instantiate() as Node3D;
-		_preview_placeable = placeable;
-		if _preview_node == null:
-			return;
-
-		_preview_node.process_mode = Node.PROCESS_MODE_DISABLED;
-		_disable_preview_collision(_preview_node);
-		_apply_preview_modulate(_preview_node);
-
-		var active_scene := SceneManager.get_active_scene();
-		if active_scene != null and active_scene.node != null:
-			active_scene.node.add_child(_preview_node);
-
-	_preview_node.visible = true;
-	_preview_node.global_position = (
-		hovered_hex.global_position
-		+ placeable.get_placement_offset(hovered_hex, placement_rotation_y)
-	);
-	_preview_node.rotation.y = 0.0 if is_nan(placement_rotation_y) else placement_rotation_y;
+	preview.update(placeable, hovered_hex, hovered_hex_can_drop, placement_rotation_y)
 
 func _clear_placement_preview() -> void:
-	_preview_placeable = null;
-	_preview_hex = null;
-	if _preview_node != null and is_instance_valid(_preview_node):
-		_preview_node.queue_free();
-	_preview_node = null;
+	preview.clear()
+	_preview_hex = null
 
-func _apply_preview_modulate(root: Node) -> void:
-	for mesh: MeshInstance3D in root.find_children("*", "MeshInstance3D", true, false):
-		mesh.transparency = 0.35;
-
-func _disable_preview_collision(root: Node) -> void:
-	for area: Area3D in root.find_children("*", "Area3D", true, false):
-		area.monitoring = false;
-		area.monitorable = false;
-		area.collision_layer = 0;
-		area.collision_mask = 0;
-	for body: CollisionObject3D in root.find_children("*", "CollisionObject3D", true, false):
-		body.collision_layer = 0;
-		body.collision_mask = 0;
-	for shape: CollisionShape3D in root.find_children("*", "CollisionShape3D", true, false):
-		shape.disabled = true;
+func _gui_input(event: InputEvent) -> void:
+	if not can_drag or contentSlot == null: return
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
+		var placeable := _get_dragged_placeable()
+		if placeable == null: return
+		accept_event()
+		var menu := ContextMenu.new([ContextMenuItem.new("PLACEMENT_PLACE", func() -> void: WorldPlacement.begin(placeable, _get_player_inventory(), contentSlot))])
+		add_child(menu)
+		menu.open(get_global_mouse_position())

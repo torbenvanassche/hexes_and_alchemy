@@ -24,8 +24,8 @@ func can_place_on(hex: HexBase, inventory: ContentGroup = null, placement_rotati
 func place_on(hex: HexBase, inventory: ContentGroup = null, placement_rotation_y: float = NAN) -> bool:
 	if not can_place_on(hex, inventory, placement_rotation_y):
 		return false;
+	if not hex.set_structure(self, false, placement_rotation_y): return false
 	_pay_build_cost(inventory);
-	hex.set_structure(self, false, placement_rotation_y);
 	if journal_task != null and Manager.instance != null and Manager.instance.journal != null:
 		Manager.instance.journal.complete_task(journal_task.id)
 	return true;
@@ -33,24 +33,19 @@ func place_on(hex: HexBase, inventory: ContentGroup = null, placement_rotation_y
 func uses_content(content: Resource) -> bool:
 	return content == self or build_cost.has(content);
 
-func get_placement_rotation_y(hex: HexBase, placement_rotation_y: float = NAN) -> Dictionary:
+## NaN means the placement handler does not request a rotation.
+func get_placement_rotation_y(hex: HexBase, placement_rotation_y: float = NAN) -> float:
 	if not is_nan(placement_rotation_y):
-		return {
-			"has_rotation": true,
-			"rotation_y": float(placement_rotation_y)
-		};
+		return placement_rotation_y
 
 	if placement_handler == null:
-		return { "has_rotation": false };
+		return NAN
 
 	var handler: RefCounted = placement_handler.new();
 	if handler == null or not handler.has_method("get_rotation_y"):
-		return { "has_rotation": false };
+		return NAN
 
-	return {
-		"has_rotation": true,
-		"rotation_y": float(handler.get_rotation_y(self, hex))
-	};
+	return float(handler.get_rotation_y(self, hex))
 
 func get_placement_offset(hex: HexBase, placement_rotation_y: float = NAN) -> Vector3:
 	if placement_handler == null:

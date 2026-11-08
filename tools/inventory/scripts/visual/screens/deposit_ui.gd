@@ -1,9 +1,13 @@
 class_name DepositUI
 extends VBoxContainer
 
+class RequirementRow extends RefCounted:
+	var slot: ContentSlotResource
+	var count_label: Label
+
 @onready var complete_order: Button = $"../complete_order"
 
-var requirement_rows: Dictionary[Resource, Dictionary] = {}
+var requirement_rows: Dictionary[Resource, RequirementRow] = {}
 
 @export var inventory: ContentGroup:
 	set(value):
@@ -24,6 +28,14 @@ var source_inventory: ContentGroup:
 		_on_inventory_changed()
 
 signal supplies_deposited()
+var completion_action: Callable
+
+func set_completion_action(action: Callable) -> void:
+	if completion_action.is_valid() and supplies_deposited.is_connected(completion_action):
+		supplies_deposited.disconnect(completion_action)
+	completion_action = action
+	if action.is_valid() and not supplies_deposited.is_connected(action):
+		supplies_deposited.connect(action)
 
 func _ready() -> void:
 	_rebuild_requirements()
@@ -54,10 +66,9 @@ func _rebuild_requirements() -> void:
 			continue
 		var row := _create_requirement_row(item)
 		add_child(row)
-		var row_data: Dictionary[String, Object] = {
-			"slot": slot,
-			"count_label": row.get_node("CountLabel"),
-		}
+		var row_data := RequirementRow.new()
+		row_data.slot = slot
+		row_data.count_label = row.get_node("CountLabel") as Label
 		requirement_rows[item] = row_data
 	_refresh_deposit_state()
 	minimum_size_changed.emit()
@@ -105,9 +116,9 @@ func _refresh_deposit_state() -> void:
 		return
 	var required := _get_required_resources()
 	for item: Resource in requirement_rows.keys():
-		var row_data: Dictionary[String, Object] = requirement_rows[item]
-		var slot := row_data["slot"] as ContentSlotResource
-		var count_label := row_data["count_label"] as Label
+		var row_data := requirement_rows[item]
+		var slot := row_data.slot
+		var count_label := row_data.count_label
 		var available := slot.count
 		if source_inventory != null:
 			available += source_inventory.get_count(item)

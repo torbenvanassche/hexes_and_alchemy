@@ -4,6 +4,8 @@ func can_place(_structure_info: PlaceableStructureInfo, hex: HexBase, _inventory
 	var settlement := _get_settlement_for_hex(hex)
 	if settlement == null:
 		return false
+	if not settlement.is_construction_site_clear(settlement._get_active_grid(), hex):
+		return false
 	if settlement.level < _structure_info.required_settlement_level:
 		return false
 	if not hex.is_traversable(HexInfo.TraversalTag.WALK):
@@ -13,6 +15,8 @@ func can_place(_structure_info: PlaceableStructureInfo, hex: HexBase, _inventory
 func can_place_rotation(_structure_info: PlaceableStructureInfo, hex: HexBase, _inventory: ContentGroup, rotation_y: float) -> bool:
 	var settlement := _get_settlement_for_hex(hex)
 	if settlement == null:
+		return false
+	if not settlement.is_construction_site_clear(settlement._get_active_grid(), hex):
 		return false
 	if settlement.level < _structure_info.required_settlement_level:
 		return false
@@ -85,6 +89,8 @@ func _is_valid_facing_neighbor(settlement: Settlement, hex: HexBase, neighbor: H
 	if grid == null:
 		return false
 	if not settlement.contains_hex(grid, neighbor):
+		return false
+	if settlement.is_building_plot_occupied(grid, neighbor):
 		return false
 	return not settlement.has_boundary_between(grid, hex, neighbor)
 

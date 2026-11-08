@@ -1,5 +1,5 @@
 class_name ContextMenuItem
-extends Node
+extends RefCounted
 
 var id: String;
 var function: Callable;

@@ -1,0 +1,45 @@
+[gd_scene load_steps=11 format=3]
+[ext_resource type="Script" path="res://scripts/structures/community_buildable.gd" id="buildable"]
+[ext_resource type="Script" path="res://tools/quest_system/scripts/fetch_objective.gd" id="request"]
+[ext_resource type="Resource" path="res://tools/quest_system/resources/quests/build_well.tres" id="quest"]
+[ext_resource type="PackedScene" path="res://meshes/kay_fantasy_hexagon/buildings/neutral/building_stage_A.glb" id="foundation"]
+[ext_resource type="PackedScene" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_well_blue.glb" id="well"]
+[ext_resource type="Script" path="res://scripts/interactions/community_improvement.gd" id="interaction"]
+[ext_resource type="Material" path="res://materials/kay_fantasy_default.tres" id="material"]
+[sub_resource type="BoxShape3D" id="area"]
+size = Vector3(1.8, 1, 1.8)
+[sub_resource type="BoxShape3D" id="body"]
+size = Vector3(0.85, 1, 0.85)
+[sub_resource type="BoxShape3D" id="base"]
+size = Vector3(0.9, 0.25, 0.9)
+[node name="BuildableWell" type="Node3D" node_paths=PackedStringArray("build_steps")]
+script = ExtResource("buildable")
+build_steps = [NodePath("Foundation"), NodePath("Well")]
+project_id = "water"
+[node name="Foundation" type="Node3D" parent="."]
+script = ExtResource("request")
+quest = ExtResource("quest")
+required_settlement_level = 2
+[node name="Model" parent="Foundation" instance=ExtResource("foundation")]
+scale = Vector3(0.75, 0.75, 0.75)
+[node name="interaction" type="Area3D" parent="Foundation"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Foundation/interaction"]
+position = Vector3(0, 0.5, 0)
+shape = SubResource("area")
+[node name="collision" type="StaticBody3D" parent="Foundation"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Foundation/collision"]
+position = Vector3(0, 0.125, 0)
+shape = SubResource("base")
+[node name="Well" type="Node3D" parent="."]
+visible = false
+script = ExtResource("interaction")
+project_id = "water"
+[node name="Model" parent="Well" instance=ExtResource("well")]
+[node name="interaction" type="Area3D" parent="Well"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Well/interaction"]
+position = Vector3(0, 0.5, 0)
+shape = SubResource("area")
+[node name="collision" type="StaticBody3D" parent="Well"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Well/collision"]
+position = Vector3(0, 0.5, 0)
+shape = SubResource("body")

@@ -10,6 +10,7 @@ func _init(data: Array[ContextMenuItem] = []) -> void:
 
 func _ready() -> void:
 	close_requested.connect(_on_close)
+	popup_hide.connect(_on_close)
 	index_pressed.connect(_on_idx)
 
 func add(cmi: ContextMenuItem) -> void:

@@ -16,6 +16,7 @@ const BOUNDARY_EDGE_META := &"settlement_boundary_edge"
 @export_range(0, 8, 1) var initial_footprint_radius: int = 0
 ## Child paths mapped to cube offsets from the settlement's origin hex.
 ## Moves the complete building, including collisions, onto the actual grid surface.
+## Omit wall-side props such as the quest board to retain their authored placement.
 @export var building_hex_offsets: Dictionary[NodePath, Vector3i] = {}
 @export_group("Settlement Reveal")
 @export_range(1, 32, 1) var reveal_search_range: int = 8;
@@ -30,6 +31,10 @@ var interactions: Array[Interaction] = []
 var interactions_by_type: Dictionary[StringName, Array] = {};
 var buildables: Array[Buildable] = []
 var expanded_tiles: Array[Vector3i] = []
+## Exterior stable and its front approach persist with the settlement.
+var transport_stable_tile := Vector3i.MAX
+var transport_stable_approach := Vector3i.MAX
+var _world_ready := false
 
 signal level_changed(new_level: int)
 
@@ -39,6 +44,8 @@ func _ready() -> void:
 	var grid := _get_active_grid()
 	if grid != null:
 		grid.invalidate_settlement_structure_exclusion_cache()
+		var origin := _get_settlement_origin_hex(grid)
+		if origin != null: _align_buildings_to_grid(grid, origin)
 	
 	interactions.assign(find_children("*", "Interaction", true, false))
 	_register_interactions()
@@ -53,7 +60,13 @@ func _ready() -> void:
 		Manager.instance.set_active_settlement(self);
 		Manager.instance.spawn_in_settlement();
 	visibility_changed.connect(_toggle_collision)
-	_ready_deferred.call_deferred();
+	ensure_world_ready.call_deferred();
+
+## Generation must see the final footprint/walls before validating routes.
+func ensure_world_ready() -> void:
+	if _world_ready: return
+	_world_ready = true
+	_ready_deferred()
 	
 func _ready_deferred() -> void:
 	var grid := _get_active_grid()
@@ -158,6 +171,27 @@ func contains_hex(grid: HexGrid, hex: HexBase) -> bool:
 			return true
 	return false
 
+## Built-in services live beneath the settlement, not hex.structure. They still
+## own their plots. Keep both sides of each entrance free for gate interaction.
+func is_building_plot_occupied(grid: HexGrid, hex: HexBase, ignore_placed_structure := false) -> bool:
+	var buildings := get_node_or_null("structures")
+	if buildings != null:
+		for building: Node3D in buildings.get_children():
+			var occupied := grid.get_hex_at_world_position(building.global_position)
+			if occupied == hex: return true
+	return not ignore_placed_structure and hex.structure != null and hex.structure.instance != self
+
+func is_gate_approach(grid: HexGrid, hex: HexBase) -> bool:
+	var entrances := get_node_or_null("entrances")
+	if entrances != null:
+		for gate: Node3D in entrances.get_children():
+			if grid.get_hex_at_world_position(gate.global_position) == hex: return true
+			if grid.get_hex_at_world_position(gate.global_transform * (Vector3.LEFT * 2.0)) == hex: return true
+	return false
+
+func is_construction_site_clear(grid: HexGrid, hex: HexBase, ignore_placed_structure := false) -> bool:
+	return not is_building_plot_occupied(grid, hex, ignore_placed_structure) and not is_gate_approach(grid, hex)
+
 func get_settlement_hexes(grid: HexGrid) -> Array[HexBase]:
 	var result: Array[HexBase] = []
 	if grid == null or not grid.is_ancestor_of(self):
@@ -193,6 +227,8 @@ func can_expand_to_hex(grid: HexGrid, hex: HexBase) -> bool:
 	if grid == null or hex == null:
 		return false
 	if contains_hex(grid, hex):
+		return false
+	if hex.cube_id in [transport_stable_tile, transport_stable_approach]:
 		return false
 	if not hex.is_traversable(HexInfo.TraversalTag.WALK):
 		return false

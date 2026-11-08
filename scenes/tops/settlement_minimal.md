@@ -41,7 +41,9 @@ For manual scene composition, instance `settlement_minimal.tscn` under the world
 grid and align its origin to a hex centre. Use structure placement when footprint
 reservation and region bookkeeping are needed. Add future village services under
 Buildings or a separate Services node; the Settlement root registers Interaction
-children automatically. Arrival defines the gate approach; Buildings/Market/Approach is the player and packhorse arrival point.
+children automatically. Arrival defines the gate approach; Buildings/Market/Approach
+is the player interaction point. Packhorses use a separate exterior stable and its
+loading bay, placed by `TransportStops` in the cleared ring beside the gate.
 
 Run `tests/village_boundary_test.tscn` to check the perimeter, gate access,
 market interaction, discovery marker, stock persistence, and legacy save migration.
@@ -56,7 +58,7 @@ Locate village continues to track the same counter; there is no floating market 
 
 The door uses the starting stone gate's rotating interaction with a collider fitted
 to the wooden mesh. Players open and close it with the usual interaction button.
-NPCs and packhorse shipments open it when passing; closed doors physically block
+NPCs open it when passing; shipments stay outside the village. Closed doors physically block
 the entrance while the gate remains available to route planning. The open/closed
 state is saved and restored when the boundary is rebuilt.
 
@@ -65,3 +67,7 @@ interacting opens the shared buy/sell window with a small local stock. Its
 Shipments button opens the village's delivery requests. The starting market keeps
 its existing UI. The village has no guild hall, recruitment hub or other starting
 settlement facilities; it remains a small, passive neighbour.
+
+After the repair and crafted-equipment deliveries, its market becomes a trade
+partner: grain unlocks, later deliveries replenish its stock, and extra goods
+crates appear beside the stall. Stock and partnership survive save/load.

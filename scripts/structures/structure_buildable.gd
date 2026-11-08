@@ -33,6 +33,7 @@ func _meets_settlement_level_requirement(owner_settlement: Settlement) -> bool:
 	return owner_settlement.level >= int(current_step.required_settlement_level)
 	
 func _on_step_completed(step: BuildRequest) -> void:
+	if step != current_step: return
 	var index := build_steps.find(step);
 	if index < build_steps.size() - 1:
 		current_step.visible = false;

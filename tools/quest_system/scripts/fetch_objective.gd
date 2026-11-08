@@ -45,6 +45,5 @@ func _open_window(window_info: SceneInfo) -> void:
 			dep_ui.source_inventory = Manager.instance.hub.stockpile
 		elif Manager.instance.player_instance != null:
 			dep_ui.source_inventory = Manager.instance.player_instance.inventory
-	if not dep_ui.supplies_deposited.is_connected(completed.emit):
-		dep_ui.supplies_deposited.connect(completed.emit);
+	dep_ui.set_completion_action(completed.emit)
 	window_instance.on_enter.emit();

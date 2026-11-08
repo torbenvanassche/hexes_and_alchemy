@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ItemInfo" format=3]
+[ext_resource type="Script" path="res://tools/inventory/scripts/data/item_info.gd" id="item"]
+[ext_resource type="Texture2D" path="res://sprites/items/blueprint.png" id="icon"]
+[resource]
+script = ExtResource("item")
+usage_key = "ITEM_USE_WELL_BLUEPRINT"
+unique_id = "well_blueprint"
+translation_key_name = "ITEM_WELL_BLUEPRINT_NAME"
+translation_key_description = "ITEM_WELL_BLUEPRINT_DESC"
+texture = ExtResource("icon")
+buy_value = 15
+sell_value = 1

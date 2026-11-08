@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="FetchQuest" format=3]
+[ext_resource type="Script" path="res://tools/quest_system/scripts/fetch.gd" id="fetch"]
+[ext_resource type="Script" path="res://tools/inventory/scripts/data/item_info.gd" id="item"]
+[ext_resource type="Resource" path="res://resources/item_info/wood_log.tres" id="planks"]
+[ext_resource type="Resource" path="res://resources/item_info/iron_ore.tres" id="iron"]
+[ext_resource type="Resource" path="res://resources/item_info/work_supplies.tres" id="supplies"]
+[resource]
+script = ExtResource("fetch")
+requested_items = Dictionary[ExtResource("item"), int]({ExtResource("planks"):2, ExtResource("iron"):1, ExtResource("supplies"):1})

@@ -17,8 +17,15 @@ script = ExtResource("1_l415u")
 spawn_position = NodePath("player_spawn")
 is_active_settlement = true
 upgrade_requirements = Array[ExtResource("18_upgrade_info")]([ExtResource("16_upgrade_2"), ExtResource("17_upgrade_3")])
-settlement_tile_anchors = Array[NodePath]([NodePath("structures/market"), NodePath("structures/tavern"), NodePath("structures/home"), NodePath("structures/guild_hall")])
+settlement_tile_anchors = Array[NodePath]([NodePath("structures/market"), NodePath("structures/tavern"), NodePath("structures/home"), NodePath("structures/guild_hall"), NodePath("structures/questboard")])
 initial_footprint_radius = 2
+building_hex_offsets = Dictionary[NodePath, Vector3i]({
+NodePath("structures/market"): Vector3i(-1, -1, 2),
+NodePath("structures/tavern"): Vector3i(1, 0, -1),
+NodePath("structures/home"): Vector3i(0, 1, -1),
+NodePath("structures/guild_hall"): Vector3i(-1, 0, 1),
+NodePath("player_spawn"): Vector3i(0, 0, 0)
+})
 
 [node name="structures" type="Node3D" parent="." unique_id=516994821]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9910254, 0, -1.75)
@@ -30,7 +37,7 @@ transform = Transform3D(0.9999999, 0, 0, 0, 1, 0, 0, 0, 0.9999999, 0.9910254, 0,
 transform = Transform3D(-0.4999999, 0, -0.86602545, 0, 1, 0, 0.86602545, 0, -0.4999999, 2.9551268, 0, 1.75)
 
 [node name="questboard" parent="structures" unique_id=1065241070 instance=ExtResource("11_mt1kp")]
-transform = Transform3D(0.028422564, 0, 0.99959606, 0, 1, 0, -0.99959606, 0, 0.028422564, -2.732742, 0, -0.051187754)
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -3.6730762, 0, 1.75)
 
 [node name="home" parent="structures" unique_id=2074058054 instance=ExtResource("11_47cix")]
 transform = Transform3D(1.0392303, 0, -0.60000014, 0, 1.1999997, 0, 0.60000014, 0, 1.0392303, -0.008974612, 0, -0.25)
