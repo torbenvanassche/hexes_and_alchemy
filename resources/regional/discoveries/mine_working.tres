@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="DiscoveryDefinition" format=3]
+[ext_resource type="Script" path="res://scripts/regional/discovery_definition.gd" id="1"]
+[resource]
+script = ExtResource("1")
+id = "mine_working"
+site_kind = "mines"
+weight = 40.0
+title_key = "DISCOVERY_MINE_WORKING_TITLE"
+description_key = "DISCOVERY_MINE_WORKING_DESC"
+initial_state = "POOR_VEIN"
+occupation = 1
+safe_for_opening = true

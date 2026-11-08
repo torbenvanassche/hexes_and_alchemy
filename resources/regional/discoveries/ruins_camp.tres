@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="DiscoveryDefinition" format=3]
+[ext_resource type="Script" path="res://scripts/regional/discovery_definition.gd" id="1"]
+[resource]
+script = ExtResource("1")
+id = "ruins_camp"
+site_kind = "ancient_ruins"
+weight = 25.0
+title_key = "DISCOVERY_RUINS_CAMP_TITLE"
+description_key = "DISCOVERY_RUINS_CAMP_DESC"
+initial_state = "SURVEYED"
+occupation = 1
+safe_for_opening = true

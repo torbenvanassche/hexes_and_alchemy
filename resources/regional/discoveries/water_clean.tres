@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="DiscoveryDefinition" format=3]
+[ext_resource type="Script" path="res://scripts/regional/discovery_definition.gd" id="1"]
+[resource]
+script = ExtResource("1")
+id = "water_clean"
+site_kind = "water_source"
+weight = 60.0
+title_key = "DISCOVERY_WATER_CLEAN_TITLE"
+description_key = "DISCOVERY_WATER_CLEAN_DESC"
+initial_state = "FRESH"
+occupation = 1
+safe_for_opening = true
