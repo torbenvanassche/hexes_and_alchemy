@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="OpeningChapterDefinition" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/helpers/opening_chapter_definition.gd" id="1"]
+[resource]
+script = ExtResource("1")
+required_projects = 2
+forge_grant = 20
+completion_grant = 40
+completion_prestige = 2

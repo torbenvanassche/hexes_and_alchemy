@@ -5,10 +5,10 @@
 
 [node name="ProjectsPage" type="MarginContainer"]
 theme = ExtResource("2_theme")
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 8
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
 script = ExtResource("1_script")
 
 [node name="Body" type="VBoxContainer" parent="."]
@@ -48,6 +48,10 @@ autowrap_mode = 3
 [node name="Guidance" type="Label" parent="Body/Scroll/Content"]
 layout_mode = 2
 autowrap_mode = 3
+
+[node name="MaterialsHeader" type="Label" parent="Body/Scroll/Content"]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
 
 [node name="Materials" type="VBoxContainer" parent="Body/Scroll/Content"]
 layout_mode = 2
@@ -93,10 +97,6 @@ layout_mode = 2
 text = "CAMPAIGN_CONTROLS"
 autowrap_mode = 3
 
-[node name="TradeDivider" type="HSeparator" parent="Body/Scroll/Content"]
+[node name="SettlementStatus" type="Label" parent="Body/Scroll/Content" index="2"]
 layout_mode = 2
-
-[node name="Trade" type="Button" parent="Body/Scroll/Content"]
-layout_mode = 2
-custom_minimum_size = Vector2(0, 36)
-text = "SHIPMENT_OPEN"
+theme_type_variation = &"MutedLabel"
