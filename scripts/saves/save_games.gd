@@ -2,6 +2,8 @@ extends Node
 
 signal slots_changed()
 signal load_finished(success: bool, message: String)
+signal load_started()
+var loading_progress := WorldGenerationProgress.new()
 
 const VERSION := 1
 const DIRECTORY := "user://saves"
@@ -9,15 +11,27 @@ const DEVELOPMENT_DIRECTORY := "res://development/checkpoints"
 const DEVELOPMENT_CHECKPOINTS := [
 	{"id": "arrival", "label": "01 · Fresh arrival", "description": "The opening settlement, starting guild and 100 coins. No campaign progress."},
 	{"id": "foundation", "label": "02 · Forge foundation", "description": "Forge placed; 1 of 2 timber delivered. Gather the remaining timber and 5 iron ore."},
-	{"id": "blacksmith", "label": "03 · Blacksmith open", "description": "Level 2 settlement with a working blacksmith, basic supplies and 250 coins for testing."},
-	{"id": "village", "label": "04 · Neighbouring village", "description": "The neighbouring village and route are revealed. Start at its entrance with the level 2 settlement established."},
+	{"id": "blacksmith", "label": "03 · Choose village requests", "description": "Blacksmith open, level 2, no village improvements yet. 250 coins, 4 prestige and supplies for testing."},
+	{"id": "first_improvement", "label": "04 · One village improvement", "description": "Well built and water request complete. Choose a second request; the neighbouring village is not revealed yet."},
+	{"id": "village_improved", "label": "05 · Village improved", "description": "Water and food requests complete. Discover the neighbour to begin the trade part of the chapter."},
+	{"id": "trade_ready", "label": "06 · Ready for first shipment", "description": "Two improvements complete; village and route revealed. Dispatch the repair supplies from the journal Trade page."},
+	{"id": "first_shipment", "label": "07 · Craft the partnership shipment", "description": "Repair delivery completed and horse returned. Craft the equipment for the second delivery."},
+	{"id": "chapter_complete", "label": "08 · Opening chapter complete", "description": "Two improvements and trade partnership complete. Chapter grant paid once; continue upgrading or exploring."},
+	{"id": "well_blueprint", "label": "Alt · Place the well", "description": "Water fieldwork complete and blueprint issued. Test placement and cancellation; construction supplies are in stores."},
+	{"id": "well_foundation", "label": "Alt · Build the well", "description": "Well foundation placed. Deliver the construction supplies to finish the water request and activate its benefit."},
+	{"id": "village", "label": "Alt · Village discovered early", "description": "Blacksmith open and village revealed, but no improvements. Test exploring or trading ahead of the suggested chapter order."},
+	{"id": "trade_partner", "label": "Alt · Trade before improvements", "description": "Both deliveries complete and grain unlocked, with village requests still pending. Finish two requests to conclude the chapter."},
+	{"id": "active_commission", "label": "Alt · Commission in progress", "description": "A paid forage commission is working. Auto-collect is off. Inspect resumed work, then collect its rewards."},
 ]
 var is_loading := false
 var last_error := ""
-var _pending: Dictionary = {}
+var _pending: Dictionary[String, Variant] = {}
 var _old_manager_id := 0
 var _restoring := false
 var _load_started := 0
+
+func is_restoring() -> bool:
+	return _restoring
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -33,8 +47,6 @@ func save_block_reason() -> String:
 		return "The world is not ready."
 	var grid := active.node as MainGrid
 	if grid.is_streaming_busy(): return "The world is still generating. Resume briefly before saving."
-	if not Manager.instance.quests.active_quests.is_empty():
-		return "Finish or cancel commissions and collect their rewards before saving this checkpoint."
 	return ""
 
 func save_slot(label: String) -> bool:
@@ -76,7 +88,7 @@ func save_slot(label: String) -> bool:
 	slots_changed.emit()
 	return true
 
-func create_document(label: String, data: Dictionary) -> Dictionary:
+func create_document(label: String, data: Dictionary[String, Variant]) -> Dictionary[String, Variant]:
 	var payload := JSON.stringify(data, "", true, true)
 	return {"version": VERSION, "label": label, "saved_at": Time.get_datetime_string_from_system(), "day": Manager.instance.time_of_day.get_day_number(), "stage": Manager.instance.campaign.stage, "payload": payload, "checksum": payload.sha256_text()}
 
@@ -105,18 +117,18 @@ func list_slots() -> Array[Dictionary]:
 		if not filename.ends_with(".json"): continue
 		var document: Variant = JSON.parse_string(FileAccess.get_file_as_string(DIRECTORY.path_join(filename)))
 		if document is Dictionary and document.get("version") == VERSION:
-			result.append({"slot": filename.trim_suffix(".json"), "label": document.get("label", filename), "saved_at": document.get("saved_at", ""), "day": document.get("day", 1)})
-	result.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return str(a.saved_at) > str(b.saved_at))
+			result.append(TypedData.string_map({"slot": filename.trim_suffix(".json"), "label": document.get("label", filename), "saved_at": document.get("saved_at", ""), "day": document.get("day", 1)}))
+	result.sort_custom(func(a: Dictionary[String, Variant], b: Dictionary[String, Variant]) -> bool: return str(a.saved_at) > str(b.saved_at))
 	return result
 
-func read_slot(slot: String) -> Dictionary:
+func read_slot(slot: String) -> Dictionary[String, Variant]:
 	last_error = ""
 	if slot != slot.validate_filename() or slot.is_empty():
 		last_error = "Invalid save slot."
 		return {}
 	return _read_document(_path(slot))
 
-func _read_document(path: String) -> Dictionary:
+func _read_document(path: String) -> Dictionary[String, Variant]:
 	last_error = ""
 	if not FileAccess.file_exists(path):
 		last_error = "This checkpoint no longer exists."
@@ -129,7 +141,7 @@ func _read_document(path: String) -> Dictionary:
 	if payload.sha256_text() != document.get("checksum", ""):
 		last_error = "This save is incomplete or damaged. The previous backup is preserved."
 		return {}
-	var data: Variant = JSON.parse_string(payload)
+	var data: Variant = TypedData.json_value(JSON.parse_string(payload))
 	if not data is Dictionary or not _validate_snapshot(data):
 		last_error = "This save does not contain a complete game state."
 		return {}
@@ -141,13 +153,15 @@ func _read_document(path: String) -> Dictionary:
 func load_slot(slot: String) -> bool:
 	return _load_data(read_slot(slot))
 
-func _load_data(data: Dictionary) -> bool:
+func _load_data(data: Dictionary[String, Variant]) -> bool:
 	if is_loading:
 		last_error = "A save is being loaded."
 		return false
 	if data.is_empty(): return false
 	_pending = data
 	is_loading = true
+	loading_progress = WorldGenerationProgress.new()
+	load_started.emit()
 	_load_started = Time.get_ticks_msec()
 	_old_manager_id = Manager.instance.get_instance_id() if is_instance_valid(Manager.instance) else 0
 	get_tree().paused = false
@@ -162,6 +176,7 @@ func _prepare_grid(node: Node) -> void:
 	if not is_loading or not node is MainGrid: return
 	var codec := SaveCodec.new()
 	codec.apply_fields(node, _pending.world.settings)
+	if not _pending.world.settings.has("generation_version"): node.generation_version = 1
 	node.world_seed = int(_pending.world.seed)
 	node.generate_chunks_near_player = false
 	node.initial_chunk_override.assign(codec.decode(_pending.world.chunks))
@@ -184,13 +199,16 @@ func _restore(grid: MainGrid) -> void:
 	get_tree().paused = true
 	for frame in 3: await get_tree().process_frame
 	var snapshot := GameSnapshot.new()
-	var success := await snapshot.restore(_pending, grid)
+	var success := await snapshot.restore(_pending, grid, loading_progress)
 	grid.generate_chunks_near_player = bool(_pending.world.settings.get("generate_chunks_near_player", true))
 	_pending.clear()
 	_restoring = false
 	is_loading = false
 	get_tree().paused = false
 	if success:
+		Manager.instance.quests.resume_restored_commissions()
+		Manager.instance.campaign.refresh()
+		Manager.instance.regional.queue_refresh()
 		Manager.instance.toast.notify_report("Checkpoint loaded")
 		load_finished.emit(true, "Checkpoint loaded")
 	else:
@@ -206,7 +224,7 @@ func _fail_load(message: String) -> void:
 		Manager.instance.toast.notify_report(message)
 	load_finished.emit(false, message)
 
-func _validate_snapshot(data: Dictionary) -> bool:
+func _validate_snapshot(data: Dictionary[String, Variant]) -> bool:
 	for key: String in ["world", "hub", "inventory", "journal", "factions", "reputation", "time", "player", "campaign"]:
 		if not data.get(key) is Dictionary: return false
 	if not data.get("roster") is Array or not data.get("history") is Array: return false
@@ -229,7 +247,7 @@ func _validate_snapshot(data: Dictionary) -> bool:
 		if not row is Dictionary or not row.has_all(["quest_id", "location", "type", "state", "context", "fields", "operation"]): return false
 	return true
 
-func _valid_inventory(data: Dictionary) -> bool:
+func _valid_inventory(data: Dictionary[String, Variant]) -> bool:
 	if not data.has_all(["stack", "slots"]) or not data.slots is Array: return false
 	for slot in data.slots:
 		if not slot is Dictionary or not slot.has_all(["item", "count", "max", "unlocked"]): return false
