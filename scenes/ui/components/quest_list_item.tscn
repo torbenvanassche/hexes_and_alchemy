@@ -66,9 +66,9 @@ theme_override_constants/separation = 6
 [node name="QuestType" type="Label" parent="Paper/MarginContainer/VBoxContainer/Header" unique_id=236912205]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 18
 text = "QUEST_TYPE_FETCH"
-text_overrun_behavior = 3
+autowrap_mode = 3
 
 [node name="QuestNumber" type="Label" parent="Paper/MarginContainer/VBoxContainer/Header" unique_id=725982639]
 layout_mode = 2

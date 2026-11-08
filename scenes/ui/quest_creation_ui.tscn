@@ -9,17 +9,18 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxFlat_quest_form"]
 
-[node name="Window" unique_id=1301866213 node_paths=PackedStringArray("content") instance=ExtResource("1_b8c84")]
+[node name="Window" unique_id=1301866213 node_paths=PackedStringArray("content", "fit_scroll") instance=ExtResource("1_b8c84")]
 custom_minimum_size = Vector2(460, 0)
 resizable = false
 offset_right = 460.0
 offset_bottom = 233.0
 id = "WINDOW_NEW_QUEST"
 content = NodePath("NinePatchRect/VBoxContainer/contentPanel/QuestCreation")
+fit_scroll = NodePath("NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll")
 
 [node name="contentPanel" parent="NinePatchRect/VBoxContainer" parent_id_path=PackedInt32Array(554725130) index="1" unique_id=1040542232]
 size_flags_horizontal = 3
-size_flags_vertical = 1
+size_flags_vertical = 3
 
 [node name="QuestCreation" type="PanelContainer" parent="NinePatchRect/VBoxContainer/contentPanel" index="0" unique_id=206947003]
 custom_minimum_size = Vector2(400, 0)
@@ -31,63 +32,67 @@ script = ExtResource("2_1mihr")
 packed_slot = ExtResource("3_slot")
 support_row_scene = ExtResource("7_support_row")
 
-[node name="MarginContainer" type="MarginContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation" index="0" unique_id=1452652058]
-layout_mode = 2
-theme_override_constants/margin_left = 4
-theme_override_constants/margin_top = 4
-theme_override_constants/margin_right = 4
-theme_override_constants/margin_bottom = 4
-
-[node name="VBoxContainer" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer" index="0" unique_id=376979057]
+[node name="MarginContainer" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation" index="0" unique_id=1452652058]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="LocationRow" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer" index="0" unique_id=1452652059]
+[node name="Scroll" type="ScrollContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer" index="0"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll" index="0" unique_id=376979057]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="LocationRow" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer" index="0" unique_id=1452652059]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="LocationLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/LocationRow" index="0" unique_id=474702119]
+[node name="LocationLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/LocationRow" index="0" unique_id=474702119]
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 text = "QUEST_CREATION_TARGET"
 vertical_alignment = 1
 
-[node name="QuestLocation" type="OptionButton" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/LocationRow" index="1" unique_id=90833800]
+[node name="QuestLocation" type="OptionButton" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/LocationRow" index="1" unique_id=90833800]
 custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("4_theme")
 text_overrun_behavior = 3
 
-[node name="TypeRow" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer" index="1" unique_id=376979058]
+[node name="TypeRow" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer" index="1" unique_id=376979058]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="TypeLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/TypeRow" index="0" unique_id=844205132]
+[node name="TypeLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/TypeRow" index="0" unique_id=844205132]
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 text = "QUEST_CREATION_QUEST"
 vertical_alignment = 1
 
-[node name="QuestType" type="OptionButton" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/TypeRow" index="1" unique_id=675844846]
+[node name="QuestType" type="OptionButton" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/TypeRow" index="1" unique_id=675844846]
 custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("4_theme")
 text_overrun_behavior = 3
 
-[node name="ScoutDistanceRow" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer" index="2" unique_id=287423844]
+[node name="ScoutDistanceRow" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer" index="2" unique_id=287423844]
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="ScoutDistanceLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/ScoutDistanceRow" index="0" unique_id=1353602673]
+[node name="ScoutDistanceLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/ScoutDistanceRow" index="0" unique_id=1353602673]
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 text = "QUEST_CREATION_SCOUT_DISTANCE"
 vertical_alignment = 1
 
-[node name="ScoutDistance" type="SpinBox" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/ScoutDistanceRow" index="1" unique_id=2039914325]
+[node name="ScoutDistance" type="SpinBox" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/ScoutDistanceRow" index="1" unique_id=2039914325]
 custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -96,58 +101,58 @@ min_value = 1.0
 max_value = 50.0
 value = 1.0
 
-[node name="ScoutDirectionRow" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer" index="3" unique_id=104318025]
+[node name="ScoutDirectionRow" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer" index="3" unique_id=104318025]
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="ScoutDirectionLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/ScoutDirectionRow" index="0" unique_id=234646713]
+[node name="ScoutDirectionLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/ScoutDirectionRow" index="0" unique_id=234646713]
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 text = "QUEST_CREATION_SCOUT_DIRECTION"
 vertical_alignment = 1
 
-[node name="ScoutDirection" type="OptionButton" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/ScoutDirectionRow" index="1" unique_id=2008020344]
+[node name="ScoutDirection" type="OptionButton" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/ScoutDirectionRow" index="1" unique_id=2008020344]
 custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("4_theme")
 text_overrun_behavior = 3
 
-[node name="MinimumRankRow" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer" index="4" unique_id=1242870720]
+[node name="MinimumRankRow" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer" index="4" unique_id=1242870720]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="MinimumRankLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/MinimumRankRow" index="0" unique_id=1312695443]
+[node name="MinimumRankLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/MinimumRankRow" index="0" unique_id=1312695443]
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 text = "QUEST_CREATION_MINIMUM_RANK"
 vertical_alignment = 1
 
-[node name="MinimumRank" type="OptionButton" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/MinimumRankRow" index="1" unique_id=2095890718]
+[node name="MinimumRank" type="OptionButton" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/MinimumRankRow" index="1" unique_id=2095890718]
 custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("4_theme")
 text_overrun_behavior = 3
 
-[node name="RewardOfferRow" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer" index="5" unique_id=1781518387]
+[node name="RewardOfferRow" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer" index="5" unique_id=1781518387]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="RewardOfferLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/RewardOfferRow" index="0" unique_id=587504926]
+[node name="RewardOfferLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/RewardOfferRow" index="0" unique_id=587504926]
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 text = "QUEST_CREATION_REWARD_OFFER"
 vertical_alignment = 1
 
-[node name="RewardOfferAmount" type="SpinBox" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/RewardOfferRow" index="1" unique_id=241817572]
+[node name="RewardOfferAmount" type="SpinBox" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/RewardOfferRow" index="1" unique_id=241817572]
 custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("4_theme")
 
-[node name="InterestLabel" type="RichTextLabel" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer" index="6" unique_id=1698834639]
+[node name="InterestLabel" type="RichTextLabel" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer" index="6" unique_id=1698834639]
 visible = false
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
@@ -157,149 +162,149 @@ bbcode_enabled = true
 fit_content = true
 scroll_active = false
 
-[node name="ActiveQuestsSection" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer" index="7" unique_id=2061038027]
+[node name="ActiveQuestsSection" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer" index="7" unique_id=2061038027]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 6
 
-[node name="ActiveQuestsDivider" type="HSeparator" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/ActiveQuestsSection" index="0" unique_id=2048862957]
+[node name="ActiveQuestsDivider" type="HSeparator" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/ActiveQuestsSection" index="0" unique_id=2048862957]
 layout_mode = 2
 
-[node name="ActiveQuestsLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/ActiveQuestsSection" index="1" unique_id=203853361]
+[node name="ActiveQuestsLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/ActiveQuestsSection" index="1" unique_id=203853361]
 layout_mode = 2
 text = "QUEST_ACTIVE_AT_LOCATION"
 uppercase = true
 
-[node name="ActiveQuestsList" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/ActiveQuestsSection" index="2" unique_id=1888615657]
+[node name="ActiveQuestsList" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/ActiveQuestsSection" index="2" unique_id=1888615657]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 8
 
-[node name="DetailsPanel" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer" index="8" unique_id=208017456]
+[node name="DetailsPanel" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer" index="8" unique_id=208017456]
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="DescriptionTopDivider" type="HSeparator" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/DetailsPanel" index="0" unique_id=554228156]
+[node name="DescriptionTopDivider" type="HSeparator" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/DetailsPanel" index="0" unique_id=554228156]
 visible = false
 layout_mode = 2
 
-[node name="DescriptionLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/DetailsPanel" index="1" unique_id=95410111]
+[node name="DescriptionLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/DetailsPanel" index="1" unique_id=95410111]
 visible = false
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 autowrap_mode = 3
 
-[node name="DetailsDivider" type="HSeparator" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/DetailsPanel" index="2" unique_id=184002013]
+[node name="DetailsDivider" type="HSeparator" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/DetailsPanel" index="2" unique_id=184002013]
 visible = false
 layout_mode = 2
 
-[node name="MetaRow" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/DetailsPanel" index="3" unique_id=942240517]
+[node name="MetaRow" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/DetailsPanel" index="3" unique_id=942240517]
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="DurationBox" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/DetailsPanel/MetaRow" index="0" unique_id=206735510]
+[node name="DurationBox" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/DetailsPanel/MetaRow" index="0" unique_id=206735510]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="DurationTitle" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/DetailsPanel/MetaRow/DurationBox" index="0" unique_id=149555129]
+[node name="DurationTitle" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/DetailsPanel/MetaRow/DurationBox" index="0" unique_id=149555129]
 layout_mode = 2
 text = "QUEST_DETAIL_DURATION_LABEL"
 uppercase = true
 
-[node name="DurationLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/DetailsPanel/MetaRow/DurationBox" index="1" unique_id=201177203]
+[node name="DurationLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/DetailsPanel/MetaRow/DurationBox" index="1" unique_id=201177203]
 layout_mode = 2
 
-[node name="RiskBox" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/DetailsPanel/MetaRow" index="1" unique_id=201514873]
+[node name="RiskBox" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/DetailsPanel/MetaRow" index="1" unique_id=201514873]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="RiskTitle" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/DetailsPanel/MetaRow/RiskBox" index="0" unique_id=742164560]
+[node name="RiskTitle" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/DetailsPanel/MetaRow/RiskBox" index="0" unique_id=742164560]
 layout_mode = 2
 text = "QUEST_DETAIL_RISK_LABEL"
 uppercase = true
 
-[node name="RiskLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/DetailsPanel/MetaRow/RiskBox" index="1" unique_id=196523800]
+[node name="RiskLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/DetailsPanel/MetaRow/RiskBox" index="1" unique_id=196523800]
 layout_mode = 2
 
-[node name="RewardBox" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/DetailsPanel/MetaRow" index="2" unique_id=187914821]
+[node name="RewardBox" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/DetailsPanel/MetaRow" index="2" unique_id=187914821]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
 
-[node name="RewardTitle" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/DetailsPanel/MetaRow/RewardBox" index="0" unique_id=289349467]
+[node name="RewardTitle" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/DetailsPanel/MetaRow/RewardBox" index="0" unique_id=289349467]
 layout_mode = 2
 text = "QUEST_DETAIL_REWARD_LABEL"
 uppercase = true
 
-[node name="RewardItems" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/DetailsPanel/MetaRow/RewardBox" index="1" unique_id=182900517]
+[node name="RewardItems" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/DetailsPanel/MetaRow/RewardBox" index="1" unique_id=182900517]
 layout_mode = 2
 
-[node name="RewardText" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/DetailsPanel/MetaRow/RewardBox" index="2" unique_id=98222171]
+[node name="RewardText" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/DetailsPanel/MetaRow/RewardBox" index="2" unique_id=98222171]
 visible = false
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 autowrap_mode = 3
 
-[node name="ContextBox" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/DetailsPanel" index="4" unique_id=149424121]
+[node name="ContextBox" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/DetailsPanel" index="4" unique_id=149424121]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ContextTitle" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/DetailsPanel/ContextBox" index="0" unique_id=1816414897]
+[node name="ContextTitle" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/DetailsPanel/ContextBox" index="0" unique_id=1816414897]
 visible = false
 layout_mode = 2
 text = "QUEST_DETAIL_CONTEXT_LABEL"
 uppercase = true
 
-[node name="ContextLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/DetailsPanel/ContextBox" index="1" unique_id=829426491]
+[node name="ContextLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/DetailsPanel/ContextBox" index="1" unique_id=829426491]
 layout_mode = 2
 theme_type_variation = &"MutedLabel"
 autowrap_mode = 3
 
-[node name="QuestSupplies" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer" index="9" unique_id=1979064245]
+[node name="QuestSupplies" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer" index="9" unique_id=1979064245]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 6
 
-[node name="SuppliesLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/QuestSupplies" index="0" unique_id=991655882]
+[node name="SuppliesLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/QuestSupplies" index="0" unique_id=991655882]
 layout_mode = 2
 text = "QUEST_CREATION_SUPPLIES"
 
-[node name="SuppliesGrid" type="GridContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/QuestSupplies" index="1" unique_id=1114575640]
+[node name="SuppliesGrid" type="GridContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/QuestSupplies" index="1" unique_id=1114575640]
 layout_mode = 2
 theme_override_constants/h_separation = 6
 theme_override_constants/v_separation = 6
 columns = 4
 
-[node name="QuestSupport" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer" index="10" unique_id=642573541]
+[node name="QuestSupport" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer" index="10" unique_id=642573541]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 6
 
-[node name="SupportDivider" type="HSeparator" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/QuestSupport" index="0" unique_id=1941392569]
+[node name="SupportDivider" type="HSeparator" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/QuestSupport" index="0" unique_id=1941392569]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="SupportLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/QuestSupport" index="1" unique_id=1556467003]
+[node name="SupportLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/QuestSupport" index="1" unique_id=1556467003]
 layout_mode = 2
 text = "QUEST_CREATION_OPTIONAL_SUPPORT"
 uppercase = true
 
-[node name="SupportOptions" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/QuestSupport" index="2" unique_id=1825750188]
+[node name="SupportOptions" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/QuestSupport" index="2" unique_id=1825750188]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 5
 
-[node name="StatusLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer" index="11" unique_id=1675641502]
+[node name="StatusLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer" index="11" unique_id=1675641502]
 visible = false
 custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
@@ -307,12 +312,12 @@ text = "QUEST_CREATION_NO_AVAILABLE_QUESTS"
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="Actions" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer" index="12" unique_id=605675596]
+[node name="Actions" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer" index="1" unique_id=605675596]
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 2
 
-[node name="FinishQuestCreation" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/VBoxContainer/Actions" index="0" unique_id=860293657]
+[node name="FinishQuestCreation" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Actions" index="0" unique_id=860293657]
 theme_type_variation = &"PrimaryButton"
 custom_minimum_size = Vector2(128, 36)
 layout_mode = 2

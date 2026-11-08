@@ -12,14 +12,11 @@ resizable = false
 can_lock = true
 content = NodePath("NinePatchRect/VBoxContainer/contentPanel/VBoxContainer/InventoryHud")
 
-[node name="NinePatchRect" parent="." index="0" unique_id=434834391]
-region_rect = Rect2(0, 0, 48, 48)
-
 [node name="topbar" parent="NinePatchRect/VBoxContainer" parent_id_path=PackedInt32Array(554725130) index="0" unique_id=347636229]
 color = Color(0.094, 0.137, 0.173, 1)
 
 [node name="contentPanel" parent="NinePatchRect/VBoxContainer" parent_id_path=PackedInt32Array(554725130) index="1" unique_id=1040542232]
-size_flags_horizontal = 1
+size_flags_horizontal = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel" index="0" unique_id=1573950042]
 layout_mode = 2
@@ -29,4 +26,4 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/h_separation = 4
 theme_override_constants/v_separation = 4
-columns = 5
+columns = 7

@@ -7,23 +7,23 @@
 bg_color = Color(0.04, 0.06, 0.08, 0.7)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_menu_panel"]
-content_margin_left = 44.0
-content_margin_top = 28.0
-content_margin_right = 44.0
-content_margin_bottom = 28.0
-bg_color = Color(0.125, 0.184, 0.227, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.64, 0.51, 0.29, 1)
+content_margin_left = 20.0
+content_margin_top = 16.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
+bg_color = Color(0.094, 0.137, 0.173, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.714, 0.604, 0.388, 1)
 corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header_line"]
-bg_color = Color(0.125, 0.184, 0.227, 1)
+bg_color = Color(0.61, 0.53, 0.37, 1)
 
 [node name="Panel" type="Panel" unique_id=1103910319 node_paths=PackedStringArray("resume_button", "settings_button", "quit_button")]
 process_mode = 2
@@ -62,7 +62,8 @@ theme_override_constants/separation = 16
 [node name="Title" type="Label" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout" unique_id=1348970555]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
+theme_type_variation = &"Heading"
+theme_override_font_sizes/font_size = 26
 text = "SCENE_PAUSE_MENU_NAME"
 horizontal_alignment = 1
 

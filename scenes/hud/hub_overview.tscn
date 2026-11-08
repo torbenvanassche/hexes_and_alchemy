@@ -2,17 +2,7 @@
 
 [ext_resource type="Script" uid="uid://5dop4k2cveqm" path="res://scripts/ui/hub_overview_ui.gd" id="1_hub"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hub"]
-bg_color = Color(0.125, 0.184, 0.227, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.298, 0.353, 0.38, 1)
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
+[sub_resource type="StyleBoxEmpty" id="StyleBoxFlat_hub"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_standing"]
 bg_color = Color(0.125, 0.184, 0.227, 1)
@@ -39,10 +29,10 @@ script = ExtResource("1_hub")
 
 [node name="Margin" type="MarginContainer" parent="." unique_id=2006955978]
 layout_mode = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 14
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 14
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
 
 [node name="Scroll" type="ScrollContainer" parent="Margin" unique_id=571259940]
 layout_mode = 2

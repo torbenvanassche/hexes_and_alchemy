@@ -21,10 +21,8 @@ var player_inventory: ContentGroup
 var trade_mode: TradeMode = TradeMode.BUY
 var is_setup := false
 var pending_setup := false
-var shipment_destination := Vector3i.MAX
 
 func _ready() -> void:
-	$TopRow/Shipments.pressed.connect(_open_shipments)
 	_connect_tabs()
 	_connect_market_signals()
 	if scroll_container != null and not scroll_container.resized.is_connected(_on_market_layout_resized):
@@ -35,7 +33,6 @@ func _ready() -> void:
 		_finish_setup()
 
 func setup(_buy_inventory: ContentGroup, _sell_inventory: ContentGroup, _player_inventory: ContentGroup) -> void:
-	set_shipment_destination(Vector3i.MAX)
 	buy_inventory = _buy_inventory
 	sell_inventory = _sell_inventory
 	player_inventory = _player_inventory
@@ -43,17 +40,6 @@ func setup(_buy_inventory: ContentGroup, _sell_inventory: ContentGroup, _player_
 	if not is_node_ready():
 		return
 	_finish_setup()
-
-func set_shipment_destination(coord: Vector3i) -> void:
-	shipment_destination = coord
-	if is_node_ready(): $TopRow/Shipments.visible = coord != Vector3i.MAX
-
-func _open_shipments() -> void:
-	if shipment_destination == Vector3i.MAX: return
-	var ancestor := get_parent()
-	while ancestor != null and not ancestor is DraggableControl: ancestor = ancestor.get_parent()
-	if ancestor is DraggableControl: ancestor.hide()
-	Manager.instance.transport.open_window(shipment_destination)
 
 func _finish_setup() -> void:
 	pending_setup = false
@@ -221,8 +207,8 @@ func _set_empty_message(text: String) -> void:
 	empty_label.text = text
 	empty_label.visible = not text.is_empty()
 
-func _get_inventory_counts(inventory: ContentGroup) -> Dictionary:
-	var counts := {}
+func _get_inventory_counts(inventory: ContentGroup) -> Dictionary[Resource, int]:
+	var counts: Dictionary[Resource, int] = {}
 	for slot in inventory.data:
 		if slot == null or not slot.is_unlocked or slot.get_content() == null or slot.count <= 0:
 			continue

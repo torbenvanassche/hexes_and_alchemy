@@ -68,6 +68,7 @@ grow_vertical = 2
 mouse_filter = 1
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_bottom = 8
+theme_override_constants/margin_left = 12
 theme_override_constants/margin_right = 12
 
 [node name="MarginContainer" type="MarginContainer" parent="NinePatchRect/VBoxContainer/topbar/MarginContainer2" unique_id=67417564]
@@ -114,7 +115,7 @@ expand_icon = true
 
 [node name="contentPanel" type="MarginContainer" parent="NinePatchRect/VBoxContainer" unique_id=1040542232]
 layout_mode = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/margin_left = 15
 theme_override_constants/margin_top = 8

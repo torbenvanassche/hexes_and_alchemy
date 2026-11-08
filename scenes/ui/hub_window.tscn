@@ -8,6 +8,9 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/settlement_project_ui.tscn" id="7_projects"]
 [ext_resource type="PackedScene" path="res://scenes/ui/components/guild_notes.tscn" id="8_notes"]
 [ext_resource type="Resource" path="res://tools/custom_window/journal_appearance.tres" id="9_appearance"]
+[ext_resource type="PackedScene" path="res://scenes/ui/components/trade_page.tscn" id="11_trade"]
+[ext_resource type="PackedScene" path="res://scenes/ui/components/reward_stat.tscn" id="12_stat"]
+[ext_resource type="Texture2D" path="res://sprites/items/coin_single.png" id="13_coin"]
 
 [node name="Window" node_paths=PackedStringArray("content") instance=ExtResource("1_window")]
 custom_minimum_size = Vector2(1100, 650)
@@ -57,6 +60,14 @@ toggle_mode = true
 alignment = 0
 text = "GUILD_JOURNAL_COMMISSIONS"
 
+[node name="Trade" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/HubWindow/Spread/Contents"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 48)
+theme_type_variation = &"JournalContents"
+toggle_mode = true
+alignment = 0
+text = "GUILD_JOURNAL_TRADE"
+
 [node name="Stores" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/HubWindow/Spread/Contents"]
 layout_mode = 2
 custom_minimum_size = Vector2(0, 48)
@@ -89,10 +100,12 @@ mouse_filter = 2
 [node name="Rule" type="HSeparator" parent="NinePatchRect/VBoxContainer/contentPanel/HubWindow/Spread/Contents"]
 layout_mode = 2
 
-[node name="Treasury" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/HubWindow/Spread/Contents"]
+[node name="Treasury" parent="NinePatchRect/VBoxContainer/contentPanel/HubWindow/Spread/Contents" instance=ExtResource("12_stat")]
 layout_mode = 2
-theme_type_variation = &"MutedLabel"
-autowrap_mode = 3
+icon = ExtResource("13_coin")
+icon_size = 24
+label_key = "GUILD_TREASURY_LABEL"
+value_color = Color(0.859, 0.718, 0.459, 1)
 
 [node name="Divider" type="VSeparator" parent="NinePatchRect/VBoxContainer/contentPanel/HubWindow/Spread"]
 custom_minimum_size = Vector2(1, 0)
@@ -113,6 +126,15 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="OperationsPage" parent="NinePatchRect/VBoxContainer/contentPanel/HubWindow/Spread/PageHost" instance=ExtResource("6_operations")]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TradePage" parent="NinePatchRect/VBoxContainer/contentPanel/HubWindow/Spread/PageHost" instance=ExtResource("11_trade")]
 visible = false
 layout_mode = 1
 anchors_preset = 15

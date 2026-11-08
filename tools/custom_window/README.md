@@ -26,6 +26,10 @@ Call `apply_appearance()` after changing the resource at runtime.
   inherited scene. Reserve additional title space if adding more actions.
 - **footer / set_footer(page)**: optional bottom content; hidden by default.
   Replacing footer content detaches it with the same ownership rule.
+- **fit_scroll**: optional scrolling body whose natural height determines the
+  window height up to the viewport limit. Keep submit buttons outside that
+  scroll container, and let it expand vertically. The quest form demonstrates
+  this with a fixed action row and scrolling fields/support options.
 - **change_title** signal: accepts a translation key or literal title.
 
 Use `request_fit_to_content()` after dynamic content changes. Scroll containers
@@ -41,3 +45,11 @@ commission, inventory, and notes pages with a contents column. Its existing
 UI dimensions retain their original pixel size as the screen resolution changes.
 The Stores grid derives its column count from the available page width and
 100px minimum slot size, then fills the width with square slots.
+The standalone inventory uses seven columns of the same 100px slots.
+
+The frame owns the outer page padding (20px horizontally, 12px above and 20px
+below). Page wrappers should not add another layer of padding around the whole
+page; inset cards can keep their own internal margins. Headers use 12px action
+insets and square 40px controls. Centered titles reserve the same space on both
+sides, including when the lock action is present. Window positions snap to
+pixels; visible windows recenter or stay within the viewport when it changes.

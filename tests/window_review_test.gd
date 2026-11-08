@@ -4,6 +4,9 @@ var failures: Array[String] = []
 var deadline := 0
 
 func _ready() -> void:
+	get_tree().node_added.connect(func(node: Node) -> void:
+		if node is MainGrid: node.world_seed = 20261102
+	)
 	get_window().size = Vector2i(1280, 720)
 	deadline = Time.get_ticks_msec() + 60000
 	_run.call_deferred()
@@ -30,9 +33,20 @@ func _settle(window: DraggableControl, screenshot: String) -> void:
 	check(is_equal_approx(window.top_bar.size.x + 2.0, window.size.x), "Header width mismatch")
 	for handle in [window.resize_handle_x, window.resize_handle_y, window.resize_handle_xy]:
 		check(handle.color.a == 0, "Visible resize block")
+	_check_fixed_actions(window, window.get_global_rect().grow(1), screenshot)
 	if OS.get_cmdline_user_args().has("--capture"):
 		await RenderingServer.frame_post_draw
 		get_viewport().get_texture().get_image().save_png("res://.godot/validation/" + screenshot + ".png")
+
+func _check_fixed_actions(root: Control, bounds: Rect2, screen: String) -> void:
+	for button: Button in root.find_children("*", "Button", true, false):
+		if not button.is_visible_in_tree(): continue
+		var ancestor := button.get_parent()
+		var scrollable := false
+		while ancestor != null and ancestor != root:
+			if ancestor is ScrollContainer: scrollable = true; break
+			ancestor = ancestor.get_parent()
+		if not scrollable: check(bounds.encloses(button.get_global_rect()), "Fixed action outside frame: %s/%s" % [screen,button.name])
 
 func _run() -> void:
 	while not SaveGames.save_block_reason().is_empty(): await get_tree().process_frame
@@ -90,5 +104,43 @@ func _run() -> void:
 	check(details.status_label.text.contains("35") and details.get_node("%RecoveryBar").visible, "Recovery did not update live")
 	await _settle(window, "character-injured")
 	check(not details.equipment_slot_uis[&"weapon"].can_drag, "Assigned character can change equipment")
+	window.hide()
+	# Audit every service/window family at both reference resolutions.
+	var audit_alchemist := Alchemist.new()
+	audit_alchemist.settlement = Manager.instance.active_settlement
+	Manager.instance.active_settlement.add_child(audit_alchemist)
+	for viewport_size: Vector2i in [Vector2i(1280,720), Vector2i(960,540)]:
+		get_window().size = viewport_size
+		for screen: String in ["hub_window", "quest_list_ui", "quest_creation_ui", "crafting_ui", "market_ui", "inventory_ui", "alchemist_ui", "settlement_upgrade_ui", "transport_ui", "journal_ui", "settings_menu", "game_settings", "input_settings", "pause_menu"]:
+			var info := load("res://resources/scene_info/ui/%s.tres" % screen) as SceneInfo
+			info.queue(func(_info: SceneInfo) -> void: pass)
+			while not info.is_cached: await get_tree().process_frame
+			var opened := SceneManager.add(info, false)
+			window = opened.node as DraggableControl
+			if window == null:
+				# Pause/settings are deliberately full-screen overlays.
+				var overlay := opened.node as Control
+				check(overlay != null, "UI is not a Control: " + screen)
+				if overlay == null: continue
+				opened.on_enter.emit()
+				for frame in 12: await get_tree().process_frame
+				check(get_viewport().get_visible_rect().grow(1).encloses(overlay.get_global_rect()), "Overlay exceeds viewport: " + screen)
+				_check_fixed_actions(overlay, get_viewport().get_visible_rect().grow(1), screen)
+				if OS.get_cmdline_user_args().has("--capture"):
+					await RenderingServer.frame_post_draw
+					get_viewport().get_texture().get_image().save_png("res://.godot/validation/audit-%s-%d.png" % [screen, viewport_size.y])
+				overlay.hide()
+				continue
+			if window.content is CraftingUI: window.content.inventory = Manager.instance.hub.stockpile
+			if window.content is InventoryUI: window.content.inventory = Manager.instance.hub.stockpile
+			if window.content is MarketUI:
+				var market := Manager.instance.active_settlement.get_service(&"Market") as Market
+				window.content.setup(market.buy_inventory, market.sell_inventory, Manager.instance.hub.stockpile)
+			if window.content is AlchemistUI: window.content.setup_interaction(audit_alchemist)
+			if window.content is SettlementUpgradeUI:
+				window.content.settlement = Manager.instance.active_settlement
+				window.content.player_inventory = Manager.instance.hub.stockpile
+			await _settle(window, "audit-%s-%d" % [screen, viewport_size.y])
+			window.hide()
 	print("WINDOW REVIEW %s" % ("PASS" if failures.is_empty() else "FAIL " + str(failures)))
 	get_tree().quit(0 if failures.is_empty() else 1)

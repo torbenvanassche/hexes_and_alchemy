@@ -61,6 +61,7 @@ func _refresh_operations() -> void:
 	for operation: HubOperation in active_operations:
 		if operation == null or operation.quest == null:
 			continue
+		if not operation.quest.uses_guild_roster(): continue
 		var card := _create_operation_card(operation)
 		operations_container.add_child(card)
 		(card as OperationCardUI).setup(operation)

@@ -31,7 +31,7 @@ func set_data(quest: Quest) -> void:
 	questData = quest;
 	
 	quest_number.text = "#%s" % [str(self.get_parent().get_child_count())];
-	quest_type.text = _get_quest_type_name(quest.quest_key).to_upper();
+	quest_type.text = _get_quest_type_name(quest.quest_key);
 	quest_location.text = _get_location_name();
 
 	_update_progress(questData.state_machine.get_current_state())
@@ -102,6 +102,8 @@ func _get_party_text() -> String:
 	return ", ".join(names) if not names.is_empty() else tr("QUEST_PARTY_UNASSIGNED")
 
 func _get_quest_type_name(quest_type_key: String) -> String:
+	if questData != null and questData.get_profile() != null:
+		return questData.get_profile().get_display_name()
 	var translation_key := "QUEST_TYPE_%s" % [quest_type_key.to_upper()]
 	var translated := tr(translation_key)
 	if translated == translation_key:

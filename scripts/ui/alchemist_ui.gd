@@ -40,15 +40,14 @@ func _refresh() -> void:
 	var currency := _get_currency()
 	currency_label.text = tr("ALCHEMIST_CURRENCY") % currency
 
-	var injuries: Array[Dictionary] = []
+	var injury_count := 0
 	for npc: NPC in alchemist.get_adventurers():
 		for injury: AdventurerInjury in npc.active_injuries:
 			if injury != null:
-				injuries.append({"npc": npc, "injury": injury})
-	patient_count.text = tr("ALCHEMIST_AVAILABLE_COUNT") % injuries.size()
-	patients_empty.visible = injuries.is_empty()
-	for entry: Dictionary in injuries:
-		_add_treatment_row(entry.npc as NPC, entry.injury as AdventurerInjury, currency)
+				injury_count += 1
+				_add_treatment_row(npc, injury, currency)
+	patient_count.text = tr("ALCHEMIST_AVAILABLE_COUNT") % injury_count
+	patients_empty.visible = injury_count == 0
 
 	var available_relics := alchemist.get_relics()
 	relic_count.text = tr("ALCHEMIST_AVAILABLE_COUNT") % available_relics.size()

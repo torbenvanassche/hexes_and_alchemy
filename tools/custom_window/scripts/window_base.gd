@@ -43,6 +43,9 @@ var scene_instance: SceneInstance
 
 @export_group("Content")
 @export var content: Control;
+## Optional scrolling body: fit its natural height up to the viewport, while
+## sibling headers/actions remain visible outside the scroll area.
+@export var fit_scroll: ScrollContainer
 
 ## Extension slots for inherited scenes; existing content paths remain compatible.
 @onready var header_actions: HBoxContainer = $NinePatchRect/VBoxContainer/topbar/MarginContainer2/HBoxContainer
@@ -82,6 +85,7 @@ func _ready() -> void:
 	
 	top_bar.custom_minimum_size.y = topbar_height if topbar_height > 0 else appearance.header_height
 	_update_resize_handles()
+	get_viewport().size_changed.connect(_on_viewport_size_changed)
 	
 func _prepare_floating_layout() -> void:
 	anchor_left = 0.0
@@ -137,7 +141,13 @@ func _fit_to_content() -> void:
 	if _is_fitting:
 		return
 	_is_fitting = true
+	var previous_size := size
 	size = _clamp_window_size(_get_content_fit_size())
+	if visible and size != previous_size:
+		if position_options == "center" and initial_dock == "center" and not stored_position.is_finite():
+			initial_position = get_viewport_rect().size / 2
+			position = _get_initial_position()
+		_keep_on_screen()
 	_is_fitting = false
 
 func _get_content_fit_size() -> Vector2:
@@ -152,6 +162,11 @@ func _get_content_fit_size() -> Vector2:
 	# The content VBox sits one pixel inside each edge of the outer frame.
 	content_size += Vector2(v_box_container.offset_left - v_box_container.offset_right,
 		v_box_container.offset_top - v_box_container.offset_bottom)
+	if is_instance_valid(fit_scroll) and fit_scroll.get_child_count() > 0:
+		var body := fit_scroll.get_child(0) as Control
+		if body != null:
+			content_size.y += maxf(0.0, body.get_combined_minimum_size().y - fit_scroll.get_combined_minimum_size().y)
+			content_size.y = minf(content_size.y, get_viewport_rect().size.y - 32.0)
 	fit_size = fit_size.max(content_size)
 	return fit_size
 
@@ -252,14 +267,30 @@ func on_enter() -> void:
 		position = stored_position;
 	else:
 		position = _get_initial_position()
+	_keep_on_screen()
 	modulate = previous_modulate
 	if scene_instance != null:
 		SceneManager.promote_scene_instance(scene_instance)
 
 func _get_initial_position() -> Vector2:
 	if initial_dock == "right":
-		return Vector2(maxf(0.0, get_viewport_rect().size.x - size.x - 20.0), 66.0)
-	return initial_position - size / 2
+		return Vector2(maxf(0.0, get_viewport_rect().size.x - size.x - 20.0), 66.0).round()
+	return (initial_position - size / 2).round()
+
+func _keep_on_screen() -> void:
+	position = position.clamp(Vector2.ZERO, (get_viewport_rect().size - size).max(Vector2.ZERO)).round()
+
+func _on_viewport_size_changed() -> void:
+	if not visible: return
+	if display_mode == "fullscreen":
+		size = get_viewport_rect().size
+		return
+	await fit_to_content_settled(1)
+	if not is_inside_tree() or not visible: return
+	if position_options == "center" and not stored_position.is_finite():
+		initial_position = get_viewport_rect().size / 2
+		position = _get_initial_position()
+	_keep_on_screen()
 
 func _change_title(s: String) -> void:
 	title.text = tr(s);
@@ -352,5 +383,7 @@ func _set_close_locked(locked: bool) -> void:
 
 func _update_lock_availability() -> void:
 	lock_button.visible = can_lock
-	title_margin.add_theme_constant_override("margin_left", 20)
-	title_margin.add_theme_constant_override("margin_right", (appearance.action_size + 8) * (2 if can_lock else 1) + 12)
+	var action_space := (appearance.action_size + 8) * (2 if can_lock else 1)
+	# Centered titles reserve equal space on both sides of the header actions.
+	title_margin.add_theme_constant_override("margin_left", action_space if appearance.title_alignment == HORIZONTAL_ALIGNMENT_CENTER else 8)
+	title_margin.add_theme_constant_override("margin_right", action_space)

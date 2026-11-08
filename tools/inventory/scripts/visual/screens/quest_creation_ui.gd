@@ -1,42 +1,46 @@
 class_name QuestCreationUI extends Control
 
-@onready var type_row: HBoxContainer = $MarginContainer/VBoxContainer/TypeRow
-@onready var quest_type: OptionButton = $MarginContainer/VBoxContainer/TypeRow/QuestType
-@onready var location_row: HBoxContainer = $MarginContainer/VBoxContainer/LocationRow
-@onready var quest_location: OptionButton = $MarginContainer/VBoxContainer/LocationRow/QuestLocation
-@onready var scout_distance_row: HBoxContainer = $MarginContainer/VBoxContainer/ScoutDistanceRow
-@onready var scout_distance_spin_box: SpinBox = $MarginContainer/VBoxContainer/ScoutDistanceRow/ScoutDistance
-@onready var scout_direction_row: HBoxContainer = $MarginContainer/VBoxContainer/ScoutDirectionRow
-@onready var scout_direction_option: OptionButton = $MarginContainer/VBoxContainer/ScoutDirectionRow/ScoutDirection
-@onready var minimum_rank_row: HBoxContainer = $MarginContainer/VBoxContainer/MinimumRankRow
-@onready var minimum_rank_option: OptionButton = $MarginContainer/VBoxContainer/MinimumRankRow/MinimumRank
-@onready var reward_offer_row: HBoxContainer = $MarginContainer/VBoxContainer/RewardOfferRow
-@onready var reward_offer_spin_box: SpinBox = $MarginContainer/VBoxContainer/RewardOfferRow/RewardOfferAmount
-@onready var interest_label: RichTextLabel = $MarginContainer/VBoxContainer/InterestLabel
-@onready var active_quests_section: VBoxContainer = $MarginContainer/VBoxContainer/ActiveQuestsSection
-@onready var active_quests_list: VBoxContainer = $MarginContainer/VBoxContainer/ActiveQuestsSection/ActiveQuestsList
-@onready var details_panel: VBoxContainer = $MarginContainer/VBoxContainer/DetailsPanel
-@onready var description_top_divider: HSeparator = $MarginContainer/VBoxContainer/DetailsPanel/DescriptionTopDivider
-@onready var description_label: Label = $MarginContainer/VBoxContainer/DetailsPanel/DescriptionLabel
-@onready var details_divider: HSeparator = $MarginContainer/VBoxContainer/DetailsPanel/DetailsDivider
-@onready var meta_row: HBoxContainer = $MarginContainer/VBoxContainer/DetailsPanel/MetaRow
-@onready var duration_box: VBoxContainer = $MarginContainer/VBoxContainer/DetailsPanel/MetaRow/DurationBox
-@onready var duration_title: Label = $MarginContainer/VBoxContainer/DetailsPanel/MetaRow/DurationBox/DurationTitle
-@onready var duration_label: Label = $MarginContainer/VBoxContainer/DetailsPanel/MetaRow/DurationBox/DurationLabel
-@onready var risk_box: VBoxContainer = $MarginContainer/VBoxContainer/DetailsPanel/MetaRow/RiskBox
-@onready var risk_label: Label = $MarginContainer/VBoxContainer/DetailsPanel/MetaRow/RiskBox/RiskLabel
-@onready var reward_box: VBoxContainer = $MarginContainer/VBoxContainer/DetailsPanel/MetaRow/RewardBox
-@onready var reward_items: HBoxContainer = $MarginContainer/VBoxContainer/DetailsPanel/MetaRow/RewardBox/RewardItems
-@onready var reward_text_label: Label = $MarginContainer/VBoxContainer/DetailsPanel/MetaRow/RewardBox/RewardText
-@onready var context_box: VBoxContainer = $MarginContainer/VBoxContainer/DetailsPanel/ContextBox
-@onready var context_label: Label = $MarginContainer/VBoxContainer/DetailsPanel/ContextBox/ContextLabel
-@onready var quest_supplies: Control = $MarginContainer/VBoxContainer/QuestSupplies
-@onready var supplies_grid: GridContainer = $MarginContainer/VBoxContainer/QuestSupplies/SuppliesGrid
-@onready var quest_support: VBoxContainer = $MarginContainer/VBoxContainer/QuestSupport
-@onready var support_options: VBoxContainer = $MarginContainer/VBoxContainer/QuestSupport/SupportOptions
-@onready var status_label: Label = $MarginContainer/VBoxContainer/StatusLabel
-@onready var actions_row: HBoxContainer = $MarginContainer/VBoxContainer/Actions
-@onready var finish_quest_creation: Button = $MarginContainer/VBoxContainer/Actions/FinishQuestCreation
+class QuestSelection extends RefCounted:
+	var objective: QuestObjective
+	var quest_type := ""
+
+@onready var type_row: HBoxContainer = $MarginContainer/Scroll/VBoxContainer/TypeRow
+@onready var quest_type: OptionButton = $MarginContainer/Scroll/VBoxContainer/TypeRow/QuestType
+@onready var location_row: HBoxContainer = $MarginContainer/Scroll/VBoxContainer/LocationRow
+@onready var quest_location: OptionButton = $MarginContainer/Scroll/VBoxContainer/LocationRow/QuestLocation
+@onready var scout_distance_row: HBoxContainer = $MarginContainer/Scroll/VBoxContainer/ScoutDistanceRow
+@onready var scout_distance_spin_box: SpinBox = $MarginContainer/Scroll/VBoxContainer/ScoutDistanceRow/ScoutDistance
+@onready var scout_direction_row: HBoxContainer = $MarginContainer/Scroll/VBoxContainer/ScoutDirectionRow
+@onready var scout_direction_option: OptionButton = $MarginContainer/Scroll/VBoxContainer/ScoutDirectionRow/ScoutDirection
+@onready var minimum_rank_row: HBoxContainer = $MarginContainer/Scroll/VBoxContainer/MinimumRankRow
+@onready var minimum_rank_option: OptionButton = $MarginContainer/Scroll/VBoxContainer/MinimumRankRow/MinimumRank
+@onready var reward_offer_row: HBoxContainer = $MarginContainer/Scroll/VBoxContainer/RewardOfferRow
+@onready var reward_offer_spin_box: SpinBox = $MarginContainer/Scroll/VBoxContainer/RewardOfferRow/RewardOfferAmount
+@onready var interest_label: RichTextLabel = $MarginContainer/Scroll/VBoxContainer/InterestLabel
+@onready var active_quests_section: VBoxContainer = $MarginContainer/Scroll/VBoxContainer/ActiveQuestsSection
+@onready var active_quests_list: VBoxContainer = $MarginContainer/Scroll/VBoxContainer/ActiveQuestsSection/ActiveQuestsList
+@onready var details_panel: VBoxContainer = $MarginContainer/Scroll/VBoxContainer/DetailsPanel
+@onready var description_top_divider: HSeparator = $MarginContainer/Scroll/VBoxContainer/DetailsPanel/DescriptionTopDivider
+@onready var description_label: Label = $MarginContainer/Scroll/VBoxContainer/DetailsPanel/DescriptionLabel
+@onready var details_divider: HSeparator = $MarginContainer/Scroll/VBoxContainer/DetailsPanel/DetailsDivider
+@onready var meta_row: HBoxContainer = $MarginContainer/Scroll/VBoxContainer/DetailsPanel/MetaRow
+@onready var duration_box: VBoxContainer = $MarginContainer/Scroll/VBoxContainer/DetailsPanel/MetaRow/DurationBox
+@onready var duration_title: Label = $MarginContainer/Scroll/VBoxContainer/DetailsPanel/MetaRow/DurationBox/DurationTitle
+@onready var duration_label: Label = $MarginContainer/Scroll/VBoxContainer/DetailsPanel/MetaRow/DurationBox/DurationLabel
+@onready var risk_box: VBoxContainer = $MarginContainer/Scroll/VBoxContainer/DetailsPanel/MetaRow/RiskBox
+@onready var risk_label: Label = $MarginContainer/Scroll/VBoxContainer/DetailsPanel/MetaRow/RiskBox/RiskLabel
+@onready var reward_box: VBoxContainer = $MarginContainer/Scroll/VBoxContainer/DetailsPanel/MetaRow/RewardBox
+@onready var reward_items: HBoxContainer = $MarginContainer/Scroll/VBoxContainer/DetailsPanel/MetaRow/RewardBox/RewardItems
+@onready var reward_text_label: Label = $MarginContainer/Scroll/VBoxContainer/DetailsPanel/MetaRow/RewardBox/RewardText
+@onready var context_box: VBoxContainer = $MarginContainer/Scroll/VBoxContainer/DetailsPanel/ContextBox
+@onready var context_label: Label = $MarginContainer/Scroll/VBoxContainer/DetailsPanel/ContextBox/ContextLabel
+@onready var quest_supplies: Control = $MarginContainer/Scroll/VBoxContainer/QuestSupplies
+@onready var supplies_grid: GridContainer = $MarginContainer/Scroll/VBoxContainer/QuestSupplies/SuppliesGrid
+@onready var quest_support: VBoxContainer = $MarginContainer/Scroll/VBoxContainer/QuestSupport
+@onready var support_options: VBoxContainer = $MarginContainer/Scroll/VBoxContainer/QuestSupport/SupportOptions
+@onready var status_label: Label = $MarginContainer/Scroll/VBoxContainer/StatusLabel
+@onready var actions_row: HBoxContainer = $MarginContainer/Actions
+@onready var finish_quest_creation: Button = $MarginContainer/Actions/FinishQuestCreation
 @onready var window: DraggableControl = $"../../../.."
 
 @export var packed_slot: PackedScene
@@ -217,6 +221,13 @@ func _on_quest_type_selected(_idx: int) -> void:
 	_refresh_quest_details()
 	_refresh_interest_feedback()
 	_update_finish_button()
+
+func select_commission_type(key: String) -> void:
+	for index in quest_type.item_count:
+		if str(quest_type.get_item_metadata(index)) == key:
+			quest_type.select(index)
+			_on_quest_type_selected(index)
+			return
 
 func _on_minimum_rank_selected(_idx: int) -> void:
 	_refresh_quest_type_availability()
@@ -451,8 +462,8 @@ func _refresh_minimum_rank_options() -> void:
 	var previous_rank := _get_minimum_rank_override()
 	minimum_rank_option.clear()
 	var selected := _get_selected_quest_type_and_objective()
-	var objective := selected.get("objective") as QuestObjective
-	var quest_type_key := str(selected.get("quest_type", ""))
+	var objective := selected.objective
+	var quest_type_key := selected.quest_type
 	if quest_type_key == SCOUT_QUEST_KEY:
 		for rank_index in range(int(AdventurerRank.Rank.F), int(AdventurerRank.get_max_rank()) + 1):
 			var rank := AdventurerRank.clamp_rank(rank_index)
@@ -565,7 +576,7 @@ func _refresh_active_quests_for_location(location: HexBase) -> void:
 		_request_window_refit()
 		return
 
-	var quests := Manager.instance.quests.get_quests_for_location(location)
+	var quests := Manager.instance.quests.get_commissions_for_location(location)
 	for quest in quests:
 		if quest == null:
 			continue
@@ -594,7 +605,7 @@ func _claim_active_location_quest(quest: Quest, location: HexBase) -> void:
 
 func _close_status_if_no_claimable_quests(location: HexBase) -> void:
 	if Manager.instance != null and Manager.instance.quests != null:
-		for quest in Manager.instance.quests.get_quests_for_location(location):
+		for quest in Manager.instance.quests.get_commissions_for_location(location):
 			if quest != null and quest.is_state(Quest.QuestState.COMPLETE):
 				return
 	if window != null:
@@ -693,19 +704,19 @@ func _clear_reward_preview() -> void:
 		reward_items.remove_child(child)
 		child.queue_free()
 
-func _set_reward_preview(preview: Array[Dictionary]) -> bool:
+func _set_reward_preview(preview: Array[RewardPreview]) -> bool:
 	_clear_reward_preview()
 	if reward_box == null or reward_items == null:
 		return false
 
 	var has_rewards := false
 	for entry in preview:
-		var item := entry.get("item") as ItemInfo
+		var item := entry.item
 		if item == null:
 			continue
 
-		var min_amount := int(entry.get("min", 0))
-		var max_amount := int(entry.get("max", 0))
+		var min_amount := entry.minimum
+		var max_amount := entry.maximum
 		if max_amount <= 0:
 			continue
 		var slot := _create_reward_slot()
@@ -722,10 +733,7 @@ func _set_reward_preview(preview: Array[Dictionary]) -> bool:
 	return has_rewards
 
 func _create_reward_slot() -> ContentSlotUI:
-	var slot: ContentSlotUI = packed_slot.instantiate()
-	slot.custom_minimum_size = Vector2(slot_size, slot_size)
-	slot.can_drag = false
-	return slot
+	return ItemPreview.create(null, 1, slot_size, packed_slot)
 
 func _set_reward_slot(slot: ContentSlotUI, item: ItemInfo, min_amount: int, max_amount: int) -> void:
 	var range_text := _format_reward_range(min_amount, max_amount)
@@ -749,7 +757,7 @@ func _set_details(
 	description: String,
 	duration: String = "",
 	risk: String = "",
-	reward_preview: Array[Dictionary] = [],
+	reward_preview: Array[RewardPreview] = [],
 	context: String = ""
 ) -> void:
 	var has_description := false
@@ -834,8 +842,8 @@ func _get_role_display_name(role: String) -> String:
 
 func _get_selected_required_supplies() -> Dictionary[ItemInfo, int]:
 	var selected := _get_selected_quest_type_and_objective()
-	var objective := selected.get("objective") as QuestObjective
-	var quest_type_key := str(selected.get("quest_type", ""))
+	var objective := selected.objective
+	var quest_type_key := selected.quest_type
 	if quest_type_key == SCOUT_QUEST_KEY:
 		return {}
 	if objective == null or quest_type_key == "":
@@ -845,8 +853,8 @@ func _get_selected_required_supplies() -> Dictionary[ItemInfo, int]:
 
 func _refresh_quest_details() -> void:
 	var selected := _get_selected_quest_type_and_objective()
-	var objective := selected.get("objective") as QuestObjective
-	var quest_type_key := str(selected.get("quest_type", ""))
+	var objective := selected.objective
+	var quest_type_key := selected.quest_type
 	if quest_type_key == SCOUT_QUEST_KEY:
 		if duration_title != null:
 			duration_title.text = tr("QUEST_DETAIL_DISTANCE_LABEL")
@@ -870,7 +878,8 @@ func _refresh_quest_details() -> void:
 	var description := objective.get_quest_profile_description(quest_type_key)
 
 	var duration_text := ""
-	var duration := objective.get_quest_duration(quest_type_key, 0.0)
+	var preview := _create_selected_quest_preview()
+	var duration := objective.get_effective_quest_duration(preview, 0.0)
 	if duration > 0.0:
 		duration_text = tr("QUEST_DETAIL_DURATION") % [ceil(duration)]
 
@@ -878,7 +887,6 @@ func _refresh_quest_details() -> void:
 	var risk := objective.get_quest_profile_risk(quest_type_key)
 	if risk != "":
 		risk_text = risk
-	var preview := _create_selected_quest_preview()
 	if preview != null:
 		var effective_risk_key := preview.get_effective_risk_key()
 		var preview_profile := preview.get_profile()
@@ -893,12 +901,12 @@ func _refresh_quest_details() -> void:
 
 func _get_selected_objective() -> QuestObjective:
 	var selected := _get_selected_quest_type_and_objective()
-	return selected.get("objective") as QuestObjective
+	return selected.objective
 
 func _get_selected_profile() -> QuestProfile:
 	var selected := _get_selected_quest_type_and_objective()
-	var objective := selected.get("objective") as QuestObjective
-	var quest_type_key := str(selected.get("quest_type", ""))
+	var objective := selected.objective
+	var quest_type_key := selected.quest_type
 	if objective == null or quest_type_key == "":
 		return null
 	return objective.get_profile(quest_type_key)
@@ -1013,34 +1021,32 @@ func _on_support_selection_changed(definition: QuestSupportDefinition, selected:
 	_refresh_quest_details()
 	_request_window_refit()
 
-func _get_selected_quest_type_and_objective() -> Dictionary:
+func _get_selected_quest_type_and_objective() -> QuestSelection:
+	var selection := QuestSelection.new()
 	var location_idx: int = quest_location.selected
 	var quest_type_idx: int = quest_type.selected
 	if location_idx < 0 or quest_type_idx < 0:
-		return {}
+		return selection
 
 	var location: HexBase = quest_location.get_item_metadata(location_idx) as HexBase
 	var quest_type_key := _get_quest_type_key(quest_type_idx)
 	if location == null or quest_type_key == "":
-		return {}
+		return selection
 
 	if quest_type_key == SCOUT_QUEST_KEY:
-		return {
-			"objective": null,
-			"quest_type": quest_type_key,
-		}
+		selection.quest_type = quest_type_key
+		return selection
 
 	if location.structure == null:
-		return {}
+		return selection
 
 	var objective := location.structure.instance as QuestObjective
 	if objective == null:
-		return {}
+		return selection
 
-	return {
-		"objective": objective,
-		"quest_type": quest_type_key,
-	}
+	selection.objective = objective
+	selection.quest_type = quest_type_key
+	return selection
 
 func _get_quest_type_key(index: int) -> String:
 	if index < 0 or index >= quest_type.item_count:
@@ -1049,11 +1055,7 @@ func _get_quest_type_key(index: int) -> String:
 	return str(metadata) if metadata is String else ""
 
 func _create_supply_slot(item: ItemInfo, count: int) -> ContentSlotUI:
-	var slot: ContentSlotUI = packed_slot.instantiate()
-	slot.custom_minimum_size = Vector2(slot_size, slot_size)
-	slot.can_drag = false
-	slot.set_content(ContentSlotResource.new(count, item, max(1, count), true, false))
-	return slot
+	return ItemPreview.create(item, count, slot_size, packed_slot)
 
 func _get_player_inventory() -> ContentGroup:
 	if Manager.instance == null:
@@ -1228,7 +1230,7 @@ func _create_scout_quest(location: HexBase, reward_amount: int) -> void:
 	var scout_rank_experience := 1
 	if minimum_rank_override >= 0:
 		scout_rank_experience = int(AdventurerRank.clamp_rank(minimum_rank_override)) + 1
-	var scout_context := {
+	var scout_context: Dictionary[String, Variant] = {
 		"scout_direction_key": "QUEST_SCOUT_DIRECTION_%s" % [_get_requested_scout_direction()],
 		"scout_distance": _get_target_selector().get_scout_distance(location),
 	}

@@ -4,12 +4,7 @@
 [ext_resource type="Script" uid="uid://bp5uvuxxqwt4" path="res://scripts/ui/settlement_upgrade_ui.gd" id="2_upgrade"]
 [ext_resource type="Theme" path="res://themes/game_theme.tres" id="3_theme"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_upgrade"]
-bg_color = Color(0.125, 0.184, 0.227, 1)
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
+[sub_resource type="StyleBoxEmpty" id="StyleBoxFlat_upgrade"]
 
 [node name="Window" unique_id=2033956504 node_paths=PackedStringArray("content") instance=ExtResource("1_window")]
 custom_minimum_size = Vector2(460, 0)
@@ -21,7 +16,7 @@ content = NodePath("NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade")
 size_flags_horizontal = 3
 
 [node name="SettlementUpgrade" type="PanelContainer" parent="NinePatchRect/VBoxContainer/contentPanel" index="0" unique_id=369156769]
-custom_minimum_size = Vector2(430, 0)
+custom_minimum_size = Vector2(0, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("3_theme")
@@ -30,10 +25,10 @@ script = ExtResource("2_upgrade")
 
 [node name="MarginContainer" type="MarginContainer" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade" index="0" unique_id=1829991319]
 layout_mode = 2
-theme_override_constants/margin_left = 18
-theme_override_constants/margin_top = 18
-theme_override_constants/margin_right = 18
-theme_override_constants/margin_bottom = 16
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer" index="0" unique_id=1343541689]
 layout_mode = 2
@@ -55,10 +50,8 @@ layout_mode = 2
 text = "1"
 horizontal_alignment = 2
 
-[node name="TopDivider" type="ColorRect" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer/VBoxContainer" index="1" unique_id=430153256]
-custom_minimum_size = Vector2(0, 2)
+[node name="TopDivider" type="HSeparator" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer/VBoxContainer" index="1" unique_id=430153256]
 layout_mode = 2
-color = Color(0.298, 0.353, 0.38, 1)
 
 [node name="NextSection" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer/VBoxContainer" index="2" unique_id=1813422221]
 layout_mode = 2
@@ -78,10 +71,8 @@ layout_mode = 2
 text = "SETTLEMENT_UPGRADE_UNLOCK_LEVEL_2"
 autowrap_mode = 3
 
-[node name="RequirementsDivider" type="ColorRect" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer/VBoxContainer" index="3" unique_id=1865374137]
-custom_minimum_size = Vector2(0, 2)
+[node name="RequirementsDivider" type="HSeparator" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer/VBoxContainer" index="3" unique_id=1865374137]
 layout_mode = 2
-color = Color(0.298, 0.353, 0.38, 1)
 
 [node name="RequirementsHeader" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer/VBoxContainer" index="4" unique_id=73536892]
 layout_mode = 2

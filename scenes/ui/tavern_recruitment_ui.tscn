@@ -26,10 +26,10 @@ script = ExtResource("2_ui")
 
 [node name="Margin" type="MarginContainer" parent="NinePatchRect/VBoxContainer/contentPanel/TavernRecruitment" index="0" unique_id=478620497]
 layout_mode = 2
-theme_override_constants/margin_left = 4
-theme_override_constants/margin_top = 4
-theme_override_constants/margin_right = 4
-theme_override_constants/margin_bottom = 4
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
 
 [node name="Content" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/TavernRecruitment/Margin" index="0" unique_id=1515018970]
 layout_mode = 2

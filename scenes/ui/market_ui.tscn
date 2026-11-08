@@ -13,12 +13,6 @@ id = "WINDOW_MARKET"
 resizable = false
 content = NodePath("NinePatchRect/VBoxContainer/contentPanel/MarketPanel")
 
-[node name="MarginContainer2" parent="NinePatchRect/VBoxContainer/topbar" parent_id_path=PackedInt32Array(347636229) index="0" unique_id=634422055]
-theme_override_constants/margin_right = 25
-
-[node name="CloseButton" parent="NinePatchRect/VBoxContainer/topbar/MarginContainer2/HBoxContainer" parent_id_path=PackedInt32Array(1643440073) index="1" unique_id=1866505049]
-custom_minimum_size = Vector2(35, 25)
-
 [node name="contentPanel" parent="NinePatchRect/VBoxContainer" parent_id_path=PackedInt32Array(554725130) index="1" unique_id=1040542232]
 size_flags_horizontal = 3
 
@@ -99,9 +93,3 @@ theme = ExtResource("5_dark")
 text = "MARKET_EMPTY_DEFAULT"
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="Shipments" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/MarketPanel/TopRow"]
-visible = false
-layout_mode = 2
-custom_minimum_size = Vector2(120, 36)
-text = "SHIPMENT_MARKET_REQUESTS"
