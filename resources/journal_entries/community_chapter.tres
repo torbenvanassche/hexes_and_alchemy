@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="JournalEntry" format=3]
+[ext_resource type="Script" path="res://scripts/ui/journal_entry.gd" id="1"]
+[ext_resource type="Resource" path="res://resources/journal_tasks/community_water.tres" id="t0"]
+[ext_resource type="Resource" path="res://resources/journal_tasks/community_food.tres" id="t1"]
+[ext_resource type="Resource" path="res://resources/journal_tasks/community_workshop.tres" id="t2"]
+[ext_resource type="Resource" path="res://resources/journal_tasks/community_expedition.tres" id="t3"]
+[ext_resource type="Resource" path="res://resources/journal_tasks/community_foothold.tres" id="t4"]
+[resource]
+script = ExtResource("1")
+id = "community_chapter"
+title_key = "COMMUNITY_CHAPTER_TITLE"
+body_key = "COMMUNITY_CHAPTER_BODY"
+unlocked = false
+tasks = Array[Resource]([ExtResource("t0"), ExtResource("t1"), ExtResource("t2"), ExtResource("t3"), ExtResource("t4")])

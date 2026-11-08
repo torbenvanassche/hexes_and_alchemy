@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="SiteCommissionSet" format=3]
+[ext_resource type="Script" path="res://scripts/regional/site_commission_set.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/quests/quest_profile.gd" id="profile"]
+[ext_resource type="Resource" path="res://resources/quest_profiles/regional_selective_cut.tres" id="p0"]
+[ext_resource type="Resource" path="res://resources/quest_profiles/regional_recover_timber.tres" id="p1"]
+[resource]
+script = ExtResource("1")
+site_kind = "forest"
+profiles = Array[ExtResource("profile")]([ExtResource("p0"), ExtResource("p1")])

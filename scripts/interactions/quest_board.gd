@@ -15,6 +15,7 @@ func can_interact() -> bool:
 	
 func _open_window(window_info: SceneInfo) -> void:
 	window_instance = open_ui_window(window_info);
+	((window_instance.node as DraggableControl).content as QuestListUI).show_board()
 	open_additional_ui_windows()
 
 func _has_available_quest_locations() -> bool:

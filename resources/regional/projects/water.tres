@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="CommunityProjectDefinition" format=3]
+[ext_resource type="Script" path="res://scripts/regional/community_project_definition.gd" id="1"]
+[ext_resource type="Script" path="res://tools/inventory/scripts/data/item_info.gd" id="item"]
+[ext_resource type="PackedScene" path="res://meshes/kay_fantasy_hexagon/buildings/blue/building_well_blue.glb" id="visual"]
+[ext_resource type="Resource" path="res://resources/item_info/iron_ore.tres" id="iron_ore"]
+[ext_resource type="Resource" path="res://resources/item_info/water_bucket.tres" id="water_bucket"]
+[ext_resource type="Resource" path="res://resources/item_info/wood_log.tres" id="wood_log"]
+[ext_resource type="Script" path="res://scripts/regional/community_benefit.gd" id="ui_benefit"]
+[ext_resource type="Texture2D" path="res://sprites/items/work supplies.png" id="ui_icon_0"]
+[ext_resource type="Texture2D" path="res://sprites/items/bucket_water.png" id="ui_icon_1"]
+[ext_resource type="Resource" path="res://resources/item_info/well_blueprint.tres" id="blueprint"]
+[ext_resource type="Resource" path="res://resources/structure_info/well.tres" id="construction"]
+[ext_resource type="Resource" path="res://resources/item_info/work_supplies.tres" id="supplies"]
+[sub_resource type="Resource" id="ui_effect_0"]
+script = ExtResource("ui_benefit")
+icon = ExtResource("ui_icon_0")
+value = "-20%"
+label_key = "REQUEST_WATER_DURATION"
+[sub_resource type="Resource" id="ui_effect_1"]
+script = ExtResource("ui_benefit")
+icon = ExtResource("ui_icon_1")
+value = "+1"
+label_key = "REQUEST_EXTRA_WATER"
+[resource]
+script = ExtResource("1")
+blueprint = ExtResource("blueprint")
+construction = ExtResource("construction")
+id = "water"
+objective_key = "COMMUNITY_WATER_STEP"
+exploration_key = "QUEST_REQUEST_EXPLORE_WATER"
+duration_site_kinds = Array[String](["water_source"])
+work_duration_multiplier = 0.8
+bonus_quest_keys = Array[String](["fill", "draw_extra", "draw_careful"])
+bonus_items = Dictionary[ExtResource("item"), int]({ExtResource("water_bucket"):1})
+improvement_position = Vector3(-1.2, 0, 0.5)
+improvement_scale = 1.0
+title_key = "COMMUNITY_WATER_TITLE"
+resident_name = "Mara Fen"
+resident_role_key = "COMMUNITY_WATER_ROLE"
+request_key = "COMMUNITY_WATER_REQUEST"
+complete_key = "COMMUNITY_WATER_COMPLETE"
+benefit_key = "COMMUNITY_WATER_BENEFIT"
+site_kind = "water_source"
+commission_types = Array[String](["purify", "maintain", "protect_spring", "draw_careful", "fill"])
+materials = Dictionary[ExtResource("item"), int]({ExtResource("iron_ore"):1, ExtResource("wood_log"):2, ExtResource("supplies"):1})
+coin_cost = 15
+prestige_cost = 1
+recipe_unlock = ""
+reward_items = Dictionary[ExtResource("item"), int]({ExtResource("water_bucket"):3})
+visual = ExtResource("visual")
+
+benefits = Array[ExtResource("ui_benefit")]([SubResource("ui_effect_0"), SubResource("ui_effect_1")])

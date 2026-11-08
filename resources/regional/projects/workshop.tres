@@ -1,0 +1,46 @@
+[gd_resource type="Resource" script_class="CommunityProjectDefinition" format=3]
+[ext_resource type="Script" path="res://scripts/regional/community_project_definition.gd" id="1"]
+[ext_resource type="Script" path="res://tools/inventory/scripts/data/item_info.gd" id="item"]
+[ext_resource type="PackedScene" path="res://meshes/kay_fantasy_hexagon/decoration/props/crate_A_small.glb" id="visual"]
+[ext_resource type="Resource" path="res://resources/item_info/iron_ore.tres" id="iron_ore"]
+[ext_resource type="Resource" path="res://resources/item_info/wood_log.tres" id="wood_log"]
+[ext_resource type="Resource" path="res://resources/item_info/work_supplies.tres" id="work_supplies"]
+[ext_resource type="Script" path="res://scripts/regional/community_benefit.gd" id="ui_benefit"]
+[ext_resource type="Texture2D" path="res://sprites/items/work supplies.png" id="ui_icon_0"]
+[ext_resource type="Texture2D" path="res://sprites/items/work supplies.png" id="ui_icon_1"]
+[sub_resource type="Resource" id="ui_effect_0"]
+script = ExtResource("ui_benefit")
+icon = ExtResource("ui_icon_0")
+value = "-20%"
+label_key = "REQUEST_REPAIR_DURATION"
+[sub_resource type="Resource" id="ui_effect_1"]
+script = ExtResource("ui_benefit")
+icon = ExtResource("ui_icon_1")
+value = "-15%"
+label_key = "REQUEST_CRAFT_DURATION"
+[resource]
+script = ExtResource("1")
+id = "workshop"
+objective_key = "COMMUNITY_WORKSHOP_OBJECTIVE"
+exploration_key = "QUEST_REQUEST_EXPLORE_WORKSHOP"
+duration_behaviours = Array[String](["reinforce", "maintain", "reopen", "brace", "shore_reopen"])
+work_duration_multiplier = 0.8
+crafting_item_ids = Array[String](["work_supplies", "support_beams", "field_kit", "reinforced_tools"])
+crafting_duration_multiplier = 0.85
+improvement_position = Vector3(0.25, 0, -0.15)
+title_key = "COMMUNITY_WORKSHOP_TITLE"
+resident_name = "Bram Holt"
+resident_role_key = "COMMUNITY_WORKSHOP_ROLE"
+request_key = "COMMUNITY_WORKSHOP_REQUEST"
+complete_key = "COMMUNITY_WORKSHOP_COMPLETE"
+benefit_key = "COMMUNITY_WORKSHOP_BENEFIT"
+site_kind = "mines"
+commission_types = Array[String](["brace", "reinforce", "stabilized_extract", "sample_vein", "extract"])
+materials = Dictionary[ExtResource("item"), int]({ExtResource("wood_log"):2, ExtResource("iron_ore"):2, ExtResource("work_supplies"):1})
+coin_cost = 20
+prestige_cost = 1
+recipe_unlock = "reinforced_tools"
+reward_items = Dictionary[ExtResource("item"), int]({ExtResource("work_supplies"):2})
+visual = ExtResource("visual")
+
+benefits = Array[ExtResource("ui_benefit")]([SubResource("ui_effect_0"), SubResource("ui_effect_1")])

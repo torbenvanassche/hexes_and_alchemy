@@ -1,0 +1,6 @@
+[gd_scene format=3]
+[ext_resource type="Script" path="res://scripts/ui/village_request_notice.gd" id="1"]
+[node name="VillageRequestNotice" type="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("1")

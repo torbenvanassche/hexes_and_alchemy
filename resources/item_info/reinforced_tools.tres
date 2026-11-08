@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="EquipmentInfo" format=3]
+[ext_resource type="Script" path="res://tools/inventory/scripts/data/equipment_info.gd" id="equipment"]
+[ext_resource type="Script" path="res://tools/inventory/scripts/data/item_info.gd" id="item"]
+[ext_resource type="Texture2D" path="res://sprites/items/work supplies.png" id="icon"]
+[ext_resource type="Resource" path="res://resources/item_info/wood_log.tres" id="wood_log"]
+[ext_resource type="Resource" path="res://resources/item_info/iron_ore.tres" id="iron_ore"]
+[ext_resource type="Resource" path="res://resources/item_info/work_supplies.tres" id="work_supplies"]
+[resource]
+script = ExtResource("equipment")
+usage_key = "ITEM_USE_TOOLS"
+slot = 2
+tier = 1
+unique_id = "reinforced_tools"
+translation_key_name = "ITEM_REINFORCED_TOOLS_NAME"
+translation_key_description = "ITEM_REINFORCED_TOOLS_DESC"
+texture = ExtResource("icon")
+quest_duration_multiplier = 0.85
+danger_weight_multiplier = 0.65
+injury_chance_multiplier = 0.75
+buy_value = 40
+sell_value = 12
+recipe_unlock_key = "reinforced_tools"
+effective_quest_types = Array[String](["extract", "deepen", "reinforce", "reopen", "brace", "shore_reopen"])
+recipe = Dictionary[ExtResource("item"), int]({ExtResource("wood_log"):2, ExtResource("iron_ore"):2, ExtResource("work_supplies"):1})

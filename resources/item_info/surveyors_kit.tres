@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="EquipmentInfo" format=3]
+[ext_resource type="Script" path="res://tools/inventory/scripts/data/equipment_info.gd" id="equipment"]
+[ext_resource type="Script" path="res://tools/inventory/scripts/data/item_info.gd" id="item"]
+[ext_resource type="Texture2D" path="res://sprites/items/work supplies.png" id="icon"]
+[ext_resource type="Resource" path="res://resources/item_info/gold_ore.tres" id="gold_ore"]
+[ext_resource type="Resource" path="res://resources/item_info/work_supplies.tres" id="work_supplies"]
+[resource]
+script = ExtResource("equipment")
+usage_key = "ITEM_USE_SURVEYOR"
+slot = 2
+tier = 1
+unique_id = "surveyors_kit"
+translation_key_name = "ITEM_SURVEYORS_KIT_NAME"
+translation_key_description = "ITEM_SURVEYORS_KIT_DESC"
+texture = ExtResource("icon")
+quest_duration_multiplier = 0.85
+scouting_radius_bonus = 1
+buy_value = 40
+sell_value = 12
+recipe_unlock_key = "surveyors_kit"
+effective_quest_types = Array[String](["scout", "survey", "prospect"])
+recipe = Dictionary[ExtResource("item"), int]({ExtResource("gold_ore"):1, ExtResource("work_supplies"):2})

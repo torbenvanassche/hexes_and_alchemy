@@ -17,7 +17,7 @@ func record_quest(quest: Quest) -> void:
 	if quest == null:
 		return
 
-	completed_quests += 1
+	if quest.uses_guild_roster(): completed_quests += 1
 	var profile := quest.get_profile()
 	if profile != null:
 		reputation += profile.guild_reputation_reward
@@ -28,7 +28,7 @@ func record_quest(quest: Quest) -> void:
 		reputation += 1
 		notoriety += 1 if quest.scout_revealed_tiles >= 8 else 0
 	if Manager.instance != null and Manager.instance.hub != null:
-		Manager.instance.hub.add_prestige(maxi(1, profile.guild_reputation_reward) if profile != null else 1)
+		Manager.instance.hub.add_prestige(quest.get_prestige_reward())
 
 	_record_world_site(quest)
 	_update_journal_progress(quest)
@@ -69,6 +69,7 @@ func _record_world_site(quest: Quest) -> void:
 	if quest.location == null or quest.location.structure == null or quest.location.structure.structure_info == null:
 		return
 	var structure_id := quest.location.structure.structure_info.id
+	if quest.get_objective() is Mineshaft: structure_id = "mines"
 	if structure_id in ["farmland", "forest", "mines", "water_source"]:
 		supported_world_sites[structure_id] = true
 

@@ -2,6 +2,7 @@ class_name OperationManager
 extends Node
 
 signal operations_changed()
+signal operation_completed(quest: Quest)
 
 @export var auto_resolve_completed_quests := true
 
@@ -17,7 +18,7 @@ func register_quest(quest: Quest, parent_id: String = "") -> HubOperation:
 	var operation := HubOperation.new("operation_%s" % _next_id, quest, parent_id)
 	_next_id += 1
 	var hub := _get_hub()
-	if hub != null:
+	if hub != null and quest.uses_guild_roster():
 		operation.required_role = hub.get_required_role_for_quest(quest)
 		var faction := hub.get_faction_for_quest(quest)
 		operation.faction_id = faction.id if faction != null else &""
@@ -28,8 +29,8 @@ func register_quest(quest: Quest, parent_id: String = "") -> HubOperation:
 		quest.completed.connect(_on_quest_completed.bind(operation))
 	if not quest.outcome_ready.is_connected(_on_quest_outcome_ready.bind(operation)):
 		quest.outcome_ready.connect(_on_quest_outcome_ready.bind(operation))
-	_capture_available_quest_types(quest)
-	if quest.location != null and hub != null:
+	if not SaveGames.is_loading: _capture_available_quest_types(quest)
+	if quest.uses_guild_roster() and quest.location != null and hub != null:
 		hub.mark_operation(quest.location, quest.quest_key)
 	operations_changed.emit()
 	return operation
@@ -77,6 +78,7 @@ func _on_quest_completed(operation: HubOperation) -> void:
 	if hub != null and not operation.completion_recorded:
 		operation.completion_recorded = true
 		hub.record_operation_completed(quest)
+		operation_completed.emit(quest)
 	_update_spot_after_operation(quest)
 	_announce_newly_available_work(quest)
 	operations_changed.emit()
@@ -88,6 +90,7 @@ func on_quest_completed(quest: Quest) -> void:
 			return
 
 func _update_spot_after_operation(quest: Quest) -> void:
+	if quest != null and not quest.uses_guild_roster(): return
 	var hub := _get_hub()
 	if hub == null or quest == null or quest.location == null:
 		return

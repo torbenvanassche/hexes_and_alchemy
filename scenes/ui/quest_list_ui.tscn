@@ -1,9 +1,7 @@
 [gd_scene format=3 uid="uid://brxjfdnhnyhhv"]
-
 [ext_resource type="PackedScene" path="res://tools/custom_window/base_window.tscn" id="1_window"]
 [ext_resource type="Script" path="res://tools/inventory/scripts/visual/screens/quest_list_ui.gd" id="2_script"]
 [ext_resource type="PackedScene" path="res://scenes/ui/components/quest_list_item.tscn" id="3_note"]
-
 [sub_resource type="StyleBoxFlat" id="Board"]
 bg_color = Color(0.067, 0.102, 0.129, 1)
 border_width_left = 1
@@ -13,93 +11,134 @@ border_width_bottom = 1
 border_color = Color(0.298, 0.353, 0.38, 1)
 
 [node name="Window" node_paths=PackedStringArray("content") instance=ExtResource("1_window")]
-custom_minimum_size = Vector2(660, 460)
+custom_minimum_size = Vector2(740, 540)
 resizable = false
 id = "WINDOW_QUEST_BOARD"
 content = NodePath("NinePatchRect/VBoxContainer/contentPanel/QuestBoard")
-
 [node name="contentPanel" parent="NinePatchRect/VBoxContainer" index="1"]
 size_flags_horizontal = 3
-
 [node name="QuestBoard" type="Control" parent="NinePatchRect/VBoxContainer/contentPanel"]
-custom_minimum_size = Vector2(620, 370)
+custom_minimum_size = Vector2(600, 400)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("2_script")
 quest_item_ui = ExtResource("3_note")
-
 [node name="Layout" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-theme_override_constants/separation = 12
-
-[node name="Heading" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout"]
+theme_override_constants/separation = 10
+[node name="Tabs" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout"]
 layout_mode = 2
+theme_override_constants/separation = 8
+[node name="Village" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Tabs"]
+layout_mode = 2
+custom_minimum_size = Vector2(190, 36)
+theme_type_variation = &"TabButton"
+toggle_mode = true
+text = "QUEST_BOARD_VILLAGE_TAB"
+[node name="Guild" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Tabs"]
+layout_mode = 2
+custom_minimum_size = Vector2(190, 36)
+theme_type_variation = &"TabButton"
+toggle_mode = true
+text = "QUEST_BOARD_GUILD_TAB"
+[node name="RuleTop" type="HSeparator" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout"]
+layout_mode = 2
+[node name="Heading" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout"]
+layout_mode = 2
+theme_override_constants/separation = 10
+[node name="Back" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Heading"]
+visible = false
+layout_mode = 2
+text = "QUEST_REQUEST_BACK"
+[node name="Context" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Heading"]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_type_variation = &"MutedLabel"
 theme_override_font_sizes/font_size = 13
-text = "QUEST_BOARD_POSTED"
-uppercase = true
-
-[node name="BoardSurface" type="Panel" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout"]
+autowrap_mode = 3
+[node name="Scroll" type="ScrollContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_styles/panel = SubResource("Board")
-
-[node name="EmptyState" type="CenterContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/BoardSurface"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 2
-
-[node name="Content" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/BoardSurface/EmptyState"]
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 4
+[node name="Content" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Scroll"]
 layout_mode = 2
-custom_minimum_size = Vector2(340, 0)
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+[node name="RequestScroll" type="ScrollContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Scroll/Content"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 268)
+size_flags_horizontal = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 4
+[node name="RequestMargin" type="MarginContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Scroll/Content/RequestScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_bottom = 0
+[node name="Requests" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Scroll/Content/RequestScroll/RequestMargin"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+[node name="Completed" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Scroll/Content"]
+visible = false
+layout_mode = 2
+toggle_mode = true
+text = "QUEST_REQUEST_COMPLETED"
+[node name="BoardSurface" type="Panel" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Scroll/Content"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("Board")
+[node name="EmptyState" type="CenterContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Scroll/Content"]
+layout_mode = 2
+size_flags_vertical = 3
+custom_minimum_size = Vector2(0, 180)
+mouse_filter = 2
+[node name="Content" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Scroll/Content/EmptyState"]
+layout_mode = 2
 theme_override_constants/separation = 8
 mouse_filter = 2
-
-[node name="Title" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/BoardSurface/EmptyState/Content"]
+[node name="Title" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Scroll/Content/EmptyState/Content"]
 layout_mode = 2
 text = "QUEST_LIST_EMPTY"
+theme_override_font_sizes/font_size = 18
 horizontal_alignment = 1
-
-[node name="Hint" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/BoardSurface/EmptyState/Content"]
+autowrap_mode = 3
+[node name="Hint" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Scroll/Content/EmptyState/Content"]
 layout_mode = 2
 theme_type_variation = &"MutedLabel"
 text = "QUEST_BOARD_EMPTY_HINT"
 horizontal_alignment = 1
 autowrap_mode = 3
-
 [node name="Rule" type="HSeparator" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout"]
 layout_mode = 2
-
 [node name="Actions" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout"]
 layout_mode = 2
 theme_override_constants/separation = 8
-
-[node name="AutoResolveButton" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Actions"]
+[node name="AutoResolveButton" type="CheckBox" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Actions"]
 layout_mode = 2
+theme_override_constants/h_separation = 8
 custom_minimum_size = Vector2(0, 36)
-theme_type_variation = &"TradeTab"
+theme_type_variation = &"SquareCheck"
 toggle_mode = true
 text = "QUEST_BOARD_AUTO_COLLECT"
 theme_override_font_sizes/font_size = 16
 tooltip_text = "QUEST_AUTO_RESOLVE"
-
 [node name="Spacer" type="Control" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Actions"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
-
 [node name="ScoutQuestButton" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Actions"]
 layout_mode = 2
 custom_minimum_size = Vector2(88, 36)
 text = "QUEST_CREATION_SCOUT_FRONTIER"
 theme_override_font_sizes/font_size = 16
-
 [node name="CreateQuestButton" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Actions"]
 layout_mode = 2
 custom_minimum_size = Vector2(112, 36)

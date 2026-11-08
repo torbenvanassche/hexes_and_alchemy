@@ -1,0 +1,38 @@
+[gd_resource type="Resource" script_class="CommunityProjectDefinition" format=3]
+[ext_resource type="Script" path="res://scripts/regional/community_project_definition.gd" id="1"]
+[ext_resource type="Script" path="res://tools/inventory/scripts/data/item_info.gd" id="item"]
+[ext_resource type="PackedScene" path="res://meshes/kay_fantasy_hexagon/decoration/props/sack.glb" id="visual"]
+[ext_resource type="Resource" path="res://resources/item_info/grain.tres" id="grain"]
+[ext_resource type="Resource" path="res://resources/item_info/seed_pouch.tres" id="seed_pouch"]
+[ext_resource type="Resource" path="res://resources/item_info/wood_raw.tres" id="wood_raw"]
+[ext_resource type="Script" path="res://scripts/regional/community_benefit.gd" id="ui_benefit"]
+[ext_resource type="Texture2D" path="res://sprites/items/wheat_bunch.png" id="ui_icon_0"]
+[sub_resource type="Resource" id="ui_effect_0"]
+script = ExtResource("ui_benefit")
+icon = ExtResource("ui_icon_0")
+value = "+1"
+label_key = "REQUEST_EXTRA_GRAIN"
+[resource]
+script = ExtResource("1")
+id = "food"
+objective_key = "COMMUNITY_FOOD_OBJECTIVE"
+exploration_key = "QUEST_REQUEST_EXPLORE_FOOD"
+bonus_quest_keys = Array[String](["harvest", "careful_harvest", "rush_harvest", "collect"])
+bonus_items = Dictionary[ExtResource("item"), int]({ExtResource("grain"):1})
+improvement_position = Vector3(0, 0, 0.9)
+title_key = "COMMUNITY_FOOD_TITLE"
+resident_name = "Tamsin Reed"
+resident_role_key = "COMMUNITY_FOOD_ROLE"
+request_key = "COMMUNITY_FOOD_REQUEST"
+complete_key = "COMMUNITY_FOOD_COMPLETE"
+benefit_key = "COMMUNITY_FOOD_BENEFIT"
+site_kind = "farmland"
+commission_types = Array[String](["careful_harvest", "harvest", "collect", "rush_harvest"])
+materials = Dictionary[ExtResource("item"), int]({ExtResource("wood_raw"):3, ExtResource("seed_pouch"):1})
+coin_cost = 15
+prestige_cost = 1
+recipe_unlock = "quartermaster_kit"
+reward_items = Dictionary[ExtResource("item"), int]({ExtResource("grain"):3})
+visual = ExtResource("visual")
+
+benefits = Array[ExtResource("ui_benefit")]([SubResource("ui_effect_0")])
