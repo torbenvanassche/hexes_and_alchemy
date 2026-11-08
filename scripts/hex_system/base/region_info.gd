@@ -39,11 +39,12 @@ func get_display_name() -> String:
 		return id.capitalize()
 	return translated
 
-func matches(x: int, y: int) -> bool:
-	if noise == null:
+func matches(x: int, y: int, noise_override: FastNoiseLite = null) -> bool:
+	var sampler := noise_override if noise_override != null else noise
+	if sampler == null:
 		return true
 
-	var n := noise.get_noise_2d(float(x) * noise_scale,float(y) * noise_scale)
+	var n := sampler.get_noise_2d(float(x) * noise_scale,float(y) * noise_scale)
 	return n >= noise_min and n <= noise_max
 
 func get_generation_weight(distance: int = -1) -> float:

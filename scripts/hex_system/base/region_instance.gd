@@ -64,6 +64,8 @@ func _pick_structure(rng: RandomNumberGenerator) -> StructureInfo:
 			continue
 
 		var weight := info.structures[s] * s.spawn_weight
+		if hex_grid.generation_version >= 2:
+			weight /= 1.0 + structure_counts[s] * hex_grid.discovery_repeat_penalty
 		if weight <= 0.0:
 			continue
 
@@ -141,6 +143,8 @@ func _can_place_structure_at(
 
 	if hex is HexSlope:
 		return false;
+	if placement_mode == REQUIRED_PLACEMENT_STANDARD and not hex_grid.is_discovery_spaced(pos, candidate):
+		return false
 
 	if (
 		placement_mode == REQUIRED_PLACEMENT_STANDARD
@@ -239,9 +243,9 @@ func _get_structure_generation_hexes() -> Array[Vector3i]:
 			generation_hexes.append(hex_id)
 	return generation_hexes
 
-func create_structure_generation_job(candidate_hexes: Array[Vector3i] = []) -> Dictionary:
+func create_structure_generation_job(candidate_hexes: Array[Vector3i] = []) -> GenerationJobs.StructureState:
 	if info.structures.is_empty():
-		return {}
+		return null
 
 	var generation_hexes := _get_structure_generation_hexes()
 	_compute_structure_caps(generation_hexes.size())
@@ -258,7 +262,7 @@ func create_structure_generation_job(candidate_hexes: Array[Vector3i] = []) -> D
 			if candidate_hex != null and hex_grid.can_generate_structures_on_hex(candidate_hex):
 				available_hexes.append(hex_id)
 	if available_hexes.is_empty():
-		return {}
+		return null
 	available_hexes.sort_custom(_sort_hex_ids)
 	_shuffle_hexes(available_hexes, rng)
 
@@ -279,33 +283,35 @@ func create_structure_generation_job(candidate_hexes: Array[Vector3i] = []) -> D
 
 	var target_count := maxi(0, target_total - existing_total)
 	if target_count <= 0:
-		return {}
+		return null
 
-	return {
-		"rng": rng,
-		"available_hexes": available_hexes,
-		"remaining_slots": target_count,
-	}
+	var job := GenerationJobs.StructureState.new()
+	job.rng = rng
+	job.available_hexes = available_hexes
+	job.remaining_slots = target_count
+	return job
 
-func process_structure_generation_job(job: Dictionary) -> bool:
-	if job.is_empty():
+func process_structure_generation_job(job: GenerationJobs.StructureState) -> bool:
+	if job == null:
 		return true
 
-	var remaining_slots := int(job["remaining_slots"])
-	var available_hexes := job["available_hexes"] as Array[Vector3i]
-	if remaining_slots <= 0 or available_hexes.is_empty():
+	var remaining_slots := job.remaining_slots
+	var available_hexes := job.available_hexes
+	if (remaining_slots <= 0 and job.pending_structure == null) or available_hexes.is_empty():
 		return true
 
-	job["remaining_slots"] = remaining_slots - 1
-	var rng := job["rng"] as RandomNumberGenerator
-	var structure := _pick_structure(rng)
-	if structure == null:
-		return int(job["remaining_slots"]) <= 0
-
+	if job.pending_structure == null:
+		job.remaining_slots -= 1
+		job.pending_structure = _pick_structure(job.rng)
+		if job.pending_structure == null: return job.remaining_slots <= 0
+		job.search_start = job.rng.randi_range(0, available_hexes.size() - 1)
+		job.search_offset = 0
+	var structure := job.pending_structure
 	var placed := false
-	var start_index := rng.randi_range(0, available_hexes.size() - 1)
-	for offset in available_hexes.size():
-		var hex_id: Vector3i = available_hexes[(start_index + offset) % available_hexes.size()]
+	var end_offset := mini(available_hexes.size(), job.search_offset + hex_grid.structure_candidates_per_step)
+	while job.search_offset < end_offset:
+		var hex_id: Vector3i = available_hexes[(job.search_start + job.search_offset) % available_hexes.size()]
+		job.search_offset += 1
 		var hex := hexes[hex_id] as HexBase
 
 		if hex == null or not hex.can_generate:
@@ -323,10 +329,12 @@ func process_structure_generation_job(job: Dictionary) -> bool:
 		placed = true
 		break
 
+	if not placed and job.search_offset < available_hexes.size(): return false
+	job.pending_structure = null
 	if not placed:
 		structure_counts[structure] = structure_caps[structure]
 
-	return int(job["remaining_slots"]) <= 0 or available_hexes.is_empty()
+	return int(job.remaining_slots) <= 0 or available_hexes.is_empty()
 
 func generate_structures_for_region(candidate_hexes: Array[Vector3i] = []) -> void:
 	var job := create_structure_generation_job(candidate_hexes)

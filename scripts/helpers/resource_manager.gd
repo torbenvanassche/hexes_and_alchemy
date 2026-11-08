@@ -1,5 +1,10 @@
 class_name DataManager extends Node
 
+class RegionSceneTable extends RefCounted:
+	var total_weight := 0.0
+	var cumulative: Array[float] = []
+	var scenes: Array[HexInfo] = []
+
 @export var catalog: GameContentCatalog
 
 var hexes: Array[HexInfo] = []
@@ -14,7 +19,7 @@ var scene_data: Array[SceneInfo] = []
 var _scene_lookup: Dictionary[StringName, SceneInfo] = {}
 var _item_lookup: Dictionary[StringName, ItemInfo] = {}
 var _node_lookup: Dictionary[int, SceneInfo] = {}
-var _region_scene_tables: Dictionary[RegionInfo, Dictionary] = {}
+var _region_scene_tables: Dictionary[RegionInfo, RegionSceneTable] = {}
 
 var ocean_descriptor: RegionInfo
 
@@ -169,9 +174,9 @@ func pick_scene_for_region(region: RegionInfo, rng: RandomNumberGenerator = null
 		return null
 
 	var table := _get_region_scene_table(region)
-	var total_weight := float(table["total_weight"])
-	var cumulative: Array[float] = table["cumulative"]
-	var valid_scenes: Array[HexInfo] = table["scenes"]
+	var total_weight := table.total_weight
+	var cumulative := table.cumulative
+	var valid_scenes := table.scenes
 
 	if total_weight <= 0.0:
 		Debug.message("Total weight was <= 0")
@@ -184,7 +189,7 @@ func pick_scene_for_region(region: RegionInfo, rng: RandomNumberGenerator = null
 
 	return valid_scenes[-1]
 
-func _get_region_scene_table(region: RegionInfo) -> Dictionary:
+func _get_region_scene_table(region: RegionInfo) -> RegionSceneTable:
 	if _region_scene_tables.has(region):
 		return _region_scene_tables[region]
 
@@ -204,11 +209,10 @@ func _get_region_scene_table(region: RegionInfo) -> Dictionary:
 		cumulative.append(total_weight)
 		valid_scenes.append(info)
 
-	var table := {
-		"total_weight": total_weight,
-		"cumulative": cumulative,
-		"scenes": valid_scenes,
-	}
+	var table := RegionSceneTable.new()
+	table.total_weight = total_weight
+	table.cumulative = cumulative
+	table.scenes = valid_scenes
 	_region_scene_tables[region] = table
 	return table
 
@@ -220,7 +224,8 @@ func get_region_for(
 	y: int,
 	region_options: Array[RegionInfo] = regions,
 	rng: RandomNumberGenerator = null,
-	distance: int = -1
+	distance: int = -1,
+	noise_overrides: Dictionary[RegionInfo, FastNoiseLite] = {}
 ) -> RegionInfo:
 	var candidates: Array[RegionInfo] = []
 	var cumulative: Array[float] = []
@@ -228,7 +233,7 @@ func get_region_for(
 	var total_weight := 0.0
 
 	for region: RegionInfo in region_options:
-		if not region.matches(x, y):
+		if not region.matches(x, y, noise_overrides.get(region)):
 			continue
 
 		var weight := region.get_generation_weight(distance)

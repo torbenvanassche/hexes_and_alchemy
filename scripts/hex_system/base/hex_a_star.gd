@@ -8,64 +8,66 @@ var cube_to_id: Dictionary[Vector3i, int] = {}
 var id_to_cube: Dictionary[int, Vector3i] = {}
 
 static var obstacles: Array[Obstacle] = []
+static var _obstacle_revision := 0
+var _indexed_obstacle_revision := -1
+var _blocked_edges: Dictionary[Vector4i, bool] = {}
 
 func _init(hex_grid: HexGrid, traverse_method: HexInfo.TraversalTag = HexInfo.TraversalTag.WALK) -> void:
 	grid = hex_grid
 	method = traverse_method
 
 func _is_blocked(a: Vector3i, b: Vector3i) -> bool:
-	for o in obstacles:
-		if o == null or not is_instance_valid(o):
-			continue
-		if (o.cube_id == a and o.adjacent_id == b) or (o.cube_id == b and o.adjacent_id == a):
-			return true
-	return false
+	if _indexed_obstacle_revision != _obstacle_revision:
+		_blocked_edges.clear()
+		for obstacle: Obstacle in obstacles:
+			if not is_instance_valid(obstacle) or not grid.is_ancestor_of(obstacle):
+				continue
+			_blocked_edges[_edge_key(obstacle.cube_id, obstacle.adjacent_id)] = true
+		_indexed_obstacle_revision = _obstacle_revision
+	return _blocked_edges.has(_edge_key(a, b))
 
-func rebuild() -> void:
+func _edge_key(a: Vector3i, b: Vector3i) -> Vector4i:
+	# Cube z is -x-y; canonical endpoint order makes the lookup undirected.
+	if a.x > b.x or (a.x == b.x and a.y > b.y):
+		return Vector4i(b.x, b.y, a.x, a.y)
+	return Vector4i(a.x, a.y, b.x, b.y)
+
+func _clear_navigation() -> void:
 	clear()
 	cube_to_id.clear()
 	id_to_cube.clear()
-	
-	for cube_id: Vector3i in grid.tiles.keys():
-		var scene_instance: SceneInstance = grid.tiles[cube_id]
-		var hex: HexBase = scene_instance.node
 
-		if hex == null:
-			continue
-		if not hex.is_inside_tree():
-			continue
+func rebuild() -> void:
+	_clear_navigation()
+	for coordinate: Vector3i in grid.tiles: _add_navigation_point(coordinate)
+	for coordinate: Vector3i in cube_to_id: _connect_navigation_point(coordinate)
 
-		if not hex.is_traversable(method):
-			continue
+func rebuild_budgeted(budget: GenerationBudget) -> void:
+	_clear_navigation()
+	for coordinate: Vector3i in grid.tiles:
+		await budget.checkpoint()
+		_add_navigation_point(coordinate)
+	for coordinate: Vector3i in cube_to_id:
+		await budget.checkpoint()
+		_connect_navigation_point(coordinate)
 
-		var point_id := _cube_to_astar_id(cube_id)
+func _add_navigation_point(coordinate: Vector3i) -> void:
+	var hex := grid.get_hex_at_cube_id(coordinate)
+	if hex == null or not hex.is_inside_tree() or not hex.is_traversable(method): return
+	var point_id := _cube_to_astar_id(coordinate)
+	cube_to_id[coordinate] = point_id
+	id_to_cube[point_id] = coordinate
+	add_point(point_id, Vector2(hex.global_position.x, hex.global_position.z), hex.movement_cost)
 
-		cube_to_id[cube_id] = point_id
-		id_to_cube[point_id] = cube_id
-
-		add_point(point_id, Vector2(hex.global_position.x, hex.global_position.z), hex.movement_cost)
-
-	# rebuild connections (OBSTACLES RESPECTED)
-	for cube_id: Vector3i in cube_to_id.keys():
-		var from_id := cube_to_id[cube_id]
-		var from_hex := grid.tiles[cube_id].node as HexBase
-
-		for dir in DataManager.instance.CUBE_DIRS:
-			var neighbor_cube := cube_id + dir
-
-			if not cube_to_id.has(neighbor_cube):
-				continue
-
-			if _is_blocked(cube_id, neighbor_cube):
-				continue
-			var neighbor: HexBase = grid.tiles[neighbor_cube].node
-			if not grid.can_traverse_between(from_hex, neighbor, method):
-				continue
-
-			var to_id := cube_to_id[neighbor_cube]
-
-			if not are_points_connected(from_id, to_id):
-				connect_points(from_id, to_id, true)
+func _connect_navigation_point(coordinate: Vector3i) -> void:
+	var from_id := cube_to_id[coordinate]
+	var hex := grid.get_hex_at_cube_id(coordinate)
+	for direction: Vector3i in DataManager.instance.CUBE_DIRS:
+		var neighbor := coordinate + direction
+		if not cube_to_id.has(neighbor) or _is_blocked(coordinate, neighbor): continue
+		if not grid.can_traverse_between(hex, grid.get_hex_at_cube_id(neighbor), method): continue
+		var to_id := cube_to_id[neighbor]
+		if not are_points_connected(from_id, to_id): connect_points(from_id, to_id, true)
 
 func update_hex(hex: HexBase) -> void:
 	var cube_id := hex.cube_id
@@ -99,32 +101,6 @@ func update_hex(hex: HexBase) -> void:
 
 			if not are_points_connected(point_id, neighbor_id):
 				connect_points(point_id, neighbor_id, true)
-				connect_points(neighbor_id, point_id, true)
-
-	for dir in DataManager.instance.CUBE_DIRS:
-		var neighbor_cube := cube_id + dir
-
-		if not grid.tiles.has(neighbor_cube):
-			continue
-
-		if _is_blocked(cube_id, neighbor_cube):
-			continue
-
-		var neighbor_scene: SceneInstance = grid.tiles[neighbor_cube]
-		var neighbor: HexBase = neighbor_scene.node
-
-		if neighbor == null:
-			continue
-
-		var neighbor_id := _cube_to_astar_id(neighbor_cube)
-
-		if not has_point(point_id) or not has_point(neighbor_id):
-			continue
-		if grid.can_traverse_between(hex, neighbor, method):
-			if not are_points_connected(point_id, neighbor_id):
-				connect_points(point_id, neighbor_id, true)
-		elif are_points_connected(point_id, neighbor_id):
-			disconnect_points(point_id, neighbor_id)
 
 func get_hex_path(start_cube: Vector3i, end_cube: Vector3i) -> Array[HexBase]:
 	var result: Array[HexBase] = []
@@ -243,6 +219,8 @@ func _cube_to_astar_id(c: Vector3i) -> int:
 
 
 func apply_obstacle(obstacle: Obstacle) -> void:
+	# Registration may update an existing obstacle's coordinates.
+	_obstacle_revision += 1
 	var a := obstacle.cube_id
 	var b := obstacle.adjacent_id
 
@@ -262,5 +240,6 @@ func remove_obstacle(obstacle: Obstacle, rebuild_now: bool = true) -> void:
 	if obstacle == null:
 		return
 	obstacles.erase(obstacle)
+	_obstacle_revision += 1
 	if rebuild_now:
 		rebuild()

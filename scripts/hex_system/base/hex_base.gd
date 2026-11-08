@@ -154,7 +154,12 @@ func set_structure(s: StructureInfo, immediate: bool = false, placement_rotation
 		return structure != null
 	else:
 		var was_cached := s.is_cached
-		s.queue(_on_structure_loaded.bind(footprint_replacements, placement_rotation_y, remove_if_passage_repair_failed, not was_cached));
+		var grid := SceneManager.get_active_scene().node as HexGrid
+		if not was_cached and grid != null: grid._pending_structure_loads += 1
+		s.queue(func(info: StructureInfo) -> void:
+			_on_structure_loaded(info, footprint_replacements, placement_rotation_y, remove_if_passage_repair_failed, not was_cached)
+			if not was_cached and is_instance_valid(grid): grid._pending_structure_loads -= 1
+		)
 		return structure != null if was_cached else true
 	
 ##When the structure finishes loading, add the instance to the scene and validate adjacent tiles
@@ -170,8 +175,8 @@ func _on_structure_loaded(s: StructureInfo, required_tiles: Array[SceneInstance]
 		add_child(structure.instance);
 		var placement_rotation := _get_structure_placement_rotation(s, placement_rotation_y)
 		var resolved_rotation_y := NAN
-		if bool(placement_rotation.get("has_rotation", false)):
-			resolved_rotation_y = float(placement_rotation["rotation_y"])
+		if not is_nan(placement_rotation):
+			resolved_rotation_y = placement_rotation
 			structure.instance.rotation.y = resolved_rotation_y
 		elif s.randomize_rotation:
 			var grid := SceneManager.get_active_scene().node as HexGrid
@@ -418,10 +423,10 @@ func _remove_structure_after_failed_passage_repair(s: StructureInfo, unregister_
 		structure.instance.queue_free()
 	structure = null
 
-func _get_structure_placement_rotation(s: StructureInfo, placement_rotation_y: float = NAN) -> Dictionary:
+func _get_structure_placement_rotation(s: StructureInfo, placement_rotation_y: float = NAN) -> float:
 	var placeable := s as PlaceableStructureInfo
 	if placeable == null:
-		return { "has_rotation": false }
+		return NAN
 	return placeable.get_placement_rotation_y(self, placement_rotation_y)
 
 func has_walkable_random_rotation(s: StructureInfo) -> bool:

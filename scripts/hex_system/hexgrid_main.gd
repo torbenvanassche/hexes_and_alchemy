@@ -5,6 +5,11 @@ class_name MainGrid extends HexGrid
 @export_group("Starter Progression")
 @export var required_starting_structures: Array[StructureInfo] = []
 @export_range(1, 64, 1) var required_structure_max_walk_distance := 24
+## Repair isolated starter islands only when normal required placement fails.
+@export var repair_failed_starter_terrain := true
+var starter_terrain_repaired_tiles := 0
+var _finishing_generation := false
+var starter_layout: StarterLayoutPlan
 @export_group("Nearby Settlement")
 ## One passive settlement is placed before resource scattering. Empty disables it.
 @export var nearby_settlement: StructureInfo
@@ -30,7 +35,15 @@ func _within_required_walk_range(structure: StructureInfo, distance: int) -> boo
 	return distance <= required_structure_max_walk_distance
 
 func _ready() -> void:
-	super();
+	await super()
+
+func _prepare_terrain_plan() -> void:
+	if generation_version < 2: return
+	loading_progress.report(0.02, "LOADING_PREPARING")
+	startup_budget = GenerationBudget.new(self)
+	starter_layout = StarterLayoutPlan.new()
+	await starter_layout.build(self, startup_budget)
+	startup_budget.finish_slice()
 	
 func _on_map_ready() -> void:
 	SceneManager.set_active_scene(DataManager.instance.node_to_info(self));
@@ -54,6 +67,7 @@ func _queue_starting_settlement() -> void:
 	
 func settlement_created(sI: StructureInfo) -> void:
 	var center_hex: HexBase = chunks[Vector2i.ZERO].get_best_structure_hex();
+	if starter_layout != null: center_hex = get_hex_at_grid_id(starter_layout.home)
 	if center_hex == null:
 		Debug.err("Could not place the starting settlement because the center hex was not found.");
 		_finish_map_generation();
@@ -66,26 +80,73 @@ func settlement_created(sI: StructureInfo) -> void:
 	center_hex.set_structure(sI);
 
 func _finish_map_generation() -> void:
-	if initialized:
+	if initialized or _finishing_generation:
 		return;
-	ensure_elevated_areas_reachable_from(_get_starter_origin_hex())
-	_ensure_elevated_areas_have_entrances()
+	_finishing_generation = true
+	startup_budget = GenerationBudget.new(self)
+	var started := generation_metrics.begin()
+	_prepare_settlement_geometry()
+	loading_progress.report(0.60, "LOADING_PATHS")
+	await ensure_elevated_areas_reachable_from(_get_starter_origin_hex())
+	await _ensure_elevated_areas_have_entrances()
+	generation_metrics.end("initial_slopes_elapsed", started)
+	started = generation_metrics.begin()
 	_register_navigation_obstacles()
-	pathfinder.rebuild();
-	var required_structures_placed := _place_required_starting_structures()
-	generate_structures();
+	loading_progress.report(0.72, "LOADING_NAVIGATION")
+	await pathfinder.rebuild_budgeted(startup_budget);
+	generation_metrics.end("initial_navigation_elapsed", started)
+	started = generation_metrics.begin()
+	loading_progress.report(0.76, "LOADING_SETTLEMENTS")
+	var required_structures_placed := await _place_required_starting_structures(false)
+	loading_progress.report(0.80, "LOADING_SETTLEMENTS")
+	if not required_structures_placed and repair_failed_starter_terrain:
+		starter_terrain_repaired_tiles = await StarterTerrainRepair.repair(self, _get_starter_origin_hex())
+		_register_navigation_obstacles()
+		await pathfinder.rebuild_budgeted(startup_budget)
+		required_structures_placed = await _place_required_starting_structures()
+	elif not required_structures_placed:
+		_report_missing_starting_structures(_get_required_structures())
+	generation_metrics.end("required_structures_elapsed", started)
+	started = generation_metrics.begin()
+	_prepare_settlement_geometry()
+	# Use the same incremental worker as exploration instead of scattering every
+	# region in one uninterrupted call. Keep the original region order/RNG keys.
+	for region: RegionInfo in region_instances:
+		for instance: RegionInstance in region_instances[region]:
+			var job := GenerationJobs.RegionStructures.new()
+			job.region_instance = instance
+			job.candidates.assign(instance.hexes.keys())
+			_structure_generation_queue.append(job)
+	startup_budget.finish_slice()
+	var initial_structure_jobs := maxi(1, _structure_generation_queue.size())
+	while not _structure_generation_queue.is_empty() or _pending_structure_loads > 0:
+		loading_progress.report(0.82 + 0.10 * (1.0 - float(_structure_generation_queue.size()) / initial_structure_jobs), "LOADING_RESOURCES")
+		await get_tree().process_frame
+	startup_budget.restart_after_wait()
+	generation_metrics.end("initial_scatter_elapsed", started)
+	loading_progress.report(0.94, "LOADING_NAVIGATION")
+	started = generation_metrics.begin()
 	_register_navigation_obstacles()
-	pathfinder.rebuild();
+	await pathfinder.rebuild_budgeted(startup_budget);
+	generation_metrics.end("final_navigation_elapsed", started)
 	if not required_structures_placed or not _validate_required_starting_structures():
-		Debug.err("Required starting structures could not be generated within reach of the player.")
+		_finishing_generation = false
+		Debug.err("Required starting structures could not be generated within reach of the player (seed %d)." % generation_seed)
+		loading_progress.fail(tr("LOADING_GENERATION_FAILED") % generation_seed)
 		return
+	_finishing_generation = false
+	startup_budget.finish_slice()
 	mark_initialized();
+
+func _prepare_settlement_geometry() -> void:
+	for settlement: Settlement in Manager.instance.settlements.duplicate():
+		if is_ancestor_of(settlement): settlement.ensure_world_ready()
 
 func _register_navigation_obstacles() -> void:
 	for obstacle: Obstacle in find_children("*", "Obstacle", true, false):
 		obstacle.register_with_grid(self)
 
-func _place_required_starting_structures() -> bool:
+func _place_required_starting_structures(report_failure: bool = true) -> bool:
 	_required_starting_structure_coords.clear()
 	if _get_required_structures().is_empty():
 		return true
@@ -110,7 +171,7 @@ func _place_required_starting_structures() -> bool:
 		REQUIRED_PLACEMENT_ALLOW_RESERVED,
 	]
 	for placement_mode in placement_modes:
-		var plan := _plan_required_structure_placements(
+		var plan := await _plan_required_structure_placements(
 			missing_structures,
 			reachable_distances,
 			placement_mode
@@ -122,19 +183,22 @@ func _place_required_starting_structures() -> bool:
 			return true
 		missing_structures = failed_structures
 
+	if report_failure: _report_missing_starting_structures(missing_structures)
+	return false
+
+func _report_missing_starting_structures(missing_structures: Array[StructureInfo]) -> void:
 	for required_structure in missing_structures:
 		if required_structure == nearby_settlement:
 			Debug.err("Could not place nearby settlement '%s' within %d–%d walking steps. Adjust Nearby Settlement distance limits or generate a larger world." % [required_structure.id, settlement_min_walk_distance, maxi(settlement_min_walk_distance, settlement_max_walk_distance)])
 		else:
 			Debug.err("Could not place required starting structure: %s" % required_structure.id)
-	return false
 
 func _get_starter_origin_hex() -> HexBase:
 	if Manager.instance == null or Manager.instance.active_settlement == null:
 		return null
 	return Manager.instance.active_settlement.get_parent() as HexBase
 
-func _get_walk_reachable_distances(origin: HexBase) -> Dictionary:
+func _get_walk_reachable_distances(origin: HexBase) -> Dictionary[Vector3i, int]:
 	var max_distance := required_structure_max_walk_distance
 	if nearby_settlement != null:
 		max_distance = maxi(max_distance, maxi(settlement_min_walk_distance, settlement_max_walk_distance))
@@ -143,7 +207,7 @@ func _get_walk_reachable_distances(origin: HexBase) -> Dictionary:
 		max_distance
 	)
 
-func _collect_missing_required_structures(reachable_distances: Dictionary) -> Array[StructureInfo]:
+func _collect_missing_required_structures(reachable_distances: Dictionary[Vector3i, int]) -> Array[StructureInfo]:
 	var missing: Array[StructureInfo] = []
 	var claimed_existing: Dictionary[Vector3i, bool] = {}
 	for required_structure in _get_required_structures():
@@ -163,7 +227,7 @@ func _collect_missing_required_structures(reachable_distances: Dictionary) -> Ar
 
 func _find_existing_required_structure(
 	required_structure: StructureInfo,
-	reachable_distances: Dictionary,
+	reachable_distances: Dictionary[Vector3i, int],
 	claimed_existing: Dictionary[Vector3i, bool]
 ) -> Vector3i:
 	var coords: Array[Vector3i] = []
@@ -182,46 +246,54 @@ func _find_existing_required_structure(
 
 func _plan_required_structure_placements(
 	required_structures: Array[StructureInfo],
-	reachable_distances: Dictionary,
+	reachable_distances: Dictionary[Vector3i, int],
 	placement_mode: int
-) -> Array[Dictionary]:
-	var entries: Array[Dictionary] = []
+) -> Array[GenerationJobs.RequiredPlacement]:
+	var entries: Array[GenerationJobs.RequiredCandidates] = []
 	for required_structure in required_structures:
-		var candidates := _get_required_structure_candidates(
+		if startup_budget != null: await startup_budget.checkpoint()
+		var candidates := await _get_required_structure_candidates(
 			required_structure,
 			reachable_distances,
 			placement_mode
 		)
 		if candidates.is_empty():
 			return []
-		entries.append({
-			"structure": required_structure,
-			"candidates": candidates,
-		})
+		var entry := GenerationJobs.RequiredCandidates.new()
+		entry.structure = required_structure
+		entry.candidates = candidates
+		entries.append(entry)
 	entries.sort_custom(
-		func(a: Dictionary, b: Dictionary) -> bool:
-			var a_candidates := a["candidates"] as Array[HexBase]
-			var b_candidates := b["candidates"] as Array[HexBase]
+		func(a: GenerationJobs.RequiredCandidates, b: GenerationJobs.RequiredCandidates) -> bool:
+			var a_candidates := a.candidates
+			var b_candidates := b.candidates
 			if a_candidates.size() != b_candidates.size():
 				return a_candidates.size() < b_candidates.size()
-			return (a["structure"] as StructureInfo).id < (b["structure"] as StructureInfo).id
+			return a.structure.id < b.structure.id
 	)
 
-	var reservations: Array[Dictionary] = []
-	var assignments: Array[Dictionary] = []
-	if _build_required_structure_plan(entries, 0, reservations, assignments):
+	var reservations: Array[GenerationJobs.RequiredPlacement] = []
+	var assignments: Array[GenerationJobs.RequiredPlacement] = []
+	if await _build_required_structure_plan(entries, 0, reservations, assignments):
 		return assignments
 	return []
 
 func _get_required_structure_candidates(
 	required_structure: StructureInfo,
-	reachable_distances: Dictionary,
+	reachable_distances: Dictionary[Vector3i, int],
 	placement_mode: int
 ) -> Array[HexBase]:
 	var candidates: Array[HexBase] = []
+	var origin := _get_starter_origin_hex()
 	for cube_id: Vector3i in reachable_distances.keys():
+		if startup_budget != null: await startup_budget.checkpoint()
 		if not _within_required_walk_range(required_structure, int(reachable_distances[cube_id])):
 			continue
+		# Footprint/passage repairs can shorten a winding route after placement.
+		# Keep the physical lower bound too, so the village cannot become too near.
+		if required_structure == nearby_settlement and origin != null:
+			if GridUtils.cube_distance(origin.cube_id, cube_id) < maxi(1, settlement_min_walk_distance):
+				continue
 		var hex := get_hex_at_cube_id(cube_id)
 		if hex == null or hex.region_instance == null:
 			continue
@@ -242,6 +314,10 @@ func _get_required_structure_candidates(
 		candidates.append(hex)
 	candidates.sort_custom(
 		func(a: HexBase, b: HexBase) -> bool:
+			if starter_layout != null and starter_layout.locations.has(required_structure):
+				var planned := starter_layout.locations[required_structure]
+				if a.cube_id == planned and b.cube_id != planned: return true
+				if b.cube_id == planned and a.cube_id != planned: return false
 			var a_distance := int(reachable_distances[a.cube_id])
 			var b_distance := int(reachable_distances[b.cube_id])
 			if required_structure == nearby_settlement:
@@ -285,30 +361,30 @@ func _required_structure_conflicts_with_recorded_placements(
 	return false
 
 func _build_required_structure_plan(
-	entries: Array[Dictionary],
+	entries: Array[GenerationJobs.RequiredCandidates],
 	index: int,
-	reservations: Array[Dictionary],
-	assignments: Array[Dictionary]
+	reservations: Array[GenerationJobs.RequiredPlacement],
+	assignments: Array[GenerationJobs.RequiredPlacement]
 ) -> bool:
 	if index >= entries.size():
 		return true
 	var entry := entries[index]
-	var required_structure := entry["structure"] as StructureInfo
-	var candidates := entry["candidates"] as Array[HexBase]
+	var required_structure := entry.structure
+	var candidates := entry.candidates
 	for candidate in candidates:
+		if startup_budget != null: await startup_budget.checkpoint()
 		if _required_structure_conflicts_with_reservations(
 			candidate.cube_id,
 			required_structure,
 			reservations
 		):
 			continue
-		var assignment := {
-			"structure": required_structure,
-			"cube_id": candidate.cube_id,
-		}
+		var assignment := GenerationJobs.RequiredPlacement.new()
+		assignment.structure = required_structure
+		assignment.cube_id = candidate.cube_id
 		reservations.append(assignment)
 		assignments.append(assignment)
-		if _build_required_structure_plan(entries, index + 1, reservations, assignments):
+		if await _build_required_structure_plan(entries, index + 1, reservations, assignments):
 			return true
 		assignments.pop_back()
 		reservations.pop_back()
@@ -317,10 +393,10 @@ func _build_required_structure_plan(
 func _required_structure_conflicts_with_reservations(
 	cube_id: Vector3i,
 	required_structure: StructureInfo,
-	reservations: Array[Dictionary]
+	reservations: Array[GenerationJobs.RequiredPlacement]
 ) -> bool:
 	for reservation in reservations:
-		var other := reservation["structure"] as StructureInfo
+		var other := reservation.structure
 		var required_distance := (
 			maxi(required_structure.required_space_radius, other.required_space_radius)
 			+ maxi(
@@ -329,18 +405,18 @@ func _required_structure_conflicts_with_reservations(
 			)
 			+ 1
 		)
-		if GridUtils.cube_distance(cube_id, reservation["cube_id"]) <= required_distance:
+		if GridUtils.cube_distance(cube_id, reservation.cube_id) <= required_distance:
 			return true
 	return false
 
 func _apply_required_structure_plan(
-	plan: Array[Dictionary],
+	plan: Array[GenerationJobs.RequiredPlacement],
 	placement_mode: int
 ) -> Array[StructureInfo]:
 	var failed: Array[StructureInfo] = []
 	for assignment in plan:
-		var required_structure := assignment["structure"] as StructureInfo
-		var cube_id := assignment["cube_id"] as Vector3i
+		var required_structure := assignment.structure
+		var cube_id := assignment.cube_id
 		var hex := get_hex_at_cube_id(cube_id)
 		if (
 			hex == null

@@ -26,7 +26,7 @@ const EDGE_DIRECTIONS: Array[Vector3] = [
 	Vector3(0.5, 0.0, 0.8660254),
 ]
 const SURFACE_COLLISION_LAYER := 1 << 3
-static var _surface_collision_shape_cache: Dictionary = {}
+static var _surface_collision_shape_cache: Dictionary[RID, Shape3D] = {}
 
 func _ready() -> void:
 	super()
