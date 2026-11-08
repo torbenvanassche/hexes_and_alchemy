@@ -27,8 +27,8 @@ func place_on(hex: HexBase, inventory: ContentGroup = null, _placement_rotation_
 	_pay_expansion_cost(inventory)
 	return settlement.expand_to_hex(grid, hex)
 
-func get_placement_rotation_y(_hex: HexBase, _placement_rotation_y: float = NAN) -> Dictionary:
-	return { "has_rotation": false }
+func get_placement_rotation_y(_hex: HexBase, _placement_rotation_y: float = NAN) -> float:
+	return NAN
 
 func _get_expandable_settlement(grid: HexGrid, hex: HexBase) -> Settlement:
 	if grid == null or hex == null or Manager.instance == null:

@@ -24,6 +24,8 @@ func get_count(content: Resource) -> int:
 			total += slot.count;
 	return total;
 
+## Generic boundary: GDScript does not accept Dictionary[ItemInfo, int] as
+## Dictionary[Resource, int]. Callers keep their concrete resource key types.
 func has_all(cost: Dictionary) -> bool:
 	for content: Resource in cost.keys():
 		if get_count(content) < int(cost[content]):
@@ -117,7 +119,7 @@ func transfer_all_to(
 	if not has_all(amounts):
 		return false
 
-	var moved: Dictionary = {}
+	var moved: Dictionary[Resource, int] = {}
 	for content: Resource in amounts.keys():
 		var amount := maxi(0, int(amounts[content]))
 		if amount == 0:
@@ -135,7 +137,7 @@ func transfer_all_to(
 			return false
 	return true
 
-func _rollback_transfer(destination: ContentGroup, moved: Dictionary) -> void:
+func _rollback_transfer(destination: ContentGroup, moved: Dictionary[Resource, int]) -> void:
 	for content: Resource in moved.keys():
 		var amount := int(moved[content])
 		if amount <= 0:

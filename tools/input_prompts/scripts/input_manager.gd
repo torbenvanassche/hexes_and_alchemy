@@ -40,7 +40,7 @@ var dictionary_path: String = "res://tools/input_prompts/input_prompts.json";
 @onready var keyboard_image: Texture2D = preload("res://tools/input_prompts/textures/kb_mouse_inputs.png");
 @onready var controller_image: Texture2D = preload("res://tools/input_prompts/textures/xbox-controller_inputs.png");
 
-var keys: Dictionary:
+var keys: Dictionary[String, Variant]:
 	get:
 		if !keys:
 			keys = FileUtils.load_json(dictionary_path);

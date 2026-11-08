@@ -179,7 +179,7 @@ func _build_ui() -> void:
 	structures_tab.add_child(_make_label("Piece"))
 
 	piece_options = OptionButton.new()
-	for piece: Dictionary in PIECES:
+	for piece: Dictionary[String, Variant] in PIECES:
 		piece_options.add_item(String(piece["label"]))
 	piece_options.item_selected.connect(_on_piece_selected)
 	structures_tab.add_child(piece_options)
@@ -198,7 +198,7 @@ func _build_ui() -> void:
 	structures_tab.add_child(buildable_check)
 
 	quest_options = OptionButton.new()
-	for quest: Dictionary in QUESTS:
+	for quest: Dictionary[String, Variant] in QUESTS:
 		quest_options.add_item(String(quest["label"]))
 	structures_tab.add_child(quest_options)
 
@@ -476,7 +476,7 @@ func _queue_spawn_position_if_needed(undo: EditorUndoRedoManager, root: Node3D, 
 
 func _on_piece_selected(index: int) -> void:
 	if index >= 0 and index < PIECES.size():
-		var piece: Dictionary = PIECES[index]
+		var piece: Dictionary[String, Variant] = TypedData.string_map(PIECES[index])
 		piece_name.text = String(piece["name"])
 
 func _on_buildable_toggled(enabled: bool) -> void:
@@ -486,7 +486,7 @@ func _on_buildable_toggled(enabled: bool) -> void:
 func _add_piece() -> void:
 	if not _require_settlement():
 		return
-	var piece: Dictionary = PIECES[piece_options.selected]
+	var piece: Dictionary[String, Variant] = TypedData.string_map(PIECES[piece_options.selected])
 	var parent: Node3D = settlement_root.get_node_or_null(STRUCTURES_ROOT) as Node3D
 	if parent == null:
 		_set_status("Set up the settlement containers first.")
@@ -499,7 +499,7 @@ func _add_piece() -> void:
 		_queue_scene_instance(parent, String(piece["path"]), piece_name.text, _selected_hex_position(), rotation_spin.value, undo)
 	undo.commit_action()
 
-func _queue_buildable_piece(parent: Node, piece: Dictionary, undo: EditorUndoRedoManager) -> void:
+func _queue_buildable_piece(parent: Node, piece: Dictionary[String, Variant], undo: EditorUndoRedoManager) -> void:
 	var buildable_scene: PackedScene = load(BUILDABLE_SCENE) as PackedScene
 	if buildable_scene == null:
 		_set_status("Missing buildable scene.")
@@ -536,7 +536,7 @@ func _create_foundation() -> Node3D:
 	var script: Script = load(FOUNDATION_SCRIPT) as Script
 	if script != null:
 		foundation.set_script(script)
-	var selected_quest: Dictionary = QUESTS[quest_options.selected]
+	var selected_quest: Dictionary[String, Variant] = TypedData.string_map(QUESTS[quest_options.selected])
 	var quest_path: String = String(selected_quest["path"])
 	if quest_path != "":
 		foundation.set("quest", load(quest_path))
@@ -661,13 +661,13 @@ func _add_entrance() -> void:
 		var gate: Node3D = _create_entrance_replacement(wall)
 		if gate == null:
 			continue
-		replacements.append({"old": wall, "new": gate})
+		replacements.append(TypedData.string_map({"old": wall, "new": gate}))
 	if replacements.is_empty():
 		_set_status("No valid selected wall segments found.")
 		return
 	var undo: EditorUndoRedoManager = _get_undo_redo()
 	_create_undo_action(undo, "Replace Selected Walls With Entrances")
-	for replacement_pair: Dictionary in replacements:
+	for replacement_pair: Dictionary[String, Variant] in replacements:
 		var old_wall: Node = replacement_pair["old"] as Node
 		var new_gate: Node = replacement_pair["new"] as Node
 		if old_wall == null or new_gate == null or not is_instance_valid(old_wall):
@@ -871,13 +871,13 @@ func _replace_wall_placeholders() -> void:
 		var replacement: Node3D = _create_wall_replacement(placeholder)
 		if replacement == null:
 			continue
-		replacements.append({"old": placeholder, "new": replacement})
+		replacements.append(TypedData.string_map({"old": placeholder, "new": replacement}))
 	if replacements.is_empty():
 		_set_status("No valid wall placeholders found.")
 		return
 	var undo: EditorUndoRedoManager = _get_undo_redo()
 	_create_undo_action(undo, "Replace Settlement Wall Placeholders")
-	for replacement_pair: Dictionary in replacements:
+	for replacement_pair: Dictionary[String, Variant] in replacements:
 		var old_placeholder: Node = replacement_pair["old"] as Node
 		var new_wall: Node = replacement_pair["new"] as Node
 		if old_placeholder == null or new_wall == null or not is_instance_valid(old_placeholder):

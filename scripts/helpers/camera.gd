@@ -221,7 +221,7 @@ func _update_pan(delta: float) -> void:
 	if pan_offset.length() > max_pan_distance:
 		pan_offset = pan_offset.normalized() * max_pan_distance;
 
-func get_ray_hit_from_screen_point() -> Dictionary:
+func get_ray_hit_from_screen_point() -> Dictionary[String, Variant]:
 	var screen_point: Vector2 = get_viewport().get_mouse_position();
 	var from := camera.project_ray_origin(screen_point);
 	var to := from + camera.project_ray_normal(screen_point) * 1000.0;
@@ -230,7 +230,7 @@ func get_ray_hit_from_screen_point() -> Dictionary:
 	var query := PhysicsRayQueryParameters3D.create(from, to);
 	var result := space_state.intersect_ray(query);
 
-	return result if result else {};
+	return TypedData.string_map(result);
 
 func snap_to_target() -> void:
 	pan_offset = Vector3.ZERO;

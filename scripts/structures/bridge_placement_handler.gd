@@ -4,7 +4,7 @@ func can_place(_structure_info: PlaceableStructureInfo, hex: HexBase, _inventory
 	if not _is_valid_center(hex):
 		return false
 	for direction_index in range(3):
-		if not _get_bridge_pair(hex, direction_index).is_empty():
+		if _get_bridge_height_units(hex, direction_index) >= 0:
 			return true
 	return false
 
@@ -12,13 +12,13 @@ func can_place_rotation(_structure_info: PlaceableStructureInfo, hex: HexBase, _
 	if not _is_valid_center(hex):
 		return false
 	var direction_index := _get_direction_index(hex, rotation_y)
-	return direction_index >= 0 and not _get_bridge_pair(hex, direction_index).is_empty()
+	return direction_index >= 0 and _get_bridge_height_units(hex, direction_index) >= 0
 
 func get_rotation_y(_structure_info: PlaceableStructureInfo, hex: HexBase) -> float:
 	if not _is_valid_center(hex):
 		return 0.0
 	for direction_index in range(3):
-		if _get_bridge_pair(hex, direction_index).is_empty():
+		if _get_bridge_height_units(hex, direction_index) < 0:
 			continue
 		var neighbor := _get_grid().get_hex_at_cube_id(
 			hex.cube_id + DataManager.instance.CUBE_DIRS[direction_index]
@@ -34,10 +34,9 @@ func get_placement_offset(_structure_info: PlaceableStructureInfo, hex: HexBase,
 	if is_nan(resolved_rotation):
 		resolved_rotation = get_rotation_y(_structure_info, hex)
 	var direction_index := _get_direction_index(hex, resolved_rotation)
-	var pair := _get_bridge_pair(hex, direction_index)
-	if pair.is_empty():
+	var height_units := _get_bridge_height_units(hex, direction_index)
+	if height_units < 0:
 		return Vector3.ZERO
-	var height_units := int(pair["height_units"])
 	return Vector3.UP * float(height_units - hex.elevation_units) * hex.elevation_unit_height
 
 func _is_valid_center(hex: HexBase) -> bool:
@@ -50,10 +49,10 @@ func _is_valid_center(hex: HexBase) -> bool:
 		and not hex_info.traversal_tags.has(HexInfo.TraversalTag.WALK)
 	)
 
-func _get_bridge_pair(hex: HexBase, direction_index: int) -> Dictionary:
+func _get_bridge_height_units(hex: HexBase, direction_index: int) -> int:
 	var grid := _get_grid()
 	if grid == null or direction_index < 0:
-		return {}
+		return -1
 	var direction_count := DataManager.instance.CUBE_DIRS.size()
 	var opposite_index := posmod(direction_index + 3, direction_count)
 	var forward := grid.get_hex_at_cube_id(
@@ -63,7 +62,7 @@ func _get_bridge_pair(hex: HexBase, direction_index: int) -> Dictionary:
 		hex.cube_id + DataManager.instance.CUBE_DIRS[opposite_index]
 	)
 	if not _is_valid_bank(forward) or not _is_valid_bank(backward):
-		return {}
+		return -1
 	var forward_height := forward.get_edge_elevation_units_for_method(
 		opposite_index, HexInfo.TraversalTag.WALK
 	)
@@ -71,14 +70,10 @@ func _get_bridge_pair(hex: HexBase, direction_index: int) -> Dictionary:
 		direction_index, HexInfo.TraversalTag.WALK
 	)
 	if forward_height != backward_height:
-		return {}
+		return -1
 	if forward_height <= 0 or forward_height <= hex.elevation_units:
-		return {}
-	return {
-		"forward": forward,
-		"backward": backward,
-		"height_units": forward_height,
-	}
+		return -1
+	return forward_height
 
 func _is_valid_bank(hex: HexBase) -> bool:
 	return (

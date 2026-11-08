@@ -31,7 +31,7 @@ func _refresh() -> void:
 	_refresh_pending = false
 	if not is_inside_tree() or Manager.instance == null or Manager.instance.hub == null:
 		return
-	var factions: Dictionary = Manager.instance.hub.factions
+	var factions: Dictionary[StringName, FactionState] = Manager.instance.hub.factions
 	if not factions.has(active_faction_id) and not factions.is_empty():
 		active_faction_id = factions.keys()[0]
 	for child in faction_tabs.get_children():

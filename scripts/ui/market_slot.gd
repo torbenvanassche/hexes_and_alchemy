@@ -28,7 +28,7 @@ func configure_buy(slot: ContentSlotResource, target_inventory: ContentGroup) ->
 	unit_price = Manager.instance.market.get_buy_value(content)
 	_set_item(content)
 	quantity_label.text = tr("MARKET_STOCK_COUNT") % (source_slot.count if source_slot else 0)
-	disabled = content == null
+	disabled = content == null or source_slot.count <= 0
 
 func configure_sell(_content: Resource, owned_count: int, inventory: ContentGroup) -> void:
 	mode = TileMode.SELL

@@ -25,7 +25,7 @@ func interact() -> void:
 func can_interact() -> bool:
 	return buildable_structure == null or buildable_structure.current_step == self
 
-func create_member(profile: SceneInfo, recruitment_data: Dictionary = {}) -> SceneInstance:
+func create_member(profile: SceneInfo, recruitment_data: Dictionary[String, Variant] = {}) -> SceneInstance:
 	if Manager.instance == null or Manager.instance.quests == null:
 		return null
 	if not can_interact() or members.size() >= roster_capacity:
@@ -121,7 +121,7 @@ func _get_recovery_anchor() -> Node3D:
 	var tavern := get_settlement_service(&"Tavern") as Tavern
 	return tavern.get_recreation_anchor() if tavern != null else null
 
-func _create_starting_identity(profile: NpcInfo) -> Dictionary:
+func _create_starting_identity(profile: NpcInfo) -> Dictionary[String, Variant]:
 	if profile == null:
 		return {}
 	var tavern := get_settlement_service(&"Tavern") as Tavern
@@ -134,7 +134,7 @@ func _create_starting_identity(profile: NpcInfo) -> Dictionary:
 		"traits": profile.traits,
 	}
 
-func _get_recruited_traits(recruitment_data: Dictionary) -> Array[AdventurerTraitDefinition]:
+func _get_recruited_traits(recruitment_data: Dictionary[String, Variant]) -> Array[AdventurerTraitDefinition]:
 	var result: Array[AdventurerTraitDefinition] = []
 	for trait_value in recruitment_data.get("traits", []):
 		var definition := trait_value as AdventurerTraitDefinition

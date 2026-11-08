@@ -25,8 +25,8 @@ func _ensure_defaults() -> void:
 func change_keybinding(action: StringName, event: InputEvent) -> void:
 	_config.set_value(SECTION, action, _event_to_string(event))
 
-func load_keybindings() -> Dictionary:
-	var result := {}
+func load_keybindings() -> Dictionary[String, InputEvent]:
+	var result: Dictionary[String, InputEvent] = {}
 	for action in _config.get_section_keys(SECTION):
 		result[action] = _string_to_event(
 			_config.get_value(SECTION, action)

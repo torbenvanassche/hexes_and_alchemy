@@ -1,6 +1,6 @@
 class_name FileUtils
 
-static func load_json(file_path: String) -> Dictionary:
+static func load_json(file_path: String) -> Dictionary[String, Variant]:
 	if not FileAccess.file_exists(file_path):
 		printerr("File does not exist: %s" % file_path)
 		return {}
@@ -10,11 +10,11 @@ static func load_json(file_path: String) -> Dictionary:
 		return {}
 	var parsed_result: Variant = JSON.parse_string(data_file.get_as_text())
 	if parsed_result is Dictionary:
-		return parsed_result as Dictionary
+		return TypedData.json_value(parsed_result)
 	printerr("Expected a JSON object in file: %s" % file_path)
 	return {}
 
-static func load_items(file_path: String) -> Dictionary:
+static func load_items(file_path: String) -> Dictionary[String, Variant]:
 	var parsed_result := load_json(file_path)
 	for item_id: Variant in parsed_result:
 		var item: Variant = parsed_result[item_id]
@@ -22,11 +22,11 @@ static func load_items(file_path: String) -> Dictionary:
 			(item as Dictionary)["id"] = item_id
 	return parsed_result
 
-static func get_item(dict: Dictionary, item_name: String) -> Dictionary:
+static func get_item(dict: Dictionary[String, Variant], item_name: String) -> Dictionary[String, Variant]:
 	for value: Variant in dict.values():
 		var item := value as Dictionary
 		if item != null and str(item.get("name", "")) == item_name:
-			return item
+			return TypedData.string_map(item)
 	return {}
 
 static func get_resource_paths(folder_path: String) -> Array[String]:

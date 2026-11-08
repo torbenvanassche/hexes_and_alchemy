@@ -29,7 +29,7 @@ func post_quest(
 	rank_experience_reward: int,
 	selected_support_ids: Array[String],
 	supply_inventory: ContentGroup,
-	extra_context: Dictionary = {}
+	extra_context: Dictionary[String, Variant] = {}
 ) -> PostResult:
 	var result := PostResult.new()
 	if quest_manager == null:

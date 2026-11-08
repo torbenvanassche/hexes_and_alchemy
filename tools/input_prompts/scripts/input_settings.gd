@@ -41,7 +41,7 @@ func _reset_bindings() -> void:
 		btn.pressed.connect(_on_rebind_key.bind(btn, action))
 		
 func _load_bindings() -> void:
-	var keybindings: Dictionary = Manager.instance.input.load_keybindings();
+	var keybindings: Dictionary[String, InputEvent] = Manager.instance.input.load_keybindings();
 	for action: String in keybindings.keys():
 		InputManager.set_action(action, keybindings[action])
 
