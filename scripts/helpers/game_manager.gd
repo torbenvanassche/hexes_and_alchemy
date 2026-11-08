@@ -21,6 +21,8 @@ var input: InputSettings
 @onready var journal: JournalManager = $journal_manager;
 @onready var campaign: SettlementCampaign = $settlement_campaign;
 @onready var transport: TransportManager = $transport_manager
+@onready var crafting: CraftingManager = $crafting_manager
+@onready var regional: RegionalProgression = $regional_progression
 @onready var reputation: GuildReputation = $guild_reputation;
 @onready var time_of_day: TimeOfDay = $time_of_day;
 @onready var toast: Toast = $"../game_ui/ToastNotifications";
@@ -36,6 +38,7 @@ func _ready() -> void:
 	instance = self;
 	if hub != null and not hub.changed.is_connected(quests.try_assign_waiting_quests):
 		hub.changed.connect(quests.try_assign_waiting_quests)
+		hub.mapped_changed.connect(quests.try_assign_waiting_quests)
 	_connect_quest_notifications()
 	_load_or_create()
 	input = InputSettings.new(config)
@@ -59,37 +62,41 @@ func _connect_quest_notifications() -> void:
 		quests.quest_cancelled.connect(_on_quest_cancelled)
 
 func _on_quest_added(quest: Quest) -> void:
-	_notify_quest("QUEST_NOTICE_POSTED", quest, Color(0.65, 0.45, 0.16, 1.0))
+	if not quest.uses_guild_roster(): return
+	_notify_quest("QUEST_NOTICE_POSTED", quest, GameUI.ACCENT)
 
 func _on_quest_state_changed(quest: Quest, state: String) -> void:
+	if not quest.uses_guild_roster(): return
 	var notice_key := ""
 	var accent := Color.TRANSPARENT
 	match state:
 		"en_route":
 			notice_key = "QUEST_NOTICE_EN_ROUTE"
-			accent = Color(0.2, 0.42, 0.62, 1.0)
+			accent = GameUI.TRAVEL
 		"in_progress":
 			notice_key = "QUEST_NOTICE_IN_PROGRESS"
-			accent = Color(0.18, 0.5, 0.34, 1.0)
+			accent = GameUI.ACCENT
 		"returning":
 			notice_key = "QUEST_NOTICE_RETURNING"
-			accent = Color(0.2, 0.42, 0.62, 1.0)
+			accent = GameUI.TRAVEL
 		"complete":
 			notice_key = "QUEST_NOTICE_COMPLETE"
-			accent = Color(0.25, 0.55, 0.28, 1.0)
+			accent = GameUI.SUCCESS
 	if notice_key != "":
 		_notify_quest(notice_key, quest, accent)
 
 func _on_quest_failed(quest: Quest, reason_key: String) -> void:
+	if not quest.uses_guild_roster(): return
 	if toast == null or quest == null:
 		return
 	toast.notify(
 		tr("QUEST_NOTICE_FAILED") % [_get_quest_notice_name(quest), tr(reason_key)],
-		Color(0.65, 0.18, 0.15, 1.0)
+		GameUI.DANGER
 	)
 
 func _on_quest_cancelled(quest: Quest, _reason_key: String) -> void:
-	_notify_quest("QUEST_NOTICE_CANCELLED", quest, Color(0.5, 0.38, 0.22, 1.0))
+	if not quest.uses_guild_roster(): return
+	_notify_quest("QUEST_NOTICE_CANCELLED", quest, GameUI.MUTED)
 
 func _notify_quest(message_key: String, quest: Quest, accent: Color) -> void:
 	if toast == null or quest == null:

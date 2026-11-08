@@ -28,6 +28,9 @@
 [ext_resource type="Resource" path="res://resources/catalogs/default_game_content.tres" id="70_game_catalog"]
 [ext_resource type="Script" path="res://scripts/helpers/settlement_campaign.gd" id="71_campaign"]
 [ext_resource type="Script" path="res://scripts/transport/transport_manager.gd" id="79_transport"]
+[ext_resource type="Script" path="res://scripts/crafting/crafting_manager.gd" id="81_crafting"]
+[ext_resource type="Script" path="res://scripts/regional/regional_progression.gd" id="82_regional"]
+[ext_resource type="Resource" path="res://resources/journal_entries/community_chapter.tres" id="83_community"]
 [ext_resource type="PackedScene" path="res://scenes/hud/settlement_project_hud.tscn" id="72_project_hud"]
 [ext_resource type="Script" path="res://tools/inventory/scripts/data/item_info.gd" id="73_item"]
 [ext_resource type="Resource" path="res://resources/item_info/seed_pouch.tres" id="74_seeds"]
@@ -78,13 +81,19 @@ script = ExtResource("4_operation_manager")
 
 [node name="journal_manager" type="Node" parent="game_manager" unique_id=1453624016]
 script = ExtResource("4_journal_manager")
-entries = Array[Resource]([ExtResource("77_opening"), ExtResource("80_trade")])
+entries = Array[Resource]([ExtResource("77_opening"), ExtResource("80_trade"), ExtResource("83_community")])
 
 [node name="settlement_campaign" type="Node" parent="game_manager"]
 script = ExtResource("71_campaign")
 
 [node name="transport_manager" type="Node" parent="game_manager"]
 script = ExtResource("79_transport")
+
+[node name="crafting_manager" type="Node" parent="game_manager"]
+script = ExtResource("81_crafting")
+
+[node name="regional_progression" type="Node" parent="game_manager"]
+script = ExtResource("82_regional")
 
 [node name="guild_reputation" type="Node" parent="game_manager" unique_id=977987457]
 script = ExtResource("4_guild_reputation")
@@ -134,12 +143,17 @@ offset_bottom = 36.0
 text = "WORLD_SEED_PLACEHOLDER"
 
 [node name="interaction_prompt" type="TextureRect" parent="game_ui" unique_id=286348204 node_paths=PackedStringArray("element")]
-offset_right = 40.0
-offset_bottom = 40.0
+texture_filter = 2
+offset_right = 32.0
+offset_bottom = 32.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
 script = ExtResource("23_f3p2p")
 element = NodePath(".")
 
 [node name="ToastNotifications" type="Control" parent="game_ui" unique_id=1863266253]
+z_index = 100
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -158,10 +172,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 164
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 12
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
 
 [node name="Alignment" type="HBoxContainer" parent="game_ui/ToastNotifications/SafeMargin" unique_id=466689881]
 layout_mode = 2
@@ -173,8 +187,9 @@ size_flags_horizontal = 3
 mouse_filter = 2
 
 [node name="NotificationStack" type="VBoxContainer" parent="game_ui/ToastNotifications/SafeMargin/Alignment" unique_id=1618565852]
-custom_minimum_size = Vector2(400, 0)
+custom_minimum_size = Vector2(380, 0)
 layout_mode = 2
+size_flags_vertical = 0
 mouse_filter = 2
 theme_override_constants/separation = 8
 

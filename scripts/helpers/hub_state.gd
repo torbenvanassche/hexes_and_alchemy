@@ -2,6 +2,7 @@ class_name HubState
 extends Node
 
 signal changed()
+signal mapped_changed()
 signal faction_activity_changed()
 signal activity_log_changed()
 
@@ -15,6 +16,7 @@ var prestige := 0
 var stockpile: ContentGroup
 var factions: Dictionary[StringName, FactionState] = {}
 var spots: Dictionary[Vector3i, SpotProgress] = {}
+var _mapping_update_queued := false
 var activity_log: Array[String] = []
 @export_range(4, 64, 1) var max_activity_entries := 24
 
@@ -169,7 +171,15 @@ func mark_mapped(hex: HexBase) -> void:
 	if spot == null:
 		return
 	spot.mark_mapped()
-	changed.emit()
+	# Exploration changes the map, not the inventory or roster. Batch a group of
+	# revealed tiles into one update rather than rebuilding every hidden window.
+	if not _mapping_update_queued:
+		_mapping_update_queued = true
+		_emit_mapping_update.call_deferred()
+
+func _emit_mapping_update() -> void:
+	_mapping_update_queued = false
+	mapped_changed.emit()
 
 func mark_operation(hex: HexBase, operation_type: String) -> void:
 	var spot := get_spot(hex)
@@ -192,7 +202,7 @@ func deposit_items(items: Dictionary[ItemInfo, int]) -> void:
 func adopt_inventory(source: ContentGroup) -> void:
 	if source == null or stockpile == null or source == stockpile:
 		return
-	var items: Dictionary = {}
+	var items: Dictionary[ItemInfo, int] = {}
 	for slot: ContentSlotResource in source.data:
 		if slot == null or slot.get_content() == null or slot.count <= 0:
 			continue
@@ -230,7 +240,7 @@ func add_prestige(amount: int) -> void:
 func record_operation_completed(quest: Quest) -> void:
 	var completed_activity := tr("HUB_ACTIVITY_COMPLETED") % _get_operation_label(quest)
 	var faction := get_faction_for_quest(quest)
-	if faction != null:
+	if faction != null and quest.uses_guild_roster():
 		faction.completed_operations += 1
 		faction.last_activity = completed_activity
 	record_activity(completed_activity)

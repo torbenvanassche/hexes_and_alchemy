@@ -1,4 +1,72 @@
 keys,en,nl
+LOADING_TITLE,Preparing your settlement,Je nederzetting voorbereiden
+LOADING_PREPARING,Planning the landscape,Het landschap plannen
+LOADING_TERRAIN,Shaping the terrain,Het terrein vormgeven
+LOADING_PATHS,Connecting paths and hills,Paden en heuvels verbinden
+LOADING_NAVIGATION,Checking routes,Routes controleren
+LOADING_SETTLEMENTS,Building settlements,Nederzettingen bouwen
+LOADING_RESOURCES,Placing resources and discoveries,Grondstoffen en ontdekkingen plaatsen
+LOADING_RESTORING,Restoring your settlement,Je nederzetting herstellen
+LOADING_PEOPLE,Bringing your people home,Je mensen thuisbrengen
+LOADING_READY,Ready,Gereed
+LOADING_FAILED,Unable to load the world,De wereld kon niet worden geladen
+LOADING_NEW_WORLD,New world,Nieuwe wereld
+LOADING_GENERATION_FAILED,The world could not be generated (seed %d). Try a new world.,De wereld kon niet worden gegenereerd (seed %d). Probeer een nieuwe wereld.
+QUEST_REQUEST_EXPLORE_SOURCE,Find a source,Vind een bron
+QUEST_REQUEST_TABLE_TITLE,Request,Verzoek
+QUEST_REQUEST_TABLE_AUTHOR,Requester,Aanvrager
+QUEST_REQUEST_TABLE_STATUS,Status,Status
+QUEST_REQUEST_EXPLORE_WATER,Find water,Vind water
+QUEST_REQUEST_EXPLORE_FOOD,Find farmland,Vind landbouwgrond
+QUEST_REQUEST_EXPLORE_WORKSHOP,Find a mine,Vind een mijn
+QUEST_REQUEST_EXPLORE_HINT,"No mapped source has work available. Send a scout to find one.","Geen verkende bron heeft beschikbaar werk. Stuur een verkenner."
+QUEST_REQUEST_PREPARE_SOURCE,Prepare source,Bron voorbereiden
+QUEST_REQUEST_PREPARE_HINT,"Prepare this source before completing the requested work.","Bereid deze bron voor om het gevraagde werk te kunnen doen."
+QUEST_REQUEST_UNLOCK_RECIPE,"Unlock recipe: %s","Ontgrendel recept: %s"
+QUEST_REQUEST_KIND,Village request,Dorpsverzoek
+QUEST_REQUEST_OBJECTIVES_SHORT,Objectives,Doelen
+QUEST_REQUEST_SUPPLIES,Guild contribution,Gildebijdrage
+QUEST_REQUEST_RECIPE,Recipe,Recept
+QUEST_REQUEST_REPAIR_SHORT,Repair the source,Herstel de bron
+QUEST_REQUEST_RESTORE_SOURCE,Source restored,Bron hersteld
+COMMUNITY_WATER_OBJECTIVE,Complete a water commission,Voltooi een wateropdracht
+COMMUNITY_FOOD_OBJECTIVE,Bring in a harvest,Haal een oogst binnen
+COMMUNITY_WORKSHOP_OBJECTIVE,Complete a mining commission,Voltooi een mijnopdracht
+REQUEST_WATER_DURATION,Water duration,Duur van waterwerk
+REQUEST_EXTRA_WATER,Water per draw,Water per lading
+REQUEST_EXTRA_GRAIN,Grain per harvest,Graan per oogst
+REQUEST_REPAIR_DURATION,Repair time,Hersteltijd
+REQUEST_CRAFT_DURATION,Supply crafting,Benodigdheden maken
+QUEST_REQUEST_FORGE_REQUIRED,"Open the blacksmith","Open de smidse"
+QUEST_REQUEST_ASSIGN_HINT,"Post a guild commission to fulfil this villager's request.","Plaats een gildeopdracht om dit dorpsverzoek uit te voeren."
+QUEST_BOARD_VILLAGE_TAB,"Village requests","Dorpsverzoeken"
+QUEST_BOARD_GUILD_TAB,"Guild commissions","Gildeopdrachten"
+QUEST_BOARD_VILLAGE_COUNT,"Village requests (%d)","Dorpsverzoeken (%d)"
+QUEST_BOARD_GUILD_COUNT,"Guild commissions (%d)","Gildeopdrachten (%d)"
+QUEST_BOARD_VILLAGERS_HINT,"Posted by villagers","Geplaatst door dorpelingen"
+QUEST_BOARD_GUILD_HINT,"Posted by your guild","Geplaatst door je gilde"
+QUEST_REQUEST_BACK,"Back to requests","Terug naar verzoeken"
+QUEST_REQUEST_AUTHOR,"Posted by %s · %s","Geplaatst door %s · %s"
+QUEST_REQUEST_POSTED_BY,"Posted by %s","Geplaatst door %s"
+QUEST_REQUEST_VIEW,"View request","Bekijk verzoek"
+QUEST_REQUEST_OBJECTIVES,"Objectives & contribution","Doelen en bijdrage"
+QUEST_REQUEST_REWARDS,"Rewards","Beloningen"
+QUEST_REQUEST_HAND_IN,"Complete request","Voltooi verzoek"
+QUEST_REQUEST_REPUTATION,"+%d reputation","+%d reputatie"
+QUEST_REQUEST_FIELDWORK,"Complete one related commission, then provide the supplies below.","Voltooi een bijbehorende opdracht en lever dan de onderstaande benodigdheden."
+QUEST_REQUEST_CONTRIBUTION,"Guild contribution · %d coins + %d prestige","Gildebijdrage · %d munten + %d prestige"
+QUEST_REQUEST_REPAIR,"Arrange a repair commission at the affected source. No deadline.","Regel een herstelopdracht bij de getroffen bron. Geen tijdslimiet."
+QUEST_REQUEST_INCIDENT_REWARD,"%d coins for completing the repair commission.","%d munten voor het voltooien van de herstelopdracht."
+QUEST_REQUEST_INCIDENT_HELP,"Alternatively pay local workers %d coins; this resolves the request without the commission reward.","Betaal als alternatief lokale werkers %d munten; dit voltooit het verzoek zonder de opdrachtbeloning."
+QUEST_REQUEST_AVAILABLE,"Open request","Open verzoek"
+QUEST_REQUEST_READY,"Ready to complete","Klaar om te voltooien"
+QUEST_REQUEST_DELIVER_MATERIALS,"Fieldwork done · contribution needed","Veldwerk voltooid · bijdrage nodig"
+QUEST_REQUEST_COMPLETED,"Completed","Voltooid"
+QUEST_REQUEST_COMPLETED_COUNT,"Completed requests (%d)","Voltooide verzoeken (%d)"
+QUEST_REQUEST_EMPTY,"No open village requests.","Geen open dorpsverzoeken."
+QUEST_REQUEST_EMPTY_HINT,"Villagers post requests as the settlement develops.","Dorpelingen plaatsen verzoeken naarmate de nederzetting groeit."
+COMMUNITY_CHAPTER_PROGRESS,"Opening chapter · projects %d/2 · expeditions %d/1 · commissions %d/3","Opening chapter · projects %d/2 · expeditions %d/1 · commissions %d/3"
+COMMUNITY_CHAPTER_SHORT_COMPLETE,"Opening chapter complete · keep exploring and growing","Opening chapter complete · keep exploring and growing"
 HUD_NAV_GUILD,Guild,Gilde
 CAMPAIGN_PROJECTS_TAB,Settlement,Nederzetting
 CAMPAIGN_FORGE_TITLE,A village blacksmith,Een dorpssmid
@@ -9,12 +77,12 @@ CAMPAIGN_FORGE_STEP_MATERIALS,3. Gather materials,3. Verzamel materialen
 CAMPAIGN_FORGE_STEP_CONSTRUCTION,4. Deliver materials,4. Lever materialen
 CAMPAIGN_FORGE_STEP_COMPLETE,The blacksmith is open!,De smid is geopend!
 CAMPAIGN_FORGE_GUIDANCE_BLUEPRINT,Find the blueprint at the market. Gather materials at your own pace.,Koop het bouwplan op de markt. Verzamel materialen op je eigen tempo.
-CAMPAIGN_FORGE_GUIDANCE_PLACE_FOUNDATION,Drag the blueprint from Stores onto a green site. Rotate with the camera controls.,Sleep het bouwplan uit Voorraden naar een groene bouwplek. Draai met de camerabediening.
+CAMPAIGN_FORGE_GUIDANCE_PLACE_FOUNDATION,"Right-click the blueprint in Stores and choose Place. Click a clear site; Escape cancels.","Right-click the blueprint in Stores and choose Place. Click a clear site; Escape cancels."
 CAMPAIGN_FORGE_GUIDANCE_MATERIALS,Commission woodcutting and iron prospecting at the quest board or buy supplies. Mines may need reinforcement.,Plaats opdrachten voor hout en ijzer op het prikbord of koop voorraden. Mijnen kunnen versterking nodig hebben.
 CAMPAIGN_FORGE_GUIDANCE_CONSTRUCTION,Your supplies are ready. Deliver them to the marked foundation.,Je voorraden liggen klaar. Lever ze bij de gemarkeerde fundering.
 CAMPAIGN_FORGE_GUIDANCE_COMPLETE,Craft equipment at the blacksmith. Visit the settlement house to unlock level 2.,Maak uitrusting bij de smid. Ontgrendel niveau 2 bij het nederzettingshuis.
 CAMPAIGN_FORGE_CHOICES,Choose your approach: buying materials preserves adventurer time; posting work preserves coins and develops your guild. You can combine both.,Kies je aanpak: materialen kopen bespaart tijd voor avonturiers; opdrachten plaatsen bespaart munten en ontwikkelt je gilde. Je kunt beide combineren.
-CAMPAIGN_FORGE_COMPLETE_NOTICE,The blacksmith is open. Equipment crafting and the next settlement upgrade are now within reach.,De smid is geopend. Je kunt nu uitrusting maken en de volgende nederzettingsverbetering uitvoeren.
+CAMPAIGN_FORGE_COMPLETE_NOTICE,"The blacksmith is open. The settlement contributes %d coins toward your next improvements. Choose a village request at the quest board.","De smid is geopend. De nederzetting draagt %d munten bij voor verbeteringen. Kies een dorpsverzoek op het opdrachtenbord."
 CAMPAIGN_VIEW_PROJECT,View settlement project,Bekijk nederzettingsproject
 CAMPAIGN_CLEAR_DESTINATION,Clear marker,Verwijder markering
 CAMPAIGN_ACTION_MARKET,Find market,Vind de markt
@@ -50,8 +118,8 @@ KEYBIND_JOURNAL,journal,journal
 KEYBIND_HUB,guild hub,guild hub
 GUILD_HUB_TITLE,guild hall,guild hall
 GUILD_PRESTIGE_LABEL,Prestige,Prestige
-SETTINGS_TAB_GAME,game,game
-SETTINGS_TAB_INPUT,input,input
+SETTINGS_TAB_GAME,Game,Game
+SETTINGS_TAB_INPUT,Controls,Controls
 SETTINGS_BACK,Back,Back
 WINDOW_TITLE,window title,window title
 WINDOW_GUILD_HUB,Guild hall,Guild hall
@@ -107,7 +175,7 @@ INPUT_RESET_CONTROL_BINDINGS,Reset control bindings,Reset control bindings
 INPUT_APPLY_CHANGES,Apply changes,Apply changes
 INPUT_ACTION_NAME,action name,action name
 INPUT_PRESS_KEY_TO_BIND,Press key to bind...,Press key to bind...
-QUEST_LIST_EMPTY,No quests are pinned.,No quests are pinned.
+QUEST_LIST_EMPTY,No active guild commissions.,Geen actieve gildeopdrachten.
 QUEST_CREATION_TARGET,Target,Target
 QUEST_CREATION_QUEST,Quest,Quest
 QUEST_CREATION_MINIMUM_RANK,Minimum rank,Minimum rank
@@ -253,7 +321,7 @@ QUEST_REWARD_REVEALS_VEIN,Reveals a vein,Reveals a vein
 QUEST_REWARD_ORE,Ore,Ore
 QUEST_REWARD_MORE_ORE,More ore,More ore
 QUEST_DESC_FOREST_FORAGE,Gather loose wood and search for usable seeds.,Gather loose wood and search for usable seeds.
-QUEST_DESC_FOREST_HUNT,Track game through the forest and bring back fresh meat.,Track game through the forest and bring back fresh meat.
+QUEST_DESC_FOREST_HUNT,Track forest game and bring back fresh meat.,Track forest game and bring back fresh meat.
 QUEST_DESC_FOREST_HARVEST,Cut usable wood and let the grove regrow later.,Cut usable wood and let the grove regrow later.
 QUEST_DESC_FOREST_FELL_TIMBER,Take a larger timber haul and deplete the grove.,Take a larger timber haul and deplete the grove.
 QUEST_DESC_FOREST_REPLANT,Spend seeds to restore a depleted grove immediately.,Spend seeds to restore a depleted grove immediately.
@@ -334,6 +402,12 @@ CRAFTING_INGREDIENTS,Ingredients,Ingredients
 CRAFTING_RESULT,Result,Result
 CRAFTING_CRAFT,Craft item,Craft item
 CRAFTING_READY,Ready to craft.,Ready to craft.
+CRAFTING_PROGRESS,Crafting… %d%%,Crafting… %d%%
+CRAFTING_IN_PROGRESS,Crafting %s…,Crafting %s…
+CRAFTING_DURATION,Crafting time: %.1f s,Crafting time: %.1f s
+CRAFTING_BUSY,The blacksmith is already crafting.,The blacksmith is already crafting.
+CRAFTING_NOT_ENOUGH_MATERIALS,Not enough materials.,Not enough materials.
+CRAFTING_REFUNDED,Inventory is full. Materials returned.,Inventory is full. Materials returned.
 MARKET_TAB_BUY,Buy,Buy
 MARKET_TAB_SELL,Sell,Sell
 MARKET_CURRENCY,Coins,Coins
@@ -782,8 +856,8 @@ PEOPLE_VIEW_PROFILE,View %s’s profile,Bekijk het profiel van %s
 QUEST_BOARD_POSTED,Posted quests,Geplaatste opdrachten
 QUEST_BOARD_POST,Post quest,Plaats opdracht
 QUEST_BOARD_SEND_SCOUT,Send scout,Stuur verkenner
-QUEST_BOARD_AUTO_COLLECT,Auto-collect rewards,Automatisch innen
-QUEST_BOARD_EMPTY_HINT,Send a scout to find new opportunities.\nPost quests for resources and village work.,Stuur een verkenner om mogelijkheden te ontdekken.\nPlaats opdrachten voor grondstoffen en dorpswerk.
+QUEST_BOARD_AUTO_COLLECT,Auto-collect,Automatisch innen
+QUEST_BOARD_EMPTY_HINT,"Send a scout to discover work, or post a resource commission.","Stuur een verkenner op pad of plaats een grondstofopdracht."
 QUEST_BOARD_FIND_TARGET,Explore a resource location to unlock quests.,Verken een grondstoflocatie om opdrachten vrij te spelen.
 QUEST_SUPPORT_DANGER,Danger,Gevaar
 QUEST_SUPPORT_DANGER_HINT,Dangerous outcomes have %s%% of their normal weight with this support.,Gevaarlijke uitkomsten hebben %s%% van hun normale gewicht met deze ondersteuning.
@@ -794,32 +868,39 @@ NPC_ACTIVITY,Activity,Activity
 RECRUITMENT_HIRE_COST_BUTTON,Hire · %s coins,Hire · %s coins
 WINDOW_TRANSPORT,Trade & shipments,Trade & shipments
 SHIPMENT_OPEN,Trade & shipments,Trade & shipments
-SHIPMENT_WORKSHOP_TITLE,Tools for the village,Tools for the village
-SHIPMENT_WORKSHOP_DESCRIPTION,The village needs timber and iron to repair its tools. Send supplies from the guild stores.,The village needs timber and iron to repair its tools. Send supplies from the guild stores.
+SHIPMENT_WORKSHOP_TITLE,Repairs for the village,Repairs for the village
+SHIPMENT_WORKSHOP_DESCRIPTION,Timber and iron to repair the village tools.,Timber and iron to repair the village tools.
 SHIPMENT_TRAVEL_TITLE,Supplies for the road,Supplies for the road
-SHIPMENT_TRAVEL_DESCRIPTION,The village is stocking its travellers with rations and timber for repairs.,The village is stocking its travellers with rations and timber for repairs.
+SHIPMENT_TRAVEL_DESCRIPTION,Rations for travellers and timber for roadside repairs.,Rations for travellers and timber for roadside repairs.
 SHIPMENT_VILLAGE_NAME,Neighbouring village,Neighbouring village
-SHIPMENT_VISIT_FIRST,Visit the village market to establish contact.,Visit the village market to establish contact.
+SHIPMENT_DISCOVER_FIRST,Discover this village before arranging a delivery.,Discover this village before arranging a delivery.
 SHIPMENT_CARRIER_BUSY,The guild packhorse is already on a journey.,The guild packhorse is already on a journey.
 SHIPMENT_ALREADY_DELIVERED,This request has already been delivered.,This request has already been delivered.
-SHIPMENT_NO_ROUTE,No mapped walking route. Explore a connected route to the village market.,No mapped walking route. Explore a connected route to the village market.
+SHIPMENT_NO_ROUTE,Explore a connected walking route between the exterior stables.,Explore a connected walking route between the exterior stables.
+SHIPMENT_NO_STABLE,A clear exterior stable and approach are needed at both settlements.,A clear exterior stable and approach are needed at both settlements.
 SHIPMENT_MISSING_CARGO,Gather the requested goods in your stores first.,Gather the requested goods in your stores first.
-SHIPMENT_CONTACT_NOTICE,Made contact with the neighbouring village.,Made contact with the neighbouring village.
-SHIPMENT_DISPATCHED_NOTICE,Packhorse dispatched. Goods loaded from guild stores.,Packhorse dispatched. Goods loaded from guild stores.
+SHIPMENT_CONTACT_NOTICE,Village discovered. Arrange deliveries from the journal's Trade tab.,Village discovered. Arrange deliveries from the journal's Trade tab.
+SHIPMENT_DISPATCHED_NOTICE,Packhorse dispatched from the stable. Goods loaded from guild stores.,Packhorse dispatched from the stable. Goods loaded from guild stores.
 SHIPMENT_BLOCKED_NOTICE,The packhorse has stopped. Its route is blocked.,The packhorse has stopped. Its route is blocked.
 SHIPMENT_DELIVERED_NOTICE,Shipment delivered. Payment and reputation received.,Shipment delivered. Payment and reputation received.
-SHIPMENT_RETURNED_NOTICE,The guild packhorse has returned home.,The guild packhorse has returned home.
+SHIPMENT_RETURNED_NOTICE,The guild packhorse has returned to its stable.,The guild packhorse has returned to its stable.
 SHIPMENT_REWARD,%d coins · +%d reputation · +1 local influence · +1 prestige,%d coins · +%d reputation · +1 local influence · +1 prestige
 SHIPMENT_STANDING,Deliveries: %d · Local influence: %d,Deliveries: %d · Local influence: %d
 SHIPMENT_ROUTE_BLOCKED,Route blocked. Reopen a mapped path to resume the journey.,Route blocked. Reopen a mapped path to resume the journey.
 SHIPMENT_PHASE_OUTBOUND,Packhorse delivering · about %ds to arrival,Packhorse delivering · about %ds to arrival
+SHIPMENT_PHASE_UNLOADING,Unloading at the stable · returning in %ds,Unloading at the stable · returning in %ds
+SHIPMENT_STATE_UNLOADING,Unloading,Unloading
+SHIPMENT_RECALLED_RESULT,Shipment recalled; cargo returned to guild stores.,Shipment recalled; cargo returned to guild stores.
+DELIVERY_REPORT,%s delivered · %d coins · +%d reputation,%s delivered · %d coins · +%d reputation
+QUEST_TYPE_DELIVERY,Delivery,Delivery
+QUEST_TYPE_SHIPMENT,Shipment,Shipment
 SHIPMENT_PHASE_RETURNING,Goods delivered · packhorse returning in about %ds,Goods delivered · packhorse returning in about %ds
 SHIPMENT_PHASE_RECALLED,Packhorse recalled · cargo returns in about %ds,Packhorse recalled · cargo returns in about %ds
 SHIPMENT_FULFILLED,Trade established. The guild packhorse is ready for another request.,Trade established. The guild packhorse is ready for another request.
-SHIPMENT_ROUTE_PREVIEW,Mapped route: %d tiles · one guild packhorse,Mapped route: %d tiles · one guild packhorse
+SHIPMENT_ROUTE_PREVIEW,Mapped route · %d tiles,Mapped route · %d tiles
 SHIPMENT_CARGO_HINT,In stores / requested · loaded on dispatch,In stores / requested · loaded on dispatch
-SHIPMENT_NO_VILLAGES,Explore the region to find a neighbouring village. Visit its market to arrange your first shipment.,Explore the region to find a neighbouring village. Visit its market to arrange your first shipment.
-SHIPMENT_DISPATCH,Dispatch packhorse,Dispatch packhorse
+SHIPMENT_NO_VILLAGES,Discover a neighbouring village and map a route. Arrange deliveries here using guild stores.,Discover a neighbouring village and map a route. Arrange deliveries here using guild stores.
+SHIPMENT_DISPATCH,Dispatch from guild,Dispatch from guild
 SHIPMENT_RECALL,Recall packhorse,Recall packhorse
 SHIPMENT_RESUME,Resume journey,Resume journey
 SHIPMENT_NEXT_REQUEST,Next request,Next request
@@ -831,11 +912,253 @@ SHIPMENT_LOADING,Wait for the checkpoint to finish loading.,Wait for the checkpo
 SHIPMENT_CARGO_LOADED,Loaded / requested,Loaded / requested
 SHIPMENT_CARRIER_LOAD,%s · Load %d / %d,%s · Load %d / %d
 SHIPMENT_JOURNAL_TITLE,A neighbour in need,A neighbour in need
-SHIPMENT_JOURNAL_BODY,Reach beyond the settlement. Find the nearby village and deliver a small shipment to begin a trading relationship.,Reach beyond the settlement. Find the nearby village and deliver a small shipment to begin a trading relationship.
-SHIPMENT_JOURNAL_CONTACT,Meet the neighbouring village,Meet the neighbouring village
-SHIPMENT_JOURNAL_CONTACT_HINT,Explore the region and speak at the village market.,Explore the region and speak at the village market.
+SHIPMENT_JOURNAL_BODY,Discover a nearby village and send supplies for repairs. Equip its workers to establish regular trade and unlock grain at its market.,Discover a nearby village and send supplies for repairs. Equip its workers to establish regular trade and unlock grain at its market.
+SHIPMENT_JOURNAL_CONTACT,Discover a neighbouring village,Discover a neighbouring village
+SHIPMENT_JOURNAL_CONTACT_HINT,Scout the region to find a village and map a route for deliveries.,Scout the region to find a village and map a route for deliveries.
 SHIPMENT_JOURNAL_DELIVERY,Deliver your first shipment,Deliver your first shipment
-SHIPMENT_JOURNAL_DELIVERY_HINT,Gather the requested goods and dispatch the packhorse from Trade & shipments on the Village page.,Gather the requested goods and dispatch the packhorse from Trade & shipments on the Village page.
+SHIPMENT_JOURNAL_DELIVERY_HINT,Gather the requested goods and dispatch from the journal's Trade tab.,Gather the requested goods and dispatch from the journal's Trade tab.
 SHIPMENT_TRADE_POST,Trade post,Trade post
 SHIPMENT_VILLAGE_MARKET,Village market,Village market
 SHIPMENT_MARKET_REQUESTS,Shipments,Shipments
+CAMPAIGN_TRADE_PURPOSE,Help a neighbouring village thrive. A trade partnership unlocks grain and replenished village market stock.,Help a neighbouring village thrive. A trade partnership unlocks grain and replenished village market stock.
+CAMPAIGN_TRADE_STEP_MEET_VILLAGE,Find your neighbours,Find your neighbours
+CAMPAIGN_TRADE_STEP_FIRST_SHIPMENT,Help with village repairs,Help with village repairs
+CAMPAIGN_TRADE_STEP_CRAFT_SHIPMENT,Equip the village workers,Equip the village workers
+CAMPAIGN_TRADE_STEP_COMPLETE,A trade partnership established,A trade partnership established
+CAMPAIGN_TRADE_GUIDANCE_MEET_VILLAGE,Scout from the quest board to find a nearby village and map a route. Arrange deliveries from the journal's Trade tab.,Scout from the quest board to find a nearby village and map a route. Arrange deliveries from the journal's Trade tab.
+CAMPAIGN_TRADE_GUIDANCE_FIRST_SHIPMENT,Gather timber and iron for village repairs. Arrange shipments in the journal's Trade tab; the packhorse departs from your settlement.,Gather timber and iron for village repairs. Arrange shipments in the journal's Trade tab; the packhorse departs from your settlement.
+CAMPAIGN_TRADE_GUIDANCE_CRAFT_SHIPMENT,At the blacksmith make a field kit from two work supplies and prepare two processed wood. Send them on the next delivery after the packhorse returns.,At the blacksmith make a field kit from two work supplies and prepare two processed wood. Send them on the next delivery after the packhorse returns.
+CAMPAIGN_TRADE_GUIDANCE_DELIVERING,The packhorse is carrying these goods. Follow its journey in Shipments; payment and progress are recorded on delivery.,The packhorse is carrying these goods. Follow its journey in Shipments; payment and progress are recorded on delivery.
+CAMPAIGN_TRADE_GUIDANCE_COMPLETE,Your guild has earned a trading partner. Grain is now available at the village market. Optional deliveries replenish its stock. Keep exploring or upgrade your settlement.,Your guild has earned a trading partner. Grain is now available at the village market. Optional deliveries replenish its stock. Keep exploring or upgrade your settlement.
+CAMPAIGN_ACTION_VILLAGE,Find village market,Find village market
+CAMPAIGN_ACTION_BLACKSMITH,Find blacksmith,Find blacksmith
+CAMPAIGN_ACTION_SHIPMENTS,Open Trade,Open Trade
+CAMPAIGN_DESTINATION_VILLAGE,Village market,Village market
+CAMPAIGN_DESTINATION_BLACKSMITH,Blacksmith,Blacksmith
+CAMPAIGN_SETTLEMENT_LEVEL,Settlement level %d,Settlement level %d
+CAMPAIGN_MATERIALS_BUILD,Building materials,Building materials
+CAMPAIGN_MATERIALS_TRADE,Goods to send,Goods to send
+CAMPAIGN_MATERIALS_LOADED,Loaded on the packhorse,Loaded on the packhorse
+SHIPMENT_EQUIPMENT_TITLE,Equipment for village workers,Equipment for village workers
+SHIPMENT_EQUIPMENT_DESCRIPTION,Equip the village workers to open regular trade.,Equip the village workers to open regular trade.
+SHIPMENT_PARTNERSHIP_REWARD,Also establishes a trade partnership and unlocks grain at the village market.,Also establishes a trade partnership and unlocks grain at the village market.
+SHIPMENT_FIRST_DELIVERY_REQUIRED,Complete the village repairs delivery first.,Complete the village repairs delivery first.
+SHIPMENT_BLACKSMITH_REQUIRED,Open your blacksmith before preparing this delivery.,Open your blacksmith before preparing this delivery.
+SHIPMENT_RELATION_UNKNOWN,Undiscovered,Undiscovered
+SHIPMENT_RELATION_KNOWN,Known neighbour,Known neighbour
+SHIPMENT_RELATION_TRUSTED,Trusted neighbour,Trusted neighbour
+SHIPMENT_RELATION_PARTNER,Trade partner,Trade partner
+SHIPMENT_STANDING_RELATION,%s · Deliveries: %d · Influence: %d,%s · Deliveries: %d · Influence: %d
+SHIPMENT_PARTNER_BENEFIT,Grain becomes available at this market. Later deliveries replenish the village stock.,Grain becomes available at this market. Later deliveries replenish the village stock.
+SHIPMENT_PARTNERSHIP_NOTICE,Trade partnership established. Grain is now available at the village market; future deliveries replenish its stock.,Trade partnership established. Grain is now available at the village market; future deliveries replenish its stock.
+SHIPMENT_PREPARE_EQUIPMENT,Prepare equipment delivery,Prepare equipment delivery
+SHIPMENT_FIRST_FULFILLED,The repairs are supplied. Prepare an equipment delivery to establish regular trade.,The repairs are supplied. Prepare an equipment delivery to establish regular trade.
+SHIPMENT_PARTNER_FULFILLED,Partnership established. Visit the market for grain or arrange another delivery to replenish village stock.,Partnership established. Visit the market for grain or arrange another delivery to replenish village stock.
+SHIPMENT_JOURNAL_EQUIPMENT,Supply the village workers,Supply the village workers
+SHIPMENT_JOURNAL_EQUIPMENT_HINT,Craft one field kit and two processed wood at the blacksmith. Send them after the first delivery.,Craft one field kit and two processed wood at the blacksmith. Send them after the first delivery.
+SHIPMENT_JOURNAL_PARTNER,Establish a trade partnership,Establish a trade partnership
+SHIPMENT_JOURNAL_PARTNER_HINT,Deliver both repair supplies and worker equipment to the same village. Grain then unlocks at its market.,Deliver both repair supplies and worker equipment to the same village. Grain then unlocks at its market.
+SHIPMENT_COLUMN_CARGO,Cargo,Cargo
+SHIPMENT_COLUMN_HAVE,Have,Have
+SHIPMENT_COLUMN_LOADED,Loaded,Loaded
+SHIPMENT_COLUMN_SEND,Send,Send
+SHIPMENT_PAYMENT_SHORT,%d coins on delivery,%d coins on delivery
+SHIPMENT_PAYMENT_RECEIVED,%d coins received,%d coins received
+SHIPMENT_REPUTATION_SHORT,+%d reputation · +1 influence · +1 prestige,+%d reputation · +1 influence · +1 prestige
+SHIPMENT_UNLOCK_SHORT,Unlocks regular trade and grain at the village market.,Unlocks regular trade and grain at the village market.
+SHIPMENT_STATE_READY,Ready to send,Ready to send
+SHIPMENT_STATE_WAITING,Not ready,Not ready
+SHIPMENT_STATE_OUTBOUND,Delivering,Delivering
+SHIPMENT_STATE_RETURNING,Returning,Returning
+SHIPMENT_STATE_RECALLED,Recalled,Recalled
+SHIPMENT_STATE_BLOCKED,Route blocked,Route blocked
+SHIPMENT_STATE_DELIVERED,Delivered,Delivered
+GUILD_JOURNAL_TRADE,Trade,Trade
+GUILD_TREASURY_LABEL,Treasury,Treasury
+GUILD_COINS_LABEL,Coins,Coins
+SHIPMENT_REWARDS_ON_DELIVERY,Rewards on delivery,Rewards on delivery
+SHIPMENT_REWARDS_RECEIVED,Rewards received,Rewards received
+SHIPMENT_INFLUENCE_LABEL,Influence,Influence
+SHIPMENT_PAYMENT_HINT,Coins added to the guild treasury when the goods arrive.,Coins added to the guild treasury when the goods arrive.
+SHIPMENT_REPUTATION_HINT,Reputation improves the guild's standing.,Reputation improves the guild's standing.
+SHIPMENT_INFLUENCE_HINT,Influence grows your relationship with this village.,Influence grows your relationship with this village.
+SHIPMENT_PRESTIGE_HINT,Prestige records the guild's accomplishments.,Prestige records the guild's accomplishments.
+VILLAGE_GROWTH_PURPOSE,"Upgrade your settlement. Villagers post their requests at the quest board.","Verbeter je nederzetting. Dorpelingen plaatsen hun verzoeken op het opdrachtenbord."
+DISCOVERY_FOREST_GROVE_TITLE,"Tended grove","Tended grove"
+DISCOVERY_FOREST_GROVE_DESC,"Old paths and careful cutting have kept this grove healthy.","Old paths and careful cutting have kept this grove healthy."
+DISCOVERY_FOREST_OLD_GROWTH_TITLE,"Old growth","Old growth"
+DISCOVERY_FOREST_OLD_GROWTH_DESC,"Mature timber offers a good yield. Survey tracks before committing to a heavy cut.","Mature timber offers a good yield. Survey tracks before committing to a heavy cut."
+DISCOVERY_FOREST_REMNANTS_TITLE,"Old logging camp","Old logging camp"
+DISCOVERY_FOREST_REMNANTS_DESC,"Usable offcuts remain among the stumps. Replant or let the grove recover.","Usable offcuts remain among the stumps. Replant or let the grove recover."
+DISCOVERY_FOREST_PROWLERS_TITLE,"Tracks at the treeline","Tracks at the treeline"
+DISCOVERY_FOREST_PROWLERS_DESC,"Fresh tracks surround the timber stand. Security work can make gathering safer.","Fresh tracks surround the timber stand. Security work can make gathering safer."
+DISCOVERY_MINE_WORKING_TITLE,"Accessible workings","Accessible workings"
+DISCOVERY_MINE_WORKING_DESC,"The entrance is intact and a modest vein is already exposed.","The entrance is intact and a modest vein is already exposed."
+DISCOVERY_MINE_RICH_TITLE,"Exposed seam","Exposed seam"
+DISCOVERY_MINE_RICH_DESC,"A rich seam is visible near the entrance. Choose between careful extraction and a quick deep cut.","A rich seam is visible near the entrance. Choose between careful extraction and a quick deep cut."
+DISCOVERY_MINE_UNMAPPED_TITLE,"Unmapped workings","Unmapped workings"
+DISCOVERY_MINE_UNMAPPED_DESC,"An open entrance leads into unfamiliar passages. Prospect before extracting.","An open entrance leads into unfamiliar passages. Prospect before extracting."
+DISCOVERY_MINE_SHORING_TITLE,"Weathered supports","Weathered supports"
+DISCOVERY_MINE_SHORING_DESC,"The entrance needs attention. Proper reinforcement lasts; temporary shoring is quicker.","The entrance needs attention. Proper reinforcement lasts; temporary shoring is quicker."
+DISCOVERY_WATER_CLEAN_TITLE,"Clear spring","Clear spring"
+DISCOVERY_WATER_CLEAN_DESC,"The water is already usable. Protect the intake or simply fill your buckets.","The water is already usable. Protect the intake or simply fill your buckets."
+DISCOVERY_WATER_SILTED_TITLE,"Silted intake","Silted intake"
+DISCOVERY_WATER_SILTED_DESC,"Cloudy water collects behind the intake. A small purification commission will restore it.","Cloudy water collects behind the intake. A small purification commission will restore it."
+DISCOVERY_WATER_SHELTERED_TITLE,"Sheltered waterhole","Sheltered waterhole"
+DISCOVERY_WATER_SHELTERED_DESC,"A quiet source with a sound intake. A useful base for the settlement water project.","A quiet source with a sound intake. A useful base for the settlement water project."
+DISCOVERY_FARM_FALLOW_TITLE,"Fallow field","Fallow field"
+DISCOVERY_FARM_FALLOW_DESC,"This plot is ready for a fresh planting. Seeds and water are all it needs.","This plot is ready for a fresh planting. Seeds and water are all it needs."
+DISCOVERY_FARM_TENDED_TITLE,"Tended rows","Tended rows"
+DISCOVERY_FARM_TENDED_DESC,"Someone recently watered these crops. Organise a harvest when you are ready.","Someone recently watered these crops. Organise a harvest when you are ready."
+DISCOVERY_FARM_RIPE_TITLE,"An unclaimed harvest","An unclaimed harvest"
+DISCOVERY_FARM_RIPE_DESC,"Ripe crops remain in this small field. Collect them before starting your own planting.","Ripe crops remain in this small field. Collect them before starting your own planting."
+DISCOVERY_RUINS_UNKNOWN_TITLE,"Forgotten remains","Forgotten remains"
+DISCOVERY_RUINS_UNKNOWN_DESC,"The old site has not been surveyed. A short expedition can reveal what remains.","The old site has not been surveyed. A short expedition can reveal what remains."
+DISCOVERY_RUINS_CAMP_TITLE,"Abandoned survey camp","Abandoned survey camp"
+DISCOVERY_RUINS_CAMP_DESC,"Old markings show a safe way in. Catalogue the finds or salvage useful materials.","Old markings show a safe way in. Catalogue the finds or salvage useful materials."
+DISCOVERY_RUINS_ARCHIVE_TITLE,"Quiet archive","Quiet archive"
+DISCOVERY_RUINS_ARCHIVE_DESC,"The entrance and chambers are intact. Patient cataloguing may uncover useful knowledge.","The entrance and chambers are intact. Patient cataloguing may uncover useful knowledge."
+DISCOVERY_RUINS_DEN_TITLE,"An occupied ruin","An occupied ruin"
+DISCOVERY_RUINS_DEN_DESC,"Movement inside confirms that this place is inhabited. Clear the danger or prepare an escorted delve.","Movement inside confirms that this place is inhabited. Clear the danger or prepare an escorted delve."
+REGIONAL_QUEST_SELECTIVE_CUT_TITLE,"Selective timber harvest","Selective timber harvest"
+REGIONAL_QUEST_SELECTIVE_CUT_DESC,"Take mature trees and plant replacements. More preparation keeps the grove productive.","Take mature trees and plant replacements. More preparation keeps the grove productive."
+REGIONAL_QUEST_SELECTIVE_CUT_RESULT,"Leaves the grove healthy. +2 stewardship.","Leaves the grove healthy. +2 stewardship."
+REGIONAL_QUEST_SELECTIVE_CUT_REPORT,"Selective timber harvest completed.","Selective timber harvest completed."
+REGIONAL_QUEST_RECOVER_TIMBER_TITLE,"Recover camp offcuts","Recover camp offcuts"
+REGIONAL_QUEST_RECOVER_TIMBER_DESC,"Collect usable timber and abandoned tools from the old logging site.","Collect usable timber and abandoned tools from the old logging site."
+REGIONAL_QUEST_RECOVER_TIMBER_RESULT,"Available once per growth cycle. The grove still needs time or replanting.","Available once per growth cycle. The grove still needs time or replanting."
+REGIONAL_QUEST_RECOVER_TIMBER_REPORT,"Recover camp offcuts completed.","Recover camp offcuts completed."
+REGIONAL_QUEST_BRACE_TITLE,"Brace the workings","Brace the workings"
+REGIONAL_QUEST_BRACE_DESC,"Install lasting supports before mining. One preparation protects the next three extractions.","Install lasting supports before mining. One preparation protects the next three extractions."
+REGIONAL_QUEST_BRACE_RESULT,"Three supported extractions with substantially less collapse risk.","Three supported extractions with substantially less collapse risk."
+REGIONAL_QUEST_BRACE_REPORT,"Brace the workings completed.","Brace the workings completed."
+REGIONAL_QUEST_QUICK_REOPEN_TITLE,"Temporary shoring","Temporary shoring"
+REGIONAL_QUEST_QUICK_REOPEN_DESC,"Use raw timber to reopen the entrance quickly. Temporary supports leave the next extraction less secure.","Use raw timber to reopen the entrance quickly. Temporary supports leave the next extraction less secure."
+REGIONAL_QUEST_QUICK_REOPEN_RESULT,"Restores access quickly; next extraction carries extra collapse risk.","Restores access quickly; next extraction carries extra collapse risk."
+REGIONAL_QUEST_QUICK_REOPEN_REPORT,"Temporary shoring completed.","Temporary shoring completed."
+REGIONAL_QUEST_SAMPLE_VEIN_TITLE,"Survey and sample","Survey and sample"
+REGIONAL_QUEST_SAMPLE_VEIN_DESC,"Send a prepared surveyor to map the workings and bring back ore samples.","Send a prepared surveyor to map the workings and bring back ore samples."
+REGIONAL_QUEST_SAMPLE_VEIN_RESULT,"Reveals the vein and returns a small ore sample.","Reveals the vein and returns a small ore sample."
+REGIONAL_QUEST_SAMPLE_VEIN_REPORT,"Survey and sample completed.","Survey and sample completed."
+REGIONAL_QUEST_PROTECT_SPRING_TITLE,"Protect the intake","Protect the intake"
+REGIONAL_QUEST_PROTECT_SPRING_DESC,"Fit a simple screen and strengthen the intake before drawing extra water.","Fit a simple screen and strengthen the intake before drawing extra water."
+REGIONAL_QUEST_PROTECT_SPRING_RESULT,"Protects the next three draws against contamination.","Protects the next three draws against contamination."
+REGIONAL_QUEST_PROTECT_SPRING_REPORT,"Protect the intake completed.","Protect the intake completed."
+REGIONAL_QUEST_DRAW_CAREFUL_TITLE,"Prepare clean water","Prepare clean water"
+REGIONAL_QUEST_DRAW_CAREFUL_DESC,"Use work supplies to filter and store a larger clean batch without damaging the source.","Use work supplies to filter and store a larger clean batch without damaging the source."
+REGIONAL_QUEST_DRAW_CAREFUL_RESULT,"Reliable clean water; leaves the source fresh.","Reliable clean water; leaves the source fresh."
+REGIONAL_QUEST_DRAW_CAREFUL_REPORT,"Prepare clean water completed.","Prepare clean water completed."
+REGIONAL_QUEST_CATALOGUE_TITLE,"Catalogue the archive","Catalogue the archive"
+REGIONAL_QUEST_CATALOGUE_DESC,"Record the chambers and preserve useful knowledge before salvaging the site.","Record the chambers and preserve useful knowledge before salvaging the site."
+REGIONAL_QUEST_CATALOGUE_RESULT,"Once per site: unlocks the Surveyor kit recipe. The ruins remain available.","Once per site: unlocks the Surveyor kit recipe. The ruins remain available."
+REGIONAL_QUEST_CATALOGUE_REPORT,"Catalogue the archive completed.","Catalogue the archive completed."
+COMMUNITY_WATER_TITLE,"A dependable water supply","A dependable water supply"
+COMMUNITY_WATER_ROLE,"Well keeper","Well keeper"
+COMMUNITY_WATER_REQUEST,"Establish a water supply, then place and build a well for the village. Construction supplies are delivered to its foundation.","Establish a water supply, then place and build a well for the village. Construction supplies are delivered to its foundation."
+COMMUNITY_WATER_COMPLETE,"The well is running well. Our tenders can bring back more clean water with less time at the source.","The well is running well. Our tenders can bring back more clean water with less time at the source."
+COMMUNITY_WATER_BENEFIT,"Water commissions are 20% quicker. Fill commissions bring back one extra water bucket.","Water commissions are 20% quicker. Fill commissions bring back one extra water bucket."
+COMMUNITY_FOOD_TITLE,"A harvest for the village","A harvest for the village"
+COMMUNITY_FOOD_ROLE,"Grower","Grower"
+COMMUNITY_FOOD_REQUEST,"Some fields are already growing. Bring in a harvest, then help us set up a proper place to sort and store it.","Some fields are already growing. Bring in a harvest, then help us set up a proper place to sort and store it."
+COMMUNITY_FOOD_COMPLETE,"We have a place for the harvest now. I can also show your workers how to make a proper quartermaster kit.","We have a place for the harvest now. I can also show your workers how to make a proper quartermaster kit."
+COMMUNITY_FOOD_BENEFIT,"Harvest commissions bring back one extra grain. Unlocks the Quartermaster kit recipe.","Harvest commissions bring back one extra grain. Unlocks the Quartermaster kit recipe."
+COMMUNITY_WORKSHOP_TITLE,"A better equipped workshop","A better equipped workshop"
+COMMUNITY_WORKSHOP_ROLE,"Foreman","Foreman"
+COMMUNITY_WORKSHOP_REQUEST,"Have someone work the local mine. Good workings need not be repaired: sampling or a careful extraction is useful too.","Have someone work the local mine. Good workings need not be repaired: sampling or a careful extraction is useful too."
+COMMUNITY_WORKSHOP_COMPLETE,"These new stores and tools should keep repairs moving. The reinforced tool recipe is yours to use.","These new stores and tools should keep repairs moving. The reinforced tool recipe is yours to use."
+COMMUNITY_WORKSHOP_BENEFIT,"Repair commissions are 20% quicker. Unlocks Reinforced tools and speeds supply crafting by 15%.","Repair commissions are 20% quicker. Unlocks Reinforced tools and speeds supply crafting by 15%."
+INCIDENT_SILTED_SPRING_TITLE,"Silt at the intake","Silt at the intake"
+INCIDENT_SILTED_SPRING_DESC,"Heavy silt has clouded a known water source. Restore it through a commission for a 20-coin local service reward, or hire local help. There is no deadline.","Heavy silt has clouded a known water source. Restore it through a commission for a 20-coin local service reward, or hire local help. There is no deadline."
+INCIDENT_WEATHERED_MINE_TITLE,"Supports need attention","Supports need attention"
+INCIDENT_WEATHERED_MINE_DESC,"A known mine has become unstable. Reinforce it properly or reopen it with temporary shoring for a 20-coin local service reward. Local help can also restore access. There is no deadline.","A known mine has become unstable. Reinforce it properly or reopen it with temporary shoring for a 20-coin local service reward. Local help can also restore access. There is no deadline."
+ITEM_SURVEYORS_KIT_NAME,"Surveyor kit","Surveyor kit"
+ITEM_SURVEYORS_KIT_DESC,"Survey tools for scouting and investigating. Adds one scouting radius and shortens survey work.","Survey tools for scouting and investigating. Adds one scouting radius and shortens survey work."
+ITEM_QUARTERMASTER_KIT_NAME,"Quartermaster kit","Quartermaster kit"
+ITEM_QUARTERMASTER_KIT_DESC,"Specialist tools for gathering, harvest and water commissions. Improves yields by 25%.","Specialist tools for gathering, harvest and water commissions. Improves yields by 25%."
+ITEM_REINFORCED_TOOLS_NAME,"Reinforced tools","Reinforced tools"
+ITEM_REINFORCED_TOOLS_DESC,"Durable tools for mining and repairs. Reduces dangerous outcome weights and injury chance.","Durable tools for mining and repairs. Reduces dangerous outcome weights and injury chance."
+COMMUNITY_TASK_WATER,"Establish a dependable water supply","Establish a dependable water supply"
+COMMUNITY_TASK_FOOD,"Establish a local harvest","Establish a local harvest"
+COMMUNITY_TASK_WORKSHOP,"Equip the village workshop","Equip the village workshop"
+COMMUNITY_TASK_EXPEDITION,"Optional: complete a ruin expedition","Optioneel: voltooi een ruine-expeditie"
+COMMUNITY_TASK_FOOTHOLD,"Build a thriving foothold","Build a thriving foothold"
+COMMUNITY_FORGE_FIRST,"Open the blacksmith before completing village improvements.","Open de smidse voordat je dorpsverbeteringen voltooit."
+COMMUNITY_FINISHED,"Project complete · permanent benefit active","Project complete · permanent benefit active"
+COMMUNITY_FIELDWORK_REQUIRED,"Complete and collect a matching commission first. Choose Arrange work to get started.","Complete and collect a matching commission first. Choose Arrange work to get started."
+COMMUNITY_FIELDWORK_DONE,"Fieldwork complete","Fieldwork complete"
+COMMUNITY_NEED_PRESTIGE,"Requires %d prestige.","Requires %d prestige."
+COMMUNITY_NEED_COINS,"Requires %d coins.","Requires %d coins."
+COMMUNITY_NEED_MATERIALS,"Gather the remaining materials in guild stores.","Gather the remaining materials in guild stores."
+COMMUNITY_COMPLETED,"%s completed","%s completed"
+COMMUNITY_WORK_RUNNING,"Wait for the commission at this site to return.","Wait for the commission at this site to return."
+COMMUNITY_INCIDENT_RESOLVED,"%s resolved","%s resolved"
+COMMUNITY_RECIPE_LOCKED,"Earn this recipe through a community project or expedition first.","Earn this recipe through a community project or expedition first."
+COMMUNITY_COMMISSION_FEE,"Local service fee: %d coins on a successful return.","Local service fee: %d coins on a successful return."
+COMMUNITY_MINE_SUPPORTED,"Proper supports: %d extractions remaining · collapse chance reduced by 75%%.","Proper supports: %d extractions remaining · collapse chance reduced by 75%%."
+COMMUNITY_MINE_TEMPORARY,"Temporary shoring: the next extraction has an extra 8% collapse chance.","Temporary shoring: the next extraction has an extra 8% collapse chance."
+COMMUNITY_WATER_PROTECTED,"Protected intake: %d draws remaining without tainting the source.","Protected intake: %d draws remaining without tainting the source."
+COMMUNITY_PROJECTS_HEADER,"Community projects","Community projects"
+COMMUNITY_ARRANGE_WORK,"Assign guild work","Gildewerk toewijzen"
+COMMUNITY_COMPLETE_PROJECT,"Complete project","Complete project"
+COMMUNITY_FIND_RESIDENT,"Find resident","Find resident"
+COMMUNITY_VIEW_PROJECT,"View on quest board","Bekijk op opdrachtenbord"
+COMMUNITY_RESIDENT_TITLE,"Village resident","Village resident"
+COMMUNITY_PROJECT_PRICE,"%d coins · %d prestige","%d coins · %d prestige"
+COMMUNITY_FUND_PROJECT,"Fund all work (%d)","Fund all work (%d)"
+COMMUNITY_FUND_TOOLTIP,"Pay the full coin cost and %d prestige. Local workers handle the fieldwork and materials.","Pay the full coin cost and %d prestige. Local workers handle the fieldwork and materials."
+COMMUNITY_FUND_INCIDENT,"Hire local help (%d)","Hire local help (%d)"
+COMMUNITY_LOCAL_REQUEST,"Local request","Local request"
+COMMUNITY_CHAPTER_TITLE,"A thriving foothold","A thriving foothold"
+COMMUNITY_CHAPTER_BODY,"Build a thriving foothold: open the blacksmith, complete any two village requests and establish a trade partnership. Ruin expeditions are optional. Continue exploring and growing after the chapter ends.","Bouw een bloeiende basis: open de smid, voltooi twee dorpsverzoeken en sluit een handelspartnerschap. Ruine-expedities zijn optioneel. Blijf daarna verkennen en uitbreiden."
+COMMUNITY_CHAPTER_COMPLETE,"A thriving foothold · opening chapter complete. Keep exploring, trading and improving the village.","A thriving foothold · opening chapter complete. Keep exploring, trading and improving the village."
+REGIONAL_EXISTING_FELL_RESULT,"A large timber yield, but the grove is depleted until it regrows or is replanted.","A large timber yield, but the grove is depleted until it regrows or is replanted."
+REGIONAL_EXISTING_CAREFUL_RESULT,"A slower harvest with extra grain and seeds. Consumes one work supply.","A slower harvest with extra grain and seeds. Consumes one work supply."
+REGIONAL_EXISTING_RUSH_RESULT,"A quick harvest with fewer seeds. Useful when supplies are urgently needed.","A quick harvest with fewer seeds. Useful when supplies are urgently needed."
+REGIONAL_EXISTING_DEEP_RESULT,"Twice the base-vein loot rolls. Uses rations and work supplies; increases collapse and exhaustion risk.","Twice the base-vein loot rolls. Uses rations and work supplies; increases collapse and exhaustion risk."
+REGIONAL_EXISTING_STABLE_RESULT,"Uses a support beam to reduce collapse and exhaustion risk during this extraction.","Uses a support beam to reduce collapse and exhaustion risk during this extraction."
+REGIONAL_EXISTING_REINFORCE_RESULT,"Restore the last stable vein and add proper supports for the next three extractions.","Restore the last stable vein and add proper supports for the next three extractions."
+REGIONAL_EXISTING_PURIFY_RESULT,"Restore fresh water with patient treatment. The source can be used immediately afterwards.","Restore fresh water with patient treatment. The source can be used immediately afterwards."
+REGIONAL_EXISTING_MAINTAIN_RESULT,"A quicker repair using work supplies. Restores fresh water.","A quicker repair using work supplies. Restores fresh water."
+
+CAMPAIGN_OPENING_PURPOSE,"Open the blacksmith, improve the village through %d requests, and establish a trade partnership. Explore and arrange work at your own pace.","Open de smid, verbeter het dorp met %d verzoeken en sluit een handelspartnerschap. Verken en regel werk in je eigen tempo."
+CAMPAIGN_OPENING_PROJECT_STEP,"Improve the village · %d / %d","Verbeter het dorp · %d / %d"
+CAMPAIGN_OPENING_PROJECT_GUIDANCE,"Choose village requests at the quest board. Commission the fieldwork and contribute materials, or fund the work. Explore or arrange other jobs while your members are away.","Kies dorpsverzoeken op het opdrachtenbord. Regel veldwerk en lever materialen, of financier het werk. Verken of regel ander werk terwijl je leden onderweg zijn."
+CAMPAIGN_OPENING_FINISHED,"Opening chapter complete","Openingshoofdstuk voltooid"
+CAMPAIGN_OPENING_COMPLETE_GUIDANCE,"Your village has a workshop, lasting improvements and a trading partner. Continue upgrading, explore optional ruins or arrange more deliveries.","Je dorp heeft een werkplaats, blijvende verbeteringen en een handelspartner. Blijf verbeteren, verken ruines of regel meer leveringen."
+CAMPAIGN_OPENING_COMPLETE_NOTICE,"A thriving foothold: chapter complete. The guild receives %d coins and %d prestige. Continue at your own pace.","Een bloeiende basis: hoofdstuk voltooid. De gilde krijgt %d munten en %d prestige. Ga verder in je eigen tempo."
+CAMPAIGN_OPENING_PROGRESS,"Opening chapter","Openingshoofdstuk"
+CAMPAIGN_OPENING_FORGE,"Open the blacksmith","Open de smid"
+CAMPAIGN_OPENING_PROJECTS,"Village improvements · %d / %d","Dorpsverbeteringen · %d / %d"
+CAMPAIGN_OPENING_TRADE,"Establish a trade partnership","Sluit een handelspartnerschap"
+CAMPAIGN_ACTION_REQUESTS,"View village requests","Bekijk dorpsverzoeken"
+
+PLACEMENT_PLACE,"Place","Place"
+PLACEMENT_HINT,"Left click: place · Right click / Esc: cancel · Q / E: rotate","Left click: place · Right click / Esc: cancel · Q / E: rotate"
+ITEM_WELL_BLUEPRINT_NAME,"Well blueprint","Well blueprint"
+ITEM_WELL_BLUEPRINT_DESC,"Choose a site inside your settlement. Deliver construction supplies to finish the well.","Choose a site inside your settlement. Deliver construction supplies to finish the well."
+STRUCTURE_WELL_NAME,"Village well","Village well"
+COMMUNITY_NO_INSTANT_FUNDING,"Permanent improvements require their listed work and supplies.","Permanent improvements require their listed work and supplies."
+COMMUNITY_BUILD_FOUNDATION,"Blueprint ready. Choose a clear site inside the settlement.","Blueprint ready. Choose a clear site inside the settlement."
+COMMUNITY_DELIVER_FOUNDATION,"Deliver construction supplies to the well foundation.","Deliver construction supplies to the well foundation."
+COMMUNITY_PLACE_WELL,"Place well","Place well"
+COMMUNITY_FINISH_WELL,"Build well","Build well"
+COMMUNITY_ISSUE_BLUEPRINT,"Get well blueprint","Get well blueprint"
+COMMUNITY_PLACE_BLUEPRINT,"Place well","Place well"
+COMMUNITY_FIND_FOUNDATION,"Find foundation","Find foundation"
+REQUEST_VIEW_RECIPE,"View recipe","View recipe"
+REQUEST_MATCHING_WORK,"Qualifying work","Qualifying work"
+ITEM_USED_FOR,"Used for","Used for"
+CRAFTING_NEEDED_BY,"Needed by","Needed by"
+NOTICE_CRAFTED,"Crafted [b]1 %s[/b]","Crafted [b]1 %s[/b]"
+ITEM_USE_PLANKS,"Foundations, settlement improvements and equipment.","Foundations, settlement improvements and equipment."
+ITEM_USE_WORK_SUPPLIES,"Well construction, repairs, specialist commissions and trade deliveries.","Well construction, repairs, specialist commissions and trade deliveries."
+ITEM_USE_BEAMS,"Mine reinforcement, reopening and safer extraction.","Mine reinforcement, reopening and safer extraction."
+ITEM_USE_FIELD_KIT,"Reusable equipment for resource commissions and village deliveries.","Reusable equipment for resource commissions and village deliveries."
+ITEM_USE_TOOLS,"Reusable equipment for faster and safer mine work.","Reusable equipment for faster and safer mine work."
+ITEM_USE_QUARTERMASTER,"Reusable equipment for gathering and harvesting.","Reusable equipment for gathering and harvesting."
+ITEM_USE_SURVEYOR,"Reusable equipment for exploration and expeditions.","Reusable equipment for exploration and expeditions."
+ITEM_USE_WELL_BLUEPRINT,"Place a well foundation from the item context menu.","Place a well foundation from the item context menu."
+REQUEST_CONSTRUCTION_SUPPLIES,"Construction supplies","Construction supplies"
+COMMUNITY_WATER_STEP,"Water commission","Water commission"
+CRAFTING_FIND_FORGE,"Find blacksmith","Find blacksmith"
+CRAFTING_VISIT_FORGE,"View the recipe here. Visit the blacksmith to craft it.","View the recipe here. Visit the blacksmith to craft it."

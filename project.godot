@@ -21,6 +21,8 @@ SaveGames="*res://scripts/saves/save_games.gd"
 Debug="*uid://dcud1yf4q7yus"
 InputManager="*uid://de3o0pp6wss2g"
 SceneManager="*uid://bbh3tqcpujraq"
+WorldLoading="*res://scenes/ui/world_loading.tscn"
+WorldPlacement="*res://scripts/structures/world_placement.gd"
 
 [display]
 

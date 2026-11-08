@@ -106,4 +106,6 @@ func queue(c: Callable) -> void:
 		cached.connect(c, CONNECT_ONE_SHOT);
 			
 	if not is_queued && not is_cached:
-		SceneManager.get_or_create_scene(id);
+		# A caller already holding a SceneInfo should not need a second catalog
+		# lookup. This also supports optional/extension windows loaded by path.
+		SceneManager.scene_cache.queue(self)
