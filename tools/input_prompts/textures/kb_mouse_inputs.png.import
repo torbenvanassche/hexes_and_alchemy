@@ -3,20 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://iphhxccexo3h"
-path.s3tc="res://.godot/imported/kb_mouse_inputs.png-190f96590a6440210703ef2555e8f87a.s3tc.ctex"
+path="res://.godot/imported/kb_mouse_inputs.png-190f96590a6440210703ef2555e8f87a.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://tools/input_prompts/textures/kb_mouse_inputs.png"
-dest_files=["res://.godot/imported/kb_mouse_inputs.png-190f96590a6440210703ef2555e8f87a.s3tc.ctex"]
+dest_files=["res://.godot/imported/kb_mouse_inputs.png-190f96590a6440210703ef2555e8f87a.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/high_quality_mode=0
 compress/lossy_quality=0.7
@@ -25,7 +24,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=true
+mipmaps/generate=false
 mipmaps/limit=-1
 mipmaps/preserve_alpha_test_coverage=false
 mipmaps/alpha_test_threshold=0.5

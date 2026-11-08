@@ -8,6 +8,7 @@ class_name InputDisplayer extends Button
 
 func set_key(string: String, event: InputEvent) -> void:
 	var texture := AtlasTexture.new()
+	texture.filter_clip = true
 	var entry: Array = []
 	if event is InputEventKey:
 		texture.atlas = InputManager.keyboard_image
