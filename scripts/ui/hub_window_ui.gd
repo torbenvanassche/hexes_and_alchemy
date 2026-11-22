@@ -14,11 +14,13 @@ signal tab_changed(tab_id: String)
 @onready var people_page: Control = $Spread/PageHost/PeoplePage
 @onready var treasury: RewardStatUI = $Spread/Contents/Treasury
 
+var _refresh_gate: RefreshGate
 var active_tab := "projects"
 var _buttons: Dictionary[String, Button] = {}
 var _pages: Dictionary[String, Control] = {}
 
 func _ready() -> void:
+	_refresh_gate = RefreshGate.new(self, _refresh_inventory)
 	_buttons = {"projects": projects_button, "operations": operations_button, "inventory": inventory_button,
 		"people": $Spread/Contents/People, "notes": $Spread/Contents/Notes, "trade": $Spread/Contents/Trade}
 	_pages = {"projects": projects_page, "operations": operations_page, "inventory": inventory_page,
@@ -69,8 +71,12 @@ func _show_tab(tab_id: String) -> void:
 func _connect_hub_signals() -> void:
 	if Manager.instance == null or Manager.instance.hub == null:
 		return
-	if not Manager.instance.hub.changed.is_connected(_refresh_inventory):
-		Manager.instance.hub.changed.connect(_refresh_inventory)
+	if not Manager.instance.hub.inventory_changed.is_connected(_queue_refresh):
+		Manager.instance.hub.inventory_changed.connect(_queue_refresh)
+		Manager.instance.hub.currency_changed.connect(_queue_refresh)
+
+func _queue_refresh() -> void:
+	_refresh_gate.request()
 
 func _refresh_inventory() -> void:
 	if inventory_ui == null or Manager.instance == null or Manager.instance.hub == null:

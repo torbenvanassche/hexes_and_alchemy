@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ShipmentRequest" format=3]
+[ext_resource type="Script" path="res://scripts/transport/shipment_request.gd" id="1"]
+[ext_resource type="Script" path="res://tools/inventory/scripts/data/item_info.gd" id="2"]
+[ext_resource type="Resource" path="res://resources/item_info/bucket.tres" id="3"]
+[ext_resource type="Resource" path="res://resources/item_info/wood_raw.tres" id="4"]
+[resource]
+script = ExtResource("1")
+id = "partner_water"
+title_key = "PARTNER_WATER_TITLE"
+description_key = "PARTNER_WATER_DESCRIPTION"
+cargo = Dictionary[ExtResource("2"), int]({ExtResource("3"): 2, ExtResource("4"): 2})
+payment = 34
+reputation_reward = 2

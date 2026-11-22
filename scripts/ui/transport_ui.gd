@@ -1,11 +1,21 @@
 extends VBoxContainer
 
 @onready var destinations: OptionButton = %Destinations
+var _upgrade: Button
 var selected := Vector3i.MAX
 var _coords: Array[Vector3i] = []
 var _refresh_pending := false
 
 func _ready() -> void:
+	_upgrade = Button.new()
+	_upgrade.text = tr("TRADE_UPGRADE_ACTION")
+	_upgrade.tooltip_text = tr("TRADE_UPGRADE_HINT")
+	_upgrade.pressed.connect(func() -> void:
+		if not Manager.instance.transport.upgrade_carrier(): _show_error(Manager.instance.transport.last_error))
+	add_child(_upgrade)
+	move_child(_upgrade, %Actions.get_index())
+	visibility_changed.connect(_queue_refresh)
+	Manager.instance.transport.journey_progress_changed.connect(_refresh_progress)
 	destinations.item_selected.connect(func(index: int) -> void: selected = _coords[index]; _refresh())
 	%Dispatch.pressed.connect(_dispatch)
 	%Recall.pressed.connect(func() -> void:
@@ -41,6 +51,8 @@ func on_enter() -> void:
 func _refresh() -> void:
 	if not is_node_ready() or not is_inside_tree() or SaveGames.is_loading: return
 	var transport := Manager.instance.transport
+	_upgrade.visible = transport.carrier.capacity < 12 and Manager.instance.regional.chapter_complete
+	_upgrade.disabled = not transport.active_shipment.is_empty() or Manager.instance.hub.currency < 100 or Manager.instance.reputation.reputation < 10
 	var grid := transport.get_grid()
 	if grid == null or not grid.is_inside_tree(): return
 	_coords.clear()
@@ -166,3 +178,13 @@ func _locate() -> void:
 	var ancestor := get_parent()
 	while ancestor != null and not ancestor is DraggableControl: ancestor = ancestor.get_parent()
 	if ancestor is DraggableControl: ancestor.close_window(true)
+
+func _refresh_progress() -> void:
+	if not is_visible_in_tree() or not is_node_ready(): return
+	var transport := Manager.instance.transport
+	var shipment := transport.active_shipment
+	if shipment.is_empty() or shipment.destination != selected: return
+	%Status.text = tr("SHIPMENT_ROUTE_BLOCKED") if shipment.blocked else tr("SHIPMENT_PHASE_" + shipment.phase.to_upper()) % ceili(transport.remaining_seconds())
+	if shipment.phase == "unloading":
+		%Journey.value = 100.0 * (1.0 - shipment.unload_remaining / maxf(0.01, shipment.unload_duration))
+	else: %Journey.value = 100.0 * maxi(0, shipment.index - 1) / maxi(1, shipment.route.size() - 1)

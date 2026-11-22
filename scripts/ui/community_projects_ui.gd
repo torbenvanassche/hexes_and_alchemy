@@ -11,6 +11,10 @@ var title_label: Label
 var resident_label: Label
 var request_label: Label
 var objectives: HFlowContainer
+var objective_summary: Label
+var objective_toggle: Button
+var _steps_completed := 0
+var _steps_total := 0
 var contribution: HFlowContainer
 var currency_costs: HFlowContainer
 var cost_column: VBoxContainer
@@ -23,8 +27,10 @@ var complete: Button
 var fund: Button
 var actions: HFlowContainer
 var recipe: Button
+var _refresh_gate: RefreshGate
 
 func _ready() -> void:
+	_refresh_gate = RefreshGate.new(self, refresh)
 	add_theme_constant_override("separation", 8)
 	title_label = _label(self, "", "Heading")
 	title_label.add_theme_font_size_override("font_size", 20)
@@ -34,11 +40,20 @@ func _ready() -> void:
 	request_label.hide()
 	request_label.max_lines_visible = 1
 	request_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	var objective_panel := VBoxContainer.new()
+	objective_panel.add_theme_constant_override("separation", 4)
+	add_child(objective_panel)
+	objective_summary = _label(objective_panel, "", "MutedLabel")
+	objective_toggle = Button.new()
+	objective_toggle.flat = true
+	objective_toggle.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	objective_toggle.pressed.connect(_toggle_objectives)
+	objective_panel.add_child(objective_toggle)
 	objectives = HFlowContainer.new()
 	objectives.tooltip_text = tr("QUEST_REQUEST_OBJECTIVES_SHORT")
 	objectives.add_theme_constant_override("h_separation", 16)
 	objectives.add_theme_constant_override("v_separation", 4)
-	add_child(objectives)
+	objective_panel.add_child(objectives)
 	add_child(HSeparator.new())
 	var columns := HBoxContainer.new()
 	columns.add_theme_constant_override("separation", 16)
@@ -64,21 +79,24 @@ func _ready() -> void:
 	complete = _button("QUEST_REQUEST_HAND_IN", _complete)
 	recipe = _button("REQUEST_VIEW_RECIPE", _view_recipe)
 	fund = _button("", _fund)
-	Manager.instance.regional.changed.connect(refresh)
-	Manager.instance.hub.changed.connect(refresh)
+	Manager.instance.regional.changed.connect(_queue_refresh)
+	Manager.instance.hub.changed.connect(_queue_refresh)
 	refresh()
 
 func _exit_tree() -> void:
 	if not is_instance_valid(Manager.instance): return
-	if is_instance_valid(Manager.instance.regional) and Manager.instance.regional.changed.is_connected(refresh):
-		Manager.instance.regional.changed.disconnect(refresh)
-	if is_instance_valid(Manager.instance.hub) and Manager.instance.hub.changed.is_connected(refresh):
-		Manager.instance.hub.changed.disconnect(refresh)
+	if is_instance_valid(Manager.instance.regional) and Manager.instance.regional.changed.is_connected(_queue_refresh):
+		Manager.instance.regional.changed.disconnect(_queue_refresh)
+	if is_instance_valid(Manager.instance.hub) and Manager.instance.hub.changed.is_connected(_queue_refresh):
+		Manager.instance.hub.changed.disconnect(_queue_refresh)
 
 func select_request(id: String) -> void:
 	request_id = id
 	if id != INCIDENT_REQUEST: Manager.instance.regional.selected_project = id
 	refresh()
+
+func _queue_refresh() -> void:
+	_refresh_gate.request()
 
 func refresh() -> void:
 	if not is_inside_tree() or not is_node_ready() or is_queued_for_deletion() or SaveGames.is_loading: return
@@ -94,11 +112,20 @@ func refresh() -> void:
 	resident_label.text = "%s · %s" % [definition.resident_name, tr(definition.resident_role_key)]
 	request_label.text = tr(definition.complete_key if state.completed else definition.request_key)
 	title_label.tooltip_text = request_label.text
-	if not regional.is_unlocked(): _objective(tr("QUEST_REQUEST_FORGE_REQUIRED"), false)
-	_objective(tr(definition.objective_key), state.fieldwork_done or state.completed)
-	if definition.construction != null:
-		_objective(tr("COMMUNITY_PLACE_WELL"), state.completed or regional.get_project_buildable(request_id) != null)
-		_objective(tr("COMMUNITY_FINISH_WELL"), state.completed)
+	var stages := ProjectProgress.stages(definition, state, regional)
+	var finished_stages := 0
+	var next_stage := ""
+	for stage: Dictionary in stages:
+		if stage.done: finished_stages += 1
+		elif next_stage.is_empty(): next_stage = stage.text
+	_steps_completed = finished_stages
+	_steps_total = stages.size()
+	objective_summary.text = tr("QUEST_REQUEST_NEXT_STEP") % next_stage if not next_stage.is_empty() else tr("QUEST_REQUEST_ALL_STEPS_DONE")
+	objective_toggle.text = tr("QUEST_REQUEST_SHOW_STEPS") % [finished_stages, stages.size()]
+	objective_toggle.show()
+	objectives.hide()
+	for stage: Dictionary in stages:
+		_objective(stage.text, stage.done)
 	contribution_heading.visible = not state.completed
 	contribution_heading.text = tr("REQUEST_CONSTRUCTION_SUPPLIES" if definition.construction != null else "QUEST_REQUEST_SUPPLIES")
 	contribution.visible = not state.completed
@@ -107,16 +134,17 @@ func refresh() -> void:
 		var remaining := regional.remaining_materials(request_id)
 		for item: ItemInfo in remaining:
 			_item(contribution, item, remaining[item], true)
-		_cost(COIN, definition.coin_cost, Manager.instance.hub.currency, "GUILD_COINS_LABEL")
-		_cost(PRESTIGE, definition.prestige_cost, Manager.instance.hub.prestige, "GUILD_PRESTIGE_LABEL")
+		if not state.blueprint_issued:
+			_cost(COIN, definition.coin_cost, Manager.instance.hub.currency, "GUILD_COINS_LABEL")
+			_cost(PRESTIGE, definition.prestige_cost, Manager.instance.hub.prestige, "GUILD_PRESTIGE_LABEL")
 	for item: ItemInfo in definition.reward_items: _item(reward_items, item, definition.reward_items[item])
 	_stat(reward_items, REPUTATION, "%+d" % definition.reputation_reward, "GUILD_REPUTATION_LABEL")
 	if not definition.recipe_unlock.is_empty():
-		var recipe := load("res://resources/item_info/%s.tres" % definition.recipe_unlock) as ItemInfo
-		if recipe != null:
-			var slot := _item(reward_items, recipe, 1)
+		var recipe_item := load("res://resources/item_info/%s.tres" % definition.recipe_unlock) as ItemInfo
+		if recipe_item != null:
+			var slot := _item(reward_items, recipe_item, 1)
 			slot.counter.text = tr("QUEST_REQUEST_RECIPE")
-			slot.tooltip_text = tr("QUEST_REQUEST_UNLOCK_RECIPE") % recipe.get_display_name() + "\n" + recipe.get_tooltip_text()
+			slot.tooltip_text = tr("QUEST_REQUEST_UNLOCK_RECIPE") % recipe_item.get_display_name() + "\n" + recipe_item.get_tooltip_text()
 	for benefit: CommunityBenefit in definition.benefits:
 		_stat(benefits, benefit.icon, benefit.value, benefit.label_key, tr(definition.benefit_key))
 	status.text = tr("COMMUNITY_FINISHED") if state.completed else regional.completion_block_reason(request_id)
@@ -129,10 +157,10 @@ func refresh() -> void:
 		work.text = tr(definition.exploration_key)
 		work.tooltip_text = tr("QUEST_REQUEST_EXPLORE_HINT")
 	else:
-		var ready := false
+		var has_matching_work := false
 		for key: String in definition.commission_types:
-			if site.get_filtered_quest_types().has(key): ready = true
-		if not ready:
+			if site.get_filtered_quest_types().has(key): has_matching_work = true
+		if not has_matching_work:
 			work.text = tr("QUEST_REQUEST_PREPARE_SOURCE")
 			work.tooltip_text = tr("QUEST_REQUEST_PREPARE_HINT")
 	complete.visible = not state.completed or (definition.construction != null and state.blueprint_issued and regional.get_project_buildable(request_id) == null)
@@ -148,7 +176,8 @@ func refresh() -> void:
 	recipe.visible = not state.completed and _needed_recipe() != null
 	if recipe.visible: recipe.tooltip_text = _needed_recipe().get_tooltip_text()
 	if state.blueprint_issued:
-		currency_costs.hide()
+		_label(currency_costs, tr("PROJECT_COSTS_PAID"), "MutedLabel")
+		currency_costs.show()
 	else: currency_costs.show()
 
 func _refresh_incident() -> void:
@@ -192,6 +221,10 @@ func _objective(text: String, done: bool) -> void:
 	row.add_child(icon)
 	var label := _label(row, text)
 	label.add_theme_font_size_override("font_size", 14)
+
+func _toggle_objectives() -> void:
+	objectives.visible = not objectives.visible
+	objective_toggle.text = tr("QUEST_REQUEST_HIDE_STEPS") if objectives.visible else tr("QUEST_REQUEST_SHOW_STEPS") % [_steps_completed, _steps_total]
 
 func _item(parent: Container, item: ItemInfo, amount: int, required := false) -> ContentSlotUI:
 	var slot := ItemPreview.create(item, amount)

@@ -34,8 +34,7 @@ delivery in transit.
 
 Later checkpoints deliberately add working capital and supplies; these are testing
 scenarios, not balance benchmarks. Fresh arrival/foundation retain their opening
-budgets. The original foundation snapshot is preserved separately at
-`tests/fixtures/legacy_foundation.json` for building/reference migration tests.
+budgets. Older bundled checkpoints continue to exercise the supported save migrations.
 
 ## Regeneration
 
@@ -69,16 +68,7 @@ Campaign/regression scenes use seed 20261102 for reproducibility; the actual gam
 continues to generate random worlds. Generated people and recruitment pools can
 vary independently of the terrain seed.
 
-Verify with:
-
-```text
-godot --headless --path . res://tests/development_checkpoints_test.tscn
-```
-
-Run tests with an isolated user-data directory: they create named test saves.
-The test loads every fixture, checks progression and preservation of personal
-saves, returns from later progress to arrival, and exercises submenu navigation
-and loading. With graphics enabled, append `-- --capture` for a screenshot.
+Use these checkpoints for direct gameplay and save/rollback inspection with isolated user data.
 
 Editor runs read the JSON files directly. For exported debug builds, include
 `development/checkpoints/*.json` in the export's non-resource file filter if
@@ -101,7 +91,4 @@ both `Dictionary[ItemInfo, int]` and `Dictionary[Resource, int]`: GDScript's typ
 dictionaries are invariant, so the shared API cannot declare either key type
 without rejecting the other. Its internal transfer bookkeeping is typed.
 
-Run `res://tests/typed_data_test.tscn` headlessly to compile all project scripts,
-load every quest profile/reward preview, check typed inventory transfers, and
-verify conversion of older trade records. Transport, trade campaign, settlement
-placement, village boundary and window tests cover the integrated behavior.
+Gameplay is validated through direct engine runs and the bundled development checkpoints. The automated test suite has been removed.

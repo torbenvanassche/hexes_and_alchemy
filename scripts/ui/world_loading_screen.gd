@@ -65,9 +65,9 @@ func _process(_delta: float) -> void:
 			progress = 0.75 + 0.25 * SaveGames.loading_progress.value
 			stage = SaveGames.loading_progress.stage_key
 	_update_display(minf(progress, 0.99), stage)
-	var ready := _grid.initialized and not _grid.is_streaming_busy() and not SaveGames.is_loading
-	ready = ready and is_instance_valid(Manager.instance) and is_instance_valid(Manager.instance.player_instance)
-	_ready_frames = _ready_frames + 1 if ready else 0
+	var world_ready := _grid.initialized and not _grid.is_streaming_busy() and not SaveGames.is_loading
+	world_ready = world_ready and is_instance_valid(Manager.instance) and is_instance_valid(Manager.instance.player_instance)
+	_ready_frames = _ready_frames + 1 if world_ready else 0
 	if _ready_frames >= 2:
 		_finishing = true
 		_update_display(1.0, "LOADING_READY")

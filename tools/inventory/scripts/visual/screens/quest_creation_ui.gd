@@ -52,6 +52,8 @@ signal quest_created(quest: Quest)
 
 const SCOUT_QUEST_KEY := "scout"
 
+var _offer_summary: Label
+var _refresh_gate: RefreshGate
 var forced_interaction: Interaction;
 var scout_only := false
 var _selected_support_ids: Array[String] = []
@@ -81,6 +83,12 @@ func _reset_ui() -> void:
 		finish_quest_creation.pressed.disconnect(_create_quest)
 
 func _ready() -> void:
+	_refresh_gate = RefreshGate.new(self, _refresh_live_offer)
+	_offer_summary = Label.new()
+	_offer_summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_offer_summary.theme_type_variation = &"MutedLabel"
+	$MarginContainer/Scroll/VBoxContainer.add_child(_offer_summary)
+	$MarginContainer/Scroll/VBoxContainer.move_child(_offer_summary, interest_label.get_index() + 1)
 	_configure_location_dropdown()
 	quest_location.item_selected.connect(_on_location_selected)
 	quest_type.item_selected.connect(_on_quest_type_selected)
@@ -258,16 +266,28 @@ func _on_scout_direction_selected(_idx: int) -> void:
 	_request_window_refit()
 
 func _on_player_currency_amount_changed() -> void:
+	if _refresh_gate != null: _refresh_gate.request()
+
+func _on_hub_faction_activity_changed() -> void:
+	if _refresh_gate != null: _refresh_gate.request()
+
+func _refresh_live_offer() -> void:
 	_refresh_reward_offer_limit()
 	_refresh_quest_type_availability()
 	_refresh_required_supplies()
 	_refresh_optional_supports(false)
+	_refresh_quest_details()
 	_refresh_interest_feedback()
 	_update_finish_button()
 
-func _on_hub_faction_activity_changed() -> void:
-	_refresh_optional_supports(false)
-	_refresh_interest_feedback()
+func _refresh_offer_summary() -> void:
+	if _offer_summary == null: return
+	var preview := _create_selected_quest_preview()
+	_offer_summary.visible = preview != null
+	if preview == null: return
+	var summary := QuestOfferPreview.create(preview, Manager.instance.quests)
+	_offer_summary.text = "\n".join(summary.lines)
+	_offer_summary.tooltip_text = tr("OFFER_ESTIMATE_HINT")
 
 func _add_location_option(hex: HexBase, require_reachable: bool = true, allow_active_location: bool = false) -> bool:
 	var selector := _get_target_selector()
@@ -816,6 +836,7 @@ func _refresh_interest_feedback() -> void:
 	var highlighted_role := "[b][color=#dbb775]%s[/color][/b]" % [role_label]
 	var requirement_text := tr("QUEST_CREATION_REQUIRED_PROFESSION") % [highlighted_role]
 	_set_interest_feedback("%s\n%s" % [requirement_text, availability_text])
+	_refresh_offer_summary()
 
 func _get_selected_required_role() -> String:
 	var location_idx := quest_location.selected
@@ -925,7 +946,7 @@ func _create_selected_quest_preview() -> Quest:
 		quest_type_key,
 		_get_reward_offer_amount(),
 		_get_minimum_rank_override(),
-		0
+		-1
 	)
 	preview.set_selected_support_ids(_selected_support_ids)
 	return preview

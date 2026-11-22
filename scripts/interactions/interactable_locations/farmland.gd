@@ -23,6 +23,7 @@ enum CropState {
 var _quest_running: bool = false
 var _overgrow_timer: SceneTreeTimer = null
 var _wither_timer: SceneTreeTimer = null
+var _crop_timer_version := 0
 var _pending_reward: Dictionary[ItemInfo, int] = {}
 
 func _ready() -> void:
@@ -52,21 +53,23 @@ func _update_mesh(state: CropState) -> void:
 
 func _on_crop_state_entered(state: String) -> void:
 	_cancel_timers()
+	var timer_version := _crop_timer_version
 	match state:
 		"PLANTED":
 			_wither_timer = get_tree().create_timer(water_window, false)
 			_wither_timer.timeout.connect(func() -> void:
-				if _current_crop_state() == CropState.PLANTED:
+				if timer_version == _crop_timer_version and _current_crop_state() == CropState.PLANTED:
 					_set_crop_state(CropState.DEAD)
 			)
 		"READY":
 			_overgrow_timer = get_tree().create_timer(overgrow_time, false)
 			_overgrow_timer.timeout.connect(func() -> void:
-				if _current_crop_state() == CropState.READY:
+				if timer_version == _crop_timer_version and _current_crop_state() == CropState.READY:
 					_set_crop_state(CropState.DEAD)
 			)
 
 func _cancel_timers() -> void:
+	_crop_timer_version += 1
 	_overgrow_timer = null
 	_wither_timer = null
 

@@ -1,6 +1,7 @@
 class_name HexAStar
 extends AStar2D
 
+var revision := 0
 var grid: HexGrid
 var method: HexInfo.TraversalTag = HexInfo.TraversalTag.WALK
 
@@ -33,6 +34,7 @@ func _edge_key(a: Vector3i, b: Vector3i) -> Vector4i:
 	return Vector4i(a.x, a.y, b.x, b.y)
 
 func _clear_navigation() -> void:
+	revision += 1
 	clear()
 	cube_to_id.clear()
 	id_to_cube.clear()
@@ -52,6 +54,7 @@ func rebuild_budgeted(budget: GenerationBudget) -> void:
 		_connect_navigation_point(coordinate)
 
 func _add_navigation_point(coordinate: Vector3i) -> void:
+	revision += 1
 	var hex := grid.get_hex_at_cube_id(coordinate)
 	if hex == null or not hex.is_inside_tree() or not hex.is_traversable(method): return
 	var point_id := _cube_to_astar_id(coordinate)
@@ -60,6 +63,7 @@ func _add_navigation_point(coordinate: Vector3i) -> void:
 	add_point(point_id, Vector2(hex.global_position.x, hex.global_position.z), hex.movement_cost)
 
 func _connect_navigation_point(coordinate: Vector3i) -> void:
+	revision += 1
 	var from_id := cube_to_id[coordinate]
 	var hex := grid.get_hex_at_cube_id(coordinate)
 	for direction: Vector3i in DataManager.instance.CUBE_DIRS:
@@ -70,6 +74,7 @@ func _connect_navigation_point(coordinate: Vector3i) -> void:
 		if not are_points_connected(from_id, to_id): connect_points(from_id, to_id, true)
 
 func update_hex(hex: HexBase) -> void:
+	revision += 1
 	var cube_id := hex.cube_id
 	var point_id := _cube_to_astar_id(cube_id)
 
@@ -219,6 +224,7 @@ func _cube_to_astar_id(c: Vector3i) -> int:
 
 
 func apply_obstacle(obstacle: Obstacle) -> void:
+	revision += 1
 	# Registration may update an existing obstacle's coordinates.
 	_obstacle_revision += 1
 	var a := obstacle.cube_id
@@ -237,6 +243,7 @@ func apply_obstacle(obstacle: Obstacle) -> void:
 		obstacles.append(obstacle)
 
 func remove_obstacle(obstacle: Obstacle, rebuild_now: bool = true) -> void:
+	revision += 1
 	if obstacle == null:
 		return
 	obstacles.erase(obstacle)

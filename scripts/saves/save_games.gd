@@ -5,7 +5,7 @@ signal load_finished(success: bool, message: String)
 signal load_started()
 var loading_progress := WorldGenerationProgress.new()
 
-const VERSION := 1
+const VERSION := 2
 const DIRECTORY := "user://saves"
 const DEVELOPMENT_DIRECTORY := "res://development/checkpoints"
 const DEVELOPMENT_CHECKPOINTS := [
@@ -23,6 +23,14 @@ const DEVELOPMENT_CHECKPOINTS := [
 	{"id": "trade_partner", "label": "Alt · Trade before improvements", "description": "Both deliveries complete and grain unlocked, with village requests still pending. Finish two requests to conclude the chapter."},
 	{"id": "active_commission", "label": "Alt · Commission in progress", "description": "A paid forage commission is working. Auto-collect is off. Inspect resumed work, then collect its rewards."},
 ]
+var history := SaveHistory.new()
+var autosave_enabled := true
+var autosave_minutes := 5
+var _autosave_remaining := 300.0
+var _autosave_index := 0
+var _checkpoint_kind := "manual"
+const SETTINGS_PATH := "user://save_preferences.cfg"
+signal autosaved(label: String)
 var is_loading := false
 var last_error := ""
 var _pending: Dictionary[String, Variant] = {}
@@ -36,6 +44,8 @@ func is_restoring() -> bool:
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	get_tree().node_added.connect(_prepare_grid)
+	_load_preferences()
+	_register_shortcuts()
 
 func save_block_reason() -> String:
 	if is_loading: return "A save is being loaded."
@@ -49,12 +59,13 @@ func save_block_reason() -> String:
 	if grid.is_streaming_busy(): return "The world is still generating. Resume briefly before saving."
 	return ""
 
-func save_slot(label: String) -> bool:
+func save_slot(label: String, kind := "manual") -> bool:
+	_checkpoint_kind = kind
 	last_error = save_block_reason()
 	if not last_error.is_empty(): return false
 	label = label.strip_edges()
 	if label.is_empty(): label = "Quick save"
-	var slot := slot_id(label)
+	var slot := slot_id(label if kind == "manual" else "@%s:%s" % [kind, label])
 	var snapshot := GameSnapshot.new()
 	var data := snapshot.capture(SceneManager.get_active_scene().node as MainGrid)
 	if not snapshot.codec.errors.is_empty():
@@ -77,6 +88,9 @@ func save_slot(label: String) -> bool:
 		last_error = "The save could not be written completely."
 		return false
 	if FileAccess.file_exists(path):
+		if not history.archive(path, slot):
+			last_error = history.last_error
+			return false
 		if FileAccess.file_exists(path + ".bak"): DirAccess.remove_absolute(path + ".bak")
 		if DirAccess.rename_absolute(path, path + ".bak") != OK:
 			last_error = "Could not back up the previous checkpoint."
@@ -90,7 +104,7 @@ func save_slot(label: String) -> bool:
 
 func create_document(label: String, data: Dictionary[String, Variant]) -> Dictionary[String, Variant]:
 	var payload := JSON.stringify(data, "", true, true)
-	return {"version": VERSION, "label": label, "saved_at": Time.get_datetime_string_from_system(), "day": Manager.instance.time_of_day.get_day_number(), "stage": Manager.instance.campaign.stage, "payload": payload, "checksum": payload.sha256_text()}
+	return {"version": VERSION, "kind": _checkpoint_kind, "label": label, "saved_at": Time.get_datetime_string_from_system(), "day": Manager.instance.time_of_day.get_day_number(), "stage": Manager.instance.campaign.stage, "payload": payload, "checksum": payload.sha256_text()}
 
 func list_development_checkpoints() -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
@@ -116,8 +130,11 @@ func list_slots() -> Array[Dictionary]:
 	for filename: String in DirAccess.get_files_at(DIRECTORY):
 		if not filename.ends_with(".json"): continue
 		var document: Variant = JSON.parse_string(FileAccess.get_file_as_string(DIRECTORY.path_join(filename)))
-		if document is Dictionary and document.get("version") == VERSION:
-			result.append(TypedData.string_map({"slot": filename.trim_suffix(".json"), "label": document.get("label", filename), "saved_at": document.get("saved_at", ""), "day": document.get("day", 1)}))
+		var damaged := not document is Dictionary
+		if damaged and FileAccess.file_exists(DIRECTORY.path_join(filename) + ".bak"):
+			document = JSON.parse_string(FileAccess.get_file_as_string(DIRECTORY.path_join(filename) + ".bak"))
+		if document is Dictionary and int(document.get("version", 0)) in [1, VERSION]:
+			result.append(TypedData.string_map({"slot": filename.trim_suffix(".json"), "label": ("[Damaged] " if damaged else "") + str(document.get("label", filename)), "saved_at": document.get("saved_at", ""), "day": document.get("day", 1), "kind": document.get("kind", "manual"), "backup": FileAccess.file_exists(DIRECTORY.path_join(filename) + ".bak")}))
 	result.sort_custom(func(a: Dictionary[String, Variant], b: Dictionary[String, Variant]) -> bool: return str(a.saved_at) > str(b.saved_at))
 	return result
 
@@ -134,7 +151,7 @@ func _read_document(path: String) -> Dictionary[String, Variant]:
 		last_error = "This checkpoint no longer exists."
 		return {}
 	var document: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
-	if not document is Dictionary or document.get("version") != VERSION:
+	if not document is Dictionary or not int(document.get("version", 0)) in [1, VERSION]:
 		last_error = "This save is damaged or uses an unsupported version."
 		return {}
 	var payload: String = document.get("payload", "")
@@ -148,7 +165,10 @@ func _read_document(path: String) -> Dictionary[String, Variant]:
 	if not _validate_resources(data):
 		last_error = "This save references game content that is no longer available."
 		return {}
-	return data
+	if int(data.get("schema_version", 1)) > SnapshotMigrations.CURRENT_SCHEMA:
+		last_error = "This save requires a newer version of the game."
+		return {}
+	return SnapshotMigrations.upgrade(data)
 
 func load_slot(slot: String) -> bool:
 	return _load_data(read_slot(slot))
@@ -158,8 +178,11 @@ func _load_data(data: Dictionary[String, Variant]) -> bool:
 		last_error = "A save is being loaded."
 		return false
 	if data.is_empty(): return false
+	# Preserve the current session before replacing it, including development loads.
+	if save_block_reason().is_empty() and not save_slot("Before rollback", "recovery"): return false
 	_pending = data
 	is_loading = true
+	_autosave_remaining = autosave_minutes * 60.0
 	loading_progress = WorldGenerationProgress.new()
 	load_started.emit()
 	_load_started = Time.get_ticks_msec()
@@ -182,7 +205,9 @@ func _prepare_grid(node: Node) -> void:
 	node.initial_chunk_override.assign(codec.decode(_pending.world.chunks))
 
 func _process(_delta: float) -> void:
-	if not is_loading: return
+	if not is_loading:
+		_tick_autosave(_delta)
+		return
 	if Time.get_ticks_msec() - _load_started > 60000:
 		_fail_load("The saved world could not finish loading.")
 		return
@@ -271,3 +296,76 @@ func slot_id(label: String) -> String:
 
 func _path(slot: String) -> String:
 	return DIRECTORY.path_join(slot + ".json")
+
+func list_versions(slot: String) -> Array[Dictionary]:
+	return history.list_versions(slot)
+
+func load_version(id: String) -> bool:
+	var path := history.path_for(id)
+	if path.is_empty():
+		last_error = "Invalid save version."
+		return false
+	return _load_data(_read_document(path))
+
+func load_backup(slot: String) -> bool:
+	if slot.is_empty() or slot != slot.validate_filename():
+		last_error = "Invalid save slot."
+		return false
+	return _load_data(_read_document(_path(slot) + ".bak"))
+
+func set_autosave(enabled: bool, minutes: int) -> void:
+	autosave_enabled = enabled
+	autosave_minutes = clampi(minutes, 1, 30)
+	_autosave_remaining = autosave_minutes * 60.0
+	var config := ConfigFile.new()
+	config.set_value("autosave", "enabled", autosave_enabled)
+	config.set_value("autosave", "minutes", autosave_minutes)
+	config.set_value("autosave", "index", _autosave_index)
+	config.save(SETTINGS_PATH)
+
+func _load_preferences() -> void:
+	var config := ConfigFile.new()
+	if config.load(SETTINGS_PATH) == OK:
+		autosave_enabled = bool(config.get_value("autosave", "enabled", true))
+		autosave_minutes = clampi(int(config.get_value("autosave", "minutes", 5)), 1, 30)
+		_autosave_index = int(config.get_value("autosave", "index", 0)) % 5
+	_autosave_remaining = autosave_minutes * 60.0
+
+func _tick_autosave(delta: float) -> void:
+	if not autosave_enabled or get_tree().paused or not is_instance_valid(Manager.instance): return
+	_autosave_remaining -= delta
+	if _autosave_remaining > 0.0: return
+	if not save_block_reason().is_empty():
+		_autosave_remaining = 5.0
+		return
+	var label := "Autosave %d" % (_autosave_index + 1)
+	if save_slot(label, "auto"):
+		_autosave_index = (_autosave_index + 1) % 5
+		set_autosave(autosave_enabled, autosave_minutes)
+		autosaved.emit(label)
+	else:
+		_autosave_remaining = 30.0
+
+func _register_shortcuts() -> void:
+	for binding: Array in [["quick_save", KEY_F5], ["quick_load", KEY_F9]]:
+		if InputMap.has_action(binding[0]): continue
+		InputMap.add_action(binding[0])
+		var key := InputEventKey.new()
+		key.physical_keycode = binding[1]
+		InputMap.action_add_event(binding[0], key)
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.echo: return
+	if is_loading: return
+	_register_shortcuts()
+	if not InputMap.has_action("quick_save") or not InputMap.has_action("quick_load"):
+		return
+	if event.is_action_pressed("quick_save"):
+		var success := save_slot("Quick save", "quick")
+		if is_instance_valid(Manager.instance) and Manager.instance.toast != null:
+			Manager.instance.toast.notify("Quick save created." if success else last_error)
+		get_viewport().set_input_as_handled()
+	elif event.is_action_pressed("quick_load"):
+		if not load_slot(slot_id("@quick:Quick save")) and is_instance_valid(Manager.instance):
+			Manager.instance.toast.notify(last_error, GameUI.WARNING)
+		get_viewport().set_input_as_handled()

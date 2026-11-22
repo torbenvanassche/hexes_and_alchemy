@@ -7,6 +7,7 @@ signal operation_completed(quest: Quest)
 @export var auto_resolve_completed_quests := true
 
 var operations: Array[HubOperation] = []
+var reports: Array[Dictionary] = []
 var _next_id := 1
 
 func register_quest(quest: Quest, parent_id: String = "") -> HubOperation:
@@ -49,6 +50,7 @@ func _on_quest_outcome_ready(resolved_outcome: QuestOutcome, _operation: HubOper
 	operations_changed.emit()
 
 func _on_quest_state_changed(_state: String, operation: HubOperation) -> void:
+	_trim_history.call_deferred()
 	if operation == null:
 		return
 	var previous_state := operation.state
@@ -154,3 +156,6 @@ func get_active_operations() -> Array[HubOperation]:
 
 func _get_hub() -> HubState:
 	return Manager.instance.hub if Manager.instance != null else null
+
+func _trim_history() -> void:
+	OperationHistory.trim(self)

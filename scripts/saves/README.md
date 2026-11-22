@@ -1,91 +1,21 @@
-# Checkpoint saves
+# Saves and rollback
 
-Open **Pause → Checkpoints**, enter a name, and choose **Save checkpoint**. Reusing a name
-replaces that checkpoint and retains its previous file as a `.bak`. Choose a saved
-checkpoint from the list and press **Load selected** to resume it. Loading replaces
-the current session. For testing, keep separate checkpoints such as “Before forge”,
-“Blacksmith open”, and “Village discovered”.
+Pause → Checkpoints contains manual slots, automatic/quick/recovery saves, earlier versions and backup recovery. Manual saves use the entered name. Reusing a name preserves the last eight versions. The .bak file also retains the preceding write.
 
-In editor/debug builds, the submenu also offers eight numbered chapter stages
-plus five alternatives: well placement, well construction, early village discovery,
-trade before improvements, and an active commission with auto-collect disabled. These read-only project fixtures
-never replace personal checkpoints. Later stages include explicit test supplies.
-See `development/README.md` for the stage list and regeneration command.
+F5 creates a Quick save; F9 loads it. Autosaves are enabled by default every five minutes of unpaused play, rotate across five slots, and wait for world generation to settle. The pause page lets you disable them or choose a 1–30 minute interval. Preferences live outside snapshots so loading an old world does not reset them.
 
-Commissions can be saved while waiting, travelling, working, returning or awaiting reward collection. Supplies and offered payment remain reserved; assignments and remaining work time survive. Saving still waits for world streaming to finish.
+Every load that replaces a ready game first saves the current session as Before rollback. That recovery slot has its own version history. Restoring an earlier version does not overwrite its source. Automatic, quick and recovery slots use separate internal identifiers from named manual saves.
 
-## What survives
+Select a slot to view its earlier versions or recover its .bak. A damaged primary JSON file remains listed when a readable backup exists. A failed load reports its reason without discarding the current scene. World generation must finish before saving; no offline progress is simulated.
 
-- World seed and generation settings, generated chunks, terrain/navigation state,
-  structures, and exploration, including neighbouring villages.
-- Settlement level and expansion, building stages, and delivered materials.
-- Treasury, stores, market stock, guild standing, faction statistics, activity log,
-  journal objectives, and completed/cancelled commission history and reports.
-- Guild members, names, traits, rank, experience, equipment, injuries, earnings,
-  and recovery; tavern visitors and recruitment progression.
-- Day/time, player position, and tracked campaign destination.
+## Persistence ownership
 
-Idle/recovering people resume at home or recovery. Assigned members resume from saved travel positions; routes are recalculated. Working parties resume at their site with remaining work time. Already rolled outcomes, pending loot and member fates are retained; unrolled outcomes roll normally after work finishes. Open windows and the precise simulation frame are not restored. Time
-spent outside the game does not advance recovery or regrowth.
+SaveGames coordinates slots, shortcuts, autosave timing and scene restoration. SaveHistory archives bounded versions. SnapshotMigrations upgrades old payloads at the load boundary. GameSnapshot owns world restoration order; SiteSnapshot owns the site field contract; CraftingManager owns its batch/queue snapshot.
 
-## Storage and extension
+Envelopes carry version, kind, timestamp, checksum and JSON payload. Writes use a temporary file, flush, archive the old version and rename. Envelope v1 and legacy development checkpoints remain readable; current payload schema is v2. Mutable carrier upgrades, recruitment standing, continuing-chapter rewards, active commissions and queued crafting persist.
 
-Files are JSON under `user://saves` (normally
-`%APPDATA%/Godot/app_userdata/Hexes and Alchemy/saves` on Windows). Each envelope
-contains a format version, display metadata, and checksummed payload. Writes use a
-temporary file and rename; validation happens before replacing the running scene.
-The `.bak` holds the previous successful version; backup recovery is currently
-manual. Saves reference project content paths, so content moves/removals or changes
-to scene node paths may require a migration. Release-wide save compatibility is
-not guaranteed yet.
+Files live under user://saves, normally %APPDATA%/Godot/app_userdata/Hexes and Alchemy/saves on Windows. Earlier versions live in its history subfolder. Content paths still resolve resources, so renaming shipped content requires an explicit migration.
 
-`SaveGames` owns slots, file integrity, and scene reloads. `GameSnapshot` owns the
-progression schema and restoration order. `SaveCodec` converts known values and
-resolves world/person/history references. Add new mutable progression fields to
-the appropriate explicit field list in `GameSnapshot`; add reconstruction logic
-when a system needs more than property assignment. Do not serialize callbacks or
-active simulation coroutines. Increment the format version and add a migration
-when changing the schema incompatibly.
+## Manual checks
 
-Loading also repairs legacy settlement buildings placed over built-in services or
-gate approaches. The building moves to a clear owned plot with its construction
-stage, supplied materials, history, and tracked references intact. The new plot
-is retained when the player saves; bundled fixtures remain unchanged.
-
-## Verification
-
-Run `res://tests/commission_save_test.tscn` and
-`res://tests/opening_chapter_test.tscn` in isolated user-data directories for active
-work, milestone and reward persistence. The settlement-placement, village-boundary,
-transport, trade-campaign, crafting and world-loading tests cover compatibility
-and reconstruction of the surrounding systems.
-
-Packhorse shipments now persist as part of the same save. Unlike commissions,
-shipments may be saved in transit: reserved cargo, journey phase, carrier, contacts,
-and village influence restore with the world. Older saves without transport data
-remain supported. Shipment and generic delivery quests restore through operation
-history and rejoin the active quest registry. Applied outcomes retain their payout
-guard; an unloading horse retains its remaining wait instead of restarting it.
-Guild commissions now also support in-progress checkpoint saves. See `scripts/transport/README.md`
-for the first shipment loop and authoring other delivery definitions.
-
-Timed crafting also persists in progress. Reserved ingredients are already
-removed from the saved stores; the saved job retains the output, ingredient
-snapshot, duration and elapsed time. Closing the blacksmith does not stop work.
-Loading resumes the timer without reserving materials or granting output again.
-Older checkpoints without crafting data load with no active job.
-
-Community progression persists as typed project/incident records, recipe unlocks,
-chapter milestones and incident timing. Site snapshots include discovery IDs and
-limited-use supports/protection. Existing checkpoint conditions are preserved;
-unresolved discoveries in newer saves can still roll when explored later.
-Project props are rebuilt from this state. Older markers pointing to the removed
-stationary request authors are redirected to the quest board. See
-`scripts/regional/README.md` for the content definitions and tuning controls.
-
-
-## Active commissions
-
-`Quest.wait_for_work` owns the persistable work clock; site coroutines must use it instead of creating their own work timers. `CommissionSaveState` rebinds party references after the world/roster/site/navigation restore, then `QuestManager.resume_restored_commissions` resumes execution after loading is released. Restored jobs bypass posting, currency reservation and material withdrawal. Waiting jobs can still cancel/refund; completed jobs respect the saved auto-collect preference and once-only reward/completion guards. SaveCodec resolves treasury/player payment sources as explicit service references.
-
-Run `res://tests/commission_save_test.tscn` for all five active phases, refunds, saved fates, duplicate-claim prevention and concurrent scouting/resource work. Run `opening_chapter_test` for chapter order and once-only milestone grants.
+Use isolated APPDATA and LOCALAPPDATA for development runs. Save during travel/work/return, queued crafting and shipments; reload and inspect remaining work and reservation conservation. Overwrite a manual slot, restore an earlier version and verify Before rollback can recover the departed session. Inspect controls at 1280×720 and 960×540. Development checkpoints remain available in debug builds.

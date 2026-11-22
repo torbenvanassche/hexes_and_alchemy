@@ -2,6 +2,9 @@ class_name HubState
 extends Node
 
 signal changed()
+signal currency_changed()
+signal inventory_changed()
+signal prestige_changed()
 signal mapped_changed()
 signal faction_activity_changed()
 signal activity_log_changed()
@@ -13,6 +16,7 @@ signal activity_log_changed()
 @export_range(1, 99, 1) var test_item_stack_size := 10
 var currency := 0
 var prestige := 0
+var recruitment_prestige := 0
 var stockpile: ContentGroup
 var factions: Dictionary[StringName, FactionState] = {}
 var spots: Dictionary[Vector3i, SpotProgress] = {}
@@ -29,7 +33,7 @@ func _ready() -> void:
 	stockpile = hub_inventory
 	stockpile.name = "HubStockpile"
 	add_child(stockpile)
-	stockpile.changed.connect(changed.emit)
+	stockpile.changed.connect(_on_inventory_changed)
 	if seed_test_inventory:
 		_seed_test_inventory.call_deferred()
 	else:
@@ -89,8 +93,6 @@ func register_npc(npc: NPC) -> void:
 		faction.add_member(npc)
 		if not npc.activity_changed.is_connected(_on_npc_activity_changed):
 			npc.activity_changed.connect(_on_npc_activity_changed)
-		if not npc.rest_progress_changed.is_connected(_on_npc_activity_changed):
-			npc.rest_progress_changed.connect(_on_npc_activity_changed)
 		if not npc.injuries_changed.is_connected(_on_npc_activity_changed):
 			npc.injuries_changed.connect(_on_npc_activity_changed)
 		if not npc.rank_progress_changed.is_connected(faction_activity_changed.emit):
@@ -100,8 +102,6 @@ func register_npc(npc: NPC) -> void:
 func unregister_npc(npc: NPC) -> void:
 	if npc != null and npc.activity_changed.is_connected(_on_npc_activity_changed):
 		npc.activity_changed.disconnect(_on_npc_activity_changed)
-	if npc != null and npc.rest_progress_changed.is_connected(_on_npc_activity_changed):
-		npc.rest_progress_changed.disconnect(_on_npc_activity_changed)
 	if npc != null and npc.injuries_changed.is_connected(_on_npc_activity_changed):
 		npc.injuries_changed.disconnect(_on_npc_activity_changed)
 	if npc != null and npc.rank_progress_changed.is_connected(faction_activity_changed.emit):
@@ -223,18 +223,26 @@ func withdraw_items(items: Dictionary[ItemInfo, int]) -> bool:
 	return true
 
 func add_currency(amount: int) -> void:
-	currency = maxi(0, currency + amount)
+	var value := maxi(0, currency + amount)
+	if value == currency: return
+	currency = value
+	currency_changed.emit()
 	changed.emit()
 
 func reserve_currency(amount: int) -> bool:
 	if amount < 0 or currency < amount:
 		return false
 	currency -= amount
+	currency_changed.emit()
 	changed.emit()
 	return true
 
 func add_prestige(amount: int) -> void:
-	prestige = maxi(0, prestige + amount)
+	var value := maxi(0, prestige + amount)
+	if value == prestige: return
+	prestige = value
+	recruitment_prestige = maxi(recruitment_prestige, prestige)
+	prestige_changed.emit()
 	changed.emit()
 
 func record_operation_completed(quest: Quest) -> void:
@@ -266,3 +274,7 @@ func get_stockpile_summary() -> String:
 	if entries.is_empty():
 		return tr("HUB_STOCKPILE_EMPTY")
 	return tr("HUB_STOCKPILE_SUMMARY") % ", ".join(entries)
+
+func _on_inventory_changed() -> void:
+	inventory_changed.emit()
+	changed.emit()

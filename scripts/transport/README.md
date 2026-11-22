@@ -134,19 +134,10 @@ crafted equipment, and partnership. Village shows the forge project followed by
 the next optional settlement upgrade. Trade shows cargo requirements and loaded
 goods, while campaign navigation opens the appropriate journal tab.
 
-## Testing
+## Manual inspection
 
-Use **Pause → Checkpoints → Neighbouring village** and open **Journal → Trade**
-to dispatch immediately, from any location.
-The bundled checkpoint has enough supplies for the first request.
+Use the debug development checkpoints with isolated user data. Inspect dispatch, delivery, return, recall and saving in transit. The automated test suite has been removed.
 
-`res://tests/transport_test.tscn` covers discovery, remote first dispatch, UI, missing goods, unreachable
-routes, capacity, duplicate dispatch, movement, pause, blockage/resume, delivery,
-repeat requests, recall, and mid-journey save/load without duplicate cargo or pay.
-Run with isolated user data because the test writes named checkpoint files.
-Append `-- --capture` with graphics enabled for UI previews.
+## Continuing trade
 
-`res://tests/trade_campaign_test.tscn` exercises the opening/first partnership,
-real crafting, local delivery proof, the market unlock, sold-out stock, optional
-restocking, checkpoint resets, and legacy request migration. **Pause → Checkpoints
-→ Trade partnership** opens the completed chapter directly.
+After partnership, TradeDemand rotates provisions, workshop and water orders by village coordinate and delivery cycle. Reputation and village influence improve agreed payment by at most 20%; active manifests keep their original payout. After the opening chapter, an idle packhorse can be trained for 100 coins with 10 reputation: capacity becomes 12 and speed 2.7. The upgrade persists.

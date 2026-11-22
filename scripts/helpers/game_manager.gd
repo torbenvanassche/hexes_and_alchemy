@@ -29,6 +29,7 @@ var input: InputSettings
 
 @export var initial_scene: SceneInfo;
 var active_settlement: Settlement;
+var continuing: ContinuingCampaign
 
 var settlements: Array[Settlement] = []
 
@@ -36,9 +37,16 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS;
 	SceneManager.bind_game_root(get_parent())
 	instance = self;
-	if hub != null and not hub.changed.is_connected(quests.try_assign_waiting_quests):
-		hub.changed.connect(quests.try_assign_waiting_quests)
-		hub.mapped_changed.connect(quests.try_assign_waiting_quests)
+	if continuing == null:
+		var navigation := GameplayNavigation.new()
+		navigation.name = "GameplayNavigation"
+		add_child(navigation)
+		continuing = ContinuingCampaign.new()
+		continuing.name = "ContinuingCampaign"
+		add_child(continuing)
+	if hub != null and not hub.changed.is_connected(quests.queue_assignment):
+		hub.changed.connect(quests.queue_assignment)
+		hub.mapped_changed.connect(quests.queue_assignment)
 	_connect_quest_notifications()
 	_load_or_create()
 	input = InputSettings.new(config)
@@ -63,27 +71,11 @@ func _connect_quest_notifications() -> void:
 
 func _on_quest_added(quest: Quest) -> void:
 	if not quest.uses_guild_roster(): return
-	_notify_quest("QUEST_NOTICE_POSTED", quest, GameUI.ACCENT)
+	# Posting feedback stays in the commission window.
 
 func _on_quest_state_changed(quest: Quest, state: String) -> void:
 	if not quest.uses_guild_roster(): return
-	var notice_key := ""
-	var accent := Color.TRANSPARENT
-	match state:
-		"en_route":
-			notice_key = "QUEST_NOTICE_EN_ROUTE"
-			accent = GameUI.TRAVEL
-		"in_progress":
-			notice_key = "QUEST_NOTICE_IN_PROGRESS"
-			accent = GameUI.ACCENT
-		"returning":
-			notice_key = "QUEST_NOTICE_RETURNING"
-			accent = GameUI.TRAVEL
-		"complete":
-			notice_key = "QUEST_NOTICE_COMPLETE"
-			accent = GameUI.SUCCESS
-	if notice_key != "":
-		_notify_quest(notice_key, quest, accent)
+	if state == "complete": _notify_quest("QUEST_NOTICE_COMPLETE", quest, GameUI.SUCCESS)
 
 func _on_quest_failed(quest: Quest, reason_key: String) -> void:
 	if not quest.uses_guild_roster(): return
@@ -121,6 +113,16 @@ func _load_or_create() -> void:
 		config.load(FILE_PATH)
 	else:
 		config.save(FILE_PATH)
+	var saved_locale := str(config.get_value("general", "locale", "en"))
+	set_language(saved_locale, false)
+
+func set_language(locale: String, persist := true) -> void:
+	var supported := ["en", "nl"]
+	var selected := locale if supported.has(locale) else "en"
+	TranslationServer.set_locale(selected)
+	config.set_value("general", "locale", selected)
+	if persist:
+		save()
 
 func save() -> void:
 	config.save(FILE_PATH)

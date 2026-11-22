@@ -20,6 +20,7 @@ var destination_name := ""
 var trade_destination := Vector3i.MAX
 var _completion_announced := false
 var _refresh_pending := false
+var _presentation_key := ""
 
 func _ready() -> void:
 	_connect_managers.call_deferred()
@@ -88,7 +89,10 @@ func refresh() -> void:
 		Manager.instance.hub.record_activity(message)
 		Manager.instance.toast.notify_report(message, GameUI.SUCCESS)
 	if forge_open: Manager.instance.journal.unlock_entry("regional_trade")
-	changed.emit()
+	var presentation_key := str([stage, Manager.instance.regional.completed_project_count(), Manager.instance.hub.currency, Manager.instance.hub.prestige, Manager.instance.hub.stockpile.data.map(func(slot: ContentSlotResource) -> Array: return [slot.get_content(), slot.count]), get_trade_coord(), requirements_loaded()])
+	if presentation_key != _presentation_key:
+		_presentation_key = presentation_key
+		changed.emit()
 
 func is_forge_chapter() -> bool:
 	return stage in [Stage.BLUEPRINT, Stage.PLACE_FOUNDATION, Stage.MATERIALS, Stage.CONSTRUCTION]
@@ -175,13 +179,13 @@ func has_materials() -> bool:
 func get_step_text() -> String:
 	if stage == Stage.IMPROVE_VILLAGE:
 		return tr("CAMPAIGN_OPENING_PROJECT_STEP") % [Manager.instance.regional.completed_project_count(), chapter.required_projects]
-	if stage == Stage.COMPLETE: return tr("CAMPAIGN_OPENING_FINISHED")
+	if stage == Stage.COMPLETE: return tr("NETWORK_TITLE")
 	if not is_forge_chapter(): return tr("CAMPAIGN_TRADE_STEP_%s" % Stage.keys()[stage])
 	return tr("CAMPAIGN_FORGE_STEP_%s" % Stage.keys()[stage])
 
 func get_guidance() -> String:
 	if stage == Stage.IMPROVE_VILLAGE: return tr("CAMPAIGN_OPENING_PROJECT_GUIDANCE")
-	if stage == Stage.COMPLETE: return tr("CAMPAIGN_OPENING_COMPLETE_GUIDANCE")
+	if stage == Stage.COMPLETE: return tr("NETWORK_GUIDANCE")
 	if not is_forge_chapter():
 		if requirements_loaded(): return tr("CAMPAIGN_TRADE_GUIDANCE_DELIVERING")
 		return tr("CAMPAIGN_TRADE_GUIDANCE_%s" % Stage.keys()[stage])
@@ -192,7 +196,7 @@ func get_primary_action() -> String:
 		Stage.IMPROVE_VILLAGE:
 			return "requests"
 		Stage.COMPLETE:
-			return "home"
+			return Manager.instance.continuing.next_action()
 		Stage.BLUEPRINT:
 			return "market"
 		Stage.PLACE_FOUNDATION:

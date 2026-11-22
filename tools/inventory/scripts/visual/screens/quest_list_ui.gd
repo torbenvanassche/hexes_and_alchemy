@@ -15,6 +15,9 @@ var request_footer: VBoxContainer
 var active_tab := "guild"
 var selected_request := ""
 var _show_completed := false
+var _refresh_gate: RefreshGate
+var _board_gate: RefreshGate
+var _repeat_button: Button
 var _request_refresh_pending := false
 
 @export var quest_item_ui: PackedScene
@@ -24,6 +27,8 @@ var window_instance: SceneInstance;
 var auto_resolve_enabled := false
 
 func on_enter() -> void:
+	_repeat_button.visible = active_tab == "guild"
+	_repeat_button.disabled = _last_order() == null
 	_sync_auto_resolve_button()
 	for c: QuestListItemUI in _get_quest_notes():
 		if not Manager.instance.quests.get_commissions().has(c.questData):
@@ -53,6 +58,12 @@ func _allow_quest_creation_allowed() -> void:
 	_layout_board()
 	
 func _ready() -> void:
+	_refresh_gate = RefreshGate.new(self, _refresh_requests)
+	_board_gate = RefreshGate.new(self, on_enter)
+	_repeat_button = Button.new()
+	_repeat_button.text = tr("QUEST_REPEAT_LAST")
+	_repeat_button.pressed.connect(_repeat_last_order)
+	$Layout/Actions.add_child(_repeat_button)
 	request_table_header = VillageRequestNotice.create_header()
 	request_table_header.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	$Layout.add_child(request_table_header)
@@ -85,7 +96,7 @@ func _ready() -> void:
 	create_quest_button.pressed.connect(_open_create_quest_menu)
 	scout_quest_button.pressed.connect(_open_scout_quest_menu)
 	auto_resolve_button.toggled.connect(_on_auto_resolve_toggled)
-	Manager.instance.quests.quest_list_changed.connect(on_enter)
+	Manager.instance.quests.quest_list_changed.connect(_queue_board_refresh)
 	resized.connect(_layout_board)
 	board_surface.resized.connect(_layout_board)
 	request_scroll.resized.connect(_layout_board)
@@ -128,9 +139,7 @@ func show_request(id: String) -> void:
 	_refresh_requests()
 
 func _queue_request_refresh() -> void:
-	if _request_refresh_pending: return
-	_request_refresh_pending = true
-	_refresh_requests.call_deferred()
+	_refresh_gate.request()
 
 func _refresh_requests() -> void:
 	_request_refresh_pending = false
@@ -162,6 +171,8 @@ func _refresh_requests() -> void:
 			elif state.fieldwork_done: state_text = tr("QUEST_REQUEST_DELIVER_MATERIALS")
 		_add_notice(definition.id, definition.get_title(), definition.resident_name, state_text, tr(definition.benefit_key))
 	var village := active_tab == "village"
+	_repeat_button.visible = not village
+	_repeat_button.disabled = _last_order() == null
 	var detail := village and not selected_request.is_empty()
 	$Layout/Tabs/Village.text = tr("QUEST_BOARD_VILLAGE_COUNT") % available_count
 	$Layout/Tabs/Guild.text = tr("QUEST_BOARD_GUILD_COUNT") % Manager.instance.quests.get_commissions().size()
@@ -313,3 +324,21 @@ func _has_available_scouting_to_create() -> bool:
 		return false
 
 	return not Manager.instance.quests.get_available_scout_locations(grid).is_empty()
+
+func _queue_board_refresh() -> void:
+	_board_gate.request()
+
+func _last_order() -> Quest:
+	var operations := Manager.instance.operations.operations
+	for index in range(operations.size() - 1, -1, -1):
+		var operation := operations[index]
+		var quest := operation.quest
+		if quest != null and quest.uses_guild_roster() and quest.quest_key != "scout" and operation.reward_resolved:
+			return quest
+	return null
+
+func _repeat_last_order() -> void:
+	var quest := _last_order()
+	if quest == null: return
+	var result := Manager.instance.quests.repeat_order(quest)
+	if not result.success: Manager.instance.toast.notify(tr(result.message_key), GameUI.WARNING)

@@ -3,10 +3,8 @@ extends RefCounted
 
 const WORLD_SETTINGS := ["generation_version", "world_chunk_radius", "startup_work_budget_ms", "same_discovery_spacing", "discovery_repeat_penalty", "structure_candidates_per_step", "discovery_variation_radius", "discovery_variant_repeat_penalty", "disruption_spacing", "generate_chunks_near_player", "player_settlement", "chunk_radius", "chunk_size", "pointy_top", "_spacing", "generate_elevation", "elevation_unit_height", "elevation_feature_cell_size", "elevation_feature_density", "elevation_min_radius", "elevation_max_radius", "keep_protected_chunks_flat", "protected_chunk_elevation_buffer", "generate_slope_entrances", "slope_entrance_density", "minimum_slope_entrances_per_area", "elevated_tiles_per_extra_slope_entrance", "custom_regions", "use_global_regions", "generate_ocean", "protected_chunks", "protected_chunk_feature_buffer", "settlement_feature_buffer", "required_starting_structures", "required_structure_max_walk_distance", "repair_failed_starter_terrain", "nearby_settlement", "settlement_min_walk_distance", "settlement_max_walk_distance"]
 const NPC_FIELDS := ["npc_info", "recruited_display_name", "recruited_traits", "has_recruited_traits", "rank", "rank_experience", "equipment", "earned_currency", "rest_remaining_seconds", "rest_duration_seconds", "recovering_from_injury", "active_injuries", "career_age_seconds", "retirement_pending", "last_completed_quest_key"]
-const SITE_FIELDS := ["state_machine", "depth", "_last_stable_state", "_pending_reward", "_pending_behaviour", "_pending_outcome", "_pending_reveal_occupation", "_loot_claimed", "lost_equipment", "lost_adventurer_names", "_regrow_timer", "_overgrow_timer", "_wither_timer", "candidates", "_candidate_serial", "_name_serial", "_next_natural_arrival_operation", "_rng", "buy_inventory", "sell_inventory", "transport_stable_tile", "transport_stable_approach"]
-const HUB_FIELDS := ["currency", "prestige", "spots", "activity_log"]
+const HUB_FIELDS := ["currency", "prestige", "recruitment_prestige", "spots", "activity_log"]
 const REGIONAL_FIELDS := ["projects", "unlocked_recipes", "resolved_incidents", "active_incident", "completed_commissions", "expeditions_completed", "chapter_complete", "incident_remaining", "incident_serial", "selected_project"]
-const DISCOVERY_FIELDS := ["discovery_id", "discovery_resolved", "salvaged_remnants", "reinforced_uses", "temporary_supports", "protected_uses", "archive_recorded"]
 const REPUTATION_FIELDS := ["reputation", "notoriety", "stewardship", "regional_hazard", "completed_quests", "supported_world_sites"]
 const HISTORY_FIELDS := ["offered_currency_reward", "minimum_rank_override", "rank_experience_reward", "scout_revealed_tiles", "scout_discovered_structures", "outcome", "party", "primary_member", "support_members", "party_fates", "supplies", "required_cargo", "work_remaining"]
 const TERRAIN_FIELDS := ["rotation", "movement_cost", "generated_elevation_units", "structure_root_tile", "asset_uphill_edge", "slope_rise_units", "connector_mask", "navigation_only_mask", "edge_height_offsets"]
@@ -55,6 +53,7 @@ func capture(grid: MainGrid) -> Dictionary[String, Variant]:
 		factions[str(faction.id)] = codec.fields(faction, ["completed_operations", "failed_operations", "last_activity"])
 	var active_hex := manager.active_settlement.get_parent() as HexBase
 	return {
+		"schema_version": SnapshotMigrations.CURRENT_SCHEMA,
 		"world": {
 			"seed": str(grid.generation_seed),
 			"settings": codec.fields(grid, WORLD_SETTINGS),
@@ -63,7 +62,7 @@ func capture(grid: MainGrid) -> Dictionary[String, Variant]:
 		},
 		"roster": roster,
 		"history": history,
-		"operation_settings": codec.fields(manager.operations, ["auto_resolve_completed_quests"]),
+		"operation_settings": codec.fields(manager.operations, ["auto_resolve_completed_quests", "_next_id", "reports"]),
 		"hub": codec.fields(manager.hub, HUB_FIELDS),
 		"inventory": codec.inventory(manager.hub.stockpile),
 		"factions": factions,
@@ -73,7 +72,8 @@ func capture(grid: MainGrid) -> Dictionary[String, Variant]:
 		"player": {"position": codec.encode(manager.player_instance.global_position), "settlement": codec.encode(active_hex.cube_id)},
 		"campaign": codec.fields(manager.campaign, ["_completion_announced", "_chapter_completion_announced", "destination", "destination_name", "trade_destination"]),
 		"transport": codec.fields(manager.transport, ["villages", "active_shipment", "carrier"]),
-		"crafting": codec.fields(manager.crafting, ["active_job"]),
+		"crafting": manager.crafting.capture_state(codec),
+		"continuing": codec.fields(manager.continuing, ["reward_paid"]),
 		"regional": codec.fields(manager.regional, REGIONAL_FIELDS),
 	}
 
@@ -83,8 +83,7 @@ func _capture_structure(root: Node3D) -> Array:
 	nodes.append_array(root.find_children("*", "Node", true, false))
 	for node: Node in nodes:
 		if not (node is Settlement or node is Interaction or node is Buildable): continue
-		var row: Dictionary[String, Variant] = {"path": str(root.get_path_to(node)), "fields": codec.fields(node, SITE_FIELDS)}
-		row.fields.merge(codec.fields(node, DISCOVERY_FIELDS))
+		var row: Dictionary[String, Variant] = {"path": str(root.get_path_to(node)), "fields": SiteSnapshot.capture(node, codec)}
 		if node.has_method("rebuild_boundary"):
 			row.fields.merge(codec.fields(node, ["gate_inside", "gate_outside", "gate_open"]))
 		if node is Settlement:
@@ -92,7 +91,10 @@ func _capture_structure(root: Node3D) -> Array:
 			row["expanded"] = codec.encode(node.expanded_tiles)
 		if node is Buildable: row["build_step"] = node.build_steps.find(node.current_step)
 		if node is BuildRequest and node.quest != null:
-			row["delivery"] = codec.inventory(node.quest.progress_tracker) if node.quest.progress_tracker != null else {}
+			if node.quest.progress_tracker != null:
+				row["delivery"] = codec.inventory(node.quest.progress_tracker)
+			else:
+				row["delivery"] = {}
 		rows.append(row)
 	return rows
 
@@ -235,6 +237,7 @@ func restore(data: Dictionary[String, Variant], grid: MainGrid, progress: WorldG
 	for key in data.factions:
 		if manager.hub.factions.has(StringName(key)): codec.apply_fields(manager.hub.factions[StringName(key)], data.factions[key])
 	codec.apply_fields(manager.hub, data.hub)
+	manager.hub.recruitment_prestige = maxi(manager.hub.recruitment_prestige, manager.hub.prestige)
 	for old_coord: Vector3i in codec.relocated_sites:
 		var spot := manager.hub.spots.get(old_coord) as SpotProgress
 		if spot != null:
@@ -261,7 +264,7 @@ func restore(data: Dictionary[String, Variant], grid: MainGrid, progress: WorldG
 		if hex.structure == null: continue
 		for state in row.get("nodes", []):
 			_restore_site_visuals(_saved_node(hex.structure.instance, state.path), state.fields)
-	manager.operations._next_id = data.history.size() + 1
+	manager.operations._next_id = maxi(manager.operations._next_id, data.history.size() + 1)
 	manager.active_settlement.refresh_service_states()
 	grid.invalidate_settlement_structure_exclusion_cache()
 	for settlement: Settlement in manager.settlements:
@@ -298,7 +301,9 @@ func restore(data: Dictionary[String, Variant], grid: MainGrid, progress: WorldG
 	if progress != null: progress.report(0.95, "LOADING_NAVIGATION")
 	manager.transport.restore_saved_state(TypedData.string_map(data.get("transport", {})), codec)
 	manager.transport.restore_visual()
-	codec.apply_fields(manager.crafting, TypedData.string_map(data.get("crafting", {})))
+	manager.crafting.restore_state(TypedData.string_map(data.get("crafting", {})), codec)
+	codec.apply_fields(manager.continuing, TypedData.string_map(data.get("continuing", {})))
+	manager.continuing.queue_refresh()
 	manager.player_instance.global_position = codec.decode(data.player.position)
 	manager.player_instance.velocity = Vector3.ZERO
 	manager.spring_arm_camera.snap_to_target()

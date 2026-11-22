@@ -1,23 +1,9 @@
-# Timed crafting
+# Workshop orders
 
-Each `ItemInfo` resource exposes `crafting_duration`, in seconds. It defaults to
-1.0 for every item, including existing recipes and equipment. Change it on the
-item resource in the inspector to tune individual recipes. Running jobs snapshot
-their duration and ingredients, so edits do not change work already started.
+The blacksmith accepts batches of 1–99 items and up to eight orders including the active order. Choose a quantity, then craft or add it to the queue. Other recipes remain selectable while work runs.
 
-`CraftingManager` owns one active `CraftingJob`, separate from the blacksmith
-window. Materials are reserved once on start; one output item is added when the
-timer finishes. The craft button's background fills from left to right beneath
-its progress percentage.
-Recipe selection stays on the active item until completion. A completion toast
-uses the item's icon and the journal receives its existing `craft_<item id>` task.
+Each order snapshots the recipe and per-item duration. All ingredients are reserved once when queued. Items finish individually; cancelling an active or queued order returns ingredients for unfinished items and keeps completed output. If stores fill, unfinished ingredients return safely. Cancellation buttons are available beside each order.
 
-Work continues when the window closes, pauses with the game and resumes from its
-saved elapsed time after loading. Older saves start with no active craft. If the
-output inventory fills while working, the ingredients are returned instead of
-losing them. There is no automatic repeat or crafting queue.
+Crafting continues while its window is closed, pauses with the simulation and restores both the active batch and queued orders from saves. Version-one saves with one active item still load. CraftingManager owns reservations, refunds and progress; CraftingUI renders selection and order controls. Progress changes have a separate signal and hidden windows do not redraw it.
 
-Run `res://tests/crafting_test.tscn` with isolated user data. It checks timing,
-progress, duplicate clicks, recipe selection, closing/reopening, pause, active and
-completed saves, notifications and material refunds. With graphics enabled,
-`-- --capture` saves progress/completion previews in `.godot/validation`.
+Tune item recipes and crafting_duration on ItemInfo resources. Project duration modifiers remain data driven. Use the development checkpoints and the blacksmith for manual inspection; there is no bundled automated test suite.

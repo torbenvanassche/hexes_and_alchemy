@@ -12,10 +12,12 @@ const CANDIDATE_ROW_SCENE := preload("res://scenes/ui/components/recruit_candida
 
 @onready var candidate_list: MarginContainer = $Margin/Content/CandidateList
 
+var _refresh_gate: RefreshGate
 var tavern: Tavern
 var _refresh_queued := false
 
 func _ready() -> void:
+	_refresh_gate = RefreshGate.new(self, _apply_refresh)
 	if not refresh_button.pressed.is_connected(_on_refresh_pressed):
 		refresh_button.pressed.connect(_on_refresh_pressed)
 	if Manager.instance != null and Manager.instance.hub != null:
@@ -36,10 +38,7 @@ func on_enter() -> void:
 	_queue_refresh()
 
 func _queue_refresh() -> void:
-	if _refresh_queued:
-		return
-	_refresh_queued = true
-	_apply_refresh.call_deferred()
+	if _refresh_gate != null: _refresh_gate.request()
 
 func _apply_refresh() -> void:
 	_refresh_queued = false

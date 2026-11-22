@@ -80,17 +80,9 @@ need a deliberate gameplay implementation and corresponding persistence/tests.
 - A held `SceneInfo` can queue itself directly; optional windows do not require a
   second lookup by ID. Gameplay still uses the explicit catalog for named lookups.
 
-## Validation
+## Manual validation
 
-`window_review_test` checks service windows and overlays at 1280×720 and 960×540,
-including headers, bounds and fixed actions. `quest_board_test` covers table
-columns, overflow, status tooltips and request actions. Add `-- --capture` with a
-renderer to inspect actual screenshots under `.godot/validation`.
-
-Run the relevant gameplay tests after changing shared components: typed-data,
-regional progression, crafting, transport, trade campaign, settlement placement
-and village boundary. See each subsystem's README for its own invariants. Tests
-should isolate APPDATA/LOCALAPPDATA to avoid modifying a player's saves.
+Use development checkpoints and isolated user data. Inspect service windows at 1280×720 and 960×540, including keyboard/controller navigation, scrolling and fixed actions. Save during active work and queueing, then verify cancellation and rollback preserve resources. The automated test suite has been removed.
 
 For a constructed improvement, set the project blueprint and construction resource.
 Use a CommunityBuildable with foundation and finished Interaction steps. The
@@ -102,3 +94,18 @@ once, without another reward or payment.
 ItemInfo.usage_key documents practical uses. CraftingGuidance marks current request
 and shipment demand and opens recipe previews; crafting still takes place at the
 blacksmith. Toast supports formatted text, item icons and grouped reward summaries.
+
+## Coordination helpers
+
+- QuestPartyPlanner selects distinct workers and support; QuestManager owns registration and assignment scheduling.
+- QuestOfferPreview calculates offer feedback without assigning people or spending resources.
+- GameplayNavigation translates gameplay request signals into windows; RegionalProgression does not cast concrete UI controls.
+- ProjectProgress supplies consistent request stages.
+- ContinuingCampaign owns the follow-on trade-network milestone and once-only grant.
+- TradeDemand owns recurring partner orders and standing-based payouts.
+- KnownTradeRoutes caches the revealed walking graph using navigation revisions and exploration invalidation.
+- HexQueries owns terrain lookup and traversal queries; AdventurerModifiers combines equipment and injury effects.
+- RefreshGate coalesces dirty UI updates and retains them while cached views are hidden.
+- Transport journey_progress_changed updates countdowns without rebuilding cargo controls or refreshing campaign state.
+- OperationHistory retains 48 full settled operations and 160 compact reports; active/unclaimed work is never pruned.
+- SaveHistory, SnapshotMigrations and SiteSnapshot separate version storage, schema changes and site persistence from restoration order.

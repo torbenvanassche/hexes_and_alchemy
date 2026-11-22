@@ -13,7 +13,13 @@ signal details_requested()
 func _ready() -> void:
 	details_button.pressed.connect(details_requested.emit)
 
+var _npc: NPC
+
 func setup(npc: NPC) -> void:
+	if _npc != npc:
+		if is_instance_valid(_npc) and _npc.rest_progress_changed.is_connected(_on_rest_progress): _npc.rest_progress_changed.disconnect(_on_rest_progress)
+		_npc = npc
+		if is_instance_valid(_npc): _npc.rest_progress_changed.connect(_on_rest_progress)
 	if npc == null:
 		return
 	if not is_node_ready():
@@ -57,3 +63,8 @@ func _get_status_color(npc: NPC) -> Color:
 	if not npc.is_state(NPC.NPCState.IDLE):
 		return GameUI.TRAVEL
 	return GameUI.SUCCESS
+
+func _on_rest_progress(npc: NPC) -> void:
+	if not is_node_ready() or not is_visible_in_tree(): return
+	activity_label.text = _get_activity_label(npc)
+	activity_label.tooltip_text = activity_label.text

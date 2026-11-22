@@ -55,9 +55,9 @@ func _roll_choice() -> ItemInfo:
 		cumulative_weights.append(total_weight)
 	if weighted_items.is_empty():
 		return null
-	var roll := randf() * total_weight
+	var roll_value := randf() * total_weight
 	for index in cumulative_weights.size():
-		if roll <= cumulative_weights[index]:
+		if roll_value <= cumulative_weights[index]:
 			return _create_reward_item(weighted_items[index])
 	return _create_reward_item(weighted_items[-1])
 

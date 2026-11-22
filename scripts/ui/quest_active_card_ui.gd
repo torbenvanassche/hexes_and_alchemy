@@ -66,6 +66,17 @@ func setup(value: Quest) -> void:
 		claim_button.pressed.connect(claim_requested.emit.bind(quest))
 		content.add_child(claim_button)
 
+	if QuestStatePresentation.is_terminal(current_state) and quest.uses_guild_roster() and quest.quest_key != "scout":
+		var repeat := Button.new()
+		repeat.text = tr("QUEST_REPEAT_ORDER")
+		repeat.tooltip_text = tr("QUEST_REPEAT_HINT")
+		repeat.pressed.connect(_repeat_order)
+		content.add_child(repeat)
+
+func _repeat_order() -> void:
+	var result := Manager.instance.quests.repeat_order(quest)
+	if not result.success: Manager.instance.toast.notify(tr(result.message_key), GameUI.WARNING)
+
 func _apply_style(state_color: Color) -> void:
 	var style := StyleBoxFlat.new()
 	style.bg_color = GameUI.RAISED

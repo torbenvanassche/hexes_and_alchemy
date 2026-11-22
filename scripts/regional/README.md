@@ -91,7 +91,4 @@ unresolved status and can still roll on later discovery. Improvement props are
 rebuilt from project state. Older tracked-resident references now lead to the
 settlement quest board.
 
-Run `tests/regional_progression_test.tscn` for discovery determinism, objective
-effects, real commission posting, costs, duplicate-claim protection, project
-benefits, recipe locks, incidents, save/load and UI bounds at 720p and 540p. Add
-`-- --capture` with a renderer to save UI previews in `.godot/validation`.
+Use the development checkpoints for direct progression, construction, save/load and small-window inspection. The automated test suite has been removed.

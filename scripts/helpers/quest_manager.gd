@@ -1,14 +1,8 @@
 class_name QuestManager extends Node
 
-class PartyAssignment extends RefCounted:
-	var quest: Quest
-	var primary: NPC
-	var supports: Dictionary[StringName, NPC] = {}
-	var members: Array[NPC] = []
-	var score := 0.0
-
 var active_quests: Array[Quest] = [];
 var _restored_commissions: Array[Quest] = []
+var _assignment_pending := false
 
 func restore_active_quest(quest: Quest) -> void:
 	if active_quests.has(quest): return
@@ -75,12 +69,15 @@ func get_available_scout_locations(grid: HexGrid, limit_results: bool = true) ->
 	if grid == null or origin_hex == null:
 		return []
 
+	var reachable: Dictionary[Vector3i, int] = {}
+	if not _active_settlement_allows_boat_travel():
+		reachable = grid.pathfinder.get_reachable_distances(origin_hex.cube_id, grid.tiles.size())
 	var scout_locations: Array[HexBase] = []
 	for scene_instance: SceneInstance in grid.get_tiles_in_radius(origin_hex.cube_id, max_quest_distance):
 		var scout_hex := scene_instance.node as HexBase
 		if not is_valid_scout_location(scout_hex, grid):
 			continue
-		if not is_quest_location_reachable(scout_hex, grid):
+		if (not reachable.has(scout_hex.cube_id)) if not _active_settlement_allows_boat_travel() else (not is_quest_location_reachable(scout_hex, grid)):
 			continue
 
 		scout_locations.append(scout_hex)
@@ -427,9 +424,9 @@ func try_assign_waiting_quests() -> void:
 
 	var assigned_quests := 0
 	while not available_npcs.is_empty() and not waiting_quests.is_empty():
-		var best_assignment: PartyAssignment
+		var best_assignment: QuestPartyPlanner.Assignment = null
 		for quest: Quest in waiting_quests:
-			var assignment := _build_party_assignment(quest, available_npcs)
+			var assignment := QuestPartyPlanner.build(quest, available_npcs)
 			if assignment == null:
 				continue
 			if best_assignment == null or assignment.score > best_assignment.score:
@@ -444,7 +441,7 @@ func try_assign_waiting_quests() -> void:
 		if not _reserve_quest_supplies(selected_quest):
 			waiting_quests.erase(selected_quest)
 			continue
-		if not _commit_party_assignment(best_assignment):
+		if not QuestPartyPlanner.commit(best_assignment):
 			release_quest_supplies(selected_quest)
 			waiting_quests.erase(selected_quest)
 			continue
@@ -481,79 +478,6 @@ func _get_waiting_quests() -> Array[Quest]:
 		if quest != null and quest.uses_guild_roster() and quest.is_state(Quest.QuestState.WAITING) and quest.party.is_empty():
 			waiting_quests.append(quest)
 	return waiting_quests
-
-func _build_party_assignment(quest: Quest, available_npcs: Array[NPC]) -> PartyAssignment:
-	if quest == null:
-		return null
-
-	var best_assignment: PartyAssignment
-	for primary: NPC in available_npcs:
-		if primary == null or not primary.wants_quest(quest):
-			continue
-
-		var remaining := available_npcs.duplicate()
-		remaining.erase(primary)
-		var support_assignments: Dictionary[StringName, NPC] = {}
-		var members: Array[NPC] = [primary]
-		var score := primary.evaluate_quest(quest)
-		var complete := true
-
-		for definition: QuestSupportDefinition in quest.get_selected_support_definitions():
-			var support_npc := _get_best_support_npc(quest, definition, remaining)
-			if support_npc == null:
-				complete = false
-				break
-			support_assignments[definition.id] = support_npc
-			members.append(support_npc)
-			remaining.erase(support_npc)
-			score += support_npc.evaluate_quest_for_role(quest, definition.provider_role) * 0.25
-
-		if not complete:
-			continue
-		if best_assignment == null or score > best_assignment.score:
-			best_assignment = PartyAssignment.new()
-			best_assignment.quest = quest
-			best_assignment.primary = primary
-			best_assignment.supports = support_assignments
-			best_assignment.members = members
-			best_assignment.score = score
-	return best_assignment
-
-func _get_best_support_npc(
-	quest: Quest,
-	definition: QuestSupportDefinition,
-	available_npcs: Array[NPC]
-) -> NPC:
-	if definition == null or definition.provider_role == "":
-		return null
-	var best_npc: NPC = null
-	var best_score := -1.0
-	for npc: NPC in available_npcs:
-		if npc == null or not npc.can_consider_quest_for_role(quest, definition.provider_role):
-			continue
-		var score := npc.evaluate_quest_for_role(quest, definition.provider_role)
-		if best_npc == null or score > best_score:
-			best_npc = npc
-			best_score = score
-	return best_npc
-
-func _commit_party_assignment(assignment: PartyAssignment) -> bool:
-	var quest := assignment.quest
-	var primary := assignment.primary
-	if quest == null or primary == null or not quest.add_to_party(primary):
-		return false
-
-	var supports: Dictionary[StringName, NPC] = assignment.supports
-	for support_id: StringName in supports:
-		var support_npc := supports[support_id] as NPC
-		if support_npc != null and quest.add_to_party(support_npc, support_id):
-			continue
-		for assigned_npc: NPC in quest.party.duplicate():
-			if assigned_npc != null:
-				assigned_npc.cancel_assigned_quest(quest)
-		quest.clear_party_assignments()
-		return false
-	return true
 
 func _get_npc_from_instance(npc_scene_instance: SceneInstance) -> NPC:
 	if npc_scene_instance == null:
@@ -594,3 +518,16 @@ func _get_scout_direction_score(
 	var distance_delta := absi(candidate_distance - target_distance)
 	var direction_delta := GridUtils.cube_distance(candidate_cube, ideal_cube)
 	return float(distance_delta) * (1.0 - scout_direction_weight) + float(direction_delta) * scout_direction_weight
+
+func repeat_order(previous: Quest) -> QuestPostingService.PostResult:
+	var posting := QuestPostingService.new(self, Manager.instance.hub, Manager.instance.player_instance)
+	return posting.post_quest(previous.location, previous.quest_key, previous.offered_currency_reward, previous.minimum_rank_override, previous.rank_experience_reward, previous.get_selected_support_ids(), Manager.instance.hub.stockpile)
+
+func queue_assignment() -> void:
+	if _assignment_pending: return
+	_assignment_pending = true
+	_assign_deferred.call_deferred()
+
+func _assign_deferred() -> void:
+	_assignment_pending = false
+	try_assign_waiting_quests()

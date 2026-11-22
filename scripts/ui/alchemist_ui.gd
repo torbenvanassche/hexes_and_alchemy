@@ -13,6 +13,7 @@ const COLOR_FAILURE := GameUI.DANGER
 @onready var relics_empty: Label = $Margin/Content/Services/EnchantmentPanel/Margin/Content/Empty
 @onready var feedback: Label = $Margin/Content/Feedback
 
+var _refresh_gate: RefreshGate
 var alchemist: Alchemist
 
 func setup_interaction(interaction: Interaction) -> void:
@@ -23,6 +24,7 @@ func setup_interaction(interaction: Interaction) -> void:
 		alchemist.services_changed.connect(_queue_refresh)
 
 func _ready() -> void:
+	_refresh_gate = RefreshGate.new(self, _refresh)
 	if Manager.instance != null and Manager.instance.hub != null and not Manager.instance.hub.changed.is_connected(_queue_refresh):
 		Manager.instance.hub.changed.connect(_queue_refresh)
 
@@ -30,7 +32,7 @@ func on_enter() -> void:
 	_refresh()
 
 func _queue_refresh() -> void:
-	call_deferred("_refresh")
+	if _refresh_gate != null: _refresh_gate.request()
 
 func _refresh() -> void:
 	if not is_node_ready() or alchemist == null:

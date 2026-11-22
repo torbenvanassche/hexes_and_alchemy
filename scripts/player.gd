@@ -58,7 +58,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 
 	if event.is_action_pressed("hub"):
-		toggle_journal()
+		toggle_hub_tab("operations")
 		get_viewport().set_input_as_handled()
 		return
 	

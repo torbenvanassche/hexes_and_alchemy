@@ -10,10 +10,10 @@ func _init(config: ConfigFile) -> void:
 	_ensure_defaults()
 
 func _ensure_defaults() -> void:
-	if _config.has_section(SECTION):
-		return
-
+	var changed := false
 	for action: String in InputManager.mappable_actions:
+		if _config.has_section_key(SECTION, action):
+			continue
 		var events := InputMap.action_get_events(action)
 		if events.is_empty():
 			continue
@@ -21,6 +21,24 @@ func _ensure_defaults() -> void:
 		var event := events[0]
 		var value := _event_to_string(event)
 		_config.set_value(SECTION, action, value)
+		changed = true
+	if _migrate_misassigned_navigation_bindings():
+		changed = true
+	if changed and is_instance_valid(Manager.instance):
+		Manager.instance.save()
+
+func _migrate_misassigned_navigation_bindings() -> bool:
+	if not _config.has_section_key(SECTION, "inventory") or not _config.has_section_key(SECTION, "hub"):
+		return false
+	var inventory_binding := str(_config.get_value(SECTION, "inventory")).to_lower()
+	var hub_binding := str(_config.get_value(SECTION, "hub")).to_lower()
+	if inventory_binding != "w" or hub_binding != "y":
+		return false
+	for action: String in ["inventory", "hub"]:
+		var events := InputMap.action_get_events(action)
+		if not events.is_empty():
+			_config.set_value(SECTION, action, _event_to_string(events[0]))
+	return true
 
 func change_keybinding(action: StringName, event: InputEvent) -> void:
 	_config.set_value(SECTION, action, _event_to_string(event))

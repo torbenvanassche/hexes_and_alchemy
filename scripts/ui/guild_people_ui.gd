@@ -6,6 +6,7 @@ const NPC_DETAILS_WINDOW := preload("res://resources/scene_info/ui/npc_details_u
 @onready var faction_tabs: HBoxContainer = $FactionTabs
 @onready var faction_details: VBoxContainer = $FactionDetails
 
+var _refresh_gate: RefreshGate
 var active_faction_id: StringName = &"hunters"
 var _refresh_pending := false
 var detail_windows: Dictionary[int, SceneInstance] = {}
@@ -16,16 +17,14 @@ func show_faction(faction_id: StringName) -> void:
 	_refresh()
 
 func _ready() -> void:
+	_refresh_gate = RefreshGate.new(self, _refresh)
 	if Manager.instance != null and Manager.instance.hub != null:
 		Manager.instance.hub.changed.connect(_queue_refresh)
 		Manager.instance.hub.faction_activity_changed.connect(_queue_refresh)
 	_refresh()
 
 func _queue_refresh() -> void:
-	if _refresh_pending or not is_inside_tree():
-		return
-	_refresh_pending = true
-	_refresh.call_deferred()
+	if _refresh_gate != null: _refresh_gate.request()
 
 func _refresh() -> void:
 	_refresh_pending = false

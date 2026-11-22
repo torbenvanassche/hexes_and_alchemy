@@ -105,33 +105,6 @@ still overshoot. The rendered seed-3 check passed, but included a roughly 30 ms
 startup slice; headless CPU measurements do not guarantee equivalent rendered
 frame times. Large custom maps also need their own profiling.
 
-## Validation
+## Manual validation
 
-`WorldLoading` is a persistent autoload using `scenes/ui/world_loading.tscn`.
-It covers scene changes and paused save restoration, consumes gameplay input,
-then shows 100% and fades only after initialization, pending callbacks and the
-player are ready. Runtime chunk streaming does not reopen it. Generation reports
-weighted phase/tile progress through `WorldGenerationProgress`; restoration uses
-the optional progress argument on `GameSnapshot.restore`. Add new phases to those
-reports rather than advancing the bar with a timer. A generation/load failure
-keeps the cover visible with its error and a New world recovery button.
-
-`world_loading_test` verifies coverage, monotonic progress, paused restoration,
-input release, runtime streaming and failure recovery at 1280×720/960×540. Append
-`-- --capture` with a renderer for loading-screen screenshots.
-
-Use isolated APPDATA/LOCALAPPDATA so test saves cannot touch personal saves:
-
-```text
-godot --headless --path . res://tests/world_generation_test.tscn -- --seed=3 --roundtrip
-godot --headless --path . res://tests/world_generation_test.tscn -- --seed=20261102 --steps=16 --record-layout
-godot --path . --rendering-method gl_compatibility res://tests/world_generation_test.tscn -- --seed=3 --capture
-```
-
-Layout records and the rendered overview go to `.godot/validation`. Timing is
-opt-in through `grid.generation_metrics.enabled`. `startup_slice` measures a
-cooperative computation slice. Stages ending in `_elapsed` include frame waits.
-The fingerprint excludes people/recruit names and other non-world random state.
-
-Also run typed-data, village-boundary, settlement-placement, transport, trade,
-regional-progression, quest-board and crafting regressions after shared changes.
+WorldLoading remains the persistent loading overlay during generation and restoration. Use the bundled development checkpoints, new worlds with explicit seeds and isolated user data. Inspect reveal/streaming, route reachability, boundary behavior and loading at small window sizes. GenerationMetrics remains available for CPU profiling. The automated test suite has been removed.

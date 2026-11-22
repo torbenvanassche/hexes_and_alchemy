@@ -224,7 +224,7 @@ func _get_faction_home(faction_id: StringName) -> FactionHome:
 	return shared_home
 
 func _roll_candidate_rank() -> AdventurerRank.Rank:
-	var prestige := Manager.instance.hub.prestige if Manager.instance != null and Manager.instance.hub != null else 0
+	var prestige := Manager.instance.hub.recruitment_prestige if Manager.instance != null and Manager.instance.hub != null else 0
 	return _get_recruitment_rules().roll_candidate_rank(_rng, prestige)
 
 func _get_hire_cost(candidate_rank: AdventurerRank.Rank, trait_count: int) -> int:

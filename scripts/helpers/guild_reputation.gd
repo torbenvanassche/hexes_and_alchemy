@@ -35,16 +35,10 @@ func record_quest(quest: Quest) -> void:
 	changed.emit()
 
 func get_summary() -> String:
-	return tr("GUILD_STANDING_SUMMARY") % [reputation, notoriety]
+	return tr("STANDING_SUMMARY") % [reputation, completed_quests]
 
 func get_detailed_summary() -> String:
-	return tr("GUILD_STANDING_DETAILS") % [
-		reputation,
-		notoriety,
-		stewardship,
-		regional_hazard,
-		completed_quests,
-	]
+	return tr("STANDING_DETAILS") % [reputation, completed_quests, Manager.instance.hub.prestige, Manager.instance.hub.recruitment_prestige]
 
 func _update_journal_progress(quest: Quest) -> void:
 	if Manager.instance == null or Manager.instance.journal == null:

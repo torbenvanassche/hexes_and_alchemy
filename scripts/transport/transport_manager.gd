@@ -2,6 +2,7 @@ class_name TransportManager
 extends Node
 
 signal changed()
+signal journey_progress_changed()
 const REQUESTS := [preload("res://resources/shipments/workshop_supplies.tres"), preload("res://resources/shipments/travel_supplies.tres")]
 const PARTNERSHIP_REQUEST := preload("res://resources/shipments/village_equipment.tres")
 
@@ -14,6 +15,7 @@ var _last_display_second := -1
 var _discovery_refresh_pending := false
 var _discovery_grid_id := 0
 var stops := TransportStops.new()
+var _routes := KnownTradeRoutes.new()
 const STABLE_ROUTE_VERSION := 1
 
 func _ready() -> void:
@@ -25,6 +27,7 @@ func _connect_discovery() -> void:
 	_queue_discovery_refresh()
 
 func _queue_discovery_refresh() -> void:
+	_routes.invalidate()
 	if _discovery_refresh_pending: return
 	_discovery_refresh_pending = true
 	_refresh_discovered_villages.call_deferred()
@@ -104,6 +107,8 @@ func get_relationship_text(coord: Vector3i) -> String:
 
 func _request_by_id(request_id: String) -> ShipmentRequest:
 	if request_id == PARTNERSHIP_REQUEST.id: return PARTNERSHIP_REQUEST
+	var partner_request := TradeDemand.by_id(request_id)
+	if partner_request != null: return partner_request
 	for request: ShipmentRequest in REQUESTS:
 		if request.id == request_id: return request
 	return REQUESTS[0]
@@ -121,7 +126,11 @@ func get_request(coord: Vector3i) -> ShipmentRequest:
 	var record := get_record(coord)
 	if not active_shipment.is_empty() and active_shipment.destination == coord:
 		return _request_by_id(active_shipment.request_id)
-	return _request_by_id(record.request_id)
+	var request := _request_by_id(record.request_id)
+	if TradeDemand.by_id(record.request_id) != null:
+		request = request.duplicate()
+		request.payment = TradeDemand.bonus_payment(request.payment, Manager.instance.reputation.reputation, record.influence)
+	return request
 
 func _home_hex() -> HexBase:
 	var grid := get_grid()
@@ -139,29 +148,7 @@ func _arrival_hex(coord: Vector3i) -> HexBase:
 ## rescanned every world tile against every wall when any UI wanted a preview.
 ## A separate graph still keeps unknown terrain out of merchant routes.
 func known_route(start: HexBase, finish: HexBase) -> Array[HexBase]:
-	if start == null or finish == null: return []
-	if not start.is_explored or not finish.is_explored: return []
-	var grid := get_grid()
-	stops.ensure_all(grid)
-	var inside := stops.interiors(grid)
-	var source := grid.pathfinder
-	var nav := AStar2D.new()
-	for coord: Vector3i in source.cube_to_id:
-		var hex := grid.get_hex_at_cube_id(coord)
-		if hex == null or inside.has(coord) or not hex.is_explored or not hex.is_traversable(HexInfo.TraversalTag.WALK): continue
-		var point: int = source.cube_to_id[coord]
-		nav.add_point(point, source.get_point_position(point), hex.movement_cost)
-	for point: int in nav.get_point_ids():
-		for neighbor: int in source.get_point_connections(point):
-			if nav.has_point(neighbor) and stops.permits_edge(source.id_to_cube[point], source.id_to_cube[neighbor]) and not nav.are_points_connected(point, neighbor):
-				nav.connect_points(point, neighbor)
-	var from_id: int = source.cube_to_id.get(start.cube_id, -1)
-	var to_id: int = source.cube_to_id.get(finish.cube_id, -1)
-	if not nav.has_point(from_id) or not nav.has_point(to_id): return []
-	var result: Array[HexBase] = []
-	for point: int in nav.get_id_path(from_id, to_id):
-		result.append(grid.get_hex_at_cube_id(source.id_to_cube[point]))
-	return result
+	return _routes.route(get_grid(), stops, start, finish)
 
 func route_to(coord: Vector3i) -> Array[HexBase]:
 	return known_route(_home_hex(), _arrival_hex(coord))
@@ -224,7 +211,7 @@ func next_request(coord: Vector3i) -> bool:
 	if not active_shipment.is_empty() or not villages.has(coord) or villages[coord].phase != "fulfilled": return false
 	_normalise_record(coord)
 	villages[coord].cycle += 1
-	villages[coord].request_id = PARTNERSHIP_REQUEST.id if has_first_delivery(coord) and not is_partner(coord) else REQUESTS[(int(villages[coord].cycle) + 1) % REQUESTS.size()].id
+	villages[coord].request_id = PARTNERSHIP_REQUEST.id if has_first_delivery(coord) and not is_partner(coord) else TradeDemand.next_for(coord, villages[coord].cycle).id
 	villages[coord].phase = "available"
 	changed.emit()
 	return true
@@ -286,7 +273,7 @@ func _process(delta: float) -> void:
 		var second := ceili(remaining_seconds())
 		if second != _last_display_second:
 			_last_display_second = second
-			changed.emit()
+			journey_progress_changed.emit()
 
 func _advance(delta: float) -> void:
 	var budget := delta
@@ -509,3 +496,16 @@ func _open_trade_page(journal: SceneInfo, coord: Vector3i) -> void:
 	var instance := SceneManager.add(journal, false)
 	(instance.node.content as HubWindowUI).show_trade(coord)
 	instance.on_enter.emit()
+
+func upgrade_carrier() -> bool:
+	last_error = ""
+	if not active_shipment.is_empty(): last_error = tr("SHIPMENT_CARRIER_BUSY")
+	elif carrier.capacity >= 12: last_error = tr("TRADE_UPGRADE_OWNED")
+	elif Manager.instance.reputation.reputation < 10: last_error = tr("TRADE_UPGRADE_REPUTATION")
+	elif not Manager.instance.hub.reserve_currency(100): last_error = tr("TRADE_UPGRADE_COINS")
+	if not last_error.is_empty(): return false
+	carrier = carrier.duplicate()
+	carrier.capacity = 12
+	carrier.travel_speed = 2.7
+	changed.emit()
+	return true

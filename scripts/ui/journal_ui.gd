@@ -13,6 +13,8 @@ class_name JournalUI extends Control
 @export var page_scene: PackedScene
 
 var _refresh_queued := false
+var _page_gate: RefreshGate
+var _standing_gate: RefreshGate
 var _visible_entries: Array[JournalEntry] = []
 var _current_page := 0
 
@@ -21,15 +23,18 @@ func on_enter() -> void:
 	_refresh_guild_standing()
 
 func _ready() -> void:
+	_page_gate = RefreshGate.new(self, _refresh_pages)
+	_standing_gate = RefreshGate.new(self, _refresh_guild_standing)
+	notoriety_progress.get_parent().hide()
 	previous_page_button.pressed.connect(_show_previous_page)
 	next_page_button.pressed.connect(_show_next_page)
 	chapter_selector.item_selected.connect(_show_selected_page)
 	if Manager.instance != null and Manager.instance.journal != null:
 		Manager.instance.journal.journal_changed.connect(_request_refresh_pages)
 	if Manager.instance != null and Manager.instance.reputation != null:
-		Manager.instance.reputation.changed.connect(_refresh_guild_standing)
+		Manager.instance.reputation.changed.connect(_queue_standing)
 	if Manager.instance != null and Manager.instance.hub != null:
-		Manager.instance.hub.changed.connect(_refresh_guild_standing)
+		Manager.instance.hub.changed.connect(_queue_standing)
 	_refresh_guild_standing()
 	_request_refresh_pages()
 
@@ -38,11 +43,11 @@ func _exit_tree() -> void:
 		if Manager.instance.journal.journal_changed.is_connected(_request_refresh_pages):
 			Manager.instance.journal.journal_changed.disconnect(_request_refresh_pages)
 	if Manager.instance != null and Manager.instance.reputation != null:
-		if Manager.instance.reputation.changed.is_connected(_refresh_guild_standing):
-			Manager.instance.reputation.changed.disconnect(_refresh_guild_standing)
+		if Manager.instance.reputation.changed.is_connected(_queue_standing):
+			Manager.instance.reputation.changed.disconnect(_queue_standing)
 	if Manager.instance != null and Manager.instance.hub != null:
-		if Manager.instance.hub.changed.is_connected(_refresh_guild_standing):
-			Manager.instance.hub.changed.disconnect(_refresh_guild_standing)
+		if Manager.instance.hub.changed.is_connected(_queue_standing):
+			Manager.instance.hub.changed.disconnect(_queue_standing)
 
 func _refresh_guild_standing() -> void:
 	if Manager.instance == null or Manager.instance.reputation == null:
@@ -58,12 +63,13 @@ func _refresh_guild_standing() -> void:
 	reputation_value.text = "%d / %d" % [int(reputation_progress.value), int(reputation_progress.max_value)]
 	notoriety_value.text = "%d / %d" % [int(notoriety_progress.value), int(notoriety_progress.max_value)]
 	prestige_value.text = str(Manager.instance.hub.prestige if Manager.instance.hub != null else 0)
+	prestige_value.tooltip_text = tr("STANDING_PRESTIGE_HINT") % Manager.instance.hub.recruitment_prestige
 
 func _request_refresh_pages() -> void:
-	if _refresh_queued:
-		return
-	_refresh_queued = true
-	_refresh_pages.call_deferred()
+	if _page_gate != null: _page_gate.request()
+
+func _queue_standing() -> void:
+	_standing_gate.request()
 
 func _refresh_pages() -> void:
 	_refresh_queued = false

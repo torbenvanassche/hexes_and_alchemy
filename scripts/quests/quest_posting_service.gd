@@ -46,6 +46,8 @@ func post_quest(
 	quest.context.merge(extra_context, true)
 	result.quest = quest
 
+	if quest_type_key == "scout" and not quest_manager.is_valid_scout_location(location):
+		return _fail(result, "QUEST_POST_LOCATION_UNAVAILABLE")
 	var posting_error := quest_manager.get_posting_error(quest)
 	if posting_error != "":
 		return _fail(result, posting_error)

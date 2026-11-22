@@ -2,6 +2,7 @@ extends MarginContainer
 
 const REQUIREMENT_ROW := preload("res://scenes/ui/components/settlement_requirement_row.tscn")
 var _primary_action := ""
+var _refresh_gate: RefreshGate
 
 @onready var step_label: Label = $Body/Scroll/Content/Step
 @onready var guidance_label: Label = $Body/Scroll/Content/Guidance
@@ -12,17 +13,22 @@ var _primary_action := ""
 @onready var treasury_label: Label = $Body/Scroll/Content/Treasury
 
 func _ready() -> void:
+	_refresh_gate = RefreshGate.new(self, _refresh)
 	primary_button.tooltip_text = tr("CAMPAIGN_CONTROLS")
 	$Body/Scroll/Content/Alternatives.tooltip_text = tr("CAMPAIGN_FORGE_CHOICES")
 	var campaign: SettlementCampaign = Manager.instance.campaign
-	campaign.changed.connect(_refresh)
+	campaign.changed.connect(_queue_refresh)
+	Manager.instance.continuing.changed.connect(_queue_refresh)
 	primary_button.pressed.connect(func() -> void: campaign.perform_action(_primary_action))
 	market_button.pressed.connect(campaign.perform_action.bind("market"))
 	board_button.pressed.connect(campaign.perform_action.bind("board"))
 	_refresh()
 
+func _queue_refresh() -> void:
+	_refresh_gate.request()
+
 func on_enter() -> void:
-	_refresh()
+	_refresh_gate.request()
 
 func _refresh() -> void:
 	if not is_inside_tree() or SaveGames.is_loading: return
@@ -54,6 +60,13 @@ func _refresh() -> void:
 		_add_milestone(tr("CAMPAIGN_OPENING_PROJECTS") % [completed, campaign.chapter.required_projects], completed >= campaign.chapter.required_projects)
 		_add_milestone(tr("CAMPAIGN_OPENING_TRADE"), Manager.instance.transport.is_partner(campaign.get_trade_coord()))
 		_primary_action = campaign.get_primary_action()
+	if campaign.stage == SettlementCampaign.Stage.COMPLETE:
+		for child in materials_list.get_children():
+			materials_list.remove_child(child)
+			child.queue_free()
+		$Body/Scroll/Content/Title.text = tr("NETWORK_TITLE")
+		$Body/Scroll/Content/Purpose.text = tr("NETWORK_PURPOSE")
+		for objective: Dictionary in Manager.instance.continuing.objectives(): _add_milestone(objective.text, objective.done)
 	materials_list.visible = materials_list.get_child_count() > 0
 	$Body/Scroll/Content/MaterialsHeader.visible = materials_list.visible
 	primary_button.visible = not _primary_action.is_empty()

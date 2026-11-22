@@ -244,28 +244,16 @@ func _get_signature_equipment_slot() -> EquipmentInfo.Slot:
 	return EquipmentInfo.Slot.TOOL
 
 func get_equipment_success_multiplier(quest: Quest) -> float:
-	var multiplier := equipment.get_success_weight_multiplier(quest) if equipment != null else 1.0
-	for injury in active_injuries:
-		multiplier *= injury.success_weight_multiplier
-	return multiplier
+	return AdventurerModifiers.get_equipment_success_multiplier(self, quest)
 
 func get_equipment_danger_multiplier(quest: Quest) -> float:
-	var multiplier := equipment.get_danger_weight_multiplier(quest) if equipment != null else 1.0
-	for injury in active_injuries:
-		multiplier *= injury.danger_weight_multiplier
-	return multiplier
+	return AdventurerModifiers.get_equipment_danger_multiplier(self, quest)
 
 func get_equipment_duration_multiplier(quest: Quest) -> float:
-	var multiplier := equipment.get_quest_duration_multiplier(quest) if equipment != null else 1.0
-	for injury in active_injuries:
-		multiplier *= injury.quest_duration_multiplier
-	return multiplier
+	return AdventurerModifiers.get_equipment_duration_multiplier(self, quest)
 
 func get_equipment_loot_multiplier(quest: Quest) -> float:
-	var multiplier := equipment.get_loot_quantity_multiplier(quest) if equipment != null else 1.0
-	for injury in active_injuries:
-		multiplier *= injury.loot_quantity_multiplier
-	return multiplier
+	return AdventurerModifiers.get_equipment_loot_multiplier(self, quest)
 
 func roll_quest_fate(quest: Quest) -> QuestFate:
 	if quest == null or quest.outcome == null or not quest.outcome.is_dangerous:

@@ -11,9 +11,12 @@ const OPERATION_CARD_SCENE := preload("res://scenes/ui/components/operation_card
 @onready var notoriety_value: Label = $Margin/Scroll/VBox/StandingPanel/Margin/Content/Metrics/Notoriety/Value
 @onready var prestige_value: Label = $Margin/Scroll/VBox/StandingPanel/Margin/Content/Metrics/Prestige/Margin/Content/Value
 
+var _refresh_gate: RefreshGate
 var _refresh_pending := false
 
 func _ready() -> void:
+	_refresh_gate = RefreshGate.new(self, _refresh)
+	notoriety_progress.get_parent().hide()
 	if Manager.instance != null:
 		if Manager.instance.hub != null and not Manager.instance.hub.changed.is_connected(_queue_refresh):
 			Manager.instance.hub.changed.connect(_queue_refresh)
@@ -26,10 +29,7 @@ func _ready() -> void:
 	_refresh()
 
 func _queue_refresh() -> void:
-	if _refresh_pending or not is_inside_tree():
-		return
-	_refresh_pending = true
-	_apply_queued_refresh.call_deferred()
+	if _refresh_gate != null: _refresh_gate.request()
 
 func _apply_queued_refresh() -> void:
 	_refresh_pending = false
@@ -53,11 +53,14 @@ func _refresh_standing(hub: HubState) -> void:
 	reputation_value.text = "%d / %d" % [reputation, int(reputation_progress.max_value)]
 	notoriety_value.text = "%d / %d" % [notoriety, int(notoriety_progress.max_value)]
 	prestige_value.text = str(hub.prestige)
+	prestige_value.tooltip_text = tr("STANDING_PRESTIGE_HINT") % hub.recruitment_prestige
 	standing_panel.tooltip_text = standing.get_detailed_summary() if standing != null else ""
 
 func _refresh_operations() -> void:
 	_clear_container(operations_container)
-	var active_operations: Array[HubOperation] = Manager.instance.operations.get_active_operations() if Manager.instance.operations != null else []
+	var active_operations: Array[HubOperation] = []
+	if Manager.instance.operations != null:
+		active_operations = Manager.instance.operations.get_active_operations()
 	for operation: HubOperation in active_operations:
 		if operation == null or operation.quest == null:
 			continue

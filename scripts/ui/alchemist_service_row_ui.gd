@@ -22,8 +22,6 @@ func setup(
 	is_available: bool,
 	disabled_reason: String = ""
 ) -> void:
-	if not is_node_ready():
-		await ready
 	badge_label.text = badge
 	title_label.text = title
 	detail_label.text = detail

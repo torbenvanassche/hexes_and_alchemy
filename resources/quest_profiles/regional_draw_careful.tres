@@ -1,25 +1,31 @@
-[gd_resource type="Resource" script_class="QuestProfile" format=3]
-[ext_resource type="Script" path="res://scripts/quests/quest_profile.gd" id="profile"]
-[ext_resource type="Script" path="res://scripts/quests/quest_outcome.gd" id="outcome"]
-[ext_resource type="Script" path="res://scripts/structures/loot_table.gd" id="table"]
-[ext_resource type="Script" path="res://scripts/structures/loot_table_entry.gd" id="entry"]
-[ext_resource type="Script" path="res://tools/inventory/scripts/data/item_info.gd" id="item"]
-[ext_resource type="Resource" path="res://resources/item_info/bucket.tres" id="bucket"]
-[ext_resource type="Resource" path="res://resources/item_info/water_bucket.tres" id="water_bucket"]
-[ext_resource type="Resource" path="res://resources/item_info/work_supplies.tres" id="work_supplies"]
+[gd_resource type="Resource" script_class="QuestProfile" format=3 uid="uid://bnjaacgxaeh37"]
+
+[ext_resource type="Script" uid="uid://dctayqehoj6y7" path="res://scripts/quests/quest_support_definition.gd" id="1_1ang8"]
+[ext_resource type="Resource" uid="uid://b0i36ajrv252n" path="res://resources/item_info/bucket.tres" id="bucket"]
+[ext_resource type="Script" uid="uid://ctqcmpru1cvqf" path="res://scripts/structures/loot_table_entry.gd" id="entry"]
+[ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="item"]
+[ext_resource type="Script" uid="uid://cwu8dwm55ox1u" path="res://scripts/quests/quest_outcome.gd" id="outcome"]
+[ext_resource type="Script" uid="uid://bapqr4qv780fa" path="res://scripts/quests/quest_profile.gd" id="profile"]
+[ext_resource type="Script" uid="uid://b2wjb40qlkbuf" path="res://scripts/structures/loot_table.gd" id="table"]
+[ext_resource type="Resource" uid="uid://bt35piqwc5pdt" path="res://resources/item_info/water_bucket.tres" id="water_bucket"]
+[ext_resource type="Resource" uid="uid://duoiqc12vrtx2" path="res://resources/item_info/work_supplies.tres" id="work_supplies"]
+
 [sub_resource type="Resource" id="loot_water_bucket"]
 script = ExtResource("entry")
 item = ExtResource("water_bucket")
 min_amount = 3
 max_amount = 4
+
 [sub_resource type="Resource" id="loot"]
 script = ExtResource("table")
 entries = Array[ExtResource("entry")]([SubResource("loot_water_bucket")])
+
 [sub_resource type="Resource" id="result"]
 script = ExtResource("outcome")
 loot_table = SubResource("loot")
 next_state = "FRESH"
 message_key = "REGIONAL_QUEST_DRAW_CAREFUL_REPORT"
+
 [resource]
 script = ExtResource("profile")
 quest_key = "draw_careful"
@@ -31,9 +37,10 @@ result_description_key = "REGIONAL_QUEST_DRAW_CAREFUL_RESULT"
 duration_seconds = 8.0
 rank_experience_reward = 3
 available_states = Array[String](["FRESH"])
-required_supplies = Dictionary[ExtResource("item"), int]({ExtResource("bucket"):1, ExtResource("work_supplies"):1})
+required_supplies = Dictionary[ExtResource("item"), int]({
+ExtResource("bucket"): 1,
+ExtResource("work_supplies"): 1
+})
 outcomes = Array[ExtResource("outcome")]([SubResource("result")])
-guild_reputation_reward = 1
-guild_currency_reward = 0
-stewardship_change = 1
 blocked_by_active_occupation = true
+stewardship_change = 1
