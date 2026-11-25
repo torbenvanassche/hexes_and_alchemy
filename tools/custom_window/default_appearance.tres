@@ -4,3 +4,9 @@
 
 [resource]
 script = ExtResource("1")
+header_color = Color(0.055, 0.068, 0.063, 1)
+header_height = 44
+action_size = 28
+icon_size = 16
+title_size = 20
+content_margins = Vector4i(12, 8, 12, 12)

@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://dsicy12n7flej"]
 
 [ext_resource type="Script" path="res://scripts/ui/resource_hud.gd" id="1_hud"]
-[ext_resource type="Theme" path="res://themes/game_theme.tres" id="2_theme"]
 
 [node name="ResourceHud" type="PanelContainer"]
 theme_type_variation = &"HudPanel"
@@ -10,7 +9,6 @@ offset_top = 20.0
 offset_right = 310.0
 offset_bottom = 64.0
 grow_horizontal = 2
-theme = ExtResource("2_theme")
 script = ExtResource("1_hud")
 
 [node name="Margin" type="MarginContainer" parent="."]

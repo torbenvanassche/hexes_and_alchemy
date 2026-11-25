@@ -3,24 +3,6 @@
 [ext_resource type="Script" uid="uid://bhn5mfd3d5ujk" path="res://tools/control_helpers/toggle_group.gd" id="1_pfmrl"]
 [ext_resource type="Resource" uid="uid://cs0kfyy871ovd" path="res://resources/scene_info/ui/game_settings.tres" id="2_6hi4t"]
 [ext_resource type="Resource" uid="uid://uov1jt8s2qia" path="res://resources/scene_info/ui/input_settings.tres" id="2_j3boo"]
-[ext_resource type="Theme" path="res://themes/game_theme.tres" id="4_theme"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_overlay"]
-bg_color = Color(0.04, 0.06, 0.08, 0.7)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dialog"]
-content_margin_left = 20.0
-content_margin_top = 16.0
-content_margin_right = 20.0
-content_margin_bottom = 20.0
-bg_color = Color(0.094, 0.137, 0.173, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.714, 0.604, 0.388, 1)
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxFlat_content"]
 
 [node name="Control" type="Control" unique_id=1653328238 node_paths=PackedStringArray("button_group_parent", "tab_instance_parent", "group_buttons", "back_button")]
 process_mode = 3
@@ -30,7 +12,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("4_theme")
 script = ExtResource("1_pfmrl")
 button_group_parent = NodePath("CenterContainer/SettingsDialog/MarginContainer/DialogLayout/MainContent/Navigation")
 tab_instance_parent = NodePath("CenterContainer/SettingsDialog/MarginContainer/DialogLayout/MainContent/ContentPanel/MarginContainer/tab_instances")
@@ -47,7 +28,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_overlay")
+theme_type_variation = &"OverlayPanel"
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=519210432]
 layout_mode = 1
@@ -60,7 +41,7 @@ grow_vertical = 2
 [node name="SettingsDialog" type="PanelContainer" parent="CenterContainer" unique_id=42747668]
 custom_minimum_size = Vector2(980, 620)
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_dialog")
+theme_type_variation = &"CardPanel"
 
 [node name="MarginContainer" type="MarginContainer" parent="CenterContainer/SettingsDialog" unique_id=1032114656]
 layout_mode = 2
@@ -75,8 +56,7 @@ layout_mode = 2
 [node name="Title" type="Label" parent="CenterContainer/SettingsDialog/MarginContainer/DialogLayout/Header" unique_id=874138002]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_type_variation = &"Heading"
-theme_override_font_sizes/font_size = 26
+theme_type_variation = &"DisplayLabel"
 text = "SCENE_SETTINGS_MENU_NAME"
 
 [node name="MainContent" type="HBoxContainer" parent="CenterContainer/SettingsDialog/MarginContainer/DialogLayout" unique_id=1280618574]
@@ -94,8 +74,6 @@ custom_minimum_size = Vector2(0, 44)
 theme_type_variation = &"JournalContents"
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 20
 text = "SETTINGS_TAB_GAME"
 alignment = 0
 
@@ -104,7 +82,6 @@ custom_minimum_size = Vector2(0, 44)
 theme_type_variation = &"JournalContents"
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 20
 text = "SETTINGS_TAB_INPUT"
 alignment = 0
 
@@ -112,7 +89,7 @@ alignment = 0
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_content")
+theme_type_variation = &"UnframedPanel"
 
 [node name="MarginContainer" type="MarginContainer" parent="CenterContainer/SettingsDialog/MarginContainer/DialogLayout/MainContent/ContentPanel" unique_id=2094888374]
 layout_mode = 2
@@ -130,8 +107,6 @@ alignment = 2
 custom_minimum_size = Vector2(120, 36)
 layout_mode = 2
 size_flags_horizontal = 0
-theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 16
 text = "SETTINGS_BACK"
 
 [node name="HeaderRule" type="HSeparator" parent="CenterContainer/SettingsDialog/MarginContainer/DialogLayout" index="1"]

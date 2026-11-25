@@ -48,8 +48,8 @@ func _set_item(item: Resource) -> void:
 	item_name_label.tooltip_text = display_name
 	var buying := mode == TileMode.BUY
 	tooltip_text = tr("MARKET_BUY_ONE" if buying else "MARKET_SELL_ONE") % [display_name, unit_price]
-	price_label.text = "%d [img=18x18]res://sprites/items/coin_single.png[/img]" % unit_price
-	price_label.add_theme_color_override("default_color", GameUI.ACCENT if buying else GameUI.SUCCESS)
+	price_label.text = "%d [img=18x18]res://sprites/items/HA_ICON_02_Coin.png[/img]" % unit_price
+	price_label.theme_type_variation = &"PriceAccentRichText" if buying else &"PriceSuccessRichText"
 
 func _on_pressed() -> void:
 	match mode:

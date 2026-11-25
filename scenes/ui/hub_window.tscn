@@ -10,7 +10,7 @@
 [ext_resource type="Resource" path="res://tools/custom_window/journal_appearance.tres" id="9_appearance"]
 [ext_resource type="PackedScene" path="res://scenes/ui/components/trade_page.tscn" id="11_trade"]
 [ext_resource type="PackedScene" path="res://scenes/ui/components/reward_stat.tscn" id="12_stat"]
-[ext_resource type="Texture2D" path="res://sprites/items/coin_single.png" id="13_coin"]
+[ext_resource type="Texture2D" path="res://sprites/items/HA_ICON_02_Coin.png" id="13_coin"]
 
 [node name="Window" node_paths=PackedStringArray("content") instance=ExtResource("1_window")]
 custom_minimum_size = Vector2(1100, 650)
@@ -105,7 +105,7 @@ layout_mode = 2
 icon = ExtResource("13_coin")
 icon_size = 24
 label_key = "GUILD_TREASURY_LABEL"
-value_color = Color(0.859, 0.718, 0.459, 1)
+value_variation = &"StatusAccentLabel"
 
 [node name="Divider" type="VSeparator" parent="NinePatchRect/VBoxContainer/contentPanel/HubWindow/Spread"]
 custom_minimum_size = Vector2(1, 0)

@@ -80,7 +80,6 @@ mouse_filter = 1
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"Heading"
-theme_override_font_sizes/font_size = 22
 text = "WINDOW_TITLE"
 mouse_filter = 2
 horizontal_alignment = 0

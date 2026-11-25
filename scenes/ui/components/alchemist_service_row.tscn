@@ -1,32 +1,10 @@
 [gd_scene format=3 uid="uid://cwa1l7f7atvt6"]
 
 [ext_resource type="Script" uid="uid://beuys6cmc4g33" path="res://scripts/ui/alchemist_service_row_ui.gd" id="1_row"]
-[ext_resource type="Theme" path="res://themes/game_theme.tres" id="2_light"]
-[ext_resource type="Theme" path="res://themes/game_theme.tres" id="3_buttons"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBox_row"]
-bg_color = Color(0.125, 0.184, 0.227, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.298, 0.353, 0.38, 1)
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
-
-[sub_resource type="StyleBoxFlat" id="StyleBox_badge"]
-bg_color = Color(0.125, 0.184, 0.227, 1)
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
 
 [node name="AlchemistServiceRow" type="PanelContainer" unique_id=1557566946]
 custom_minimum_size = Vector2(0, 68)
-theme = ExtResource("2_light")
-theme_override_styles/panel = SubResource("StyleBox_row")
+theme_type_variation = &"CardPanel"
 script = ExtResource("1_row")
 
 [node name="Margin" type="MarginContainer" parent="." unique_id=319943069]
@@ -38,16 +16,15 @@ theme_override_constants/margin_bottom = 6
 
 [node name="Row" type="HBoxContainer" parent="Margin" unique_id=870365324]
 layout_mode = 2
-theme_override_constants/separation = 8
 
 [node name="Badge" type="PanelContainer" parent="Margin/Row" unique_id=1719542014]
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBox_badge")
+theme_type_variation = &"InsetPanel"
 
 [node name="Label" type="Label" parent="Margin/Row/Badge" unique_id=582264731]
 layout_mode = 2
-theme_override_font_sizes/font_size = 14
+theme_type_variation = &"CompactLabel"
 text = "I"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -61,14 +38,14 @@ theme_override_constants/separation = 2
 [node name="Title" type="Label" parent="Margin/Row/Details" unique_id=2067788919]
 layout_mode = 2
 mouse_filter = 1
-theme_override_font_sizes/font_size = 15
+theme_type_variation = &"MediumLabel"
 clip_text = true
 text_overrun_behavior = 3
 
 [node name="Detail" type="Label" parent="Margin/Row/Details" unique_id=368320791]
 layout_mode = 2
 mouse_filter = 1
-theme_override_font_sizes/font_size = 14
+theme_type_variation = &"CompactLabel"
 autowrap_mode = 2
 text_overrun_behavior = 3
 max_lines_visible = 2
@@ -83,6 +60,4 @@ vertical_alignment = 1
 custom_minimum_size = Vector2(106, 30)
 layout_mode = 2
 size_flags_vertical = 4
-theme = ExtResource("3_buttons")
-theme_override_font_sizes/font_size = 18
 text = "ALCHEMIST_ACTION"

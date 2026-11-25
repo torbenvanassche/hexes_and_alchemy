@@ -32,13 +32,13 @@ func setup(npc: NPC) -> void:
 	injury_label.visible = not npc.active_injuries.is_empty()
 	injury_label.text = tr("PEOPLE_INJURED")
 	injury_label.tooltip_text = npc.get_injuries_label()
-	injury_label.add_theme_color_override("font_color", GameUI.DANGER)
+	injury_label.theme_type_variation = &"StatusDangerLabel"
 	details_button.tooltip_text = tr("PEOPLE_VIEW_PROFILE") % npc.get_display_name()
 	activity_label.text = _get_activity_label(npc)
 	name_label.tooltip_text = name_label.text
 	role_label.tooltip_text = "%s · %s" % [npc.get_profession_label(), role_label.text]
 	activity_label.tooltip_text = activity_label.text
-	activity_label.add_theme_color_override("font_color", _get_status_color(npc))
+	activity_label.theme_type_variation = _get_status_variation(npc)
 
 func _get_activity_label(npc: NPC) -> String:
 	var status := npc.get_activity_status_label()
@@ -57,12 +57,12 @@ func _get_quest_label(quest: Quest) -> String:
 func _get_npc_display_name(npc: NPC) -> String:
 	return npc.get_display_name()
 
-func _get_status_color(npc: NPC) -> Color:
+func _get_status_variation(npc: NPC) -> StringName:
 	if npc.is_state(NPC.NPCState.RESTING):
-		return GameUI.WARNING
+		return &"StatusWarningLabel"
 	if not npc.is_state(NPC.NPCState.IDLE):
-		return GameUI.TRAVEL
-	return GameUI.SUCCESS
+		return &"StatusTravelLabel"
+	return &"StatusSuccessLabel"
 
 func _on_rest_progress(npc: NPC) -> void:
 	if not is_node_ready() or not is_visible_in_tree(): return

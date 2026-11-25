@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://bcvkix0qglx74" path="res://scripts/ui/settlement_requirement_row_ui.gd" id="1_row"]
 
 [node name="SettlementRequirementRow" type="HBoxContainer" unique_id=1929925230]
-theme_override_constants/separation = 8
 script = ExtResource("1_row")
 
 [node name="State" type="Label" parent="." unique_id=1692151147]

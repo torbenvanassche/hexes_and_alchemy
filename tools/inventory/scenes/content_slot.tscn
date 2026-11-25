@@ -1,27 +1,7 @@
 [gd_scene format=3 uid="uid://c5ocjw6joaemy"]
 
-[ext_resource type="StyleBox" uid="uid://dyequs13mhyp3" path="res://tools/inventory/styles/content_slot_stylebox.tres" id="1_f67vh"]
-[ext_resource type="StyleBox" uid="uid://b3yojughln6fb" path="res://tools/inventory/styles/content_slot_stylebox_disabled.tres" id="1_pdw3o"]
 [ext_resource type="Script" uid="uid://cfr0ldcno68wc" path="res://tools/inventory/scripts/visual/parts/placeable_content_slot_ui.gd" id="2_rfq8a"]
-[ext_resource type="Texture2D" uid="uid://bsqv6eysfvkrb" path="res://sprites/ui/panels/panel-border-015.png" id="4_pdw3o"]
-[ext_resource type="Texture2D" uid="uid://c7m3weld6fl26" path="res://sprites/items/container_pile_small.png" id="5_nc0ld"]
-[ext_resource type="StyleBox" path="res://themes/tooltip_panel.tres" id="6_tooltip"]
-
-[sub_resource type="Theme" id="Theme_ceefl"]
-Button/styles/disabled = ExtResource("1_pdw3o")
-Button/styles/focus = ExtResource("1_f67vh")
-Button/styles/hover = ExtResource("1_f67vh")
-Button/styles/normal = ExtResource("1_f67vh")
-Button/styles/pressed = ExtResource("1_f67vh")
-TooltipLabel/colors/font_color = Color(1, 0.94902, 0.8, 1)
-TooltipLabel/colors/font_outline_color = Color(0.0470588, 0.027451, 0.0117647, 1)
-TooltipLabel/constants/outline_size = 2
-TooltipLabel/font_sizes/font_size = 18
-TooltipPanel/styles/panel = ExtResource("6_tooltip")
-
-[sub_resource type="LabelSettings" id="LabelSettings_aoki5"]
-font_size = 14
-font_color = Color(0.91, 0.89, 0.835, 1)
+[ext_resource type="Texture2D" path="res://sprites/items/HA_ICON_14_WorkSupplies.png" id="5_nc0ld"]
 
 [node name="content_slot" type="TextureButton" unique_id=930043497]
 custom_minimum_size = Vector2(100, 100)
@@ -34,7 +14,6 @@ offset_bottom = -224.0
 grow_vertical = 2
 size_flags_horizontal = 4
 focus_mode = 2
-theme = SubResource("Theme_ceefl")
 theme_type_variation = &"FlatButton"
 toggle_mode = true
 ignore_texture_size = true
@@ -50,13 +29,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ColorRect" type="ColorRect" parent="margin_container" unique_id=128610021]
-layout_mode = 2
-color = Color(0, 0, 0, 0.4862745)
-
 [node name="background" type="Panel" parent="margin_container" unique_id=1043705938]
 mouse_filter = 2
 layout_mode = 2
+theme_type_variation = &"SlotInterior"
 
 
 
@@ -89,4 +65,4 @@ z_index = 2
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
-label_settings = SubResource("LabelSettings_aoki5")
+theme_type_variation = &"CompactLabel"

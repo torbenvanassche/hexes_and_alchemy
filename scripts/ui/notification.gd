@@ -8,7 +8,6 @@ class NotificationData extends RefCounted:
 	var icon_color := Color.WHITE
 
 const REPORT_ICON := preload("res://sprites/ui/line/book.svg")
-const REPORT_ICON_COLOR := GameUI.MUTED
 
 @export var notification_scene: PackedScene
 @export var display_time: float = 5.0
@@ -35,7 +34,7 @@ func notify(text: String, accent_color: Color = Color.TRANSPARENT) -> void:
 	_enqueue(text, accent_color)
 
 func notify_report(text: String, accent_color: Color = Color.TRANSPARENT) -> void:
-	_enqueue(text, accent_color, REPORT_ICON, REPORT_ICON_COLOR)
+	_enqueue(text, accent_color, REPORT_ICON, GameUI.MUTED)
 
 func notify_item_reward(item: ItemInfo, amount: int, accent_color: Color = Color.TRANSPARENT) -> void:
 	if item == null:

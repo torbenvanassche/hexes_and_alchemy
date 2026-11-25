@@ -3,8 +3,6 @@
 [ext_resource type="PackedScene" uid="uid://dny1dqcanlco0" path="res://tools/custom_window/base_window.tscn" id="1_w2das"]
 [ext_resource type="Script" uid="uid://kyqrlu0hq63c" path="res://scripts/ui/market_ui.gd" id="2_3uv46"]
 [ext_resource type="PackedScene" uid="uid://b8rer4f8w6ive" path="res://scenes/ui/components/market_slot.tscn" id="3_market_slot"]
-[ext_resource type="Theme" path="res://themes/game_theme.tres" id="4_theme"]
-[ext_resource type="Theme" path="res://themes/game_theme.tres" id="5_dark"]
 
 [node name="Window" unique_id=1224465671 node_paths=PackedStringArray("content") instance=ExtResource("1_w2das")]
 custom_minimum_size = Vector2(760, 460)
@@ -20,14 +18,11 @@ size_flags_horizontal = 3
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = ExtResource("4_theme")
-theme_override_constants/separation = 8
 script = ExtResource("2_3uv46")
 market_tile_scene = ExtResource("3_market_slot")
 
 [node name="TopRow" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/MarketPanel" index="0" unique_id=1570491888]
 layout_mode = 2
-theme_override_constants/separation = 8
 
 [node name="TabSelector" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/MarketPanel/TopRow" index="0" unique_id=165577413]
 layout_mode = 2
@@ -54,14 +49,12 @@ theme_override_constants/separation = 4
 
 [node name="CurrencyLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/MarketPanel/TopRow/CurrencyPanel" index="0" unique_id=1881878829]
 layout_mode = 2
-theme = ExtResource("5_dark")
 text = "MARKET_CURRENCY"
 vertical_alignment = 1
 
 [node name="CurrencyAmount" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/MarketPanel/TopRow/CurrencyPanel" index="1" unique_id=741555253]
 custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
-theme = ExtResource("5_dark")
 text = "0"
 horizontal_alignment = 2
 vertical_alignment = 1
@@ -80,7 +73,6 @@ vertical_scroll_mode = 4
 [node name="ItemGrid" type="GridContainer" parent="NinePatchRect/VBoxContainer/contentPanel/MarketPanel/ScrollContainer" index="0" unique_id=1199294812]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/h_separation = 8
 theme_override_constants/v_separation = 6
 columns = 3
 
@@ -89,7 +81,6 @@ visible = false
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
 size_flags_horizontal = 4
-theme = ExtResource("5_dark")
 text = "MARKET_EMPTY_DEFAULT"
 horizontal_alignment = 1
 vertical_alignment = 1

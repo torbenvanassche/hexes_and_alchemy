@@ -1,24 +1,11 @@
 [gd_scene format=3 uid="uid://rw8d36yv38k"]
 
-[ext_resource type="Theme" path="res://themes/game_theme.tres" id="1_theme"]
 [ext_resource type="Script" uid="uid://ck86kmho8abvr" path="res://scripts/ui/toast_notification_ui.gd" id="2_script"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_toast"]
-bg_color = Color(0.094, 0.137, 0.173, 0.98)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.298, 0.353, 0.38, 1)
-shadow_color = Color(0.08, 0.06, 0.04, 0.45)
-shadow_size = 0
-shadow_offset = Vector2(0, 2)
 
 [node name="ToastNotification" type="PanelContainer" unique_id=781162060]
 custom_minimum_size = Vector2(0, 44)
 mouse_filter = 2
-theme = ExtResource("1_theme")
-theme_override_styles/panel = SubResource("StyleBoxFlat_toast")
+theme_type_variation = &"CardPanel"
 script = ExtResource("2_script")
 
 [node name="Margin" type="MarginContainer" parent="." unique_id=70169360]
@@ -34,11 +21,11 @@ layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 10
 
-[node name="Accent" type="ColorRect" parent="Margin/Content" unique_id=595925451]
+[node name="Accent" type="Panel" parent="Margin/Content" unique_id=595925451]
+theme_type_variation = &"ToastAccent"
 custom_minimum_size = Vector2(3, 0)
 layout_mode = 2
 mouse_filter = 2
-color = Color(0.298, 0.353, 0.38, 1)
 
 [node name="Icon" type="TextureRect" parent="Margin/Content" unique_id=745747977]
 visible = false

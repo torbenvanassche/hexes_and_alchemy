@@ -7,8 +7,8 @@ extends Resource
 @export var frame_style: StyleBox
 @export var header_color := Color("18232c")
 @export_range(36, 96) var header_height := 56
-@export_range(28, 56) var action_size := 40
-@export_range(16, 32) var icon_size := 22
+@export_range(28, 56) var action_size := 28
+@export_range(16, 32) var icon_size := 16
 @export_range(16, 36) var title_size := 26
 @export var title_alignment: HorizontalAlignment = HORIZONTAL_ALIGNMENT_LEFT
 @export var content_margins := Vector4i(20, 12, 20, 20)

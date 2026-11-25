@@ -2,10 +2,8 @@
 
 [ext_resource type="Script" path="res://scripts/ui/guild_navigation_ui.gd" id="1_script"]
 [ext_resource type="Texture2D" path="res://sprites/ui/line/book.svg" id="2_icon"]
-[ext_resource type="Theme" path="res://themes/game_theme.tres" id="3_theme"]
 
 [node name="GuildNavigation" type="PanelContainer"]
-theme = ExtResource("3_theme")
 theme_type_variation = &"UnframedPanel"
 anchors_preset = 3
 anchor_left = 1.0

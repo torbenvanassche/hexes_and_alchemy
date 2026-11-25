@@ -72,7 +72,7 @@ func _refresh_operations() -> void:
 		var empty_label := Label.new()
 		empty_label.text = tr("HUB_NO_ACTIVE_OPERATIONS")
 		empty_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		empty_label.add_theme_color_override("font_color", GameUI.MUTED)
+		empty_label.theme_type_variation = &"MutedLabel"
 		operations_container.add_child(empty_label)
 
 func _create_operation_card(_operation: HubOperation) -> Control:

@@ -3,11 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://dny1dqcanlco0" path="res://tools/custom_window/base_window.tscn" id="1_b8c84"]
 [ext_resource type="Script" uid="uid://cp06udl0ffykh" path="res://tools/inventory/scripts/visual/screens/quest_creation_ui.gd" id="2_1mihr"]
 [ext_resource type="PackedScene" uid="uid://c5ocjw6joaemy" path="res://tools/inventory/scenes/content_slot.tscn" id="3_slot"]
-[ext_resource type="Theme" path="res://themes/game_theme.tres" id="4_theme"]
-[ext_resource type="Theme" path="res://themes/game_theme.tres" id="6_button_theme"]
 [ext_resource type="PackedScene" path="res://scenes/ui/components/quest_support_row.tscn" id="7_support_row"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxFlat_quest_form"]
 
 [node name="Window" unique_id=1301866213 node_paths=PackedStringArray("content", "fit_scroll") instance=ExtResource("1_b8c84")]
 custom_minimum_size = Vector2(460, 0)
@@ -26,8 +22,6 @@ size_flags_vertical = 3
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("4_theme")
-theme_override_styles/panel = SubResource("StyleBoxFlat_quest_form")
 script = ExtResource("2_1mihr")
 packed_slot = ExtResource("3_slot")
 support_row_scene = ExtResource("7_support_row")
@@ -61,7 +55,6 @@ vertical_alignment = 1
 custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("4_theme")
 text_overrun_behavior = 3
 
 [node name="TypeRow" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer" index="1" unique_id=376979058]
@@ -78,7 +71,6 @@ vertical_alignment = 1
 custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("4_theme")
 text_overrun_behavior = 3
 
 [node name="ScoutDistanceRow" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer" index="2" unique_id=287423844]
@@ -96,7 +88,6 @@ vertical_alignment = 1
 custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("4_theme")
 min_value = 1.0
 max_value = 50.0
 value = 1.0
@@ -116,7 +107,6 @@ vertical_alignment = 1
 custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("4_theme")
 text_overrun_behavior = 3
 
 [node name="MinimumRankRow" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer" index="4" unique_id=1242870720]
@@ -133,7 +123,6 @@ vertical_alignment = 1
 custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("4_theme")
 text_overrun_behavior = 3
 
 [node name="RewardOfferRow" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer" index="5" unique_id=1781518387]
@@ -150,7 +139,6 @@ vertical_alignment = 1
 custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("4_theme")
 
 [node name="InterestLabel" type="RichTextLabel" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer" index="6" unique_id=1698834639]
 visible = false
@@ -179,7 +167,6 @@ uppercase = true
 [node name="ActiveQuestsList" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer/ActiveQuestsSection" index="2" unique_id=1888615657]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 8
 
 [node name="DetailsPanel" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestCreation/MarginContainer/Scroll/VBoxContainer" index="8" unique_id=208017456]
 visible = false
@@ -322,6 +309,4 @@ theme_type_variation = &"PrimaryButton"
 custom_minimum_size = Vector2(128, 36)
 layout_mode = 2
 size_flags_horizontal = 0
-theme = ExtResource("6_button_theme")
-theme_override_font_sizes/font_size = 16
 text = "QUEST_CREATION_CREATE"

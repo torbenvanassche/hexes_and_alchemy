@@ -32,8 +32,7 @@ static func create_header() -> HBoxContainer:
 	var labels := add_columns(row)
 	for index in 3:
 		labels[index].text = ["QUEST_REQUEST_TABLE_TITLE", "QUEST_REQUEST_TABLE_AUTHOR", "QUEST_REQUEST_TABLE_STATUS"][index]
-		labels[index].theme_type_variation = &"MutedLabel"
-		labels[index].add_theme_font_size_override("font_size", 13)
+		labels[index].theme_type_variation = &"MutedSmallLabel"
 	var spacer := Control.new()
 	spacer.custom_minimum_size.x = ACTION_WIDTH
 	row.add_child(spacer)

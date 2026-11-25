@@ -13,7 +13,6 @@ can_lock = true
 content = NodePath("NinePatchRect/VBoxContainer/contentPanel/VBoxContainer/InventoryHud")
 
 [node name="topbar" parent="NinePatchRect/VBoxContainer" parent_id_path=PackedInt32Array(554725130) index="0" unique_id=347636229]
-color = Color(0.094, 0.137, 0.173, 1)
 
 [node name="contentPanel" parent="NinePatchRect/VBoxContainer" parent_id_path=PackedInt32Array(554725130) index="1" unique_id=1040542232]
 size_flags_horizontal = 3

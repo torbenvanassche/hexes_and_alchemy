@@ -2,21 +2,9 @@
 
 [ext_resource type="Script" uid="uid://d1khd8rl1w2fd" path="res://scripts/ui/quest_support_row_ui.gd" id="1_script"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_support"]
-bg_color = Color(0.125, 0.184, 0.227, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.298, 0.353, 0.38, 1)
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
-
 [node name="QuestSupportRow" type="PanelContainer" unique_id=1565688841]
 size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_support")
+theme_type_variation = &"CardPanel"
 script = ExtResource("1_script")
 
 [node name="Margin" type="MarginContainer" parent="." unique_id=20630891]
@@ -29,7 +17,6 @@ theme_override_constants/margin_bottom = 7
 [node name="Content" type="HBoxContainer" parent="Margin" unique_id=2017622273]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 8
 
 [node name="SelectionToggle" type="CheckBox" parent="Margin/Content" unique_id=636265364]
 custom_minimum_size = Vector2(28, 28)
@@ -47,28 +34,25 @@ theme_override_constants/separation = 2
 [node name="Header" type="HBoxContainer" parent="Margin/Content/Copy" unique_id=1801537435]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 8
 
 [node name="SupportName" type="Label" parent="Margin/Content/Copy/Header" unique_id=1443008575]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 15
-
+theme_type_variation = &"MediumLabel"
 [node name="Availability" type="Label" parent="Margin/Content/Copy/Header" unique_id=930049446]
 layout_mode = 2
-theme_override_font_sizes/font_size = 14
+theme_type_variation = &"CompactLabel"
 horizontal_alignment = 2
 
 [node name="Description" type="Label" parent="Margin/Content/Copy" unique_id=1176893217]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 14
+theme_type_variation = &"CompactLabel"
 autowrap_mode = 3
 
 [node name="Impact" type="HBoxContainer" parent="Margin/Content/Copy"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 8
 
 [node name="RiskIcon" type="TextureRect" parent="Margin/Content/Copy/Impact"]
 layout_mode = 2
@@ -80,7 +64,7 @@ mouse_filter = 0
 
 [node name="RiskLabel" type="Label" parent="Margin/Content/Copy/Impact"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 14
+theme_type_variation = &"CompactLabel"
 text = "QUEST_DETAIL_RISK_LABEL"
 
 [node name="Spacer" type="Control" parent="Margin/Content/Copy/Impact"]
@@ -89,7 +73,7 @@ custom_minimum_size = Vector2(8, 0)
 
 [node name="DangerLabel" type="Label" parent="Margin/Content/Copy/Impact"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 14
+theme_type_variation = &"CompactLabel"
 text = "QUEST_SUPPORT_DANGER"
 
 [node name="Danger" type="HSlider" parent="Margin/Content/Copy/Impact"]
@@ -105,5 +89,5 @@ mouse_filter = 0
 [node name="DangerValue" type="Label" parent="Margin/Content/Copy/Impact"]
 layout_mode = 2
 custom_minimum_size = Vector2(36, 0)
-theme_override_font_sizes/font_size = 14
+theme_type_variation = &"CompactLabel"
 horizontal_alignment = 2

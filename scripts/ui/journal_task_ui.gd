@@ -18,8 +18,8 @@ func _refresh() -> void:
 	if not is_node_ready() or _task == null:
 		return
 	status.text = "✓" if _task.completed else ""
-	status.add_theme_color_override("font_color", GameUI.SUCCESS)
-	text_label.add_theme_color_override("font_color", GameUI.SUCCESS if _task.completed else GameUI.TEXT)
+	status.theme_type_variation = &"StatusSuccessLabel"
+	text_label.theme_type_variation = &"StatusSuccessLabel" if _task.completed else &"Label"
 	text_label.text = tr(_task.text_key)
 	description.text = tr(_task.description_key) if not _task.description_key.is_empty() else ""
 	description.visible = not _task.description_key.is_empty()

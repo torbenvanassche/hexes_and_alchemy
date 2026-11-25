@@ -98,7 +98,7 @@ func _refresh() -> void:
 func _refresh_condition(_person: NPC = null) -> void:
 	if not is_instance_valid(npc) or not is_node_ready(): return
 	status_label.text = npc.get_activity_status_label()
-	status_label.modulate = Color("a8bb92") if npc.is_available_for_quest() else Color("c5aa76")
+	status_label.theme_type_variation = &"StatusSuccessLabel" if npc.is_available_for_quest() else &"StatusWarningLabel"
 	injuries_label.text = tr("UI_LABEL_VALUE") % [tr("NPC_INJURIES"), npc.get_injuries_label()] if not npc.active_injuries.is_empty() else tr("NPC_CONDITION_HEALTHY")
 	%RecoveryBar.visible = npc.rest_remaining_seconds > 0.0
 	%RecoveryBar.value = npc.get_rest_progress_ratio() * 100.0

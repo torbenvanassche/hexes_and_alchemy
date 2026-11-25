@@ -23,12 +23,11 @@ mouse_filter = 2
 
 [node name="Value" type="Label" parent="Text"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_type_variation = &"LargeLabel"
 text = "0"
 mouse_filter = 2
 
 [node name="Caption" type="Label" parent="Text"]
 layout_mode = 2
-theme_type_variation = &"MutedLabel"
-theme_override_font_sizes/font_size = 14
+theme_type_variation = &"CompactLabel"
 mouse_filter = 2

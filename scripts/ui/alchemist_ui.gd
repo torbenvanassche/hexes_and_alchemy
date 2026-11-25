@@ -1,8 +1,6 @@
 class_name AlchemistUI extends PanelContainer
 
 const SERVICE_ROW := preload("res://scenes/ui/components/alchemist_service_row.tscn")
-const COLOR_SUCCESS := GameUI.SUCCESS
-const COLOR_FAILURE := GameUI.DANGER
 
 @onready var currency_label: Label = $Margin/Content/Header/Currency
 @onready var patients: VBoxContainer = $Margin/Content/Services/TreatmentPanel/Margin/Content/Scroll/Rows
@@ -112,7 +110,7 @@ func _on_enchant(item: EquipmentInfo) -> void:
 
 func _set_feedback(success: bool, success_key: String) -> void:
 	feedback.text = tr(success_key) if success else tr("ALCHEMIST_ACTION_FAILED")
-	feedback.add_theme_color_override("font_color", COLOR_SUCCESS if success else COLOR_FAILURE)
+	feedback.theme_type_variation = &"StatusSuccessLabel" if success else &"StatusDangerLabel"
 	if not success:
 		_queue_refresh()
 

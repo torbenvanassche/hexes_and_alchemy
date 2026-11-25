@@ -19,6 +19,6 @@ stretch_mode = 5
 [node name="Count" type="Label" parent="." unique_id=2054207709]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 18
+theme_type_variation = &"SectionTitle"
 text = "0"
 vertical_alignment = 1

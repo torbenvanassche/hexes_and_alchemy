@@ -2,21 +2,9 @@
 
 [ext_resource type="Script" uid="uid://c3lppfjljqi6k" path="res://scripts/ui/operation_card_ui.gd" id="1_operation"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_operation"]
-bg_color = Color(0.125, 0.184, 0.227, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.298, 0.353, 0.38, 1)
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
-
 [node name="OperationCard" type="PanelContainer" unique_id=1805163612]
 custom_minimum_size = Vector2(0, 68)
-theme_override_styles/panel = SubResource("StyleBoxFlat_operation")
+theme_type_variation = &"CardPanel"
 script = ExtResource("1_operation")
 
 [node name="Margin" type="MarginContainer" parent="." unique_id=1635500530]

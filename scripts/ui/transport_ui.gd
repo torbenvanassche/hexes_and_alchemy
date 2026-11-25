@@ -118,7 +118,7 @@ func _refresh() -> void:
 			amount.text = str(count)
 			amount.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 			amount.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-			if quantity < int(request.cargo[item]): amount.add_theme_color_override("font_color", GameUI.WARNING)
+			if quantity < int(request.cargo[item]): amount.theme_type_variation = &"StatusWarningLabel"
 			row.add_child(amount)
 		%Materials.add_child(row)
 	var blocked_reason := transport.dispatch_block_reason(selected)
@@ -140,16 +140,16 @@ func _refresh() -> void:
 		%Status.text = tr("SHIPMENT_ROUTE_PREVIEW") % maxi(0, path.size() - 1) if not path.is_empty() else tr("SHIPMENT_NO_ROUTE")
 		if not blocked_reason.is_empty(): %Status.text = blocked_reason
 	var state_key := "SHIPMENT_STATE_READY"
-	var state_color := GameUI.SUCCESS
+	var state_variation: StringName = &"StatusSuccessLabel"
 	if this_shipment:
 		state_key = "SHIPMENT_STATE_" + ("BLOCKED" if shipment.blocked else str(shipment.phase).to_upper())
-		state_color = GameUI.WARNING if shipment.blocked else (GameUI.ACCENT if shipment.phase == "unloading" else GameUI.TRAVEL)
+		state_variation = &"StatusWarningLabel" if shipment.blocked else (&"StatusAccentLabel" if shipment.phase == "unloading" else &"StatusTravelLabel")
 	elif record.phase == "fulfilled": state_key = "SHIPMENT_STATE_DELIVERED"
 	elif not blocked_reason.is_empty():
 		state_key = "SHIPMENT_STATE_WAITING"
-		state_color = GameUI.WARNING
+		state_variation = &"StatusWarningLabel"
 	%State.text = tr(state_key)
-	%State.add_theme_color_override("font_color", state_color)
+	%State.theme_type_variation = state_variation
 	%Journey.visible = this_shipment
 	if this_shipment:
 		if shipment.phase == "unloading":

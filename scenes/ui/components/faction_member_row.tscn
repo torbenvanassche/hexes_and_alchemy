@@ -2,17 +2,9 @@
 
 [ext_resource type="Script" uid="uid://cciyt2r1wajds" path="res://scripts/ui/faction_member_row_ui.gd" id="1_row"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_row"]
-bg_color = Color(0, 0, 0, 0)
-border_width_left = 0
-border_width_top = 0
-border_width_right = 0
-border_width_bottom = 1
-border_color = Color(0.298, 0.353, 0.38, 1)
-
 [node name="FactionMemberRow" type="PanelContainer" unique_id=534455210]
 custom_minimum_size = Vector2(0, 48)
-theme_override_styles/panel = SubResource("StyleBoxFlat_row")
+theme_type_variation = &"ListRow"
 script = ExtResource("1_row")
 
 [node name="Margin" type="MarginContainer" parent="." unique_id=1538122283]
@@ -61,8 +53,7 @@ autowrap_mode = 3
 
 [node name="Injury" type="Label" parent="Margin/Columns/Status"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 13
-
+theme_type_variation = &"SmallLabel"
 [node name="Details" type="Button" parent="Margin/Columns"]
 layout_mode = 2
 custom_minimum_size = Vector2(64, 36)

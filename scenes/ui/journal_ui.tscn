@@ -1,10 +1,8 @@
 [gd_scene format=3 uid="uid://bxu6gvad8murf"]
 
-[ext_resource type="Theme" path="res://themes/game_theme.tres" id="1_theme"]
 [ext_resource type="PackedScene" uid="uid://dny1dqcanlco0" path="res://tools/custom_window/base_window.tscn" id="1_window"]
 [ext_resource type="Script" uid="uid://bkoojt24df6m0" path="res://scripts/ui/journal_ui.gd" id="2_journal"]
 [ext_resource type="PackedScene" path="res://scenes/ui/components/journal_page.tscn" id="3_page"]
-[ext_resource type="Theme" path="res://themes/game_theme.tres" id="4_buttons"]
 
 [ext_resource type="PackedScene" path="res://scenes/ui/components/guild_notes.tscn" id="5_notes"]
 
@@ -17,7 +15,6 @@ can_lock = true
 content = NodePath("NinePatchRect/VBoxContainer/contentPanel/JournalPage")
 
 [node name="topbar" parent="NinePatchRect/VBoxContainer" parent_id_path=PackedInt32Array(554725130) index="0" unique_id=347636229]
-color = Color(0.094, 0.137, 0.173, 1)
 
 [node name="Title" parent="NinePatchRect/VBoxContainer/topbar/MarginContainer2/MarginContainer" parent_id_path=PackedInt32Array(67417564) index="0" unique_id=1155745598]
 text = "JOURNAL_TITLE"

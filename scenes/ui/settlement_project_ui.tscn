@@ -1,10 +1,8 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/settlement_project_ui.gd" id="1_script"]
-[ext_resource type="Theme" path="res://themes/game_theme.tres" id="2_theme"]
 
 [node name="ProjectsPage" type="MarginContainer"]
-theme = ExtResource("2_theme")
 theme_override_constants/margin_left = 0
 theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 0
@@ -27,8 +25,7 @@ theme_override_constants/separation = 12
 
 [node name="Title" type="Label" parent="Body/Scroll/Content"]
 layout_mode = 2
-theme_type_variation = &"Heading"
-theme_override_font_sizes/font_size = 24
+theme_type_variation = &"LargeLabel"
 text = "CAMPAIGN_FORGE_TITLE"
 autowrap_mode = 3
 
@@ -42,7 +39,7 @@ layout_mode = 2
 
 [node name="Step" type="Label" parent="Body/Scroll/Content"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_type_variation = &"LargeLabel"
 autowrap_mode = 3
 
 [node name="Guidance" type="Label" parent="Body/Scroll/Content"]
@@ -77,7 +74,6 @@ autowrap_mode = 3
 
 [node name="Alternatives" type="HBoxContainer" parent="Body/Scroll/Content"]
 layout_mode = 2
-theme_override_constants/separation = 8
 
 [node name="Market" type="Button" parent="Body/Scroll/Content/Alternatives"]
 size_flags_horizontal = 3

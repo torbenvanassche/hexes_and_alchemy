@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://joxea3d6sary" path="res://tools/inventory/scripts/data/equipment_info.gd" id="1_equipment"]
 [ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="2_item"]
-[ext_resource type="Texture2D" uid="uid://xmesksu3en75" path="res://sprites/items/bar_iron.png" id="3_icon"]
+[ext_resource type="Texture2D" path="res://sprites/items/HA_ICON_31_IronBlade.png" id="3_icon"]
 [ext_resource type="Resource" uid="uid://o03k1cg30nlw" path="res://resources/item_info/iron_ore.tres" id="4_iron"]
 [ext_resource type="Resource" uid="uid://oowfm1lpkvm" path="res://resources/item_info/wood_log.tres" id="5_wood"]
 

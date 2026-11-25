@@ -2,8 +2,6 @@
 
 [ext_resource type="PackedScene" uid="uid://dny1dqcanlco0" path="res://tools/custom_window/base_window.tscn" id="1_window"]
 [ext_resource type="Script" uid="uid://vhcdgiphx7ee" path="res://scripts/ui/tavern_recruitment_ui.gd" id="2_ui"]
-[ext_resource type="Theme" path="res://themes/game_theme.tres" id="3_light"]
-[ext_resource type="Theme" path="res://themes/game_theme.tres" id="4_buttons"]
 
 [node name="Window" unique_id=1422384806 node_paths=PackedStringArray("content") instance=ExtResource("1_window")]
 custom_minimum_size = Vector2(660, 0)
@@ -21,7 +19,6 @@ custom_minimum_size = Vector2(0, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = ExtResource("3_light")
 script = ExtResource("2_ui")
 
 [node name="Margin" type="MarginContainer" parent="NinePatchRect/VBoxContainer/contentPanel/TavernRecruitment" index="0" unique_id=478620497]
@@ -33,11 +30,9 @@ theme_override_constants/margin_bottom = 0
 
 [node name="Content" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/TavernRecruitment/Margin" index="0" unique_id=1515018970]
 layout_mode = 2
-theme_override_constants/separation = 8
 
 [node name="PoolSummary" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/TavernRecruitment/Margin/Content" index="0" unique_id=1005065912]
 layout_mode = 2
-theme_override_constants/separation = 8
 
 [node name="NextArrival" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/TavernRecruitment/Margin/Content/PoolSummary" index="0" unique_id=778243307]
 layout_mode = 2
@@ -67,7 +62,6 @@ mouse_force_pass_scroll_events = false
 [node name="CandidateRows" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/TavernRecruitment/Margin/Content/CandidateList" index="0" unique_id=1322754820]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 8
 
 [node name="EmptyLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/TavernRecruitment/Margin/Content" index="5" unique_id=1202180045]
 visible = false
@@ -90,6 +84,4 @@ clip_text = true
 [node name="Refresh" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/TavernRecruitment/Margin/Content/Footer" index="1" unique_id=272070911]
 custom_minimum_size = Vector2(176, 36)
 layout_mode = 2
-theme = ExtResource("4_buttons")
-theme_override_font_sizes/font_size = 16
 text = "RECRUITMENT_REFRESH_BUTTON"

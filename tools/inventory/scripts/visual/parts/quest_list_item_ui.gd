@@ -9,7 +9,7 @@ class_name QuestListItemUI extends Control
 @onready var label: Label = $Paper/MarginContainer/VBoxContainer/ProgressBar/Label
 @onready var claim_reward_button: Button = $Paper/MarginContainer/VBoxContainer/ClaimRewardButton
 @onready var paper: Panel = $Paper
-@onready var pin: ColorRect = $Paper/Pin
+@onready var pin: Panel = $Paper/Pin
 
 @export var supply_slot: PackedScene;
 
@@ -46,10 +46,8 @@ func _on_quest_complete() -> void:
 func _update_progress(state: String) -> void:
 	label.text = _get_state_name(state);
 	var state_color := QuestStatePresentation.get_color(state)
-	label.add_theme_color_override("font_color", Color.WHITE)
 	progress_bar.self_modulate = state_color
-	pin.color = state_color
-	paper.self_modulate = Color.WHITE
+	pin.self_modulate = state_color
 	party.text = _get_party_text()
 	var payment := questData.get_offered_currency_reward() if questData != null else 0
 	payment_label.text = tr("QUEST_PAYMENT_OFFERED") % [payment]

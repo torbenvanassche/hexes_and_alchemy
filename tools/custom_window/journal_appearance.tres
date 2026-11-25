@@ -4,6 +4,8 @@
 
 [resource]
 script = ExtResource("1")
-header_height = 64
-title_size = 28
-title_alignment = 1
+header_height = 44
+action_size = 28
+icon_size = 16
+title_size = 20
+title_alignment = 0

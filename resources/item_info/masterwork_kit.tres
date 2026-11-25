@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://joxea3d6sary" path="res://tools/inventory/scripts/data/equipment_info.gd" id="1"]
 [ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="1_rbmot"]
-[ext_resource type="Texture2D" uid="uid://bdoeiust46kjd" path="res://sprites/items/trap.png" id="2"]
+[ext_resource type="Texture2D" path="res://sprites/items/HA_ICON_32_MasterworkKit.png" id="2"]
 
 [resource]
 script = ExtResource("1")

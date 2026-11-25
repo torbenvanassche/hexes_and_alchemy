@@ -1,9 +1,7 @@
 [gd_scene format=3 uid="uid://cpaka7pj72i7g"]
 
-[ext_resource type="Theme" path="res://themes/game_theme.tres" id="1_theme"]
 [ext_resource type="Script" uid="uid://bkoojt24df6m0" path="res://scripts/ui/journal_ui.gd" id="2_journal"]
 [ext_resource type="PackedScene" path="res://scenes/ui/components/journal_page.tscn" id="3_page"]
-[ext_resource type="Theme" path="res://themes/game_theme.tres" id="4_buttons"]
 
 [node name="JournalPage" type="Control" unique_id=1381502266]
 custom_minimum_size = Vector2(430, 330)
@@ -13,7 +11,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_theme")
 script = ExtResource("2_journal")
 page_scene = ExtResource("3_page")
 
@@ -35,7 +32,6 @@ theme_override_constants/separation = 14
 
 [node name="GuildStanding" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 8
 
 [node name="HeadingRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/GuildStanding"]
 layout_mode = 2
@@ -43,26 +39,23 @@ theme_override_constants/separation = 12
 
 [node name="StandingHeader" type="Label" parent="MarginContainer/VBoxContainer/GuildStanding/HeadingRow"]
 layout_mode = 2
-theme_type_variation = &"MutedLabel"
-theme_override_font_sizes/font_size = 13
+theme_type_variation = &"MutedSmallLabel"
 text = "GUILD_STANDING_HEADER"
 size_flags_horizontal = 3
 uppercase = true
 
 [node name="Prestige" type="HBoxContainer" parent="MarginContainer/VBoxContainer/GuildStanding/HeadingRow"]
 layout_mode = 2
-theme_override_constants/separation = 8
 
 [node name="PrestigeTitle" type="Label" parent="MarginContainer/VBoxContainer/GuildStanding/HeadingRow/Prestige"]
 layout_mode = 2
-theme_type_variation = &"MutedLabel"
-theme_override_font_sizes/font_size = 13
+theme_type_variation = &"MutedSmallLabel"
 text = "GUILD_PRESTIGE_LABEL"
 
 [node name="PrestigeValue" type="Label" parent="MarginContainer/VBoxContainer/GuildStanding/HeadingRow/Prestige"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 13
-theme_override_colors/font_color = Color(0.714, 0.604, 0.388, 1)
+theme_type_variation = &"SmallLabel"
+theme_type_variation = &"StatusAccentLabel"
 horizontal_alignment = 2
 
 [node name="Metrics" type="HBoxContainer" parent="MarginContainer/VBoxContainer/GuildStanding"]
@@ -121,28 +114,23 @@ layout_mode = 2
 [node name="ChapterNavigation" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1032812432]
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
-theme = ExtResource("4_buttons")
-theme_override_constants/separation = 8
 
 [node name="PreviousPageButton" type="Button" parent="MarginContainer/VBoxContainer/ChapterNavigation" unique_id=918425928]
 custom_minimum_size = Vector2(42, 0)
 layout_mode = 2
 tooltip_text = "JOURNAL_PREVIOUS_CHAPTER"
-theme_override_font_sizes/font_size = 18
 text = "<"
 
 [node name="ChapterSelector" type="OptionButton" parent="MarginContainer/VBoxContainer/ChapterNavigation" unique_id=1256036495]
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "JOURNAL_CHAPTER_SELECTOR"
-theme_override_font_sizes/font_size = 18
 alignment = 1
 
 [node name="NextPageButton" type="Button" parent="MarginContainer/VBoxContainer/ChapterNavigation" unique_id=1225384084]
 custom_minimum_size = Vector2(42, 0)
 layout_mode = 2
 tooltip_text = "JOURNAL_NEXT_CHAPTER"
-theme_override_font_sizes/font_size = 18
 text = ">"
 
 [node name="PageDivider" type="HSeparator" parent="MarginContainer/VBoxContainer" unique_id=874146196]

@@ -1,11 +1,9 @@
 [gd_scene format=3 uid="uid://by3y5854pa1s4"]
 
 [ext_resource type="Script" uid="uid://boko5h8j3y051" path="res://scripts/ui/tavern_roster_row_ui.gd" id="1_row"]
-[ext_resource type="Theme" path="res://themes/game_theme.tres" id="2_theme"]
 
 [node name="TavernRosterRow" type="HBoxContainer" unique_id=297779562]
 custom_minimum_size = Vector2(0, 30)
-theme = ExtResource("2_theme")
 theme_override_constants/separation = 14
 script = ExtResource("1_row")
 

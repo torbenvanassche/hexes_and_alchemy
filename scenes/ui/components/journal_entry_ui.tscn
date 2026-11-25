@@ -20,8 +20,7 @@ scroll_active = false
 
 [node name="ObjectivesHeader" type="Label" parent="."]
 layout_mode = 2
-theme_type_variation = &"MutedLabel"
-theme_override_font_sizes/font_size = 13
+theme_type_variation = &"MutedSmallLabel"
 text = "JOURNAL_OBJECTIVES"
 uppercase = true
 

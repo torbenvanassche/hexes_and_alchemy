@@ -8,8 +8,7 @@ func setup(value: Quest) -> void:
 	quest = value
 	size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	var current_state := quest.state_machine.get_current_state()
-	var state_color := QuestStatePresentation.get_color(current_state)
-	_apply_style(state_color)
+	theme_type_variation = &"CardPanel"
 
 	var content := VBoxContainer.new()
 	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -22,22 +21,20 @@ func setup(value: Quest) -> void:
 
 	var title := Label.new()
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title.add_theme_font_size_override("font_size", 18)
-	title.add_theme_color_override("font_color", GameUI.TEXT)
+	title.theme_type_variation = &"SectionTitle"
 	title.text = _get_quest_type_name()
 	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	header.add_child(title)
 
 	var state_label := Label.new()
-	state_label.add_theme_font_size_override("font_size", 14)
-	state_label.add_theme_color_override("font_color", state_color)
+	state_label.theme_type_variation = _state_variation(current_state)
 	state_label.text = _get_state_name(current_state)
 	state_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	header.add_child(state_label)
 
 	var party_label := Label.new()
 	party_label.text = _get_party_text()
-	party_label.modulate = GameUI.MUTED
+	party_label.theme_type_variation = &"MutedLabel"
 	party_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	content.add_child(party_label)
 
@@ -47,7 +44,7 @@ func setup(value: Quest) -> void:
 	progress.max_value = 1.0
 	progress.show_percentage = false
 	progress.value = QuestStatePresentation.get_progress(current_state)
-	progress.self_modulate = state_color
+	progress.self_modulate = QuestStatePresentation.get_color(current_state)
 	progress.visible = not QuestStatePresentation.is_terminal(current_state)
 	content.add_child(progress)
 
@@ -55,7 +52,7 @@ func setup(value: Quest) -> void:
 		var result_label := Label.new()
 		var reason_key := str(quest.context.get("failure_reason_key", "QUEST_CANCELLED"))
 		result_label.text = tr(reason_key)
-		result_label.add_theme_color_override("font_color", state_color)
+		result_label.theme_type_variation = _state_variation(current_state)
 		result_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		content.add_child(result_label)
 
@@ -77,17 +74,13 @@ func _repeat_order() -> void:
 	var result := Manager.instance.quests.repeat_order(quest)
 	if not result.success: Manager.instance.toast.notify(tr(result.message_key), GameUI.WARNING)
 
-func _apply_style(state_color: Color) -> void:
-	var style := StyleBoxFlat.new()
-	style.bg_color = GameUI.RAISED
-	style.border_color = state_color
-	style.set_border_width_all(1)
-	style.set_corner_radius_all(4)
-	style.set_content_margin(SIDE_LEFT, 10)
-	style.set_content_margin(SIDE_TOP, 8)
-	style.set_content_margin(SIDE_RIGHT, 10)
-	style.set_content_margin(SIDE_BOTTOM, 8)
-	add_theme_stylebox_override("panel", style)
+func _state_variation(state: String) -> StringName:
+	match state:
+		"waiting": return &"StatusWarningLabel"
+		"en_route", "returning": return &"StatusTravelLabel"
+		"in_progress", "complete": return &"StatusSuccessLabel"
+		"failed": return &"StatusDangerLabel"
+		_: return &"StatusMutedLabel"
 
 func _get_quest_type_name() -> String:
 	if quest.quest_key == "scout":

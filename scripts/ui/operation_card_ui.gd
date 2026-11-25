@@ -17,10 +17,7 @@ func setup(operation: HubOperation) -> void:
 	party.text = tr("HUB_PARTY_LABEL") % operation.get_assigned_npc_names()
 	party.clip_text = true
 	state.text = operation.get_state_name().to_upper()
-	state.add_theme_color_override("font_color", _get_state_color(operation.state))
-	var panel_style := get_theme_stylebox("panel").duplicate() as StyleBoxFlat
-	panel_style.border_color = _get_state_color(operation.state)
-	add_theme_stylebox_override("panel", panel_style)
+	state.theme_type_variation = _get_state_variation(operation.state)
 
 func _get_location_name(operation: HubOperation) -> String:
 	if operation.quest != null and operation.quest.location != null and operation.quest.location.structure != null:
@@ -29,18 +26,18 @@ func _get_location_name(operation: HubOperation) -> String:
 			return structure_info.get_display_name()
 	return tr("HUB_UNKNOWN_LOCATION")
 
-func _get_state_color(operation_state: HubOperation.State) -> Color:
+func _get_state_variation(operation_state: HubOperation.State) -> StringName:
 	if operation_state == HubOperation.State.COMPLETE:
-		return QuestStatePresentation.COMPLETE_COLOR
+		return &"StatusSuccessLabel"
 	if operation_state == HubOperation.State.FAILED:
-		return QuestStatePresentation.FAILED_COLOR
+		return &"StatusDangerLabel"
 	if operation_state == HubOperation.State.CANCELLED:
-		return QuestStatePresentation.CANCELLED_COLOR
+		return &"StatusMutedLabel"
 	match operation_state:
 		HubOperation.State.WAITING:
-			return QuestStatePresentation.WAITING_COLOR
+			return &"StatusWarningLabel"
 		HubOperation.State.EN_ROUTE, HubOperation.State.RETURNING:
-			return QuestStatePresentation.TRAVEL_COLOR
+			return &"StatusTravelLabel"
 		HubOperation.State.IN_PROGRESS:
-			return QuestStatePresentation.ACTIVE_COLOR
-	return GameUI.MUTED
+			return &"StatusSuccessLabel"
+	return &"StatusMutedLabel"

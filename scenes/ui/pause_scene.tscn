@@ -1,29 +1,6 @@
 [gd_scene format=3 uid="uid://bd0i5jrt7650t"]
 
 [ext_resource type="Script" uid="uid://bem2f43dlfne5" path="res://scripts/scene_controllers/pause_screen.gd" id="1_53068"]
-[ext_resource type="Theme" path="res://themes/game_theme.tres" id="2_theme"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_overlay"]
-bg_color = Color(0.04, 0.06, 0.08, 0.7)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_menu_panel"]
-content_margin_left = 20.0
-content_margin_top = 16.0
-content_margin_right = 20.0
-content_margin_bottom = 20.0
-bg_color = Color(0.094, 0.137, 0.173, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.714, 0.604, 0.388, 1)
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header_line"]
-bg_color = Color(0.61, 0.53, 0.37, 1)
 
 [node name="Panel" type="Panel" unique_id=1103910319 node_paths=PackedStringArray("resume_button", "settings_button", "quit_button")]
 process_mode = 2
@@ -32,8 +9,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("2_theme")
-theme_override_styles/panel = SubResource("StyleBoxFlat_overlay")
+theme_type_variation = &"OverlayPanel"
 script = ExtResource("1_53068")
 resume_button = NodePath("CenterContainer/MenuPanel/MarginContainer/MenuLayout/Actions/resume")
 settings_button = NodePath("CenterContainer/MenuPanel/MarginContainer/MenuLayout/Actions/settings")
@@ -50,7 +26,7 @@ grow_vertical = 2
 [node name="MenuPanel" type="PanelContainer" parent="CenterContainer" unique_id=1617234068]
 custom_minimum_size = Vector2(620, 0)
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_menu_panel")
+theme_type_variation = &"CardPanel"
 
 [node name="MarginContainer" type="MarginContainer" parent="CenterContainer/MenuPanel" unique_id=2144853512]
 layout_mode = 2
@@ -62,15 +38,14 @@ theme_override_constants/separation = 16
 [node name="Title" type="Label" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout" unique_id=1348970555]
 unique_name_in_owner = true
 layout_mode = 2
-theme_type_variation = &"Heading"
-theme_override_font_sizes/font_size = 26
+theme_type_variation = &"DisplayLabel"
 text = "SCENE_PAUSE_MENU_NAME"
 horizontal_alignment = 1
 
 [node name="HeaderLine" type="Panel" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout" unique_id=15896976]
 custom_minimum_size = Vector2(0, 2)
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_header_line")
+theme_type_variation = &"AccentRule"
 
 [node name="Actions" type="VBoxContainer" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout" unique_id=790131330]
 unique_name_in_owner = true
@@ -78,15 +53,14 @@ layout_mode = 2
 theme_override_constants/separation = 14
 
 [node name="resume" type="Button" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout/Actions" unique_id=522419469]
+theme_type_variation = &"PrimaryButton"
 custom_minimum_size = Vector2(500, 40)
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
 text = "PAUSE_RESUME"
 
 [node name="settings" type="Button" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout/Actions" unique_id=2066547482]
 custom_minimum_size = Vector2(500, 40)
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
 text = "PAUSE_SETTINGS"
 
 [node name="OpenCheckpoints" type="Button" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout/Actions"]
@@ -96,9 +70,9 @@ layout_mode = 2
 text = "Checkpoints"
 
 [node name="quit" type="Button" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout/Actions" unique_id=746646866]
+theme_type_variation = &"DangerButton"
 custom_minimum_size = Vector2(500, 40)
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
 text = "PAUSE_QUIT"
 
 [node name="CheckpointsPage" type="VBoxContainer" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout"]

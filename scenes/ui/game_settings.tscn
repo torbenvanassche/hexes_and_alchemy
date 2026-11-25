@@ -1,6 +1,5 @@
 [gd_scene format=3 uid="uid://ughm5jhd4ey6"]
 
-[ext_resource type="Theme" path="res://themes/game_theme.tres" id="1_theme"]
 [ext_resource type="Script" path="res://scripts/ui/language_settings.gd" id="2_language"]
 
 [node name="Control" type="Control" unique_id=976897692]
@@ -10,7 +9,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_theme")
 script = ExtResource("2_language")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=199110682]
@@ -31,8 +29,7 @@ theme_override_constants/separation = 18
 
 [node name="Title" type="Label" parent="MarginContainer/VBoxContainer" unique_id=768945560]
 layout_mode = 2
-theme_type_variation = &"Heading"
-theme_override_font_sizes/font_size = 20
+theme_type_variation = &"LargeLabel"
 text = "SCENE_GAME_SETTINGS_NAME"
 
 [node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer" unique_id=891891179]

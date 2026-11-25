@@ -23,7 +23,7 @@ func setup(npc: NPC) -> void:
 	profession_label.text = npc.get_profession_label()
 	rank_label.text = tr("ADVENTURER_ROSTER_RANK") % npc.get_rank_progress_label()
 	status_label.text = npc.get_activity_status_label()
-	status_label.add_theme_color_override("font_color", _get_status_color(npc))
+	status_label.theme_type_variation = _get_status_variation(npc)
 
 func _on_details_pressed() -> void:
 	details_requested.emit()
@@ -31,11 +31,11 @@ func _on_details_pressed() -> void:
 func _get_npc_display_name(npc: NPC) -> String:
 	return npc.get_display_name() if npc != null else tr("SCENE_ADVENTURER_NAME")
 
-func _get_status_color(npc: NPC) -> Color:
+func _get_status_variation(npc: NPC) -> StringName:
 	if npc == null:
-		return GameUI.MUTED
+		return &"StatusMutedLabel"
 	if npc.is_state(NPC.NPCState.RESTING):
-		return GameUI.WARNING
+		return &"StatusWarningLabel"
 	if not npc.is_state(NPC.NPCState.IDLE):
-		return GameUI.TRAVEL
-	return GameUI.SUCCESS
+		return &"StatusTravelLabel"
+	return &"StatusSuccessLabel"

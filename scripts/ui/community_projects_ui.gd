@@ -3,7 +3,7 @@ extends VBoxContainer
 
 const INCIDENT_REQUEST := "local_incident"
 const STAT := preload("res://scenes/ui/components/reward_stat.tscn")
-const COIN := preload("res://sprites/items/coin_single.png")
+const COIN := preload("res://sprites/items/HA_ICON_02_Coin.png")
 const PRESTIGE := preload("res://sprites/ui/line/lucide/prestige.svg")
 const REPUTATION := preload("res://sprites/ui/line/lucide/reputation.svg")
 var request_id := "water"
@@ -33,9 +33,9 @@ func _ready() -> void:
 	_refresh_gate = RefreshGate.new(self, refresh)
 	add_theme_constant_override("separation", 8)
 	title_label = _label(self, "", "Heading")
-	title_label.add_theme_font_size_override("font_size", 20)
+	title_label.theme_type_variation = &"LargeLabel"
 	resident_label = _label(self, "", "MutedLabel")
-	resident_label.add_theme_font_size_override("font_size", 14)
+	resident_label.theme_type_variation = &"CompactLabel"
 	request_label = _label(self, "", "MutedLabel")
 	request_label.hide()
 	request_label.max_lines_visible = 1
@@ -220,7 +220,7 @@ func _objective(text: String, done: bool) -> void:
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	row.add_child(icon)
 	var label := _label(row, text)
-	label.add_theme_font_size_override("font_size", 14)
+	label.theme_type_variation = &"CompactLabel"
 
 func _toggle_objectives() -> void:
 	objectives.visible = not objectives.visible
@@ -268,7 +268,7 @@ func _label(parent: Node, text: String, variation := "") -> Label:
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	if not variation.is_empty(): label.theme_type_variation = variation
-	if variation == "MutedLabel": label.add_theme_font_size_override("font_size", 13)
+	if variation == "MutedLabel": label.theme_type_variation = &"MutedSmallLabel"
 	parent.add_child(label)
 	return label
 

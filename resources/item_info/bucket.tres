@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="ItemInfo" format=3 uid="uid://b0i36ajrv252n"]
 
 [ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="1_bucket"]
-[ext_resource type="Texture2D" uid="uid://ffulp4bkj5o2" path="res://sprites/items/bucket_empty.png" id="2_bucket"]
+[ext_resource type="Texture2D" path="res://sprites/items/HA_ICON_09_Bucket.png" id="2_bucket"]
 [ext_resource type="Resource" uid="uid://b46nyvtvipor5" path="res://resources/item_info/wood_raw.tres" id="3_bucket"]
 
 [resource]

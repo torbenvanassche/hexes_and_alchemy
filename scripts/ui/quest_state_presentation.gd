@@ -1,11 +1,17 @@
 class_name QuestStatePresentation extends RefCounted
 
-const WAITING_COLOR := GameUI.WARNING
-const TRAVEL_COLOR := GameUI.TRAVEL
-const ACTIVE_COLOR := GameUI.SUCCESS
-const COMPLETE_COLOR := GameUI.SUCCESS
-const FAILED_COLOR := GameUI.DANGER
-const CANCELLED_COLOR := GameUI.MUTED
+static var WAITING_COLOR: Color:
+	get: return GameUI.WARNING
+static var TRAVEL_COLOR: Color:
+	get: return GameUI.TRAVEL
+static var ACTIVE_COLOR: Color:
+	get: return GameUI.SUCCESS
+static var COMPLETE_COLOR: Color:
+	get: return GameUI.SUCCESS
+static var FAILED_COLOR: Color:
+	get: return GameUI.DANGER
+static var CANCELLED_COLOR: Color:
+	get: return GameUI.MUTED
 
 static func get_color(state: String) -> Color:
 	match state:

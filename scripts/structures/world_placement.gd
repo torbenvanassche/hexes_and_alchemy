@@ -30,7 +30,7 @@ func _ready() -> void:
 	_hint.offset_top = -60
 	_hint.offset_bottom = -24
 	_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_hint.add_theme_color_override("font_color", GameUI.ACCENT)
+	_hint.theme_type_variation = &"StatusAccentLabel"
 	_hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_hint.text = tr("PLACEMENT_HINT")
 	_hint.hide()

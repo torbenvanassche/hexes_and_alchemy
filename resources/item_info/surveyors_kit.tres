@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="EquipmentInfo" format=3]
 [ext_resource type="Script" path="res://tools/inventory/scripts/data/equipment_info.gd" id="equipment"]
 [ext_resource type="Script" path="res://tools/inventory/scripts/data/item_info.gd" id="item"]
-[ext_resource type="Texture2D" path="res://sprites/items/work supplies.png" id="icon"]
+[ext_resource type="Texture2D" path="res://sprites/items/HA_ICON_14_WorkSupplies.png" id="icon"]
 [ext_resource type="Resource" path="res://resources/item_info/gold_ore.tres" id="gold_ore"]
 [ext_resource type="Resource" path="res://resources/item_info/work_supplies.tres" id="work_supplies"]
 [resource]

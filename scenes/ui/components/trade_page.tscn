@@ -1,7 +1,7 @@
 [gd_scene format=3]
 [ext_resource type="Script" path="res://scripts/ui/transport_ui.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/ui/components/reward_stat.tscn" id="2_stat"]
-[ext_resource type="Texture2D" path="res://sprites/items/coin_single.png" id="3_coin"]
+[ext_resource type="Texture2D" path="res://sprites/items/HA_ICON_02_Coin.png" id="3_coin"]
 [ext_resource type="Texture2D" path="res://sprites/ui/line/lucide/reputation.svg" id="4_reputation"]
 [ext_resource type="Texture2D" path="res://sprites/ui/line/lucide/influence.svg" id="5_influence"]
 [ext_resource type="Texture2D" path="res://sprites/ui/line/lucide/prestige.svg" id="6_prestige"]
@@ -123,7 +123,7 @@ layout_mode = 2
 unique_name_in_owner = true
 icon = ExtResource("3_coin")
 label_key = "GUILD_COINS_LABEL"
-value_color = Color(0.859, 0.718, 0.459, 1)
+value_variation = &"StatusAccentLabel"
 tooltip_text = "SHIPMENT_PAYMENT_HINT"
 
 [node name="CoinRule" type="VSeparator" parent="Scroll/RequestBody/Rewards"]
@@ -186,9 +186,9 @@ unique_name_in_owner = true
 [node name="Actions" type="HBoxContainer" parent="."]
 layout_mode = 2
 unique_name_in_owner = true
-theme_override_constants/separation = 8
 
 [node name="Dispatch" type="Button" parent="Actions"]
+theme_type_variation = &"PrimaryButton"
 layout_mode = 2
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 36)

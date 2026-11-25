@@ -107,6 +107,10 @@ func apply_appearance() -> void:
 		button.custom_minimum_size = Vector2.ONE * appearance.action_size
 		button.theme_type_variation = &"WindowAction"
 		button.add_theme_constant_override("icon_max_width", appearance.icon_size)
+		button.update_minimum_size()
+		button.queue_redraw()
+	header_actions.queue_sort()
+	header_actions.queue_redraw()
 	var margins := appearance.content_margins
 	for entry in [["margin_left", margins.x], ["margin_top", margins.y], ["margin_right", margins.z], ["margin_bottom", margins.w]]:
 		content_panel.add_theme_constant_override(entry[0], entry[1])
@@ -303,7 +307,7 @@ func handle_input(event: InputEvent) -> void:
 			SceneManager.promote_scene_instance(scene_instance)
 		dragging = event.pressed
 	elif dragging and event is InputEventMouseMotion:
-		position += event.relative
+		position = (position + event.relative).round()
 		stored_position = position;
 	else:
 		return

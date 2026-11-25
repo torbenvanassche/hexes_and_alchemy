@@ -2,9 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://dny1dqcanlco0" path="res://tools/custom_window/base_window.tscn" id="1_xoce2"]
 [ext_resource type="Script" uid="uid://m4gt3l1i1hk2" path="res://tools/inventory/scripts/visual/screens/deposit_ui.gd" id="3_i1cn2"]
-[ext_resource type="Theme" path="res://themes/game_theme.tres" id="4_theme"]
 [ext_resource type="Texture2D" uid="uid://c21ya3fh5a86q" path="res://sprites/ui/icons/pouch_add.png" id="5_pouch"]
-[ext_resource type="Theme" path="res://themes/game_theme.tres" id="6_buttons"]
 
 [node name="Window" unique_id=1301866213 node_paths=PackedStringArray("content") instance=ExtResource("1_xoce2")]
 custom_minimum_size = Vector2(420, 0)
@@ -16,7 +14,6 @@ content = NodePath("NinePatchRect/VBoxContainer/contentPanel/DepositPanel")
 region_rect = Rect2(0, 0, 48, 48)
 
 [node name="topbar" parent="NinePatchRect/VBoxContainer" parent_id_path=PackedInt32Array(554725130) index="0" unique_id=347636229]
-color = Color(0.094, 0.137, 0.173, 1)
 
 [node name="contentPanel" parent="NinePatchRect/VBoxContainer" parent_id_path=PackedInt32Array(554725130) index="1" unique_id=1040542232]
 size_flags_horizontal = 3
@@ -25,13 +22,10 @@ size_flags_vertical = 1
 [node name="DepositPanel" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel" index="0" unique_id=1544552581]
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("4_theme")
-theme_override_constants/separation = 8
 
 [node name="InventoryHud" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/DepositPanel" index="0" unique_id=195655274]
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("4_theme")
 theme_override_constants/separation = 4
 script = ExtResource("3_i1cn2")
 
@@ -40,8 +34,6 @@ theme_type_variation = &"PrimaryButton"
 custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("6_buttons")
-theme_override_font_sizes/font_size = 16
 theme_override_constants/icon_max_width = 20
 text = "DEPOSIT_COMPLETE_ORDER"
 icon = ExtResource("5_pouch")

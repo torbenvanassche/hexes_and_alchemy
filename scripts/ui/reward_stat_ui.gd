@@ -5,7 +5,7 @@ extends HBoxContainer
 @export var icon: Texture2D
 @export var label_key := ""
 @export var icon_size := 28
-@export var value_color := GameUI.TEXT
+@export var value_variation: StringName = &"Label"
 
 var _amount := 0
 var _show_sign := false
@@ -15,7 +15,7 @@ func _ready() -> void:
 	$Icon.texture = icon
 	$Icon.custom_minimum_size = Vector2(icon_size, icon_size)
 	$Text/Caption.text = tr(label_key)
-	$Text/Value.add_theme_color_override("font_color", value_color)
+	$Text/Value.theme_type_variation = value_variation
 	_update_amount()
 
 func set_amount(amount: int, show_sign := false) -> void:

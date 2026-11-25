@@ -2,12 +2,9 @@
 
 [ext_resource type="Script" path="res://scripts/ui/faction_overview_card_ui.gd" id="1_card"]
 
-[sub_resource type="StyleBoxEmpty" id="Empty"]
-
 [node name="FactionOverviewCard" type="PanelContainer"]
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_styles/panel = SubResource("Empty")
 script = ExtResource("1_card")
 
 [node name="Content" type="VBoxContainer" parent="."]
@@ -51,23 +48,20 @@ theme_override_constants/separation = 16
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 3.0
-theme_type_variation = &"MutedLabel"
-theme_override_font_sizes/font_size = 13
+theme_type_variation = &"MutedSmallLabel"
 text = "HUB_ACTIVITY_NAME"
 
 [node name="Role" type="Label" parent="Content/MembersScroll/Roster/HeaderMargin/Columns"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
-theme_type_variation = &"MutedLabel"
-theme_override_font_sizes/font_size = 13
+theme_type_variation = &"MutedSmallLabel"
 text = "HUB_ACTIVITY_ROLE"
 
 [node name="Rank" type="Label" parent="Content/MembersScroll/Roster/HeaderMargin/Columns"]
 layout_mode = 2
 custom_minimum_size = Vector2(48, 0)
-theme_type_variation = &"MutedLabel"
-theme_override_font_sizes/font_size = 13
+theme_type_variation = &"MutedSmallLabel"
 horizontal_alignment = 1
 text = "RECRUITMENT_RANK_HEADER"
 
@@ -75,8 +69,7 @@ text = "RECRUITMENT_RANK_HEADER"
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 4.0
-theme_type_variation = &"MutedLabel"
-theme_override_font_sizes/font_size = 13
+theme_type_variation = &"MutedSmallLabel"
 text = "HUB_ACTIVITY_STATUS"
 
 [node name="Action" type="Control" parent="Content/MembersScroll/Roster/HeaderMargin/Columns"]
@@ -98,5 +91,4 @@ layout_mode = 2
 
 [node name="Progress" type="Label" parent="Content"]
 layout_mode = 2
-theme_type_variation = &"MutedLabel"
-theme_override_font_sizes/font_size = 13
+theme_type_variation = &"MutedSmallLabel"
