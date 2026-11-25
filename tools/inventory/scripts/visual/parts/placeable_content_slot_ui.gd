@@ -140,6 +140,14 @@ func _clear_placement_preview() -> void:
 
 func _gui_input(event: InputEvent) -> void:
 	if not can_drag or contentSlot == null: return
+	if InputManager.is_device(InputManager.InputDevice.CONTROLLER) and event.is_action_pressed("ui_slot_place"):
+		var placeable := _get_dragged_placeable()
+		if placeable != null:
+			ContentSlotUI.cancel_controller_transfer()
+			WorldPlacement.begin(placeable, _get_player_inventory(), contentSlot)
+		accept_event()
+		return
+	super(event)
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
 		var placeable := _get_dragged_placeable()
 		if placeable == null: return

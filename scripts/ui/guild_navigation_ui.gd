@@ -7,5 +7,6 @@ func _ready() -> void:
 	)
 
 func _process(_delta: float) -> void:
+	visible = not InputManager.is_device(InputManager.InputDevice.CONTROLLER)
 	if DataManager.instance != null:
 		$Journal.set_pressed_no_signal(DataManager.instance.is_active("hub_window"))

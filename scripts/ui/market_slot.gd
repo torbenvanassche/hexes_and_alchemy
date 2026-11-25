@@ -40,6 +40,7 @@ func configure_sell(_content: Resource, owned_count: int, inventory: ContentGrou
 	disabled = content == null
 
 func _set_item(item: Resource) -> void:
+	set_meta("controller_focus_key", "market:%s:%s" % [mode, item.resource_path if item != null else ""])
 	var item_info := item as ItemInfo
 	var display_name := _get_display_name(item)
 	item_icon.texture = item_info.texture if item_info else null

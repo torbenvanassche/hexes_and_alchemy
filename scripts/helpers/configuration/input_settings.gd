@@ -2,6 +2,7 @@ class_name InputSettings
 extends RefCounted
 
 const SECTION := "keybinds"
+const CONTROLLER_SECTION := "controller_keybinds"
 
 var _config: ConfigFile
 
@@ -41,7 +42,22 @@ func _migrate_misassigned_navigation_bindings() -> bool:
 	return true
 
 func change_keybinding(action: StringName, event: InputEvent) -> void:
-	_config.set_value(SECTION, action, _event_to_string(event))
+	var controller := event is InputEventJoypadButton or event is InputEventJoypadMotion
+	_config.set_value(CONTROLLER_SECTION if controller else SECTION, action, _event_to_string(event))
+
+func apply_bindings() -> void:
+	var bindings := load_keybindings()
+	for action: String in bindings:
+		InputManager.set_action(action, bindings[action])
+	if _config.has_section(CONTROLLER_SECTION):
+		for action: String in _config.get_section_keys(CONTROLLER_SECTION):
+			InputManager.set_action(action, _string_to_event(str(_config.get_value(CONTROLLER_SECTION, action))))
+
+func reset_bindings() -> void:
+	_config.erase_section(SECTION)
+	_config.erase_section(CONTROLLER_SECTION)
+	InputMap.load_from_project_settings()
+	_ensure_defaults()
 
 func load_keybindings() -> Dictionary[String, InputEvent]:
 	var result: Dictionary[String, InputEvent] = {}
@@ -53,12 +69,34 @@ func load_keybindings() -> Dictionary[String, InputEvent]:
 
 func _event_to_string(event: InputEvent) -> String:
 	if event is InputEventKey:
-		return OS.get_keycode_string(event.physical_keycode).to_lower()
+		var code: int = event.physical_keycode if event.physical_keycode != KEY_NONE else event.keycode
+		return "key:%d:%d:%d:%d:%d" % [code, int(event.shift_pressed), int(event.ctrl_pressed), int(event.alt_pressed), int(event.meta_pressed)]
 	elif event is InputEventMouseButton:
 		return "mouse_%d" % event.button_index
+	elif event is InputEventJoypadButton:
+		return "joy_button_%d" % event.button_index
+	elif event is InputEventJoypadMotion:
+		return "joy_axis_%d_%s" % [event.axis, str(signf(event.axis_value))]
 	return ""
 
 func _string_to_event(value: String) -> InputEvent:
+	if value.begins_with("key:"):
+		var key := InputEventKey.new()
+		key.physical_keycode = value.get_slice(":", 1).to_int()
+		key.shift_pressed = value.get_slice(":", 2) == "1"
+		key.ctrl_pressed = value.get_slice(":", 3) == "1"
+		key.alt_pressed = value.get_slice(":", 4) == "1"
+		key.meta_pressed = value.get_slice(":", 5) == "1"
+		return key
+	if value.begins_with("joy_button_"):
+		var button := InputEventJoypadButton.new()
+		button.button_index = value.get_slice("_", 2).to_int()
+		return button
+	if value.begins_with("joy_axis_"):
+		var axis := InputEventJoypadMotion.new()
+		axis.axis = value.get_slice("_", 2).to_int()
+		axis.axis_value = value.get_slice("_", 3).to_float()
+		return axis
 	if value.begins_with("mouse_"):
 		var e := InputEventMouseButton.new()
 		e.button_index = value.get_slice("_", 1).to_int() as MouseButton;

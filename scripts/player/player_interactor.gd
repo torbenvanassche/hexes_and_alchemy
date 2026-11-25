@@ -77,6 +77,8 @@ func _get_hex_from_mouse(update_selection: bool) -> HexBase:
 	
 	var camera := camera_controller.camera
 	var mouse_position := get_viewport().get_mouse_position()
+	if InputManager.is_device(InputManager.InputDevice.CONTROLLER):
+		mouse_position = get_viewport().get_visible_rect().get_center()
 	var ray_origin := camera.project_ray_origin(mouse_position)
 	var ray_direction := camera.project_ray_normal(mouse_position)
 	var grid_plane := Plane(Vector3.UP, grid.global_position.y)

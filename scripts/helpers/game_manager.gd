@@ -50,6 +50,7 @@ func _ready() -> void:
 	_connect_quest_notifications()
 	_load_or_create()
 	input = InputSettings.new(config)
+	input.apply_bindings()
 	
 	if DataManager.instance == null:
 		call_deferred("_ready");
@@ -128,10 +129,17 @@ func save() -> void:
 	config.save(FILE_PATH)
 	
 func input_moves_player() -> bool:
-	return move_player || InputManager.is_device(InputManager.InputDevice.CONTROLLER);
+	return move_player and not controller_ui_active()
+
+func controller_ui_active() -> bool:
+	if not InputManager.is_device(InputManager.InputDevice.CONTROLLER): return false
+	for scene: SceneInfo in SceneManager.ui_stack:
+		for instance in scene.get_live_instances():
+			if SceneManager.is_visible(instance): return true
+	return false
 	
 func _physics_process(_delta: float) -> void:
-	if  InputManager.is_device(InputManager.InputDevice.KEYBOARD_MOUSE) && Input.is_action_just_pressed("toggle_input"):
+	if not controller_ui_active() and Input.is_action_just_pressed("toggle_input") and spring_arm_camera != null:
 		spring_arm_camera.snap_camera_on_player_moved(!move_player);
 		move_player = !move_player;
 
@@ -139,6 +147,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.echo:
 		return
 	if not event.is_action_pressed("cancel"):
+		if event.is_action_pressed("pause"):
+			pause_game(not is_paused)
+			get_viewport().set_input_as_handled()
 		return
 
 	_handle_cancel_input()

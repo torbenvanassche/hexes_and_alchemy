@@ -35,10 +35,7 @@ func physics_process(delta: float) -> void:
 		_follow_terrain()
 
 func _handle_movement(delta: float) -> void:
-	var input := Vector2(
-		Input.get_action_strength("move_right") - Input.get_action_strength("move_left"),
-		Input.get_action_strength("move_forward") - Input.get_action_strength("move_backward")
-	)
+	var input := Input.get_vector("move_left", "move_right", "move_backward", "move_forward")
 
 	if input.length() > 1.0:
 		input = input.normalized()

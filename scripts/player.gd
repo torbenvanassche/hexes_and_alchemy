@@ -63,6 +63,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	
 	if event.is_action_pressed("primary_action"):
+		if Manager.instance.controller_ui_active(): return
 		if not interactor_component.interact():
 			pick_hex_from_mouse()
 

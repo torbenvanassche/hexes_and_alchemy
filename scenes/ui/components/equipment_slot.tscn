@@ -6,7 +6,7 @@
 [node name="equipment_slot" type="TextureButton" unique_id=1091330847]
 custom_minimum_size = Vector2(72, 72)
 size_flags_horizontal = 4
-focus_mode = 0
+focus_mode = 2
 theme_type_variation = &"FlatButton"
 toggle_mode = true
 ignore_texture_size = true

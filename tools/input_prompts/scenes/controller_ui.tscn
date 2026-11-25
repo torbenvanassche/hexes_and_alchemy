@@ -1,0 +1,81 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://tools/input_prompts/scripts/controller_ui.gd" id="1"]
+[ext_resource type="PackedScene" path="res://tools/input_prompts/scenes/action_prompt.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://tools/input_prompts/scenes/controller_keyboard.tscn" id="3"]
+
+[node name="ControllerUI" type="CanvasLayer"]
+process_mode = 3
+layer = 95
+script = ExtResource("1")
+
+[node name="Keyboard" parent="." instance=ExtResource("3")]
+
+[node name="Bar" type="PanelContainer" parent="."]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -36.0
+grow_vertical = 0
+mouse_filter = 2
+theme_type_variation = &"ControllerBar"
+
+[node name="Prompts" type="HBoxContainer" parent="Bar"]
+layout_mode = 2
+alignment = 1
+mouse_filter = 2
+theme_type_variation = &"PromptBarRow"
+
+[node name="Confirm" parent="Bar/Prompts" instance=ExtResource("2")]
+layout_mode = 2
+
+[node name="Navigation" parent="Bar/Prompts" instance=ExtResource("2")]
+layout_mode = 2
+action = "ui_up"
+label_key = "UI_NAVIGATE"
+
+[node name="Back" parent="Bar/Prompts" instance=ExtResource("2")]
+layout_mode = 2
+action = "cancel"
+label_key = "UI_BACK"
+
+[node name="Previous" parent="Bar/Prompts" instance=ExtResource("2")]
+layout_mode = 2
+action = "ui_focus_prev"
+label_key = "UI_PREVIOUS_CONTROL"
+
+[node name="Next" parent="Bar/Prompts" instance=ExtResource("2")]
+layout_mode = 2
+action = "ui_focus_next"
+label_key = "UI_NEXT_CONTROL"
+
+[node name="Special" parent="Bar/Prompts" instance=ExtResource("2")]
+layout_mode = 2
+action = "ui_slot_place"
+label_key = "PLACEMENT_PLACE"
+
+[node name="Scroll" parent="Bar/Prompts" instance=ExtResource("2")]
+layout_mode = 2
+action = "ui_scroll_down"
+label_key = "UI_SCROLL"
+
+[node name="Details" type="PanelContainer" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = -104.0
+offset_right = -12.0
+offset_bottom = -42.0
+grow_vertical = 0
+mouse_filter = 2
+theme_type_variation = &"ControllerDetails"
+
+[node name="Text" type="Label" parent="Details"]
+layout_mode = 2
+theme_type_variation = &"CompactLabel"
+autowrap_mode = 3
+max_lines_visible = 2
+text_overrun_behavior = 3
+mouse_filter = 2

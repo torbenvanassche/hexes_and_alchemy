@@ -89,7 +89,7 @@ func _physics_process(delta: float) -> void:
 	if snapping:
 		_snap_to_center(delta);
 
-	if not Manager.instance.input_moves_player():
+	if not Manager.instance.input_moves_player() and not Manager.instance.controller_ui_active():
 		_update_pan(delta);
 
 	zoom = lerp(zoom, target_zoom, clampf(delta * zoom_smoothness, 0.0, 1.0));
@@ -159,10 +159,10 @@ func _apply_zoom() -> void:
 	camera.rotation_degrees.x = pitch;
 
 func _handle_rotation_input(delta: float) -> void:
-	if PlaceableContentSlotUI.is_placing_placeable:
+	if PlaceableContentSlotUI.is_placing_placeable or Manager.instance.controller_ui_active():
 		return;
 
-	var controller_rotation_input := _get_controller_axis(JOY_AXIS_RIGHT_X);
+	var controller_rotation_input := Input.get_action_strength("camera_rotate_right") - Input.get_action_strength("camera_rotate_left") if InputManager.is_device(InputManager.InputDevice.CONTROLLER) else 0.0
 	if absf(controller_rotation_input) > controller_stick_deadzone:
 		target_yaw -= controller_rotation_input * deg_to_rad(smooth_rotation_turn_speed_deg) * delta;
 	elif rotation_mode == RotationMode.SMOOTH:
@@ -178,18 +178,11 @@ func _handle_rotation_input(delta: float) -> void:
 	target_yaw = wrapf(target_yaw, -PI, PI);
 
 func _handle_controller_zoom(delta: float) -> void:
-	var controller_zoom_input := _get_controller_axis(JOY_AXIS_RIGHT_Y);
+	var controller_zoom_input := Input.get_action_strength("camera_zoom_out") - Input.get_action_strength("camera_zoom_in") if InputManager.is_device(InputManager.InputDevice.CONTROLLER) else 0.0
 	if absf(controller_zoom_input) <= controller_stick_deadzone:
 		return;
 
 	target_zoom += controller_zoom_input * controller_zoom_speed * delta;
-
-func _get_controller_axis(axis: int) -> float:
-	for device in Input.get_connected_joypads():
-		var value := Input.get_joy_axis(device, axis);
-		if absf(value) > controller_stick_deadzone:
-			return value;
-	return 0.0;
 
 func _snap_to_center(delta: float) -> void:
 	pan_offset = pan_offset.lerp(Vector3.ZERO, clampf(delta * snap_speed, 0.0, 1.0));

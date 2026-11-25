@@ -11,6 +11,7 @@ var preview := StructurePlacementPreview.new()
 var hidden_windows: Array[Control] = []
 var _player: PlayerController
 var _hint: Label
+var _controller_aim: Label
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -22,6 +23,19 @@ func _ready() -> void:
 	screen.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	screen.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	layer.add_child(screen)
+	_controller_aim = Label.new()
+	screen.add_child(_controller_aim)
+	_controller_aim.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
+	_controller_aim.offset_left = -12
+	_controller_aim.offset_right = 12
+	_controller_aim.offset_top = -16
+	_controller_aim.offset_bottom = 16
+	_controller_aim.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_controller_aim.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_controller_aim.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_controller_aim.theme_type_variation = &"SectionTitle"
+	_controller_aim.text = "+"
+	_controller_aim.hide()
 	_hint = Label.new()
 	screen.add_child(_hint)
 	_hint.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM)
@@ -65,7 +79,10 @@ func finish(restore_windows := true) -> void:
 	if is_instance_valid(_hint): _hint.hide()
 
 func _process(_delta: float) -> void:
+	_controller_aim.visible = is_instance_valid(Manager.instance) and not get_tree().paused and InputManager.is_device(InputManager.InputDevice.CONTROLLER) and not Manager.instance.controller_ui_active() and (structure != null or not Manager.instance.move_player)
 	if structure == null: return
+	_hint.visible = not InputManager.is_device(InputManager.InputDevice.CONTROLLER)
+	_hint.text = tr("PLACEMENT_HINT_BINDINGS") % [InputManager.action_label("primary_action"), InputManager.action_label("cancel"), InputManager.action_label("camera_rotate_left"), InputManager.action_label("camera_rotate_right")]
 	if not is_instance_valid(_player) or SaveGames.is_loading:
 		finish(false)
 		return
@@ -89,7 +106,7 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("cancel") or (event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT):
 		get_viewport().set_input_as_handled()
 		finish()
-	elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+	elif event.is_action_pressed("primary_action"):
 		get_viewport().set_input_as_handled()
 		# Refresh the pick on click, so a fast move/click cannot use the previous tile.
 		_process(0.0)

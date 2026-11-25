@@ -25,6 +25,8 @@ class_name ContentSlotUI extends TextureButton
 var contentSlot: ContentSlotResource;
 static var drag_data: DragData;
 static var drag_origin: ContentSlotUI;
+static var controller_source: WeakRef
+static var _controller_resource: ContentSlotResource
 
 signal initialized();
 
@@ -156,6 +158,10 @@ func _process(_delta: float) -> void:
 func _gui_input(_event: InputEvent) -> void:
 	if not can_drag:
 		return
+	if InputManager.is_device(InputManager.InputDevice.CONTROLLER) and _event.is_action_pressed("ui_accept"):
+		controller_activate()
+		accept_event()
+		return
 	if _event is InputEventMouseButton and _event.is_pressed() and _event.button_index == MOUSE_BUTTON_RIGHT && !contentSlot.has_content(null):
 		var mouse_position := get_global_mouse_position();
 		var context := ContextMenu.new([
@@ -183,3 +189,38 @@ func _handle_unsuccessful_drag_end() -> bool:
 
 func _update_mouse_filter() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
+	# Read-only item previews should not trap focus among the actionable controls.
+	focus_mode = Control.FOCUS_ALL if can_drag else Control.FOCUS_NONE
+
+static func controller_transfer_active() -> bool:
+	if controller_source == null: return false
+	var source = controller_source.get_ref()
+	return is_instance_valid(source) and not source.is_queued_for_deletion() and source.contentSlot == _controller_resource and source.can_drag and _controller_resource != null and _controller_resource.is_unlocked and _controller_resource.count > 0
+
+static func cancel_controller_transfer() -> void:
+	controller_source = null
+	_controller_resource = null
+
+func controller_activate() -> bool:
+	if not can_drag or contentSlot == null or not contentSlot.is_unlocked: return false
+	if not controller_transfer_active():
+		if contentSlot.get_content() == null or contentSlot.count <= 0: return false
+		controller_source = weakref(self)
+		_controller_resource = contentSlot
+		return true
+	var source := controller_source.get_ref() as ContentSlotUI
+	if source == self:
+		cancel_controller_transfer()
+		return true
+	var data := DragData.new(source)
+	var allowed := _can_drop_data(Vector2.ZERO, data)
+	# Swaps must fit both slots and satisfy both equipment type restrictions.
+	if allowed and contentSlot.get_content() != null and contentSlot.get_content() != source.contentSlot.get_content():
+		var reverse := DragData.new(self)
+		allowed = source._can_drop_data(Vector2.ZERO, reverse) and source.contentSlot.count <= contentSlot.maxcount and contentSlot.count <= source.contentSlot.maxcount
+		reverse.free()
+	if allowed:
+		_drop_data(Vector2.ZERO, data)
+		cancel_controller_transfer()
+	data.free()
+	return allowed

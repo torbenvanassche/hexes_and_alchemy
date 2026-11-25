@@ -1,6 +1,6 @@
 class_name WSD extends Control
 
-@export var element: TextureRect;
+@export var element: Control;
 var _target: Node3D;
 
 func _process(_delta: float):
@@ -9,7 +9,7 @@ func _process(_delta: float):
 		# This remains a fixed-size HUD icon; only its anchor follows the world.
 		var camera := Manager.instance.spring_arm_camera.camera
 		element.global_position = (camera.unproject_position(point) - element.size / 2).round()
-		element.visible = element.texture != null and not camera.is_position_behind(point)
+		element.visible = not camera.is_position_behind(point) and not Manager.instance.controller_ui_active() and not WorldLoading.blocks_input
 	else:
 		element.visible = false;
 
@@ -19,17 +19,8 @@ func show_rect(target: Node3D = null):
 	handle_rect()
 
 func handle_rect():
-	if is_instance_valid(_target):
-		var coords := InputManager.get_input_icon("primary_action");
-		if coords.size() < 2:
-			element.texture = null
-			element.hide()
-			return
-		var texture := InputManager.get_input_texture()
-		texture.region = InputManager.get_rect(Vector2i(coords[0], coords[1]))
-		# Clamp filtering to this cell instead of sampling adjacent atlas icons.
-		texture.filter_clip = true
-		element.texture = texture
+	if is_instance_valid(element): element.refresh()
 
 func _ready():
 	InputManager.input_mode_changed.connect(handle_rect);
+	InputManager.bindings_changed.connect(handle_rect)

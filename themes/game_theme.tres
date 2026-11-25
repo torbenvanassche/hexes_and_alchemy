@@ -364,6 +364,21 @@ border_color = Color(0.62, 0.39, 0.28, 1)
 bg_color = Color(0.12, 0.135, 0.125, 1)
 
 [resource]
+KeyboardKey/base_type = &"Button"
+KeyboardKey/font_sizes/font_size = 18
+ControllerTextPreview/base_type = &"Label"
+ControllerTextPreview/font_sizes/font_size = 20
+ControllerBar/base_type = &"PanelContainer"
+ControllerBar/styles/panel = SubResource("Tooltip")
+ControllerDetails/base_type = &"PanelContainer"
+ControllerDetails/styles/panel = SubResource("Tooltip")
+PromptBinding/base_type = &"Label"
+PromptBinding/font_sizes/font_size = 14
+PromptBinding/colors/font_color = Color(0.78, 0.52, 0.37, 1)
+PromptRow/base_type = &"HBoxContainer"
+PromptRow/constants/separation = 6
+PromptBarRow/base_type = &"HBoxContainer"
+PromptBarRow/constants/separation = 20
 default_font = SubResource("BodyFont")
 default_font_size = 16
 Button/colors/font_color = Color(0.88, 0.88, 0.83, 1)

@@ -77,7 +77,7 @@ keys,en,nl
 "CAMPAIGN_FORGE_STEP_CONSTRUCTION","4. Deliver materials",
 "CAMPAIGN_FORGE_STEP_COMPLETE","The blacksmith is open!",
 "CAMPAIGN_FORGE_GUIDANCE_BLUEPRINT","Find the blueprint at the market. Gather materials at your own pace.",
-"CAMPAIGN_FORGE_GUIDANCE_PLACE_FOUNDATION","Right-click the blueprint in Stores and choose Place. Click a clear site; Escape cancels.",
+"CAMPAIGN_FORGE_GUIDANCE_PLACE_FOUNDATION","Select the blueprint in Stores and choose Place, then confirm a clear site. Back cancels.",
 "CAMPAIGN_FORGE_GUIDANCE_MATERIALS","Commission woodcutting and iron prospecting at the quest board or buy supplies. Mines may need reinforcement.",
 "CAMPAIGN_FORGE_GUIDANCE_CONSTRUCTION","Your supplies are ready. Deliver them to the marked foundation.",
 "CAMPAIGN_FORGE_GUIDANCE_COMPLETE","Craft equipment at the blacksmith. Visit the settlement house to unlock level 2.",
@@ -1226,3 +1226,30 @@ Recruitment standing: %d (keeps earned candidate rank access)",
 "NETWORK_COMPLETE","Trade network established · 75 coins and 2 prestige received.",
 "OFFER_RECOVERING","Recovering or returning home",
 "OFFER_OUTPUT","Output range with this party: %s",
+"KEYBIND_CAMERA_ZOOM_IN","Zoom in","Inzoomen"
+"KEYBIND_CAMERA_ZOOM_OUT","Zoom out","Uitzoomen"
+"KEYBIND_PAUSE","Pause","Pauzeren"
+"UI_CONFIRM","Confirm","Bevestigen"
+"UI_BACK","Back","Terug"
+"UI_NEXT_CONTROL","Next control","Volgend veld"
+"UI_PREVIOUS_CONTROL","Previous control","Vorig veld"
+"UI_PICK_UP","Pick up item","Voorwerp oppakken"
+"UI_TRANSFER_TO","Transfer here","Hier plaatsen"
+"UI_CANCEL_TRANSFER","Cancel transfer","Verplaatsen annuleren"
+"UI_REBIND_WAIT","Waiting for input","Wachten op invoer"
+"UI_ROTATE_LEFT","Rotate left","Links draaien"
+"UI_ROTATE_RIGHT","Rotate right","Rechts draaien"
+"UI_INTERACT","Interact","Interactie"
+"UI_EDIT_TEXT","Edit text","Tekst bewerken"
+"UI_SPACE","Space","Spatie"
+"UI_DELETE_CHARACTER","Delete","Wissen"
+"UI_SHIFT","Shift","Shift"
+"UI_DONE","Done","Klaar"
+"UI_UNEQUIP","Unequip","Uitrusting afdoen"
+"UI_EQUIP","Choose equipment","Uitrusting kiezen"
+"UI_NAVIGATE","Navigate","Navigeren"
+"UI_SCROLL","Scroll","Scrollen"
+"UI_ADJUST_VALUE","%s / %s: adjust value. %s / %s: change field.","%s / %s: waarde aanpassen. %s / %s: ander veld."
+"PLACEMENT_HINT_BINDINGS","%s: place · %s: cancel · %s / %s: rotate","%s: plaatsen · %s: annuleren · %s / %s: draaien"
+"UI_REBIND_PROMPT","Press input · %s: cancel","Druk op invoer · %s: annuleren"
+"UI_INVENTORY_FULL","No room in Stores for the returned equipment.","Geen ruimte in de opslag voor de teruggegeven uitrusting."

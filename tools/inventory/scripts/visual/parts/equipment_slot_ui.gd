@@ -35,3 +35,40 @@ func _can_drop_data(at_position: Vector2, data: Variant) -> bool:
 
 func _get_dragged_placeable() -> PlaceableStructureInfo:
 	return null
+
+func controller_activate() -> bool:
+	if ContentSlotUI.controller_transfer_active(): return super()
+	if not can_drag or rank_locked or contentSlot == null or not contentSlot.is_unlocked: return false
+	var stockpile := _get_player_inventory()
+	if stockpile == null: return false
+	var menu := PopupMenu.new()
+	var choices: Array[EquipmentInfo] = [null]
+	menu.add_item(tr("UI_UNEQUIP"))
+	menu.set_item_disabled(0, contentSlot.get_content() == null)
+	for slot: ContentSlotResource in stockpile.data:
+		var item := slot.get_content() as EquipmentInfo
+		if item == null or item.slot != accepted_slot or slot.count <= 0 or not slot.is_unlocked or choices.has(item): continue
+		choices.append(item)
+		menu.add_item(item.get_display_name())
+	menu.index_pressed.connect(func(index: int) -> void: _choose_equipment(choices[index], stockpile))
+	menu.popup_hide.connect(func() -> void:
+		if is_instance_valid(self) and is_visible_in_tree(): grab_focus()
+		menu.queue_free())
+	add_child(menu)
+	menu.popup(Rect2i(Vector2i(global_position), Vector2i(300, 0)))
+	menu.set_focused_item(1 if choices.size() > 1 else 0)
+	return true
+
+func _choose_equipment(item: EquipmentInfo, stockpile: ContentGroup) -> bool:
+	if not can_drag or rank_locked or contentSlot == null or not contentSlot.is_unlocked: return false
+	var previous := contentSlot.get_content() as EquipmentInfo
+	if item == previous: return true
+	if item != null and (item.slot != accepted_slot or stockpile.remove(item, 1) != 0): return false
+	if previous != null and stockpile.add(previous, 1) != 0:
+		if item != null: stockpile.add(item, 1, true)
+		if is_instance_valid(Manager.instance) and Manager.instance.toast != null:
+			Manager.instance.toast.notify(tr("UI_INVENTORY_FULL"), GameUI.WARNING)
+		return false
+	contentSlot.count = 0 if item == null else 1
+	contentSlot.set_content(item)
+	return true

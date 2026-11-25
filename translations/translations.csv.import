@@ -6,10 +6,10 @@ uid="uid://cmbyjeplm2g2"
 
 [deps]
 
-files=["res://translations/translations.en.translation"]
+files=["res://translations/translations.en.translation", "res://translations/translations.nl.translation"]
 
 source_file="res://translations/translations.csv"
-dest_files=["res://translations/translations.en.translation"]
+dest_files=["res://translations/translations.en.translation", "res://translations/translations.nl.translation"]
 
 [params]
 
