@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="Hexes and Alchemy"
+config/version="1.0.0-beta.1"
 run/main_scene="uid://3pb564xgsaqo"
 config/features=PackedStringArray("4.8", "Forward Plus")
 config/icon="res://icon.svg"
@@ -908,7 +909,7 @@ ui_scroll_down={
 
 [internationalization]
 
-locale/translations=PackedStringArray("res://translations/translations.en.translation", "res://translations/translations.nl.translation")
+locale/translations=PackedStringArray("res://translations/translations.en.translation")
 
 [navigation]
 

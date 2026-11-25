@@ -1,6 +1,7 @@
 class_name Manager extends Node
 
 const FILE_PATH := "user://settings.ini"
+const SUPPORTED_LANGUAGES := {"en": "SETTINGS_LANGUAGE_ENGLISH"}
 
 static var instance: Manager;
 
@@ -125,8 +126,7 @@ func _load_or_create() -> void:
 		graphics.changed.connect(save)
 
 func set_language(locale: String, persist := true) -> void:
-	var supported := ["en", "nl"]
-	var selected := locale if supported.has(locale) else "en"
+	var selected := locale if SUPPORTED_LANGUAGES.has(locale) else "en"
 	TranslationServer.set_locale(selected)
 	config.set_value("general", "locale", selected)
 	if persist:
