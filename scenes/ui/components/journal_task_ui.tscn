@@ -7,16 +7,20 @@ size_flags_horizontal = 3
 theme_override_constants/separation = 12
 script = ExtResource("1_script")
 
-[node name="Completed" type="PanelContainer" parent="."]
-custom_minimum_size = Vector2(24, 24)
+[node name="Completed" type="Panel" parent="."]
+custom_minimum_size = Vector2(20, 20)
+custom_maximum_size = Vector2(20, 20)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mouse_filter = 2
-theme_type_variation = &"CardPanel"
+theme_type_variation = &"CardSurface"
 
 [node name="Mark" type="Label" parent="Completed"]
-layout_mode = 2
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 horizontal_alignment = 1
 vertical_alignment = 1
 

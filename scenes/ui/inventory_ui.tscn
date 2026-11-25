@@ -2,27 +2,34 @@
 
 [ext_resource type="PackedScene" uid="uid://dny1dqcanlco0" path="res://tools/custom_window/base_window.tscn" id="1_7nagc"]
 [ext_resource type="PackedScene" uid="uid://g8cyqkretffu" path="res://tools/inventory/scenes/content_group.tscn" id="2_4ycse"]
+[ext_resource type="Script" path="res://scripts/ui/inventory_window_fit.gd" id="3_fit"]
 
-[node name="Window" unique_id=1301866213 node_paths=PackedStringArray("content") instance=ExtResource("1_7nagc")]
+[node name="Window" unique_id=1301866213 node_paths=PackedStringArray("content", "fit_scroll") instance=ExtResource("1_7nagc")]
 z_index = 1
+script = ExtResource("3_fit")
 size_flags_vertical = 3
 id = "WINDOW_INVENTORY"
 store_position = true
 resizable = false
 can_lock = true
-content = NodePath("NinePatchRect/VBoxContainer/contentPanel/VBoxContainer/InventoryHud")
+content = NodePath("NinePatchRect/VBoxContainer/contentPanel/InventoryScroll")
+fit_scroll = NodePath("NinePatchRect/VBoxContainer/contentPanel/InventoryScroll")
 
 [node name="topbar" parent="NinePatchRect/VBoxContainer" parent_id_path=PackedInt32Array(554725130) index="0" unique_id=347636229]
 
 [node name="contentPanel" parent="NinePatchRect/VBoxContainer" parent_id_path=PackedInt32Array(554725130) index="1" unique_id=1040542232]
 size_flags_horizontal = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel" index="0" unique_id=1573950042]
+[node name="InventoryScroll" type="ScrollContainer" parent="NinePatchRect/VBoxContainer/contentPanel" index="0" unique_id=1573950042]
 layout_mode = 2
-
-[node name="InventoryHud" parent="NinePatchRect/VBoxContainer/contentPanel/VBoxContainer" index="0" unique_id=195655274 instance=ExtResource("2_4ycse")]
-layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="InventoryHud" parent="NinePatchRect/VBoxContainer/contentPanel/InventoryScroll" index="0" unique_id=195655274 instance=ExtResource("2_4ycse")]
+layout_mode = 2
+size_flags_horizontal = 3
+auto_fit_columns = true
 theme_override_constants/h_separation = 4
 theme_override_constants/v_separation = 4
 columns = 7

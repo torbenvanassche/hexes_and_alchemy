@@ -1,6 +1,6 @@
 class_name JournalTaskUI extends HBoxContainer
 
-@onready var completed: PanelContainer = $Completed
+@onready var completed: Panel = $Completed
 @onready var status: Label = $Completed/Mark
 @onready var text_label: Label = $Content/Text
 @onready var description: Label = $Content/Description

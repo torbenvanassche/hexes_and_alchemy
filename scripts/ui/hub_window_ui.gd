@@ -10,7 +10,7 @@ signal tab_changed(tab_id: String)
 @onready var operations_page: Control = $Spread/PageHost/OperationsPage
 @onready var projects_page: Control = $Spread/PageHost/ProjectsPage
 @onready var trade_page: Control = $Spread/PageHost/TradePage
-@onready var inventory_ui: InventoryUI = $Spread/PageHost/InventoryPage/InventoryHud
+@onready var inventory_ui: InventoryUI = $Spread/PageHost/InventoryPage/InventoryCenter/InventoryHud
 @onready var people_page: Control = $Spread/PageHost/PeoplePage
 @onready var treasury: RewardStatUI = $Spread/Contents/Treasury
 

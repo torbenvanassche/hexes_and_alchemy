@@ -60,10 +60,10 @@ func _fit_grid() -> void:
 			available -= bar.size.x + scroll.get_theme_constant("scrollbar_h_separation")
 	var gap := get_theme_constant("h_separation")
 	columns = maxi(1, floori((available + gap) / (slot_size + gap)))
-	var side := maxf(slot_size, floorf((available - gap * (columns - 1)) / columns))
 	for element: Control in elements:
-		element.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		element.custom_minimum_size = Vector2(slot_size, side)
+		element.size_flags_horizontal = Control.SIZE_FILL
+		element.custom_minimum_size = Vector2(slot_size, slot_size)
+		element.custom_maximum_size = Vector2(slot_size, slot_size)
 
 func add(content: ContentSlotResource) -> ContentSlotUI:
 	var container: ContentSlotUI = packed_slot.instantiate()
@@ -74,6 +74,7 @@ func add(content: ContentSlotResource) -> ContentSlotUI:
 	container.size_flags_horizontal = Control.SIZE_FILL
 	container.size_flags_vertical = Control.SIZE_FILL
 	container.custom_minimum_size = Vector2(slot_size, slot_size)
+	container.custom_maximum_size = Vector2(slot_size, slot_size)
 
 	grid.add_child(container)
 	return container
