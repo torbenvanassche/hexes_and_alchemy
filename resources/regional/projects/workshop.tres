@@ -4,7 +4,7 @@
 [ext_resource type="Resource" uid="uid://o03k1cg30nlw" path="res://resources/item_info/iron_ore.tres" id="iron_ore"]
 [ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="item"]
 [ext_resource type="Script" uid="uid://djx5qbdi5vwj5" path="res://scripts/regional/community_benefit.gd" id="ui_benefit"]
-[ext_resource type="Texture2D" path="res://sprites/items/HA_ICON_14_WorkSupplies.png" id="ui_icon_1"]
+[ext_resource type="Texture2D" uid="uid://cm2r3j4uhhnl7" path="res://sprites/items/HA_ICON_14_WorkSupplies.png" id="ui_icon_1"]
 [ext_resource type="PackedScene" uid="uid://0h8dsmcmbcdd" path="res://meshes/kay_fantasy_hexagon/decoration/props/crate_A_small.glb" id="visual"]
 [ext_resource type="Resource" uid="uid://oowfm1lpkvm" path="res://resources/item_info/wood_log.tres" id="wood_log"]
 [ext_resource type="Resource" uid="uid://duoiqc12vrtx2" path="res://resources/item_info/work_supplies.tres" id="work_supplies"]

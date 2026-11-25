@@ -5,20 +5,19 @@ class_name QuestListUI extends Control
 @onready var auto_resolve_button: Button = $Layout/Actions/AutoResolveButton
 @onready var board_surface: Control = $Layout/Scroll/Content/BoardSurface
 @onready var empty_label: Control = $Layout/Scroll/Content/EmptyState
-@onready var request_list: VBoxContainer = $Layout/Scroll/Content/RequestScroll/RequestMargin/Requests
-var request_table_header: HBoxContainer
-@onready var request_scroll: ScrollContainer = $Layout/Scroll/Content/RequestScroll
+@onready var scroll: ScrollContainer = $Layout/Scroll
+@onready var request_table: VBoxContainer = $Layout/Scroll/Content/RequestTable
+@onready var request_list: VBoxContainer = request_table.get_node("Requests")
 @onready var completed_button: Button = $Layout/Scroll/Content/Completed
-@onready var back_button: Button = $Layout/Heading/Back
-var request_details: CommunityProjectsUI
-var request_footer: VBoxContainer
+@onready var back_button: Button = $Layout/Back
+@onready var repeat_button: Button = $Layout/Actions/RepeatLast
+@onready var request_footer: VBoxContainer = $Layout/RequestFooter
+@onready var request_details: CommunityProjectsUI = $Layout/Scroll/Content/RequestDetails
 var active_tab := "guild"
 var selected_request := ""
 var _show_completed := false
 var _refresh_gate: RefreshGate
 var _board_gate: RefreshGate
-var _repeat_button: Button
-var _request_refresh_pending := false
 
 @export var quest_item_ui: PackedScene
 @export var board_margin: float = 20.0
@@ -27,14 +26,13 @@ var window_instance: SceneInstance;
 var auto_resolve_enabled := false
 
 func on_enter() -> void:
-	_repeat_button.visible = active_tab == "guild"
-	_repeat_button.disabled = _last_order() == null
 	_sync_auto_resolve_button()
 	for c: QuestListItemUI in _get_quest_notes():
 		if not Manager.instance.quests.get_commissions().has(c.questData):
 			c.queue_free()
 		else:
 			c.set_auto_resolve_enabled(auto_resolve_enabled)
+			c.refresh_scout_departure()
 
 	for q: Quest in Manager.instance.quests.get_commissions():
 		if _find_note_for_quest(q) == null:
@@ -55,35 +53,19 @@ func _allow_quest_creation_allowed() -> void:
 	create_quest_button.tooltip_text = tr("QUEST_BOARD_FIND_TARGET") if create_quest_button.disabled else ""
 	scout_quest_button.disabled = not _has_available_scouting_to_create()
 	scout_quest_button.theme_type_variation = &"PrimaryButton" if create_quest_button.disabled else &"Button"
-	_layout_board()
 	
 func _ready() -> void:
 	_refresh_gate = RefreshGate.new(self, _refresh_requests)
 	_board_gate = RefreshGate.new(self, on_enter)
-	_repeat_button = Button.new()
-	_repeat_button.text = tr("QUEST_REPEAT_LAST")
-	_repeat_button.pressed.connect(_repeat_last_order)
-	$Layout/Actions.add_child(_repeat_button)
-	request_table_header = VillageRequestNotice.create_header()
-	request_table_header.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
-	$Layout.add_child(request_table_header)
-	$Layout.move_child(request_table_header, $Layout/Scroll.get_index())
+	repeat_button.pressed.connect(_repeat_last_order)
 	_mount_back_button.call_deferred()
-	request_details = CommunityProjectsUI.new()
-	request_details.name = "RequestDetails"
-	$Layout/Scroll/Content.add_child(request_details)
 	# Keep hand-in/delegation actions available while the notice body scrolls.
-	request_footer = VBoxContainer.new()
-	request_footer.name = "RequestFooter"
-	request_footer.add_theme_constant_override("separation", 8)
-	$Layout.add_child(request_footer)
-	$Layout.move_child(request_footer, $Layout/Rule.get_index())
-	request_footer.add_child(HSeparator.new())
 	request_details.status.reparent(request_footer)
+	request_details.status.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	request_details.actions.reparent(request_footer)
+	request_details.actions.alignment = FlowContainer.ALIGNMENT_CENTER
 	active_tab = "village"
-	$Layout/Scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_RESERVE
-	$Layout/Scroll.resized.connect(_layout_empty_state)
+	scroll.resized.connect(_layout_empty_state)
 	$Layout/Tabs/Village.pressed.connect(show_tab.bind("village"))
 	$Layout/Tabs/Guild.pressed.connect(show_tab.bind("guild"))
 	back_button.pressed.connect(show_board)
@@ -97,17 +79,13 @@ func _ready() -> void:
 	scout_quest_button.pressed.connect(_open_scout_quest_menu)
 	auto_resolve_button.toggled.connect(_on_auto_resolve_toggled)
 	Manager.instance.quests.quest_list_changed.connect(_queue_board_refresh)
-	resized.connect(_layout_board)
 	board_surface.resized.connect(_layout_board)
-	request_scroll.resized.connect(_layout_board)
-	request_list.resized.connect(_layout_board)
-	$Layout/Scroll/Content.resized.connect(_layout_board)
 	on_enter()
 	_layout_empty_state.call_deferred()
 
 func _layout_empty_state() -> void:
 	# Center a readable paragraph, rather than the label's narrow minimum width.
-	empty_label.get_node("Content").custom_minimum_size.x = minf(440.0, maxf(1.0, $Layout/Scroll.size.x - 32.0))
+	empty_label.get_node("Content").custom_minimum_size.x = minf(440.0, maxf(1.0, scroll.size.x - 32.0))
 
 func _mount_back_button() -> void:
 	var parent_window: Node = get_parent()
@@ -142,7 +120,6 @@ func _queue_request_refresh() -> void:
 	_refresh_gate.request()
 
 func _refresh_requests() -> void:
-	_request_refresh_pending = false
 	if not is_node_ready() or SaveGames.is_loading: return
 	var regional := Manager.instance.regional
 	if selected_request == CommunityProjectsUI.INCIDENT_REQUEST and regional.active_incident == null:
@@ -156,7 +133,7 @@ func _refresh_requests() -> void:
 		available_count += 1
 		var incident := regional.active_incident.definition
 		var author := regional.get_incident_requester()
-		_add_notice(CommunityProjectsUI.INCIDENT_REQUEST, incident.get_title(), author.resident_name, tr("QUEST_REQUEST_AVAILABLE"), tr("QUEST_REQUEST_INCIDENT_REWARD") % incident.coin_reward)
+		_add_notice(CommunityProjectsUI.INCIDENT_REQUEST, incident.get_title(), author.resident_name, tr("QUEST_REQUEST_AVAILABLE"))
 	for definition: CommunityProjectDefinition in regional.catalog.projects:
 		var state := regional.projects[definition.id]
 		if state.completed:
@@ -169,21 +146,18 @@ func _refresh_requests() -> void:
 			elif state.blueprint_issued: state_text = tr("COMMUNITY_PLACE_BLUEPRINT" if regional.get_project_buildable(definition.id) == null else "COMMUNITY_FIND_FOUNDATION")
 			elif regional.completion_block_reason(definition.id).is_empty(): state_text = tr("QUEST_REQUEST_READY")
 			elif state.fieldwork_done: state_text = tr("QUEST_REQUEST_DELIVER_MATERIALS")
-		_add_notice(definition.id, definition.get_title(), definition.resident_name, state_text, tr(definition.benefit_key))
+		_add_notice(definition.id, definition.get_title(), definition.resident_name, state_text)
 	var village := active_tab == "village"
-	_repeat_button.visible = not village
-	_repeat_button.disabled = _last_order() == null
+	repeat_button.disabled = _last_order() == null
 	var detail := village and not selected_request.is_empty()
 	$Layout/Tabs/Village.text = tr("QUEST_BOARD_VILLAGE_COUNT") % available_count
 	$Layout/Tabs/Guild.text = tr("QUEST_BOARD_GUILD_COUNT") % Manager.instance.quests.get_commissions().size()
 	$Layout/Tabs/Village.set_pressed_no_signal(village)
 	$Layout/Tabs/Guild.set_pressed_no_signal(not village)
 	back_button.visible = detail
-	$Layout/Heading.visible = not village
-	$Layout/Heading/Context.text = tr("QUEST_BOARD_GUILD_HINT")
-	request_list.visible = village and not detail
-	request_scroll.visible = village and not detail and request_list.get_child_count() > 0
-	request_table_header.visible = request_scroll.visible
+	$Layout/Tabs.visible = not detail
+	$Layout/RuleTop.visible = not detail
+	request_table.visible = village and not detail and request_list.get_child_count() > 0
 	request_details.visible = detail
 	request_footer.visible = detail
 	completed_button.visible = village and not detail and completed_count > 0
@@ -196,15 +170,11 @@ func _refresh_requests() -> void:
 	$Layout/Actions.visible = not village
 	$Layout/Rule.visible = not village
 	if detail: request_details.refresh()
-	_layout_board()
 
-func _add_notice(id: String, title: String, author: String, state: String, reward: String) -> void:
+func _add_notice(id: String, title: String, author: String, state: String) -> void:
 	var notice := preload("res://scenes/ui/components/village_request_notice.tscn").instantiate() as VillageRequestNotice
 	request_list.add_child(notice)
-	var progress := 0.08
-	if Manager.instance.regional.project_complete(id): progress = 1.0
-	elif Manager.instance.regional.projects.has(id) and Manager.instance.regional.projects[id].fieldwork_done: progress = 0.7
-	notice.setup(id, title, author, state, reward, show_request, progress)
+	notice.setup(id, title, author, state, show_request)
 
 func _on_auto_resolve_toggled(enabled: bool) -> void:
 	auto_resolve_enabled = enabled
@@ -253,18 +223,27 @@ func _find_note_for_quest(quest: Quest) -> QuestListItemUI:
 	return null
 
 func _layout_board() -> void:
-	if not is_node_ready():
+	if not is_node_ready() or board_surface.size.x <= 0.0:
 		return
 
-	var width := maxf(1.0, $Layout/Scroll.size.x - $Layout/Scroll.get_v_scroll_bar().size.x)
-	request_table_header.custom_minimum_size.x = request_list.size.x
-	var columns := maxi(1, floori((width - board_margin * 2.0 + note_spacing.x) / (201.0 + note_spacing.x)))
 	var notes := _get_ordered_notes()
-	for index in notes.size():
-		notes[index].size = Vector2(184, 210)
-		notes[index].position = Vector2(board_margin + (index % columns) * (201.0 + note_spacing.x), board_margin + floori(float(index) / columns) * (210.0 + note_spacing.y))
+	if notes.is_empty():
+		board_surface.custom_minimum_size.y = 0.0
+		return
+	var width := board_surface.size.x
+	var note_size := notes[0].get_combined_minimum_size()
+	var stride := note_size + note_spacing
+	var columns := maxi(1, floori((width - board_margin * 2.0 + note_spacing.x) / stride.x))
 	var rows := ceili(float(notes.size()) / columns)
-	board_surface.custom_minimum_size.y = board_margin * 2.0 + rows * (210.0 + note_spacing.y)
+	for row in rows:
+		var first := row * columns
+		var count := mini(columns, notes.size() - first)
+		var row_width := count * stride.x - note_spacing.x
+		var left := maxf(0.0, (width - row_width) * 0.5)
+		for column in count:
+			var note := notes[first + column]
+			note.position = Vector2(left + column * stride.x, board_margin + row * stride.y).round()
+	board_surface.custom_minimum_size.y = board_margin * 2.0 + rows * stride.y - note_spacing.y
 
 func _get_ordered_notes() -> Array[QuestListItemUI]:
 	var ordered_notes: Array[QuestListItemUI] = []

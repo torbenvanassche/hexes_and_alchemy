@@ -103,7 +103,7 @@ layout_mode = 2
 [node name="Treasury" parent="NinePatchRect/VBoxContainer/contentPanel/HubWindow/Spread/Contents" instance=ExtResource("12_stat")]
 layout_mode = 2
 icon = ExtResource("13_coin")
-icon_size = 24
+icon_size = 44
 label_key = "GUILD_TREASURY_LABEL"
 value_variation = &"StatusAccentLabel"
 

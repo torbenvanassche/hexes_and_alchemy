@@ -52,3 +52,16 @@ text = "CAMPAIGN_VIEW_PROJECT"
 theme_type_variation = &"DangerButton"
 layout_mode = 2
 text = "CAMPAIGN_CLEAR_DESTINATION"
+
+[node name="DestinationIndicator" type="Control" parent="."]
+visible = false
+top_level = true
+offset_right = 36.0
+offset_bottom = 36.0
+mouse_filter = 2
+
+[node name="Arrow" type="Polygon2D" parent="DestinationIndicator"]
+position = Vector2(18, 18)
+color = Color(0.95, 0.07, 0.04, 1)
+polygon = PackedVector2Array(15, 0, -12, -9, -5, 0, -12, 9)
+antialiased = true

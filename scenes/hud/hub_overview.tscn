@@ -42,7 +42,7 @@ theme_override_constants/separation = 4
 
 [node name="Header" type="Label" parent="Margin/Scroll/VBox/StandingPanel/Margin/Content" unique_id=1135662384]
 layout_mode = 2
-theme_type_variation = &"CompactLabel"
+theme_type_variation = &"SectionHeading"
 text = "GUILD_STANDING_HEADER"
 uppercase = true
 
@@ -123,6 +123,7 @@ vertical_alignment = 1
 layout_mode = 2
 
 [node name="OperationsHeader" type="Label" parent="Margin/Scroll/VBox" unique_id=851288972]
+theme_type_variation = &"SectionHeading"
 layout_mode = 2
 text = "HUB_ACTIVE_OPERATIONS"
 uppercase = true

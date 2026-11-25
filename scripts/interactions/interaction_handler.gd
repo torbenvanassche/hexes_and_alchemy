@@ -9,6 +9,7 @@ var collision_shapes: Array[CollisionShape3D] = []
 var window_instance: SceneInstance;
 
 @export var show_interaction_prompt: bool = true;
+@export var prompt_label_key := "UI_INTERACT"
 @export var close_window_on_area_exit: bool = true
 @export var can_be_triggered_by_npc: bool = false
 ## Optional visible focus for prompts on compound structures such as trade posts.

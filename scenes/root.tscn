@@ -21,8 +21,7 @@
 [ext_resource type="Resource" uid="uid://dkibdkuc04rrk" path="res://tools/time_of_day/resources/dusk.tres" id="9_xkeu2"]
 [ext_resource type="Script" uid="uid://dcapggl16i04f" path="res://scripts/helpers/camera.gd" id="15_dylgi"]
 [ext_resource type="Resource" uid="uid://cutvod5684gln" path="res://resources/scene_info/sub_scenes/gameplay_main.tres" id="22_jehah"]
-[ext_resource type="Script" uid="uid://p57cg8ml65u0" path="res://scripts/helpers/world_space_ui.gd" id="23_f3p2p"]
-[ext_resource type="PackedScene" path="res://tools/input_prompts/scenes/action_prompt.tscn" id="controller_interact"]
+[ext_resource type="PackedScene" path="res://scenes/hud/world_interaction_prompt.tscn" id="23_f3p2p"]
 [ext_resource type="Script" uid="uid://c8bmw05frta6c" path="res://scripts/ui/notification.gd" id="49_c6i2r"]
 [ext_resource type="PackedScene" uid="uid://dsicy12n7flej" path="res://scenes/hud/resource_hud.tscn" id="57_resource_hud"]
 [ext_resource type="PackedScene" uid="uid://rw8d36yv38k" path="res://scenes/ui/components/toast_notification.tscn" id="64_toast_notification"]
@@ -32,6 +31,7 @@
 [ext_resource type="Script" path="res://scripts/crafting/crafting_manager.gd" id="81_crafting"]
 [ext_resource type="Script" path="res://scripts/regional/regional_progression.gd" id="82_regional"]
 [ext_resource type="Resource" path="res://resources/journal_entries/community_chapter.tres" id="83_community"]
+[ext_resource type="Resource" path="res://resources/journal_entries/expedition_contracts.tres" id="84_expeditions"]
 [ext_resource type="PackedScene" path="res://scenes/hud/settlement_project_hud.tscn" id="72_project_hud"]
 [ext_resource type="Script" path="res://tools/inventory/scripts/data/item_info.gd" id="73_item"]
 [ext_resource type="Resource" path="res://resources/item_info/seed_pouch.tres" id="74_seeds"]
@@ -52,6 +52,18 @@ sky_material = SubResource("ProceduralSkyMaterial_j5px3")
 background_mode = 2
 sky = SubResource("Sky_twpsu")
 tonemap_mode = 2
+adjustment_enabled = true
+adjustment_brightness = 0.97
+adjustment_contrast = 1.02
+adjustment_saturation = 0.72
+ssao_enabled = true
+ssao_radius = 0.65
+ssao_intensity = 1.3
+ssao_power = 1.3
+ssao_detail = 0.25
+ssao_horizon = 0.06
+ssao_sharpness = 0.92
+ssao_light_affect = 0.0
 
 [node name="game" type="Node3D" unique_id=1531349496]
 script = ExtResource("1_x28sa")
@@ -82,7 +94,7 @@ script = ExtResource("4_operation_manager")
 
 [node name="journal_manager" type="Node" parent="game_manager" unique_id=1453624016]
 script = ExtResource("4_journal_manager")
-entries = Array[Resource]([ExtResource("77_opening"), ExtResource("80_trade"), ExtResource("83_community")])
+entries = Array[Resource]([ExtResource("77_opening"), ExtResource("80_trade"), ExtResource("83_community"), ExtResource("84_expeditions")])
 
 [node name="settlement_campaign" type="Node" parent="game_manager"]
 script = ExtResource("71_campaign")
@@ -100,6 +112,7 @@ script = ExtResource("82_regional")
 script = ExtResource("4_guild_reputation")
 
 [node name="time_of_day" type="Node" parent="game_manager" unique_id=1430942160 node_paths=PackedStringArray("sun", "environment")]
+process_mode = 1
 script = ExtResource("4_moyyc")
 sun = NodePath("../../shared_components/DirectionalLight3D")
 environment = NodePath("../../shared_components/WorldEnvironment")
@@ -120,9 +133,11 @@ environment = SubResource("Environment_lrqlo")
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
 light_cull_mask = 4294967293
 shadow_enabled = true
-directional_shadow_split_1 = 0.06
-directional_shadow_split_2 = 0.16
-directional_shadow_split_3 = 0.36
+shadow_bias = 0.12
+shadow_normal_bias = 1.5
+directional_shadow_split_1 = 0.1
+directional_shadow_split_2 = 0.2
+directional_shadow_split_3 = 0.5
 directional_shadow_blend_splits = true
 
 [node name="Camera3D" type="Camera3D" parent="shared_components" unique_id=503402897]
@@ -143,17 +158,7 @@ offset_right = 260.0
 offset_bottom = 36.0
 text = "WORLD_SEED_PLACEHOLDER"
 
-[node name="interaction_prompt" type="Control" parent="game_ui" unique_id=286348204 node_paths=PackedStringArray("element")]
-texture_filter = 2
-offset_right = 32.0
-offset_bottom = 32.0
-mouse_filter = 2
-script = ExtResource("23_f3p2p")
-element = NodePath("Prompt")
-
-[node name="Prompt" parent="game_ui/interaction_prompt" instance=ExtResource("controller_interact")]
-action = "primary_action"
-label_key = "UI_INTERACT"
+[node name="interaction_prompt" parent="game_ui" unique_id=286348204 instance=ExtResource("23_f3p2p")]
 
 [node name="ToastNotifications" type="Control" parent="game_ui" unique_id=1863266253]
 z_index = 100
@@ -198,6 +203,7 @@ theme_override_constants/separation = 8
 
 [node name="resource_hud" parent="game_ui" unique_id=1817972187 instance=ExtResource("57_resource_hud")]
 
-[node name="settlement_project" parent="game_ui" instance=ExtResource("72_project_hud")]
+[node name="settlement_project" parent="game_ui" node_paths=PackedStringArray("edge_hud_panels") instance=ExtResource("72_project_hud")]
+edge_hud_panels = Array[NodePath]([NodePath("../resource_hud"), NodePath("../guild_navigation"), NodePath("../ToastNotifications/SafeMargin/Alignment/NotificationStack"), NodePath("../interaction_prompt/Badge")])
 
 [node name="guild_navigation" parent="game_ui" instance=ExtResource("78_navigation")]

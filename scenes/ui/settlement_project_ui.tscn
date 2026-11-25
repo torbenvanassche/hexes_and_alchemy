@@ -25,7 +25,7 @@ theme_override_constants/separation = 12
 
 [node name="Title" type="Label" parent="Body/Scroll/Content"]
 layout_mode = 2
-theme_type_variation = &"LargeLabel"
+theme_type_variation = &"PageTitle"
 text = "CAMPAIGN_FORGE_TITLE"
 autowrap_mode = 3
 
@@ -47,14 +47,16 @@ layout_mode = 2
 autowrap_mode = 3
 
 [node name="MaterialsHeader" type="Label" parent="Body/Scroll/Content"]
+uppercase = true
 layout_mode = 2
-theme_type_variation = &"MutedLabel"
+theme_type_variation = &"SectionHeading"
 
 [node name="Materials" type="VBoxContainer" parent="Body/Scroll/Content"]
 layout_mode = 2
 theme_override_constants/separation = 12
 
 [node name="Treasury" type="Label" parent="Body/Scroll/Content"]
+theme_type_variation = &"StatusAccentLabel"
 visible = false
 layout_mode = 2
 

@@ -12,6 +12,9 @@ class QuestSelection extends RefCounted:
 @onready var scout_distance_spin_box: SpinBox = $MarginContainer/Scroll/VBoxContainer/ScoutDistanceRow/ScoutDistance
 @onready var scout_direction_row: HBoxContainer = $MarginContainer/Scroll/VBoxContainer/ScoutDirectionRow
 @onready var scout_direction_option: OptionButton = $MarginContainer/Scroll/VBoxContainer/ScoutDirectionRow/ScoutDirection
+@onready var scout_schedule: VBoxContainer = $MarginContainer/Scroll/VBoxContainer/ScoutSchedule
+@onready var scout_departure: OptionButton = scout_schedule.get_node("DepartureRow/Departure")
+@onready var scout_survey: ScoutPreviewUI = scout_schedule.get_node("SurveyPreview")
 @onready var minimum_rank_row: HBoxContainer = $MarginContainer/Scroll/VBoxContainer/MinimumRankRow
 @onready var minimum_rank_option: OptionButton = $MarginContainer/Scroll/VBoxContainer/MinimumRankRow/MinimumRank
 @onready var reward_offer_row: HBoxContainer = $MarginContainer/Scroll/VBoxContainer/RewardOfferRow
@@ -51,8 +54,10 @@ class QuestSelection extends RefCounted:
 signal quest_created(quest: Quest)
 
 const SCOUT_QUEST_KEY := "scout"
+enum ScoutDeparture { NOW, DAWN }
 
 var _offer_summary: Label
+var _current_offer: QuestOfferPreview
 var _refresh_gate: RefreshGate
 var forced_interaction: Interaction;
 var scout_only := false
@@ -63,6 +68,8 @@ var _target_selector: QuestTargetSelector
 
 func _reset_ui() -> void:
 	_apply_mode_visibility()
+	scout_departure.select(ScoutDeparture.NOW)
+	_clear_offer_summary()
 	quest_type.clear();
 	quest_location.clear();
 	quest_type.disabled = true;
@@ -90,6 +97,10 @@ func _ready() -> void:
 	$MarginContainer/Scroll/VBoxContainer.add_child(_offer_summary)
 	$MarginContainer/Scroll/VBoxContainer.move_child(_offer_summary, interest_label.get_index() + 1)
 	_configure_location_dropdown()
+	scout_departure.add_item("QUEST_SCOUT_SEND_NOW", ScoutDeparture.NOW)
+	scout_departure.add_item("QUEST_SCOUT_DEPART_AT_DAWN", ScoutDeparture.DAWN)
+	scout_departure.select(ScoutDeparture.NOW)
+	scout_departure.item_selected.connect(_on_scout_departure_selected)
 	quest_location.item_selected.connect(_on_location_selected)
 	quest_type.item_selected.connect(_on_quest_type_selected)
 	if minimum_rank_option != null:
@@ -283,11 +294,39 @@ func _refresh_live_offer() -> void:
 func _refresh_offer_summary() -> void:
 	if _offer_summary == null: return
 	var preview := _create_selected_quest_preview()
-	_offer_summary.visible = preview != null
-	if preview == null: return
-	var summary := QuestOfferPreview.create(preview, Manager.instance.quests)
-	_offer_summary.text = "\n".join(summary.lines)
+	if preview == null:
+		_clear_offer_summary()
+		return
+	_current_offer = QuestOfferPreview.create(preview, Manager.instance.quests)
+	var is_scout := preview.quest_key == SCOUT_QUEST_KEY
+	_offer_summary.visible = not is_scout
+	_offer_summary.text = "\n".join(_current_offer.lines)
 	_offer_summary.tooltip_text = tr("OFFER_ESTIMATE_HINT")
+	scout_schedule.visible = is_scout
+	if scout_schedule.visible:
+		scout_survey.set_offer(_current_offer, _get_target_selector().get_scout_distance(preview.location))
+		_on_scout_departure_selected(scout_departure.selected)
+
+func _clear_offer_summary() -> void:
+	_current_offer = null
+	_offer_summary.hide()
+	scout_schedule.hide()
+
+func _departs_at_dawn() -> bool:
+	return scout_departure.get_selected_id() == ScoutDeparture.DAWN
+
+func _on_scout_departure_selected(_index: int) -> void:
+	if not scout_schedule.visible: return
+	finish_quest_creation.text = tr("QUEST_SCOUT_QUEUE") if _departs_at_dawn() else tr("QUEST_BOARD_SEND_SCOUT")
+	_refresh_scout_survey()
+
+func _on_scout_clock_changed(_day: int, _hour: int, _minute: int) -> void:
+	if scout_schedule.is_visible_in_tree():
+		_refresh_scout_survey()
+
+func _refresh_scout_survey() -> void:
+	if _current_offer == null: return
+	scout_survey.update_survey(Manager.instance.time_of_day, _departs_at_dawn())
 
 func _add_location_option(hex: HexBase, require_reachable: bool = true, allow_active_location: bool = false) -> bool:
 	var selector := _get_target_selector()
@@ -334,6 +373,8 @@ func _apply_scouting_request() -> void:
 	var selector := _get_target_selector()
 	var grid := selector.get_grid()
 	if grid == null:
+		_clear_offer_summary()
+		_update_finish_button()
 		_set_details("")
 		_set_status(tr("QUEST_CREATION_NO_SCOUTING_AVAILABLE"))
 		return
@@ -344,6 +385,8 @@ func _apply_scouting_request() -> void:
 		_get_requested_scout_distance()
 	)
 	if scout_location == null:
+		_clear_offer_summary()
+		_update_finish_button()
 		_set_details("")
 		_set_status(tr("QUEST_CREATION_NO_SCOUTING_AVAILABLE"))
 		return
@@ -816,9 +859,15 @@ func _set_interest_feedback(message: String) -> void:
 		return
 	interest_label.text = message
 	interest_label.visible = message != ""
+	if message.is_empty(): _clear_offer_summary()
 	_request_window_refit()
 
 func _refresh_interest_feedback() -> void:
+	if _get_quest_type_key(quest_type.selected) == SCOUT_QUEST_KEY:
+		interest_label.hide()
+		_refresh_offer_summary()
+		_request_window_refit()
+		return
 	var interested_count := _get_interested_npc_count()
 	if interested_count < 0:
 		_set_interest_feedback("")
@@ -877,18 +926,7 @@ func _refresh_quest_details() -> void:
 	var objective := selected.objective
 	var quest_type_key := selected.quest_type
 	if quest_type_key == SCOUT_QUEST_KEY:
-		if duration_title != null:
-			duration_title.text = tr("QUEST_DETAIL_DISTANCE_LABEL")
-		var distance_text := ""
-		var location := quest_location.get_item_metadata(quest_location.selected) as HexBase
-		if location != null:
-			distance_text = tr("QUEST_DETAIL_SCOUT_DISTANCE") % [_get_target_selector().get_scout_distance(location)]
-		_set_details(
-			tr("QUEST_DESC_SCOUT"),
-			distance_text,
-			tr("QUEST_RISK_UNCERTAIN"),
-			[]
-		)
+		_set_details("")
 		return
 	if objective == null or quest_type_key == "":
 		_set_details("")
@@ -1093,6 +1131,8 @@ func _get_player() -> PlayerController:
 	return Manager.instance.player_instance
 
 func _connect_player_currency_signal() -> void:
+	if Manager.instance != null and not Manager.instance.time_of_day.time_changed.is_connected(_on_scout_clock_changed):
+		Manager.instance.time_of_day.time_changed.connect(_on_scout_clock_changed)
 	if Manager.instance != null and Manager.instance.hub != null:
 		if not Manager.instance.hub.changed.is_connected(_on_player_currency_amount_changed):
 			Manager.instance.hub.changed.connect(_on_player_currency_amount_changed)
@@ -1255,6 +1295,8 @@ func _create_scout_quest(location: HexBase, reward_amount: int) -> void:
 		"scout_direction_key": "QUEST_SCOUT_DIRECTION_%s" % [_get_requested_scout_direction()],
 		"scout_distance": _get_target_selector().get_scout_distance(location),
 	}
+	if _departs_at_dawn():
+		scout_context["scout_departure_day"] = Manager.instance.time_of_day.get_day_number() + 1
 	var no_supports: Array[String] = []
 	var result := _get_posting_service().post_quest(
 		location,

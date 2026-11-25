@@ -17,6 +17,8 @@ const SLOPE_SURFACE_COLLISION_MASK := 1 << 3
 
 @export_group("Scouting")
 @export_range(0, 8, 1) var scouting_exploration_radius := 2
+var _last_survey_hex: Vector3i
+var _last_survey_radius := -1
 
 @export_group("Equipment")
 @export var equipment: NpcEquipmentSlots
@@ -46,6 +48,7 @@ var active_injuries: Array[AdventurerInjury] = []
 var career_age_seconds := 0.0
 var retirement_pending := false
 var _last_rest_display_second := -1
+var _last_rest_rate := 1.0
 var _last_progress_position := Vector3.ZERO
 var _stuck_time := 0.0
 
@@ -165,6 +168,7 @@ func assign_quest(q: Quest) -> void:
 	else:
 		home_position = operation_home_anchor.global_position
 	current_quest = q
+	_last_survey_radius = -1
 	rest_remaining_seconds = 0.0
 	rest_duration_seconds = 0.0
 	recovering_from_injury = false
@@ -423,9 +427,11 @@ func get_activity_state_key() -> String:
 
 func get_activity_status_label() -> String:
 	if is_state(NPCState.RESTING):
-		if recovering_from_injury:
-			return tr("NPC_STATUS_RECOVERING_INJURY") % int(ceil(rest_remaining_seconds))
-		return tr("NPC_STATUS_RESTING") % int(ceil(rest_remaining_seconds))
+		var rate := _get_town_rest_rate()
+		var key := "NPC_STATUS_RECOVERING_INJURY" if recovering_from_injury else "NPC_STATUS_RESTING"
+		if rate > 1.0:
+			key = "NPC_STATUS_NIGHT_RECOVERY" if recovering_from_injury else "NPC_STATUS_NIGHT_REST"
+		return tr(key) % _get_rest_display_seconds(rate)
 	if not is_state(NPCState.IDLE):
 		var status_key := "NPC_STATUS_%s" % get_activity_state_key().to_upper()
 		var translated := tr(status_key)
@@ -493,20 +499,37 @@ func _begin_resting() -> void:
 	velocity = Vector3.ZERO
 	current_path.clear()
 	global_position = get_recovery_position()
-	_last_rest_display_second = int(ceil(rest_remaining_seconds))
+	_last_rest_rate = _get_town_rest_rate()
+	_last_rest_display_second = _get_rest_display_seconds(_last_rest_rate)
 
 func _update_resting() -> void:
 	if rest_remaining_seconds <= 0.0:
 		set_state(NPCState.RETURNING_HOME)
 		return
-	rest_remaining_seconds = maxf(0.0, rest_remaining_seconds - get_physics_process_delta_time())
-	var rest_display_second := int(ceil(rest_remaining_seconds))
-	if rest_display_second != _last_rest_display_second:
+	var rate := _get_town_rest_rate()
+	rest_remaining_seconds = maxf(0.0, rest_remaining_seconds - get_physics_process_delta_time() * rate)
+	var rest_display_second := _get_rest_display_seconds(rate)
+	if rest_display_second != _last_rest_display_second or rate != _last_rest_rate:
 		_last_rest_display_second = rest_display_second
+		_last_rest_rate = rate
 		rest_progress_changed.emit(self)
 	if rest_remaining_seconds <= 0.0:
 		recovering_from_injury = false
 		set_state(NPCState.RETURNING_HOME)
+
+func _get_town_rest_rate() -> float:
+	# Guild members rest at the tavern or at their faction home in town.
+	if not is_instance_valid(recovery_anchor) and not is_instance_valid(operation_home_anchor):
+		return 1.0
+	if Manager.instance == null or not Manager.instance.time_of_day.is_night():
+		return 1.0
+	return recovery_rules.night_rest_speed_multiplier if recovery_rules != null else AdventurerRecoveryRules.DEFAULT_NIGHT_REST_SPEED
+
+func _get_rest_display_seconds(rate: float) -> int:
+	if rate <= 1.0:
+		return ceili(rest_remaining_seconds)
+	var night_seconds := minf(rest_remaining_seconds / rate, Manager.instance.time_of_day.get_seconds_until_dawn())
+	return ceili(rest_remaining_seconds - night_seconds * (rate - 1.0))
 
 func _start_recovery_after_quest(quest: Quest, injured: bool = false) -> void:
 	var rules := recovery_rules
@@ -594,7 +617,8 @@ func _follow_path(on_arrived: Callable) -> void:
 		return
 	var grid := _get_active_grid()
 	_follow_terrain(grid)
-	_explore_for_scouting_quest()
+	if current_quest != null and current_quest.quest_key == "scout" and grid != null:
+		survey_scout_hex(grid.get_hex_at_world_position(global_position))
 	if current_target_index >= current_path.size():
 		velocity = Vector3.ZERO
 		move_and_slide()
@@ -707,15 +731,18 @@ func _get_distance_to_quest(quest: Quest) -> float:
 	return float(GridUtils.cube_distance(start_hex.cube_id, quest.location.cube_id))
 
 func _get_path_to_quest(grid: HexGrid, start_hex: HexBase) -> Array[HexBase]:
-	if grid == null or start_hex == null or current_quest == null or current_quest.location == null:
+	return get_quest_route(grid, start_hex, current_quest.location) if current_quest != null else []
+
+func get_quest_route(grid: HexGrid, start_hex: HexBase, destination: HexBase) -> Array[HexBase]:
+	if grid == null or start_hex == null or destination == null:
 		return []
 	if _can_use_boats_from_active_settlement():
 		return grid.pathfinder.get_hex_path_for_methods(
 			start_hex.cube_id,
-			current_quest.location.cube_id,
+			destination.cube_id,
 			[HexInfo.TraversalTag.WALK, HexInfo.TraversalTag.BOAT]
 		)
-	return grid.pathfinder.get_hex_path(start_hex.cube_id, current_quest.location.cube_id)
+	return grid.pathfinder.get_hex_path(start_hex.cube_id, destination.cube_id)
 
 func _get_path_to_home(grid: HexGrid, start_hex: HexBase, home_hex: HexBase) -> Array[HexBase]:
 	if grid == null or start_hex == null or home_hex == null:
@@ -805,21 +832,24 @@ func _can_use_boats_from_active_settlement() -> bool:
 		and Manager.instance.active_settlement.has_service(&"Shipyard")
 	)
 
-func _explore_for_scouting_quest() -> void:
-	if current_quest == null or current_quest.quest_key != "scout":
+func get_scouting_radius(at_night: bool) -> int:
+	var bonus := equipment.get_scouting_radius_bonus() if equipment != null else 0
+	return maxi(0, scouting_exploration_radius + bonus - int(at_night))
+
+func survey_scout_hex(center: HexBase) -> void:
+	if center == null or current_quest == null or current_quest.quest_key != "scout":
 		return
-	var active_scene := SceneManager.get_active_scene()
-	if active_scene == null:
+	var cycle := Manager.instance.time_of_day
+	var radius := get_scouting_radius(cycle.is_night())
+	if _last_survey_hex == center.cube_id and _last_survey_radius == radius:
 		return
-	var grid := active_scene.node as HexGrid
+	var grid := _get_active_grid()
 	if grid == null:
 		return
-	var current_hex := grid.get_hex_at_world_position(global_position)
-	if current_hex == null:
-		return
-	grid.generate_chunks_around_grid_id(current_hex.grid_id)
-	var equipment_radius_bonus := equipment.get_scouting_radius_bonus() if equipment != null else 0
-	for nearby_tile: SceneInstance in grid.get_tiles_in_radius(current_hex.cube_id, scouting_exploration_radius + equipment_radius_bonus):
+	_last_survey_hex = center.cube_id
+	_last_survey_radius = radius
+	grid.generate_chunks_around_grid_id(center.grid_id)
+	for nearby_tile: SceneInstance in grid.get_tiles_in_radius(center.cube_id, radius):
 		var tile := nearby_tile.node as HexBase
 		if tile != null and not tile.is_explored:
 			current_quest.record_scouted_hex(tile)

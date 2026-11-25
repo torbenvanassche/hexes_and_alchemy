@@ -4,3 +4,45 @@
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("1")
+theme_override_constants/separation = 0
+
+[node name="Columns" type="HBoxContainer" parent="."]
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="Columns"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 0
+autowrap_mode = 3
+vertical_alignment = 1
+
+[node name="Author" type="Label" parent="Columns"]
+custom_minimum_size = Vector2(112, 0)
+layout_mode = 2
+mouse_filter = 0
+autowrap_mode = 3
+vertical_alignment = 1
+
+[node name="Status" type="Label" parent="Columns"]
+custom_minimum_size = Vector2(164, 0)
+layout_mode = 2
+mouse_filter = 0
+theme_type_variation = &"MutedLabel"
+autowrap_mode = 3
+vertical_alignment = 1
+
+[node name="Action" type="MarginContainer" parent="Columns"]
+custom_minimum_size = Vector2(116, 0)
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="View" type="Button" parent="Columns/Action"]
+layout_mode = 2
+text = "QUEST_REQUEST_VIEW"
+tooltip_text = "QUEST_REQUEST_VIEW"
+text_overrun_behavior = 3
+
+[node name="Rule" type="HSeparator" parent="."]
+layout_mode = 2

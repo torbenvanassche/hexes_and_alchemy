@@ -1,0 +1,184 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/graphics_quality_controls.gd" id="1_script"]
+
+[node name="GraphicsQualityControls" type="VBoxContainer"]
+theme_override_constants/separation = 12
+script = ExtResource("1_script")
+
+[node name="PageHeading" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Title" type="Label" parent="PageHeading"]
+layout_mode = 2
+theme_type_variation = &"PageTitle"
+text = "GRAPHICS_QUALITY_TITLE"
+
+[node name="Description" type="Label" parent="PageHeading"]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+autowrap_mode = 3
+text = "GRAPHICS_QUALITY_DESCRIPTION"
+
+[node name="Scroll" type="ScrollContainer" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+follow_focus = true
+
+[node name="Sections" type="VBoxContainer" parent="Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 16
+
+[node name="ImageSection" type="VBoxContainer" parent="Scroll/Sections"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Heading" type="HBoxContainer" parent="Scroll/Sections/ImageSection"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="Scroll/Sections/ImageSection/Heading"]
+layout_mode = 2
+theme_type_variation = &"SectionHeading"
+text = "GRAPHICS_SECTION_IMAGE"
+uppercase = true
+
+[node name="Rule" type="HSeparator" parent="Scroll/Sections/ImageSection/Heading"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 1
+
+[node name="Image" type="GridContainer" parent="Scroll/Sections/ImageSection"]
+layout_mode = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 6
+columns = 2
+
+[node name="AntialiasingLabel" type="Label" parent="Scroll/Sections/ImageSection/Image"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "GRAPHICS_ANTI_ALIASING"
+
+[node name="Antialiasing" type="OptionButton" parent="Scroll/Sections/ImageSection/Image"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(190, 34)
+layout_mode = 2
+tooltip_text = "GRAPHICS_ANTI_ALIASING_HINT"
+
+[node name="RenderScaleLabel" type="Label" parent="Scroll/Sections/ImageSection/Image"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "GRAPHICS_RENDER_SCALE"
+
+[node name="RenderScale" type="OptionButton" parent="Scroll/Sections/ImageSection/Image"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(190, 34)
+layout_mode = 2
+tooltip_text = "GRAPHICS_RENDER_SCALE_HINT"
+
+[node name="LightingSection" type="VBoxContainer" parent="Scroll/Sections"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Heading" type="HBoxContainer" parent="Scroll/Sections/LightingSection"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="Scroll/Sections/LightingSection/Heading"]
+layout_mode = 2
+theme_type_variation = &"SectionHeading"
+text = "GRAPHICS_SECTION_LIGHTING"
+uppercase = true
+
+[node name="Rule" type="HSeparator" parent="Scroll/Sections/LightingSection/Heading"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 1
+
+[node name="Lighting" type="GridContainer" parent="Scroll/Sections/LightingSection"]
+layout_mode = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 6
+columns = 2
+
+[node name="ShadowsLabel" type="Label" parent="Scroll/Sections/LightingSection/Lighting"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "GRAPHICS_SHADOW_QUALITY"
+
+[node name="Shadows" type="OptionButton" parent="Scroll/Sections/LightingSection/Lighting"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(190, 34)
+layout_mode = 2
+tooltip_text = "GRAPHICS_SHADOW_HINT"
+
+[node name="OcclusionLabel" type="Label" parent="Scroll/Sections/LightingSection/Lighting"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "GRAPHICS_AMBIENT_OCCLUSION"
+
+[node name="Occlusion" type="OptionButton" parent="Scroll/Sections/LightingSection/Lighting"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(190, 34)
+layout_mode = 2
+tooltip_text = "GRAPHICS_AMBIENT_OCCLUSION_HINT"
+
+[node name="FramePacingSection" type="VBoxContainer" parent="Scroll/Sections"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Heading" type="HBoxContainer" parent="Scroll/Sections/FramePacingSection"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="Scroll/Sections/FramePacingSection/Heading"]
+layout_mode = 2
+theme_type_variation = &"SectionHeading"
+text = "GRAPHICS_SECTION_FRAME_PACING"
+uppercase = true
+
+[node name="Rule" type="HSeparator" parent="Scroll/Sections/FramePacingSection/Heading"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 1
+
+[node name="FramePacing" type="GridContainer" parent="Scroll/Sections/FramePacingSection"]
+layout_mode = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 6
+columns = 2
+
+[node name="VSyncLabel" type="Label" parent="Scroll/Sections/FramePacingSection/FramePacing"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "GRAPHICS_VSYNC"
+
+[node name="VSync" type="OptionButton" parent="Scroll/Sections/FramePacingSection/FramePacing"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(190, 34)
+layout_mode = 2
+tooltip_text = "GRAPHICS_VSYNC_HINT"
+
+[node name="FrameLimitLabel" type="Label" parent="Scroll/Sections/FramePacingSection/FramePacing"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "GRAPHICS_FRAME_LIMIT"
+
+[node name="FrameLimit" type="OptionButton" parent="Scroll/Sections/FramePacingSection/FramePacing"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(190, 34)
+layout_mode = 2
+tooltip_text = "GRAPHICS_FRAME_LIMIT_HINT"
+
+[node name="Reset" type="Button" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "GRAPHICS_RESET"

@@ -103,7 +103,10 @@ func execute_quest(q: Quest) -> void:
 			_quest_running = false
 			return
 		_pending_reward = _roll_extract_reward(origin_state, _get_profile_int(profile, "reward_rolls", 1))
-		_set_mine_state(_roll_post_extract_state(origin_state, profile, q.get_danger_weight_multiplier()))
+		var next_state := _roll_post_extract_state(origin_state, profile, q.get_danger_weight_multiplier())
+		if q.quest_key == "deep_extract" and depth >= 2 and next_state != MineState.UNSTABLE:
+			q.context["deep_mine_contract_succeeded"] = true
+		_set_mine_state(next_state)
 		reinforced_uses = maxi(0, reinforced_uses - 1)
 		temporary_supports = false
 	elif behaviour == "reinforce":

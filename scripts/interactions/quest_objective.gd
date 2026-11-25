@@ -220,8 +220,9 @@ func _get_threat_context(_quest_type_key: String) -> String:
 		if spot.stage == SpotProgress.Stage.SECURED:
 			return tr("QUEST_CONTEXT_SITE_SECURED")
 		return tr("QUEST_CONTEXT_NO_MONSTER_OCCUPATION")
-	return tr("QUEST_CONTEXT_MONSTER_OCCUPATION") % [
+	return tr("EXPEDITION_THREAT_DETAIL") % [
 		occupation.get_display_name(),
+		occupation.danger_level,
 		AdventurerRank.get_display_name(occupation.get_difficulty()),
 	]
 

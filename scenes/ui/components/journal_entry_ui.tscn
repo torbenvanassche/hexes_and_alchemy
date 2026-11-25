@@ -20,7 +20,7 @@ scroll_active = false
 
 [node name="ObjectivesHeader" type="Label" parent="."]
 layout_mode = 2
-theme_type_variation = &"MutedSmallLabel"
+theme_type_variation = &"SectionHeading"
 text = "JOURNAL_OBJECTIVES"
 uppercase = true
 

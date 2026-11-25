@@ -18,6 +18,7 @@ unique_name_in_owner = true
 fit_to_longest_item = false
 
 [node name="Empty" type="Label" parent="."]
+theme_type_variation = &"MutedLabel"
 layout_mode = 2
 unique_name_in_owner = true
 size_flags_vertical = 3
@@ -57,7 +58,7 @@ horizontal_alignment = 2
 [node name="Title" type="Label" parent="Scroll/RequestBody"]
 layout_mode = 2
 unique_name_in_owner = true
-theme_type_variation = &"Heading"
+theme_type_variation = &"PageTitle"
 autowrap_mode = 2
 
 [node name="Description" type="Label" parent="Scroll/RequestBody"]
@@ -76,25 +77,28 @@ unique_name_in_owner = true
 theme_override_constants/separation = 12
 
 [node name="Cargo" type="Label" parent="Scroll/RequestBody/CargoHint"]
+uppercase = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "SHIPMENT_COLUMN_CARGO"
-theme_type_variation = &"MutedLabel"
+theme_type_variation = &"SectionHeading"
 
 [node name="Have" type="Label" parent="Scroll/RequestBody/CargoHint"]
+uppercase = true
 layout_mode = 2
 unique_name_in_owner = true
 custom_minimum_size = Vector2(64, 0)
 horizontal_alignment = 2
 text = "SHIPMENT_COLUMN_HAVE"
-theme_type_variation = &"MutedLabel"
+theme_type_variation = &"SectionHeading"
 
 [node name="Send" type="Label" parent="Scroll/RequestBody/CargoHint"]
+uppercase = true
 layout_mode = 2
 custom_minimum_size = Vector2(64, 0)
 horizontal_alignment = 2
 text = "SHIPMENT_COLUMN_SEND"
-theme_type_variation = &"MutedLabel"
+theme_type_variation = &"SectionHeading"
 
 [node name="Materials" type="VBoxContainer" parent="Scroll/RequestBody"]
 layout_mode = 2
@@ -110,9 +114,10 @@ theme_type_variation = &"MutedLabel"
 layout_mode = 2
 
 [node name="RewardHeading" type="Label" parent="Scroll/RequestBody"]
+uppercase = true
 layout_mode = 2
 unique_name_in_owner = true
-theme_type_variation = &"MutedLabel"
+theme_type_variation = &"SectionHeading"
 
 [node name="Rewards" type="HBoxContainer" parent="Scroll/RequestBody"]
 layout_mode = 2

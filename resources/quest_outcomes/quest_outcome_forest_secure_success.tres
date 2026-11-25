@@ -1,7 +1,21 @@
 [gd_resource type="Resource" script_class="QuestOutcome" format=3 uid="uid://b64nikyhiq0c3"]
 
 [ext_resource type="Script" uid="uid://cwu8dwm55ox1u" path="res://scripts/quests/quest_outcome.gd" id="1_outcome"]
+[ext_resource type="Script" path="res://scripts/structures/loot_table.gd" id="table"]
+[ext_resource type="Script" path="res://scripts/structures/loot_table_entry.gd" id="entry"]
+[ext_resource type="Resource" path="res://resources/item_info/huntsman_saber.tres" id="saber"]
+[ext_resource type="Resource" path="res://resources/journal_tasks/expedition_forest.tres" id="task"]
+
+[sub_resource type="Resource" id="saber_reward"]
+script = ExtResource("entry")
+item = ExtResource("saber")
+
+[sub_resource type="Resource" id="bounty"]
+script = ExtResource("table")
+entries = Array[ExtResource("entry")]([SubResource("saber_reward")])
 
 [resource]
 script = ExtResource("1_outcome")
+loot_table = SubResource("bounty")
 message_key = "QUEST_REPORT_FOREST_SECURED"
+completes_journal_task = ExtResource("task")

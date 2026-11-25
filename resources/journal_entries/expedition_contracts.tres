@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="JournalEntry" format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/journal_entry.gd" id="entry"]
+[ext_resource type="Script" path="res://scripts/ui/journal_task.gd" id="task"]
+[ext_resource type="Resource" path="res://resources/journal_tasks/expedition_forest.tres" id="forest"]
+[ext_resource type="Resource" path="res://resources/journal_tasks/expedition_relic.tres" id="relic"]
+
+[sub_resource type="Resource" id="mine"]
+script = ExtResource("task")
+id = "expedition_deep_mine"
+text_key = "EXPEDITION_MINE_TASK"
+description_key = "EXPEDITION_MINE_TASK_DESC"
+
+[resource]
+script = ExtResource("entry")
+id = "expedition_contracts"
+title_key = "EXPEDITION_CONTRACTS_TITLE"
+body_key = "EXPEDITION_CONTRACTS_BODY"
+tasks = Array[Resource]([ExtResource("forest"), SubResource("mine"), ExtResource("relic")])

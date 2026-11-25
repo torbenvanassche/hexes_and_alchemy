@@ -38,14 +38,14 @@ func _show_main_page() -> void:
 	%Actions.show()
 	_checkpoint_scroll.hide()
 	%BackFromCheckpoints.hide()
-	%Title.text = tr("SCENE_PAUSE_MENU_NAME")
+	%Title.text = "SCENE_PAUSE_MENU_NAME"
 
 func show_checkpoints() -> void:
 	_refresh_checkpoints()
 	%Actions.hide()
 	_checkpoint_scroll.show()
 	%BackFromCheckpoints.show()
-	%Title.text = "Checkpoints"
+	%Title.text = "PAUSE_CHECKPOINTS"
 	%BackFromCheckpoints.grab_focus()
 
 func _refresh_checkpoints() -> void:

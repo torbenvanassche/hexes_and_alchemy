@@ -1,12 +1,15 @@
 class_name AdventurerRecoveryRules
 extends Resource
 
+const DEFAULT_NIGHT_REST_SPEED := 2.0
+
 @export_range(0.0, 60.0, 0.5) var base_rest_seconds := 3.0
 @export_range(0.0, 10.0, 0.05) var quest_duration_rest_multiplier := 0.35
 @export_range(1.0, 4.0, 0.05) var dangerous_quest_rest_multiplier := 2.0
 @export_range(1.0, 3.0, 0.05) var uncertain_quest_rest_multiplier_min := 1.15
 @export_range(1.0, 3.0, 0.05) var uncertain_quest_rest_multiplier_max := 1.55
 @export_range(0.0, 120.0, 1.0) var maximum_rest_seconds := 30.0
+@export_range(1.0, 4.0, 0.05) var night_rest_speed_multiplier := DEFAULT_NIGHT_REST_SPEED
 @export var injury_recovery_item: ItemInfo
 @export_range(0, 100, 1) var injury_recovery_item_count := 1
 @export_range(0.25, 1.0, 0.05) var injury_item_recovery_multiplier := 0.75

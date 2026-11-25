@@ -7,6 +7,7 @@ extends Node
 @export var back_button: Button;
 
 var btn_group: ButtonGroup;
+var _selected_tab: SceneInfo
 
 func _ready() -> void:
 	btn_group = ButtonGroup.new();
@@ -29,11 +30,13 @@ func _on_tab_changed(button: BaseButton) -> void:
 			for instance in tab.get_live_instances():
 				if "visible" in instance.node:
 					instance.node.visible = false;
-	var scene_info: SceneInfo = group_buttons.get(button)
-	if scene_info:
-		scene_info.queue(_on_tab_change_scene_loaded)
+	_selected_tab = group_buttons.get(button)
+	if _selected_tab:
+		_selected_tab.queue(_on_tab_change_scene_loaded)
 	
 func _on_tab_change_scene_loaded(scene_info: SceneInfo) -> void:
+	if scene_info != _selected_tab:
+		return
 	var opened_scene := scene_info.get_instance()
 	var node := opened_scene.node
 	if node.get_parent() != tab_instance_parent:

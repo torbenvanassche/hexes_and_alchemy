@@ -59,6 +59,10 @@ func _update_progress(state: String) -> void:
 	if is_complete and auto_resolve_enabled:
 		_queue_auto_claim()
 
+func refresh_scout_departure() -> void:
+	if questData != null and questData.is_state(Quest.QuestState.WAITING) and questData.get_scout_departure_day() > 0:
+		label.text = _get_state_name("waiting")
+
 func _claim_reward() -> void:
 	if questData == null:
 		return
@@ -109,6 +113,10 @@ func _get_quest_type_name(quest_type_key: String) -> String:
 	return translated
 
 func _get_state_name(state: String) -> String:
+	if state == "waiting" and questData != null:
+		var departure_day := questData.get_scout_departure_day()
+		if departure_day > Manager.instance.time_of_day.get_day_number():
+			return tr("QUEST_SCOUT_SCHEDULED") % departure_day
 	var translation_key := "QUEST_STATE_%s" % [state.to_upper()]
 	var translated := tr(translation_key)
 	if translated == translation_key:

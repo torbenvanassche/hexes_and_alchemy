@@ -19,9 +19,12 @@ signal phase_changed(new_phase: TimeOfDayPhase)
 signal time_changed(day: int, hour: int, minute: int)
 
 @export var duration: float = 120.0
+const DAWN_MINUTE := 360
+const MINUTES_PER_DAY := 1440
 var days: int = 0
 var _time: float = 0.0
 var _last_display_time_key := -1
+var _shadow_settings_phase: TimeOfDayPhase
 
 signal day_ended()
 
@@ -49,6 +52,21 @@ func get_current_time_percentage() -> float:
 func get_day_number() -> int:
 	return days + 1
 
+func get_elapsed_seconds() -> float:
+	return days * duration + _time
+
+func get_day_at(elapsed_seconds: float) -> int:
+	return floori(elapsed_seconds / duration) + 1
+
+func get_dawn_time(day: int) -> float:
+	return (day - 1) * duration
+
+func get_seconds_until_dawn() -> float:
+	return maxf(0.0, duration - _time)
+
+func is_night() -> bool:
+	return current_phase != null and current_phase.phase == Phase.NIGHT
+
 func get_clock_hour() -> int:
 	return floori(float(get_clock_minutes()) / 60.0)
 
@@ -56,7 +74,13 @@ func get_clock_minute() -> int:
 	return get_clock_minutes() % 60
 
 func get_clock_minutes() -> int:
-	return int(fposmod(360.0 + get_current_time_percentage() * 1440.0, 1440.0))
+	return _clock_minutes_for_fraction(get_current_time_percentage())
+
+func get_clock_minutes_at(elapsed_seconds: float) -> int:
+	return _clock_minutes_for_fraction(fposmod(elapsed_seconds, duration) / duration)
+
+func _clock_minutes_for_fraction(day_fraction: float) -> int:
+	return int(fposmod(DAWN_MINUTE + day_fraction * MINUTES_PER_DAY, MINUTES_PER_DAY))
 
 func _update_time_signal(force: bool = false) -> void:
 	var clock_minutes := get_clock_minutes()
@@ -74,9 +98,14 @@ func _update_phase() -> void:
 		phase_changed.emit(current_phase)
 
 func get_current_phase() -> TimeOfDayPhase:
-	var t := get_current_time_percentage()
+	return _phase_for_fraction(get_current_time_percentage())
+
+func get_phase_at(elapsed_seconds: float) -> TimeOfDayPhase:
+	return _phase_for_fraction(fposmod(elapsed_seconds, duration) / duration)
+
+func _phase_for_fraction(day_fraction: float) -> TimeOfDayPhase:
 	for phase in phases:
-		if t < phase.end_time:
+		if day_fraction < phase.end_time:
 			return phase
 	return phases.back()
 
@@ -111,6 +140,15 @@ func _update_sun_rotation() -> void:
 
 	sun.rotation_degrees.x = angle
 
+func _update_shadow_projection() -> void:
+	if current_phase == _shadow_settings_phase or not sun:
+		return
+	_shadow_settings_phase = current_phase
+	sun.directional_shadow_max_distance = current_phase.shadow_max_distance
+	sun.directional_shadow_fade_start = current_phase.shadow_fade_start
+	sun.shadow_blur = current_phase.shadow_blur
+	sun.light_angular_distance = current_phase.shadow_softness
+	sun.directional_shadow_pancake_size = current_phase.shadow_pancake_size
 func _update_lighting() -> void:
 	if current_phase == null or not sun:
 		return
@@ -127,11 +165,7 @@ func _update_lighting() -> void:
 
 	sun.light_color = base_color
 	sun.light_energy = base_energy * sun_strength
-	sun.directional_shadow_max_distance = lerpf(current_phase.shadow_max_distance, next_phase.shadow_max_distance, blend)
-	sun.directional_shadow_fade_start = lerpf(current_phase.shadow_fade_start, next_phase.shadow_fade_start, blend)
-	sun.shadow_blur = lerpf(current_phase.shadow_blur, next_phase.shadow_blur, blend)
-	sun.light_angular_distance = lerpf(current_phase.shadow_softness, next_phase.shadow_softness, blend)
-	sun.directional_shadow_pancake_size = lerpf(current_phase.shadow_pancake_size, next_phase.shadow_pancake_size, blend)
+	_update_shadow_projection()
 	sun.shadow_opacity = lerpf(current_phase.shadow_opacity, next_phase.shadow_opacity, blend) * sun_strength
 
 	if environment and environment.environment:

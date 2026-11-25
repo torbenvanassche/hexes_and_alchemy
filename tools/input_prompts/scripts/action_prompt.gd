@@ -1,4 +1,4 @@
-extends HBoxContainer
+class_name ActionPrompt extends HBoxContainer
 
 @export var action := "ui_accept"
 @export var label_key := "UI_CONFIRM"

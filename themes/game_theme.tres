@@ -9,6 +9,9 @@
 [ext_resource type="StyleBox" uid="uid://dyequs13mhyp3" path="res://tools/inventory/styles/content_slot_stylebox.tres" id="7_slot_normal"]
 [ext_resource type="StyleBox" uid="uid://b3yojughln6fb" path="res://tools/inventory/styles/content_slot_stylebox_disabled.tres" id="8_slot_disabled"]
 
+[sub_resource type="StyleBoxFlat" id="AccentRule"]
+bg_color = Color(0.55, 0.33, 0.24, 1)
+
 [sub_resource type="StyleBoxFlat" id="Disabled"]
 content_margin_left = 12.0
 content_margin_top = 6.0
@@ -55,7 +58,7 @@ border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.28, 0.30, 0.27, 1)
+border_color = Color(0.28, 0.3, 0.27, 1)
 
 [sub_resource type="StyleBoxFlat" id="Pressed"]
 content_margin_left = 12.0
@@ -66,6 +69,62 @@ bg_color = Color(0.12, 0.135, 0.125, 1)
 border_width_bottom = 2
 border_color = Color(0.62, 0.39, 0.28, 1)
 
+[sub_resource type="StyleBoxFlat" id="Inset"]
+content_margin_left = 10.0
+content_margin_top = 6.0
+content_margin_right = 10.0
+content_margin_bottom = 6.0
+bg_color = Color(0.055, 0.068, 0.063, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.28, 0.3, 0.27, 1)
+
+[sub_resource type="StyleBoxFlat" id="Tooltip"]
+content_margin_left = 10.0
+content_margin_top = 6.0
+content_margin_right = 10.0
+content_margin_bottom = 6.0
+bg_color = Color(0.055, 0.068, 0.063, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.28, 0.3, 0.27, 1)
+
+[sub_resource type="StyleBoxFlat" id="DangerFocus"]
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.82, 0.49, 0.42, 1)
+
+[sub_resource type="StyleBoxFlat" id="DangerHover"]
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 6.0
+bg_color = Color(0.38, 0.18, 0.15, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.62, 0.34, 0.28, 1)
+
+[sub_resource type="StyleBoxFlat" id="DangerButton"]
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 6.0
+bg_color = Color(0.28, 0.14, 0.12, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.48, 0.25, 0.21, 1)
+
 [sub_resource type="StyleBoxFlat" id="DangerFill"]
 content_margin_top = 2.0
 content_margin_bottom = 2.0
@@ -75,6 +134,19 @@ bg_color = Color(0.62, 0.39, 0.28, 1)
 content_margin_top = 2.0
 content_margin_bottom = 2.0
 bg_color = Color(0.25, 0.3, 0.33, 1)
+
+[sub_resource type="StyleBoxFlat" id="SlotHover"]
+bg_color = Color(0.15, 0.16, 0.14, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.5, 0.36, 0.27, 1)
+
+[sub_resource type="StyleBoxFlat" id="SlotPressed"]
+bg_color = Color(0.12, 0.135, 0.125, 1)
+border_width_bottom = 2
+border_color = Color(0.62, 0.39, 0.28, 1)
 
 [sub_resource type="StyleBoxFlat" id="HorizontalThumb"]
 content_margin_left = 16.0
@@ -93,7 +165,7 @@ border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.28, 0.30, 0.27, 1)
+border_color = Color(0.28, 0.3, 0.27, 1)
 
 [sub_resource type="StyleBoxLine" id="HorizontalRule"]
 color = Color(0.35, 0.37, 0.32, 1)
@@ -107,19 +179,7 @@ border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.28, 0.30, 0.27, 1)
-
-[sub_resource type="StyleBoxFlat" id="Inset"]
-content_margin_left = 10.0
-content_margin_top = 6.0
-content_margin_right = 10.0
-content_margin_bottom = 6.0
-bg_color = Color(0.055, 0.068, 0.063, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.28, 0.30, 0.27, 1)
+border_color = Color(0.28, 0.3, 0.27, 1)
 
 [sub_resource type="StyleBoxFlat" id="Tab"]
 content_margin_left = 12.0
@@ -156,6 +216,20 @@ border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.62, 0.39, 0.28, 1)
 
+[sub_resource type="StyleBoxFlat" id="ListRow"]
+draw_center = false
+border_width_bottom = 1
+border_color = Color(0.25, 0.27, 0.24, 1)
+
+[sub_resource type="StyleBoxFlat" id="LoadingBackdrop"]
+bg_color = Color(0.055, 0.068, 0.063, 1)
+
+[sub_resource type="StyleBoxFlat" id="LockedOverlay"]
+bg_color = Color(0.055, 0.068, 0.063, 0.62)
+
+[sub_resource type="StyleBoxFlat" id="DimOverlay"]
+bg_color = Color(0.025, 0.035, 0.03, 0.68)
+
 [sub_resource type="StyleBoxFlat" id="Surface"]
 content_margin_left = 0.0
 content_margin_top = 6.0
@@ -166,7 +240,7 @@ border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.28, 0.30, 0.27, 1)
+border_color = Color(0.28, 0.3, 0.27, 1)
 
 [sub_resource type="StyleBoxFlat" id="DropdownPanel"]
 content_margin_left = 12.0
@@ -174,18 +248,6 @@ content_margin_top = 8.0
 content_margin_right = 12.0
 content_margin_bottom = 8.0
 bg_color = Color(0.08, 0.095, 0.09, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.62, 0.39, 0.28, 1)
-
-[sub_resource type="StyleBoxFlat" id="PrimaryHover"]
-content_margin_left = 12.0
-content_margin_top = 6.0
-content_margin_right = 12.0
-content_margin_bottom = 6.0
-bg_color = Color(0.43, 0.25, 0.20, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
@@ -200,49 +262,29 @@ border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.78, 0.52, 0.37, 1)
 
-[sub_resource type="StyleBoxFlat" id="DangerButton"]
+[sub_resource type="StyleBoxFlat" id="PrimaryHover"]
 content_margin_left = 12.0
 content_margin_top = 6.0
 content_margin_right = 12.0
 content_margin_bottom = 6.0
-bg_color = Color(0.28, 0.14, 0.12, 1)
+bg_color = Color(0.43, 0.25, 0.2, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.48, 0.25, 0.21, 1)
-
-[sub_resource type="StyleBoxFlat" id="DangerHover"]
-content_margin_left = 12.0
-content_margin_top = 6.0
-content_margin_right = 12.0
-content_margin_bottom = 6.0
-bg_color = Color(0.38, 0.18, 0.15, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.62, 0.34, 0.28, 1)
-
-[sub_resource type="StyleBoxFlat" id="DangerFocus"]
-draw_center = false
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.82, 0.49, 0.42, 1)
+border_color = Color(0.62, 0.39, 0.28, 1)
 
 [sub_resource type="StyleBoxFlat" id="Primary"]
 content_margin_left = 12.0
 content_margin_top = 6.0
 content_margin_right = 12.0
 content_margin_bottom = 6.0
-bg_color = Color(0.34, 0.20, 0.17, 1)
+bg_color = Color(0.34, 0.2, 0.17, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.50, 0.32, 0.27, 1)
+border_color = Color(0.5, 0.32, 0.27, 1)
 
 [sub_resource type="StyleBoxFlat" id="Track"]
 content_margin_left = 0.0
@@ -271,17 +313,25 @@ border_color = Color(0, 0, 0, 0)
 [sub_resource type="SystemFont" id="BodyFont"]
 font_names = PackedStringArray("Segoe UI", "Noto Sans")
 
-[sub_resource type="StyleBoxFlat" id="Tooltip"]
-content_margin_left = 10.0
-content_margin_top = 6.0
-content_margin_right = 10.0
-content_margin_bottom = 6.0
-bg_color = Color(0.055, 0.068, 0.063, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
+[sub_resource type="StyleBoxFlat" id="HeaderOutline"]
+draw_center = false
 border_width_bottom = 1
-border_color = Color(0.28, 0.30, 0.27, 1)
+border_color = Color(0.55, 0.33, 0.24, 1)
+
+[sub_resource type="StyleBoxFlat" id="DialogHeader"]
+content_margin_left = 14.0
+content_margin_top = 8.0
+content_margin_right = 14.0
+content_margin_bottom = 9.0
+bg_color = Color(0.09411765, 0.1372549, 0.172549, 1)
+border_width_bottom = 1
+border_color = Color(0.55, 0.33, 0.24, 1)
+
+[sub_resource type="StyleBoxFlat" id="SlotInterior"]
+bg_color = Color(0.12, 0.135, 0.125, 1)
+
+[sub_resource type="StyleBoxFlat" id="ToastAccent"]
+bg_color = Color(0.62, 0.39, 0.28, 1)
 
 [sub_resource type="StyleBoxFlat" id="VerticalThumb"]
 content_margin_left = 6.0
@@ -318,69 +368,26 @@ border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.78, 0.52, 0.37, 1)
 
-[sub_resource type="StyleBoxFlat" id="HeaderOutline"]
-draw_center = false
-border_width_left = 0
-border_width_top = 0
-border_width_right = 0
-border_width_bottom = 1
-border_color = Color(0.28, 0.30, 0.27, 1)
-
-[sub_resource type="StyleBoxFlat" id="DimOverlay"]
-bg_color = Color(0.025, 0.035, 0.03, 0.68)
-
-[sub_resource type="StyleBoxFlat" id="LoadingBackdrop"]
-bg_color = Color(0.055, 0.068, 0.063, 1)
-
-[sub_resource type="StyleBoxFlat" id="AccentRule"]
-bg_color = Color(0.55, 0.33, 0.24, 1)
-
-[sub_resource type="StyleBoxFlat" id="ListRow"]
-draw_center = false
-border_width_bottom = 1
-border_color = Color(0.25, 0.27, 0.24, 1)
-
-
-[sub_resource type="StyleBoxFlat" id="LockedOverlay"]
-bg_color = Color(0.055, 0.068, 0.063, 0.62)
-
-[sub_resource type="StyleBoxFlat" id="ToastAccent"]
-bg_color = Color(0.62, 0.39, 0.28, 1)
-
-[sub_resource type="StyleBoxFlat" id="SlotHover"]
-bg_color = Color(0.15, 0.16, 0.14, 1)
+[sub_resource type="StyleBoxFlat" id="WorldPromptBadge"]
+content_margin_left = 9.0
+content_margin_top = 5.0
+content_margin_right = 12.0
+content_margin_bottom = 5.0
+bg_color = Color(0.055, 0.068, 0.063, 0.97)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.50, 0.36, 0.27, 1)
-
-[sub_resource type="StyleBoxFlat" id="SlotPressed"]
-bg_color = Color(0.12, 0.135, 0.125, 1)
 border_width_bottom = 2
 border_color = Color(0.62, 0.39, 0.28, 1)
-
-[sub_resource type="StyleBoxFlat" id="SlotInterior"]
-bg_color = Color(0.12, 0.135, 0.125, 1)
+shadow_color = Color(0, 0, 0, 0.42)
+shadow_size = 4
+shadow_offset = Vector2(0, 2)
 
 [resource]
-KeyboardKey/base_type = &"Button"
-KeyboardKey/font_sizes/font_size = 18
-ControllerTextPreview/base_type = &"Label"
-ControllerTextPreview/font_sizes/font_size = 20
-ControllerBar/base_type = &"PanelContainer"
-ControllerBar/styles/panel = SubResource("Tooltip")
-ControllerDetails/base_type = &"PanelContainer"
-ControllerDetails/styles/panel = SubResource("Tooltip")
-PromptBinding/base_type = &"Label"
-PromptBinding/font_sizes/font_size = 14
-PromptBinding/colors/font_color = Color(0.78, 0.52, 0.37, 1)
-PromptRow/base_type = &"HBoxContainer"
-PromptRow/constants/separation = 6
-PromptBarRow/base_type = &"HBoxContainer"
-PromptBarRow/constants/separation = 20
 default_font = SubResource("BodyFont")
 default_font_size = 16
+AccentRule/base_type = &"Panel"
+AccentRule/styles/panel = SubResource("AccentRule")
 Button/colors/font_color = Color(0.88, 0.88, 0.83, 1)
 Button/colors/font_disabled_color = Color(0.52, 0.55, 0.52, 1)
 Button/colors/font_focus_color = Color(0.94, 0.93, 0.87, 1)
@@ -392,6 +399,10 @@ Button/styles/hover = SubResource("Hover")
 Button/styles/hover_pressed = SubResource("Hover")
 Button/styles/normal = SubResource("Button")
 Button/styles/pressed = SubResource("Pressed")
+CardPanel/base_type = &"PanelContainer"
+CardPanel/styles/panel = SubResource("Inset")
+CardSurface/base_type = &"Panel"
+CardSurface/styles/panel = SubResource("Inset")
 CheckBox/colors/font_color = Color(0.88, 0.88, 0.83, 1)
 CheckBox/colors/font_disabled_color = Color(0.52, 0.55, 0.52, 1)
 CheckBox/colors/font_focus_color = Color(0.94, 0.93, 0.87, 1)
@@ -414,13 +425,15 @@ CheckButton/styles/hover = SubResource("Hover")
 CheckButton/styles/hover_pressed = SubResource("Hover")
 CheckButton/styles/normal = SubResource("Button")
 CheckButton/styles/pressed = SubResource("Pressed")
-DangerMeter/base_type = &"HSlider"
-DangerMeter/icons/grabber = ExtResource("6_meter_handle")
-DangerMeter/icons/grabber_disabled = ExtResource("6_meter_handle")
-DangerMeter/icons/grabber_highlight = ExtResource("6_meter_handle")
-DangerMeter/styles/grabber_area = SubResource("DangerFill")
-DangerMeter/styles/grabber_area_highlight = SubResource("DangerFill")
-DangerMeter/styles/slider = SubResource("DangerTrack")
+CompactLabel/base_type = &"Label"
+CompactLabel/colors/font_color = Color(0.65, 0.68, 0.64, 1)
+CompactLabel/font_sizes/font_size = 14
+ControllerBar/base_type = &"PanelContainer"
+ControllerBar/styles/panel = SubResource("Tooltip")
+ControllerDetails/base_type = &"PanelContainer"
+ControllerDetails/styles/panel = SubResource("Tooltip")
+ControllerTextPreview/base_type = &"Label"
+ControllerTextPreview/font_sizes/font_size = 20
 DangerButton/base_type = &"Button"
 DangerButton/styles/disabled = SubResource("Disabled")
 DangerButton/styles/focus = SubResource("DangerFocus")
@@ -428,6 +441,35 @@ DangerButton/styles/hover = SubResource("DangerHover")
 DangerButton/styles/hover_pressed = SubResource("DangerHover")
 DangerButton/styles/normal = SubResource("DangerButton")
 DangerButton/styles/pressed = SubResource("DangerHover")
+DangerMeter/base_type = &"HSlider"
+DangerMeter/icons/grabber = ExtResource("6_meter_handle")
+DangerMeter/icons/grabber_disabled = ExtResource("6_meter_handle")
+DangerMeter/icons/grabber_highlight = ExtResource("6_meter_handle")
+DangerMeter/styles/grabber_area = SubResource("DangerFill")
+DangerMeter/styles/grabber_area_highlight = SubResource("DangerFill")
+DangerMeter/styles/slider = SubResource("DangerTrack")
+DisplayLabel/base_type = &"Label"
+DisplayLabel/font_sizes/font_size = 26
+FlatButton/base_type = &"TextureButton"
+FlatButton/styles/disabled = ExtResource("8_slot_disabled")
+FlatButton/styles/focus = SubResource("SlotHover")
+FlatButton/styles/hover = SubResource("SlotHover")
+FlatButton/styles/hover_pressed = SubResource("SlotPressed")
+FlatButton/styles/normal = ExtResource("7_slot_normal")
+FlatButton/styles/pressed = SubResource("SlotPressed")
+GamePalette/colors/accent_color = Color(0.62, 0.39, 0.28, 1)
+GamePalette/colors/border_color = Color(0.28, 0.3, 0.27, 1)
+GamePalette/colors/danger_color = Color(0.76, 0.43, 0.37, 1)
+GamePalette/colors/muted_color = Color(0.65, 0.68, 0.64, 1)
+GamePalette/colors/raised_color = Color(0.12, 0.135, 0.125, 1)
+GamePalette/colors/success_color = Color(0.6, 0.73, 0.58, 1)
+GamePalette/colors/surface_color = Color(0.08, 0.095, 0.09, 1)
+GamePalette/colors/text_color = Color(0.88, 0.88, 0.83, 1)
+GamePalette/colors/travel_color = Color(0.52, 0.68, 0.72, 1)
+GamePalette/colors/warning_color = Color(0.78, 0.63, 0.37, 1)
+GridContainer/constants/h_separation = 8
+GridContainer/constants/v_separation = 8
+HBoxContainer/constants/separation = 8
 HScrollBar/styles/grabber = SubResource("HorizontalThumb")
 HScrollBar/styles/grabber_highlight = SubResource("HorizontalThumb")
 HScrollBar/styles/grabber_pressed = SubResource("HorizontalThumb")
@@ -439,6 +481,10 @@ Heading/font_sizes/font_size = 24
 Heading/fonts/font = SubResource("HeadingFont")
 HudPanel/base_type = &"PanelContainer"
 HudPanel/styles/panel = SubResource("GoldFrame")
+InsetCard/base_type = &"PanelContainer"
+InsetCard/styles/panel = SubResource("Inset")
+InsetPanel/base_type = &"Panel"
+InsetPanel/styles/panel = SubResource("Inset")
 ItemList/colors/font_color = Color(0.88, 0.88, 0.83, 1)
 ItemList/colors/font_disabled_color = Color(0.52, 0.55, 0.52, 1)
 ItemList/colors/font_focus_color = Color(0.94, 0.93, 0.87, 1)
@@ -446,21 +492,25 @@ ItemList/colors/font_hover_color = Color(0.94, 0.93, 0.87, 1)
 ItemList/colors/font_pressed_color = Color(0.88, 0.88, 0.83, 1)
 ItemList/styles/focus = SubResource("Focus")
 ItemList/styles/normal = SubResource("Inset")
-JournalContents/base_type = &"Button"
+JournalContents/base_type = &"TabButton"
 JournalContents/font_sizes/font_size = 20
-JournalContents/styles/normal = SubResource("Tab")
-JournalContents/styles/pressed = SubResource("Pressed")
 JournalShortcut/base_type = &"Button"
 JournalShortcut/styles/focus = SubResource("Empty")
 JournalShortcut/styles/hover = SubResource("ShortcutActive")
 JournalShortcut/styles/hover_pressed = SubResource("ShortcutActive")
 JournalShortcut/styles/normal = SubResource("Shortcut")
 JournalShortcut/styles/pressed = SubResource("ShortcutActive")
+KeyboardKey/base_type = &"Button"
+KeyboardKey/font_sizes/font_size = 18
 Label/colors/font_color = Color(0.88, 0.88, 0.83, 1)
 Label/colors/font_disabled_color = Color(0.52, 0.55, 0.52, 1)
 Label/colors/font_focus_color = Color(0.94, 0.93, 0.87, 1)
 Label/colors/font_hover_color = Color(0.94, 0.93, 0.87, 1)
 Label/colors/font_pressed_color = Color(0.88, 0.88, 0.83, 1)
+LargeButton/base_type = &"Button"
+LargeButton/font_sizes/font_size = 20
+LargeLabel/base_type = &"Label"
+LargeLabel/font_sizes/font_size = 20
 LineEdit/colors/font_color = Color(0.88, 0.88, 0.83, 1)
 LineEdit/colors/font_disabled_color = Color(0.52, 0.55, 0.52, 1)
 LineEdit/colors/font_focus_color = Color(0.94, 0.93, 0.87, 1)
@@ -468,8 +518,30 @@ LineEdit/colors/font_hover_color = Color(0.94, 0.93, 0.87, 1)
 LineEdit/colors/font_pressed_color = Color(0.88, 0.88, 0.83, 1)
 LineEdit/styles/focus = SubResource("Focus")
 LineEdit/styles/normal = SubResource("Inset")
+ListRow/base_type = &"PanelContainer"
+ListRow/styles/panel = SubResource("ListRow")
+LoadingBackdrop/base_type = &"Panel"
+LoadingBackdrop/styles/panel = SubResource("LoadingBackdrop")
+LoadingTitle/base_type = &"Label"
+LoadingTitle/colors/font_color = Color(0.88, 0.88, 0.83, 1)
+LoadingTitle/font_sizes/font_size = 32
+LockedOverlay/base_type = &"Panel"
+LockedOverlay/styles/panel = SubResource("LockedOverlay")
+MediumLabel/base_type = &"Label"
+MediumLabel/font_sizes/font_size = 15
+MetricValue/base_type = &"Label"
+MetricValue/font_sizes/font_size = 22
+MutedCompactLabel/base_type = &"Label"
+MutedCompactLabel/colors/font_color = Color(0.65, 0.68, 0.64, 1)
+MutedCompactLabel/font_sizes/font_size = 14
 MutedLabel/base_type = &"Label"
 MutedLabel/colors/font_color = Color(0.65, 0.68, 0.64, 1)
+MutedMediumLabel/base_type = &"Label"
+MutedMediumLabel/colors/font_color = Color(0.65, 0.68, 0.64, 1)
+MutedMediumLabel/font_sizes/font_size = 15
+MutedSmallLabel/base_type = &"Label"
+MutedSmallLabel/colors/font_color = Color(0.65, 0.68, 0.64, 1)
+MutedSmallLabel/font_sizes/font_size = 13
 OptionButton/colors/font_color = Color(0.88, 0.88, 0.83, 1)
 OptionButton/colors/font_disabled_color = Color(0.52, 0.55, 0.52, 1)
 OptionButton/colors/font_focus_color = Color(0.94, 0.93, 0.87, 1)
@@ -483,6 +555,8 @@ OptionButton/styles/hover = SubResource("Hover")
 OptionButton/styles/hover_pressed = SubResource("Hover")
 OptionButton/styles/normal = SubResource("Button")
 OptionButton/styles/pressed = SubResource("Pressed")
+OverlayPanel/base_type = &"Panel"
+OverlayPanel/styles/panel = SubResource("DimOverlay")
 Panel/styles/panel = SubResource("Surface")
 PanelContainer/styles/panel = SubResource("Surface")
 PopupMenu/colors/font_color = Color(0.88, 0.88, 0.83, 1)
@@ -499,6 +573,10 @@ PopupMenu/icons/radio_unchecked_disabled = ExtResource("2_radio_unselected")
 PopupMenu/styles/hover = SubResource("Hover")
 PopupMenu/styles/panel = SubResource("DropdownPanel")
 PopupPanel/styles/panel = SubResource("Surface")
+PriceAccentRichText/base_type = &"RichTextLabel"
+PriceAccentRichText/colors/default_color = Color(0.78, 0.52, 0.37, 1)
+PriceSuccessRichText/base_type = &"RichTextLabel"
+PriceSuccessRichText/colors/default_color = Color(0.6, 0.73, 0.58, 1)
 PrimaryButton/base_type = &"Button"
 PrimaryButton/styles/disabled = SubResource("Disabled")
 PrimaryButton/styles/focus = SubResource("PrimaryFocus")
@@ -509,6 +587,13 @@ PrimaryButton/styles/pressed = SubResource("PrimaryHover")
 ProgressBar/font_sizes/font_size = 12
 ProgressBar/styles/background = SubResource("Track")
 ProgressBar/styles/fill = SubResource("Fill")
+PromptBarRow/base_type = &"HBoxContainer"
+PromptBarRow/constants/separation = 20
+PromptBinding/base_type = &"Label"
+PromptBinding/colors/font_color = Color(0.78, 0.52, 0.37, 1)
+PromptBinding/font_sizes/font_size = 14
+PromptRow/base_type = &"HBoxContainer"
+PromptRow/constants/separation = 6
 RichTextLabel/colors/default_color = Color(0.88, 0.88, 0.83, 1)
 RichTextLabel/fonts/bold_font = SubResource("BodyFont")
 RichTextLabel/fonts/bold_italics_font = SubResource("BodyFont")
@@ -516,6 +601,37 @@ RichTextLabel/fonts/italics_font = SubResource("BodyFont")
 RichTextLabel/fonts/normal_font = SubResource("BodyFont")
 ScrollContainer/constants/scrollbar_h_separation = 12
 ScrollContainer/constants/scrollbar_v_separation = 12
+SectionTitle/base_type = &"Label"
+SectionTitle/colors/font_color = Color(0.88, 0.88, 0.83, 1)
+SectionTitle/font_sizes/font_size = 18
+SettingsCategoryTabs/base_type = &"TabContainer"
+SettingsCategoryTabs/colors/font_hovered_color = Color(0.94, 0.87, 0.77, 1)
+SettingsCategoryTabs/colors/font_selected_color = Color(0.85, 0.7, 0.56, 1)
+SettingsCategoryTabs/colors/font_unselected_color = Color(0.72, 0.74, 0.7, 1)
+SettingsCategoryTabs/constants/side_margin = 0
+SettingsCategoryTabs/constants/tab_separation = 4
+SettingsCategoryTabs/font_sizes/font_size = 14
+SettingsCategoryTabs/fonts/font = SubResource("HeadingFont")
+SettingsCategoryTabs/styles/tab_hovered = SubResource("Hover")
+SettingsCategoryTabs/styles/tabbar_background = SubResource("HeaderOutline")
+DialogHeader/base_type = &"PanelContainer"
+DialogHeader/styles/panel = SubResource("DialogHeader")
+PageTitle/base_type = &"Label"
+PageTitle/font_sizes/font_size = 22
+PageTitle/fonts/font = SubResource("HeadingFont")
+SectionHeading/base_type = &"Label"
+SectionHeading/colors/font_color = Color(0.85, 0.7, 0.56, 1)
+SectionHeading/font_sizes/font_size = 14
+SectionHeading/fonts/font = SubResource("HeadingFont")
+SlotInterior/base_type = &"Panel"
+SlotInterior/styles/panel = SubResource("SlotInterior")
+SmallButton/base_type = &"Button"
+SmallButton/font_sizes/font_size = 14
+SmallLabel/base_type = &"Label"
+SmallLabel/font_sizes/font_size = 13
+SmallMutedRichText/base_type = &"RichTextLabel"
+SmallMutedRichText/colors/default_color = Color(0.65, 0.68, 0.64, 1)
+SmallMutedRichText/font_sizes/font_size = 13
 SpinBox/colors/font_color = Color(0.88, 0.88, 0.83, 1)
 SpinBox/colors/font_disabled_color = Color(0.52, 0.55, 0.52, 1)
 SpinBox/colors/font_focus_color = Color(0.94, 0.93, 0.87, 1)
@@ -533,12 +649,26 @@ SquareCheck/styles/hover = SubResource("Empty")
 SquareCheck/styles/hover_pressed = SubResource("Empty")
 SquareCheck/styles/normal = SubResource("Empty")
 SquareCheck/styles/pressed = SubResource("Empty")
+StatusAccentLabel/base_type = &"Label"
+StatusAccentLabel/colors/font_color = Color(0.78, 0.52, 0.37, 1)
+StatusDangerLabel/base_type = &"Label"
+StatusDangerLabel/colors/font_color = Color(0.76, 0.43, 0.37, 1)
+StatusMutedLabel/base_type = &"Label"
+StatusMutedLabel/colors/font_color = Color(0.65, 0.68, 0.64, 1)
+StatusSuccessLabel/base_type = &"Label"
+StatusSuccessLabel/colors/font_color = Color(0.6, 0.73, 0.58, 1)
+StatusTravelLabel/base_type = &"Label"
+StatusTravelLabel/colors/font_color = Color(0.52, 0.68, 0.72, 1)
+StatusWarningLabel/base_type = &"Label"
+StatusWarningLabel/colors/font_color = Color(0.78, 0.63, 0.37, 1)
 TabBar/colors/font_color = Color(0.88, 0.88, 0.83, 1)
 TabBar/colors/font_disabled_color = Color(0.52, 0.55, 0.52, 1)
 TabBar/colors/font_focus_color = Color(0.94, 0.93, 0.87, 1)
 TabBar/colors/font_hover_color = Color(0.94, 0.93, 0.87, 1)
 TabBar/colors/font_pressed_color = Color(0.88, 0.88, 0.83, 1)
 TabButton/base_type = &"Button"
+TabButton/colors/font_pressed_color = Color(0.85, 0.7, 0.56, 1)
+TabButton/styles/hover_pressed = SubResource("Pressed")
 TabButton/styles/normal = SubResource("Tab")
 TabButton/styles/pressed = SubResource("Pressed")
 TabContainer/styles/panel = SubResource("Surface")
@@ -551,14 +681,11 @@ TextEdit/colors/font_hover_color = Color(0.94, 0.93, 0.87, 1)
 TextEdit/colors/font_pressed_color = Color(0.88, 0.88, 0.83, 1)
 TextEdit/styles/focus = SubResource("Focus")
 TextEdit/styles/normal = SubResource("Inset")
+ToastAccent/base_type = &"Panel"
+ToastAccent/styles/panel = SubResource("ToastAccent")
 TooltipLabel/colors/font_color = Color(0.88, 0.88, 0.83, 1)
 TooltipLabel/font_sizes/font_size = 15
 TooltipPanel/styles/panel = SubResource("Tooltip")
-TradeTab/base_type = &"Button"
-TradeTab/styles/hover = SubResource("ShortcutActive")
-TradeTab/styles/hover_pressed = SubResource("ShortcutActive")
-TradeTab/styles/normal = SubResource("Shortcut")
-TradeTab/styles/pressed = SubResource("ShortcutActive")
 Tree/colors/font_color = Color(0.88, 0.88, 0.83, 1)
 Tree/colors/font_disabled_color = Color(0.52, 0.55, 0.52, 1)
 Tree/colors/font_focus_color = Color(0.94, 0.93, 0.87, 1)
@@ -568,6 +695,7 @@ Tree/styles/focus = SubResource("Focus")
 Tree/styles/normal = SubResource("Inset")
 UnframedPanel/base_type = &"PanelContainer"
 UnframedPanel/styles/panel = SubResource("Empty")
+VBoxContainer/constants/separation = 8
 VScrollBar/styles/grabber = SubResource("VerticalThumb")
 VScrollBar/styles/grabber_highlight = SubResource("VerticalThumb")
 VScrollBar/styles/grabber_pressed = SubResource("VerticalThumb")
@@ -585,101 +713,12 @@ WindowAction/styles/hover = SubResource("WindowAction")
 WindowAction/styles/hover_pressed = SubResource("WindowAction")
 WindowAction/styles/normal = SubResource("WindowAction")
 WindowAction/styles/pressed = SubResource("WindowAction")
-HBoxContainer/constants/separation = 8
-VBoxContainer/constants/separation = 8
-GridContainer/constants/h_separation = 8
-GridContainer/constants/v_separation = 8
 WindowFrame/base_type = &"Panel"
 WindowFrame/styles/panel = SubResource("GoldFrame")
 WindowHeader/base_type = &"Panel"
 WindowHeader/styles/panel = SubResource("HeaderOutline")
-CardPanel/base_type = &"PanelContainer"
-CardPanel/styles/panel = SubResource("Inset")
-CardSurface/base_type = &"Panel"
-CardSurface/styles/panel = SubResource("Inset")
-InsetPanel/base_type = &"Panel"
-InsetPanel/styles/panel = SubResource("Inset")
-SectionTitle/base_type = &"Label"
-SectionTitle/font_sizes/font_size = 18
-SectionTitle/colors/font_color = Color(0.88, 0.88, 0.83, 1)
-CompactLabel/base_type = &"Label"
-CompactLabel/font_sizes/font_size = 14
-CompactLabel/colors/font_color = Color(0.65, 0.68, 0.64, 1)
-OverlayPanel/base_type = &"Panel"
-OverlayPanel/styles/panel = SubResource("DimOverlay")
-LoadingBackdrop/base_type = &"Panel"
-LoadingBackdrop/styles/panel = SubResource("LoadingBackdrop")
-AccentRule/base_type = &"Panel"
-AccentRule/styles/panel = SubResource("AccentRule")
-ListRow/base_type = &"PanelContainer"
-ListRow/styles/panel = SubResource("ListRow")
-SmallMutedRichText/base_type = &"RichTextLabel"
-SmallMutedRichText/font_sizes/font_size = 13
-SmallMutedRichText/colors/default_color = Color(0.65, 0.68, 0.64, 1)
-PriceAccentRichText/base_type = &"RichTextLabel"
-PriceAccentRichText/colors/default_color = Color(0.78, 0.52, 0.37, 1)
-PriceSuccessRichText/base_type = &"RichTextLabel"
-PriceSuccessRichText/colors/default_color = Color(0.60, 0.73, 0.58, 1)
-SmallButton/base_type = &"Button"
-SmallButton/font_sizes/font_size = 14
-LargeButton/base_type = &"Button"
-LargeButton/font_sizes/font_size = 20
-GamePalette/colors/surface_color = Color(0.08, 0.095, 0.09, 1)
-GamePalette/colors/raised_color = Color(0.12, 0.135, 0.125, 1)
-GamePalette/colors/border_color = Color(0.28, 0.30, 0.27, 1)
-GamePalette/colors/text_color = Color(0.88, 0.88, 0.83, 1)
-GamePalette/colors/muted_color = Color(0.65, 0.68, 0.64, 1)
-GamePalette/colors/accent_color = Color(0.62, 0.39, 0.28, 1)
-GamePalette/colors/success_color = Color(0.60, 0.73, 0.58, 1)
-GamePalette/colors/warning_color = Color(0.78, 0.63, 0.37, 1)
-GamePalette/colors/danger_color = Color(0.76, 0.43, 0.37, 1)
-GamePalette/colors/travel_color = Color(0.52, 0.68, 0.72, 1)
-SmallLabel/base_type = &"Label"
-SmallLabel/font_sizes/font_size = 13
-MutedSmallLabel/base_type = &"Label"
-MutedSmallLabel/font_sizes/font_size = 13
-MutedSmallLabel/colors/font_color = Color(0.65, 0.68, 0.64, 1)
-MutedCompactLabel/base_type = &"Label"
-MutedCompactLabel/font_sizes/font_size = 14
-MutedCompactLabel/colors/font_color = Color(0.65, 0.68, 0.64, 1)
-MutedMediumLabel/base_type = &"Label"
-MutedMediumLabel/font_sizes/font_size = 15
-MutedMediumLabel/colors/font_color = Color(0.65, 0.68, 0.64, 1)
-MediumLabel/base_type = &"Label"
-MediumLabel/font_sizes/font_size = 15
-LargeLabel/base_type = &"Label"
-LargeLabel/font_sizes/font_size = 20
-DisplayLabel/base_type = &"Label"
-DisplayLabel/font_sizes/font_size = 26
-LoadingTitle/base_type = &"Label"
-LoadingTitle/font_sizes/font_size = 32
-LoadingTitle/colors/font_color = Color(0.88, 0.88, 0.83, 1)
-StatusSuccessLabel/base_type = &"Label"
-StatusSuccessLabel/colors/font_color = Color(0.60, 0.73, 0.58, 1)
-StatusWarningLabel/base_type = &"Label"
-StatusWarningLabel/colors/font_color = Color(0.78, 0.63, 0.37, 1)
-StatusDangerLabel/base_type = &"Label"
-StatusDangerLabel/colors/font_color = Color(0.76, 0.43, 0.37, 1)
-StatusTravelLabel/base_type = &"Label"
-StatusTravelLabel/colors/font_color = Color(0.52, 0.68, 0.72, 1)
-StatusMutedLabel/base_type = &"Label"
-StatusMutedLabel/colors/font_color = Color(0.65, 0.68, 0.64, 1)
-StatusAccentLabel/base_type = &"Label"
-StatusAccentLabel/colors/font_color = Color(0.78, 0.52, 0.37, 1)
-FlatButton/base_type = &"TextureButton"
-FlatButton/styles/disabled = ExtResource("8_slot_disabled")
-FlatButton/styles/focus = SubResource("SlotHover")
-FlatButton/styles/hover = SubResource("SlotHover")
-FlatButton/styles/hover_pressed = SubResource("SlotPressed")
-FlatButton/styles/normal = ExtResource("7_slot_normal")
-FlatButton/styles/pressed = SubResource("SlotPressed")
-SlotInterior/base_type = &"Panel"
-SlotInterior/styles/panel = SubResource("SlotInterior")
-InsetCard/base_type = &"PanelContainer"
-InsetCard/styles/panel = SubResource("Inset")
-MetricValue/base_type = &"Label"
-MetricValue/font_sizes/font_size = 22
-LockedOverlay/base_type = &"Panel"
-LockedOverlay/styles/panel = SubResource("LockedOverlay")
-ToastAccent/base_type = &"Panel"
-ToastAccent/styles/panel = SubResource("ToastAccent")
+WorldPromptBadge/base_type = &"PanelContainer"
+WorldPromptBadge/styles/panel = SubResource("WorldPromptBadge")
+WorldPromptText/base_type = &"Label"
+WorldPromptText/colors/font_color = Color(0.94, 0.93, 0.87, 1)
+WorldPromptText/font_sizes/font_size = 17

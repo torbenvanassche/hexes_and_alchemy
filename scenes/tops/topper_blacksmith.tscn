@@ -12,6 +12,7 @@ size = Vector3(1.0518265, 0.6777344, 0.880126)
 
 [node name="Node3D" type="Node3D" unique_id=728034513]
 script = ExtResource("2_cpkdt")
+prompt_label_key = "WINDOW_CRAFTING"
 
 [node name="Root Scene" parent="." unique_id=19869173 instance=ExtResource("2_eemul")]
 

@@ -215,6 +215,10 @@ func _on_operation_completed(quest: Quest) -> void:
 			expeditions_completed += 1
 			Manager.instance.journal.complete_task("community_expedition")
 		if quest.quest_key == "catalogue": unlocked_recipes["surveyors_kit"] = true
+		if quest.context.get("deep_mine_contract_succeeded", false) and not unlocked_recipes.has("delvers_harness"):
+			unlocked_recipes["delvers_harness"] = true
+			Manager.instance.journal.complete_task("expedition_deep_mine")
+			Manager.instance.toast.notify_report(tr("EXPEDITION_HARNESS_UNLOCKED"))
 		if active_incident != null and quest.location != null and active_incident.site == quest.location.cube_id and active_incident.definition.repair_types.has(quest.quest_key):
 			_finish_incident(true)
 	queue_refresh()

@@ -2,282 +2,224 @@ class_name CommunityProjectsUI
 extends VBoxContainer
 
 const INCIDENT_REQUEST := "local_incident"
-const STAT := preload("res://scenes/ui/components/reward_stat.tscn")
+const FACT_ROW := preload("res://scenes/ui/components/request_fact_row.tscn")
 const COIN := preload("res://sprites/items/HA_ICON_02_Coin.png")
 const PRESTIGE := preload("res://sprites/ui/line/lucide/prestige.svg")
 const REPUTATION := preload("res://sprites/ui/line/lucide/reputation.svg")
+const CHECKED := preload("res://sprites/ui/line/checkbox_checked.svg")
+const UNCHECKED := preload("res://sprites/ui/line/checkbox_empty.svg")
+
 var request_id := "water"
-var title_label: Label
-var resident_label: Label
-var request_label: Label
-var objectives: HFlowContainer
-var objective_summary: Label
-var objective_toggle: Button
-var _steps_completed := 0
-var _steps_total := 0
-var contribution: HFlowContainer
-var currency_costs: HFlowContainer
-var cost_column: VBoxContainer
-var reward_items: HFlowContainer
-var benefits: HFlowContainer
-var contribution_heading: Label
-var status: Label
-var work: Button
-var complete: Button
-var fund: Button
-var actions: HFlowContainer
-var recipe: Button
 var _refresh_gate: RefreshGate
+
+@onready var title_label: Label = %Title
+@onready var resident_label: Label = %Resident
+@onready var request_label: Label = %Description
+@onready var objectives: VBoxContainer = %Objectives
+@onready var contribution: VBoxContainer = %Contribution
+@onready var currency_costs: VBoxContainer = %CurrencyCosts
+@onready var cost_card: PanelContainer = %Costs
+@onready var reward_items: VBoxContainer = %RewardItems
+@onready var status: Label = %Status
+@onready var work: Button = %Work
+@onready var complete: Button = %Complete
+@onready var fund: Button = %Fund
+@onready var actions: HFlowContainer = %Actions
+@onready var recipe: Button = %Recipe
+@onready var forge: Button = %Forge
 
 func _ready() -> void:
 	_refresh_gate = RefreshGate.new(self, refresh)
-	add_theme_constant_override("separation", 8)
-	title_label = _label(self, "", "Heading")
-	title_label.theme_type_variation = &"LargeLabel"
-	resident_label = _label(self, "", "MutedLabel")
-	resident_label.theme_type_variation = &"CompactLabel"
-	request_label = _label(self, "", "MutedLabel")
-	request_label.hide()
-	request_label.max_lines_visible = 1
-	request_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	var objective_panel := VBoxContainer.new()
-	objective_panel.add_theme_constant_override("separation", 4)
-	add_child(objective_panel)
-	objective_summary = _label(objective_panel, "", "MutedLabel")
-	objective_toggle = Button.new()
-	objective_toggle.flat = true
-	objective_toggle.alignment = HORIZONTAL_ALIGNMENT_LEFT
-	objective_toggle.pressed.connect(_toggle_objectives)
-	objective_panel.add_child(objective_toggle)
-	objectives = HFlowContainer.new()
-	objectives.tooltip_text = tr("QUEST_REQUEST_OBJECTIVES_SHORT")
-	objectives.add_theme_constant_override("h_separation", 16)
-	objectives.add_theme_constant_override("v_separation", 4)
-	objective_panel.add_child(objectives)
-	add_child(HSeparator.new())
-	var columns := HBoxContainer.new()
-	columns.add_theme_constant_override("separation", 16)
-	add_child(columns)
-	cost_column = VBoxContainer.new()
-	cost_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	cost_column.add_theme_constant_override("separation", 8)
-	columns.add_child(cost_column)
-	contribution_heading = _label(cost_column, "QUEST_REQUEST_SUPPLIES", "MutedLabel")
-	contribution = _flow(cost_column)
-	currency_costs = _flow(cost_column)
-	var rewards := VBoxContainer.new()
-	rewards.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	rewards.add_theme_constant_override("separation", 8)
-	columns.add_child(rewards)
-	_label(rewards, "QUEST_REQUEST_REWARDS", "MutedLabel")
-	reward_items = _flow(rewards)
-	benefits = _flow(rewards)
-	status = _label(self, "", "MutedLabel")
-	actions = _flow()
-	work = _button("COMMUNITY_ARRANGE_WORK", _open_work)
-	work.tooltip_text = tr("QUEST_REQUEST_ASSIGN_HINT")
-	complete = _button("QUEST_REQUEST_HAND_IN", _complete)
-	recipe = _button("REQUEST_VIEW_RECIPE", _view_recipe)
-	fund = _button("", _fund)
+	work.pressed.connect(_open_work)
+	complete.pressed.connect(_complete)
+	recipe.pressed.connect(_view_recipe)
+	fund.pressed.connect(_fund)
+	forge.pressed.connect(_open_forge_project)
 	Manager.instance.regional.changed.connect(_queue_refresh)
 	Manager.instance.hub.changed.connect(_queue_refresh)
 	refresh()
 
-func _exit_tree() -> void:
-	if not is_instance_valid(Manager.instance): return
-	if is_instance_valid(Manager.instance.regional) and Manager.instance.regional.changed.is_connected(_queue_refresh):
-		Manager.instance.regional.changed.disconnect(_queue_refresh)
-	if is_instance_valid(Manager.instance.hub) and Manager.instance.hub.changed.is_connected(_queue_refresh):
-		Manager.instance.hub.changed.disconnect(_queue_refresh)
-
 func select_request(id: String) -> void:
 	request_id = id
-	if id != INCIDENT_REQUEST: Manager.instance.regional.selected_project = id
-	refresh()
+	if id != INCIDENT_REQUEST:
+		Manager.instance.regional.selected_project = id
 
 func _queue_refresh() -> void:
 	_refresh_gate.request()
 
 func refresh() -> void:
-	if not is_inside_tree() or not is_node_ready() or is_queued_for_deletion() or SaveGames.is_loading: return
-	for container: Container in [objectives, contribution, currency_costs, reward_items, benefits]: _clear(container)
-	if request_id == INCIDENT_REQUEST:
-		_refresh_incident()
+	if not is_node_ready() or not is_visible_in_tree() or is_queued_for_deletion() or SaveGames.is_loading:
 		return
+	for container: Container in [objectives, contribution, currency_costs, reward_items]:
+		_clear(container)
 	var regional := Manager.instance.regional
+	if request_id == INCIDENT_REQUEST:
+		_refresh_incident(regional)
+		return
+
 	var definition := regional.get_definition(request_id)
-	if definition == null: return
+	if definition == null:
+		return
 	var state := regional.projects[request_id]
 	title_label.text = definition.get_title()
 	resident_label.text = "%s · %s" % [definition.resident_name, tr(definition.resident_role_key)]
 	request_label.text = tr(definition.complete_key if state.completed else definition.request_key)
-	title_label.tooltip_text = request_label.text
-	var stages := ProjectProgress.stages(definition, state, regional)
-	var finished_stages := 0
-	var next_stage := ""
+	%Benefit.text = tr(definition.benefit_key)
+	_refresh_steps(ProjectProgress.stages(definition, state, regional))
+	_refresh_costs(definition, state, regional)
+	_refresh_rewards(definition)
+	_refresh_project_actions(definition, state, regional)
+
+func _refresh_steps(stages: Array[Dictionary]) -> void:
+	var finished := 0
+	var next_found := false
 	for stage: Dictionary in stages:
-		if stage.done: finished_stages += 1
-		elif next_stage.is_empty(): next_stage = stage.text
-	_steps_completed = finished_stages
-	_steps_total = stages.size()
-	objective_summary.text = tr("QUEST_REQUEST_NEXT_STEP") % next_stage if not next_stage.is_empty() else tr("QUEST_REQUEST_ALL_STEPS_DONE")
-	objective_toggle.text = tr("QUEST_REQUEST_SHOW_STEPS") % [finished_stages, stages.size()]
-	objective_toggle.show()
-	objectives.hide()
-	for stage: Dictionary in stages:
-		_objective(stage.text, stage.done)
-	contribution_heading.visible = not state.completed
-	contribution_heading.text = tr("REQUEST_CONSTRUCTION_SUPPLIES" if definition.construction != null else "QUEST_REQUEST_SUPPLIES")
-	contribution.visible = not state.completed
-	cost_column.visible = not state.completed
-	if not state.completed:
-		var remaining := regional.remaining_materials(request_id)
-		for item: ItemInfo in remaining:
-			_item(contribution, item, remaining[item], true)
-		if not state.blueprint_issued:
-			_cost(COIN, definition.coin_cost, Manager.instance.hub.currency, "GUILD_COINS_LABEL")
-			_cost(PRESTIGE, definition.prestige_cost, Manager.instance.hub.prestige, "GUILD_PRESTIGE_LABEL")
-	for item: ItemInfo in definition.reward_items: _item(reward_items, item, definition.reward_items[item])
-	_stat(reward_items, REPUTATION, "%+d" % definition.reputation_reward, "GUILD_REPUTATION_LABEL")
+		var done := bool(stage.done)
+		var next := not done and not next_found
+		next_found = next_found or next
+		finished += int(done)
+		var text := str(stage.text)
+		var label := tr("QUEST_REQUEST_NEXT_STEP") % text if next else text
+		var row := _fact(objectives, CHECKED if done else UNCHECKED, label)
+		if next:
+			var fact_label: Label = row.get_node("Fact")
+			fact_label.add_theme_color_override("font_color", get_theme_color("font_color", &"SectionHeading"))
+
+	%StepCount.text = tr("QUEST_REQUEST_PROGRESS") % [finished, stages.size()]
+	%Progress.max_value = maxi(1, stages.size())
+	%Progress.value = finished
+
+func _refresh_costs(definition: CommunityProjectDefinition, state: CommunityProjectState, regional: RegionalProgression) -> void:
+	cost_card.visible = not state.completed
+	if state.completed:
+		return
+	var hub := Manager.instance.hub
+	%ContributionHeading.text = "QUEST_REQUEST_COSTS"
+	var remaining := regional.remaining_materials(request_id)
+	%AmountsHeading.visible = not remaining.is_empty() or (not state.blueprint_issued and (definition.coin_cost > 0 or definition.prestige_cost > 0))
+	for item: ItemInfo in remaining:
+		var needed := int(remaining[item])
+		_requirement(contribution, item.texture, item.get_display_name(), hub.stockpile.get_count(item), needed)
+	if state.blueprint_issued:
+		_fact(currency_costs, null, tr("PROJECT_COSTS_PAID"))
+	else:
+		if definition.coin_cost > 0:
+			_requirement(currency_costs, COIN, tr("GUILD_COINS_LABEL"), hub.currency, definition.coin_cost)
+		if definition.prestige_cost > 0:
+			_requirement(currency_costs, PRESTIGE, tr("GUILD_PRESTIGE_LABEL"), hub.prestige, definition.prestige_cost)
+		if remaining.is_empty() and definition.coin_cost == 0 and definition.prestige_cost == 0:
+			_fact(contribution, null, tr("QUEST_REQUEST_NO_COSTS"))
+	contribution.visible = contribution.get_child_count() > 0
+	currency_costs.visible = currency_costs.get_child_count() > 0
+
+func _refresh_rewards(definition: CommunityProjectDefinition) -> void:
+	for item: ItemInfo in definition.reward_items:
+		_fact(reward_items, item.texture, item.get_display_name(), "×%d" % int(definition.reward_items[item]))
+	if definition.reputation_reward > 0:
+		_fact(reward_items, REPUTATION, tr("GUILD_REPUTATION_LABEL"), "%+d" % definition.reputation_reward)
 	if not definition.recipe_unlock.is_empty():
 		var recipe_item := load("res://resources/item_info/%s.tres" % definition.recipe_unlock) as ItemInfo
 		if recipe_item != null:
-			var slot := _item(reward_items, recipe_item, 1)
-			slot.counter.text = tr("QUEST_REQUEST_RECIPE")
-			slot.tooltip_text = tr("QUEST_REQUEST_UNLOCK_RECIPE") % recipe_item.get_display_name() + "\n" + recipe_item.get_tooltip_text()
-	for benefit: CommunityBenefit in definition.benefits:
-		_stat(benefits, benefit.icon, benefit.value, benefit.label_key, tr(definition.benefit_key))
-	status.text = tr("COMMUNITY_FINISHED") if state.completed else regional.completion_block_reason(request_id)
-	status.visible = not status.text.is_empty()
+			_fact(reward_items, recipe_item.texture, tr("QUEST_REQUEST_RECIPE_REWARD") % recipe_item.get_display_name())
+	%RewardsCard.visible = reward_items.get_child_count() > 0
+
+func _refresh_project_actions(definition: CommunityProjectDefinition, state: CommunityProjectState, regional: RegionalProgression) -> void:
+	var needs_forge := not state.completed and not regional.is_unlocked()
+	forge.visible = needs_forge
 	work.visible = not state.completed and not state.fieldwork_done
-	var site := regional.get_project_work_site(request_id)
-	work.text = tr("COMMUNITY_ARRANGE_WORK")
+	fund.hide()
+	work.text = "COMMUNITY_ARRANGE_WORK"
 	work.tooltip_text = tr("QUEST_REQUEST_ASSIGN_HINT")
+	var site := regional.get_project_work_site(request_id)
 	if site == null:
-		work.text = tr(definition.exploration_key)
+		work.text = definition.exploration_key
 		work.tooltip_text = tr("QUEST_REQUEST_EXPLORE_HINT")
 	else:
-		var has_matching_work := false
-		for key: String in definition.commission_types:
-			if site.get_filtered_quest_types().has(key): has_matching_work = true
-		if not has_matching_work:
-			work.text = tr("QUEST_REQUEST_PREPARE_SOURCE")
+		var available_types := site.get_filtered_quest_types()
+		if not definition.commission_types.any(func(type: String) -> bool: return available_types.has(type)):
+			work.text = "QUEST_REQUEST_PREPARE_SOURCE"
 			work.tooltip_text = tr("QUEST_REQUEST_PREPARE_HINT")
-	complete.visible = not state.completed or (definition.construction != null and state.blueprint_issued and regional.get_project_buildable(request_id) == null)
-	complete.disabled = not regional.completion_block_reason(request_id).is_empty()
-	complete.text = tr("COMMUNITY_ISSUE_BLUEPRINT") if definition.construction != null else tr("QUEST_REQUEST_HAND_IN")
-	if definition.construction != null and state.blueprint_issued:
-		complete.text = tr("COMMUNITY_PLACE_BLUEPRINT") if regional.get_project_buildable(request_id) == null else tr("COMMUNITY_FIND_FOUNDATION")
-		complete.disabled = false
-	complete.tooltip_text = regional.completion_block_reason(request_id)
-	if complete.visible and state.completed: complete.tooltip_text = tr("COMMUNITY_BUILD_FOUNDATION")
 	work.tooltip_text += "\n" + tr("REQUEST_MATCHING_WORK") + ": " + _commission_names(definition)
-	fund.hide()
-	recipe.visible = not state.completed and _needed_recipe() != null
-	if recipe.visible: recipe.tooltip_text = _needed_recipe().get_tooltip_text()
-	if state.blueprint_issued:
-		_label(currency_costs, tr("PROJECT_COSTS_PAID"), "MutedLabel")
-		currency_costs.show()
-	else: currency_costs.show()
 
-func _refresh_incident() -> void:
-	recipe.hide()
-	var regional := Manager.instance.regional
+	var reason := regional.completion_block_reason(request_id)
+	var has_blueprint := definition.construction != null and state.blueprint_issued
+	var foundation_missing := regional.get_project_buildable(request_id) == null if has_blueprint else false
+	complete.visible = not state.completed or (has_blueprint and foundation_missing)
+	complete.disabled = not reason.is_empty() and not has_blueprint
+	complete.text = "COMMUNITY_ISSUE_BLUEPRINT" if definition.construction != null else "QUEST_REQUEST_HAND_IN"
+	if has_blueprint:
+		complete.text = "COMMUNITY_PLACE_BLUEPRINT" if foundation_missing else "COMMUNITY_FIND_FOUNDATION"
+	complete.tooltip_text = reason
+
+	var needed := _needed_recipe() if not state.completed else null
+	recipe.visible = needed != null
+	if needed != null:
+		recipe.tooltip_text = needed.get_tooltip_text()
+	status.text = reason
+	status.visible = not reason.is_empty() and (state.completed or (not needs_forge and not work.visible and complete.disabled))
+	_style_actions()
+
+func _refresh_incident(regional: RegionalProgression) -> void:
 	var incident := regional.active_incident
-	work.visible = incident != null
-	work.text = tr("COMMUNITY_ARRANGE_WORK")
-	work.tooltip_text = tr("QUEST_REQUEST_ASSIGN_HINT")
-	fund.visible = incident != null
-	complete.hide()
-	contribution_heading.hide()
-	contribution.hide()
-	cost_column.hide()
-	if incident == null: return
+	if incident == null:
+		return
 	var definition := incident.definition
 	var author := regional.get_incident_requester()
 	title_label.text = definition.get_title()
 	resident_label.text = "%s · %s" % [author.resident_name, tr(author.resident_role_key)]
 	request_label.text = tr(definition.description_key)
-	title_label.tooltip_text = request_label.text
-	_objective(tr("QUEST_REQUEST_REPAIR_SHORT"), false)
-	_stat(reward_items, COIN, str(definition.coin_reward), "GUILD_COINS_LABEL", tr("QUEST_REQUEST_INCIDENT_REWARD") % definition.coin_reward)
-	_label(benefits, "QUEST_REQUEST_RESTORE_SOURCE", "MutedLabel")
+	%Benefit.text = tr("QUEST_REQUEST_RESTORE_SOURCE")
+	_refresh_steps([{"text": tr("QUEST_REQUEST_REPAIR_SHORT"), "done": false}])
+	%RewardsCard.show()
+	_fact(reward_items, COIN, tr("GUILD_COINS_LABEL"), str(definition.coin_reward))
+	cost_card.show()
+	%ContributionHeading.text = "QUEST_REQUEST_INCIDENT_PAY"
+	%AmountsHeading.show()
+	contribution.hide()
+	currency_costs.show()
+	_requirement(currency_costs, COIN, tr("GUILD_COINS_LABEL"), Manager.instance.hub.currency, definition.funding_cost)
+	forge.hide()
+	recipe.hide()
+	complete.hide()
+	work.show()
+	work.text = "COMMUNITY_ARRANGE_WORK"
+	work.tooltip_text = tr("QUEST_REQUEST_ASSIGN_HINT")
+	fund.show()
 	fund.text = tr("COMMUNITY_FUND_INCIDENT") % definition.funding_cost
 	fund.tooltip_text = tr("QUEST_REQUEST_INCIDENT_HELP") % definition.funding_cost
 	fund.disabled = Manager.instance.hub.currency < definition.funding_cost
 	status.hide()
+	_style_actions()
 
-func _objective(text: String, done: bool) -> void:
-	var row := HBoxContainer.new()
-	row.custom_minimum_size = Vector2(168, 24)
-	row.tooltip_text = text
-	row.add_theme_constant_override("separation", 8)
-	objectives.add_child(row)
-	var icon := TextureRect.new()
-	icon.texture = preload("res://sprites/ui/line/checkbox_checked.svg") if done else preload("res://sprites/ui/line/checkbox_empty.svg")
-	icon.custom_minimum_size = Vector2(20, 20)
-	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	row.add_child(icon)
-	var label := _label(row, text)
-	label.theme_type_variation = &"CompactLabel"
+func _style_actions() -> void:
+	var has_primary := false
+	for action: Button in [forge, work, complete, fund]:
+		var primary := not has_primary and action.visible and not action.disabled
+		action.theme_type_variation = &"PrimaryButton" if primary else &""
+		has_primary = has_primary or primary
 
-func _toggle_objectives() -> void:
-	objectives.visible = not objectives.visible
-	objective_toggle.text = tr("QUEST_REQUEST_HIDE_STEPS") if objectives.visible else tr("QUEST_REQUEST_SHOW_STEPS") % [_steps_completed, _steps_total]
+func _open_forge_project() -> void:
+	var player := Manager.instance.player_instance
+	if player != null:
+		player.open_hub_tab("projects")
 
-func _item(parent: Container, item: ItemInfo, amount: int, required := false) -> ContentSlotUI:
-	var slot := ItemPreview.create(item, amount)
-	parent.add_child(slot)
-	slot.redraw()
-	if required:
-		var owned := Manager.instance.hub.stockpile.get_count(item)
-		slot.counter.text = "%d/%d" % [owned, amount]
-		slot.counter.visible = true
-		slot.counter.modulate = GameUI.SUCCESS if owned >= amount else GameUI.WARNING
-		slot.tooltip_text = "%s\n%s" % [item.get_display_name(), tr("QUEST_SUPPLY_COUNTS") % [amount, owned]]
-	else:
-		slot.counter.visible = true
-		slot.counter.text = str(amount)
-		slot.tooltip_text = "%s ×%d" % [item.get_display_name(), amount]
-	return slot
+func _requirement(parent: Container, icon: Texture2D, label: String, owned: int, needed: int) -> void:
+	var row := _fact(parent, icon, label, "%d / %d" % [owned, needed])
+	row.tooltip_text = tr("QUEST_SUPPLY_COUNTS") % [needed, owned]
+	var amount: Label = row.get_node("Amount")
+	amount.theme_type_variation = &"StatusSuccessLabel" if owned >= needed else &"StatusWarningLabel"
 
-func _cost(icon: Texture2D, amount: int, owned: int, label_key: String) -> void:
-	var stat := _stat(currency_costs, icon, str(amount), label_key, tr("QUEST_SUPPLY_COUNTS") % [amount, owned])
-	stat.get_node("Text/Value").modulate = GameUI.ACCENT if owned >= amount else GameUI.WARNING
-
-func _stat(parent: Container, icon: Texture2D, value: String, label_key: String, hint := "") -> RewardStatUI:
-	var stat := STAT.instantiate() as RewardStatUI
-	stat.icon = icon
-	stat.label_key = label_key
-	stat.tooltip_text = hint
-	parent.add_child(stat)
-	stat.set_text_value(value)
-	return stat
-
-func _flow(parent: Node = self) -> HFlowContainer:
-	var flow := HFlowContainer.new()
-	flow.add_theme_constant_override("h_separation", 16)
-	flow.add_theme_constant_override("v_separation", 8)
-	parent.add_child(flow)
-	return flow
-
-func _label(parent: Node, text: String, variation := "") -> Label:
-	var label := Label.new()
-	label.text = text
-	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	if not variation.is_empty(): label.theme_type_variation = variation
-	if variation == "MutedLabel": label.theme_type_variation = &"MutedSmallLabel"
-	parent.add_child(label)
-	return label
-
-func _button(text: String, action: Callable) -> Button:
-	var button := Button.new()
-	button.text = text
-	button.pressed.connect(action)
-	actions.add_child(button)
-	return button
+func _fact(parent: Container, icon: Texture2D, label: String, amount := "") -> HBoxContainer:
+	var row: HBoxContainer = FACT_ROW.instantiate()
+	var sprite: TextureRect = row.get_node("Icon")
+	sprite.texture = icon
+	sprite.visible = icon != null
+	row.get_node("Fact").text = label
+	var amount_label: Label = row.get_node("Amount")
+	amount_label.text = amount
+	amount_label.visible = not amount.is_empty()
+	parent.add_child(row)
+	return row
 
 func _clear(parent: Node) -> void:
 	for child: Node in parent.get_children():

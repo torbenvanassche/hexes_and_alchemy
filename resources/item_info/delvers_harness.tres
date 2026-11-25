@@ -3,6 +3,9 @@
 [ext_resource type="Script" uid="uid://joxea3d6sary" path="res://tools/inventory/scripts/data/equipment_info.gd" id="1"]
 [ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="1_qtsdk"]
 [ext_resource type="Texture2D" path="res://sprites/items/HA_ICON_28_DelversHarness.png" id="2"]
+[ext_resource type="Resource" path="res://resources/item_info/reinforced_armor.tres" id="armor"]
+[ext_resource type="Resource" path="res://resources/item_info/iron_ore.tres" id="iron"]
+[ext_resource type="Resource" path="res://resources/item_info/work_supplies.tres" id="supplies"]
 
 [resource]
 script = ExtResource("1")
@@ -19,3 +22,6 @@ translation_key_description = "ITEM_DELVERS_HARNESS_DESCRIPTION"
 texture = ExtResource("2")
 buy_value = 52
 sell_value = 30
+recipe_unlock_key = "delvers_harness"
+crafting_duration = 4.0
+recipe = Dictionary[ExtResource("1_qtsdk"), int]({ExtResource("armor"): 1, ExtResource("iron"): 2, ExtResource("supplies"): 2})

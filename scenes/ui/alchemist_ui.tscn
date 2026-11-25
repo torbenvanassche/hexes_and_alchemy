@@ -39,11 +39,12 @@ theme_override_constants/separation = 12
 [node name="Title" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Margin/Content/Header" index="0" unique_id=61707050]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_type_variation = &"SectionTitle"
+theme_type_variation = &"PageTitle"
 text = "ALCHEMIST_SERVICES_TITLE"
 uppercase = true
 
 [node name="Currency" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Margin/Content/Header" index="1" unique_id=1063358341]
+theme_type_variation = &"StatusAccentLabel"
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 text = "ALCHEMIST_CURRENCY"
@@ -51,6 +52,7 @@ horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="Introduction" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Margin/Content" index="1" unique_id=1930306775]
+theme_type_variation = &"MutedLabel"
 layout_mode = 2
 text = "ALCHEMIST_SERVICES_DESCRIPTION"
 autowrap_mode = 2
@@ -85,7 +87,8 @@ layout_mode = 2
 [node name="Title" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Margin/Content/Services/TreatmentPanel/Margin/Content/Header" index="0" unique_id=700585076]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_type_variation = &"MediumLabel"
+theme_type_variation = &"SectionHeading"
+uppercase = true
 text = "ALCHEMIST_PATIENTS_HEADER"
 uppercase = true
 
@@ -144,7 +147,8 @@ layout_mode = 2
 [node name="Title" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/AlchemistUI/Margin/Content/Services/EnchantmentPanel/Margin/Content/Header" index="0" unique_id=753660759]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_type_variation = &"MediumLabel"
+theme_type_variation = &"SectionHeading"
+uppercase = true
 text = "ALCHEMIST_RELICS_HEADER"
 uppercase = true
 

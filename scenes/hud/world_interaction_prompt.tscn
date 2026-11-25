@@ -1,0 +1,31 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/helpers/world_space_ui.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://tools/input_prompts/scenes/action_prompt.tscn" id="2_action"]
+
+[node name="WorldInteractionPrompt" type="Control"]
+mouse_filter = 2
+script = ExtResource("1_script")
+
+[node name="Badge" type="PanelContainer" parent="."]
+visible = false
+mouse_filter = 2
+theme_type_variation = &"WorldPromptBadge"
+
+[node name="Action" parent="Badge" instance=ExtResource("2_action")]
+layout_mode = 2
+theme_override_constants/separation = 9
+action = "primary_action"
+label_key = "UI_INTERACT"
+
+[node name="Icon" parent="Badge/Action" index="0"]
+custom_minimum_size = Vector2(32, 32)
+texture_filter = 1
+
+[node name="Binding" parent="Badge/Action" index="1"]
+theme_override_font_sizes/font_size = 16
+
+[node name="Text" parent="Badge/Action" index="2"]
+theme_type_variation = &"WorldPromptText"
+
+[editable path="Badge/Action"]

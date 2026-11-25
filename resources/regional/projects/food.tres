@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://c8ngjbq8w5gjr" path="res://tools/inventory/scripts/data/item_info.gd" id="item"]
 [ext_resource type="Resource" uid="uid://cedqercu5lay2" path="res://resources/item_info/seed_pouch.tres" id="seed_pouch"]
 [ext_resource type="Script" uid="uid://djx5qbdi5vwj5" path="res://scripts/regional/community_benefit.gd" id="ui_benefit"]
-[ext_resource type="Texture2D" path="res://sprites/items/HA_ICON_05_Grain.png" id="ui_icon_0"]
+[ext_resource type="Texture2D" uid="uid://bix5dbvpno3l3" path="res://sprites/items/HA_ICON_05_Grain.png" id="ui_icon_0"]
 [ext_resource type="PackedScene" uid="uid://gqrs7vgqtha0" path="res://meshes/kay_fantasy_hexagon/decoration/props/sack.glb" id="visual"]
 [ext_resource type="Resource" uid="uid://b46nyvtvipor5" path="res://resources/item_info/wood_raw.tres" id="wood_raw"]
 

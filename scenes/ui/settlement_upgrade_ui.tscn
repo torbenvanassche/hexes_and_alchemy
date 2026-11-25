@@ -13,6 +13,7 @@ content = NodePath("NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade")
 size_flags_horizontal = 3
 
 [node name="SettlementUpgrade" type="PanelContainer" parent="NinePatchRect/VBoxContainer/contentPanel" index="0" unique_id=369156769]
+theme_type_variation = &"UnframedPanel"
 custom_minimum_size = Vector2(0, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -32,12 +33,14 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="CurrentLevelLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer/VBoxContainer/CurrentRow" index="0" unique_id=1579134063]
+theme_type_variation = &"SectionHeading"
 layout_mode = 2
 size_flags_horizontal = 3
 text = "SETTLEMENT_UPGRADE_CURRENT_LEVEL_LABEL"
 uppercase = true
 
 [node name="CurrentLevelValue" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer/VBoxContainer/CurrentRow" index="1" unique_id=2095072131]
+theme_type_variation = &"StatusAccentLabel"
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 text = "1"
@@ -51,6 +54,7 @@ layout_mode = 2
 theme_override_constants/separation = 3
 
 [node name="NextHeader" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer/VBoxContainer/NextSection" index="0" unique_id=305376917]
+theme_type_variation = &"SectionHeading"
 layout_mode = 2
 text = "SETTLEMENT_UPGRADE_NEXT_HEADER"
 uppercase = true
@@ -68,6 +72,7 @@ autowrap_mode = 3
 layout_mode = 2
 
 [node name="RequirementsHeader" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/SettlementUpgrade/MarginContainer/VBoxContainer" index="4" unique_id=73536892]
+theme_type_variation = &"SectionHeading"
 layout_mode = 2
 text = "SETTLEMENT_UPGRADE_REQUIREMENTS_HEADER"
 uppercase = true

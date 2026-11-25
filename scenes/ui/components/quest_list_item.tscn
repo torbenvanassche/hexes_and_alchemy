@@ -5,10 +5,11 @@
 [ext_resource type="Texture2D" uid="uid://drasftash875f" path="res://sprites/ui/icons/pawns.png" id="5_so8rn"]
 
 [node name="QuestNote" type="Control" unique_id=84988057]
+custom_minimum_size = Vector2(201, 210)
 layout_mode = 3
 anchors_preset = 0
-offset_right = 147.0
-offset_bottom = 176.0
+offset_right = 201.0
+offset_bottom = 210.0
 script = ExtResource("1_qmdcg")
 
 [node name="Paper" type="Panel" parent="." unique_id=128610021]
@@ -18,7 +19,6 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 17.0
 grow_horizontal = 2
 grow_vertical = 2
 

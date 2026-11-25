@@ -410,6 +410,10 @@ func _get_inventory_contents(inventory: ContentGroup) -> Dictionary[Resource, in
 
 func try_assign_waiting_quests() -> void:
 	if SaveGames.is_loading: return
+	var waiting_quests := _get_waiting_quests()
+	if waiting_quests.is_empty():
+		return
+
 	var available_npcs: Array[NPC] = []
 	for npc_scene_instance: SceneInstance in _get_available_roster_members():
 		var available_npc := _get_npc_from_instance(npc_scene_instance)
@@ -417,10 +421,6 @@ func try_assign_waiting_quests() -> void:
 			available_npcs.append(available_npc)
 	if available_npcs.is_empty():
 		return;
-
-	var waiting_quests := _get_waiting_quests()
-	if waiting_quests.is_empty():
-		return
 
 	var assigned_quests := 0
 	while not available_npcs.is_empty() and not waiting_quests.is_empty():
@@ -474,10 +474,20 @@ func _reserve_quest_supplies(quest: Quest) -> bool:
 
 func _get_waiting_quests() -> Array[Quest]:
 	var waiting_quests: Array[Quest] = []
+	var day := Manager.instance.time_of_day.get_day_number()
 	for quest: Quest in active_quests:
 		if quest != null and quest.uses_guild_roster() and quest.is_state(Quest.QuestState.WAITING) and quest.party.is_empty():
-			waiting_quests.append(quest)
+			if quest.get_scout_departure_day() <= day:
+				waiting_quests.append(quest)
 	return waiting_quests
+
+func on_dawn() -> void:
+	var day := Manager.instance.time_of_day.get_day_number()
+	for quest: Quest in active_quests:
+		if quest != null and quest.is_state(Quest.QuestState.WAITING) and quest.get_scout_departure_day() == day:
+			queue_assignment()
+			quest_list_changed.emit()
+			return
 
 func _get_npc_from_instance(npc_scene_instance: SceneInstance) -> NPC:
 	if npc_scene_instance == null:

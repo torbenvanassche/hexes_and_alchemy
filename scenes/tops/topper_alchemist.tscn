@@ -14,6 +14,7 @@ size = Vector3(1.1329467, 1.15, 1.1190857)
 
 [node name="alchemist" type="Node3D" unique_id=901829019]
 script = ExtResource("1_script")
+prompt_label_key = "WINDOW_ALCHEMIST"
 additional_ui = Array[ExtResource("4_info")]([ExtResource("3_ui")])
 
 [node name="Root Scene" parent="." unique_id=435973315 instance=ExtResource("2_model")]

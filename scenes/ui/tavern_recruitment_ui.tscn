@@ -42,6 +42,7 @@ theme_type_variation = &"MutedLabel"
 vertical_alignment = 1
 
 [node name="VisitorCount" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/TavernRecruitment/Margin/Content/PoolSummary" index="1" unique_id=1311930555]
+theme_type_variation = &"StatusAccentLabel"
 layout_mode = 2
 text = "RECRUITMENT_VISITOR_COUNT"
 horizontal_alignment = 2
@@ -64,6 +65,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="EmptyLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/TavernRecruitment/Margin/Content" index="5" unique_id=1202180045]
+theme_type_variation = &"MutedLabel"
 visible = false
 custom_minimum_size = Vector2(0, 28)
 layout_mode = 2

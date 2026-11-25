@@ -24,7 +24,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="MenuPanel" type="PanelContainer" parent="CenterContainer" unique_id=1617234068]
-custom_minimum_size = Vector2(620, 0)
+custom_minimum_size = Vector2(640, 0)
 layout_mode = 2
 theme_type_variation = &"CardPanel"
 
@@ -32,25 +32,31 @@ theme_type_variation = &"CardPanel"
 layout_mode = 2
 
 [node name="MenuLayout" type="VBoxContainer" parent="CenterContainer/MenuPanel/MarginContainer" unique_id=1513400093]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="Title" type="Label" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout" unique_id=1348970555]
+[node name="Header" type="PanelContainer" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout"]
+layout_mode = 2
+theme_type_variation = &"DialogHeader"
+
+[node name="Title" type="Label" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout/Header" unique_id=1348970555]
 unique_name_in_owner = true
 layout_mode = 2
-theme_type_variation = &"DisplayLabel"
+theme_type_variation = &"Heading"
 text = "SCENE_PAUSE_MENU_NAME"
 horizontal_alignment = 1
-
-[node name="HeaderLine" type="Panel" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout" unique_id=15896976]
-custom_minimum_size = Vector2(0, 2)
-layout_mode = 2
-theme_type_variation = &"AccentRule"
 
 [node name="Actions" type="VBoxContainer" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout" unique_id=790131330]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 14
+
+[node name="PauseCaption" type="Label" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout/Actions"]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "PAUSE_CAPTION"
+horizontal_alignment = 1
 
 [node name="resume" type="Button" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout/Actions" unique_id=522419469]
 theme_type_variation = &"PrimaryButton"
@@ -67,7 +73,7 @@ text = "PAUSE_SETTINGS"
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
-text = "Checkpoints"
+text = "PAUSE_CHECKPOINTS"
 
 [node name="quit" type="Button" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout/Actions" unique_id=746646866]
 theme_type_variation = &"DangerButton"
@@ -83,7 +89,9 @@ theme_override_constants/separation = 12
 
 [node name="SavedTitle" type="Label" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout/CheckpointsPage"]
 layout_mode = 2
-text = "Saved checkpoints"
+theme_type_variation = &"SectionHeading"
+text = "PAUSE_SAVED_CHECKPOINTS"
+uppercase = true
 
 [node name="Checkpoints" type="OptionButton" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout/CheckpointsPage"]
 unique_name_in_owner = true
@@ -124,7 +132,9 @@ layout_mode = 2
 
 [node name="DevelopmentTitle" type="Label" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout/CheckpointsPage/DevelopmentSection"]
 layout_mode = 2
-text = "Development checkpoints"
+theme_type_variation = &"SectionHeading"
+text = "PAUSE_DEVELOPMENT_CHECKPOINTS"
+uppercase = true
 
 [node name="DevelopmentCheckpoints" type="OptionButton" parent="CenterContainer/MenuPanel/MarginContainer/MenuLayout/CheckpointsPage/DevelopmentSection"]
 unique_name_in_owner = true

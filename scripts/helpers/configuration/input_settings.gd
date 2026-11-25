@@ -56,8 +56,20 @@ func apply_bindings() -> void:
 func reset_bindings() -> void:
 	_config.erase_section(SECTION)
 	_config.erase_section(CONTROLLER_SECTION)
-	InputMap.load_from_project_settings()
+	for action: String in InputManager.mappable_actions:
+		_restore_default_events(action)
+	# Controller cancel is mirrored to Godot's interface cancel action.
+	_restore_default_events("ui_cancel")
 	_ensure_defaults()
+	InputManager.bindings_changed.emit()
+
+func _restore_default_events(action: String) -> void:
+	var binding: Dictionary = ProjectSettings.get_setting("input/" + action, {})
+	if not binding.has("events") or not InputMap.has_action(action):
+		return
+	InputMap.action_erase_events(action)
+	for event: InputEvent in binding["events"]:
+		InputMap.action_add_event(action, event.duplicate())
 
 func load_keybindings() -> Dictionary[String, InputEvent]:
 	var result: Dictionary[String, InputEvent] = {}

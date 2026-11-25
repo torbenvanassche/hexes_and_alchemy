@@ -25,25 +25,43 @@ theme_override_constants/margin_bottom = 0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1867016859]
 layout_mode = 2
-theme_override_constants/separation = 18
+theme_override_constants/separation = 12
 
 [node name="Title" type="Label" parent="MarginContainer/VBoxContainer" unique_id=768945560]
 layout_mode = 2
-theme_type_variation = &"LargeLabel"
+theme_type_variation = &"PageTitle"
 text = "SCENE_GAME_SETTINGS_NAME"
 
-[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer" unique_id=891891179]
+[node name="GeneralSection" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_constants/separation = 6
 
-[node name="LanguageRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="Heading" type="HBoxContainer" parent="MarginContainer/VBoxContainer/GeneralSection"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer/GeneralSection/Heading"]
+layout_mode = 2
+theme_type_variation = &"SectionHeading"
+text = "SETTINGS_GAME_GENERAL"
+uppercase = true
+
+[node name="Rule" type="HSeparator" parent="MarginContainer/VBoxContainer/GeneralSection/Heading" unique_id=891891179]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 1
+
+[node name="LanguageRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/GeneralSection"]
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="LanguageLabel" type="Label" parent="MarginContainer/VBoxContainer/LanguageRow"]
+[node name="LanguageLabel" type="Label" parent="MarginContainer/VBoxContainer/GeneralSection/LanguageRow"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "SETTINGS_LANGUAGE"
 
-[node name="LanguagePicker" type="OptionButton" parent="MarginContainer/VBoxContainer/LanguageRow"]
-custom_minimum_size = Vector2(200, 0)
+[node name="LanguagePicker" type="OptionButton" parent="MarginContainer/VBoxContainer/GeneralSection/LanguageRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(190, 34)
 layout_mode = 2

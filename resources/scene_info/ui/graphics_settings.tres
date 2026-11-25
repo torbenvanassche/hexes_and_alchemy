@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="SceneInfo" format=3]
+
+[ext_resource type="Script" path="res://scripts/scene_manager/scene_info.gd" id="1_scene_info"]
+[ext_resource type="PackedScene" path="res://scenes/ui/components/graphics_quality_controls.tscn" id="2_graphics"]
+
+[resource]
+script = ExtResource("1_scene_info")
+id = "graphics_settings"
+packed_scene = ExtResource("2_graphics")
+type = 2
+is_unique = true
+process_mode_enabled = 0

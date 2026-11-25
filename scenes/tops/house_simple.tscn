@@ -10,6 +10,7 @@ size = Vector3(0.65734243, 0.711185, 0.8605708)
 
 [node name="Node3D" type="Node3D" unique_id=2074058054]
 script = ExtResource("3_home")
+prompt_label_key = "WINDOW_SETTLEMENT_UPGRADE"
 upgrade_window = ExtResource("4_upgrade_ui")
 
 [node name="Root Scene" parent="." unique_id=540453184 instance=ExtResource("1_8d7ft")]

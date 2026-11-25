@@ -1,6 +1,6 @@
 extends Control
 
-@onready var language_picker: OptionButton = $MarginContainer/VBoxContainer/LanguageRow/LanguagePicker
+@onready var language_picker: OptionButton = %LanguagePicker
 
 const LANGUAGES := [
 	{"locale": "en", "key": "SETTINGS_LANGUAGE_ENGLISH"},

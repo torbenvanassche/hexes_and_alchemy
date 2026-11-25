@@ -15,18 +15,19 @@ func has_trigger() -> bool:
 
 func _refresh_interaction_prompt() -> void:
 	var prompt_target := _get_closest_trigger(true)
-	Manager.instance.interaction_prompt.show_rect(prompt_target)
+	Manager.instance.interaction_prompt.set_target(prompt_target)
 
 func interact() -> bool:
 	if not has_trigger():
 		return false
 	
-	var closest_trigger := _get_closest_trigger(false)
+	var closest_trigger := _get_closest_trigger(true)
+	if closest_trigger == null:
+		closest_trigger = _get_closest_trigger(false)
 	if closest_trigger == null:
 		return false
 
 	closest_trigger.on_interact()
-	_refresh_interaction_prompt()
 	return true
 
 func _get_closest_trigger(prompt_only: bool) -> Interaction:
@@ -37,7 +38,7 @@ func _get_closest_trigger(prompt_only: bool) -> Interaction:
 	for trigger: Interaction in current_triggers:
 		if not is_instance_valid(trigger):
 			continue
-		if prompt_only and (not trigger.show_interaction_prompt or not trigger.can_interact()):
+		if not trigger.can_interact() or (prompt_only and not trigger.show_interaction_prompt):
 			continue
 
 		var target_position := trigger.global_position

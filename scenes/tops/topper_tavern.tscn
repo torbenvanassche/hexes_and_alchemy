@@ -15,6 +15,7 @@ size = Vector3(1.173315, 1.3972301, 1.2564573)
 
 [node name="tavern" type="Node3D" unique_id=1607926184 node_paths=PackedStringArray("recreation_anchor")]
 script = ExtResource("1_isasx")
+prompt_label_key = "WINDOW_TAVERN"
 recreation_anchor = NodePath("recreation_anchor")
 recruitment_rules = ExtResource("2_recruitment_rules")
 additional_ui = Array[ExtResource("5_scene_info")]([ExtResource("4_recruitment")])

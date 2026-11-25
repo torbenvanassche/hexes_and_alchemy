@@ -52,11 +52,11 @@ offset_bottom = -1.0
 theme_override_constants/separation = 0
 
 [node name="topbar" type="ColorRect" parent="NinePatchRect/VBoxContainer" unique_id=347636229]
-custom_minimum_size = Vector2(100, 50)
+custom_minimum_size = Vector2(100, 44)
 layout_mode = 2
 mouse_filter = 1
 mouse_default_cursor_shape = 13
-color = Color(0.094, 0.137, 0.173, 1)
+color = Color(0.09411765, 0.1372549, 0.172549, 1)
 
 [node name="MarginContainer2" type="MarginContainer" parent="NinePatchRect/VBoxContainer/topbar" unique_id=634422055]
 layout_mode = 1
@@ -92,7 +92,7 @@ theme_override_constants/separation = 8
 
 [node name="LockButton" type="Button" parent="NinePatchRect/VBoxContainer/topbar/MarginContainer2/HBoxContainer" unique_id=1870475115]
 visible = false
-custom_minimum_size = Vector2(36, 36)
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 size_flags_vertical = 4
 tooltip_text = "WINDOW_KEEP_OPEN"
@@ -103,7 +103,7 @@ icon_alignment = 1
 expand_icon = true
 
 [node name="CloseButton" type="Button" parent="NinePatchRect/VBoxContainer/topbar/MarginContainer2/HBoxContainer" unique_id=1866505049]
-custom_minimum_size = Vector2(36, 36)
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 size_flags_vertical = 4
 tooltip_text = "WINDOW_CLOSE"

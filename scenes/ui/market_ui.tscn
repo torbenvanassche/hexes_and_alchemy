@@ -31,14 +31,14 @@ theme_override_constants/separation = 4
 
 [node name="BuyTab" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/MarketPanel/TopRow/TabSelector" index="0" unique_id=1802110311]
 custom_minimum_size = Vector2(150, 40)
-theme_type_variation = &"TradeTab"
+theme_type_variation = &"TabButton"
 layout_mode = 2
 toggle_mode = true
 text = "MARKET_BUY_SUPPLIES"
 
 [node name="SellTab" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/MarketPanel/TopRow/TabSelector" index="1" unique_id=2121912735]
 custom_minimum_size = Vector2(150, 40)
-theme_type_variation = &"TradeTab"
+theme_type_variation = &"TabButton"
 layout_mode = 2
 toggle_mode = true
 text = "MARKET_SELL_GOODS"
@@ -48,11 +48,13 @@ layout_mode = 2
 theme_override_constants/separation = 4
 
 [node name="CurrencyLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/MarketPanel/TopRow/CurrencyPanel" index="0" unique_id=1881878829]
+theme_type_variation = &"MutedLabel"
 layout_mode = 2
 text = "MARKET_CURRENCY"
 vertical_alignment = 1
 
 [node name="CurrencyAmount" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/MarketPanel/TopRow/CurrencyPanel" index="1" unique_id=741555253]
+theme_type_variation = &"StatusAccentLabel"
 custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
 text = "0"
@@ -77,6 +79,7 @@ theme_override_constants/v_separation = 6
 columns = 3
 
 [node name="EmptyLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/MarketPanel" index="2" unique_id=983768139]
+theme_type_variation = &"MutedLabel"
 visible = false
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2

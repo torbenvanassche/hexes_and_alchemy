@@ -34,7 +34,7 @@ func set_key(string: String, event: InputEvent) -> void:
 		rebinding_text.visible = true
 
 func set_label(string: String) -> void:
-	action_name.text = tr(string);
+	action_name.text = string
 	
 func set_rebinding() -> void:
 	rebinding_text.text = tr("UI_REBIND_PROMPT") % InputManager.action_label("cancel")

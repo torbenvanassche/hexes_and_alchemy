@@ -12,6 +12,7 @@ var is_paused: bool = false;
 
 var config := ConfigFile.new()
 var input: InputSettings
+var graphics: GraphicsSettings
 
 @onready var interaction_prompt: WSD = $"../game_ui/interaction_prompt";
 @onready var market: MarketManager = $market_manager;
@@ -47,6 +48,8 @@ func _ready() -> void:
 	if hub != null and not hub.changed.is_connected(quests.queue_assignment):
 		hub.changed.connect(quests.queue_assignment)
 		hub.mapped_changed.connect(quests.queue_assignment)
+	if not time_of_day.day_ended.is_connected(quests.on_dawn):
+		time_of_day.day_ended.connect(quests.on_dawn)
 	_connect_quest_notifications()
 	_load_or_create()
 	input = InputSettings.new(config)
@@ -116,6 +119,10 @@ func _load_or_create() -> void:
 		config.save(FILE_PATH)
 	var saved_locale := str(config.get_value("general", "locale", "en"))
 	set_language(saved_locale, false)
+	if graphics == null:
+		var world_environment := time_of_day.environment
+		graphics = GraphicsSettings.new(config, get_tree().root, world_environment.environment if world_environment != null else null)
+		graphics.changed.connect(save)
 
 func set_language(locale: String, persist := true) -> void:
 	var supported := ["en", "nl"]

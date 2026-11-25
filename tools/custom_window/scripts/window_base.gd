@@ -389,5 +389,7 @@ func _update_lock_availability() -> void:
 	lock_button.visible = can_lock
 	var action_space := (appearance.action_size + 8) * (2 if can_lock else 1)
 	# Centered titles reserve equal space on both sides of the header actions.
-	title_margin.add_theme_constant_override("margin_left", action_space if appearance.title_alignment == HORIZONTAL_ALIGNMENT_CENTER else 8)
+	var header_margin := title_margin.get_parent() as MarginContainer
+	var content_inset := maxi(0, appearance.content_margins.x - header_margin.get_theme_constant("margin_left"))
+	title_margin.add_theme_constant_override("margin_left", action_space if appearance.title_alignment == HORIZONTAL_ALIGNMENT_CENTER else content_inset)
 	title_margin.add_theme_constant_override("margin_right", action_space)

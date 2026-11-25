@@ -205,6 +205,9 @@ func get_objective() -> QuestObjective:
 func requires_objective() -> bool:
 	return quest_key != "scout"
 
+func get_scout_departure_day() -> int:
+	return int(context.get("scout_departure_day", 0)) if quest_key == "scout" else 0
+
 ## Externally driven quests can share lifecycle/outcomes without recruiting a party.
 func uses_guild_roster() -> bool:
 	return true
@@ -271,6 +274,8 @@ func _check_party_arrived_at_quest() -> void:
 			if npc != null and npc.movement_failed.is_connected(_on_party_movement_failed):
 				npc.movement_failed.disconnect(_on_party_movement_failed)
 		if quest_key == "scout":
+			for npc in party:
+				npc.survey_scout_hex(location)
 			set_state(QuestState.IN_PROGRESS);
 			return_from_quest()
 			return

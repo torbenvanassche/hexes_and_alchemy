@@ -8,6 +8,7 @@ extends Node3D
 
 var target: Node3D
 var _bob_phase := 0.0
+@onready var _arrow_mesh: MeshInstance3D = $"Arrow/arrow-standing"
 
 func track(location: Node3D) -> void:
 	if target == location:
@@ -28,6 +29,19 @@ func _update_marker() -> void:
 	# Only bob upward from the clearance so the tip never clips into the roof.
 	var lift := bob_height * (0.5 - 0.5 * cos(_bob_phase))
 	global_position = Vector3(bounds.get_center().x, bounds.end.y + clearance + lift, bounds.get_center().z)
+
+func is_on_screen(camera: Camera3D, viewport_rect: Rect2) -> bool:
+	var bounds := _arrow_mesh.get_aabb()
+	var projected_bounds := Rect2()
+	var has_projection := false
+	for index in range(8):
+		var corner := _arrow_mesh.global_transform * bounds.get_endpoint(index)
+		if camera.is_position_behind(corner):
+			continue
+		var point := camera.unproject_position(corner)
+		projected_bounds = projected_bounds.expand(point) if has_projection else Rect2(point, Vector2.ZERO)
+		has_projection = true
+	return has_projection and viewport_rect.intersects(projected_bounds)
 
 static func get_visible_bounds(location: Node3D) -> AABB:
 	var meshes: Array[Node] = location.find_children("*", "MeshInstance3D", true, false)

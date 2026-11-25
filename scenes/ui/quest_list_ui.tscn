@@ -2,6 +2,8 @@
 [ext_resource type="PackedScene" path="res://tools/custom_window/base_window.tscn" id="1_window"]
 [ext_resource type="Script" path="res://tools/inventory/scripts/visual/screens/quest_list_ui.gd" id="2_script"]
 [ext_resource type="PackedScene" path="res://scenes/ui/components/quest_list_item.tscn" id="3_note"]
+[ext_resource type="PackedScene" path="res://scenes/ui/components/village_request_notice.tscn" id="4_request"]
+[ext_resource type="PackedScene" path="res://scenes/ui/components/community_request_details.tscn" id="5_details"]
 [node name="Window" node_paths=PackedStringArray("content") instance=ExtResource("1_window")]
 custom_minimum_size = Vector2(740, 540)
 resizable = false
@@ -24,6 +26,8 @@ anchor_bottom = 1.0
 theme_override_constants/separation = 10
 [node name="Tabs" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout"]
 layout_mode = 2
+theme_override_constants/separation = 6
+alignment = 1
 [node name="Village" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Tabs"]
 layout_mode = 2
 custom_minimum_size = Vector2(190, 36)
@@ -38,48 +42,39 @@ toggle_mode = true
 text = "QUEST_BOARD_GUILD_TAB"
 [node name="RuleTop" type="HSeparator" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout"]
 layout_mode = 2
-[node name="Heading" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout"]
-layout_mode = 2
-theme_override_constants/separation = 10
-[node name="Back" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Heading"]
+[node name="Back" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout"]
 visible = false
 layout_mode = 2
+custom_minimum_size = Vector2(0, 28)
+size_flags_vertical = 4
+theme_type_variation = &"SmallButton"
 text = "QUEST_REQUEST_BACK"
-[node name="Context" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Heading"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_type_variation = &"MutedSmallLabel"
-autowrap_mode = 3
 [node name="Scroll" type="ScrollContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout"]
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
-vertical_scroll_mode = 4
 [node name="Content" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Scroll"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 10
-[node name="RequestScroll" type="ScrollContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Scroll/Content"]
+[node name="RequestDetails" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Scroll/Content" instance=ExtResource("5_details")]
 layout_mode = 2
-custom_minimum_size = Vector2(0, 268)
-size_flags_horizontal = 3
-horizontal_scroll_mode = 0
-vertical_scroll_mode = 4
-[node name="RequestMargin" type="MarginContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Scroll/Content/RequestScroll"]
+[node name="RequestTable" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Scroll/Content"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/margin_left = 0
-theme_override_constants/margin_right = 0
-theme_override_constants/margin_top = 0
-theme_override_constants/margin_bottom = 0
-[node name="Requests" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Scroll/Content/RequestScroll/RequestMargin"]
+theme_override_constants/separation = 0
+[node name="Columns" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Scroll/Content/RequestTable" instance=ExtResource("4_request")]
+layout_mode = 2
+column_header = true
+[node name="Requests" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Scroll/Content/RequestTable"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 0
 [node name="Completed" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Scroll/Content"]
 visible = false
 layout_mode = 2
+size_flags_horizontal = 4
 toggle_mode = true
 text = "QUEST_REQUEST_COMPLETED"
 [node name="BoardSurface" type="Panel" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Scroll/Content"]
@@ -105,10 +100,18 @@ theme_type_variation = &"MutedLabel"
 text = "QUEST_BOARD_EMPTY_HINT"
 horizontal_alignment = 1
 autowrap_mode = 3
+[node name="RequestFooter" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 8
+[node name="Rule" type="HSeparator" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/RequestFooter"]
+layout_mode = 2
 [node name="Rule" type="HSeparator" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout"]
 layout_mode = 2
 [node name="Actions" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout"]
 layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
 [node name="AutoResolveButton" type="CheckBox" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Actions"]
 layout_mode = 2
 theme_override_constants/h_separation = 8
@@ -117,10 +120,10 @@ theme_type_variation = &"SquareCheck"
 toggle_mode = true
 text = "QUEST_BOARD_AUTO_COLLECT"
 tooltip_text = "QUEST_AUTO_RESOLVE"
-[node name="Spacer" type="Control" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Actions"]
+[node name="RepeatLast" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Actions"]
 layout_mode = 2
-size_flags_horizontal = 3
-mouse_filter = 2
+custom_minimum_size = Vector2(0, 36)
+text = "QUEST_REPEAT_LAST"
 [node name="ScoutQuestButton" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Actions"]
 layout_mode = 2
 custom_minimum_size = Vector2(88, 36)

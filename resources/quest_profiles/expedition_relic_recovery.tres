@@ -1,0 +1,51 @@
+[gd_resource type="Resource" script_class="QuestProfile" format=3]
+
+[ext_resource type="Script" path="res://scripts/quests/quest_profile.gd" id="profile"]
+[ext_resource type="Script" path="res://scripts/quests/quest_outcome.gd" id="outcome"]
+[ext_resource type="Script" path="res://scripts/quests/quest_support_definition.gd" id="support"]
+[ext_resource type="Script" path="res://scripts/structures/loot_table.gd" id="loot"]
+[ext_resource type="Script" path="res://tools/inventory/scripts/data/item_info.gd" id="item"]
+[ext_resource type="Resource" path="res://resources/quest_outcomes/quest_outcome_ruins_delve_danger.tres" id="setback"]
+[ext_resource type="Resource" path="res://resources/quest_supports/security_escort.tres" id="escort"]
+[ext_resource type="Resource" path="res://resources/journal_tasks/expedition_relic.tres" id="task"]
+[ext_resource type="Resource" path="res://resources/item_info/travel_rations.tres" id="rations"]
+[ext_resource type="Resource" path="res://resources/item_info/work_supplies.tres" id="supplies"]
+[ext_resource type="Resource" path="res://resources/item_info/aegis_plate.tres" id="aegis"]
+[ext_resource type="Resource" path="res://resources/item_info/ancient_compass.tres" id="compass"]
+[ext_resource type="Resource" path="res://resources/item_info/masterwork_kit.tres" id="kit"]
+[ext_resource type="Resource" path="res://resources/item_info/sunsteel_blade.tres" id="blade"]
+
+[sub_resource type="Resource" id="relic_cache"]
+script = ExtResource("loot")
+choice_pool = Array[ExtResource("item")]([ExtResource("aegis"), ExtResource("compass"), ExtResource("kit"), ExtResource("blade")])
+choice_chance = 1.0
+
+[sub_resource type="Resource" id="success"]
+script = ExtResource("outcome")
+weight = 0.65
+loot_table = SubResource("relic_cache")
+next_state = "LOOTED"
+message_key = "EXPEDITION_RELIC_SUCCESS"
+completes_journal_task = ExtResource("task")
+
+[resource]
+script = ExtResource("profile")
+quest_key = "relic_recovery"
+behaviour = "delve"
+required_role = "delver"
+translation_key_name = "EXPEDITION_RELIC_TITLE"
+description_key = "EXPEDITION_RELIC_DESC"
+result_description_key = "EXPEDITION_RELIC_RESULT"
+risk_key = "QUEST_RISK_DANGEROUS"
+expected_reward_key = "EXPEDITION_RELIC_REWARD"
+duration_seconds = 14.0
+rank_experience_reward = 6
+available_states = Array[String](["DANGEROUS"])
+required_supplies = Dictionary[ExtResource("item"), int]({ExtResource("rations"): 1, ExtResource("supplies"): 2})
+optional_supports = Array[ExtResource("support")]([ExtResource("escort")])
+outcomes = Array[ExtResource("outcome")]([SubResource("success"), ExtResource("setback")])
+completion_spot_stage = 5
+occupied_completion_spot_stage = 8
+objective_state_spot_stage_overrides = Dictionary[String, int]({"DANGEROUS": 3})
+requires_revealed_occupation = true
+occupation_must_be_revealed = false

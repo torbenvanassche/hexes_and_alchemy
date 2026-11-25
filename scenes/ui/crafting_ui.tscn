@@ -33,6 +33,8 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="IngredientsLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/CraftingPanel/CraftingRows/IngredientsPanel" index="0" unique_id=1781497121]
+uppercase = true
+theme_type_variation = &"SectionHeading"
 layout_mode = 2
 text = "CRAFTING_INGREDIENTS"
 
@@ -47,6 +49,8 @@ custom_minimum_size = Vector2(110, 0)
 layout_mode = 2
 
 [node name="ResultLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/CraftingPanel/CraftingRows/ResultPanel" index="0" unique_id=415962559]
+uppercase = true
+theme_type_variation = &"SectionHeading"
 layout_mode = 2
 text = "CRAFTING_RESULT"
 horizontal_alignment = 1
@@ -62,6 +66,7 @@ layout_mode = 2
 text = "CRAFTING_CRAFT"
 
 [node name="StatusLabel" type="Label" parent="NinePatchRect/VBoxContainer/contentPanel/CraftingPanel" index="3" unique_id=840211456]
+theme_type_variation = &"MutedLabel"
 visible = false
 custom_minimum_size = Vector2(430, 28)
 layout_mode = 2

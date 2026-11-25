@@ -1,19 +1,32 @@
 class_name QuestOfferPreview
 extends RefCounted
 
+class ScoutSurvey extends RefCounted:
+	var day: int
+	var minute: int
+	var night: bool
+	var radius: int
+
+var scout_route := PackedVector2Array()
+var scout_name := ""
+var scout_round_trip_seconds := 0
 var lines: PackedStringArray = []
 var provider_names: PackedStringArray = []
+var _scout: NPC
+var _scout_travel_seconds := 0.0
 
 static func create(quest: Quest, manager: QuestManager) -> QuestOfferPreview:
 	var result := QuestOfferPreview.new()
 	if quest == null or quest.location == null: return result
+	var is_scout := quest.quest_key == "scout"
 	var profile := quest.get_profile()
 	var objective := quest.get_objective()
 	var supplies: Dictionary[ItemInfo, int] = {}
 	if objective != null: supplies = objective.get_required_supplies(quest.quest_key)
 	var material_value := 0
 	for item: ItemInfo in supplies: material_value += item.get_sell_value() * int(supplies[item])
-	result.lines.append(TranslationServer.translate("OFFER_BUDGET") % [quest.offered_currency_reward, material_value, profile.guild_currency_reward if profile != null else 0])
+	if not is_scout or quest.offered_currency_reward > 0:
+		result.lines.append(TranslationServer.translate("OFFER_BUDGET") % [quest.offered_currency_reward, material_value, profile.guild_currency_reward if profile != null else 0])
 	var available_for_assignment: Array[NPC] = []
 	var role := Manager.instance.hub.get_required_role_for_quest(quest)
 	for home: FactionHome in manager._get_active_roster_homes():
@@ -56,25 +69,50 @@ static func create(quest: Quest, manager: QuestManager) -> QuestOfferPreview:
 	var rest := 0.0
 	var grid := Manager.instance.transport.get_grid()
 	for npc: NPC in assignment.members:
-		var start := grid.get_hex_at_world_position(npc.global_position)
-		var path: Array[HexBase] = []
-		if start != null:
-			var methods: Array[HexInfo.TraversalTag] = [HexInfo.TraversalTag.WALK]
-			if manager._active_settlement_allows_boat_travel(): methods.append(HexInfo.TraversalTag.BOAT)
-			path = grid.pathfinder.get_hex_path_for_methods(start.cube_id, quest.location.cube_id, methods)
+		var start := grid.get_hex_at_world_position(npc.global_position) if grid != null else null
+		var path := npc.get_quest_route(grid, start, quest.location)
 		if path.is_empty():
 			result.lines.append(TranslationServer.translate("SHIPMENT_NO_ROUTE"))
 			return result
-		var seconds := 0.0
+		if is_scout and npc == assignment.primary:
+			for tile: HexBase in path:
+				result.scout_route.append(Vector2(tile.global_position.x, tile.global_position.z))
+		var distance := 0.0
+		var previous := Vector2(npc.global_position.x, npc.global_position.z)
 		for index in range(1, path.size()):
-			seconds += path[index - 1].global_position.distance_to(path[index].global_position) / maxf(0.1, npc.get_effective_move_speed())
+			var position := path[index].global_position
+			var next := Vector2(position.x, position.z)
+			distance += previous.distance_to(next)
+			previous = next
+		var seconds := distance / maxf(0.1, npc.get_effective_move_speed())
 		travel = maxf(travel, seconds)
 		var rules := npc.recovery_rules if npc.recovery_rules != null else AdventurerRecoveryRules.new()
 		var estimate := rules.base_rest_seconds + (profile.duration_seconds if profile != null else 0.0) * rules.quest_duration_rest_multiplier
 		if quest.get_effective_risk_key() == "QUEST_RISK_DANGEROUS": estimate *= rules.dangerous_quest_rest_multiplier
 		elif quest.get_effective_risk_key() == "QUEST_RISK_UNCERTAIN": estimate *= rules.uncertain_quest_rest_multiplier_max
 		rest = maxf(rest, minf(rules.maximum_rest_seconds, estimate))
-	result.lines.append(TranslationServer.translate("OFFER_TIMING") % [ceili(travel), ceili(work), ceili(travel), ceili(rest), ceili(travel * 2.0 + work + rest)])
+	if is_scout:
+		result._scout = assignment.primary
+		result._scout_travel_seconds = travel
+		result.scout_name = assignment.primary.get_display_name()
+		result.scout_round_trip_seconds = ceili(travel * 2.0)
+	else:
+		result.lines.append(TranslationServer.translate("OFFER_TIMING") % [ceili(travel), ceili(work), ceili(travel), ceili(rest), ceili(travel * 2.0 + work + rest)])
+	return result
+
+func get_scout_survey(clock: TimeOfDay, depart_at_dawn: bool) -> ScoutSurvey:
+	if not is_instance_valid(_scout):
+		return null
+	var departure := clock.get_elapsed_seconds()
+	if depart_at_dawn:
+		departure = clock.get_dawn_time(clock.get_day_number() + 1)
+	var survey_time := departure + _scout_travel_seconds
+	var phase := clock.get_phase_at(survey_time)
+	var result := ScoutSurvey.new()
+	result.day = clock.get_day_at(survey_time)
+	result.minute = clock.get_clock_minutes_at(survey_time)
+	result.night = phase != null and phase.phase == TimeOfDay.Phase.NIGHT
+	result.radius = _scout.get_scouting_radius(result.night)
 	return result
 
 static func _minimum_pay(npc: NPC, quest: Quest) -> int:

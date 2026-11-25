@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://bhn5mfd3d5ujk" path="res://tools/control_helpers/toggle_group.gd" id="1_pfmrl"]
 [ext_resource type="Resource" uid="uid://cs0kfyy871ovd" path="res://resources/scene_info/ui/game_settings.tres" id="2_6hi4t"]
 [ext_resource type="Resource" uid="uid://uov1jt8s2qia" path="res://resources/scene_info/ui/input_settings.tres" id="2_j3boo"]
+[ext_resource type="Resource" path="res://resources/scene_info/ui/graphics_settings.tres" id="3_graphics"]
 
 [node name="Control" type="Control" unique_id=1653328238 node_paths=PackedStringArray("button_group_parent", "tab_instance_parent", "group_buttons", "back_button")]
 process_mode = 3
@@ -17,6 +18,7 @@ button_group_parent = NodePath("CenterContainer/SettingsDialog/MarginContainer/D
 tab_instance_parent = NodePath("CenterContainer/SettingsDialog/MarginContainer/DialogLayout/MainContent/ContentPanel/MarginContainer/tab_instances")
 group_buttons = {
 NodePath("CenterContainer/SettingsDialog/MarginContainer/DialogLayout/MainContent/Navigation/GAME"): ExtResource("2_6hi4t"),
+NodePath("CenterContainer/SettingsDialog/MarginContainer/DialogLayout/MainContent/Navigation/GRAPHICS"): ExtResource("3_graphics"),
 NodePath("CenterContainer/SettingsDialog/MarginContainer/DialogLayout/MainContent/Navigation/INPUT"): ExtResource("2_j3boo")
 }
 back_button = NodePath("CenterContainer/SettingsDialog/MarginContainer/DialogLayout/Footer/BACK")
@@ -50,13 +52,14 @@ layout_mode = 2
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Header" type="HBoxContainer" parent="CenterContainer/SettingsDialog/MarginContainer/DialogLayout" unique_id=2031921283]
+[node name="Header" type="PanelContainer" parent="CenterContainer/SettingsDialog/MarginContainer/DialogLayout" unique_id=2031921283]
 layout_mode = 2
+theme_type_variation = &"DialogHeader"
 
 [node name="Title" type="Label" parent="CenterContainer/SettingsDialog/MarginContainer/DialogLayout/Header" unique_id=874138002]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_type_variation = &"DisplayLabel"
+theme_type_variation = &"Heading"
 text = "SCENE_SETTINGS_MENU_NAME"
 
 [node name="MainContent" type="HBoxContainer" parent="CenterContainer/SettingsDialog/MarginContainer/DialogLayout" unique_id=1280618574]
@@ -75,6 +78,14 @@ theme_type_variation = &"JournalContents"
 layout_mode = 2
 size_flags_horizontal = 3
 text = "SETTINGS_TAB_GAME"
+alignment = 0
+
+[node name="GRAPHICS" type="Button" parent="CenterContainer/SettingsDialog/MarginContainer/DialogLayout/MainContent/Navigation"]
+custom_minimum_size = Vector2(0, 44)
+theme_type_variation = &"JournalContents"
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SETTINGS_TAB_GRAPHICS"
 alignment = 0
 
 [node name="INPUT" type="Button" parent="CenterContainer/SettingsDialog/MarginContainer/DialogLayout/MainContent/Navigation" unique_id=4257191]
@@ -108,9 +119,6 @@ custom_minimum_size = Vector2(120, 36)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "SETTINGS_BACK"
-
-[node name="HeaderRule" type="HSeparator" parent="CenterContainer/SettingsDialog/MarginContainer/DialogLayout" index="1"]
-layout_mode = 2
 
 [node name="NavigationRule" type="VSeparator" parent="CenterContainer/SettingsDialog/MarginContainer/DialogLayout/MainContent" index="1"]
 layout_mode = 2

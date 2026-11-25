@@ -28,6 +28,8 @@ func _ready() -> void:
 	add_child(backup)
 	row = HBoxContainer.new()
 	autosave = CheckBox.new()
+	autosave.theme_type_variation = &"SquareCheck"
+	autosave.add_theme_constant_override("h_separation", 8)
 	autosave.text = tr("SAVE_AUTOSAVE")
 	autosave.button_pressed = SaveGames.autosave_enabled
 	row.add_child(autosave)
