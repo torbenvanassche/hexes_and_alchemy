@@ -1,70 +1,45 @@
 class_name QuestListUI extends Control
 
+const REQUEST_ROW := preload("res://scenes/ui/components/village_request_notice.tscn")
+
+@export var quest_item_ui: PackedScene
+
 @onready var create_quest_button: Button = $Layout/Actions/CreateQuestButton
 @onready var scout_quest_button: Button = $Layout/Actions/ScoutQuestButton
-@onready var auto_resolve_button: Button = $Layout/Actions/AutoResolveButton
-@onready var board_surface: Control = $Layout/Scroll/Content/BoardSurface
-@onready var empty_label: Control = $Layout/Scroll/Content/EmptyState
+@onready var auto_resolve_button: CheckBox = $Layout/Actions/AutoResolveButton
+@onready var repeat_button: Button = $Layout/Actions/RepeatLast
 @onready var scroll: ScrollContainer = $Layout/Scroll
 @onready var request_table: VBoxContainer = $Layout/Scroll/Content/RequestTable
 @onready var request_list: VBoxContainer = request_table.get_node("Requests")
+@onready var request_details: CommunityProjectsUI = $Layout/Scroll/Content/RequestDetails
+@onready var commission_table: VBoxContainer = $Layout/Scroll/Content/CommissionTable
+@onready var commission_list: VBoxContainer = commission_table.get_node("Rows")
+@onready var empty_label: Control = $Layout/Scroll/Content/EmptyState
 @onready var completed_button: Button = $Layout/Scroll/Content/Completed
 @onready var back_button: Button = $Layout/Back
-@onready var repeat_button: Button = $Layout/Actions/RepeatLast
 @onready var request_footer: VBoxContainer = $Layout/RequestFooter
-@onready var request_details: CommunityProjectsUI = $Layout/Scroll/Content/RequestDetails
-var active_tab := "guild"
+
+var active_tab := "village"
 var selected_request := ""
+var window_instance: SceneInstance
+var _expanded_commission: Quest
+var _commission_rows: Dictionary[Quest, QuestListItemUI] = {}
 var _show_completed := false
-var _refresh_gate: RefreshGate
-var _board_gate: RefreshGate
+var _completed_request_count := 0
+var _request_gate: RefreshGate
+var _commission_gate: RefreshGate
+var _availability_gate: RefreshGate
 
-@export var quest_item_ui: PackedScene
-@export var board_margin: float = 20.0
-@export var note_spacing: Vector2 = Vector2(16.0, 14.0)
-var window_instance: SceneInstance;
-var auto_resolve_enabled := false
-
-func on_enter() -> void:
-	_sync_auto_resolve_button()
-	for c: QuestListItemUI in _get_quest_notes():
-		if not Manager.instance.quests.get_commissions().has(c.questData):
-			c.queue_free()
-		else:
-			c.set_auto_resolve_enabled(auto_resolve_enabled)
-			c.refresh_scout_departure()
-
-	for q: Quest in Manager.instance.quests.get_commissions():
-		if _find_note_for_quest(q) == null:
-			var instance: QuestListItemUI = quest_item_ui.instantiate();
-			board_surface.add_child(instance);
-			instance.set_auto_resolve_enabled(auto_resolve_enabled)
-			instance.set_data(q);
-
-	_refresh_requests()
-	_allow_quest_creation_allowed()
-	_layout_board()
-	
-	if not Manager.instance.quests.quest_availability_changed.is_connected(_allow_quest_creation_allowed):
-		Manager.instance.quests.quest_availability_changed.connect(_allow_quest_creation_allowed)
-	
-func _allow_quest_creation_allowed() -> void:
-	create_quest_button.disabled = not _has_available_quests_to_create()
-	create_quest_button.tooltip_text = tr("QUEST_BOARD_FIND_TARGET") if create_quest_button.disabled else ""
-	scout_quest_button.disabled = not _has_available_scouting_to_create()
-	scout_quest_button.theme_type_variation = &"PrimaryButton" if create_quest_button.disabled else &"Button"
-	
 func _ready() -> void:
-	_refresh_gate = RefreshGate.new(self, _refresh_requests)
-	_board_gate = RefreshGate.new(self, on_enter)
-	repeat_button.pressed.connect(_repeat_last_order)
+	_request_gate = RefreshGate.new(self, _refresh_requests)
+	_commission_gate = RefreshGate.new(self, _refresh_commissions)
+	_availability_gate = RefreshGate.new(self, _allow_quest_creation_allowed)
 	_mount_back_button.call_deferred()
-	# Keep hand-in/delegation actions available while the notice body scrolls.
 	request_details.status.reparent(request_footer)
 	request_details.status.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	request_details.actions.reparent(request_footer)
 	request_details.actions.alignment = FlowContainer.ALIGNMENT_CENTER
-	active_tab = "village"
+
 	scroll.resized.connect(_layout_empty_state)
 	$Layout/Tabs/Village.pressed.connect(show_tab.bind("village"))
 	$Layout/Tabs/Guild.pressed.connect(show_tab.bind("guild"))
@@ -73,23 +48,39 @@ func _ready() -> void:
 		_show_completed = value
 		_refresh_requests()
 	)
-	Manager.instance.regional.changed.connect(_queue_request_refresh)
-	Manager.instance.hub.changed.connect(_queue_request_refresh)
+	repeat_button.pressed.connect(_repeat_last_order)
 	create_quest_button.pressed.connect(_open_create_quest_menu)
 	scout_quest_button.pressed.connect(_open_scout_quest_menu)
-	auto_resolve_button.toggled.connect(_on_auto_resolve_toggled)
-	Manager.instance.quests.quest_list_changed.connect(_queue_board_refresh)
-	board_surface.resized.connect(_layout_board)
+	auto_resolve_button.toggled.connect(Manager.instance.operations.set_auto_collect_commissions)
+
+	Manager.instance.regional.changed.connect(_request_gate.request)
+	Manager.instance.hub.changed.connect(_request_gate.request)
+	Manager.instance.quests.quest_list_changed.connect(_commission_gate.request)
+	Manager.instance.quests.quest_availability_changed.connect(_availability_gate.request)
 	on_enter()
 	_layout_empty_state.call_deferred()
 
+func on_enter() -> void:
+	auto_resolve_button.set_pressed_no_signal(Manager.instance.operations.auto_resolve_completed_quests)
+	_refresh_commissions()
+	_refresh_requests()
+	_availability_gate.request()
+
+func _allow_quest_creation_allowed() -> void:
+	if active_tab != "guild" or SaveGames.is_loading:
+		return
+	create_quest_button.disabled = not _has_available_quests_to_create()
+	create_quest_button.tooltip_text = tr("QUEST_BOARD_FIND_TARGET") if create_quest_button.disabled else ""
+	scout_quest_button.disabled = not _has_available_scouting_to_create()
+	scout_quest_button.theme_type_variation = &"PrimaryButton" if create_quest_button.disabled else &"Button"
+
 func _layout_empty_state() -> void:
-	# Center a readable paragraph, rather than the label's narrow minimum width.
 	empty_label.get_node("Content").custom_minimum_size.x = minf(440.0, maxf(1.0, scroll.size.x - 32.0))
 
 func _mount_back_button() -> void:
 	var parent_window: Node = get_parent()
-	while parent_window != null and not parent_window is DraggableControl: parent_window = parent_window.get_parent()
+	while parent_window != null and not parent_window is DraggableControl:
+		parent_window = parent_window.get_parent()
 	if parent_window is DraggableControl:
 		back_button.reparent(parent_window.header_actions)
 		parent_window.header_actions.move_child(back_button, 0)
@@ -97,13 +88,15 @@ func _mount_back_button() -> void:
 func show_tab(id: String) -> void:
 	active_tab = id
 	selected_request = ""
-	$Layout/Scroll.scroll_vertical = 0
-	_refresh_requests()
+	scroll.scroll_vertical = 0
+	if active_tab == "village":
+		_refresh_requests()
+	else:
+		_refresh_commissions()
+		_availability_gate.request()
 
 func show_board() -> void:
-	selected_request = ""
-	$Layout/Scroll.scroll_vertical = 0
-	_refresh_requests()
+	show_tab(active_tab)
 
 func show_request(id: String) -> void:
 	var regional := Manager.instance.regional
@@ -113,33 +106,32 @@ func show_request(id: String) -> void:
 	active_tab = "village"
 	selected_request = id
 	request_details.select_request(id)
-	$Layout/Scroll.scroll_vertical = 0
+	scroll.scroll_vertical = 0
 	_refresh_requests()
-
-func _queue_request_refresh() -> void:
-	_refresh_gate.request()
 
 func _refresh_requests() -> void:
 	if not is_node_ready() or SaveGames.is_loading: return
 	var regional := Manager.instance.regional
 	if selected_request == CommunityProjectsUI.INCIDENT_REQUEST and regional.active_incident == null:
 		selected_request = ""
-	for child: Node in request_list.get_children():
-		request_list.remove_child(child)
-		child.queue_free()
-	var completed_count := 0
+	var show_requests := active_tab == "village" and selected_request.is_empty()
+	if show_requests:
+		for child: Node in request_list.get_children():
+			request_list.remove_child(child)
+			child.queue_free()
 	var available_count := 0
+	_completed_request_count = 0
 	if regional.active_incident != null:
 		available_count += 1
-		var incident := regional.active_incident.definition
-		var author := regional.get_incident_requester()
-		_add_notice(CommunityProjectsUI.INCIDENT_REQUEST, incident.get_title(), author.resident_name, tr("QUEST_REQUEST_AVAILABLE"))
+		if show_requests:
+			var incident := regional.active_incident.definition
+			var author := regional.get_incident_requester()
+			_add_notice(CommunityProjectsUI.INCIDENT_REQUEST, incident.get_title(), author.resident_name, tr("QUEST_REQUEST_AVAILABLE"))
 	for definition: CommunityProjectDefinition in regional.catalog.projects:
 		var state := regional.projects[definition.id]
-		if state.completed:
-			completed_count += 1
-			if not _show_completed: continue
+		if state.completed: _completed_request_count += 1
 		else: available_count += 1
+		if not show_requests or (state.completed and not _show_completed): continue
 		var state_text := tr("QUEST_REQUEST_COMPLETED") if state.completed else tr("QUEST_REQUEST_AVAILABLE")
 		if not state.completed:
 			if not regional.is_unlocked(): state_text = tr("QUEST_REQUEST_FORGE_REQUIRED")
@@ -147,45 +139,75 @@ func _refresh_requests() -> void:
 			elif regional.completion_block_reason(definition.id).is_empty(): state_text = tr("QUEST_REQUEST_READY")
 			elif state.fieldwork_done: state_text = tr("QUEST_REQUEST_DELIVER_MATERIALS")
 		_add_notice(definition.id, definition.get_title(), definition.resident_name, state_text)
-	var village := active_tab == "village"
-	repeat_button.disabled = _last_order() == null
-	var detail := village and not selected_request.is_empty()
 	$Layout/Tabs/Village.text = tr("QUEST_BOARD_VILLAGE_COUNT") % available_count
-	$Layout/Tabs/Guild.text = tr("QUEST_BOARD_GUILD_COUNT") % Manager.instance.quests.get_commissions().size()
+	completed_button.text = tr("QUEST_REQUEST_COMPLETED_COUNT") % _completed_request_count
+	_update_page()
+	if request_details.visible:
+		request_details.refresh()
+
+func _add_notice(id: String, title: String, author: String, state: String) -> void:
+	var notice := REQUEST_ROW.instantiate() as VillageRequestNotice
+	request_list.add_child(notice)
+	notice.setup(id, title, author, state, show_request)
+
+func _refresh_commissions() -> void:
+	if not is_node_ready() or SaveGames.is_loading: return
+	var commissions := Manager.instance.quests.get_commissions()
+	for quest: Quest in _commission_rows.keys():
+		if commissions.has(quest): continue
+		var obsolete := _commission_rows[quest]
+		_commission_rows.erase(quest)
+		commission_list.remove_child(obsolete)
+		obsolete.queue_free()
+	for quest: Quest in commissions:
+		var row: QuestListItemUI = _commission_rows.get(quest)
+		if row == null:
+			row = quest_item_ui.instantiate() as QuestListItemUI
+			_commission_rows[quest] = row
+			commission_list.add_child(row)
+			row.details_requested.connect(_show_commission_details)
+			row.setup(quest)
+		else:
+			row.refresh()
+	$Layout/Tabs/Guild.text = tr("QUEST_BOARD_GUILD_COUNT") % commissions.size()
+	repeat_button.disabled = _last_order() == null
+	if _expanded_commission != null and not _commission_rows.has(_expanded_commission):
+		_expanded_commission = null
+	_update_page()
+
+func _show_commission_details(quest: Quest, expanded: bool) -> void:
+	if not _commission_rows.has(quest):
+		return
+	if _expanded_commission != null:
+		_commission_rows[_expanded_commission].set_expanded(false)
+	_expanded_commission = quest if expanded else null
+	if not expanded:
+		return
+	var row := _commission_rows[quest]
+	row.set_expanded(true)
+	await get_tree().process_frame
+	if _expanded_commission == quest and is_instance_valid(row) and row.is_visible_in_tree():
+		scroll.ensure_control_visible(row)
+
+func _update_page() -> void:
+	var village := active_tab == "village"
+	var detail := village and not selected_request.is_empty()
 	$Layout/Tabs/Village.set_pressed_no_signal(village)
 	$Layout/Tabs/Guild.set_pressed_no_signal(not village)
-	back_button.visible = detail
 	$Layout/Tabs.visible = not detail
 	$Layout/RuleTop.visible = not detail
+	back_button.visible = detail
 	request_table.visible = village and not detail and request_list.get_child_count() > 0
 	request_details.visible = detail
 	request_footer.visible = detail
-	completed_button.visible = village and not detail and completed_count > 0
-	completed_button.text = tr("QUEST_REQUEST_COMPLETED_COUNT") % completed_count
-	var guild_empty := Manager.instance.quests.get_commissions().is_empty()
-	board_surface.visible = not village and not guild_empty
-	empty_label.visible = not detail and (request_list.get_child_count() == 0 if village else guild_empty)
+	completed_button.visible = village and not detail and _completed_request_count > 0
+	commission_table.visible = not village and not _commission_rows.is_empty()
+	empty_label.visible = not detail and (request_list.get_child_count() == 0 if village else _commission_rows.is_empty())
 	empty_label.get_node("Content/Title").text = tr("QUEST_REQUEST_EMPTY" if village else "QUEST_LIST_EMPTY")
 	empty_label.get_node("Content/Hint").text = tr("QUEST_REQUEST_EMPTY_HINT" if village else "QUEST_BOARD_EMPTY_HINT")
 	$Layout/Actions.visible = not village
 	$Layout/Rule.visible = not village
-	if detail: request_details.refresh()
 
-func _add_notice(id: String, title: String, author: String, state: String) -> void:
-	var notice := preload("res://scenes/ui/components/village_request_notice.tscn").instantiate() as VillageRequestNotice
-	request_list.add_child(notice)
-	notice.setup(id, title, author, state, show_request)
-
-func _on_auto_resolve_toggled(enabled: bool) -> void:
-	auto_resolve_enabled = enabled
-	for note in _get_quest_notes():
-		note.set_auto_resolve_enabled(auto_resolve_enabled)
-
-func _sync_auto_resolve_button() -> void:
-	if auto_resolve_button == null:
-		return
-	auto_resolve_button.set_pressed_no_signal(auto_resolve_enabled)
-	
 func _open_create_quest_menu() -> void:
 	if can_open_creation_menu() and _has_available_quests_to_create():
 		DataManager.instance.get_scene_by_name("quest_creation_ui").queue(_on_create_quest_window_loaded)
@@ -209,50 +231,6 @@ func _on_scout_quest_window_loaded(window_info: SceneInfo) -> void:
 	quest_creation.setup_scouting_request()
 	window_instance.on_enter.emit();
 
-func _get_quest_notes() -> Array[QuestListItemUI]:
-	var notes: Array[QuestListItemUI]
-	for child: Node in board_surface.get_children():
-		if child is QuestListItemUI:
-			notes.append(child)
-	return notes
-
-func _find_note_for_quest(quest: Quest) -> QuestListItemUI:
-	for note: QuestListItemUI in _get_quest_notes():
-		if note.questData == quest:
-			return note
-	return null
-
-func _layout_board() -> void:
-	if not is_node_ready() or board_surface.size.x <= 0.0:
-		return
-
-	var notes := _get_ordered_notes()
-	if notes.is_empty():
-		board_surface.custom_minimum_size.y = 0.0
-		return
-	var width := board_surface.size.x
-	var note_size := notes[0].get_combined_minimum_size()
-	var stride := note_size + note_spacing
-	var columns := maxi(1, floori((width - board_margin * 2.0 + note_spacing.x) / stride.x))
-	var rows := ceili(float(notes.size()) / columns)
-	for row in rows:
-		var first := row * columns
-		var count := mini(columns, notes.size() - first)
-		var row_width := count * stride.x - note_spacing.x
-		var left := maxf(0.0, (width - row_width) * 0.5)
-		for column in count:
-			var note := notes[first + column]
-			note.position = Vector2(left + column * stride.x, board_margin + row * stride.y).round()
-	board_surface.custom_minimum_size.y = board_margin * 2.0 + rows * stride.y - note_spacing.y
-
-func _get_ordered_notes() -> Array[QuestListItemUI]:
-	var ordered_notes: Array[QuestListItemUI] = []
-	for quest: Quest in Manager.instance.quests.get_commissions():
-		var note := _find_note_for_quest(quest)
-		if note != null:
-			ordered_notes.append(note)
-	return ordered_notes
-
 func _has_available_quests_to_create() -> bool:
 	var active_scene := SceneManager.get_active_scene()
 	if active_scene == null:
@@ -262,7 +240,10 @@ func _has_available_quests_to_create() -> bool:
 	if grid == null:
 		return false
 
-	var player_hex := Manager.instance.player_instance.get_hex()
+	var player := Manager.instance.player_instance
+	if player == null:
+		return false
+	var player_hex := player.get_hex()
 	if player_hex == null:
 		return false
 
@@ -303,9 +284,6 @@ func _has_available_scouting_to_create() -> bool:
 		return false
 
 	return not Manager.instance.quests.get_available_scout_locations(grid).is_empty()
-
-func _queue_board_refresh() -> void:
-	_board_gate.request()
 
 func _last_order() -> Quest:
 	var operations := Manager.instance.operations.operations

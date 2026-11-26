@@ -10,6 +10,13 @@ var operations: Array[HubOperation] = []
 var reports: Array[Dictionary] = []
 var _next_id := 1
 
+func set_auto_collect_commissions(enabled: bool) -> void:
+	auto_resolve_completed_quests = enabled
+	if enabled:
+		for quest: Quest in Manager.instance.quests.get_commissions():
+			if quest.is_state(Quest.QuestState.COMPLETE):
+				quest.parse_reward()
+
 func register_quest(quest: Quest, parent_id: String = "") -> HubOperation:
 	if quest == null:
 		return null
@@ -60,11 +67,12 @@ func _on_quest_state_changed(_state: String, operation: HubOperation) -> void:
 		if hub != null:
 			hub.record_activity(tr("HUB_ACTIVITY_OPERATION_STATE") % [operation.get_display_name(), operation.get_state_name()])
 	operations_changed.emit()
-	if operation.state == HubOperation.State.COMPLETE and auto_resolve_completed_quests and not operation.reward_resolved:
+	if operation.state == HubOperation.State.COMPLETE and operation.quest != null and not operation.reward_resolved and (
+		auto_resolve_completed_quests or not operation.quest.uses_guild_roster()
+	):
 		operation.reward_resolved = true
-		if operation.quest != null:
-			operation.quest.context["reward_resolved"] = true
-			operation.quest.parse_reward()
+		operation.quest.context["reward_resolved"] = true
+		operation.quest.parse_reward()
 	elif operation.state in [HubOperation.State.FAILED, HubOperation.State.CANCELLED] and operation.quest != null:
 		var reason_key := str(operation.quest.context.get("failure_reason_key", "OPERATION_RESULT_FAILED"))
 		operation.result_text = tr(reason_key)

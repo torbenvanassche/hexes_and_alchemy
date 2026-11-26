@@ -1,151 +1,119 @@
-class_name QuestListItemUI extends Control
+class_name QuestListItemUI extends VBoxContainer
 
-@onready var quest_type: Label = $Paper/MarginContainer/VBoxContainer/Header/QuestType
-@onready var quest_number: Label = $Paper/MarginContainer/VBoxContainer/Header/QuestNumber
-@onready var quest_location: Label = $Paper/MarginContainer/VBoxContainer/LocationRow/QuestLocation
-@onready var party: Label = $Paper/MarginContainer/VBoxContainer/PartyRow/Party
-@onready var payment_label: Label = $Paper/MarginContainer/VBoxContainer/PaymentLabel
-@onready var progress_bar: ProgressBar = $Paper/MarginContainer/VBoxContainer/ProgressBar
-@onready var label: Label = $Paper/MarginContainer/VBoxContainer/ProgressBar/Label
-@onready var claim_reward_button: Button = $Paper/MarginContainer/VBoxContainer/ClaimRewardButton
-@onready var paper: Panel = $Paper
-@onready var pin: Panel = $Paper/Pin
+signal details_requested(quest: Quest, expanded: bool)
 
-@export var supply_slot: PackedScene;
+@export var column_header := false
 
-var questData: Quest;
-var auto_resolve_enabled := false
-var _dragging := false
-var _drag_offset := Vector2.ZERO
-var _auto_claim_queued := false
-static var _top_z_index := 10
+@onready var title_label: Label = $Margin/Columns/Commission/Title
+@onready var target_label: Label = $Margin/Columns/Commission/Target
+@onready var crew_label: Label = $Margin/Columns/Crew
+@onready var status_label: Label = $Margin/Columns/Status
+@onready var details_button: Button = $Margin/Columns/Actions/Details
+@onready var collect_button: Button = $Margin/Columns/Actions/CollectSlot/Collect
+@onready var details_panel: PanelContainer = $DetailsPanel
+@onready var summary_label: Label = $DetailsPanel/Content/Summary
+@onready var detail_crew: Label = $DetailsPanel/Content/Facts/Crew
+@onready var detail_payment: Label = $DetailsPanel/Content/Facts/Payment
+@onready var detail_risk: Label = $DetailsPanel/Content/Facts/Risk
+
+var quest: Quest
+var _refresh_gate: RefreshGate
 
 func _ready() -> void:
-	gui_input.connect(_on_gui_input)
-	claim_reward_button.pressed.connect(_claim_reward)
-
-func set_data(quest: Quest) -> void:
-	if questData:
-		Debug.err("Quest already has data, create a new one instead!")
+	if column_header:
+		$Margin/Columns.custom_minimum_size.y = 28
+		title_label.text = "QUEST_COMMISSION_COLUMN_TITLE"
+		crew_label.text = "QUEST_COMMISSION_COLUMN_CREW"
+		status_label.text = "QUEST_COMMISSION_COLUMN_STATUS"
+		for heading: Label in [title_label, crew_label, status_label]:
+			heading.theme_type_variation = &"SectionHeading"
+			heading.uppercase = true
+		target_label.hide()
+		details_button.hide()
 		return
-	questData = quest;
-	
-	quest_number.text = "#%s" % [str(self.get_parent().get_child_count())];
-	quest_type.text = _get_quest_type_name(quest.quest_key);
-	quest_location.text = _get_location_name();
+	_refresh_gate = RefreshGate.new(self, refresh)
+	details_button.toggled.connect(func(expanded: bool) -> void:
+		details_requested.emit(quest, expanded)
+	)
+	collect_button.pressed.connect(func() -> void: quest.parse_reward())
 
-	_update_progress(questData.state_machine.get_current_state())
-	
-	quest.state_machine.state_entered.connect(_update_progress)
-	quest.completed.connect(_on_quest_complete)
-	
-func _on_quest_complete() -> void:
-	questData = null;
-	queue_free();
-	
-func _update_progress(state: String) -> void:
-	label.text = _get_state_name(state);
-	var state_color := QuestStatePresentation.get_color(state)
-	progress_bar.self_modulate = state_color
-	pin.self_modulate = state_color
-	party.text = _get_party_text()
-	var payment := questData.get_offered_currency_reward() if questData != null else 0
-	payment_label.text = tr("QUEST_PAYMENT_OFFERED") % [payment]
-	payment_label.visible = payment > 0
-	progress_bar.value = QuestStatePresentation.get_progress(state)
-	var is_complete := questData != null and questData.is_state(Quest.QuestState.COMPLETE)
-	progress_bar.visible = not is_complete
-	claim_reward_button.visible = is_complete
-	if is_complete and auto_resolve_enabled:
-		_queue_auto_claim()
+func setup(value: Quest) -> void:
+	quest = value
+	quest.state_machine.state_entered.connect(_queue_refresh.unbind(1))
+	refresh()
 
-func refresh_scout_departure() -> void:
-	if questData != null and questData.is_state(Quest.QuestState.WAITING) and questData.get_scout_departure_day() > 0:
-		label.text = _get_state_name("waiting")
+func _queue_refresh() -> void:
+	_refresh_gate.request()
 
-func _claim_reward() -> void:
-	if questData == null:
+func refresh() -> void:
+	if quest == null or SaveGames.is_loading:
 		return
-	questData.parse_reward()
+	title_label.text = get_title(quest)
+	target_label.text = get_target(quest)
+	crew_label.text = get_crew(quest)
+	status_label.text = get_status(quest)
+	status_label.add_theme_color_override("font_color", QuestStatePresentation.get_color(quest.state_machine.get_current_state()))
+	collect_button.visible = quest.is_state(Quest.QuestState.COMPLETE)
+	for label: Label in [title_label, target_label, crew_label, status_label]:
+		label.tooltip_text = label.text
+	if details_panel.visible:
+		_refresh_details()
 
-func set_auto_resolve_enabled(enabled: bool) -> void:
-	auto_resolve_enabled = enabled
-	if enabled and questData != null and questData.is_state(Quest.QuestState.COMPLETE):
-		_queue_auto_claim()
+func set_expanded(expanded: bool) -> void:
+	details_button.set_pressed_no_signal(expanded)
+	details_panel.visible = expanded
+	if expanded:
+		_refresh_details()
 
-func _queue_auto_claim() -> void:
-	if _auto_claim_queued:
-		return
-	_auto_claim_queued = true
-	_claim_reward.call_deferred()
+func _refresh_details() -> void:
+	var complete := quest.is_state(Quest.QuestState.COMPLETE)
+	var profile := quest.get_profile()
+	summary_label.text = quest.outcome.get_summary() if complete and quest.outcome != null else ""
+	if summary_label.text.is_empty() and profile != null:
+		summary_label.text = profile.get_description()
+	summary_label.visible = not summary_label.text.is_empty()
+	detail_crew.text = tr("QUEST_COMMISSION_CREW_DETAIL") % crew_label.text
+	detail_payment.text = tr("QUEST_PAYMENT_OFFERED") % quest.get_offered_currency_reward()
+	var risk_key := quest.get_effective_risk_key()
+	detail_risk.visible = not risk_key.is_empty()
+	detail_risk.text = tr("QUEST_DETAIL_RISK") % tr(risk_key) if detail_risk.visible else ""
 
-func _get_location_name() -> String:
-	if questData == null:
-		return tr("UNKNOWN")
-	if questData.quest_key == "scout":
-		var direction_key := str(questData.context.get("scout_direction_key", ""))
-		var direction := tr(direction_key) if direction_key != "" else ""
-		var distance := int(questData.context.get("scout_distance", 0))
-		if direction != "" and direction != direction_key and distance > 0:
-			return tr("QUEST_LOCATION_SCOUT_BOARD") % [direction, distance]
-		return tr("QUEST_LOCATION_UNCHARTED_FRONTIER")
-	if questData.location == null or questData.location.structure == null:
-		return tr("UNKNOWN")
-	return questData.location.structure.structure_info.get_display_name()
+static func get_title(commission: Quest) -> String:
+	var profile := commission.get_profile()
+	if profile != null:
+		return profile.get_display_name()
+	var key := "QUEST_TYPE_%s" % commission.quest_key.to_upper()
+	var title := str(TranslationServer.translate(key))
+	return commission.quest_key.capitalize() if title == key else title
 
-func _get_party_text() -> String:
-	if questData == null or questData.party.is_empty():
-		return tr("QUEST_PARTY_UNASSIGNED")
-	var names: Array[String] = []
-	for npc: NPC in questData.party:
-		if npc == null or not is_instance_valid(npc):
-			continue
-		names.append(npc.get_display_name())
-	return ", ".join(names) if not names.is_empty() else tr("QUEST_PARTY_UNASSIGNED")
+static func get_target(commission: Quest) -> String:
+	if commission.quest_key == "scout":
+		var direction_key := str(commission.context.get("scout_direction_key", ""))
+		var direction := str(TranslationServer.translate(direction_key)) if not direction_key.is_empty() else ""
+		var distance := int(commission.context.get("scout_distance", 0))
+		if not direction.is_empty() and direction != direction_key and distance > 0:
+			return TranslationServer.translate("QUEST_LOCATION_SCOUT_BOARD") % [direction, distance]
+		return TranslationServer.translate("QUEST_LOCATION_UNCHARTED_FRONTIER")
+	var location := commission.location
+	if is_instance_valid(location) and location.structure != null and location.structure.structure_info != null:
+		return location.structure.structure_info.get_display_name()
+	return TranslationServer.translate("UNKNOWN")
 
-func _get_quest_type_name(quest_type_key: String) -> String:
-	if questData != null and questData.get_profile() != null:
-		return questData.get_profile().get_display_name()
-	var translation_key := "QUEST_TYPE_%s" % [quest_type_key.to_upper()]
-	var translated := tr(translation_key)
-	if translated == translation_key:
-		return quest_type_key.capitalize()
-	return translated
+static func get_crew(commission: Quest) -> String:
+	var names := PackedStringArray()
+	for member: NPC in commission.party:
+		if is_instance_valid(member):
+			names.append(member.get_display_name())
+	return TranslationServer.translate("QUEST_PARTY_UNASSIGNED") if names.is_empty() else ", ".join(names)
 
-func _get_state_name(state: String) -> String:
-	if state == "waiting" and questData != null:
-		var departure_day := questData.get_scout_departure_day()
+static func get_status(commission: Quest) -> String:
+	var state := commission.state_machine.get_current_state()
+	if state == "waiting":
+		var departure_day := commission.get_scout_departure_day()
 		if departure_day > Manager.instance.time_of_day.get_day_number():
-			return tr("QUEST_SCOUT_SCHEDULED") % departure_day
-	var translation_key := "QUEST_STATE_%s" % [state.to_upper()]
-	var translated := tr(translation_key)
-	if translated == translation_key:
-		return state.capitalize()
-	return translated
-
-func _on_gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		_dragging = event.pressed
-		if _dragging:
-			_top_z_index += 1
-			z_index = _top_z_index
-			_drag_offset = get_global_mouse_position() - global_position
-			get_viewport().set_input_as_handled()
-
-func _input(event: InputEvent) -> void:
-	if not _dragging:
-		return
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		_dragging = event.pressed
-		get_viewport().set_input_as_handled()
-	elif event is InputEventMouseMotion:
-		global_position = get_global_mouse_position() - _drag_offset
-		_clamp_to_board()
-		get_viewport().set_input_as_handled()
-
-func _clamp_to_board() -> void:
-	var board := get_parent() as Control
-	if board == null:
-		return
-	var max_position := (board.size - size).max(Vector2.ZERO)
-	position = position.clamp(Vector2.ZERO, max_position)
+			return TranslationServer.translate("QUEST_SCOUT_SCHEDULED") % departure_day
+	if state == "complete":
+		return TranslationServer.translate("QUEST_COMMISSION_READY_TO_COLLECT")
+	var key := "QUEST_STATE_%s" % state.to_upper()
+	var status := str(TranslationServer.translate(key))
+	return state.capitalize() if status == key else status

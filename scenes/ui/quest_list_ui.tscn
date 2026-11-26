@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://brxjfdnhnyhhv"]
 [ext_resource type="PackedScene" path="res://tools/custom_window/base_window.tscn" id="1_window"]
 [ext_resource type="Script" path="res://tools/inventory/scripts/visual/screens/quest_list_ui.gd" id="2_script"]
-[ext_resource type="PackedScene" path="res://scenes/ui/components/quest_list_item.tscn" id="3_note"]
+[ext_resource type="PackedScene" path="res://scenes/ui/components/quest_list_item.tscn" id="3_row"]
 [ext_resource type="PackedScene" path="res://scenes/ui/components/village_request_notice.tscn" id="4_request"]
 [ext_resource type="PackedScene" path="res://scenes/ui/components/community_request_details.tscn" id="5_details"]
 [node name="Window" node_paths=PackedStringArray("content") instance=ExtResource("1_window")]
@@ -17,7 +17,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("2_script")
-quest_item_ui = ExtResource("3_note")
+quest_item_ui = ExtResource("3_row")
 [node name="Layout" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard"]
 layout_mode = 1
 anchors_preset = 15
@@ -77,9 +77,16 @@ layout_mode = 2
 size_flags_horizontal = 4
 toggle_mode = true
 text = "QUEST_REQUEST_COMPLETED"
-[node name="BoardSurface" type="Panel" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Scroll/Content"]
+[node name="CommissionTable" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Scroll/Content"]
+visible = false
 layout_mode = 2
-theme_type_variation = &"InsetPanel"
+theme_override_constants/separation = 0
+[node name="Columns" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Scroll/Content/CommissionTable" instance=ExtResource("3_row")]
+layout_mode = 2
+column_header = true
+[node name="Rows" type="VBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Scroll/Content/CommissionTable"]
+layout_mode = 2
+theme_override_constants/separation = 0
 [node name="EmptyState" type="CenterContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Scroll/Content"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -111,7 +118,6 @@ layout_mode = 2
 [node name="Actions" type="HBoxContainer" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout"]
 layout_mode = 2
 theme_override_constants/separation = 8
-alignment = 1
 [node name="AutoResolveButton" type="CheckBox" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Actions"]
 layout_mode = 2
 theme_override_constants/h_separation = 8
@@ -119,11 +125,15 @@ custom_minimum_size = Vector2(0, 36)
 theme_type_variation = &"SquareCheck"
 toggle_mode = true
 text = "QUEST_BOARD_AUTO_COLLECT"
-tooltip_text = "QUEST_AUTO_RESOLVE"
+tooltip_text = "QUEST_COMMISSION_AUTO_COLLECT_HINT"
 [node name="RepeatLast" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Actions"]
 layout_mode = 2
 custom_minimum_size = Vector2(0, 36)
 text = "QUEST_REPEAT_LAST"
+[node name="Spacer" type="Control" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Actions"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
 [node name="ScoutQuestButton" type="Button" parent="NinePatchRect/VBoxContainer/contentPanel/QuestBoard/Layout/Actions"]
 layout_mode = 2
 custom_minimum_size = Vector2(88, 36)

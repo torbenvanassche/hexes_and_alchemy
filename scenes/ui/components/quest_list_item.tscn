@@ -1,148 +1,107 @@
 [gd_scene format=3 uid="uid://bhqw7ckq2j06r"]
 
-[ext_resource type="Script" uid="uid://bspwdi5yrsyab" path="res://tools/inventory/scripts/visual/parts/quest_list_item_ui.gd" id="1_qmdcg"]
-[ext_resource type="Texture2D" uid="uid://dwqf3fg4acslg" path="res://sprites/ui/icons/structure_farm.png" id="4_tm2j7"]
-[ext_resource type="Texture2D" uid="uid://drasftash875f" path="res://sprites/ui/icons/pawns.png" id="5_so8rn"]
+[ext_resource type="Script" uid="uid://bspwdi5yrsyab" path="res://tools/inventory/scripts/visual/parts/quest_list_item_ui.gd" id="1_script"]
 
-[node name="QuestNote" type="Control" unique_id=84988057]
-custom_minimum_size = Vector2(201, 210)
-layout_mode = 3
-anchors_preset = 0
-offset_right = 201.0
-offset_bottom = 210.0
-script = ExtResource("1_qmdcg")
+[node name="CommissionRow" type="VBoxContainer"]
+theme_override_constants/separation = 0
+script = ExtResource("1_script")
 
-[node name="Paper" type="Panel" parent="." unique_id=128610021]
-theme_type_variation = &"CardSurface"
-show_behind_parent = true
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Pin" type="Panel" parent="Paper" unique_id=54231665]
-theme_type_variation = &"AccentRule"
-z_index = 1
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -5.0
-offset_top = 6.0
-offset_right = 5.0
-offset_bottom = 15.999994
-grow_horizontal = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="Paper" unique_id=1990104491]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 12
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Paper/MarginContainer" unique_id=1314253522]
+[node name="Margin" type="MarginContainer" parent="."]
 layout_mode = 2
-theme_override_constants/separation = 5
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_right = 8
 
-[node name="TopDivider" type="Panel" parent="Paper/MarginContainer/VBoxContainer" unique_id=183152230]
-custom_minimum_size = Vector2(0, 2)
+[node name="Columns" type="HBoxContainer" parent="Margin"]
+custom_minimum_size = Vector2(0, 56)
 layout_mode = 2
-theme_type_variation = &"AccentRule"
+theme_override_constants/separation = 12
 
-[node name="Header" type="HBoxContainer" parent="Paper/MarginContainer/VBoxContainer" unique_id=1583251630]
-layout_mode = 2
-theme_override_constants/separation = 6
-
-[node name="QuestType" type="Label" parent="Paper/MarginContainer/VBoxContainer/Header" unique_id=236912205]
+[node name="Commission" type="VBoxContainer" parent="Margin/Columns"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 2
+
+[node name="Title" type="Label" parent="Margin/Columns/Commission"]
+layout_mode = 2
+mouse_filter = 1
+text_overrun_behavior = 3
 theme_type_variation = &"SectionTitle"
-text = "QUEST_TYPE_FETCH"
+
+[node name="Target" type="Label" parent="Margin/Columns/Commission"]
+layout_mode = 2
+mouse_filter = 1
+text_overrun_behavior = 3
+theme_type_variation = &"MutedLabel"
+
+[node name="Crew" type="Label" parent="Margin/Columns"]
+custom_minimum_size = Vector2(136, 0)
+layout_mode = 2
+mouse_filter = 1
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Status" type="Label" parent="Margin/Columns"]
+custom_minimum_size = Vector2(124, 0)
+layout_mode = 2
+mouse_filter = 1
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Actions" type="HBoxContainer" parent="Margin/Columns"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 6
+alignment = 2
+
+[node name="CollectSlot" type="MarginContainer" parent="Margin/Columns/Actions"]
+custom_minimum_size = Vector2(76, 32)
+layout_mode = 2
+
+[node name="Collect" type="Button" parent="Margin/Columns/Actions/CollectSlot"]
+visible = false
+layout_mode = 2
+theme_type_variation = &"PrimaryButton"
+text = "QUEST_COMMISSION_COLLECT"
+
+[node name="Details" type="Button" parent="Margin/Columns/Actions"]
+custom_minimum_size = Vector2(64, 32)
+layout_mode = 2
+theme_type_variation = &"SmallButton"
+toggle_mode = true
+text = "QUEST_COMMISSION_DETAILS"
+
+[node name="DetailsPanel" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 2
+theme_type_variation = &"CardPanel"
+
+[node name="Content" type="VBoxContainer" parent="DetailsPanel"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Summary" type="Label" parent="DetailsPanel/Content"]
+layout_mode = 2
 autowrap_mode = 3
 
-[node name="QuestNumber" type="Label" parent="Paper/MarginContainer/VBoxContainer/Header" unique_id=725982639]
+[node name="Facts" type="HBoxContainer" parent="DetailsPanel/Content"]
 layout_mode = 2
-text = "#1"
-horizontal_alignment = 2
+theme_override_constants/separation = 18
 
-[node name="BottomDivider" type="Panel" parent="Paper/MarginContainer/VBoxContainer" unique_id=183152231]
-custom_minimum_size = Vector2(0, 2)
-layout_mode = 2
-theme_type_variation = &"AccentRule"
-
-[node name="LocationRow" type="HBoxContainer" parent="Paper/MarginContainer/VBoxContainer" unique_id=246549520]
-layout_mode = 2
-
-[node name="LocationIcon" type="TextureRect" parent="Paper/MarginContainer/VBoxContainer/LocationRow" unique_id=246549522]
-custom_minimum_size = Vector2(18, 18)
-layout_mode = 2
-texture = ExtResource("4_tm2j7")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="QuestLocation" type="Label" parent="Paper/MarginContainer/VBoxContainer/LocationRow" unique_id=246549521]
+[node name="Crew" type="Label" parent="DetailsPanel/Content/Facts"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "STRUCTURE_FARMLAND_NAME"
-vertical_alignment = 1
-text_overrun_behavior = 3
+theme_type_variation = &"MutedLabel"
+autowrap_mode = 3
 
-[node name="PartyRow" type="HBoxContainer" parent="Paper/MarginContainer/VBoxContainer" unique_id=1583251632]
+[node name="Payment" type="Label" parent="DetailsPanel/Content/Facts"]
 layout_mode = 2
-size_flags_vertical = 3
+theme_type_variation = &"MutedLabel"
 
-[node name="PartyIcon" type="TextureRect" parent="Paper/MarginContainer/VBoxContainer/PartyRow" unique_id=1583251633]
-custom_minimum_size = Vector2(18, 18)
+[node name="Risk" type="Label" parent="DetailsPanel/Content/Facts"]
 layout_mode = 2
-texture = ExtResource("5_so8rn")
-expand_mode = 1
-stretch_mode = 5
+theme_type_variation = &"MutedLabel"
 
-[node name="Party" type="Label" parent="Paper/MarginContainer/VBoxContainer/PartyRow" unique_id=1583251631]
+[node name="Rule" type="HSeparator" parent="."]
 layout_mode = 2
-size_flags_horizontal = 3
-text = "QUEST_PARTY_UNASSIGNED"
-vertical_alignment = 1
-text_overrun_behavior = 3
-
-[node name="PaymentLabel" type="Label" parent="Paper/MarginContainer/VBoxContainer" unique_id=849440719]
-visible = false
-layout_mode = 2
-text = "QUEST_PAYMENT_OFFERED"
-horizontal_alignment = 1
-
-[node name="ProgressBar" type="ProgressBar" parent="Paper/MarginContainer/VBoxContainer" unique_id=1310734486]
-custom_minimum_size = Vector2(0, 18)
-layout_mode = 2
-size_flags_horizontal = 3
-max_value = 1.0
-show_percentage = false
-
-[node name="Label" type="Label" parent="Paper/MarginContainer/VBoxContainer/ProgressBar" unique_id=1170717140]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_type_variation = &"CompactLabel"
-text = "QUEST_STATE_WAITING"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="ClaimRewardButton" type="Button" parent="Paper/MarginContainer/VBoxContainer" unique_id=2008819152]
-visible = false
-theme_type_variation = &"PrimaryButton"
-custom_minimum_size = Vector2(0, 22)
-layout_mode = 2
-size_flags_horizontal = 3
-text = "QUEST_ACTION_CLAIM_REWARD"
-icon_alignment = 1
-expand_icon = true

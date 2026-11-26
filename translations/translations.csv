@@ -921,7 +921,7 @@ PEOPLE_AWAY,%d away
 PEOPLE_VIEW,View
 "PEOPLE_VIEW_PROFILE","View %s’s profile"
 "QUEST_BOARD_POSTED",Posted quests
-"QUEST_BOARD_POST",Post quest
+"QUEST_BOARD_POST","Post commission"
 "QUEST_BOARD_SEND_SCOUT","Send scout"
 "QUEST_BOARD_AUTO_COLLECT",Auto-collect
 "QUEST_BOARD_EMPTY_HINT","Send a scout to discover work, or post a resource commission."
@@ -1342,3 +1342,11 @@ Recruitment standing: %d (keeps earned candidate rank access)"
 "EXPEDITION_RELIC_REWARD","One random relic on success"
 "EXPEDITION_RELIC_SUCCESS","The party returned with a relic. The ruin is now exhausted."
 "EXPEDITION_THREAT_DETAIL","%s · Danger %d · Rank %s"
+"QUEST_COMMISSION_COLUMN_TITLE","Commission"
+"QUEST_COMMISSION_COLUMN_CREW","Crew"
+"QUEST_COMMISSION_COLUMN_STATUS","Status"
+"QUEST_COMMISSION_DETAILS","Details"
+"QUEST_COMMISSION_COLLECT","Collect"
+"QUEST_COMMISSION_READY_TO_COLLECT","Ready to collect"
+"QUEST_COMMISSION_CREW_DETAIL","Crew: %s"
+"QUEST_COMMISSION_AUTO_COLLECT_HINT","Automatically collect rewards when commissions return, even when the board is closed."
